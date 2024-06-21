@@ -7,19 +7,21 @@ defmodule Canary.Application do
 
   @impl true
   def start(_type, _args) do
-    children = [
-      CanaryWeb.Telemetry,
-      Canary.Repo,
-      {Oban, Application.fetch_env!(:canary, Oban)},
-      {DNSCluster, query: Application.get_env(:canary, :dns_cluster_query) || :ignore},
-      {Phoenix.PubSub, name: Canary.PubSub},
-      # Start the Finch HTTP client for sending emails
-      {Finch, name: Canary.Finch},
-      # Start a worker by calling: Canary.Worker.start_link(arg)
-      # {Canary.Worker, arg},
-      # Start to serve requests, typically the last entry
-      CanaryWeb.Endpoint
-    ]
+    children =
+      discord() ++
+        [
+          CanaryWeb.Telemetry,
+          Canary.Repo,
+          {Oban, Application.fetch_env!(:canary, Oban)},
+          {DNSCluster, query: Application.get_env(:canary, :dns_cluster_query) || :ignore},
+          {Phoenix.PubSub, name: Canary.PubSub},
+          # Start the Finch HTTP client for sending emails
+          {Finch, name: Canary.Finch},
+          # Start a worker by calling: Canary.Worker.start_link(arg)
+          # {Canary.Worker, arg},
+          # Start to serve requests, typically the last entry
+          CanaryWeb.Endpoint
+        ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
@@ -33,5 +35,13 @@ defmodule Canary.Application do
   def config_change(changed, _new, removed) do
     CanaryWeb.Endpoint.config_change(changed, removed)
     :ok
+  end
+
+  defp discord() do
+    if Application.get_env(:nostrum, :token) do
+      [Nostrum.Application, Canary.Clients.DiscordBot]
+    else
+      []
+    end
   end
 end

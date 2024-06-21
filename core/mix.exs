@@ -58,7 +58,9 @@ defmodule Canary.MixProject do
       {:dns_cluster, "~> 0.1.1"},
       {:bandit, "~> 1.2"},
       {:oban, "~> 2.17"},
-      {:rustler, "~> 0.32.1"}
+      {:rustler, "~> 0.32.1"},
+      {:nostrum, "~> 0.9.1", runtime: false},
+      {:gun, "~> 2.0", runtime: true}
     ]
   end
 

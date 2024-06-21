@@ -115,3 +115,5 @@ if config_env() == :prod do
   #
   # See https://hexdocs.pm/swoosh/Swoosh.html#module-installation for details.
 end
+
+config :nostrum, :token, System.get_env("DISCORD_BOT_TOKEN")
