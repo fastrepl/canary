@@ -35,3 +35,4 @@ canary-*.tar
 npm-debug.log
 /assets/node_modules/
 
+**/*.so

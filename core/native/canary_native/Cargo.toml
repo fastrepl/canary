@@ -1,0 +1,20 @@
+[package]
+name = "canary_native"
+version = "0.1.0"
+authors = []
+edition = "2021"
+
+[lib]
+name = "canary_native"
+path = "src/lib.rs"
+crate-type = ["cdylib"]
+
+[dependencies]
+rustler = "0.32.1"
+anyhow = "1.0"
+text-splitter = { version = "0.13.3", features = ["tiktoken-rs", "markdown"] }
+tiktoken-rs = "0.5.9"
+
+[dev-dependencies]
+insta = "1.38.0"
+include_uri = "0.1.1"

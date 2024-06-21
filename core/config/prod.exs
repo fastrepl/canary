@@ -16,5 +16,10 @@ config :swoosh, local: false
 # Do not print debug messages in production
 config :logger, level: :info
 
+config :canary, Canary.Native,
+  crate: :canary_native,
+  skip_compilation?: true,
+  load_from: {:canary, "priv/native/libcanary_native"}
+
 # Runtime production configuration, including reading
 # of environment variables, is done on config/runtime.exs.
