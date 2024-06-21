@@ -10,6 +10,7 @@ defmodule Canary.Application do
     children = [
       CanaryWeb.Telemetry,
       Canary.Repo,
+      {Oban, Application.fetch_env!(:canary, Oban)},
       {DNSCluster, query: Application.get_env(:canary, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: Canary.PubSub},
       # Start the Finch HTTP client for sending emails
