@@ -1,0 +1,11 @@
+---
+name: canary
+services:
+  db:
+    image: paradedb/paradedb:16-v0.7.5
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: canary_dev
+    ports:
+      - 5432:5432

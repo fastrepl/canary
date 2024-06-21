@@ -1,0 +1,11 @@
+---
+version: "3"
+dotenv:
+  - .env
+tasks:
+  dev:
+    cmds:
+      - docker-compose up -d
+      - mix ecto.migrate
+      - iex --sname canary --cookie canary -S mix phx.server
+      - docker-compose down
