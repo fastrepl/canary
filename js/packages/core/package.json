@@ -1,0 +1,31 @@
+{
+  "name": "@canary/core",
+  "version": "0.0.1",
+  "type": "module",
+  "license": "MIT",
+  "author": "Yujong Lee <yujonglee@fastrepl.com>",
+  "homepage": "https://github.com/fastrepl/canary",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.umd.cjs",
+  "module": "./dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.umd.cjs"
+    }
+  },
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc && vite build",
+    "test": "vitest"
+  },
+  "devDependencies": {
+    "msw": "^2.3.1",
+    "typescript": "^5.2.2",
+    "vite": "^5.2.0",
+    "vite-plugin-dts": "^3.9.1",
+    "vitest": "^1.6.0"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "canary",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "devDependencies": {
+    "prettier": "^3.3.2",
+    "prettier-plugin-astro": "^0.14.0"
+  },
+  "scripts": {
+    "format": "prettier -w ."
+  }
+}
