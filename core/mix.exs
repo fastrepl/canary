@@ -69,7 +69,9 @@ defmodule Canary.MixProject do
       {:retry, "~> 0.18"},
       {:cors_plug, "~> 3.0"},
       {:mox, "~> 1.0", only: :test},
-      {:crawler, git: "https://github.com/fredwu/crawler.git", ref: "6866bbe287c760b7e4bba1925e80f2a4494d7af3"}
+      {:crawler,
+       git: "https://github.com/fredwu/crawler.git",
+       ref: "6866bbe287c760b7e4bba1925e80f2a4494d7af3"}
     ]
   end
 
