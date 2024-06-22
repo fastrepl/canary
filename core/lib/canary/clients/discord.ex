@@ -1,4 +1,4 @@
-defmodule Canary.Clients.DiscordBot do
+defmodule Canary.Clients.Discord do
   use Nostrum.Consumer
 
   alias Nostrum.Api
