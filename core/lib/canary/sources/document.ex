@@ -59,16 +59,17 @@ defmodule Canary.Sources.Document.HybridSearch do
       limit: ash_query.limit
     ]
 
-    result = hybrid_search(text, embedding, opts)
-
-    {:ok, result}
+    hybrid_search(text, embedding, opts)
   end
 
-  def hybrid_search(text, embedding, opts \\ []) do
+  defp hybrid_search(text, embedding, opts) do
     n = opts[:limit] || 10
     threshold = opts[:threshold] || 0.4
 
-    embedding = Ash.Vector.to_list(embedding)
+    embedding =
+      embedding
+      |> Ash.Vector.to_list()
+      |> Jason.encode!()
 
     """
     SELECT doc.*
@@ -91,7 +92,7 @@ defmodule Canary.Sources.Document.HybridSearch do
     """
     |> query([
       "#{@table_text_field}:#{text}",
-      "'#{Jason.encode!(embedding)}' <-> #{@table_vector_field}",
+      "'#{embedding}' <-> #{@table_vector_field}",
       threshold,
       n
     ])
@@ -102,7 +103,8 @@ defmodule Canary.Sources.Document.HybridSearch do
     |> Canary.Repo.query(params)
     |> case do
       {:ok, %{rows: rows, columns: columns}} ->
-        rows |> Enum.map(&Canary.Repo.load(Canary.Sources.Document, {columns, &1}))
+        docs = rows |> Enum.map(&Canary.Repo.load(Canary.Sources.Document, {columns, &1}))
+        {:ok, docs}
 
       error ->
         error
