@@ -38,11 +38,9 @@ defmodule CanaryWeb.Router do
   scope "/", CanaryWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
-
-    ash_authentication_live_session :native,
+    ash_authentication_live_session :default,
       on_mount: {CanaryWeb.LiveUserAuth, :live_user_optional} do
-      live "/native", NativeLive, :index
+      live "/", MainLive, :index
     end
   end
 
