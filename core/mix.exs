@@ -64,7 +64,9 @@ defmodule Canary.MixProject do
       {:ash, "~> 3.0"},
       {:ash_authentication, "~> 4.0"},
       {:ash_authentication_phoenix, "~> 2.0"},
-      {:ash_postgres, "~> 2.0"}
+      {:ash_postgres, "~> 2.0"},
+      {:req, "~> 0.5.0"},
+      {:retry, "~> 0.18"}
     ]
   end
 

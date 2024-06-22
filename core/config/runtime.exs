@@ -117,3 +117,10 @@ if config_env() == :prod do
 end
 
 config :nostrum, :token, System.get_env("DISCORD_BOT_TOKEN")
+
+if config_env() != :test do
+  config :canary, :openai_api_base, System.fetch_env!("OPENAI_API_BASE")
+  config :canary, :openai_api_key, System.fetch_env!("OPENAI_API_KEY")
+  config :canary, :chat_completion_model, System.fetch_env!("CHAT_COMPLETION_MODEL")
+  config :canary, :text_embedding_model, System.fetch_env!("TEXT_EMBEDDING_MODEL")
+end
