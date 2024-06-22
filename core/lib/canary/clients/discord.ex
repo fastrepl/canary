@@ -40,9 +40,9 @@ defmodule Canary.Clients.Discord do
 
   defp handle_message(_, _), do: :ignore
 
-  defp respond(channel_id, user_id, message_id, _query) do
-    # {:ok, pid} = Canary.Sessions.find_or_start_session(channel_id)
-    # GenServer.call(pid, {:submit, :website, %{query: query}})
+  defp respond(channel_id, user_id, message_id, query) do
+    {:ok, pid} = Canary.Sessions.find_or_start_session(channel_id)
+    GenServer.call(pid, {:submit, :website, %{query: query}})
 
     receive do
       {:complete, data} ->

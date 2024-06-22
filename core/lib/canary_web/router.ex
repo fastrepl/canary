@@ -12,7 +12,12 @@ defmodule CanaryWeb.Router do
     plug :load_from_session
   end
 
-  pipeline :api do
+  pipeline :public_api do
+    plug :accepts, ["json"]
+    plug CORSPlug
+  end
+
+  pipeline :private_api do
     plug :accepts, ["json"]
     plug :load_from_bearer
   end
@@ -39,6 +44,12 @@ defmodule CanaryWeb.Router do
       on_mount: {CanaryWeb.LiveUserAuth, :live_user_optional} do
       live "/native", NativeLive, :index
     end
+  end
+
+  scope "/", CanaryWeb do
+    pipe_through :public_api
+
+    post "/api/website/submit", PublicApiController, :website_submit
   end
 
   # Enable Swoosh mailbox preview in development

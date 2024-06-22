@@ -10,6 +10,8 @@ defmodule Canary.Application do
     children =
       discord() ++
         [
+          {Task.Supervisor, name: Canary.TaskSupervisor},
+          {Registry, keys: :unique, name: Canary.SessionRegistry},
           {AshAuthentication.Supervisor, otp_app: :canary},
           CanaryWeb.Telemetry,
           Canary.Repo,
