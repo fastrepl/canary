@@ -1,8 +1,14 @@
 <header class="px-4 sm:px-6 lg:px-8">
-  <div class="flex items-center justify-between py-3 text-sm font-semibold">
-    <a href="/">
-      🐤 Canary
-    </a>
+  <div class="flex items-center justify-between py-3">
+    <.link href="/" class="text-md font-semibold">🐤 Canary</.link>
+
+    <div class="text-xs font-semibold">
+      <%= if @current_user do %>
+        <.link href={~p"/sign-out"}>Sign out</.link>
+      <% else %>
+        <.link href={~p"/sign-in"}>Sign in</.link>
+      <% end %>
+    </div>
   </div>
 </header>
 <main class="px-4 py-20 sm:px-6 lg:px-8">

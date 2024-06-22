@@ -39,7 +39,7 @@ defmodule CanaryWeb.Router do
     pipe_through :browser
 
     ash_authentication_live_session :default,
-      on_mount: {CanaryWeb.LiveUserAuth, :live_user_optional} do
+      on_mount: {CanaryWeb.LiveUserAuth, :live_user_required} do
       live "/", MainLive, :index
     end
   end
