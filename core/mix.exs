@@ -39,7 +39,7 @@ defmodule Canary.MixProject do
       {:phoenix_html, "~> 4.0"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:phoenix_live_view, "~> 0.20.2"},
-      {:floki, ">= 0.30.0", only: :test},
+      {:floki, ">= 0.30.0"},
       {:esbuild, "~> 0.8", runtime: Mix.env() == :dev},
       {:tailwind, "~> 0.2", runtime: Mix.env() == :dev},
       {:heroicons,
@@ -68,7 +68,8 @@ defmodule Canary.MixProject do
       {:req, "~> 0.5.0"},
       {:retry, "~> 0.18"},
       {:cors_plug, "~> 3.0"},
-      {:mox, "~> 1.0", only: :test}
+      {:mox, "~> 1.0", only: :test},
+      {:crawler, git: "https://github.com/fredwu/crawler.git", ref: "6866bbe287c760b7e4bba1925e80f2a4494d7af3"}
     ]
   end
 
