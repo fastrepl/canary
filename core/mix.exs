@@ -60,7 +60,11 @@ defmodule Canary.MixProject do
       {:oban, "~> 2.17"},
       {:rustler, "~> 0.32.1"},
       {:nostrum, "~> 0.9.1", runtime: false},
-      {:gun, "~> 2.0", runtime: true}
+      {:gun, "~> 2.0", runtime: true},
+      {:ash, "~> 3.0"},
+      {:ash_authentication, "~> 4.0"},
+      {:ash_authentication_phoenix, "~> 2.0"},
+      {:ash_postgres, "~> 2.0"}
     ]
   end
 

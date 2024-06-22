@@ -1,5 +1,6 @@
 defmodule CanaryWeb.Router do
   use CanaryWeb, :router
+  use AshAuthentication.Phoenix.Router
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -8,23 +9,37 @@ defmodule CanaryWeb.Router do
     plug :put_root_layout, html: {CanaryWeb.Layouts, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug :load_from_session
   end
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug :load_from_bearer
+  end
+
+  scope "/", CanaryWeb do
+    pipe_through :browser
+
+    sign_in_route(
+      register_path: "/register",
+      overrides: [CanaryWeb.AuthOverrides, AshAuthentication.Phoenix.Overrides.Default]
+    )
+
+    sign_out_route(AuthController)
+    auth_routes_for(Canary.Accounts.User, to: AuthController)
+    reset_route([])
   end
 
   scope "/", CanaryWeb do
     pipe_through :browser
 
     get "/", PageController, :home
-    live "/native", NativeLive
-  end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", CanaryWeb do
-  #   pipe_through :api
-  # end
+    ash_authentication_live_session :native,
+      on_mount: {CanaryWeb.LiveUserAuth, :live_user_optional} do
+      live "/native", NativeLive, :index
+    end
+  end
 
   # Enable Swoosh mailbox preview in development
   if Application.compile_env(:canary, :dev_routes) do

@@ -1,5 +1,7 @@
 defmodule Canary.Repo do
-  use Ecto.Repo,
-    otp_app: :canary,
-    adapter: Ecto.Adapters.Postgres
+  use AshPostgres.Repo, otp_app: :canary
+
+  def installed_extensions do
+    ["uuid-ossp", "citext", "ash-functions"]
+  end
 end

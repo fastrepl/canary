@@ -10,6 +10,7 @@ defmodule Canary.Application do
     children =
       discord() ++
         [
+          {AshAuthentication.Supervisor, otp_app: :canary},
           CanaryWeb.Telemetry,
           Canary.Repo,
           {Oban, Application.fetch_env!(:canary, Oban)},
@@ -39,7 +40,7 @@ defmodule Canary.Application do
 
   defp discord() do
     if Application.get_env(:nostrum, :token) do
-      [Nostrum.Application, Canary.Clients.DiscordBot]
+      [Nostrum.Application, Canary.Clients.Discord]
     else
       []
     end
