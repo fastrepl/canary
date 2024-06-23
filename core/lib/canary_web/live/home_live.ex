@@ -1,4 +1,4 @@
-defmodule CanaryWeb.MainLive do
+defmodule CanaryWeb.HomeLive do
   use CanaryWeb, :live_view
 
   def render(assigns) do
@@ -8,10 +8,14 @@ defmodule CanaryWeb.MainLive do
     </button>
     <dialog id="add_source" class="modal">
       <div class="modal-box">
-        <h3 class="font-bold text-lg">Add source here!</h3>
+        <h3 class="font-bold text-lg">Add new source</h3>
 
-        <div class="p-4">
-          <input type="text" placeholder="Type here" class="input input-bordered w-full max-w-xs" />
+        <div class="p-4 flex flex-col gap-4">
+          <select class="select select-bordered w-full max-w-xs">
+            <option disabled>Type</option>
+            <option>Website</option>
+          </select>
+          <input type="text" placeholder="Value" class="input input-bordered w-full max-w-xs" />
         </div>
       </div>
       <form method="dialog" class="modal-backdrop">
@@ -23,28 +27,24 @@ defmodule CanaryWeb.MainLive do
       <table class="table">
         <thead>
           <tr>
-            <th></th>
-            <th>Name</th>
-            <th>Job</th>
-            <th>Favorite Color</th>
+            <th>Type</th>
+            <th>Value</th>
+            <th>Status</th>
           </tr>
         </thead>
 
         <tbody>
           <tr>
-            <th>1</th>
             <td>Cy Ganderton</td>
             <td>Quality Control Specialist</td>
             <td>Blue</td>
           </tr>
           <tr>
-            <th>2</th>
             <td>Hart Hagerty</td>
             <td>Desktop Support Technician</td>
             <td>Purple</td>
           </tr>
           <tr>
-            <th>3</th>
             <td>Brice Swyre</td>
             <td>Tax Accountant</td>
             <td>Red</td>

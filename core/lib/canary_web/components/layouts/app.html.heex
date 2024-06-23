@@ -12,6 +12,7 @@
   </div>
 </header>
 <main class="px-4 py-20 sm:px-6 lg:px-8">
+  <CanaryWeb.Layouts.side_menu active_tab={@active_tab} />
   <div class="mx-auto max-w-2xl">
     <.flash_group flash={@flash} />
     <%= @inner_content %>
