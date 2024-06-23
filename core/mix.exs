@@ -19,7 +19,8 @@ defmodule Canary.MixProject do
   def application do
     [
       mod: {Canary.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools],
+      included_applications: [:nostrum]
     ]
   end
 
@@ -60,7 +61,7 @@ defmodule Canary.MixProject do
       {:oban, "~> 2.17"},
       {:rustler, "~> 0.32.1"},
       {:nostrum, "~> 0.9.1", runtime: false},
-      {:gun, "~> 2.0", runtime: true},
+      {:gun, "~> 2.0"},
       {:ash, "~> 3.0"},
       {:ash_authentication, "~> 4.0"},
       {:ash_authentication_phoenix, "~> 2.0"},
