@@ -35,16 +35,12 @@ defmodule CanaryWeb.Router do
     reset_route([])
   end
 
-  scope "/" do
+  scope "/", CanaryWeb do
     pipe_through :browser
 
     ash_authentication_live_session :default,
-      on_mount: [
-        {CanaryWeb.LiveUserAuth, :live_user_optional},
-        CanaryWeb.NavLive
-      ] do
-      live "/", CanaryWeb.HomeLive, :none
-      live "/settings", CanaryWeb.SettingsLive, :none
+      on_mount: {CanaryWeb.LiveUserAuth, :live_user_required} do
+      live "/", MainLive, :index
     end
   end
 
