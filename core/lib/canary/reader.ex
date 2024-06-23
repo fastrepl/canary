@@ -18,13 +18,13 @@ defmodule Canary.Reader.Default do
   defp render(nodes) when is_list(nodes) do
     nodes
     |> Enum.map(&render/1)
-    |> Enum.reject(fn node -> is_binary(node) and String.trim(node) == "" end)
+    |> Enum.reject(&(&1 == "" || &1 == "\n"))
     |> Enum.join("\n")
     |> String.trim()
   end
 
   defp render({tag, _attrs, children}) when tag in ["h1", "h2", "h3", "h4", "h5", "h6"] do
-    n = String.to_integer(tag |> String.slice(1..-1//1))
+    n = String.to_integer(tag |> String.slice(1..-1//-1))
     "#{String.duplicate("#", n)} #{render(children)}"
   end
 
@@ -33,22 +33,6 @@ defmodule Canary.Reader.Default do
     |> Enum.map(&render/1)
     |> Enum.join("\n")
     |> String.trim()
-  end
-
-  defp render({tag, _, _})
-       when tag in [
-              "script",
-              "noscript",
-              "style",
-              "aside",
-              "nav",
-              "footer",
-              "header",
-              "iframe",
-              "svg",
-              "canvas"
-            ] do
-    ""
   end
 
   defp render({"img", attrs, _}) do
@@ -76,7 +60,7 @@ defmodule Canary.Reader.Default do
 
   defp render({"em", _, children}), do: "*#{render(children)}*"
 
-  defp render({"code", _, children}), do: "```\n#{render(children)}\n```"
+  defp render({"code", _, children}), do: "`#{render(children)}`"
 
   defp render({"br", _, _}), do: "\n"
 
