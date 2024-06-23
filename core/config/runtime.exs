@@ -123,4 +123,12 @@ if config_env() != :test do
   config :canary, :openai_api_key, System.fetch_env!("OPENAI_API_KEY")
   config :canary, :chat_completion_model, System.fetch_env!("CHAT_COMPLETION_MODEL")
   config :canary, :text_embedding_model, System.fetch_env!("TEXT_EMBEDDING_MODEL")
+
+  if System.get_env("GITHUB_CLIENT_ID") && System.get_env("GITHUB_CLIENT_SECRET") do
+    config :oapi_github,
+      app_name: "getcanary.dev",
+      default_auth: {System.get_env("GITHUB_CLIENT_ID"), System.get_env("GITHUB_CLIENT_SECRET")}
+  else
+    config :oapi_github, app_name: "getcanary.dev"
+  end
 end
