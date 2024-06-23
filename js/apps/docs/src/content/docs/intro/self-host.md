@@ -2,4 +2,4 @@
 title: Self-host
 ---
 
-[![Railway Template](https://railway.app/button.svg)](https://railway.app/template/mn9WJT?referralCode=IQ76H8)
+We have a [**Railway template**](https://railway.app/template/mn9WJT?referralCode=IQ76H8) that you can use to deploy your own instance of Canary.

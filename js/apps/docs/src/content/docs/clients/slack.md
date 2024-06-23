@@ -1,5 +1,5 @@
 ---
-title: Github
+title: Slack
 ---
 
 Not available yet.

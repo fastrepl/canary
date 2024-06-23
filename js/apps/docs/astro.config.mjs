@@ -29,14 +29,16 @@ export default defineConfig({
             { label: "Overview", link: "/sources/overview/" },
             { label: "Website", link: "/sources/website/" },
             { label: "Github", link: "/sources/github/" },
+            { label: "Notion", link: "/sources/notion/" },
           ],
         },
         {
           label: "Clients",
           items: [
             { label: "Overview", link: "/clients/overview/" },
-            { label: "Website", link: "/clients/website/" },
             { label: "Discord", link: "/clients/discord/" },
+            { label: "Website", link: "/clients/website/" },
+            { label: "Slack", link: "/clients/slack/" },
           ],
         },
         {
