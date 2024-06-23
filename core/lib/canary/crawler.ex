@@ -6,10 +6,10 @@ defmodule Canary.Crawler do
       Crawler.crawl(
         url,
         host: URI.new!(url).host,
-        workers: 20,
-        interval: 5,
+        workers: 10,
+        interval: 10,
         max_pages: 100 * 100,
-        max_depths: 3,
+        max_depths: 5,
         url_filter: Canary.Crawler.Filter,
         scraper: Canary.Crawler.Scraper,
         store_pid: store_pid,

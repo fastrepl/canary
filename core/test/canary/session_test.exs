@@ -5,7 +5,7 @@ defmodule Canary.Test.Session do
   setup :set_mox_from_context
   setup :verify_on_exit!
 
-  test "" do
+  test "it sends messages" do
     Canary.Sessions.Responder.Mock
     |> expect(:call, fn %{
                           handle_message: handle_message,
