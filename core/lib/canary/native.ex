@@ -7,5 +7,8 @@ defmodule Canary.Native do
   @spec chunk_markdown(String.t(), pos_integer()) :: [String.t()]
   def chunk_markdown(_content, _max_tokens), do: error()
 
+  @spec html_to_md(String.t()) :: String.t()
+  def html_to_md(_html), do: error()
+
   defp error(), do: :erlang.nif_error(:nif_not_loaded)
 end
