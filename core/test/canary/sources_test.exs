@@ -27,7 +27,7 @@ defmodule Canary.SourcesTest do
   describe "ingest" do
     test "single", %{source: source} do
       Canary.AI.Mock
-      |> expect(:embedding, 3, fn _ -> {:ok, [[1, 2, 3]]} end)
+      |> expect(:embedding, 2, fn _ -> {:ok, [[1, 2, 3]]} end)
 
       assert Canary.Repo.all(Document) |> Enum.count() == 0
 
@@ -49,33 +49,6 @@ defmodule Canary.SourcesTest do
       |> Ash.create!()
 
       assert Canary.Repo.all(Document) |> Enum.count() == 2
-
-      [src] = Canary.Repo.all(Canary.Sources.Source)
-      src = src |> Ash.load!(:updated_at)
-      IO.inspect(src)
-
-      # destroy all documents, filter with source_id, and behind 1 day old compared to updated_at
-      res =
-        Canary.Sources.Document
-        |> Ash.Query.filter(source_id == ^src.id)
-        |> Ash.Query.filter(updated_at < ^DateTime.add(src.updated_at, -1, :day))
-        |> Ash.bulk_destroy(:destroy, %{})
-
-      IO.inspect(res)
-
-      # q =
-      #   Canary.Sources.Document
-      #   |> Ash.Query.new()
-      #   |> Ash.Query.filter(source_id == ^source.id)
-      #   |> Ash.read!()
-
-      # IO.inspect(q)
-
-      # q =
-      #   Canary.Sources.Document
-      #   |> Ash.Query.aggregate(:last_updated_at, :max, :updated_at)
-
-      # IO.inspect(q)
     end
 
     test "bulk create", %{source: source} do
