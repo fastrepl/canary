@@ -7,8 +7,8 @@
       "source": "id",
       "references": null,
       "allow_nil?": false,
-      "primary_key?": true,
-      "generated?": true
+      "generated?": true,
+      "primary_key?": true
     },
     {
       "default": "nil",
@@ -17,8 +17,8 @@
       "source": "updated_at",
       "references": null,
       "allow_nil?": true,
-      "primary_key?": false,
-      "generated?": false
+      "generated?": false,
+      "primary_key?": false
     },
     {
       "default": "nil",
@@ -28,26 +28,26 @@
       "references": {
         "name": "source_documents_source_id_fkey",
         "table": "sources",
-        "primary_key?": true,
         "schema": "public",
+        "on_delete": null,
         "multitenancy": {
           "global": null,
-          "strategy": null,
-          "attribute": null
+          "attribute": null,
+          "strategy": null
         },
+        "primary_key?": true,
         "destination_attribute": "id",
-        "on_delete": null,
-        "on_update": null,
         "deferrable": false,
-        "match_with": null,
-        "match_type": null,
         "index?": false,
+        "match_type": null,
+        "match_with": null,
+        "on_update": null,
         "destination_attribute_default": null,
         "destination_attribute_generated": null
       },
       "allow_nil?": false,
-      "primary_key?": false,
-      "generated?": false
+      "generated?": false,
+      "primary_key?": false
     },
     {
       "default": "nil",
@@ -56,8 +56,8 @@
       "source": "source_url",
       "references": null,
       "allow_nil?": true,
-      "primary_key?": false,
-      "generated?": false
+      "generated?": false,
+      "primary_key?": false
     },
     {
       "default": "nil",
@@ -65,9 +65,9 @@
       "type": "text",
       "source": "content",
       "references": null,
-      "allow_nil?": true,
-      "primary_key?": false,
-      "generated?": false
+      "allow_nil?": false,
+      "generated?": false,
+      "primary_key?": false
     },
     {
       "default": "nil",
@@ -75,9 +75,9 @@
       "type": "binary",
       "source": "content_hash",
       "references": null,
-      "allow_nil?": true,
-      "primary_key?": false,
-      "generated?": false
+      "allow_nil?": false,
+      "generated?": false,
+      "primary_key?": false
     },
     {
       "default": "nil",
@@ -86,12 +86,12 @@
       "source": "content_embedding",
       "references": null,
       "allow_nil?": true,
-      "primary_key?": false,
-      "generated?": false
+      "generated?": false,
+      "primary_key?": false
     }
   ],
   "table": "source_documents",
-  "hash": "4C595F976262EBD14A9B5B101B9F31BD2DD737765F79F48DD3658413ECB2B21B",
+  "hash": "4865EA3D0F7F765466D50DA3F088CEF38A6DE2F903E7F2239D1FAA85F0175315",
   "repo": "Elixir.Canary.Repo",
   "identities": [
     {
@@ -107,21 +107,21 @@
         }
       ],
       "where": null,
-      "index_name": "source_documents_unique_content_index",
-      "base_filter": null,
+      "nils_distinct?": true,
       "all_tenants?": false,
-      "nils_distinct?": true
+      "index_name": "source_documents_unique_content_index",
+      "base_filter": null
     }
   ],
   "schema": null,
+  "multitenancy": {
+    "global": null,
+    "attribute": null,
+    "strategy": null
+  },
   "base_filter": null,
   "check_constraints": [],
   "custom_indexes": [],
-  "multitenancy": {
-    "global": null,
-    "strategy": null,
-    "attribute": null
-  },
   "custom_statements": [],
   "has_create_action": true
 }
