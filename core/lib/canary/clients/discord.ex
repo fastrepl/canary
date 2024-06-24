@@ -6,8 +6,7 @@ defmodule Canary.Clients.Discord do
   alias Nostrum.Struct.Channel
 
   @bot_name "Canary"
-  @pending_message "working on it! (will ping you when it's done)"
-  @failed_message "sorry, seems like we're having some problem"
+  @failed_message "sorry, it seems like we're having some problems..."
   @timeout 60 * 1000
 
   @channel_text 0
@@ -34,27 +33,28 @@ defmodule Canary.Clients.Discord do
   end
 
   defp handle_message(%Channel{type: @channel_public_thread, id: channel_id}, user_msg) do
-    {:ok, canary_msg} = Api.create_message(channel_id, content: @pending_message)
-    respond(channel_id, user_msg.author.id, canary_msg.id, strip(user_msg.content))
+    respond(channel_id, user_msg.author.id, strip(user_msg.content))
   end
 
   defp handle_message(_, _), do: :ignore
 
-  defp respond(channel_id, user_id, message_id, query) do
+  defp respond(channel_id, user_id, query) do
     {:ok, pid} = Canary.Sessions.find_or_start_session(channel_id)
     GenServer.call(pid, {:submit, :website, %{query: query}})
+    Api.start_typing(channel_id)
 
     receive do
-      {:complete, data} ->
-        Api.delete_message(channel_id, message_id)
-        Api.create_message(channel_id, content: "#{mention(user_id)}\n\n#{data}'")
+      {:complete, %{content: content}} ->
+        Api.create_message(channel_id, content: "#{mention(user_id)} #{content}'")
+
+      {:progress, _} ->
+        Api.start_typing(channel_id)
 
       _ ->
         :ignore
     after
       @timeout ->
-        Api.delete_message(channel_id, message_id)
-        Api.create_message(channel_id, content: "#{mention(user_id)}\n\n#{@failed_message}'")
+        Api.create_message(channel_id, content: "#{mention(user_id)} #{@failed_message}")
     end
   end
 

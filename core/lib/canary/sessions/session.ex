@@ -24,11 +24,11 @@ defmodule Canary.Sessions.Session do
   def handle_call({:submit, :website, %{query: query}}, {from, _}, state) do
     state =
       state
-      |> Map.update!(:history, &[%{type: :user, content: query} | &1])
+      |> Map.update!(:history, &[%{role: :user, content: query} | &1])
 
     handle_message = fn content ->
       send(self(), {:update, :history, content})
-      send(from, {:complete, %{id: state.id, done: true}})
+      send(from, {:complete, %{id: state.id, content: content, done: true}})
     end
 
     handle_message_delta = fn content ->
@@ -50,7 +50,7 @@ defmodule Canary.Sessions.Session do
   def handle_info({:update, :history, content}, state) do
     state =
       state
-      |> Map.update!(:history, &[%{type: :ai, content: content} | &1])
+      |> Map.update!(:history, &[%{role: :assistant, content: content} | &1])
 
     {:noreply, state, state.timeout}
   end

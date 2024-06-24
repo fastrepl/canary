@@ -3,7 +3,7 @@ defmodule Canary.AI do
   @callback chat(map(), list(any())) :: {:ok, map()} | {:error, any()}
 
   def embedding(request), do: impl().embedding(request)
-  def chat(request, opts), do: impl().chat(request, opts)
+  def chat(request, opts \\ []), do: impl().chat(request, opts)
 
   defp impl(), do: Application.get_env(:canary, :ai, Canary.AI.OpenAI)
 end

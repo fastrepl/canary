@@ -15,9 +15,12 @@ defmodule Canary.Sessions.Responder.LLM do
   @behaviour Canary.Sessions.Responder
 
   def call(%{
-        history: _history,
-        handle_message: _handle_message,
+        history: history,
+        handle_message: handle_message,
         handle_message_delta: _handle_message_delta
       }) do
+    model = Application.fetch_env!(:canary, :chat_completion_model)
+    {:ok, res} = Canary.AI.chat(%{model: model, messages: history, stream: false})
+    handle_message.(res)
   end
 end
