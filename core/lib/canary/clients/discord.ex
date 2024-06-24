@@ -12,6 +12,10 @@ defmodule Canary.Clients.Discord do
   @channel_text 0
   @channel_public_thread 11
 
+  def handle_event({:MESSAGE_CREATE, %{author: %{username: @bot_name, bot: true}}, _ws_state}) do
+    :ignore
+  end
+
   def handle_event({:MESSAGE_CREATE, user_msg, _ws_state}) do
     if mention?(user_msg) do
       channel = Api.get_channel!(user_msg.channel_id)
