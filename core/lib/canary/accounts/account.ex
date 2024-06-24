@@ -20,8 +20,7 @@ defmodule Canary.Accounts.Account do
       through Canary.Accounts.AccountUser
     end
 
-    has_many :source_websites, Canary.Sources.Website
-    has_many :client_websites, Canary.Clients.Website
+    has_many :sources, Canary.Sources.Source
   end
 
   actions do

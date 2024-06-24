@@ -6,17 +6,70 @@ defmodule Canary.Sources.Document do
   attributes do
     integer_primary_key :id
 
-    attribute :content, :string
-    attribute :embedding, :vector
+    attribute :updated_at, :utc_datetime_usec
+
+    attribute :source_id, :uuid do
+      allow_nil? false
+    end
+
+    attribute :source_url, :string do
+      # this can we url of docs or github, but not all document can be referenced by url
+      allow_nil? true
+    end
+
+    attribute :content, :string do
+      allow_nil? false
+    end
+
+    attribute :content_hash, :binary do
+      allow_nil? false
+    end
+
+    attribute :content_embedding, :vector do
+      # at ingest time, we intentionally leave this to nil.
+      allow_nil? true
+    end
+  end
+
+  identities do
+    identity :unique_content, [:source_id, :content_hash]
   end
 
   relationships do
-    belongs_to :snapshot, Canary.Sources.Snapshot
+    belongs_to :source, Canary.Sources.Source
   end
 
   actions do
-    create :create do
-      accept [:content, :embedding]
+    defaults [:read, :destroy]
+
+    create :ingest do
+      argument :source_id, :uuid do
+        allow_nil? false
+      end
+
+      argument :content, :string do
+        allow_nil? false
+      end
+
+      change set_attribute(:source_id, expr(^arg(:source_id)))
+      change set_attribute(:content, expr(^arg(:content)))
+      change set_attribute(:updated_at, &DateTime.utc_now/0)
+
+      change {
+        Canary.Sources.Changes.Hash,
+        source_attr: :content, hash_attr: :content_hash
+      }
+
+      change fn changeset, _ ->
+        Ash.Changeset.after_action(changeset, fn changeset, doc ->
+          Canary.Workers.Document.new(%{"document_id" => doc.id}) |> Oban.insert!()
+          {:ok, doc}
+        end)
+      end
+
+      upsert? true
+      upsert_identity :unique_content
+      upsert_fields [:updated_at]
     end
 
     read :hybrid_search do
@@ -34,6 +87,14 @@ defmodule Canary.Sources.Document do
 
       manual Canary.Sources.Document.HybridSearch
     end
+
+    update :set_embedding do
+      argument :embedding, :vector do
+        allow_nil? false
+      end
+
+      change set_attribute(:content_embedding, expr(^arg(:embedding)))
+    end
   end
 
   postgres do
@@ -48,7 +109,7 @@ defmodule Canary.Sources.Document.HybridSearch do
   @index_name "search_index"
   @table_name "source_documents"
   @table_text_field "content"
-  @table_vector_field "embedding"
+  @table_vector_field "content_embedding"
 
   def read(ash_query, _ecto_query, _opts, _context) do
     text = ash_query.arguments.text

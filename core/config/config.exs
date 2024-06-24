@@ -63,7 +63,7 @@ config :phoenix, :json_library, Jason
 
 config :canary, Oban,
   engine: Oban.Engines.Basic,
-  queues: [default: 10],
+  queues: [default: 10, embedding: 100],
   repo: Canary.Repo
 
 config :canary, Canary.Repo, types: Canary.PostgrexTypes

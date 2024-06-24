@@ -32,61 +32,64 @@ defmodule Canary.Repo.Migrations.InitAsh do
       add :jti, :text, null: false, primary_key: true
     end
 
-    create table(:source_websites, primary_key: false) do
+    create table(:sources, primary_key: false) do
       add :id, :uuid, null: false, default: fragment("gen_random_uuid()"), primary_key: true
       add :account_id, :uuid, null: false
-      add :base_url, :text, null: false
-    end
-
-    create table(:source_snapshots, primary_key: false) do
-      add :id, :uuid, null: false, default: fragment("gen_random_uuid()"), primary_key: true
-      add :source_id, :uuid, null: false
-
-      add :created_at, :utc_datetime_usec,
-        null: false,
-        default: fragment("(now() AT TIME ZONE 'utc')")
+      add :type, :text
+      add :last_fetched_at, :utc_datetime_usec
+      add :web_base_url, :text
     end
 
     create table(:source_documents, primary_key: false) do
       add :id, :bigserial, null: false, primary_key: true
-      add :content, :text
-      add :embedding, :vector
+      add :updated_at, :utc_datetime_usec
 
-      add :snapshot_id,
-          references(:source_snapshots,
+      add :source_id,
+          references(:sources,
             column: :id,
-            name: "source_documents_snapshot_id_fkey",
+            name: "source_documents_source_id_fkey",
             type: :uuid,
             prefix: "public"
-          )
+          ),
+          null: false
+
+      add :source_url, :text
+      add :content, :text
+      add :content_hash, :binary
+      add :content_embedding, :vector
     end
 
-    create table(:client_websites, primary_key: false) do
+    create unique_index(:source_documents, [:source_id, :content_hash],
+             name: "source_documents_unique_content_index"
+           )
+
+    create table(:clients, primary_key: false) do
       add :id, :uuid, null: false, default: fragment("gen_random_uuid()"), primary_key: true
       add :account_id, :uuid, null: false
-      add :base_url, :text, null: false
-      add :public_key, :text, null: false, default: fragment("gen_random_uuid()")
+      add :type, :text
+      add :web_base_url, :text
+      add :web_public_key, :text, default: fragment("gen_random_uuid()")
     end
 
     create table(:accounts, primary_key: false) do
       add :id, :uuid, null: false, default: fragment("gen_random_uuid()"), primary_key: true
     end
 
-    alter table(:source_websites) do
+    alter table(:sources) do
       modify :account_id,
              references(:accounts,
                column: :id,
-               name: "source_websites_account_id_fkey",
+               name: "sources_account_id_fkey",
                type: :uuid,
                prefix: "public"
              )
     end
 
-    alter table(:client_websites) do
+    alter table(:clients) do
       modify :account_id,
              references(:accounts,
                column: :id,
-               name: "client_websites_account_id_fkey",
+               name: "clients_account_id_fkey",
                type: :uuid,
                prefix: "public"
              )
@@ -132,29 +135,31 @@ defmodule Canary.Repo.Migrations.InitAsh do
       remove :user_id
     end
 
-    drop constraint(:client_websites, "client_websites_account_id_fkey")
+    drop constraint(:clients, "clients_account_id_fkey")
 
-    alter table(:client_websites) do
+    alter table(:clients) do
       modify :account_id, :uuid
     end
 
-    drop constraint(:source_websites, "source_websites_account_id_fkey")
+    drop constraint(:sources, "sources_account_id_fkey")
 
-    alter table(:source_websites) do
+    alter table(:sources) do
       modify :account_id, :uuid
     end
 
     drop table(:accounts)
 
-    drop table(:client_websites)
+    drop table(:clients)
 
-    drop constraint(:source_documents, "source_documents_snapshot_id_fkey")
+    drop_if_exists unique_index(:source_documents, [:source_id, :content_hash],
+                     name: "source_documents_unique_content_index"
+                   )
+
+    drop constraint(:source_documents, "source_documents_source_id_fkey")
 
     drop table(:source_documents)
 
-    drop table(:source_snapshots)
-
-    drop table(:source_websites)
+    drop table(:sources)
 
     drop table(:tokens)
 
