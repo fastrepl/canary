@@ -16,16 +16,16 @@
       "type": "uuid",
       "source": "account_id",
       "references": {
-        "name": "client_websites_account_id_fkey",
+        "name": "sources_account_id_fkey",
         "table": "accounts",
-        "destination_attribute": "id",
         "primary_key?": true,
         "schema": "public",
         "multitenancy": {
           "global": null,
-          "attribute": null,
-          "strategy": null
+          "strategy": null,
+          "attribute": null
         },
+        "destination_attribute": "id",
         "on_delete": null,
         "on_update": null,
         "deferrable": false,
@@ -43,36 +43,46 @@
       "default": "nil",
       "size": null,
       "type": "text",
-      "source": "base_url",
+      "source": "type",
       "references": null,
-      "allow_nil?": false,
+      "allow_nil?": true,
       "primary_key?": false,
       "generated?": false
     },
     {
-      "default": "fragment(\"gen_random_uuid()\")",
+      "default": "nil",
+      "size": null,
+      "type": "utc_datetime_usec",
+      "source": "last_fetched_at",
+      "references": null,
+      "allow_nil?": true,
+      "primary_key?": false,
+      "generated?": false
+    },
+    {
+      "default": "nil",
       "size": null,
       "type": "text",
-      "source": "public_key",
+      "source": "web_base_url",
       "references": null,
-      "allow_nil?": false,
+      "allow_nil?": true,
       "primary_key?": false,
       "generated?": false
     }
   ],
-  "table": "client_websites",
-  "hash": "8332509792F55790570E7E016542D2187D3F524FFF6BE8F7E5DB292DBFCCE813",
+  "table": "sources",
+  "hash": "96F3446E8426859FE77A678B87AA805B508B548AE1F8B0801D28756118ED73BA",
   "repo": "Elixir.Canary.Repo",
   "identities": [],
   "schema": null,
+  "base_filter": null,
   "check_constraints": [],
   "custom_indexes": [],
   "multitenancy": {
     "global": null,
-    "attribute": null,
-    "strategy": null
+    "strategy": null,
+    "attribute": null
   },
-  "base_filter": null,
   "custom_statements": [],
   "has_create_action": true
 }

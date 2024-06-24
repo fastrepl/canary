@@ -8,14 +8,14 @@
       "references": {
         "name": "account_users_user_id_fkey",
         "table": "users",
-        "destination_attribute": "id",
         "primary_key?": true,
         "schema": "public",
         "multitenancy": {
           "global": null,
-          "attribute": null,
-          "strategy": null
+          "strategy": null,
+          "attribute": null
         },
+        "destination_attribute": "id",
         "on_delete": null,
         "on_update": null,
         "deferrable": false,
@@ -37,14 +37,14 @@
       "references": {
         "name": "account_users_account_id_fkey",
         "table": "accounts",
-        "destination_attribute": "id",
         "primary_key?": true,
         "schema": "public",
         "multitenancy": {
           "global": null,
-          "attribute": null,
-          "strategy": null
+          "strategy": null,
+          "attribute": null
         },
+        "destination_attribute": "id",
         "on_delete": null,
         "on_update": null,
         "deferrable": false,
@@ -60,18 +60,18 @@
     }
   ],
   "table": "account_users",
-  "hash": "8C7C071F2D634C3EDA43F48706068AE6AF793DCA586810ACAC646B1C704684C1",
+  "hash": "10C10764B2D4BF150F83F42707CE8CBBDF1AAC490A810DCAD69EFCB8E924F16A",
   "repo": "Elixir.Canary.Repo",
   "identities": [],
   "schema": null,
+  "base_filter": null,
   "check_constraints": [],
   "custom_indexes": [],
   "multitenancy": {
     "global": null,
-    "attribute": null,
-    "strategy": null
+    "strategy": null,
+    "attribute": null
   },
-  "base_filter": null,
   "custom_statements": [],
   "has_create_action": true
 }

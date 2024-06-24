@@ -16,16 +16,16 @@
       "type": "uuid",
       "source": "account_id",
       "references": {
-        "name": "source_websites_account_id_fkey",
+        "name": "clients_account_id_fkey",
         "table": "accounts",
-        "destination_attribute": "id",
         "primary_key?": true,
         "schema": "public",
         "multitenancy": {
           "global": null,
-          "attribute": null,
-          "strategy": null
+          "strategy": null,
+          "attribute": null
         },
+        "destination_attribute": "id",
         "on_delete": null,
         "on_update": null,
         "deferrable": false,
@@ -43,26 +43,46 @@
       "default": "nil",
       "size": null,
       "type": "text",
-      "source": "base_url",
+      "source": "type",
       "references": null,
-      "allow_nil?": false,
+      "allow_nil?": true,
+      "primary_key?": false,
+      "generated?": false
+    },
+    {
+      "default": "nil",
+      "size": null,
+      "type": "text",
+      "source": "web_base_url",
+      "references": null,
+      "allow_nil?": true,
+      "primary_key?": false,
+      "generated?": false
+    },
+    {
+      "default": "fragment(\"gen_random_uuid()\")",
+      "size": null,
+      "type": "text",
+      "source": "web_public_key",
+      "references": null,
+      "allow_nil?": true,
       "primary_key?": false,
       "generated?": false
     }
   ],
-  "table": "source_websites",
-  "hash": "59E075FE98042B9D504DD8F0F3359EB1E362882D3FA3C698A6BECC9532369A5D",
+  "table": "clients",
+  "hash": "0AFBAB6CE2B3F030E4357D6A2BAF91D778864BF42F714D5F2BD1A0D24DEEECDB",
   "repo": "Elixir.Canary.Repo",
   "identities": [],
   "schema": null,
+  "base_filter": null,
   "check_constraints": [],
   "custom_indexes": [],
   "multitenancy": {
     "global": null,
-    "attribute": null,
-    "strategy": null
+    "strategy": null,
+    "attribute": null
   },
-  "base_filter": null,
   "custom_statements": [],
   "has_create_action": true
 }

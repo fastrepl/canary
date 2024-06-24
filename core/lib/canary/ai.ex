@@ -1,4 +1,16 @@
 defmodule Canary.AI do
+  @callback embedding(map()) :: {:ok, list(any())} | {:error, any()}
+  @callback chat(map(), list(any())) :: {:ok, map()} | {:error, any()}
+
+  def embedding(request), do: impl().embedding(request)
+  def chat(request, opts), do: impl().chat(request, opts)
+
+  defp impl(), do: Application.get_env(:canary, :ai, Canary.AI.OpenAI)
+end
+
+defmodule Canary.AI.OpenAI do
+  @behaviour Canary.AI
+
   use Retry
 
   defp client() do
