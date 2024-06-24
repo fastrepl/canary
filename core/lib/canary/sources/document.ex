@@ -62,7 +62,7 @@ defmodule Canary.Sources.Document do
 
       change fn changeset, _ ->
         Ash.Changeset.after_action(changeset, fn changeset, doc ->
-          Canary.Workers.Document.new(%{"document_id" => doc.id}) |> Oban.insert!()
+          Canary.Workers.Embedder.new(%{"document_id" => doc.id}) |> Oban.insert!()
           {:ok, doc}
         end)
       end

@@ -1,8 +1,11 @@
-defmodule Canary.Workers.Document do
-  use Oban.Worker, queue: :embedding, max_attempts: 5
+defmodule Canary.Workers.Embedder do
+  use Oban.Worker, queue: :embedder, max_attempts: 5
 
-  def perform(%Oban.Job{args: %{"document_id" => document_id}}) do
-    case Canary.Sources.Document |> Ash.get(document_id) do
+  alias Canary.Sources.Document
+
+  @impl true
+  def perform(%Oban.Job{args: %{"document_id" => id}}) do
+    case Ash.get(Document, id) do
       {:error, _} ->
         :ok
 
@@ -15,7 +18,7 @@ defmodule Canary.Workers.Document do
     end
   end
 
-  defp process(doc) do
+  defp process(%Document{} = doc) do
     model = Application.get_env(:canary, :text_embedding_model)
 
     with {:ok, [embedding]} = Canary.AI.embedding(%{model: model, input: [doc.content]}),

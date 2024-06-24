@@ -63,8 +63,14 @@ config :phoenix, :json_library, Jason
 
 config :canary, Oban,
   engine: Oban.Engines.Basic,
-  queues: [default: 10, embedding: 100],
-  repo: Canary.Repo
+  queues: [default: 10, embedder: 100, fetcher: 10],
+  repo: Canary.Repo,
+  plugins: [
+    {Oban.Plugins.Cron,
+     crontab: [
+       {"0 0 * * *", Canary.Workers.Updater, queue: :default}
+     ]}
+  ]
 
 config :canary, Canary.Repo, types: Canary.PostgrexTypes
 
