@@ -63,10 +63,17 @@ defmodule Canary.Clients.Discord do
     user_id = user_msg.author.id
     msg_id = user_msg.id
 
-    Api.create_message(channel_id,
-      content: "#{mention(user_id)} #{content}",
-      message_reference: %{message_id: msg_id}
-    )
+    opts =
+      if channel_id == user_msg.channel_id do
+        [
+          content: "#{mention(user_id)} #{content}",
+          message_reference: %{message_id: msg_id}
+        ]
+      else
+        [content: "#{mention(user_id)} #{content}"]
+      end
+
+    Api.create_message(channel_id, opts)
   end
 
   defp strip(s), do: s |> String.replace(~r/<@!?\d+>/, "") |> String.trim()

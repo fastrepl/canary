@@ -25,16 +25,28 @@ defmodule Canary.Sessions.Responder.LLM do
     {:ok, queries} = Canary.Query.Understander.run(user_query)
     query = queries |> List.first()
 
-    docs =
+    context =
       Canary.Sources.Document
       |> Ash.Query.for_read(:hybrid_search, %{text: query.text, embedding: query.embedding})
       |> Ash.read!()
+      |> Enum.map(& &1.content)
+      |> Enum.join("\n\n")
 
     messages = [
       %{
         role: "user",
-        content:
-          "#{docs |> Enum.map(& &1.content) |> Enum.join("\n\n")}\n\nBased on the above retrieved documents, answer the user's question, within 3 sentences. User: #{user_query}"
+        content: """
+        <retrieved_documents>
+        #{context}
+        </retrieved_documents>
+
+        <user_question>
+        #{user_query}
+        </user_question>
+
+        Based on the retrieved documents, answer the user's question within 5 sentences.
+        If user is asking for nonsense, or the retrieved documents are not relevant, just transparently say it.
+        """
       }
     ]
 
