@@ -5,7 +5,10 @@ defmodule Canary.Clients.Discord do
   alias Nostrum.Struct.Message
   alias Nostrum.Struct.Channel
 
+  require Ash.Query
+
   @bot_name "Canary"
+  @no_source_message "we can't find any sources created for this channel."
   @failed_message "sorry, it seems like we're having some problems..."
   @timeout 60 * 1000
 
@@ -23,7 +26,7 @@ defmodule Canary.Clients.Discord do
     end
   end
 
-  defp handle_message(%Channel{type: @channel_text, id: channel_id}, user_msg) do
+  defp handle_message(%Channel{type: @channel_text, id: channel_id, guild_id: guild_id}, user_msg) do
     thread_name = user_msg.content |> strip() |> String.slice(0..20)
 
     {:ok, channel} =
@@ -36,26 +39,32 @@ defmodule Canary.Clients.Discord do
     handle_message(channel, user_msg)
   end
 
-  defp handle_message(%Channel{type: @channel_public_thread, id: channel_id}, user_msg) do
-    respond(channel_id, user_msg)
+  defp handle_message(%Channel{type: @channel_public_thread} = channel, user_msg) do
+    respond(channel, user_msg)
   end
 
   defp handle_message(_, _), do: :ignore
 
-  defp respond(channel_id, user_msg) do
-    query = strip(user_msg.content)
+  defp respond(%Channel{id: thread_id, parent_id: channel_id, guild_id: guild_id}, user_msg) do
+    source_ids = find_source_ids(guild_id, channel_id)
 
-    {:ok, pid} = Canary.Sessions.find_or_start_session(channel_id)
-    GenServer.call(pid, {:submit, :website, %{query: query}})
-    Api.start_typing(channel_id)
+    if length(source_ids) == 0 do
+      send(thread_id, user_msg, @no_source_message)
+    else
+      query = strip(user_msg.content)
 
-    receive do
-      {:complete, %{content: content}} -> send(channel_id, user_msg, content)
-      {:progress, _} -> Api.start_typing(channel_id)
-      _ -> :ignore
-    after
-      @timeout ->
-        send(channel_id, user_msg, @failed_message)
+      {:ok, pid} = Canary.Sessions.find_or_start_session(thread_id)
+      GenServer.call(pid, {:submit, :website, %{query: query, source_ids: source_ids}})
+      Api.start_typing(thread_id)
+
+      receive do
+        {:complete, %{content: content}} -> send(thread_id, user_msg, content)
+        {:progress, _} -> Api.start_typing(thread_id)
+        _ -> :ignore
+      after
+        @timeout ->
+          send(thread_id, user_msg, @failed_message)
+      end
     end
   end
 
@@ -74,6 +83,24 @@ defmodule Canary.Clients.Discord do
       end
 
     Api.create_message(channel_id, opts)
+  end
+
+  defp find_source_ids(guild_id, channel_id) do
+    client =
+      Canary.Clients.Client
+      |> Ash.Query.filter(discord_server_id == ^guild_id and discord_channel_id == ^channel_id)
+      |> Ash.read_one!()
+
+    if client == nil do
+      []
+    else
+      client
+      |> Ash.load!(:account)
+      |> Map.get(:account)
+      |> Ash.load!(:sources)
+      |> Map.get(:sources)
+      |> Enum.map(& &1.id)
+    end
   end
 
   defp strip(s), do: s |> String.replace(~r/<@!?\d+>/, "") |> String.trim()

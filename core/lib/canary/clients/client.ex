@@ -16,6 +16,12 @@ defmodule Canary.Clients.Client do
     attribute :web_public_key, :string
 
     attribute :discord_server_id, :integer
+    attribute :discord_channel_id, :integer
+  end
+
+  identities do
+    identity :unique_web, [:web_base_url, :web_public_key]
+    identity :unique_discord, [:discord_server_id, :discord_channel_id]
   end
 
   actions do
@@ -31,6 +37,7 @@ defmodule Canary.Clients.Client do
       end
 
       change set_attribute(:type, :web)
+      change set_attribute(:account_id, expr(^arg(:account_id)))
       change set_attribute(:web_base_url, expr(^arg(:web_base_url)))
       change set_attribute(:web_public_key, &Ash.UUID.generate/0)
     end
@@ -44,8 +51,14 @@ defmodule Canary.Clients.Client do
         allow_nil? false
       end
 
+      argument :discord_channel_id, :integer do
+        allow_nil? false
+      end
+
       change set_attribute(:type, :discord)
+      change set_attribute(:account_id, expr(^arg(:account_id)))
       change set_attribute(:discord_server_id, expr(^arg(:discord_server_id)))
+      change set_attribute(:discord_channel_id, expr(^arg(:discord_channel_id)))
     end
   end
 

@@ -1,6 +1,7 @@
 defmodule Canary.Sessions.Responder do
   @type args :: %{
           history: list(),
+          source_ids: list(),
           handle_message: function(),
           handle_message_delta: function()
         }
@@ -13,9 +14,11 @@ end
 
 defmodule Canary.Sessions.Responder.LLM do
   @behaviour Canary.Sessions.Responder
+  require Ash.Query
 
   def call(%{
         history: history,
+        source_ids: source_ids,
         handle_message: handle_message,
         handle_message_delta: _handle_message_delta
       }) do
@@ -27,6 +30,7 @@ defmodule Canary.Sessions.Responder.LLM do
 
     context =
       Canary.Sources.Document
+      |> Ash.Query.filter(source_id in ^source_ids)
       |> Ash.Query.for_read(:hybrid_search, %{text: query.text, embedding: query.embedding})
       |> Ash.read!()
       |> Enum.map(& &1.content)

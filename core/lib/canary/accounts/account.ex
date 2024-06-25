@@ -24,6 +24,8 @@ defmodule Canary.Accounts.Account do
   end
 
   actions do
+    defaults [:read]
+
     create :create do
       accept [:user_id, :name]
     end

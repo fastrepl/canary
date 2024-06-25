@@ -21,7 +21,7 @@ defmodule Canary.Sessions.Session do
   end
 
   @impl true
-  def handle_call({:submit, :website, %{query: query}}, {from, _}, state) do
+  def handle_call({:submit, :website, %{query: query, source_ids: source_ids}}, {from, _}, state) do
     state =
       state
       |> Map.update!(:history, &[%{role: :user, content: query} | &1])
@@ -38,6 +38,7 @@ defmodule Canary.Sessions.Session do
     Task.Supervisor.start_child(Canary.TaskSupervisor, fn ->
       Canary.Sessions.Responder.call(%{
         history: state.history,
+        source_ids: source_ids,
         handle_message: handle_message,
         handle_message_delta: handle_message_delta
       })
