@@ -28,13 +28,23 @@ defmodule Canary.Sessions.Responder.LLM do
     {:ok, queries} = Canary.Query.Understander.run(user_query)
     query = queries |> List.first()
 
-    context =
+    docs =
       Canary.Sources.Document
       |> Ash.Query.filter(source_id in ^source_ids)
       |> Ash.Query.for_read(:hybrid_search, %{text: query.text, embedding: query.embedding})
       |> Ash.read!()
+
+    context =
+      docs
       |> Enum.map(& &1.content)
       |> Enum.join("\n\n")
+
+    sources =
+      docs
+      |> Enum.map(& &1.source_url)
+      |> Enum.reject(&is_nil/1)
+      |> Enum.map(fn url -> "- #{url}" end)
+      |> Enum.join("\n")
 
     messages = [
       %{
@@ -55,6 +65,6 @@ defmodule Canary.Sessions.Responder.LLM do
     ]
 
     {:ok, res} = Canary.AI.chat(%{model: model, messages: messages, stream: false})
-    handle_message.(res)
+    handle_message.("#{res}\n\n#{sources}")
   end
 end
