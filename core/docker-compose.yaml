@@ -2,7 +2,7 @@
 name: canary
 services:
   db:
-    image: paradedb/paradedb:16-v0.7.5
+    image: paradedb/paradedb:16-v0.7.6
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
