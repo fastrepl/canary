@@ -32,9 +32,9 @@ defmodule Canary.Sources.Source do
         allow_nil? false
       end
 
+      change set_attribute(:type, :web)
       change set_attribute(:account_id, expr(^arg(:account_id)))
       change set_attribute(:web_base_url, expr(^arg(:web_base_url)))
-      change set_attribute(:type, :web)
     end
   end
 

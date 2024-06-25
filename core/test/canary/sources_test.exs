@@ -5,7 +5,6 @@ defmodule Canary.SourcesTest do
   import Canary.AccountsFixtures
 
   import Mox
-  setup :set_mox_from_context
   setup :verify_on_exit!
 
   alias Canary.Sources.Document
