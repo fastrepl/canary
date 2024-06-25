@@ -17,7 +17,7 @@ defmodule Canary.Test.Session do
     end)
 
     {:ok, pid} = Canary.Sessions.find_or_start_session("TEST")
-    :ok = GenServer.call(pid, {:submit, :website, %{query: "Hello!"}})
+    :ok = GenServer.call(pid, {:submit, :website, %{query: "Hello!", source_ids: [1]}})
 
     assert_receive {:progress, %{content: "hi"}}
     assert_receive {:progress, %{content: " and bye"}}

@@ -26,7 +26,7 @@ defmodule Canary.Clients.Discord do
     end
   end
 
-  defp handle_message(%Channel{type: @channel_text, id: channel_id, guild_id: guild_id}, user_msg) do
+  defp handle_message(%Channel{type: @channel_text, id: channel_id}, user_msg) do
     thread_name = user_msg.content |> strip() |> String.slice(0..20)
 
     {:ok, channel} =
