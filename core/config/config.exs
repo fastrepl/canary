@@ -63,7 +63,7 @@ config :phoenix, :json_library, Jason
 
 config :canary, Oban,
   engine: Oban.Engines.Basic,
-  queues: [default: 10, embedder: 20, fetcher: 10],
+  queues: [default: 10, embedder: 20, fetcher: 10, pruner: 5],
   repo: Canary.Repo,
   plugins: [
     {Oban.Plugins.Cron,

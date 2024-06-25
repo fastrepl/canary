@@ -24,9 +24,17 @@ defmodule Canary.Workers.Fetcher do
         |> Enum.map(&%{source_id: src.id, source_url: url, content: &1})
       end)
 
-    inputs
-    |> Ash.bulk_create(Document, :ingest, return_records?: false, return_errors?: true)
-
-    :ok
+    with %Ash.BulkResult{status: :success} <-
+           inputs
+           |> Ash.bulk_create(Document, :ingest,
+             return_records?: false,
+             return_errors?: true
+           ),
+         _ <-
+           Canary.Workers.Pruner.new(%{"source_id" => src.id})
+           |> Oban.insert!(schedule_in: 1 * 30) do
+    else
+      error -> {:error, error}
+    end
   end
 end
