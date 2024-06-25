@@ -9,8 +9,8 @@ defmodule CanaryWeb.NavLive do
   defp set_active_tab(_params, _url, socket) do
     active_tab =
       case socket.view do
-        CanaryWeb.HomeLive -> :home
-        CanaryWeb.SettingsLive -> :settings
+        CanaryWeb.HomeLive -> nil
+        CanaryWeb.SettingsLive -> nil
         _ -> nil
       end
 
