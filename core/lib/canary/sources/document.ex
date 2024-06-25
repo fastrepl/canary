@@ -47,11 +47,16 @@ defmodule Canary.Sources.Document do
         allow_nil? false
       end
 
+      argument :source_url, :string do
+        allow_nil? true
+      end
+
       argument :content, :string do
         allow_nil? false
       end
 
       change set_attribute(:source_id, expr(^arg(:source_id)))
+      change set_attribute(:source_url, expr(^arg(:source_url)))
       change set_attribute(:content, expr(^arg(:content)))
       change set_attribute(:updated_at, &DateTime.utc_now/0)
 
@@ -140,9 +145,9 @@ defmodule Canary.Sources.Document.HybridSearch do
       FROM #{@index_name}.rank_hybrid(
         bm25_query => $1,
         similarity_query => $2,
-        bm25_weight => 0.6,
+        bm25_weight => 0.2,
         bm25_limit_n => 100,
-        similarity_weight => 0.4,
+        similarity_weight => 0.8,
         similarity_limit_n => 100
       )
     ) index
@@ -152,8 +157,8 @@ defmodule Canary.Sources.Document.HybridSearch do
     LIMIT $4;
     """
     |> query([
-      "#{@table_text_field}:#{text}",
-      "'#{embedding}' <-> #{@table_vector_field}",
+      ~s(#{@table_text_field}:"#{text}"),
+      ~s('#{embedding}' <-> #{@table_vector_field}),
       threshold,
       n
     ])

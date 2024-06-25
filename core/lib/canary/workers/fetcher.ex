@@ -20,11 +20,13 @@ defmodule Canary.Workers.Fetcher do
       |> Enum.flat_map(fn {url, html} ->
         html
         |> Canary.Reader.html_to_md!()
-        |> Canary.Native.chunk_markdown(1000)
+        |> Canary.Native.chunk_markdown(1400)
         |> Enum.map(&%{source_id: src.id, source_url: url, content: &1})
       end)
 
     inputs
-    |> Ash.bulk_create(Document, :ingest, return_records?: false)
+    |> Ash.bulk_create(Document, :ingest, return_records?: false, return_errors?: true)
+
+    :ok
   end
 end
