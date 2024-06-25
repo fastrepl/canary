@@ -55,7 +55,16 @@ defmodule Canary.Crawler.Scraper do
   @behaviour Crawler.Scraper.Spec
 
   def scrape(%Crawler.Store.Page{url: url, body: body, opts: opts} = page) do
-    opts.store_pid |> Agent.update(&Map.put(&1, url, body))
+    opts.store_pid |> Agent.update(&Map.put(&1, normalize(url), body))
     {:ok, page}
+  end
+
+  defp normalize(url) do
+    url
+    |> URI.parse()
+    |> Map.put(:query, nil)
+    |> Map.put(:fragment, nil)
+    |> URI.to_string()
+    |> String.replace_trailing("/", "")
   end
 end
