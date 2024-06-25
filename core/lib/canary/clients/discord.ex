@@ -37,29 +37,36 @@ defmodule Canary.Clients.Discord do
   end
 
   defp handle_message(%Channel{type: @channel_public_thread, id: channel_id}, user_msg) do
-    respond(channel_id, user_msg.author.id, strip(user_msg.content))
+    respond(channel_id, user_msg)
   end
 
   defp handle_message(_, _), do: :ignore
 
-  defp respond(channel_id, user_id, query) do
+  defp respond(channel_id, user_msg) do
+    query = strip(user_msg.content)
+
     {:ok, pid} = Canary.Sessions.find_or_start_session(channel_id)
     GenServer.call(pid, {:submit, :website, %{query: query}})
     Api.start_typing(channel_id)
 
     receive do
-      {:complete, %{content: content}} ->
-        Api.create_message(channel_id, content: "#{mention(user_id)} #{content}'")
-
-      {:progress, _} ->
-        Api.start_typing(channel_id)
-
-      _ ->
-        :ignore
+      {:complete, %{content: content}} -> send(channel_id, user_msg, content)
+      {:progress, _} -> Api.start_typing(channel_id)
+      _ -> :ignore
     after
       @timeout ->
-        Api.create_message(channel_id, content: "#{mention(user_id)} #{@failed_message}")
+        send(channel_id, user_msg, @failed_message)
     end
+  end
+
+  defp send(channel_id, user_msg, content) do
+    user_id = user_msg.author.id
+    msg_id = user_msg.id
+
+    Api.create_message(channel_id,
+      content: "#{mention(user_id)} #{content}",
+      message_reference: %{message_id: msg_id}
+    )
   end
 
   defp strip(s), do: s |> String.replace(~r/<@!?\d+>/, "") |> String.trim()
