@@ -3,21 +3,16 @@ defmodule CanaryWeb.HomeLive do
 
   def render(assigns) do
     ~H"""
-    <%= if @sources == [] do %>
-      <h2 class="font-semibold">No sources yet</h2>
-    <% else %>
-      <h2 class="font-semibold">Sources</h2>
-      <ul :if={@sources != []}>
-        <li :for={source <- @sources}>
-          <%= source.name %>
-        </li>
-      </ul>
-    <% end %>
+    <h1>Home</h1>
     """
   end
 
   def mount(_params, _session, socket) do
     sources = Canary.Sources.Source |> Ash.read!()
     {:ok, socket |> assign(sources: sources)}
+  end
+
+  def handle_event("1", _, socket) do
+    {:noreply, socket}
   end
 end

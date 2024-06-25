@@ -1,20 +1,10 @@
-<header class="px-4 sm:px-6 lg:px-8">
-  <div class="flex items-center justify-between py-3">
-    <.link href="/" class="text-md font-semibold">🐤 Canary</.link>
-
-    <div class="text-xs font-semibold">
-      <%= if @current_user do %>
-        <.link href={~p"/sign-out"}>Sign out</.link>
-      <% else %>
-        <.link href={~p"/sign-in"}>Sign in</.link>
-      <% end %>
+<div class="drawer min-h-screen bg-base-200 lg:drawer-open">
+  <input id="canary-drawer" type="checkbox" class="drawer-toggle" />
+  <main class="drawer-content">
+    <div class="p-4 lg:p-10">
+      <.flash_group flash={@flash} />
+      <%= @inner_content %>
     </div>
-  </div>
-</header>
-<main class="px-4 py-20 sm:px-6 lg:px-8">
+  </main>
   <CanaryWeb.Layouts.side_menu active_tab={@active_tab} />
-  <div class="mx-auto max-w-2xl">
-    <.flash_group flash={@flash} />
-    <%= @inner_content %>
-  </div>
-</main>
+</div>

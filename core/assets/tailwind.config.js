@@ -13,7 +13,7 @@ module.exports = {
     "../deps/ash_authentication_phoenix/**/*.*ex",
   ],
   daisyui: {
-    themes: ["cupcake"],
+    themes: ["lemonade"],
     logs: false,
   },
   theme: {
