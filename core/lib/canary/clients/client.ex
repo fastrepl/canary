@@ -19,6 +19,7 @@ defmodule Canary.Clients.Client do
   end
 
   identities do
+    identity :unique_client, [:account_id, :name]
     identity :unique_web, [:web_base_url, :web_public_key]
     identity :unique_discord, [:discord_server_id, :discord_channel_id]
   end

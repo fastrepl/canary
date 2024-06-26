@@ -63,7 +63,7 @@ defmodule CanaryWeb.ClientsLive do
         <tr>
           <th>Type</th>
           <th>Name</th>
-          <th>Sources</th>
+          <th>Linked sources</th>
           <th>Created at</th>
           <th></th>
         </tr>
@@ -76,6 +76,7 @@ defmodule CanaryWeb.ClientsLive do
             <td>
               <div class="dropdown">
                 <div tabindex="0" role="button" class="btn btn-ghost btn-xs">
+                  <span class="w-4"><%= length(client.sources) %></span>
                   <span class="hero-list-bullet h-5 w-5" />
                 </div>
                 <div

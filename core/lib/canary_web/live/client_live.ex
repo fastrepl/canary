@@ -12,7 +12,7 @@ defmodule CanaryWeb.ClientLive do
         </ul>
       </div>
 
-      <button class="btn btn-sm btn-neutral ml-auto" phx-click="delete">
+      <button class="btn btn-sm btn-neutral btn-outline ml-auto" phx-click="delete">
         Delete
       </button>
     </.content_header>

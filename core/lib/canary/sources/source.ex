@@ -14,6 +14,10 @@ defmodule Canary.Sources.Source do
     attribute :web_base_url, :string
   end
 
+  identities do
+    identity :unique_source, [:account_id, :name]
+  end
+
   relationships do
     belongs_to :account, Canary.Accounts.Account
     has_many :documents, Canary.Sources.Document
@@ -24,7 +28,7 @@ defmodule Canary.Sources.Source do
 
     read :read do
       primary? true
-      prepare build(load: [:updated_at])
+      prepare build(load: [:updated_at, :num_documents])
     end
 
     create :create_web do
@@ -41,6 +45,10 @@ defmodule Canary.Sources.Source do
   end
 
   aggregates do
+    count :num_documents, :documents do
+      filter expr(is_nil(content_embedding) == false)
+    end
+
     max :updated_at, :documents, :updated_at do
       # this aggregation will be used for removing outdated documents.
       # since document without embedding is not searchable yet,
