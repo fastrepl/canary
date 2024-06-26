@@ -15,5 +15,10 @@ defmodule Canary.Clients.ClientSource do
   postgres do
     table "client_sources"
     repo Canary.Repo
+
+    references do
+      reference :client, on_delete: :delete
+      reference :source, on_delete: :delete
+    end
   end
 end
