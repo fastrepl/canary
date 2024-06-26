@@ -1,8 +1,7 @@
 defmodule Canary.SourcesTest do
-  require Ash.Query
   use Canary.DataCase
-
   import Canary.AccountsFixtures
+  require Ash.Query
 
   import Mox
   setup :verify_on_exit!

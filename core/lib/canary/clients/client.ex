@@ -27,6 +27,18 @@ defmodule Canary.Clients.Client do
   actions do
     defaults [:read, :destroy]
 
+    read :find_discord do
+      argument :discord_server_id, :integer, allow_nil?: false
+      argument :discord_channel_id, :integer, allow_nil?: false
+
+      filter expr(
+               discord_server_id == ^arg(:discord_server_id) and
+                 discord_channel_id == ^arg(:discord_channel_id)
+             )
+
+      prepare build(load: [:sources])
+    end
+
     create :create_web do
       argument :account_id, :uuid do
         allow_nil? false
@@ -60,10 +72,28 @@ defmodule Canary.Clients.Client do
       change set_attribute(:discord_server_id, expr(^arg(:discord_server_id)))
       change set_attribute(:discord_channel_id, expr(^arg(:discord_channel_id)))
     end
+
+    update :add_sources do
+      require_atomic? false
+
+      argument :sources, {:array, :map}, allow_nil?: true
+      change manage_relationship(:sources, type: :append)
+    end
+
+    update :remove_sources do
+      require_atomic? false
+
+      argument :sources, {:array, :map}, allow_nil?: true
+      change manage_relationship(:sources, type: :remove)
+    end
   end
 
   relationships do
     belongs_to :account, Canary.Accounts.Account
+
+    many_to_many :sources, Canary.Sources.Source do
+      through Canary.Clients.ClientSource
+    end
   end
 
   postgres do

@@ -3,5 +3,6 @@ defmodule Canary.Clients do
 
   resources do
     resource Canary.Clients.Client
+    resource Canary.Clients.ClientSource
   end
 end

@@ -88,19 +88,13 @@ defmodule Canary.Clients.Discord do
   defp find_source_ids(guild_id, channel_id) do
     client =
       Canary.Clients.Client
-      |> Ash.Query.filter(discord_server_id == ^guild_id and discord_channel_id == ^channel_id)
+      |> Ash.Query.for_read(:find_discord, %{
+        discord_server_id: guild_id,
+        discord_channel_id: channel_id
+      })
       |> Ash.read_one!()
 
-    if client == nil do
-      []
-    else
-      client
-      |> Ash.load!(:account)
-      |> Map.get(:account)
-      |> Ash.load!(:sources)
-      |> Map.get(:sources)
-      |> Enum.map(& &1.id)
-    end
+    if client == nil, do: [], else: client.sources |> Enum.map(& &1.id)
   end
 
   defp strip(s), do: s |> String.replace(~r/<@!?\d+>/, "") |> String.trim()
