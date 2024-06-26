@@ -11,6 +11,10 @@ defmodule CanaryWeb.ClientLive do
           <li><a><%= @client.name %></a></li>
         </ul>
       </div>
+
+      <button class="btn btn-sm btn-neutral ml-auto" phx-click="delete">
+        Delete
+      </button>
     </.content_header>
     """
   end
@@ -23,5 +27,10 @@ defmodule CanaryWeb.ClientLive do
       |> assign(client: client)
 
     {:ok, socket}
+  end
+
+  def handle_event("delete", _, socket) do
+    socket.assigns.client |> Ash.destroy!()
+    {:noreply, socket |> push_navigate(to: ~p"/clients")}
   end
 end
