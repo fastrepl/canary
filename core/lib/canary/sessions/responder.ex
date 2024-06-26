@@ -26,13 +26,23 @@ defmodule Canary.Sessions.Responder.LLM do
 
     user_query = history |> List.last() |> Map.get(:content)
     {:ok, queries} = Canary.Query.Understander.run(user_query)
-    query = queries |> List.first()
 
     docs =
-      Canary.Sources.Document
-      |> Ash.Query.filter(source_id in ^source_ids)
-      |> Ash.Query.for_read(:hybrid_search, %{text: query.text, embedding: query.embedding})
-      |> Ash.read!()
+      queries
+      |> Enum.map(fn query ->
+        Task.Supervisor.async_nolink(Canary.TaskSupervisor, fn ->
+          Canary.Sources.Document
+          |> Ash.Query.filter(source_id in ^source_ids)
+          |> Ash.Query.for_read(:hybrid_search, %{text: query.text, embedding: query.embedding})
+          |> Ash.Query.limit(6)
+          |> Ash.read!()
+        end)
+      end)
+      |> Task.await_many(5000)
+      |> Enum.flat_map(fn docs -> docs end)
+      |> Enum.uniq_by(& &1.id)
+
+    {:ok, docs} = Canary.Reranker.run(user_query, docs)
 
     context =
       docs
