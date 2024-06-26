@@ -9,7 +9,7 @@ defmodule CanaryWeb.Layouts do
     ~H"""
     <aside class="drawer-side z-10">
       <label for="canary-drawer" class="drawer-overlay"></label>
-      <nav class="flex min-h-screen w-72 flex-col gap-2 overflow-y-auto bg-base-100 px-6 py-10">
+      <nav class="flex min-h-screen w-72 flex-col gap-2 overflow-y-auto bg-base-100 px-6 pt-10 pb-4">
         <.link class="mx-4 font-black flex flex-row gap-2" href="/">
           <span>🐤</span>
           <span>Canary</span>
@@ -52,6 +52,18 @@ defmodule CanaryWeb.Layouts do
             </.link>
           </li>
           <li>
+            <.link class={if @active_tab == :sessions, do: "active"} navigate={~p"/sessions"}>
+              <span class={[
+                "h-4 w-4",
+                if(@active_tab == :sessions,
+                  do: "hero-rectangle-stack-solid",
+                  else: "hero-rectangle-stack"
+                )
+              ]} />
+              <span>Sessions</span>
+            </.link>
+          </li>
+          <li>
             <.link class={if @active_tab == :settings, do: "active"} navigate={~p"/settings"}>
               <span class={[
                 "h-4 w-4",
@@ -64,8 +76,24 @@ defmodule CanaryWeb.Layouts do
             </.link>
           </li>
         </ul>
+        <.link href="/sign-out" class="btn btn-sm btn-outline btn-neutral mt-auto">
+          Log out
+        </.link>
       </nav>
     </aside>
+    """
+  end
+
+  slot :inner_block
+
+  def content_header(assigns) do
+    ~H"""
+    <header class="flex items-center">
+      <label for="canary-drawer" class="btn btn-square btn-ghost drawer-button lg:hidden">
+        <span class="hero-bars-3-solid h-5 w-5" />
+      </label>
+      <%= render_slot(@inner_block) %>
+    </header>
     """
   end
 end
