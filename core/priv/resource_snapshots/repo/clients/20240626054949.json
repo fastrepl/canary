@@ -11,6 +11,16 @@
       "generated?": false
     },
     {
+      "default": "fragment(\"(now() AT TIME ZONE 'utc')\")",
+      "size": null,
+      "type": "utc_datetime_usec",
+      "source": "created_at",
+      "references": null,
+      "allow_nil?": false,
+      "primary_key?": false,
+      "generated?": false
+    },
+    {
       "default": "nil",
       "size": null,
       "type": "uuid",
@@ -35,6 +45,16 @@
         "destination_attribute_default": null,
         "destination_attribute_generated": null
       },
+      "allow_nil?": false,
+      "primary_key?": false,
+      "generated?": false
+    },
+    {
+      "default": "nil",
+      "size": null,
+      "type": "text",
+      "source": "name",
+      "references": null,
       "allow_nil?": false,
       "primary_key?": false,
       "generated?": false
@@ -91,7 +111,7 @@
     }
   ],
   "table": "clients",
-  "hash": "06BAA66B6412CD60C1AFAF8A2AA6FEC179B66EFCC08CE649C21A25D901092142",
+  "hash": "EB33374A32FED518F3F24A5283FB4ED05F1243789D1D783D86ECCF0CA15C71B9",
   "repo": "Elixir.Canary.Repo",
   "identities": [
     {

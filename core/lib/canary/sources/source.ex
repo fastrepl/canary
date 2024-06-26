@@ -5,11 +5,10 @@ defmodule Canary.Sources.Source do
 
   attributes do
     uuid_primary_key :id
+    create_timestamp :created_at
+    attribute :account_id, :uuid, allow_nil?: false
 
-    attribute :account_id, :uuid do
-      allow_nil? false
-    end
-
+    attribute :name, :string, allow_nil?: false
     attribute :type, :atom, constraints: [one_of: [:web]]
 
     attribute :web_base_url, :string
@@ -21,20 +20,21 @@ defmodule Canary.Sources.Source do
   end
 
   actions do
-    defaults [:read]
+    read :read do
+      primary? true
+      prepare build(load: [:updated_at])
+    end
 
     create :create_web do
-      argument :account_id, :uuid do
-        allow_nil? false
-      end
-
-      argument :web_base_url, :string do
-        allow_nil? false
-      end
+      argument :name, :string, allow_nil?: false
+      argument :account, :map, allow_nil?: false
+      argument :web_base_url, :string, allow_nil?: false
 
       change set_attribute(:type, :web)
-      change set_attribute(:account_id, expr(^arg(:account_id)))
+      change set_attribute(:name, expr(^arg(:name)))
+      change manage_relationship(:account, :account, type: :append)
       change set_attribute(:web_base_url, expr(^arg(:web_base_url)))
+      change load(:updated_at)
     end
   end
 
