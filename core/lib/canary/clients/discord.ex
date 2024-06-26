@@ -26,17 +26,17 @@ defmodule Canary.Clients.Discord do
     end
   end
 
-  defp handle_message(%Channel{type: @channel_text, id: channel_id}, user_msg) do
-    thread_name = user_msg.content |> strip() |> String.slice(0..20)
+  defp handle_message(%Channel{type: @channel_text, id: channel_id, guild_id: guild_id}, user_msg) do
+    if find_client(guild_id, channel_id) == nil do
+      :ignore
+    else
+      thread_name = user_msg.content |> strip() |> String.slice(0..30)
 
-    {:ok, channel} =
-      Api.start_thread_with_message(
-        channel_id,
-        user_msg.id,
-        %{name: thread_name}
-      )
+      {:ok, channel} =
+        Api.start_thread_with_message(channel_id, user_msg.id, %{name: thread_name})
 
-    handle_message(channel, user_msg)
+      handle_message(channel, user_msg)
+    end
   end
 
   defp handle_message(%Channel{type: @channel_public_thread} = channel, user_msg) do
@@ -49,9 +49,6 @@ defmodule Canary.Clients.Discord do
     source_ids = find_source_ids(guild_id, channel_id)
 
     cond do
-      source_ids == nil ->
-        :ignore
-
       length(source_ids) == 0 ->
         send(thread_id, user_msg, @no_source_message)
 
@@ -90,16 +87,20 @@ defmodule Canary.Clients.Discord do
     Api.create_message(channel_id, opts)
   end
 
-  defp find_source_ids(guild_id, channel_id) do
-    client =
-      Canary.Clients.Client
-      |> Ash.Query.for_read(:find_discord, %{
-        discord_server_id: guild_id,
-        discord_channel_id: channel_id
-      })
-      |> Ash.read_one!()
+  defp find_client(guild_id, channel_id) do
+    args = %{
+      discord_server_id: guild_id,
+      discord_channel_id: channel_id
+    }
 
-    if client == nil, do: nil, else: client.sources |> Enum.map(& &1.id)
+    Canary.Clients.Client
+    |> Ash.Query.for_read(:find_discord, args)
+    |> Ash.read_one!()
+  end
+
+  defp find_source_ids(guild_id, channel_id) do
+    client = find_client(guild_id, channel_id)
+    if client == nil, do: [], else: client.sources |> Enum.map(& &1.id)
   end
 
   defp strip(s), do: s |> String.replace(~r/<@!?\d+>/, "") |> String.trim()
