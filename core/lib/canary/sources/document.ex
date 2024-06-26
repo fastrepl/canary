@@ -4,7 +4,7 @@ defmodule Canary.Sources.Document do
     data_layer: AshPostgres.DataLayer
 
   attributes do
-    uuid_primary_key :id
+    integer_primary_key :id
 
     attribute :updated_at, :utc_datetime_usec
 
