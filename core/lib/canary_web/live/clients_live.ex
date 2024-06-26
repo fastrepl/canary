@@ -70,10 +70,10 @@ defmodule CanaryWeb.ClientsLive do
       </thead>
       <tbody>
         <%= for client <- @clients do %>
-          <tr class="group hover:bg-base-300" phx-click="click_client" phx-value-id={client.id}>
+          <tr class="group hover:bg-base-300">
             <td><%= client.type %></td>
             <td><%= client.name %></td>
-            <td class="flex flex-row gap-2 items-center">
+            <td>
               <div class="dropdown">
                 <div tabindex="0" role="button" class="btn btn-ghost btn-xs">
                   <span class="hero-list-bullet h-5 w-5" />
@@ -102,11 +102,17 @@ defmodule CanaryWeb.ClientsLive do
               <.local_time date={client.created_at} id={"#{client.id}-created-at"} />
             </td>
             <td class="relative">
-              <span class={[
-                "hero-chevron-right h-4 w-4",
-                "hidden group-hover:block",
-                "absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
-              ]} />
+              <button
+                phx-click="click_client"
+                phx-value-id={client.id}
+                class={[
+                  "btn btn-xs btn-ghost",
+                  "hidden group-hover:block",
+                  "absolute right-4 bottom-3"
+                ]}
+              >
+                <span class="hero-chevron-right h-4 w-4" />
+              </button>
             </td>
           </tr>
         <% end %>

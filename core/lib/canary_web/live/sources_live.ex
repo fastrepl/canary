@@ -66,7 +66,7 @@ defmodule CanaryWeb.SourcesLive do
       </thead>
       <tbody>
         <%= for source <- @sources do %>
-          <tr class="group hover:bg-base-300" phx-click="click_source" phx-value-id={source.id}>
+          <tr class="group hover:bg-base-300">
             <td><%= source.type %></td>
             <td><%= source.name %></td>
             <td><%= source.web_base_url %></td>
@@ -81,11 +81,17 @@ defmodule CanaryWeb.SourcesLive do
               />
             </td>
             <td class="relative">
-              <span class={[
-                "hero-chevron-right h-4 w-4",
-                "hidden group-hover:block",
-                "absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
-              ]} />
+              <button
+                phx-click="click_source"
+                phx-value-id={source.id}
+                class={[
+                  "btn btn-xs btn-ghost",
+                  "hidden group-hover:block",
+                  "absolute right-4 bottom-2"
+                ]}
+              >
+                <span class="hero-chevron-right h-4 w-4" />
+              </button>
             </td>
           </tr>
         <% end %>
