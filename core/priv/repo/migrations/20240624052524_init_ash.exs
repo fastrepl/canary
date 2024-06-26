@@ -41,7 +41,7 @@ defmodule Canary.Repo.Migrations.InitAsh do
     end
 
     create table(:source_documents, primary_key: false) do
-      add :id, :bigserial, null: false, primary_key: true
+      add :id, :uuid, null: false, default: fragment("gen_random_uuid()"), primary_key: true
       add :updated_at, :utc_datetime_usec
 
       add :source_id,
