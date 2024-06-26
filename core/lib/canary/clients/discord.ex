@@ -48,23 +48,28 @@ defmodule Canary.Clients.Discord do
   defp respond(%Channel{id: thread_id, parent_id: channel_id, guild_id: guild_id}, user_msg) do
     source_ids = find_source_ids(guild_id, channel_id)
 
-    if length(source_ids) == 0 do
-      send(thread_id, user_msg, @no_source_message)
-    else
-      query = strip(user_msg.content)
+    cond do
+      source_ids == nil ->
+        :ignore
 
-      {:ok, pid} = Canary.Sessions.find_or_start_session(thread_id)
-      GenServer.call(pid, {:submit, :website, %{query: query, source_ids: source_ids}})
-      Api.start_typing(thread_id)
+      length(source_ids) == 0 ->
+        send(thread_id, user_msg, @no_source_message)
 
-      receive do
-        {:complete, %{content: content}} -> send(thread_id, user_msg, content)
-        {:progress, _} -> Api.start_typing(thread_id)
-        _ -> :ignore
-      after
-        @timeout ->
-          send(thread_id, user_msg, @failed_message)
-      end
+      true ->
+        query = strip(user_msg.content)
+
+        {:ok, pid} = Canary.Sessions.find_or_start_session(thread_id)
+        GenServer.call(pid, {:submit, :website, %{query: query, source_ids: source_ids}})
+        Api.start_typing(thread_id)
+
+        receive do
+          {:complete, %{content: content}} -> send(thread_id, user_msg, content)
+          {:progress, _} -> Api.start_typing(thread_id)
+          _ -> :ignore
+        after
+          @timeout ->
+            send(thread_id, user_msg, @failed_message)
+        end
     end
   end
 
@@ -94,7 +99,7 @@ defmodule Canary.Clients.Discord do
       })
       |> Ash.read_one!()
 
-    if client == nil, do: [], else: client.sources |> Enum.map(& &1.id)
+    if client == nil, do: nil, else: client.sources |> Enum.map(& &1.id)
   end
 
   defp strip(s), do: s |> String.replace(~r/<@!?\d+>/, "") |> String.trim()
