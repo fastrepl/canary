@@ -14,7 +14,8 @@ defmodule Canary.SourcesTest do
     source =
       Canary.Sources.Source
       |> Ash.Changeset.for_create(:create_web, %{
-        account_id: account.id,
+        name: "example",
+        account: account,
         web_base_url: "https://example.com"
       })
       |> Ash.create!()

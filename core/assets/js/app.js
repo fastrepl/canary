@@ -25,9 +25,24 @@ import topbar from "../vendor/topbar";
 let csrfToken = document
   .querySelector("meta[name='csrf-token']")
   .getAttribute("content");
+
+let hooks = {
+  LocalTime: {
+    mounted() {
+      this.updated();
+    },
+    updated() {
+      let dt = new Date(this.el.textContent);
+      this.el.textContent = dt.toLocaleString();
+      this.el.classList.remove("invisible");
+    },
+  },
+};
+
 let liveSocket = new LiveSocket("/live", Socket, {
   longPollFallbackMs: 2500,
   params: { _csrf_token: csrfToken },
+  hooks,
 });
 
 // Show progress bar on live navigation and form submits

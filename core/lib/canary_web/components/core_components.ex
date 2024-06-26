@@ -672,4 +672,13 @@ defmodule CanaryWeb.CoreComponents do
   def translate_errors(errors, field) when is_list(errors) do
     for {^field, {msg, opts}} <- errors, do: translate_error({msg, opts})
   end
+
+  attr :id, :string
+  attr :date, :string
+
+  def local_time(assigns) do
+    ~H"""
+    <time phx-hook="LocalTime" id={@id} class="invisible"><%= @date %></time>
+    """
+  end
 end

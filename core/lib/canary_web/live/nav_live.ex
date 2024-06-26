@@ -11,6 +11,8 @@ defmodule CanaryWeb.NavLive do
       case socket.view do
         CanaryWeb.HomeLive -> :home
         CanaryWeb.SourcesLive -> :sources
+        CanaryWeb.SourceLive -> :sources
+        CanaryWeb.ClientLive -> :clients
         CanaryWeb.ClientsLive -> :clients
         CanaryWeb.SessionsLive -> :sessions
         CanaryWeb.SettingsLive -> :settings

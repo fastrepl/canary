@@ -9,7 +9,8 @@ defmodule Canary.ClientsTest do
     client =
       Canary.Clients.Client
       |> Ash.Changeset.for_create(:create_discord, %{
-        account_id: account.id,
+        account: account,
+        name: "discord",
         discord_server_id: 1,
         discord_channel_id: 2
       })
@@ -18,7 +19,8 @@ defmodule Canary.ClientsTest do
     source_1 =
       Canary.Sources.Source
       |> Ash.Changeset.for_create(:create_web, %{
-        account_id: account.id,
+        name: "example",
+        account: account,
         web_base_url: "https://example.com"
       })
       |> Ash.create!()
@@ -26,7 +28,8 @@ defmodule Canary.ClientsTest do
     source_2 =
       Canary.Sources.Source
       |> Ash.Changeset.for_create(:create_web, %{
-        account_id: account.id,
+        name: "example2",
+        account: account,
         web_base_url: "https://example2.com"
       })
       |> Ash.create!()

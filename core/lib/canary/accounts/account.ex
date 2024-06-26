@@ -6,10 +6,6 @@ defmodule Canary.Accounts.Account do
   attributes do
     uuid_primary_key :id
 
-    attribute :user_id, :uuid do
-      allow_nil? false
-    end
-
     attribute :name, :string do
       allow_nil? false
     end
@@ -21,13 +17,18 @@ defmodule Canary.Accounts.Account do
     end
 
     has_many :sources, Canary.Sources.Source
+    has_many :clients, Canary.Clients.Client
   end
 
   actions do
     defaults [:read]
 
     create :create do
-      accept [:user_id, :name]
+      argument :user, :map, allow_nil?: false
+      argument :name, :string, allow_nil?: false
+
+      change manage_relationship(:user, :users, type: :append)
+      change set_attribute(:name, expr(^arg(:name)))
     end
 
     update :update do
