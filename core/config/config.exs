@@ -61,6 +61,9 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
+config :canary, :env, Mix.env()
+config :canary, :root, File.cwd!()
+
 config :canary, Oban,
   engine: Oban.Engines.Basic,
   queues: [default: 10, embedder: 20, fetcher: 10, pruner: 5],

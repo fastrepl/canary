@@ -40,7 +40,7 @@ defmodule CanaryWeb.Router do
 
     ash_authentication_live_session :default,
       on_mount: [
-        {CanaryWeb.LiveUserAuth, :live_user_optional},
+        {CanaryWeb.LiveUserAuth, :live_user_required},
         CanaryWeb.NavLive
       ] do
       live "/", CanaryWeb.HomeLive, :none
