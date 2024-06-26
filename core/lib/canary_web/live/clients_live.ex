@@ -93,7 +93,9 @@ defmodule CanaryWeb.ClientsLive do
                         checked={Enum.any?(client.sources, &(&1.id == source.id))}
                         class="checkbox checkbox-xs"
                       />
-                      <span><%= source.name %></span>
+                      <.link class="hover:underline" navigate={~p"/source/#{source.id}"}>
+                        <%= source.name %>
+                      </.link>
                     </div>
                   <% end %>
                 </div>
