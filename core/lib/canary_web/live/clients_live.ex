@@ -5,7 +5,7 @@ defmodule CanaryWeb.ClientsLive do
   def render(assigns) do
     ~H"""
     <.content_header>
-      <div class="breadcrumbs font-semibold text-md flex flex-row items-center justify-between">
+      <div class="breadcrumbs text-md flex flex-row items-center justify-between">
         <ul>
           <li><a>Clients</a></li>
         </ul>
@@ -65,11 +65,12 @@ defmodule CanaryWeb.ClientsLive do
           <th>Name</th>
           <th>Sources</th>
           <th>Created at</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
         <%= for client <- @clients do %>
-          <tr class="hover:bg-base-300">
+          <tr class="group hover:bg-base-300" phx-click="click_client" phx-value-id={client.id}>
             <td><%= client.type %></td>
             <td><%= client.name %></td>
             <td class="flex flex-row gap-2 items-center">
@@ -99,6 +100,13 @@ defmodule CanaryWeb.ClientsLive do
             </td>
             <td>
               <.local_time date={client.created_at} id={"#{client.id}-created-at"} />
+            </td>
+            <td class="relative">
+              <span class={[
+                "hero-chevron-right h-4 w-4",
+                "hidden group-hover:block",
+                "absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+              ]} />
             </td>
           </tr>
         <% end %>
@@ -166,5 +174,9 @@ defmodule CanaryWeb.ClientsLive do
 
     clients = socket.assigns.clients |> Ash.load!(:sources)
     {:noreply, socket |> assign(clients: clients)}
+  end
+
+  def handle_event("click_client", %{"id" => id}, socket) do
+    {:noreply, socket |> push_navigate(to: ~p"/client/#{id}")}
   end
 end

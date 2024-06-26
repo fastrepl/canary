@@ -5,7 +5,7 @@ defmodule CanaryWeb.HomeLive do
   def render(assigns) do
     ~H"""
     <.content_header>
-      <div class="breadcrumbs font-semibold text-md flex flex-row items-center justify-between">
+      <div class="breadcrumbs text-md flex flex-row items-center justify-between">
         <ul>
           <li><a>Home</a></li>
         </ul>

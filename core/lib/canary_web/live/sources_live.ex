@@ -5,7 +5,7 @@ defmodule CanaryWeb.SourcesLive do
   def render(assigns) do
     ~H"""
     <.content_header>
-      <div class="breadcrumbs font-semibold text-md flex flex-row items-center justify-between">
+      <div class="breadcrumbs text-md flex flex-row items-center justify-between">
         <ul>
           <li><a>Sources</a></li>
         </ul>
@@ -61,11 +61,12 @@ defmodule CanaryWeb.SourcesLive do
           <th>Value</th>
           <th>Created at</th>
           <th>Updated at</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
         <%= for source <- @sources do %>
-          <tr class="hover:bg-base-300">
+          <tr class="group hover:bg-base-300" phx-click="click_source" phx-value-id={source.id}>
             <td><%= source.type %></td>
             <td><%= source.name %></td>
             <td><%= source.web_base_url %></td>
@@ -78,6 +79,13 @@ defmodule CanaryWeb.SourcesLive do
                 date={source.updated_at}
                 id={"#{source.id}-updated-at" }
               />
+            </td>
+            <td class="relative">
+              <span class={[
+                "hero-chevron-right h-4 w-4",
+                "hidden group-hover:block",
+                "absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+              ]} />
             </td>
           </tr>
         <% end %>
@@ -108,5 +116,9 @@ defmodule CanaryWeb.SourcesLive do
 
     sources = [source | socket.assigns.sources] |> Enum.sort_by(& &1.created_at)
     {:noreply, socket |> assign(sources: sources)}
+  end
+
+  def handle_event("click_source", %{"id" => id}, socket) do
+    {:noreply, socket |> push_navigate(to: ~p"/source/#{id}")}
   end
 end

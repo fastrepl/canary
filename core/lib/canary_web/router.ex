@@ -45,7 +45,9 @@ defmodule CanaryWeb.Router do
       ] do
       live "/", CanaryWeb.HomeLive, :none
       live "/sources", CanaryWeb.SourcesLive, :none
+      live "/source/:id", CanaryWeb.SourceLive, :none
       live "/clients", CanaryWeb.ClientsLive, :none
+      live "/client/:id", CanaryWeb.ClientLive, :none
       live "/sessions", CanaryWeb.SessionsLive, :none
       live "/settings", CanaryWeb.SettingsLive, :none
     end

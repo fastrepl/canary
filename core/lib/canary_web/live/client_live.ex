@@ -1,4 +1,4 @@
-defmodule CanaryWeb.SettingsLive do
+defmodule CanaryWeb.ClientLive do
   use CanaryWeb, :live_view
   import CanaryWeb.Layouts, only: [content_header: 1]
 
@@ -7,14 +7,21 @@ defmodule CanaryWeb.SettingsLive do
     <.content_header>
       <div class="breadcrumbs text-md flex flex-row items-center justify-between">
         <ul>
-          <li><a>Settings</a></li>
+          <li><.link navigate={~p"/clients"}>Clients</.link></li>
+          <li><a><%= @client.name %></a></li>
         </ul>
       </div>
     </.content_header>
     """
   end
 
-  def mount(_params, _session, socket) do
+  def mount(%{"id" => id}, _session, socket) do
+    client = Canary.Clients.Client |> Ash.get!(id)
+
+    socket =
+      socket
+      |> assign(client: client)
+
     {:ok, socket}
   end
 end
