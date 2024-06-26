@@ -66,7 +66,7 @@ config :canary, :root, File.cwd!()
 
 config :canary, Oban,
   engine: Oban.Engines.Basic,
-  queues: [default: 10, embedder: 20, fetcher: 10, pruner: 5],
+  queues: [default: 10, embedder: 10, fetcher: 10, pruner: 5],
   repo: Canary.Repo,
   plugins: [
     {Oban.Plugins.Cron,

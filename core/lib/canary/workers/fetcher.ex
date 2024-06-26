@@ -33,6 +33,7 @@ defmodule Canary.Workers.Fetcher do
          _ <-
            Canary.Workers.Pruner.new(%{"source_id" => src.id})
            |> Oban.insert!(schedule_in: 1 * 30) do
+      :ok
     else
       error -> {:error, error}
     end

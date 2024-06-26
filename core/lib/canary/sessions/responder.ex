@@ -43,6 +43,7 @@ defmodule Canary.Sessions.Responder.LLM do
       docs
       |> Enum.map(& &1.source_url)
       |> Enum.reject(&is_nil/1)
+      |> Enum.uniq()
       |> Enum.map(fn url -> "- <#{url}>" end)
       |> Enum.join("\n")
 
