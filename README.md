@@ -4,6 +4,12 @@
 <br/>
 
 <div align="center">
+  <div>
+    <picture>
+      <source media="(prefers-color-scheme: light)" srcset="https://img.shields.io/github/v/release/fastrepl/canary?include_prereleases&labelColor=white&color=white">
+      <img alt="GitHub Release" src="https://img.shields.io/github/v/release/fastrepl/canary?include_prereleases&labelColor=black&color=black">
+    </picture>
+  </div>
   <a href="https://railway.app/template/mn9WJT?referralCode=IQ76H8">
     <img src="https://railway.app/button.svg" alt="Deploy on Railway">
   </a>
