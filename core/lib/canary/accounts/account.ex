@@ -17,6 +17,7 @@ defmodule Canary.Accounts.Account do
     end
 
     has_many :sources, Canary.Sources.Source
+    has_many :clients, Canary.Clients.Client
   end
 
   actions do

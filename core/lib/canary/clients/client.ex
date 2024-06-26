@@ -24,6 +24,8 @@ defmodule Canary.Clients.Client do
   end
 
   actions do
+    defaults [:destroy]
+
     read :read do
       primary? true
       prepare build(load: [:sources])

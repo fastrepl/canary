@@ -20,6 +20,8 @@ defmodule Canary.Sources.Source do
   end
 
   actions do
+    defaults [:destroy]
+
     read :read do
       primary? true
       prepare build(load: [:updated_at])
