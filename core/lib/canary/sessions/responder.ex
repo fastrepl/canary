@@ -44,41 +44,13 @@ defmodule Canary.Sessions.Responder.LLM do
 
     {:ok, docs} = Canary.Reranker.run(user_query, docs)
 
-    context =
-      docs
-      |> Enum.map(&Canary.Renderable.render/1)
-      |> Enum.join("\n\n")
-
-    sources =
-      docs
-      |> Enum.map(& &1.source_url)
-      |> Enum.reject(&is_nil/1)
-      |> Enum.uniq()
-      |> Enum.map(fn url -> "- <#{url}>" end)
-      |> Enum.join("\n")
-
-    history =
-      if length(history) > 1 do
-        body =
-          history
-          |> Enum.slice(0, length(history) - 1)
-          |> Enum.map(&Canary.Renderable.render/1)
-          |> Enum.join("\n\n")
-
-        "<history>\n#{body}\n</history>"
-      else
-        ""
-      end
-
     messages = [
       %{
         role: "user",
         content: """
-        <retrieved_documents>
-        #{context}
-        </retrieved_documents>
+        #{render_context(docs)}
 
-        #{history}
+        #{render_history(history)}
 
         <user_question>
         #{user_query}
@@ -93,6 +65,42 @@ defmodule Canary.Sessions.Responder.LLM do
     {:ok, res} =
       Canary.AI.chat(%{model: model, messages: messages, stream: false, max_tokens: 300})
 
-    handle_message.("#{res}\n\n#{sources}")
+    result = if docs != [], do: "#{res}\n\n#{render_sources(docs)}", else: res
+    handle_message.(result)
+  end
+
+  defp render_history(history) do
+    if history != [] do
+      body =
+        history
+        |> Enum.map(&Canary.Renderable.render/1)
+        |> Enum.join("\n\n")
+
+      "<history>\n#{body}\n</history>"
+    else
+      ""
+    end
+  end
+
+  defp render_context(docs) do
+    if docs != [] do
+      body =
+        docs
+        |> Enum.map(&Canary.Renderable.render/1)
+        |> Enum.join("\n\n")
+
+      "<retrieved_documents>\n#{body}\n</retrieved_documents>"
+    else
+      "<retrieved_documents>\nNo relevant documents found.\n</retrieved_documents>"
+    end
+  end
+
+  defp render_sources(docs) do
+    docs
+    |> Enum.map(& &1.source_url)
+    |> Enum.reject(&is_nil/1)
+    |> Enum.uniq()
+    |> Enum.map(fn url -> "- <#{url}>" end)
+    |> Enum.join("\n")
   end
 end
