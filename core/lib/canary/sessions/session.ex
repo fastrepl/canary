@@ -58,7 +58,7 @@ defmodule Canary.Sessions.Session do
 
   @impl true
   def handle_info(:timeout, state) do
-    {:stop, :timeout, state}
+    {:stop, :normal, state}
   end
 
   @impl true
