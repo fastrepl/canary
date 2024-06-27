@@ -46,7 +46,7 @@ defmodule Canary.Sessions.Responder.LLM do
 
     context =
       docs
-      |> Enum.map(& &1.content)
+      |> Enum.map(&Canary.Renderable.render/1)
       |> Enum.join("\n\n")
 
     sources =
