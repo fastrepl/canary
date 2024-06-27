@@ -20,5 +20,5 @@ fn handle_div_aria_label(element: htmd::Element) -> Option<String> {
         }
     }
 
-    Some(element.content)
+    Some(element.content.to_string())
 }

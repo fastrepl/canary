@@ -25,7 +25,7 @@ fn simple() {
 
     [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/BerriAI/litellm/blob/main/cookbook/liteLLM_Getting_Started.ipynb)
 
-    ```
+    ```shell
     pip install litellm  
     ```
 
@@ -37,7 +37,7 @@ fn simple() {
     *   Ollama
     *   Openrouter
 
-    ```
+    ```python
     from litellm import completion  
     import os  
       
@@ -50,7 +50,7 @@ fn simple() {
     )  
     ```
 
-    ```
+    ```python
     from litellm import completion  
     import os  
       
@@ -63,7 +63,7 @@ fn simple() {
     )  
     ```
 
-    ```
+    ```python
     from litellm import completion  
     import os  
       
@@ -77,7 +77,7 @@ fn simple() {
     )  
     ```
 
-    ```
+    ```python
     from litellm import completion  
     import os  
       
@@ -93,7 +93,7 @@ fn simple() {
     print(response)  
     ```
 
-    ```
+    ```python
     from litellm import completion  
     import os  
       
@@ -109,7 +109,7 @@ fn simple() {
     )  
     ```
 
-    ```
+    ```python
     from litellm import completion  
       
     response = completion(  
@@ -119,7 +119,7 @@ fn simple() {
     )  
     ```
 
-    ```
+    ```python
     from litellm import completion  
     import os  
       
@@ -144,7 +144,7 @@ fn simple() {
     *   Ollama
     *   Openrouter
 
-    ```
+    ```python
     from litellm import completion  
     import os  
       
@@ -158,7 +158,7 @@ fn simple() {
     )  
     ```
 
-    ```
+    ```python
     from litellm import completion  
     import os  
       
@@ -172,7 +172,7 @@ fn simple() {
     )  
     ```
 
-    ```
+    ```python
     from litellm import completion  
     import os  
       
@@ -187,7 +187,7 @@ fn simple() {
     )  
     ```
 
-    ```
+    ```python
     from litellm import completion  
     import os  
       
@@ -204,7 +204,7 @@ fn simple() {
     print(response)  
     ```
 
-    ```
+    ```python
     from litellm import completion  
     import os  
       
@@ -221,7 +221,7 @@ fn simple() {
     )  
     ```
 
-    ```
+    ```python
     from litellm import completion  
       
     response = completion(  
@@ -232,7 +232,7 @@ fn simple() {
     )  
     ```
 
-    ```
+    ```python
     from litellm import completion  
     import os  
       
@@ -250,7 +250,7 @@ fn simple() {
 
     LiteLLM maps exceptions across all supported providers to the OpenAI exceptions. All our exceptions inherit from OpenAI's exception types, so any error-handling you have for that, should work out of the box with LiteLLM.
 
-    ```
+    ```python
     from openai.error import OpenAIError  
     from litellm import completion  
       
@@ -266,7 +266,7 @@ fn simple() {
 
     LiteLLM exposes pre defined callbacks to send data to Lunary, Langfuse, Helicone, Promptlayer, Traceloop, Slack
 
-    ```
+    ```python
     from litellm import completion  
       
     ## set env variables for logging tools  
@@ -287,7 +287,7 @@ fn simple() {
 
     Use a callback function for this - more info on custom callbacks: [https://docs.litellm.ai/docs/observability/custom\_callback](https://docs.litellm.ai/docs/observability/custom_callback)
 
-    ```
+    ```python
     import litellm  
       
     # track_cost_callback  
@@ -334,13 +334,13 @@ fn simple() {
 
     ### Quick Start Proxy - CLI[​](#quick-start-proxy---cli "Direct link to Quick Start Proxy - CLI")
 
-    ```
+    ```shell
     pip install 'litellm[proxy]'  
     ```
 
     #### Step 1: Start litellm proxy[​](#step-1-start-litellm-proxy "Direct link to Step 1: Start litellm proxy")
 
-    ```
+    ```shell
     $ litellm --model huggingface/bigcode/starcoder  
       
     #INFO: Proxy running on http://0.0.0.0:8000  
@@ -348,7 +348,7 @@ fn simple() {
 
     #### Step 2: Make ChatCompletions Request to Proxy[​](#step-2-make-chatcompletions-request-to-proxy "Direct link to Step 2: Make ChatCompletions Request to Proxy")
 
-    ```
+    ```python
     import openai # openai v1.0.0+  
     client = openai.OpenAI(api_key="anything",base_url="http://0.0.0.0:8000") # set proxy to base_url  
     # request sent to model set on litellm proxy, `litellm --model`  
