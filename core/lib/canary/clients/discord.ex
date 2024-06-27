@@ -57,16 +57,23 @@ defmodule Canary.Clients.Discord do
 
         {:ok, pid} = Canary.Sessions.find_or_start_session(thread_id)
         GenServer.call(pid, {:submit, :website, %{query: query, source_ids: source_ids}})
-        Api.start_typing(thread_id)
 
-        receive do
-          {:complete, %{content: content}} -> send(thread_id, user_msg, content)
-          {:progress, _} -> Api.start_typing(thread_id)
-          _ -> :ignore
-        after
-          @timeout ->
-            send(thread_id, user_msg, @failed_message)
-        end
+        Api.start_typing(thread_id)
+        receive_loop(thread_id, user_msg)
+    end
+  end
+
+  defp receive_loop(thread_id, user_msg) do
+    receive do
+      {:complete, %{content: content}} ->
+        send(thread_id, user_msg, content)
+
+      {:progress, _} ->
+        Api.start_typing(thread_id)
+        receive_loop(thread_id, user_msg)
+    after
+      @timeout ->
+        send(thread_id, user_msg, @failed_message)
     end
   end
 
