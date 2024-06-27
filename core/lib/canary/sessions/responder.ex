@@ -42,7 +42,7 @@ defmodule Canary.Sessions.Responder.LLM do
       |> Enum.flat_map(fn docs -> docs end)
       |> Enum.uniq_by(& &1.id)
 
-    {:ok, docs} = Canary.Reranker.run(user_query, docs)
+    {:ok, docs} = Canary.Reranker.run(user_query, docs, top_n: 6, threshold: 0.4)
 
     messages = [
       %{

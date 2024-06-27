@@ -16,6 +16,7 @@ defmodule Canary.Reranker.Cohere do
 
   def run(query, docs, opts) do
     top_n = opts[:top_n] || 5
+    threshold = opts[:threshold] || 0
 
     result =
       Req.post(
@@ -36,6 +37,7 @@ defmodule Canary.Reranker.Cohere do
         reranked =
           body["results"]
           |> Enum.sort_by(& &1["relevance_score"], :asc)
+          |> Enum.filter(fn %{"relevance_score" => score} -> score > threshold end)
           |> Enum.map(fn %{"index" => i} -> i end)
           |> Enum.reduce([], fn i, acc -> [Enum.at(docs, i) | acc] end)
 
