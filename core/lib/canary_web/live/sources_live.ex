@@ -26,20 +26,22 @@ defmodule CanaryWeb.SourcesLive do
           <select name="type" class="select select-bordered w-full">
             <option selected>Web</option>
           </select>
-          <input
-            type="text"
-            autocomplete="off"
-            name="name"
-            placeholder="e.g. docs"
-            class="input input-bordered w-full"
-          />
-          <input
-            type="url"
-            autocomplete="off"
-            name="url"
-            placeholder="e.g. https://docs.example.com"
-            class="input input-bordered w-full"
-          />
+
+          <label class="input input-bordered flex items-center gap-4">
+            <span class="text-sm">Name</span>
+            <input type="text" autocomplete="off" name="name" placeholder="e.g. docs" class="grow" />
+          </label>
+
+          <label class="input input-bordered flex items-center gap-4">
+            <span class="text-sm">URL</span>
+            <input
+              type="url"
+              autocomplete="off"
+              name="url"
+              placeholder="e.g. https://docs.example.com"
+              class="grow"
+            />
+          </label>
 
           <div class="flex flex-row gap-2 ml-auto mt-4">
             <button type="button" class="btn" onclick="modal.close()">

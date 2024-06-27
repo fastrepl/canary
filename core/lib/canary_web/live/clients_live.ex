@@ -26,25 +26,27 @@ defmodule CanaryWeb.ClientsLive do
           <select name="type" class="select select-bordered w-full">
             <option selected>Discord</option>
           </select>
-          <input
-            type="text"
-            autocomplete="off"
-            name="name"
-            placeholder="e.g. canary/support"
-            class="input input-bordered w-full"
-          />
-          <input
-            type="number"
-            name="server_id"
-            placeholder="Server ID"
-            class="input input-bordered w-full"
-          />
-          <input
-            type="number"
-            name="channel_id"
-            placeholder="Channel ID"
-            class="input input-bordered w-full"
-          />
+
+          <label class="input input-bordered flex items-center gap-4">
+            <span class="text-sm">Name</span>
+            <input
+              type="text"
+              autocomplete="off"
+              name="name"
+              placeholder="e.g. canary/support"
+              class="grow"
+            />
+          </label>
+
+          <label class="input input-bordered flex items-center gap-4">
+            <span class="text-sm">Server ID</span>
+            <input type="number" name="server_id" class="grow" />
+          </label>
+
+          <label class="input input-bordered flex items-center gap-4">
+            <span class="text-sm">Channel ID</span>
+            <input type="number" name="channel_id" class="grow" />
+          </label>
 
           <div class="flex flex-row gap-2 ml-auto mt-4">
             <button type="button" class="btn" onclick="modal.close()">
