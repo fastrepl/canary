@@ -69,13 +69,15 @@ defmodule Canary.Sessions.Responder.LLM do
         #{user_query}
         </user_question>
 
-        Based on the retrieved documents, answer the user's question within 5 sentences.
+        Based on the retrieved documents, answer the user's question within 5 sentences. KEEP IT SIMPLE AND CONCISE.
         If user is asking for nonsense, or the retrieved documents are not relevant, just transparently say it.
         """
       }
     ]
 
-    {:ok, res} = Canary.AI.chat(%{model: model, messages: messages, stream: false})
+    {:ok, res} =
+      Canary.AI.chat(%{model: model, messages: messages, stream: false, max_tokens: 300})
+
     handle_message.("#{res}\n\n#{sources}")
   end
 end

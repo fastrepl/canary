@@ -10,7 +10,7 @@ defmodule Canary.Clients.Discord do
   @bot_name "Canary"
   @no_source_message "we can't find any sources created for this channel."
   @failed_message "sorry, it seems like we're having some problems..."
-  @timeout 60 * 1000
+  @timeout 30 * 1000
 
   @channel_text 0
   @channel_public_thread 11
