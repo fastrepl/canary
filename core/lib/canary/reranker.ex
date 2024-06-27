@@ -26,7 +26,7 @@ defmodule Canary.Reranker.Cohere do
           model: @model,
           query: query,
           top_n: top_n,
-          documents: docs,
+          documents: Enum.map(docs, &Canary.Renderable.render/1),
           return_documents: false
         }
       )
