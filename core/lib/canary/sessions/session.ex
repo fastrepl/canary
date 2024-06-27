@@ -1,6 +1,8 @@
 defmodule Canary.Sessions.Session do
   use GenServer
 
+  alias Canary.Sessions.Message
+
   def start_link(%{id: session_id} = args) do
     GenServer.start_link(__MODULE__, args, name: via_registry(session_id))
   end
@@ -24,7 +26,7 @@ defmodule Canary.Sessions.Session do
   def handle_call({:submit, :website, %{query: query, source_ids: source_ids}}, {from, _}, state) do
     state =
       state
-      |> Map.update!(:history, &[%{role: :user, content: query} | &1])
+      |> Map.update!(:history, &[Message.user(query) | &1])
 
     handle_message = fn content ->
       send(self(), {:update, :history, content})
@@ -37,7 +39,7 @@ defmodule Canary.Sessions.Session do
 
     Task.Supervisor.start_child(Canary.TaskSupervisor, fn ->
       Canary.Sessions.Responder.call(%{
-        history: state.history,
+        history: Enum.reverse(state.history),
         source_ids: source_ids,
         handle_message: handle_message,
         handle_message_delta: handle_message_delta
@@ -51,7 +53,7 @@ defmodule Canary.Sessions.Session do
   def handle_info({:update, :history, content}, state) do
     state =
       state
-      |> Map.update!(:history, &[%{role: :assistant, content: content} | &1])
+      |> Map.update!(:history, &[Message.user(content) | &1])
 
     {:noreply, state, state.timeout}
   end

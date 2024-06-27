@@ -24,7 +24,7 @@ defmodule Canary.Sessions.Responder.LLM do
       }) do
     model = Application.fetch_env!(:canary, :chat_completion_model)
 
-    user_query = history |> List.last() |> Map.get(:content)
+    user_query = history |> Enum.at(-1) |> Map.get(:content)
     {:ok, queries} = Canary.Query.Understander.run(user_query)
 
     docs =
@@ -57,6 +57,19 @@ defmodule Canary.Sessions.Responder.LLM do
       |> Enum.map(fn url -> "- <#{url}>" end)
       |> Enum.join("\n")
 
+    history =
+      if length(history) > 1 do
+        body =
+          history
+          |> Enum.slice(0, length(history) - 1)
+          |> Enum.map(&Canary.Renderable.render/1)
+          |> Enum.join("\n\n")
+
+        "<history>\n#{body}\n</history>"
+      else
+        ""
+      end
+
     messages = [
       %{
         role: "user",
@@ -64,6 +77,8 @@ defmodule Canary.Sessions.Responder.LLM do
         <retrieved_documents>
         #{context}
         </retrieved_documents>
+
+        #{history}
 
         <user_question>
         #{user_query}
