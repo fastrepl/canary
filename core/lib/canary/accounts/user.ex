@@ -2,7 +2,8 @@ defmodule Canary.Accounts.User do
   use Ash.Resource,
     domain: Canary.Accounts,
     data_layer: AshPostgres.DataLayer,
-    extensions: [AshAuthentication]
+    extensions: [AshAuthentication],
+    authorizers: [Ash.Policy.Authorizer]
 
   attributes do
     uuid_primary_key :id
@@ -29,6 +30,16 @@ defmodule Canary.Accounts.User do
 
   identities do
     identity :unique_email, [:email]
+  end
+
+  policies do
+    policy action_type(:create) do
+      authorize_if Canary.Checks.IsMaster
+    end
+
+    bypass AshAuthentication.Checks.AshAuthenticationInteraction do
+      authorize_if always()
+    end
   end
 
   authentication do

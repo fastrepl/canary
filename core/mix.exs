@@ -66,6 +66,7 @@ defmodule Canary.MixProject do
       {:ash_authentication, "~> 4.0"},
       {:ash_authentication_phoenix, "~> 2.0"},
       {:ash_postgres, "~> 2.0"},
+      {:picosat_elixir, "~> 0.2.3"},
       {:req, "~> 0.5.0"},
       {:retry, "~> 0.18"},
       {:cors_plug, "~> 3.0"},

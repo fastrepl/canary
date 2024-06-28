@@ -137,3 +137,5 @@ if config_env() != :test do
     config :canary, :reranker, Canary.Reranker.Cohere
   end
 end
+
+config :canary, :master_user_email, System.get_env("MASTER_USER_EMAIL")
