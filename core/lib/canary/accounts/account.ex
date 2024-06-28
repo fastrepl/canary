@@ -18,6 +18,7 @@ defmodule Canary.Accounts.Account do
 
     has_many :sources, Canary.Sources.Source
     has_many :clients, Canary.Clients.Client
+    has_many :sessions, Canary.Sessions.Session
   end
 
   actions do

@@ -46,19 +46,35 @@ defmodule Canary.Clients.Discord do
   defp handle_message(_, _), do: :ignore
 
   defp respond(%Channel{id: thread_id, parent_id: channel_id, guild_id: guild_id}, user_msg) do
-    source_ids = find_source_ids(guild_id, channel_id)
+    client = find_client(guild_id, channel_id)
+    source_ids = client.sources |> Enum.map(& &1.id)
 
     cond do
       length(source_ids) == 0 ->
-        send(thread_id, user_msg, @no_source_message)
+        send_to_discord(thread_id, user_msg, @no_source_message)
 
       true ->
-        query = strip(user_msg.content)
-
-        {:ok, pid} = Canary.Sessions.find_or_start_session(thread_id)
-        GenServer.call(pid, {:submit, :website, %{query: query, source_ids: source_ids}})
-
         Api.start_typing(thread_id)
+
+        {:ok, session} =
+          Canary.Sessions.find_or_create_session(
+            client.account,
+            {:discord, thread_id}
+          )
+
+        pid = self()
+
+        Task.Supervisor.start_child(Canary.TaskSupervisor, fn ->
+          {:ok, res} =
+            Canary.Sessions.Responder.run(%{
+              request: strip(user_msg.content),
+              session: session,
+              source_ids: source_ids
+            })
+
+          send(pid, {:complete, %{content: res}})
+        end)
+
         receive_loop(thread_id, user_msg)
     end
   end
@@ -66,18 +82,19 @@ defmodule Canary.Clients.Discord do
   defp receive_loop(thread_id, user_msg) do
     receive do
       {:complete, %{content: content}} ->
-        send(thread_id, user_msg, content)
+        send_to_discord(thread_id, user_msg, content)
 
       {:progress, _} ->
+        IO.puts("progress")
         Api.start_typing(thread_id)
         receive_loop(thread_id, user_msg)
     after
       @timeout ->
-        send(thread_id, user_msg, @failed_message)
+        send_to_discord(thread_id, user_msg, @failed_message)
     end
   end
 
-  defp send(channel_id, user_msg, content) do
+  defp send_to_discord(channel_id, user_msg, content) do
     user_id = user_msg.author.id
     msg_id = user_msg.id
 
@@ -103,11 +120,6 @@ defmodule Canary.Clients.Discord do
     Canary.Clients.Client
     |> Ash.Query.for_read(:find_discord, args)
     |> Ash.read_one!()
-  end
-
-  defp find_source_ids(guild_id, channel_id) do
-    client = find_client(guild_id, channel_id)
-    if client == nil, do: [], else: client.sources |> Enum.map(& &1.id)
   end
 
   defp strip(s), do: s |> String.replace(~r/<@!?\d+>/, "") |> String.trim()

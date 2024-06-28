@@ -41,7 +41,7 @@ defmodule Canary.Clients.Client do
                  discord_channel_id == ^arg(:discord_channel_id)
              )
 
-      prepare build(load: [:sources])
+      prepare build(load: [:account, :sources])
     end
 
     create :create_web do
