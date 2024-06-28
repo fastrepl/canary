@@ -1,14 +1,14 @@
 defmodule Canary.Sessions.Responder do
   @type args :: %{
-          history: list(),
-          source_ids: list(),
-          handle_message: function(),
-          handle_message_delta: function()
+          request: String.t(),
+          session: any(),
+          source_ids: list(any()),
+          handle_delta: function()
         }
 
-  @callback call(args()) :: any()
+  @callback run(args()) :: any()
 
-  def call(args), do: impl().call(args)
+  def run(args), do: impl().run(args)
   defp impl, do: Application.get_env(:canary, :session_responder, Canary.Sessions.Responder.LLM)
 end
 
@@ -16,16 +16,13 @@ defmodule Canary.Sessions.Responder.LLM do
   @behaviour Canary.Sessions.Responder
   require Ash.Query
 
-  def call(%{
-        history: history,
-        source_ids: source_ids,
-        handle_message: handle_message,
-        handle_message_delta: _handle_message_delta
-      }) do
-    model = Application.fetch_env!(:canary, :chat_completion_model)
+  def run(%{session: session, source_ids: source_ids, request: request} = args) do
+    Task.Supervisor.start_child(Canary.TaskSupervisor, fn ->
+      Canary.Sessions.Message.add_user!(session, request)
+    end)
 
-    user_query = history |> Enum.at(-1) |> Map.get(:content)
-    {:ok, queries} = Canary.Query.Understander.run(user_query)
+    model = Application.fetch_env!(:canary, :chat_completion_model)
+    {:ok, queries} = Canary.Query.Understander.run(request)
 
     docs =
       queries
@@ -42,7 +39,7 @@ defmodule Canary.Sessions.Responder.LLM do
       |> Enum.flat_map(fn docs -> docs end)
       |> Enum.uniq_by(& &1.id)
 
-    {:ok, docs} = Canary.Reranker.run(user_query, docs, top_n: 6, threshold: 0.4)
+    {:ok, docs} = Canary.Reranker.run(request, docs, top_n: 6, threshold: 0.4)
 
     messages = [
       %{
@@ -50,10 +47,10 @@ defmodule Canary.Sessions.Responder.LLM do
         content: """
         #{render_context(docs)}
 
-        #{render_history(history)}
+        #{render_history(session.messages)}
 
         <user_question>
-        #{user_query}
+        #{request}
         </user_question>
 
         Based on the retrieved documents, answer the user's question within 5 sentences. KEEP IT SIMPLE AND CONCISE.
@@ -62,17 +59,39 @@ defmodule Canary.Sessions.Responder.LLM do
       }
     ]
 
-    {:ok, res} =
-      Canary.AI.chat(%{model: model, messages: messages, stream: false, max_tokens: 300})
+    {:ok, completion} =
+      Canary.AI.chat(
+        %{
+          model: model,
+          messages: messages,
+          max_tokens: 300,
+          stream: args[:handle_delta] != nil
+        },
+        callback: fn data ->
+          case data do
+            %{"choices" => [%{"finish_reason" => "stop"}]} ->
+              :ok
 
-    result = if docs != [], do: "#{res}\n\n#{render_sources(docs)}", else: res
-    handle_message.(result)
+            %{"choices" => [%{"delta" => %{"content" => content}}]} ->
+              args[:handle_delta].(content)
+          end
+        end
+      )
+
+    response = if docs != [], do: "#{completion}\n\n#{render_sources(docs)}", else: completion
+
+    Task.Supervisor.start_child(Canary.TaskSupervisor, fn ->
+      Canary.Sessions.Message.add_assistant!(session, response)
+    end)
+
+    {:ok, response}
   end
 
   defp render_history(history) do
     if history != [] do
       body =
         history
+        |> Enum.sort_by(& &1.created_at, &(DateTime.compare(&1, &2) == :lt))
         |> Enum.map(&Canary.Renderable.render/1)
         |> Enum.join("\n\n")
 

@@ -1,7 +1,7 @@
 defmodule CanaryWeb.PublicApiController do
   use CanaryWeb, :controller
 
-  def website_submit(conn, %{"id" => id, "content" => content}) do
+  def submit(conn, %{"id" => _id, "content" => _content}) do
     conn =
       conn
       |> put_resp_content_type("text/event-stream")
@@ -9,9 +9,11 @@ defmodule CanaryWeb.PublicApiController do
       |> put_resp_header("connection", "keep-alive")
       |> send_chunked(200)
 
-    {:ok, pid} = Canary.Sessions.find_or_start_session(id)
+    # {:ok, pid} = Canary.Sessions.find_or_start_session(id)
 
-    GenServer.call(pid, {:submit, :website, %{query: content}})
+    # TODO: find client with public key
+    # GenServer.call(pid, {:submit, %{query: content}})
+
     receive_and_send(conn)
   end
 

@@ -56,7 +56,7 @@ defmodule CanaryWeb.Router do
   scope "/", CanaryWeb do
     pipe_through :public_api
 
-    post "/api/website/submit", PublicApiController, :website_submit
+    post "/api/submit", PublicApiController, :submit
   end
 
   # Enable Swoosh mailbox preview in development

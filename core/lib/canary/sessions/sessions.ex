@@ -1,23 +1,22 @@
 defmodule Canary.Sessions do
-  def registry() do
-    Application.fetch_env!(:canary, :session_registry)
+  use Ash.Domain
+
+  resources do
+    resource Canary.Sessions.Session
+    resource Canary.Sessions.Message
   end
 
-  def find_or_start_session(id) do
-    case find_session(id) do
-      nil -> start_session(id)
-      pid -> {:ok, pid}
+  def find_or_create_session(account, {:discord, discord_id}) do
+    case Canary.Sessions.Session.find_with_discord(account.id, discord_id) do
+      {:ok, session} -> {:ok, session}
+      {:error, _} -> Canary.Sessions.Session.create_with_discord(account, discord_id)
     end
   end
 
-  defp find_session(id) do
-    case Registry.lookup(registry(), id) do
-      [{pid, _}] -> pid
-      [] -> nil
+  def find_or_create_session(account, {:web, web_id}) do
+    case Canary.Sessions.Session.find_with_web(account.id, web_id) do
+      {:ok, session} -> {:ok, session}
+      {:error, _} -> Canary.Sessions.Session.create_with_web(account, web_id)
     end
-  end
-
-  defp start_session(id) do
-    Canary.Sessions.Session.start_link(%{id: id})
   end
 end
