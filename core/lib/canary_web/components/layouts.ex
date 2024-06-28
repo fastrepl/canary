@@ -76,7 +76,7 @@ defmodule CanaryWeb.Layouts do
             </.link>
           </li>
         </ul>
-        <.link href="/sign-out" class="btn btn-sm btn-outline btn-neutral mt-auto">
+        <.link href="/sign-out" class="btn btn-sm btn-outline btn-neutral no-animation mt-auto">
           Log out
         </.link>
       </nav>
