@@ -13,10 +13,10 @@ defmodule Canary.Workers.Fetcher do
   end
 
   defp process(%Source{type: :web} = src) do
-    {:ok, data} = Canary.Crawler.run(src.web_base_url)
+    {:ok, pairs} = Canary.Crawler.run(src.web_base_url)
 
     inputs =
-      data
+      pairs
       |> Enum.flat_map(fn {url, html} ->
         html
         |> Canary.Reader.html_to_md!()

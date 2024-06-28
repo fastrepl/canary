@@ -74,7 +74,9 @@ defmodule Canary.MixProject do
       {:crawler,
        git: "https://github.com/fredwu/crawler.git",
        ref: "6866bbe287c760b7e4bba1925e80f2a4494d7af3"},
-      {:oapi_github, "~> 0.3.3"}
+      {:oapi_github, "~> 0.3.3"},
+      {:req_crawl, "~> 0.2.0"},
+      {:saxy, "~> 1.5"}
     ]
   end
 
