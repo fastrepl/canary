@@ -2,7 +2,14 @@ defmodule Canary.AI do
   @callback embedding(map()) :: {:ok, list(any())} | {:error, any()}
   @callback chat(map(), list(any())) :: {:ok, map()} | {:error, any()}
 
-  def embedding(request), do: impl().embedding(request)
+  @embedding_dimensions 384
+
+  def embedding(request) do
+    request
+    |> Map.put(:dimensions, @embedding_dimensions)
+    |> impl().embedding()
+  end
+
   def chat(request, opts \\ []), do: impl().chat(request, opts)
 
   defp impl(), do: Application.get_env(:canary, :ai, Canary.AI.OpenAI)

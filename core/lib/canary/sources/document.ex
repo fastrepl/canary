@@ -105,6 +105,8 @@ defmodule Canary.Sources.Document do
   postgres do
     table "source_documents"
     repo Canary.Repo
+
+    migration_types content_embedding: {:vector, 384}
   end
 end
 
@@ -183,9 +185,34 @@ defmodule Canary.Sources.Document.Migration do
 
   @index_name "search_index"
   @table_name "source_documents"
+  @table_vector_field "content_embedding"
   @table_id_field "id"
+  @distance_metric "vector_cosine_ops"
 
   def up do
+    hnsw_up()
+    bm25_up()
+  end
+
+  def down do
+    hnsw_down()
+    bm25_down()
+  end
+
+  defp hnsw_up() do
+    execute("""
+    CREATE INDEX ON #{@table_name}
+    USING hnsw (#{@table_vector_field} #{@distance_metric});
+    """)
+  end
+
+  defp hnsw_down() do
+    execute("""
+    DROP INDEX #{@table_name};
+    """)
+  end
+
+  defp bm25_up() do
     execute("""
     CALL paradedb.create_bm25(
       index_name => '#{@index_name}',
@@ -196,7 +223,7 @@ defmodule Canary.Sources.Document.Migration do
     """)
   end
 
-  def down do
+  defp bm25_down() do
     execute("""
     CALL paradedb.drop_bm25('#{@table_name}');
     """)

@@ -56,7 +56,7 @@ defmodule Canary.Repo.Migrations.InitAsh do
       add :source_url, :text
       add :content, :text
       add :content_hash, :binary
-      add :content_embedding, :vector
+      add :content_embedding, :vector, size: 384
     end
 
     create unique_index(:source_documents, [:source_id, :content_hash],

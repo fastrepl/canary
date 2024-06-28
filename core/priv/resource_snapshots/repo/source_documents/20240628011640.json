@@ -81,8 +81,11 @@
     },
     {
       "default": "nil",
-      "size": null,
-      "type": "vector",
+      "size": 384,
+      "type": [
+        "vector",
+        384
+      ],
       "source": "content_embedding",
       "references": null,
       "allow_nil?": true,
@@ -91,7 +94,7 @@
     }
   ],
   "table": "source_documents",
-  "hash": "4865EA3D0F7F765466D50DA3F088CEF38A6DE2F903E7F2239D1FAA85F0175315",
+  "hash": "503F9F9F3B8FD5FA765524C0B35A8FEA04F2CD0C4BFF34F3F59E513D415868A3",
   "repo": "Elixir.Canary.Repo",
   "identities": [
     {

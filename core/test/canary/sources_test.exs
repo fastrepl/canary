@@ -26,7 +26,7 @@ defmodule Canary.SourcesTest do
   describe "ingest" do
     test "single", %{source: source} do
       Canary.AI.Mock
-      |> expect(:embedding, 2, fn _ -> {:ok, [[1, 2, 3]]} end)
+      |> expect(:embedding, 2, fn _ -> {:ok, [Enum.to_list(1..384)]} end)
 
       assert Canary.Repo.all(Document) |> Enum.count() == 0
 
@@ -52,7 +52,7 @@ defmodule Canary.SourcesTest do
 
     test "bulk create", %{source: source} do
       Canary.AI.Mock
-      |> expect(:embedding, 2, fn _ -> {:ok, [[1, 2, 3]]} end)
+      |> expect(:embedding, 2, fn _ -> {:ok, [Enum.to_list(1..384)]} end)
 
       assert Canary.Repo.all(Document) |> Enum.count() == 0
 
@@ -67,8 +67,8 @@ defmodule Canary.SourcesTest do
   test "embedding only calculated by `after_action` hook when new content added",
        %{source: source} do
     Canary.AI.Mock
-    |> expect(:embedding, 1, fn _ -> {:ok, [[1, 2, 3]]} end)
-    |> expect(:embedding, 1, fn _ -> {:ok, [[4, 5, 6]]} end)
+    |> expect(:embedding, 1, fn _ -> {:ok, [Enum.to_list(1..384)]} end)
+    |> expect(:embedding, 1, fn _ -> {:ok, [Enum.to_list(385..768)]} end)
 
     args_1 = %{content: "Hello, world!", source_id: source.id}
     args_2 = %{content: "hi, world!", source_id: source.id}
@@ -83,7 +83,7 @@ defmodule Canary.SourcesTest do
 
     assert doc1
            |> Map.get(:content_embedding)
-           |> Ash.Vector.to_list() == [1, 2, 3]
+           |> Ash.Vector.to_list() == Enum.to_list(1..384)
 
     doc2 =
       Document
