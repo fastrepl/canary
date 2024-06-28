@@ -11,10 +11,20 @@ defmodule CanaryWeb.SessionsLive do
         </ul>
       </div>
     </.content_header>
+
+    <div class="mt-4">
+      <div class="stats shadow">
+        <div class="stat place-items-center">
+          <div class="stat-title">Sessions</div>
+          <div class="stat-value"><%= @sessions |> length() %></div>
+        </div>
+      </div>
+    </div>
     """
   end
 
   def mount(_params, _session, socket) do
-    {:ok, socket}
+    sessions = Canary.Sessions.Session |> Ash.read!()
+    {:ok, socket |> assign(sessions: sessions)}
   end
 end
