@@ -39,6 +39,7 @@ defmodule CanaryWeb.Router do
     pipe_through :browser
 
     ash_authentication_live_session :default,
+      layout: {CanaryWeb.Layouts, :live},
       on_mount: [
         {CanaryWeb.LiveUserAuth, :live_user_required},
         CanaryWeb.NavLive
@@ -59,12 +60,15 @@ defmodule CanaryWeb.Router do
     post "/api/submit", PublicApiController, :submit
   end
 
-  # Enable Swoosh mailbox preview in development
   if Application.compile_env(:canary, :dev_routes) do
     scope "/dev" do
       pipe_through :browser
 
       forward "/mailbox", Plug.Swoosh.MailboxPreview
+
+      live_session :dev, layout: {CanaryWeb.Layouts, :dev} do
+        live "/reader", CanaryWeb.Dev.ReaderLive, :none
+      end
     end
   end
 end
