@@ -67,6 +67,7 @@ defmodule CanaryWeb.Router do
       forward "/mailbox", Plug.Swoosh.MailboxPreview
 
       live_session :dev, layout: {CanaryWeb.Layouts, :dev} do
+        live "/crawler", CanaryWeb.Dev.CrawlerLive, :none
         live "/reader", CanaryWeb.Dev.ReaderLive, :none
       end
     end

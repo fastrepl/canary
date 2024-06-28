@@ -11,6 +11,11 @@ defmodule Canary.Crawler do
       end
     end)
   end
+
+  def run!(url) do
+    {:ok, result} = run(url)
+    result
+  end
 end
 
 defmodule Canary.Crawler.Sitemap do

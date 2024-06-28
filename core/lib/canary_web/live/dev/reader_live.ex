@@ -3,7 +3,7 @@ defmodule CanaryWeb.Dev.ReaderLive do
 
   def render(assigns) do
     ~H"""
-    <div class="flex flex-col gap-4">
+    <div class="flex flex-col gap-2">
       <form class="flex flex-row gap-2" phx-submit="submit">
         <input
           name="url"
@@ -15,9 +15,13 @@ defmodule CanaryWeb.Dev.ReaderLive do
         />
         <button type="submit" class="btn btn-neutral">Enter</button>
       </form>
-      <pre class="border rounded-md overflow-x-hidden hover:overflow-auto h-[calc(100vh-160px)]">
-        <%= @content %>
-      </pre>
+
+      <span class="font-semibold text-xs"><%= Enum.count(@chunks) %> chunks</span>
+      <div class="flex flex-col gap-4 overflow-x-hidden hover:overflow-auto h-[calc(100vh-160px)]">
+        <%= for chunk <- @chunks do %>
+          <pre class="flex flex-row bg-gray-200"><%= chunk %></pre>
+        <% end %>
+      </div>
     </div>
     """
   end
@@ -28,15 +32,16 @@ defmodule CanaryWeb.Dev.ReaderLive do
 
   def handle_params(params, _url, socket) do
     if params["url"] do
-      content =
+      chunks =
         params["url"]
         |> Req.get!()
         |> Map.get(:body)
-        |> Canary.Native.html_to_md()
+        |> Canary.Reader.html_to_md!()
+        |> Canary.Native.chunk_markdown(1400)
 
-      {:noreply, socket |> assign(url: params["url"], content: content)}
+      {:noreply, socket |> assign(url: params["url"], chunks: chunks)}
     else
-      {:noreply, socket |> assign(content: "")}
+      {:noreply, socket |> assign(url: "", chunks: [])}
     end
   end
 

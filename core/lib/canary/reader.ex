@@ -15,6 +15,11 @@ defmodule Canary.Reader.Default do
   @behaviour Canary.Reader
 
   def html_to_md(html) do
-    {:ok, Canary.Native.html_to_md(html)}
+    result =
+      html
+      |> Canary.Native.html_to_md()
+      |> String.trim()
+
+    {:ok, result}
   end
 end
