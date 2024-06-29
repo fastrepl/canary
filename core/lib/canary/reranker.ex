@@ -14,23 +14,15 @@ defmodule Canary.Reranker.Cohere do
 
   @model "rerank-english-v3.0"
 
+  use Retry
+
   def run(query, docs, opts) do
-    top_n = opts[:top_n] || 5
     threshold = opts[:threshold] || 0
 
     result =
-      Req.post(
-        base_url: "https://api.cohere.com/v1",
-        url: "/rerank",
-        headers: [{"Authorization", "Bearer #{Application.fetch_env!(:canary, :cohere_api_key)}"}],
-        json: %{
-          model: @model,
-          query: query,
-          top_n: top_n,
-          documents: Enum.map(docs, &Canary.Renderable.render/1),
-          return_documents: false
-        }
-      )
+      retry with: exponential_backoff() |> randomize |> cap(1_000) |> expiry(4_000) do
+        request(query, docs, opts)
+      end
 
     case result do
       {:ok, %{status: 200, body: body}} ->
@@ -49,6 +41,23 @@ defmodule Canary.Reranker.Cohere do
       {:error, error} ->
         {:error, error}
     end
+  end
+
+  defp request(query, docs, opts) do
+    top_n = opts[:top_n] || 5
+
+    Req.post(
+      base_url: "https://api.cohere.com/v1",
+      url: "/rerank",
+      headers: [{"Authorization", "Bearer #{Application.fetch_env!(:canary, :cohere_api_key)}"}],
+      json: %{
+        model: @model,
+        query: query,
+        top_n: top_n,
+        documents: Enum.map(docs, &Canary.Renderable.render/1),
+        return_documents: false
+      }
+    )
   end
 end
 
