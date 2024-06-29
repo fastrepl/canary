@@ -10,6 +10,7 @@ defmodule Canary.Clients.Discord do
   @bot_name "Canary"
   @no_source_message "we can't find any sources created for this channel."
   @failed_message "sorry, it seems like we're having some problems..."
+  @rate_limit_message "you're sending too many requests. please try again in a few minutes."
   @timeout 30 * 1000
 
   @channel_text 0
@@ -49,9 +50,15 @@ defmodule Canary.Clients.Discord do
     client = find_client(guild_id, channel_id)
     source_ids = client.sources |> Enum.map(& &1.id)
 
+    user_id = user_msg.author.id
+    rate_limit = Hammer.check_rate("discord:#{user_id}", 60_000, 10)
+
     cond do
       length(source_ids) == 0 ->
         send_to_discord(thread_id, user_msg, @no_source_message)
+
+      elem(rate_limit, 0) == :deny ->
+        send_to_discord(thread_id, user_msg, @rate_limit_message)
 
       true ->
         Api.start_typing(thread_id)
