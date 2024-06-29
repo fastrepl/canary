@@ -39,7 +39,7 @@ defmodule CanaryWeb.Router do
     pipe_through :browser
 
     ash_authentication_live_session :default,
-      layout: {CanaryWeb.Layouts, :live},
+      layout: {CanaryWeb.Layouts, :app},
       on_mount: [
         {CanaryWeb.LiveUserAuth, :live_user_required},
         CanaryWeb.NavLive
