@@ -46,7 +46,8 @@ defmodule Canary.Reranker.Cohere do
   defp request(query, docs, opts) do
     top_n = opts[:top_n] || 5
 
-    Req.post(
+    Canary.rest_client()
+    |> Req.post(
       base_url: "https://api.cohere.com/v1",
       url: "/rerank",
       headers: [{"Authorization", "Bearer #{Application.fetch_env!(:canary, :cohere_api_key)}"}],

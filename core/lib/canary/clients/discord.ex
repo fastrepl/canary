@@ -5,6 +5,7 @@ defmodule Canary.Clients.Discord do
   alias Nostrum.Struct.Message
   alias Nostrum.Struct.Channel
 
+  use Tracing
   require Ash.Query
 
   @bot_name "Canary"
@@ -41,7 +42,9 @@ defmodule Canary.Clients.Discord do
   end
 
   defp handle_message(%Channel{type: @channel_public_thread} = channel, user_msg) do
-    respond(channel, user_msg)
+    Tracing.span %{}, "discord" do
+      respond(channel, user_msg)
+    end
   end
 
   defp handle_message(_, _), do: :ignore
@@ -70,8 +73,11 @@ defmodule Canary.Clients.Discord do
           )
 
         pid = self()
+        ctx = Canary.Tracing.current_ctx()
 
         Task.Supervisor.start_child(Canary.TaskSupervisor, fn ->
+          Canary.Tracing.attach_ctx(ctx)
+
           {:ok, res} =
             Canary.Sessions.Responder.run(%{
               request: strip(user_msg.content),

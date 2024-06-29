@@ -80,3 +80,18 @@ config :phoenix_live_view, :debug_heex_annotations, true
 
 # Disable swoosh api client as it is only required for production adapters.
 config :swoosh, :api_client, false
+
+if System.get_env("OTEL_LOCAL") == "1" do
+  config :opentelemetry,
+    span_processor: :simple,
+    traces_exporter: {:otel_exporter_stdout, []}
+end
+
+if System.get_env("OTEL_LOCAL") == "2" do
+  config :opentelemetry,
+    traces_exporter: :otlp,
+    span_processor: :simple,
+    otlp_protocol: :http_protobuf,
+    otlp_endpoint: "http://localhost:4318",
+    resource: [service: [name: "core", namespace: "canary"]]
+end

@@ -139,3 +139,10 @@ if config_env() != :test do
 end
 
 config :canary, :master_user_email, System.get_env("MASTER_USER_EMAIL")
+
+if config_env() == :prod and System.get_env("OTEL_COLLECTOR_URL") do
+  config :opentelemetry_exporter,
+    otlp_protocol: :http_protobuf,
+    otlp_endpoint: System.fetch_env!("OTEL_COLLECTOR_URL"),
+    otlp_headers: [{"Authorization", "Bearer #{System.fetch_env!("OTEL_COLLECTOR_URL_AUTH")}"}]
+end

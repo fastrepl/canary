@@ -77,7 +77,12 @@ defmodule Canary.MixProject do
       {:oapi_github, "~> 0.3.3"},
       {:req_crawl, "~> 0.2.0"},
       {:saxy, "~> 1.5"},
-      {:hammer, "~> 6.0"}
+      {:hammer, "~> 6.0"},
+      {:opentelemetry_exporter, "~> 1.2"},
+      {:opentelemetry, "~> 1.2"},
+      {:opentelemetry_api, "~> 1.2"},
+      {:opentelemetry_req, "~> 0.2.0"},
+      {:abstracing, git: "https://github.com/msramos/abstracing.git", branch: "main"}
     ]
   end
 
