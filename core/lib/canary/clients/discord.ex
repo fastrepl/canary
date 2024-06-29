@@ -122,7 +122,12 @@ defmodule Canary.Clients.Discord do
     |> Ash.read_one!()
   end
 
-  defp strip(s), do: s |> String.replace(~r/<@!?\d+>/, "") |> String.trim()
+  defp strip(s) do
+    s
+    |> String.replace(~r/<@!?\d+>/, "")
+    |> String.replace(~r/<#!?\d+>/, "")
+    |> String.trim()
+  end
 
   defp mention(id), do: "<@#{id}>"
 
