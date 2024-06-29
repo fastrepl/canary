@@ -18,7 +18,7 @@ defmodule Canary.Test.Reader do
       </html>
       """
 
-      assert Canary.Reader.html_to_md!(html) ==
+      assert Canary.Reader.html_to_md(html) ==
                """
                Floki
 

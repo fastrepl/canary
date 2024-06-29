@@ -19,8 +19,8 @@ defmodule Canary.Workers.Fetcher do
       pairs
       |> Enum.flat_map(fn {url, html} ->
         html
-        |> Canary.Reader.html_to_md!()
-        |> Canary.Native.chunk_markdown(1400)
+        |> Canary.Reader.html_to_md()
+        |> Canary.Reader.chunk_markdown()
         |> Enum.map(&%{source_id: src.id, source_url: url, content: &1})
       end)
 

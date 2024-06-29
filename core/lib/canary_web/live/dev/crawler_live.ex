@@ -20,7 +20,7 @@ defmodule CanaryWeb.Dev.CrawlerLive do
       <%= case @urls do %>
         <% %{ok?: true, result: urls} -> %>
           <span class="font-semibold text-xs"><%= Enum.count(urls) %> urls</span>
-          <ul class="overflow-x-hidden hover:overflow-auto h-[calc(100vh-170px)]">
+          <ul class="overflow-x-hidden hover:overflow-auto h-[calc(100vh-200px)]">
             <li :for={url <- urls} class="flex flex-row">
               <.link navigate={"/dev/reader?url=#{URI.encode_www_form(url)}"} class="link link-hover">
                 <%= url %>

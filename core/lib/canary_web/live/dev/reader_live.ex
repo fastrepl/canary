@@ -17,7 +17,7 @@ defmodule CanaryWeb.Dev.ReaderLive do
       </form>
 
       <span class="font-semibold text-xs"><%= Enum.count(@chunks) %> chunks</span>
-      <div class="flex flex-col gap-4 overflow-x-hidden hover:overflow-auto h-[calc(100vh-160px)]">
+      <div class="flex flex-col gap-4 overflow-x-hidden hover:overflow-auto h-[calc(100vh-200px)]">
         <%= for chunk <- @chunks do %>
           <pre class="flex flex-row bg-gray-200"><%= chunk %></pre>
         <% end %>
@@ -36,8 +36,8 @@ defmodule CanaryWeb.Dev.ReaderLive do
         params["url"]
         |> Req.get!()
         |> Map.get(:body)
-        |> Canary.Reader.html_to_md!()
-        |> Canary.Native.chunk_markdown(1400)
+        |> Canary.Reader.html_to_md()
+        |> Canary.Reader.chunk_markdown()
 
       {:noreply, socket |> assign(url: params["url"], chunks: chunks)}
     else
