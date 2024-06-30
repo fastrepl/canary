@@ -23,17 +23,37 @@
     {
       "default": "nil",
       "size": null,
+      "type": "text",
+      "source": "url",
+      "references": null,
+      "allow_nil?": true,
+      "generated?": false,
+      "primary_key?": false
+    },
+    {
+      "default": "nil",
+      "size": null,
+      "type": "binary",
+      "source": "content_hash",
+      "references": null,
+      "allow_nil?": false,
+      "generated?": false,
+      "primary_key?": false
+    },
+    {
+      "default": "nil",
+      "size": null,
       "type": "uuid",
-      "source": "session_id",
+      "source": "source_id",
       "references": {
-        "name": "session_messages_session_id_fkey",
-        "table": "sessions",
+        "name": "source_documents_source_id_fkey",
+        "table": "sources",
         "schema": "public",
-        "on_delete": null,
+        "on_delete": "delete",
         "multitenancy": {
           "global": null,
-          "strategy": null,
-          "attribute": null
+          "attribute": null,
+          "strategy": null
         },
         "primary_key?": true,
         "destination_attribute": "id",
@@ -45,40 +65,35 @@
         "destination_attribute_default": null,
         "destination_attribute_generated": null
       },
-      "allow_nil?": false,
-      "generated?": false,
-      "primary_key?": false
-    },
-    {
-      "default": "nil",
-      "size": null,
-      "type": "text",
-      "source": "role",
-      "references": null,
-      "allow_nil?": false,
-      "generated?": false,
-      "primary_key?": false
-    },
-    {
-      "default": "nil",
-      "size": null,
-      "type": "text",
-      "source": "content",
-      "references": null,
-      "allow_nil?": false,
+      "allow_nil?": true,
       "generated?": false,
       "primary_key?": false
     }
   ],
-  "table": "session_messages",
-  "hash": "37811E2782169BD9D87C5899C47A3AED4A5DE86D860317C219B808DBCCEB50A9",
+  "table": "source_documents",
+  "hash": "608DFC4FD3A26A12DB1F039B204963E73AEAA29AE2909DA4B2731EB972D354F9",
   "repo": "Elixir.Canary.Repo",
-  "identities": [],
+  "identities": [
+    {
+      "name": "unique_content",
+      "keys": [
+        {
+          "type": "atom",
+          "value": "content_hash"
+        }
+      ],
+      "where": null,
+      "nils_distinct?": true,
+      "all_tenants?": false,
+      "index_name": "source_documents_unique_content_index",
+      "base_filter": null
+    }
+  ],
   "schema": null,
   "multitenancy": {
     "global": null,
-    "strategy": null,
-    "attribute": null
+    "attribute": null,
+    "strategy": null
   },
   "base_filter": null,
   "check_constraints": [],

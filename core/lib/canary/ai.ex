@@ -6,6 +6,7 @@ defmodule Canary.AI do
 
   def embedding(request) do
     request
+    |> Map.put(:model, Application.get_env(:canary, :text_embedding_model))
     |> Map.put(:dimensions, @embedding_dimensions)
     |> impl().embedding()
   end

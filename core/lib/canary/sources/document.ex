@@ -1,104 +1,67 @@
 defmodule Canary.Sources.Document do
   use Ash.Resource,
     domain: Canary.Sources,
-    data_layer: AshPostgres.DataLayer
+    data_layer: AshPostgres.DataLayer,
+    extensions: [AshJsonApi.Resource]
 
   attributes do
-    integer_primary_key :id
+    uuid_primary_key :id, public?: true
+    create_timestamp :created_at, public?: true
 
-    attribute :updated_at, :utc_datetime_usec
-
-    attribute :source_id, :uuid do
-      allow_nil? false
-    end
-
-    attribute :source_url, :string do
-      # this can we url of docs or github, but not all document can be referenced by url
-      allow_nil? true
-    end
-
-    attribute :content, :string do
-      allow_nil? false
-    end
-
-    attribute :content_hash, :binary do
-      allow_nil? false
-    end
-
-    attribute :content_embedding, :vector do
-      # at ingest time, we intentionally leave this to nil.
-      allow_nil? true
-    end
+    attribute :url, :string, allow_nil?: true, public?: true
+    attribute :content_hash, :binary, allow_nil?: false
   end
 
   identities do
-    identity :unique_content, [:source_id, :content_hash]
+    identity :unique_content, [:content_hash]
   end
 
   relationships do
     belongs_to :source, Canary.Sources.Source
+    has_many :chunks, Canary.Sources.Chunk
   end
 
   actions do
     defaults [:read, :destroy]
 
-    create :ingest do
-      argument :source_id, :uuid do
-        allow_nil? false
-      end
+    read :find do
+      argument :url, :string, allow_nil?: true
+      argument :content_hash, :string, allow_nil?: false
 
-      argument :source_url, :string do
-        allow_nil? true
-      end
+      get? true
+      filter expr(url == ^arg(:url) and content_hash == ^arg(:content_hash))
+    end
 
-      argument :content, :string do
-        allow_nil? false
-      end
+    create :ingest_text do
+      transaction? true
 
-      change set_attribute(:source_id, expr(^arg(:source_id)))
-      change set_attribute(:source_url, expr(^arg(:source_url)))
-      change set_attribute(:content, expr(^arg(:content)))
-      change set_attribute(:updated_at, &DateTime.utc_now/0)
+      argument :url, :string, allow_nil?: true
+      argument :source, :map, allow_nil?: false
+      argument :content, :string, allow_nil?: false
+
+      change set_attribute(:url, expr(^arg(:url)))
+      change manage_relationship(:source, :source, type: :append)
 
       change {
         Canary.Sources.Changes.Hash,
         source_attr: :content, hash_attr: :content_hash
       }
 
-      change fn changeset, _ ->
-        Ash.Changeset.after_action(changeset, fn changeset, doc ->
-          Canary.Workers.Embedder.new(%{"document_id" => doc.id}) |> Oban.insert!()
-          {:ok, doc}
-        end)
-      end
-
-      upsert? true
-      upsert_identity :unique_content
-      upsert_fields [:updated_at]
+      change Canary.Sources.Changes.CreateChunksFromDocument
     end
+  end
 
-    read :hybrid_search do
-      argument :text, :string do
-        allow_nil? false
-      end
+  code_interface do
+    define :ingest_text, args: [:source, :content, {:optional, :url}], action: :ingest_text
+  end
 
-      argument :embedding, :vector do
-        allow_nil? false
-      end
+  json_api do
+    type "document"
 
-      argument :threshold, :float do
-        allow_nil? true
-      end
-
-      manual Canary.Sources.Document.HybridSearch
-    end
-
-    update :set_embedding do
-      argument :embedding, :vector do
-        allow_nil? false
-      end
-
-      change set_attribute(:content_embedding, expr(^arg(:embedding)))
+    routes do
+      get(:read, route: "documents/:id")
+      delete(:destroy, route: "documents/:id")
+      post(:ingest_text, route: "documents/text")
     end
   end
 
@@ -106,126 +69,8 @@ defmodule Canary.Sources.Document do
     table "source_documents"
     repo Canary.Repo
 
-    migration_types content_embedding: {:vector, 384}
-  end
-end
-
-defmodule Canary.Sources.Document.HybridSearch do
-  use Ash.Resource.ManualRead
-
-  @index_name "search_index"
-  @table_name "source_documents"
-  @table_text_field "content"
-  @table_vector_field "content_embedding"
-
-  def read(ash_query, _ecto_query, _opts, _context) do
-    text = ash_query.arguments.text
-    embedding = ash_query.arguments.embedding
-
-    opts = [
-      threshold: ash_query.arguments[:threshold],
-      limit: ash_query.limit
-    ]
-
-    hybrid_search(text, embedding, opts)
-  end
-
-  defp hybrid_search(text, embedding, opts) do
-    n = opts[:limit] || 10
-    threshold = opts[:threshold] || 0.4
-
-    embedding =
-      embedding
-      |> Ash.Vector.to_list()
-      |> Jason.encode!()
-
-    """
-    SELECT doc.*
-    FROM #{@table_name} doc
-    LEFT JOIN (
-      SELECT *
-      FROM #{@index_name}.rank_hybrid(
-        bm25_query => $1,
-        similarity_query => $2,
-        bm25_weight => 0.2,
-        bm25_limit_n => 100,
-        similarity_weight => 0.8,
-        similarity_limit_n => 100
-      )
-    ) index
-    ON doc.id = index.id
-    WHERE index.rank_hybrid >= $3
-    ORDER BY index.rank_hybrid DESC
-    LIMIT $4;
-    """
-    |> query([
-      ~s(#{@table_text_field}:"#{text}"),
-      ~s('#{embedding}' <-> #{@table_vector_field}),
-      threshold,
-      n
-    ])
-  end
-
-  defp query(query, params) do
-    query
-    |> Canary.Repo.query(params)
-    |> case do
-      {:ok, %{rows: rows, columns: columns}} ->
-        docs = rows |> Enum.map(&Canary.Repo.load(Canary.Sources.Document, {columns, &1}))
-        {:ok, docs}
-
-      error ->
-        error
+    references do
+      reference :source, on_delete: :delete
     end
-  end
-end
-
-defmodule Canary.Sources.Document.Migration do
-  use Ecto.Migration
-
-  @index_name "search_index"
-  @table_name "source_documents"
-  @table_vector_field "content_embedding"
-  @table_id_field "id"
-  @distance_metric "vector_cosine_ops"
-
-  def up do
-    hnsw_up()
-    bm25_up()
-  end
-
-  def down do
-    hnsw_down()
-    bm25_down()
-  end
-
-  defp hnsw_up() do
-    execute("""
-    CREATE INDEX ON #{@table_name}
-    USING hnsw (#{@table_vector_field} #{@distance_metric});
-    """)
-  end
-
-  defp hnsw_down() do
-    execute("""
-    DROP INDEX #{@table_name};
-    """)
-  end
-
-  defp bm25_up() do
-    execute("""
-    CALL paradedb.create_bm25(
-      index_name => '#{@index_name}',
-      table_name => '#{@table_name}',
-      key_field => '#{@table_id_field}',
-      text_fields => '#{Jason.encode!(%{content: %{tokenizer: %{type: "ngram", min_gram: 4, max_gram: 6, prefix_only: true}}})}'
-    );
-    """)
-  end
-
-  defp bm25_down() do
-    execute("""
-    CALL paradedb.drop_bm25('#{@table_name}');
-    """)
   end
 end

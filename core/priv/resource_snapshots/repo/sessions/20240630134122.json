@@ -1,20 +1,30 @@
 {
   "attributes": [
     {
-      "default": "nil",
+      "default": "fragment(\"gen_random_uuid()\")",
       "size": null,
-      "type": "bigint",
+      "type": "uuid",
       "source": "id",
       "references": null,
       "allow_nil?": false,
-      "generated?": true,
+      "generated?": false,
       "primary_key?": true
     },
     {
       "default": "nil",
       "size": null,
-      "type": "utc_datetime_usec",
-      "source": "updated_at",
+      "type": "bigint",
+      "source": "discord_id",
+      "references": null,
+      "allow_nil?": true,
+      "generated?": false,
+      "primary_key?": false
+    },
+    {
+      "default": "nil",
+      "size": null,
+      "type": "text",
+      "source": "web_id",
       "references": null,
       "allow_nil?": true,
       "generated?": false,
@@ -24,10 +34,10 @@
       "default": "nil",
       "size": null,
       "type": "uuid",
-      "source": "source_id",
+      "source": "account_id",
       "references": {
-        "name": "source_documents_source_id_fkey",
-        "table": "sources",
+        "name": "sessions_account_id_fkey",
+        "table": "accounts",
         "schema": "public",
         "on_delete": null,
         "multitenancy": {
@@ -45,74 +55,49 @@
         "destination_attribute_default": null,
         "destination_attribute_generated": null
       },
-      "allow_nil?": false,
-      "generated?": false,
-      "primary_key?": false
-    },
-    {
-      "default": "nil",
-      "size": null,
-      "type": "text",
-      "source": "source_url",
-      "references": null,
-      "allow_nil?": true,
-      "generated?": false,
-      "primary_key?": false
-    },
-    {
-      "default": "nil",
-      "size": null,
-      "type": "text",
-      "source": "content",
-      "references": null,
-      "allow_nil?": false,
-      "generated?": false,
-      "primary_key?": false
-    },
-    {
-      "default": "nil",
-      "size": null,
-      "type": "binary",
-      "source": "content_hash",
-      "references": null,
-      "allow_nil?": false,
-      "generated?": false,
-      "primary_key?": false
-    },
-    {
-      "default": "nil",
-      "size": 384,
-      "type": [
-        "vector",
-        384
-      ],
-      "source": "content_embedding",
-      "references": null,
       "allow_nil?": true,
       "generated?": false,
       "primary_key?": false
     }
   ],
-  "table": "source_documents",
-  "hash": "503F9F9F3B8FD5FA765524C0B35A8FEA04F2CD0C4BFF34F3F59E513D415868A3",
+  "table": "sessions",
+  "hash": "B9D7D1E5A3A88C079236EE70308064664E94E90E0277EC694ECD741AAC7C5835",
   "repo": "Elixir.Canary.Repo",
   "identities": [
     {
-      "name": "unique_content",
+      "name": "unique_discord",
       "keys": [
         {
           "type": "atom",
-          "value": "source_id"
+          "value": "account_id"
         },
         {
           "type": "atom",
-          "value": "content_hash"
+          "value": "discord_id"
         }
       ],
       "where": null,
       "nils_distinct?": true,
       "all_tenants?": false,
-      "index_name": "source_documents_unique_content_index",
+      "index_name": "sessions_unique_discord_index",
+      "base_filter": null
+    },
+    {
+      "name": "unique_web",
+      "keys": [
+        {
+          "type": "atom",
+          "value": "account_id"
+        },
+        {
+          "type": "atom",
+          "value": "web_id"
+        }
+      ],
+      "where": null,
+      "nils_distinct?": true,
+      "all_tenants?": false,
+      "index_name": "sessions_unique_web_index",
       "base_filter": null
     }
   ],

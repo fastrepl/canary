@@ -24,6 +24,14 @@ defmodule Canary.Clients.Client do
     identity :unique_discord, [:discord_server_id, :discord_channel_id]
   end
 
+  relationships do
+    belongs_to :account, Canary.Accounts.Account
+
+    many_to_many :sources, Canary.Sources.Source do
+      through Canary.Clients.ClientSource
+    end
+  end
+
   actions do
     defaults [:destroy]
 
@@ -93,12 +101,10 @@ defmodule Canary.Clients.Client do
     end
   end
 
-  relationships do
-    belongs_to :account, Canary.Accounts.Account
-
-    many_to_many :sources, Canary.Sources.Source do
-      through Canary.Clients.ClientSource
-    end
+  code_interface do
+    define :create_discord,
+      args: [:account, :name, :discord_server_id, :discord_channel_id],
+      action: :create_discord
   end
 
   postgres do

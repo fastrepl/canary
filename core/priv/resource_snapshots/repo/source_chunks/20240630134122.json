@@ -13,10 +13,23 @@
     {
       "default": "nil",
       "size": null,
-      "type": "bigint",
-      "source": "discord_id",
+      "type": "text",
+      "source": "content",
       "references": null,
-      "allow_nil?": true,
+      "allow_nil?": false,
+      "generated?": false,
+      "primary_key?": false
+    },
+    {
+      "default": "nil",
+      "size": 384,
+      "type": [
+        "vector",
+        384
+      ],
+      "source": "embedding",
+      "references": null,
+      "allow_nil?": false,
       "generated?": false,
       "primary_key?": false
     },
@@ -24,7 +37,7 @@
       "default": "nil",
       "size": null,
       "type": "text",
-      "source": "web_id",
+      "source": "url",
       "references": null,
       "allow_nil?": true,
       "generated?": false,
@@ -34,16 +47,16 @@
       "default": "nil",
       "size": null,
       "type": "uuid",
-      "source": "account_id",
+      "source": "document_id",
       "references": {
-        "name": "sessions_account_id_fkey",
-        "table": "accounts",
+        "name": "source_chunks_document_id_fkey",
+        "table": "source_documents",
         "schema": "public",
-        "on_delete": null,
+        "on_delete": "delete",
         "multitenancy": {
           "global": null,
-          "strategy": null,
-          "attribute": null
+          "attribute": null,
+          "strategy": null
         },
         "primary_key?": true,
         "destination_attribute": "id",
@@ -60,52 +73,15 @@
       "primary_key?": false
     }
   ],
-  "table": "sessions",
-  "hash": "EEC2ECEB84F8831498A6A249C81332DD91F0331156FAF345367C00C912E6D7B7",
+  "table": "source_chunks",
+  "hash": "9DB2A11E0A5A06B3ACB9934989000AD104D39ED8C66D8BEC4F602AD85E41FFE9",
   "repo": "Elixir.Canary.Repo",
-  "identities": [
-    {
-      "name": "unique_discord",
-      "keys": [
-        {
-          "type": "atom",
-          "value": "account_id"
-        },
-        {
-          "type": "atom",
-          "value": "discord_id"
-        }
-      ],
-      "where": null,
-      "nils_distinct?": true,
-      "all_tenants?": false,
-      "index_name": "sessions_unique_discord_index",
-      "base_filter": null
-    },
-    {
-      "name": "unique_web",
-      "keys": [
-        {
-          "type": "atom",
-          "value": "account_id"
-        },
-        {
-          "type": "atom",
-          "value": "web_id"
-        }
-      ],
-      "where": null,
-      "nils_distinct?": true,
-      "all_tenants?": false,
-      "index_name": "sessions_unique_web_index",
-      "base_filter": null
-    }
-  ],
+  "identities": [],
   "schema": null,
   "multitenancy": {
     "global": null,
-    "strategy": null,
-    "attribute": null
+    "attribute": null,
+    "strategy": null
   },
   "base_filter": null,
   "check_constraints": [],

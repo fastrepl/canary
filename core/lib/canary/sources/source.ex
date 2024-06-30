@@ -7,6 +7,7 @@ defmodule Canary.Sources.Source do
   attributes do
     uuid_primary_key :id
     create_timestamp :created_at
+
     attribute :account_id, :uuid, allow_nil?: false
 
     attribute :name, :string, allow_nil?: false, public?: true
@@ -33,8 +34,8 @@ defmodule Canary.Sources.Source do
     end
 
     create :create_web do
-      argument :name, :string, allow_nil?: false
       argument :account, :map, allow_nil?: false
+      argument :name, :string, allow_nil?: false
       argument :web_base_url, :string, allow_nil?: false
 
       change set_attribute(:type, :web)
@@ -46,16 +47,12 @@ defmodule Canary.Sources.Source do
   end
 
   aggregates do
-    count :num_documents, :documents do
-      filter expr(is_nil(content_embedding) == false)
-    end
+    max :updated_at, :documents, :created_at
+    count :num_documents, :documents
+  end
 
-    max :updated_at, :documents, :updated_at do
-      # this aggregation will be used for removing outdated documents.
-      # since document without embedding is not searchable yet,
-      # it should not affect the freshness of other documents.
-      filter expr(is_nil(content_embedding) == false)
-    end
+  code_interface do
+    define :create_web, args: [:account, :name, :web_base_url], action: :create_web
   end
 
   json_api do

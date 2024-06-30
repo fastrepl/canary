@@ -115,12 +115,7 @@ defmodule CanaryWeb.SourcesLive do
   end
 
   def handle_event("save", %{"type" => "Web", "name" => name, "url" => url}, socket) do
-    args = %{account: socket.assigns.current_account, name: name, web_base_url: url}
-
-    source =
-      Canary.Sources.Source
-      |> Ash.Changeset.for_create(:create_web, args)
-      |> Ash.create!()
+    source = Canary.Sources.Source.create_web!(socket.assigns.current_account, name, url)
 
     sources = [source | socket.assigns.sources] |> Enum.sort_by(& &1.created_at)
     {:noreply, socket |> assign(sources: sources)}
