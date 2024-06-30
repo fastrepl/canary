@@ -6,33 +6,9 @@ defmodule Canary.ClientsTest do
   test "many_to_many with sources" do
     account = account_fixture()
 
-    client =
-      Canary.Clients.Client
-      |> Ash.Changeset.for_create(:create_discord, %{
-        account: account,
-        name: "discord",
-        discord_server_id: 1,
-        discord_channel_id: 2
-      })
-      |> Ash.create!()
-
-    source_1 =
-      Canary.Sources.Source
-      |> Ash.Changeset.for_create(:create_web, %{
-        name: "example",
-        account: account,
-        web_base_url: "https://example.com"
-      })
-      |> Ash.create!()
-
-    source_2 =
-      Canary.Sources.Source
-      |> Ash.Changeset.for_create(:create_web, %{
-        name: "example2",
-        account: account,
-        web_base_url: "https://example2.com"
-      })
-      |> Ash.create!()
+    client = Canary.Clients.Client.create_discord!(account, "discord", 1, 2)
+    source_1 = Canary.Sources.Source.create_web!(account, "example", "https://example.com")
+    source_2 = Canary.Sources.Source.create_web!(account, "example2", "https://example2.com")
 
     client
     |> Ash.Changeset.for_update(:add_sources, %{sources: [%{id: source_1.id}, %{id: source_2.id}]})

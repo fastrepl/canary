@@ -28,9 +28,9 @@ defmodule Canary.Sessions.Responder.LLM do
       queries
       |> Enum.map(fn query ->
         Task.Supervisor.async_nolink(Canary.TaskSupervisor, fn ->
-          Canary.Sources.Document
-          |> Ash.Query.filter(source_id in ^source_ids)
-          |> Ash.Query.for_read(:hybrid_search, %{text: query.text, embedding: query.embedding})
+          Canary.Sources.Chunk
+          |> Ash.Query.filter(document.source_id in ^source_ids)
+          |> Ash.Query.for_read(:search, %{text: query.text, embedding: query.embedding})
           |> Ash.Query.limit(6)
           |> Ash.read!()
         end)
