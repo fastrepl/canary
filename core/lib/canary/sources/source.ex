@@ -1,17 +1,18 @@
 defmodule Canary.Sources.Source do
   use Ash.Resource,
     domain: Canary.Sources,
-    data_layer: AshPostgres.DataLayer
+    data_layer: AshPostgres.DataLayer,
+    extensions: [AshJsonApi.Resource]
 
   attributes do
     uuid_primary_key :id
     create_timestamp :created_at
     attribute :account_id, :uuid, allow_nil?: false
 
-    attribute :name, :string, allow_nil?: false
-    attribute :type, :atom, constraints: [one_of: [:web]]
+    attribute :name, :string, allow_nil?: false, public?: true
+    attribute :type, :atom, constraints: [one_of: [:generic, :web]], public?: true
 
-    attribute :web_base_url, :string
+    attribute :web_base_url, :string, public?: true
   end
 
   identities do
@@ -54,6 +55,15 @@ defmodule Canary.Sources.Source do
       # since document without embedding is not searchable yet,
       # it should not affect the freshness of other documents.
       filter expr(is_nil(content_embedding) == false)
+    end
+  end
+
+  json_api do
+    type "source"
+
+    routes do
+      get(:read, route: "sources/:id")
+      post(:create_web, route: "sources/web")
     end
   end
 

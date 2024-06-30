@@ -12,14 +12,9 @@ defmodule CanaryWeb.Router do
     plug :load_from_session
   end
 
-  pipeline :public_api do
+  pipeline :api do
     plug :accepts, ["json"]
     plug CORSPlug
-  end
-
-  pipeline :private_api do
-    plug :accepts, ["json"]
-    plug :load_from_bearer
   end
 
   scope "/", CanaryWeb do
@@ -54,10 +49,12 @@ defmodule CanaryWeb.Router do
     end
   end
 
-  scope "/", CanaryWeb do
-    pipe_through :public_api
+  scope "/api" do
+    pipe_through :api
 
-    post "/api/submit", PublicApiController, :submit
+    post "/submit", CanaryWeb.PublicApiController, :submit
+
+    forward "/", CanaryWeb.AshRouter
   end
 
   if Application.compile_env(:canary, :dev_routes) do

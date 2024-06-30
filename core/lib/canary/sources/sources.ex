@@ -1,5 +1,5 @@
 defmodule Canary.Sources do
-  use Ash.Domain
+  use Ash.Domain, extensions: [AshJsonApi.Domain]
 
   resources do
     resource Canary.Sources.Document
