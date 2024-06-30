@@ -1,6 +1,8 @@
 import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
 
+import starlightOpenAPI, { openAPISidebarGroups } from "starlight-openapi";
+
 // https://astro.build/config
 export default defineConfig({
   redirects: { "/": "/intro/readme/" },
@@ -51,8 +53,19 @@ export default defineConfig({
           collapsed: true,
           autogenerate: { directory: "others" },
         },
+        ...openAPISidebarGroups
       ],
       customCss: ["./src/styles/theme.css"],
+      plugins: [
+        starlightOpenAPI([
+          {
+            base: "api",
+            label: "API Reference",
+            schema: "https://cloud.getcanary.dev/api/openapi",
+            collapsed: true,
+          },
+        ]),
+      ],
     }),
   ],
 });
