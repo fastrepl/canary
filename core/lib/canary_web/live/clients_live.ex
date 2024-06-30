@@ -60,7 +60,7 @@ defmodule CanaryWeb.ClientsLive do
       </div>
     </dialog>
 
-    <table class="table mt-8">
+    <table class="table mt-8 bg-base-100">
       <thead>
         <tr>
           <th>Type</th>
