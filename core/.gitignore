@@ -36,3 +36,9 @@ npm-debug.log
 /assets/node_modules/
 
 **/*.so
+
+# Ignore automatically generated Svelte files by the ~V sigil
+/assets/svelte/_build/
+
+# Ignore ssr build for svelte.
+/priv/svelte/

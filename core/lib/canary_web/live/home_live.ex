@@ -11,6 +11,8 @@ defmodule CanaryWeb.HomeLive do
         </ul>
       </div>
     </.content_header>
+
+    <.svelte name="Demo" props={%{}} />
     """
   end
 
