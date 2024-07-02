@@ -10,6 +10,7 @@ module.exports = {
     "./js/**/*.js",
     "../lib/canary_web.ex",
     "../lib/canary_web/**/*.*ex",
+    "./svelte/**/*.svelte",
     "../deps/ash_authentication_phoenix/**/*.*ex",
   ],
   daisyui: {

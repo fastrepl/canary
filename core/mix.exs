@@ -41,7 +41,6 @@ defmodule Canary.MixProject do
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:phoenix_live_view, "~> 0.20.2"},
       {:floki, ">= 0.30.0"},
-      {:esbuild, "~> 0.8", runtime: Mix.env() == :dev},
       {:tailwind, "~> 0.2", runtime: Mix.env() == :dev},
       {:heroicons,
        github: "tailwindlabs/heroicons",
@@ -84,7 +83,8 @@ defmodule Canary.MixProject do
       {:opentelemetry, "~> 1.2"},
       {:opentelemetry_api, "~> 1.2"},
       {:opentelemetry_req, "~> 0.2.0"},
-      {:abstracing, git: "https://github.com/msramos/abstracing.git", branch: "main"}
+      {:abstracing, git: "https://github.com/msramos/abstracing.git", branch: "main"},
+      {:live_svelte, "~> 0.13.2"}
     ]
   end
 
@@ -96,7 +96,7 @@ defmodule Canary.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      setup: ["deps.get", "ecto.setup", "assets.setup", "assets.build"],
+      setup: ["deps.get", "ecto.setup", "cmd --cd assets npm install"],
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
@@ -104,7 +104,7 @@ defmodule Canary.MixProject do
       "assets.build": ["tailwind canary", "esbuild canary"],
       "assets.deploy": [
         "tailwind canary --minify",
-        "esbuild canary --minify",
+        "cmd --cd assets node build.js --deploy",
         "phx.digest"
       ]
     ]
