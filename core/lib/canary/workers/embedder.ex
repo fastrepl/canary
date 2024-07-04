@@ -19,10 +19,9 @@ defmodule Canary.Workers.Embedder do
   end
 
   defp process(%Document{} = doc) do
-    model = Application.get_env(:canary, :text_embedding_model)
     input = [Canary.Renderable.render(doc)]
 
-    with {:ok, [embedding]} = Canary.AI.embedding(%{model: model, input: input}),
+    with {:ok, [embedding]} = Canary.AI.embedding(%{input: input}),
          {:ok, _} <-
            doc
            |> Ash.Changeset.for_update(:set_embedding, %{embedding: embedding})
