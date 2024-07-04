@@ -9,7 +9,8 @@ defmodule Canary.MixProject do
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      consolidate_protocols: Mix.env() == :prod
     ]
   end
 
@@ -61,7 +62,7 @@ defmodule Canary.MixProject do
       {:rustler, "~> 0.32.1"},
       {:nostrum, "~> 0.9.1", runtime: false},
       {:gun, "~> 2.0"},
-      {:ash, "~> 3.0", consolidate_protocols: Mix.env() == :prod},
+      {:ash, "~> 3.0"},
       {:ash_authentication, "~> 4.0"},
       {:ash_authentication_phoenix, "~> 2.0"},
       {:ash_postgres, "~> 2.0"},
