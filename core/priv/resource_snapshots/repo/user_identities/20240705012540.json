@@ -1,6 +1,56 @@
 {
   "attributes": [
     {
+      "default": "nil",
+      "size": null,
+      "type": "text",
+      "source": "refresh_token",
+      "references": null,
+      "allow_nil?": true,
+      "primary_key?": false,
+      "generated?": false
+    },
+    {
+      "default": "nil",
+      "size": null,
+      "type": "utc_datetime_usec",
+      "source": "access_token_expires_at",
+      "references": null,
+      "allow_nil?": true,
+      "primary_key?": false,
+      "generated?": false
+    },
+    {
+      "default": "nil",
+      "size": null,
+      "type": "text",
+      "source": "access_token",
+      "references": null,
+      "allow_nil?": true,
+      "primary_key?": false,
+      "generated?": false
+    },
+    {
+      "default": "nil",
+      "size": null,
+      "type": "text",
+      "source": "uid",
+      "references": null,
+      "allow_nil?": false,
+      "primary_key?": false,
+      "generated?": false
+    },
+    {
+      "default": "nil",
+      "size": null,
+      "type": "text",
+      "source": "strategy",
+      "references": null,
+      "allow_nil?": false,
+      "primary_key?": false,
+      "generated?": false
+    },
+    {
       "default": "fragment(\"gen_random_uuid()\")",
       "size": null,
       "type": "uuid",
@@ -11,70 +61,20 @@
       "generated?": false
     },
     {
-      "default": "fragment(\"(now() AT TIME ZONE 'utc')\")",
-      "size": null,
-      "type": "utc_datetime_usec",
-      "source": "created_at",
-      "references": null,
-      "allow_nil?": false,
-      "primary_key?": false,
-      "generated?": false
-    },
-    {
-      "default": "nil",
-      "size": null,
-      "type": "text",
-      "source": "name",
-      "references": null,
-      "allow_nil?": false,
-      "primary_key?": false,
-      "generated?": false
-    },
-    {
-      "default": "nil",
-      "size": null,
-      "type": "text",
-      "source": "type",
-      "references": null,
-      "allow_nil?": true,
-      "primary_key?": false,
-      "generated?": false
-    },
-    {
-      "default": "nil",
-      "size": null,
-      "type": "bigint",
-      "source": "discord_server_id",
-      "references": null,
-      "allow_nil?": true,
-      "primary_key?": false,
-      "generated?": false
-    },
-    {
-      "default": "nil",
-      "size": null,
-      "type": "bigint",
-      "source": "discord_channel_id",
-      "references": null,
-      "allow_nil?": true,
-      "primary_key?": false,
-      "generated?": false
-    },
-    {
       "default": "nil",
       "size": null,
       "type": "uuid",
-      "source": "source_id",
+      "source": "user_id",
       "references": {
-        "name": "clients_source_id_fkey",
-        "table": "sources",
-        "on_delete": "delete",
+        "name": "user_identities_user_id_fkey",
+        "table": "users",
+        "on_delete": null,
         "primary_key?": true,
         "schema": "public",
         "multitenancy": {
           "global": null,
-          "attribute": null,
-          "strategy": null
+          "strategy": null,
+          "attribute": null
         },
         "destination_attribute": "id",
         "on_update": null,
@@ -90,56 +90,42 @@
       "generated?": false
     }
   ],
-  "table": "clients",
-  "hash": "6B37ABFAAD05B822390BA5F2E9C52CD2D478284BCCD68E00C0FA6903B507412E",
+  "table": "user_identities",
+  "hash": "FCC709235ABD4C064E28135C6947B84F292F82FBA1659595324C9708D5C75DEE",
   "repo": "Elixir.Canary.Repo",
   "identities": [
     {
-      "name": "unique_client",
+      "name": "unique_on_strategy_and_uid_and_user_id",
       "keys": [
         {
           "type": "atom",
-          "value": "source_id"
+          "value": "strategy"
         },
         {
           "type": "atom",
-          "value": "name"
-        }
-      ],
-      "where": null,
-      "index_name": "clients_unique_client_index",
-      "base_filter": null,
-      "all_tenants?": false,
-      "nils_distinct?": true
-    },
-    {
-      "name": "unique_discord",
-      "keys": [
-        {
-          "type": "atom",
-          "value": "discord_server_id"
+          "value": "uid"
         },
         {
           "type": "atom",
-          "value": "discord_channel_id"
+          "value": "user_id"
         }
       ],
       "where": null,
-      "index_name": "clients_unique_discord_index",
       "base_filter": null,
       "all_tenants?": false,
-      "nils_distinct?": true
+      "nils_distinct?": true,
+      "index_name": "user_identities_unique_on_strategy_and_uid_and_user_id_index"
     }
   ],
   "schema": null,
-  "base_filter": null,
   "check_constraints": [],
   "custom_indexes": [],
   "multitenancy": {
     "global": null,
-    "attribute": null,
-    "strategy": null
+    "strategy": null,
+    "attribute": null
   },
+  "base_filter": null,
   "custom_statements": [],
   "has_create_action": true
 }

@@ -13,8 +13,8 @@
         "schema": "public",
         "multitenancy": {
           "global": null,
-          "attribute": null,
-          "strategy": null
+          "strategy": null,
+          "attribute": null
         },
         "destination_attribute": "id",
         "on_update": null,
@@ -42,8 +42,8 @@
         "schema": "public",
         "multitenancy": {
           "global": null,
-          "attribute": null,
-          "strategy": null
+          "strategy": null,
+          "attribute": null
         },
         "destination_attribute": "id",
         "on_update": null,
@@ -60,18 +60,18 @@
     }
   ],
   "table": "account_users",
-  "hash": "4840117EA904AC09A89631267706BDAB121C6F5D7D850E2ACF19BADE829418B4",
+  "hash": "1A58DE53A45FB5C8F98FC4D4362B8FCECED9D91F6F00454AA8996F0A61DB2EE7",
   "repo": "Elixir.Canary.Repo",
   "identities": [],
   "schema": null,
-  "base_filter": null,
   "check_constraints": [],
   "custom_indexes": [],
   "multitenancy": {
     "global": null,
-    "attribute": null,
-    "strategy": null
+    "strategy": null,
+    "attribute": null
   },
+  "base_filter": null,
   "custom_statements": [],
   "has_create_action": true
 }

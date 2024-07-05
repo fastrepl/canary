@@ -6,7 +6,10 @@ defmodule Canary.Accounts.Billing do
   attributes do
     uuid_primary_key :id
 
+    # https://docs.stripe.com/api/customers/object
     attribute :stripe_customer, :map, allow_nil?: true
+
+    # https://docs.stripe.com/api/subscriptions/object
     attribute :stripe_subscription, :map, allow_nil?: true
   end
 
@@ -15,7 +18,7 @@ defmodule Canary.Accounts.Billing do
   end
 
   actions do
-    defaults [:read, :destroy]
+    defaults [:read]
 
     create :create do
       argument :account, :map, allow_nil?: false
@@ -23,6 +26,14 @@ defmodule Canary.Accounts.Billing do
       argument :stripe_subscription, :map, allow_nil?: true
 
       change manage_relationship(:account, :account, type: :append)
+      change set_attribute(:stripe_customer, expr(^arg(:stripe_customer)))
+      change set_attribute(:stripe_subscription, expr(^arg(:stripe_subscription)))
+    end
+
+    update :update do
+      argument :stripe_customer, :map, allow_nil?: true
+      argument :stripe_subscription, :map, allow_nil?: true
+
       change set_attribute(:stripe_customer, expr(^arg(:stripe_customer)))
       change set_attribute(:stripe_subscription, expr(^arg(:stripe_subscription)))
     end

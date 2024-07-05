@@ -11,20 +11,10 @@
       "generated?": false
     },
     {
-      "default": "fragment(\"(now() AT TIME ZONE 'utc')\")",
-      "size": null,
-      "type": "utc_datetime_usec",
-      "source": "created_at",
-      "references": null,
-      "allow_nil?": false,
-      "primary_key?": false,
-      "generated?": false
-    },
-    {
       "default": "nil",
       "size": null,
-      "type": "text",
-      "source": "type",
+      "type": "map",
+      "source": "stripe_customer",
       "references": null,
       "allow_nil?": true,
       "primary_key?": false,
@@ -33,20 +23,10 @@
     {
       "default": "nil",
       "size": null,
-      "type": "text",
-      "source": "base_url",
+      "type": "map",
+      "source": "stripe_subscription",
       "references": null,
-      "allow_nil?": false,
-      "primary_key?": false,
-      "generated?": false
-    },
-    {
-      "default": "nil",
-      "size": null,
-      "type": "text",
-      "source": "base_path",
-      "references": null,
-      "allow_nil?": false,
+      "allow_nil?": true,
       "primary_key?": false,
       "generated?": false
     },
@@ -56,15 +36,15 @@
       "type": "uuid",
       "source": "account_id",
       "references": {
-        "name": "sources_account_id_fkey",
+        "name": "billings_account_id_fkey",
         "table": "accounts",
-        "on_delete": null,
+        "on_delete": "nothing",
         "primary_key?": true,
         "schema": "public",
         "multitenancy": {
           "global": null,
-          "attribute": null,
-          "strategy": null
+          "strategy": null,
+          "attribute": null
         },
         "destination_attribute": "id",
         "on_update": null,
@@ -80,19 +60,19 @@
       "generated?": false
     }
   ],
-  "table": "sources",
-  "hash": "CC1FF448C184D9CEF6DC0393D5F33EE994C07D1354BE4EBB77517A6DC2C1B017",
+  "table": "billings",
+  "hash": "694637BA6643C0DCE3A6A974F951A58FA9FBE6E1A636813EE1F8D2558BE5EE06",
   "repo": "Elixir.Canary.Repo",
   "identities": [],
   "schema": null,
-  "base_filter": null,
   "check_constraints": [],
   "custom_indexes": [],
   "multitenancy": {
     "global": null,
-    "attribute": null,
-    "strategy": null
+    "strategy": null,
+    "attribute": null
   },
+  "base_filter": null,
   "custom_statements": [],
   "has_create_action": true
 }

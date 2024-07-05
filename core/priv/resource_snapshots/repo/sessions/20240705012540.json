@@ -14,20 +14,7 @@
       "default": "nil",
       "size": null,
       "type": "text",
-      "source": "content",
-      "references": null,
-      "allow_nil?": false,
-      "primary_key?": false,
-      "generated?": false
-    },
-    {
-      "default": "nil",
-      "size": 384,
-      "type": [
-        "vector",
-        384
-      ],
-      "source": "embedding",
+      "source": "type",
       "references": null,
       "allow_nil?": false,
       "primary_key?": false,
@@ -36,10 +23,10 @@
     {
       "default": "nil",
       "size": null,
-      "type": "text",
-      "source": "url",
+      "type": "bigint",
+      "source": "client_session_id",
       "references": null,
-      "allow_nil?": true,
+      "allow_nil?": false,
       "primary_key?": false,
       "generated?": false
     },
@@ -47,17 +34,17 @@
       "default": "nil",
       "size": null,
       "type": "uuid",
-      "source": "document_id",
+      "source": "account_id",
       "references": {
-        "name": "chunks_document_id_fkey",
-        "table": "documents",
-        "on_delete": "delete",
+        "name": "sessions_account_id_fkey",
+        "table": "accounts",
+        "on_delete": null,
         "primary_key?": true,
         "schema": "public",
         "multitenancy": {
           "global": null,
-          "attribute": null,
-          "strategy": null
+          "strategy": null,
+          "attribute": null
         },
         "destination_attribute": "id",
         "on_update": null,
@@ -73,19 +60,42 @@
       "generated?": false
     }
   ],
-  "table": "chunks",
-  "hash": "729759D9DE9A40FC6FA13832F0EFB47450E4ACA83F8083DC8CFC08322AD0CC1B",
+  "table": "sessions",
+  "hash": "912F4431BB053AD37E45506815ACFEA6F0277AD1F43A1B6EFE71FEEFBC72D4FE",
   "repo": "Elixir.Canary.Repo",
-  "identities": [],
+  "identities": [
+    {
+      "name": "unique_session",
+      "keys": [
+        {
+          "type": "atom",
+          "value": "account_id"
+        },
+        {
+          "type": "atom",
+          "value": "type"
+        },
+        {
+          "type": "atom",
+          "value": "client_session_id"
+        }
+      ],
+      "where": null,
+      "base_filter": null,
+      "all_tenants?": false,
+      "nils_distinct?": true,
+      "index_name": "sessions_unique_session_index"
+    }
+  ],
   "schema": null,
-  "base_filter": null,
   "check_constraints": [],
   "custom_indexes": [],
   "multitenancy": {
     "global": null,
-    "attribute": null,
-    "strategy": null
+    "strategy": null,
+    "attribute": null
   },
+  "base_filter": null,
   "custom_statements": [],
   "has_create_action": true
 }

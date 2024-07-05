@@ -1,4 +1,4 @@
-defmodule Canary.Repo.Migrations.AddResources do
+defmodule Canary.Repo.Migrations.InitResources do
   @moduledoc """
   Updates resources based on their most recent snapshots.
 
@@ -60,7 +60,7 @@ defmodule Canary.Repo.Migrations.AddResources do
         null: false,
         default: fragment("(now() AT TIME ZONE 'utc')")
 
-      add :type, :text
+      add :type, :text, null: false
       add :base_url, :text, null: false
       add :base_path, :text, null: false
       add :account_id, :uuid
@@ -68,7 +68,7 @@ defmodule Canary.Repo.Migrations.AddResources do
 
     create table(:sessions, primary_key: false) do
       add :id, :uuid, null: false, default: fragment("gen_random_uuid()"), primary_key: true
-      add :type, :text
+      add :type, :text, null: false
       add :client_session_id, :bigint, null: false
       add :account_id, :uuid
     end
@@ -144,7 +144,7 @@ defmodule Canary.Repo.Migrations.AddResources do
         default: fragment("(now() AT TIME ZONE 'utc')")
 
       add :name, :text, null: false
-      add :type, :text
+      add :type, :text, null: false
       add :discord_server_id, :bigint
       add :discord_channel_id, :bigint
 

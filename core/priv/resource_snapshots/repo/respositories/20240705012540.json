@@ -13,8 +13,8 @@
     {
       "default": "nil",
       "size": null,
-      "type": "citext",
-      "source": "email",
+      "type": "text",
+      "source": "full_name",
       "references": null,
       "allow_nil?": false,
       "primary_key?": false,
@@ -24,41 +24,55 @@
       "default": "nil",
       "size": null,
       "type": "text",
-      "source": "hashed_password",
+      "source": "type",
       "references": null,
-      "allow_nil?": false,
+      "allow_nil?": true,
+      "primary_key?": false,
+      "generated?": false
+    },
+    {
+      "default": "nil",
+      "size": null,
+      "type": "bigint",
+      "source": "github_installation_id",
+      "references": null,
+      "allow_nil?": true,
       "primary_key?": false,
       "generated?": false
     }
   ],
-  "table": "users",
-  "hash": "54C01DD2D2F1F5DE502B91D21AC02FFDD2137E82173FB2C708C0BCC55EC06C80",
+  "table": "respositories",
+  "hash": "749D8FD70C3E72FE64903250890A2975159F961BC39B9E7F4C2EBB085F8FA0B8",
   "repo": "Elixir.Canary.Repo",
   "identities": [
     {
-      "name": "unique_email",
+      "name": "unique_repository",
       "keys": [
         {
           "type": "atom",
-          "value": "email"
+          "value": "type"
+        },
+        {
+          "type": "atom",
+          "value": "full_name"
         }
       ],
       "where": null,
-      "index_name": "users_unique_email_index",
       "base_filter": null,
       "all_tenants?": false,
-      "nils_distinct?": true
+      "nils_distinct?": true,
+      "index_name": "respositories_unique_repository_index"
     }
   ],
   "schema": null,
-  "base_filter": null,
   "check_constraints": [],
   "custom_indexes": [],
   "multitenancy": {
     "global": null,
-    "attribute": null,
-    "strategy": null
+    "strategy": null,
+    "attribute": null
   },
+  "base_filter": null,
   "custom_statements": [],
   "has_create_action": true
 }

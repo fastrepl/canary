@@ -8,10 +8,10 @@ defmodule Canary.Interactions.Client do
     create_timestamp :created_at
 
     attribute :name, :string, allow_nil?: false
-    attribute :type, :atom, constraints: [one_of: [:discord]]
+    attribute :type, :atom, constraints: [one_of: [:discord]], allow_nil?: false
 
-    attribute :discord_server_id, :integer
-    attribute :discord_channel_id, :integer
+    attribute :discord_server_id, :integer, allow_nil?: true
+    attribute :discord_channel_id, :integer, allow_nil?: true
   end
 
   identities do

@@ -1,7 +1,6 @@
 defmodule Canary.Test.Interactions do
   use Canary.DataCase
   import Canary.AccountsFixtures
-  require Ash.Query
 
   import Mox
   setup :set_mox_from_context

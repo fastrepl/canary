@@ -10,9 +10,10 @@ defmodule Canary.Sources.Source do
     uuid_primary_key :id
     create_timestamp :created_at
 
-    attribute :type, :atom, constraints: [one_of: @supported_docs], public?: true
-    attribute :base_url, :string, allow_nil?: false, public?: true
-    attribute :base_path, :string, allow_nil?: false, public?: true
+    attribute :type, :atom, constraints: [one_of: @supported_docs], allow_nil?: false
+
+    attribute :base_url, :string, allow_nil?: false
+    attribute :base_path, :string, allow_nil?: false
   end
 
   relationships do

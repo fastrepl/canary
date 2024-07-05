@@ -72,18 +72,18 @@
     }
   ],
   "table": "tokens",
-  "hash": "2DD9595A4B30CE001E665CA41FAE7FFA70DB5EE5B7E14AE364C0D7652417B4A7",
+  "hash": "EF5B1D84FF86890DE7641D25F20FA44786D7D4A28AC895113979A220BB8ECAB3",
   "repo": "Elixir.Canary.Repo",
   "identities": [],
   "schema": null,
-  "base_filter": null,
   "check_constraints": [],
   "custom_indexes": [],
   "multitenancy": {
     "global": null,
-    "attribute": null,
-    "strategy": null
+    "strategy": null,
+    "attribute": null
   },
+  "base_filter": null,
   "custom_statements": [],
   "has_create_action": true
 }
