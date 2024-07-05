@@ -1,4 +1,4 @@
-defmodule Canary.SourcesTest do
+defmodule Canary.Test.Sources do
   use Canary.DataCase
   import Canary.AccountsFixtures
   require Ash.Query

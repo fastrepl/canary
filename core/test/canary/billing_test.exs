@@ -1,4 +1,4 @@
-defmodule Canary.BillingTest do
+defmodule Canary.Test.Billing do
   use Canary.DataCase
   import Canary.AccountsFixtures
   require Ash.Query

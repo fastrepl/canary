@@ -16,6 +16,8 @@ defmodule Canary.Accounts.Account do
 
     has_one :source, Canary.Sources.Source
     has_many :sessions, Canary.Interactions.Session
+
+    has_one :usage, Canary.Accounts.Usage
     has_one :billing, Canary.Accounts.Billing
   end
 
@@ -32,6 +34,7 @@ defmodule Canary.Accounts.Account do
   end
 
   changes do
+    change Canary.Accounts.Changes.InitUsage, on: [:create]
     change Canary.Accounts.Changes.InitBilling, on: [:create]
   end
 

@@ -8,5 +8,6 @@ defmodule Canary.Accounts do
     resource Canary.Accounts.AccountUser
     resource Canary.Accounts.UserIdentity
     resource Canary.Accounts.Billing
+    resource Canary.Accounts.Usage
   end
 end
