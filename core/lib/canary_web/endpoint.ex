@@ -41,6 +41,11 @@ defmodule CanaryWeb.Endpoint do
     at: "/webhook/github",
     handler: CanaryWeb.GithubWebhookHandler
 
+  plug Stripe.WebhookPlug,
+    at: "/webhook/stripe",
+    handler: CanaryWeb.StripeWebhookHandler,
+    secret: "whsec_4b43f33c1f5330c12013c5d3dc06076f00247b4b32ec9400cc09033289a817e3"
+
   plug Plug.Parsers,
     parsers: [:urlencoded, :multipart, :json],
     pass: ["*/*"],
