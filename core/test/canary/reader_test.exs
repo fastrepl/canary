@@ -18,15 +18,16 @@ defmodule Canary.Test.Reader do
       </html>
       """
 
-      assert Canary.Reader.html_to_md(html) ==
-               """
-               Floki
+      md =
+        String.trim("""
+        Floki
 
-               Enables search using CSS selectors[Github page](https://github.com/philss/floki)philss
+        Enables search using CSS selectors[Github page](https://github.com/philss/floki)philss
 
-               [Hex package](https://hex.pm/packages/floki)
-               """
-               |> String.trim()
+        [Hex package](https://hex.pm/packages/floki)
+        """)
+
+      assert Canary.Reader.html_to_md(html) == md
     end
   end
 end

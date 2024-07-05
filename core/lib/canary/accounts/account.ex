@@ -6,9 +6,7 @@ defmodule Canary.Accounts.Account do
   attributes do
     uuid_primary_key :id
 
-    attribute :name, :string do
-      allow_nil? false
-    end
+    attribute :name, :string, allow_nil?: false
   end
 
   relationships do
@@ -16,9 +14,9 @@ defmodule Canary.Accounts.Account do
       through Canary.Accounts.AccountUser
     end
 
-    has_many :sources, Canary.Sources.Source
-    has_many :clients, Canary.Clients.Client
-    has_many :sessions, Canary.Sessions.Session
+    has_one :source, Canary.Sources.Source
+    has_many :sessions, Canary.Interactions.Session
+    has_one :billing, Canary.Accounts.Billing
   end
 
   actions do
@@ -31,10 +29,10 @@ defmodule Canary.Accounts.Account do
       change manage_relationship(:user, :users, type: :append)
       change set_attribute(:name, expr(^arg(:name)))
     end
+  end
 
-    update :update do
-      accept [:name]
-    end
+  changes do
+    change Canary.Accounts.Changes.InitBilling, on: [:create]
   end
 
   postgres do

@@ -4,24 +4,21 @@ defmodule Canary.Sources.Source do
     data_layer: AshPostgres.DataLayer,
     extensions: [AshJsonApi.Resource]
 
+  @supported_docs [:docusaurus]
+
   attributes do
     uuid_primary_key :id
     create_timestamp :created_at
-    attribute :account_id, :uuid, allow_nil?: false
 
-    attribute :name, :string, allow_nil?: false, public?: true
-    attribute :type, :atom, constraints: [one_of: [:generic, :web]], public?: true
-
-    attribute :web_base_url, :string, public?: true
-  end
-
-  identities do
-    identity :unique_source, [:account_id, :name]
+    attribute :type, :atom, constraints: [one_of: @supported_docs], public?: true
+    attribute :base_url, :string, allow_nil?: false, public?: true
+    attribute :base_path, :string, allow_nil?: false, public?: true
   end
 
   relationships do
     belongs_to :account, Canary.Accounts.Account
     has_many :documents, Canary.Sources.Document
+    has_many :clients, Canary.Interactions.Client
   end
 
   actions do
@@ -29,33 +26,25 @@ defmodule Canary.Sources.Source do
 
     read :read do
       primary? true
-      prepare build(load: [:updated_at, :num_documents])
+      prepare build(load: [:num_documents])
     end
 
-    create :create_web do
-      argument :name, :string, allow_nil?: false
+    create :create do
       argument :account, :map, allow_nil?: false
-      argument :web_base_url, :string, allow_nil?: false
+      argument :type, :atom, constraints: [one_of: @supported_docs], allow_nil?: false
+      argument :base_url, :string, allow_nil?: false
+      argument :base_path, :string, allow_nil?: false
 
-      change set_attribute(:type, :web)
-      change set_attribute(:name, expr(^arg(:name)))
       change manage_relationship(:account, :account, type: :append)
-      change set_attribute(:web_base_url, expr(^arg(:web_base_url)))
-      change load(:updated_at)
+      change set_attribute(:base_path, expr(^arg(:base_path)))
+      change set_attribute(:type, expr(^arg(:type)))
+      change set_attribute(:base_url, expr(^arg(:base_url)))
+      change set_attribute(:base_path, expr(^arg(:base_path)))
     end
   end
 
   aggregates do
-    count :num_documents, :documents do
-      filter expr(is_nil(content_embedding) == false)
-    end
-
-    max :updated_at, :documents, :updated_at do
-      # this aggregation will be used for removing outdated documents.
-      # since document without embedding is not searchable yet,
-      # it should not affect the freshness of other documents.
-      filter expr(is_nil(content_embedding) == false)
-    end
+    count :num_documents, :documents
   end
 
   json_api do
@@ -63,8 +52,12 @@ defmodule Canary.Sources.Source do
 
     routes do
       get(:read, route: "sources/:id")
-      post(:create_web, route: "sources/web")
+      post(:create, route: "sources/web")
     end
+  end
+
+  code_interface do
+    define :create, args: [:account, :type, :base_url, :base_path], action: :create
   end
 
   postgres do

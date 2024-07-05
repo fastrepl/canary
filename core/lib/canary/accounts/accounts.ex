@@ -6,5 +6,7 @@ defmodule Canary.Accounts do
     resource Canary.Accounts.Token
     resource Canary.Accounts.Account
     resource Canary.Accounts.AccountUser
+    resource Canary.Accounts.UserIdentity
+    resource Canary.Accounts.Billing
   end
 end

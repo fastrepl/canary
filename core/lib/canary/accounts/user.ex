@@ -15,7 +15,25 @@ defmodule Canary.Accounts.User do
   actions do
     defaults [:read]
 
-    create :mock, accept: [:email, :hashed_password]
+    if Application.compile_env(:canary, :env) == :test do
+      create :mock, accept: [:email, :hashed_password]
+    end
+
+    create :register_with_github do
+      argument :user_info, :map, allow_nil?: false
+      argument :oauth_tokens, :map, allow_nil?: false
+
+      upsert? true
+      upsert_identity :email
+
+      change AshAuthentication.GenerateTokenChange
+      change AshAuthentication.Strategy.OAuth2.IdentityChange
+
+      change fn changeset, _ ->
+        user_info = Ash.Changeset.get_argument(changeset, :user_info)
+        Ash.Changeset.change_attributes(changeset, Map.take(user_info, ["email"]))
+      end
+    end
   end
 
   relationships do
@@ -46,6 +64,14 @@ defmodule Canary.Accounts.User do
     strategies do
       password :password do
         identity_field :email
+      end
+
+      if Application.compile_env(:canary, :github) do
+        github do
+          client_id Canary.Accounts.Secrets
+          redirect_uri Canary.Accounts.Secrets
+          client_secret Canary.Accounts.Secrets
+        end
       end
     end
 

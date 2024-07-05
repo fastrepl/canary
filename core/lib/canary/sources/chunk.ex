@@ -1,90 +1,76 @@
-defmodule Canary.Sources.Document do
+defmodule Canary.Sources.Chunk do
   use Ash.Resource,
     domain: Canary.Sources,
-    data_layer: AshPostgres.DataLayer
+    data_layer: AshPostgres.DataLayer,
+    extensions: [AshJsonApi.Resource]
+
+  @embedding_dimensions 384
 
   attributes do
-    uuid_primary_key :id, public?: true
-    create_timestamp :created_at, public?: true
+    uuid_primary_key :id
 
-    attribute :absolute_path, :string, allow_nil?: true, public?: true
-    attribute :content_hash, :binary, allow_nil?: false
-  end
-
-  identities do
-    identity :unique_content, [:content_hash]
+    attribute :content, :string, allow_nil?: false
+    attribute :embedding, :vector, allow_nil?: false
+    attribute :url, :string, allow_nil?: true
   end
 
   relationships do
-    belongs_to :source, Canary.Sources.Source
-    has_many :chunks, Canary.Sources.Chunk
-  end
-
-  calculations do
-    calculate :url, :string, Canary.Sources.Calculations.PathToUrl
+    belongs_to :document, Canary.Sources.Document
   end
 
   actions do
-    defaults [:destroy]
+    defaults [:read]
 
-    read :read do
-      primary? true
-      prepare build(load: [:url])
-    end
-
-    read :find do
-      argument :source_id, :uuid, allow_nil?: false
-      argument :absolute_path, :string, allow_nil?: true
-      argument :content_hash, :string, allow_nil?: false
-
-      get? true
-      filter expr(source_id == ^arg(:source_id))
-      filter expr(absolute_path == ^arg(:absolute_path))
-      filter expr(content_hash == ^arg(:content_hash))
-    end
-
-    create :ingest_text do
-      transaction? true
-
-      argument :source, :map, allow_nil?: false
-      argument :absolute_path, :string, allow_nil?: true
+    create :create do
+      argument :document, :map, allow_nil?: false
       argument :content, :string, allow_nil?: false
+      argument :embedding, :vector, allow_nil?: false
 
-      change manage_relationship(:source, :source, type: :append)
-      change set_attribute(:absolute_path, expr(^arg(:absolute_path)))
+      change manage_relationship(:document, :document, type: :append)
+      change set_attribute(:content, expr(^arg(:content)))
+      change set_attribute(:embedding, expr(^arg(:embedding)))
+    end
 
-      change {
-        Canary.Sources.Changes.Hash,
-        source_attr: :content, hash_attr: :content_hash
-      }
+    read :search do
+      argument :text, :string, allow_nil?: false
+      argument :embedding, :vector, allow_nil?: false
+      argument :threshold, :float, allow_nil?: true
 
-      change Canary.Sources.Changes.CreateChunksFromDocument
+      manual Canary.Sources.Chunk.HybridSearch
     end
   end
 
   code_interface do
-    define :ingest_text,
-      args: [:source, :absolute_path, :content],
-      action: :ingest_text
+    define :search, args: [:text, :embedding, {:optional, :threshold}], action: :search
+  end
+
+  json_api do
+    type "chunk"
+
+    routes do
+      post(:search, route: "/search")
+    end
   end
 
   postgres do
-    table "documents"
+    table "chunks"
     repo Canary.Repo
 
+    migration_types embedding: {:vector, @embedding_dimensions}
+
     references do
-      reference :source, on_delete: :delete
+      reference :document, on_delete: :delete
     end
   end
 end
 
-defmodule Canary.Sources.Document.HybridSearch do
+defmodule Canary.Sources.Chunk.HybridSearch do
   use Ash.Resource.ManualRead
 
   @index_name "search_index"
-  @table_name "documents"
+  @table_name "chunks"
   @table_text_field "content"
-  @table_vector_field "content_embedding"
+  @table_vector_field "embedding"
 
   def read(ash_query, _ecto_query, _opts, _context) do
     text = ash_query.arguments.text
@@ -95,12 +81,12 @@ defmodule Canary.Sources.Document.HybridSearch do
       limit: ash_query.limit
     ]
 
-    hybrid_search(text, embedding, opts)
+    run(text, embedding, opts)
   end
 
-  defp hybrid_search(text, embedding, opts) do
+  defp run(text, embedding, opts) do
     n = opts[:limit] || 10
-    threshold = opts[:threshold] || 0.4
+    threshold = opts[:threshold] || 0
 
     embedding =
       embedding
@@ -115,9 +101,9 @@ defmodule Canary.Sources.Document.HybridSearch do
       FROM #{@index_name}.rank_hybrid(
         bm25_query => $1,
         similarity_query => $2,
-        bm25_weight => 0.2,
+        bm25_weight => 0.5,
         bm25_limit_n => 100,
-        similarity_weight => 0.8,
+        similarity_weight => 0.5,
         similarity_limit_n => 100
       )
     ) index
@@ -139,7 +125,7 @@ defmodule Canary.Sources.Document.HybridSearch do
     |> Canary.Repo.query(params)
     |> case do
       {:ok, %{rows: rows, columns: columns}} ->
-        docs = rows |> Enum.map(&Canary.Repo.load(Canary.Sources.Document, {columns, &1}))
+        docs = rows |> Enum.map(&Canary.Repo.load(Canary.Sources.Chunk, {columns, &1}))
         {:ok, docs}
 
       error ->
@@ -148,12 +134,12 @@ defmodule Canary.Sources.Document.HybridSearch do
   end
 end
 
-defmodule Canary.Sources.Document.Migration do
+defmodule Canary.Sources.Chunk.Migration do
   use Ecto.Migration
 
   @index_name "search_index"
-  @table_name "documents"
-  @table_vector_field "content_embedding"
+  @table_name "chunks"
+  @table_vector_field "embedding"
   @table_id_field "id"
   @distance_metric "vector_cosine_ops"
 

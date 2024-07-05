@@ -58,15 +58,6 @@ defmodule CanaryWeb.SourceLive do
   end
 
   def handle_event("fetch", _, socket) do
-    %{source_id: socket.assigns.source.id}
-    |> Canary.Workers.Fetcher.new()
-    |> Oban.insert!()
-
-    socket =
-      socket
-      |> put_flash(:info, "On it! It will take a few minutes.")
-      |> push_navigate(to: ~p"/sources")
-
     {:noreply, socket}
   end
 end
