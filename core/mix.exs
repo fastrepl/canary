@@ -60,7 +60,7 @@ defmodule Canary.MixProject do
       {:bandit, "~> 1.2"},
       {:oban, "~> 2.17"},
       {:rustler, "~> 0.32.1"},
-      {:nostrum, "~> 0.9.1", runtime: false},
+      {:nostrum, "~> 0.8.0", runtime: false},
       {:gun, "~> 2.0"},
       {:ash, "~> 3.0"},
       {:ash_authentication, "~> 4.0"},
@@ -73,10 +73,6 @@ defmodule Canary.MixProject do
       {:retry, "~> 0.18"},
       {:cors_plug, "~> 3.0"},
       {:mox, "~> 1.0", only: :test},
-      {:crawler,
-       git: "https://github.com/fredwu/crawler.git",
-       ref: "6866bbe287c760b7e4bba1925e80f2a4494d7af3"},
-      {:oapi_github, "~> 0.3.3"},
       {:req_crawl, "~> 0.2.0"},
       {:saxy, "~> 1.5"},
       {:hammer, "~> 6.0"},
@@ -85,7 +81,10 @@ defmodule Canary.MixProject do
       {:opentelemetry_api, "~> 1.2"},
       {:opentelemetry_req, "~> 0.2.0"},
       {:abstracing, git: "https://github.com/msramos/abstracing.git", branch: "main"},
-      {:live_svelte, "~> 0.13.2"}
+      {:live_svelte, "~> 0.13.2"},
+      {:stripity_stripe, "~> 3.2"},
+      {:oapi_github, "~> 0.3.3"},
+      {:httpoison, "~> 2.2"}
     ]
   end
 
