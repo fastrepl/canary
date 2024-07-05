@@ -1,9 +1,10 @@
 {
   "scripts": {
-    "format": "prettier --write ."
+    "format": "npx prettier --plugin prettier-plugin-svelte --write ."
   },
   "devDependencies": {
     "@types/node": "^20.14.9",
+    "daisyui": "^4.12.10",
     "esbuild": "^0.16.17",
     "esbuild-plugin-import-glob": "^0.1.1",
     "esbuild-svelte": "^0.8.1",
@@ -11,9 +12,14 @@
     "prettier-plugin-svelte": "^3.2.5",
     "svelte": "^4.2.18",
     "svelte-preprocess": "^6.0.1",
-    "typescript": "^5.5.3"
+    "typescript": "^5.4.5"
   },
   "dependencies": {
+    "@codemirror/lang-javascript": "^6.2.2",
+    "@codemirror/lang-markdown": "^6.2.5",
+    "@codemirror/lang-python": "^6.1.6",
+    "clsx": "^2.1.1",
+    "codemirror": "^6.0.1",
     "live_svelte": "file:../deps/live_svelte",
     "phoenix": "file:../deps/phoenix",
     "phoenix_html": "file:../deps/phoenix_html",

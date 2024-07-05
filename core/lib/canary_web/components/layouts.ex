@@ -40,15 +40,15 @@ defmodule CanaryWeb.Layouts do
             </.link>
           </li>
           <li>
-            <.link class={if @active_tab == :clients, do: "active"} navigate={~p"/clients"}>
+            <.link class={if @active_tab == :editor, do: "active"} navigate={~p"/editor"}>
               <span class={[
                 "h-4 w-4",
-                if(@active_tab == :clients,
+                if(@active_tab == :editor,
                   do: "hero-megaphone-solid",
                   else: "hero-megaphone"
                 )
               ]} />
-              <span>Clients</span>
+              <span>Editor</span>
             </.link>
           </li>
           <li>

@@ -12,8 +12,7 @@ defmodule CanaryWeb.NavLive do
         CanaryWeb.HomeLive -> :home
         CanaryWeb.SourcesLive -> :sources
         CanaryWeb.SourceLive -> :sources
-        CanaryWeb.ClientLive -> :clients
-        CanaryWeb.ClientsLive -> :clients
+        CanaryWeb.EditorLive -> :editor
         CanaryWeb.SessionsLive -> :sessions
         CanaryWeb.SettingsLive -> :settings
         _ -> nil
