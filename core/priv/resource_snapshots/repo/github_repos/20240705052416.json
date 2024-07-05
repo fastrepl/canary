@@ -7,8 +7,8 @@
       "source": "id",
       "references": null,
       "allow_nil?": false,
-      "primary_key?": true,
-      "generated?": false
+      "generated?": false,
+      "primary_key?": true
     },
     {
       "default": "nil",
@@ -17,8 +17,8 @@
       "source": "full_name",
       "references": null,
       "allow_nil?": false,
-      "primary_key?": false,
-      "generated?": false
+      "generated?": false,
+      "primary_key?": false
     },
     {
       "default": "nil",
@@ -28,26 +28,26 @@
       "references": {
         "name": "github_repos_app_id_fkey",
         "table": "github_apps",
-        "on_delete": "delete",
-        "primary_key?": true,
         "schema": "public",
+        "on_delete": "delete",
         "multitenancy": {
           "global": null,
-          "strategy": null,
-          "attribute": null
+          "attribute": null,
+          "strategy": null
         },
+        "primary_key?": true,
         "destination_attribute": "id",
-        "on_update": null,
         "deferrable": false,
-        "match_with": null,
-        "match_type": null,
         "index?": false,
+        "match_type": null,
+        "match_with": null,
+        "on_update": null,
         "destination_attribute_default": null,
         "destination_attribute_generated": null
       },
       "allow_nil?": true,
-      "primary_key?": false,
-      "generated?": false
+      "generated?": false,
+      "primary_key?": false
     },
     {
       "default": "nil",
@@ -57,30 +57,30 @@
       "references": {
         "name": "github_repos_source_id_fkey",
         "table": "sources",
-        "on_delete": null,
-        "primary_key?": true,
         "schema": "public",
+        "on_delete": null,
         "multitenancy": {
           "global": null,
-          "strategy": null,
-          "attribute": null
+          "attribute": null,
+          "strategy": null
         },
+        "primary_key?": true,
         "destination_attribute": "id",
-        "on_update": null,
         "deferrable": false,
-        "match_with": null,
-        "match_type": null,
         "index?": false,
+        "match_type": null,
+        "match_with": null,
+        "on_update": null,
         "destination_attribute_default": null,
         "destination_attribute_generated": null
       },
       "allow_nil?": true,
-      "primary_key?": false,
-      "generated?": false
+      "generated?": false,
+      "primary_key?": false
     }
   ],
   "table": "github_repos",
-  "hash": "8FBD20E1496B9CAB90EB3041C4121CC3593CB7008242CB3056DE42D2536EA962",
+  "hash": "BA0FD0BF6B7E01B66BEBC12DCBC686F6D6D9929E07AA135A00430276DD8C5114",
   "repo": "Elixir.Canary.Repo",
   "identities": [
     {
@@ -96,21 +96,21 @@
         }
       ],
       "where": null,
-      "base_filter": null,
-      "all_tenants?": false,
       "nils_distinct?": true,
-      "index_name": "github_repos_unique_repo_index"
+      "all_tenants?": false,
+      "index_name": "github_repos_unique_repo_index",
+      "base_filter": null
     }
   ],
   "schema": null,
-  "check_constraints": [],
-  "custom_indexes": [],
   "multitenancy": {
     "global": null,
-    "strategy": null,
-    "attribute": null
+    "attribute": null,
+    "strategy": null
   },
   "base_filter": null,
+  "check_constraints": [],
+  "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true
 }

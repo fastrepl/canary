@@ -1,4 +1,4 @@
-defmodule Canary.Repo.Migrations.InitResources do
+defmodule Canary.Repo.Migrations.AddResources do
   @moduledoc """
   Updates resources based on their most recent snapshots.
 
@@ -37,6 +37,12 @@ defmodule Canary.Repo.Migrations.InitResources do
              name: "user_identities_unique_on_strategy_and_uid_and_user_id_index"
            )
 
+    create table(:usages, primary_key: false) do
+      add :id, :uuid, null: false, default: fragment("gen_random_uuid()"), primary_key: true
+      add :generation, :bigint, default: 0
+      add :account_id, :uuid
+    end
+
     create table(:tokens, primary_key: false) do
       add :updated_at, :utc_datetime_usec,
         null: false,
@@ -73,17 +79,6 @@ defmodule Canary.Repo.Migrations.InitResources do
       add :account_id, :uuid
     end
 
-    create table(:respositories, primary_key: false) do
-      add :id, :uuid, null: false, default: fragment("gen_random_uuid()"), primary_key: true
-      add :full_name, :text, null: false
-      add :type, :text
-      add :github_installation_id, :bigint
-    end
-
-    create unique_index(:respositories, [:type, :full_name],
-             name: "respositories_unique_repository_index"
-           )
-
     create table(:messages, primary_key: false) do
       add :id, :uuid, null: false, default: fragment("gen_random_uuid()"), primary_key: true
 
@@ -102,6 +97,45 @@ defmodule Canary.Repo.Migrations.InitResources do
 
       add :role, :text, null: false
       add :content, :text, null: false
+    end
+
+    create table(:github_repos, primary_key: false) do
+      add :id, :uuid, null: false, default: fragment("gen_random_uuid()"), primary_key: true
+      add :full_name, :text, null: false
+      add :app_id, :uuid
+      add :source_id, :uuid
+    end
+
+    create table(:github_apps, primary_key: false) do
+      add :id, :uuid, null: false, default: fragment("gen_random_uuid()"), primary_key: true
+    end
+
+    alter table(:github_repos) do
+      modify :app_id,
+             references(:github_apps,
+               column: :id,
+               name: "github_repos_app_id_fkey",
+               type: :uuid,
+               prefix: "public",
+               on_delete: :delete_all
+             )
+
+      modify :source_id,
+             references(:sources,
+               column: :id,
+               name: "github_repos_source_id_fkey",
+               type: :uuid,
+               prefix: "public"
+             )
+    end
+
+    create unique_index(:github_repos, [:app_id, :full_name],
+             name: "github_repos_unique_repo_index"
+           )
+
+    alter table(:github_apps) do
+      add :installation_id, :bigint, null: false
+      add :account_id, :uuid
     end
 
     create table(:feedbacks, primary_key: false) do
@@ -191,6 +225,16 @@ defmodule Canary.Repo.Migrations.InitResources do
       add :id, :uuid, null: false, default: fragment("gen_random_uuid()"), primary_key: true
     end
 
+    alter table(:usages) do
+      modify :account_id,
+             references(:accounts,
+               column: :id,
+               name: "usages_account_id_fkey",
+               type: :uuid,
+               prefix: "public"
+             )
+    end
+
     alter table(:sources) do
       modify :account_id,
              references(:accounts,
@@ -214,6 +258,17 @@ defmodule Canary.Repo.Migrations.InitResources do
     create unique_index(:sessions, [:account_id, :type, :client_session_id],
              name: "sessions_unique_session_index"
            )
+
+    alter table(:github_apps) do
+      modify :account_id,
+             references(:accounts,
+               column: :id,
+               name: "github_apps_account_id_fkey",
+               type: :uuid,
+               prefix: "public",
+               on_delete: :delete_all
+             )
+    end
 
     alter table(:feedbacks) do
       modify :account_id,
@@ -286,6 +341,12 @@ defmodule Canary.Repo.Migrations.InitResources do
       modify :account_id, :uuid
     end
 
+    drop constraint(:github_apps, "github_apps_account_id_fkey")
+
+    alter table(:github_apps) do
+      modify :account_id, :uuid
+    end
+
     drop_if_exists unique_index(:sessions, [:account_id, :type, :client_session_id],
                      name: "sessions_unique_session_index"
                    )
@@ -299,6 +360,12 @@ defmodule Canary.Repo.Migrations.InitResources do
     drop constraint(:sources, "sources_account_id_fkey")
 
     alter table(:sources) do
+      modify :account_id, :uuid
+    end
+
+    drop constraint(:usages, "usages_account_id_fkey")
+
+    alter table(:usages) do
       modify :account_id, :uuid
     end
 
@@ -332,21 +399,39 @@ defmodule Canary.Repo.Migrations.InitResources do
 
     drop table(:feedbacks)
 
+    alter table(:github_apps) do
+      remove :account_id
+      remove :installation_id
+    end
+
+    drop_if_exists unique_index(:github_repos, [:app_id, :full_name],
+                     name: "github_repos_unique_repo_index"
+                   )
+
+    drop constraint(:github_repos, "github_repos_app_id_fkey")
+
+    drop constraint(:github_repos, "github_repos_source_id_fkey")
+
+    alter table(:github_repos) do
+      modify :source_id, :uuid
+      modify :app_id, :uuid
+    end
+
+    drop table(:github_apps)
+
+    drop table(:github_repos)
+
     drop constraint(:messages, "messages_session_id_fkey")
 
     drop table(:messages)
-
-    drop_if_exists unique_index(:respositories, [:type, :full_name],
-                     name: "respositories_unique_repository_index"
-                   )
-
-    drop table(:respositories)
 
     drop table(:sessions)
 
     drop table(:sources)
 
     drop table(:tokens)
+
+    drop table(:usages)
 
     drop_if_exists unique_index(:user_identities, [:strategy, :uid, :user_id],
                      name: "user_identities_unique_on_strategy_and_uid_and_user_id_index"

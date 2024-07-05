@@ -7,18 +7,18 @@
       "source": "id",
       "references": null,
       "allow_nil?": false,
-      "primary_key?": true,
-      "generated?": false
+      "generated?": false,
+      "primary_key?": true
     },
     {
-      "default": "0",
+      "default": "nil",
       "size": null,
       "type": "bigint",
-      "source": "generation",
+      "source": "installation_id",
       "references": null,
-      "allow_nil?": true,
-      "primary_key?": false,
-      "generated?": false
+      "allow_nil?": false,
+      "generated?": false,
+      "primary_key?": false
     },
     {
       "default": "nil",
@@ -26,43 +26,43 @@
       "type": "uuid",
       "source": "account_id",
       "references": {
-        "name": "usages_account_id_fkey",
+        "name": "github_apps_account_id_fkey",
         "table": "accounts",
-        "primary_key?": true,
         "schema": "public",
+        "on_delete": "delete",
         "multitenancy": {
           "global": null,
           "attribute": null,
           "strategy": null
         },
+        "primary_key?": true,
         "destination_attribute": "id",
-        "on_delete": null,
-        "on_update": null,
         "deferrable": false,
-        "match_with": null,
-        "match_type": null,
         "index?": false,
+        "match_type": null,
+        "match_with": null,
+        "on_update": null,
         "destination_attribute_default": null,
         "destination_attribute_generated": null
       },
       "allow_nil?": true,
-      "primary_key?": false,
-      "generated?": false
+      "generated?": false,
+      "primary_key?": false
     }
   ],
-  "table": "usages",
-  "hash": "6C66087B8038F5AB4F4CD3B0E6727083A7BE0384B22449EB397F5EA391F52386",
+  "table": "github_apps",
+  "hash": "D37021F3ED8AAA584A3680F0CC3051405B806EF723F6B37F47380390690632EF",
   "repo": "Elixir.Canary.Repo",
-  "schema": null,
-  "base_filter": null,
-  "check_constraints": [],
   "identities": [],
-  "custom_indexes": [],
+  "schema": null,
   "multitenancy": {
     "global": null,
     "attribute": null,
     "strategy": null
   },
+  "base_filter": null,
+  "check_constraints": [],
+  "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true
 }

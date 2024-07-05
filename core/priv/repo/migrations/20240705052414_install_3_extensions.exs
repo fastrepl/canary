@@ -1,4 +1,4 @@
-defmodule Canary.Repo.Migrations.Install3Extensions20240704104422 do
+defmodule Canary.Repo.Migrations.Install3Extensions20240705052412 do
   @moduledoc """
   Installs any extensions that are mentioned in the repo's `installed_extensions/0` callback
 
