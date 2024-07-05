@@ -24,7 +24,7 @@ defmodule CanaryWeb.SessionsLive do
   end
 
   def mount(_params, _session, socket) do
-    sessions = Canary.Sessions.Session |> Ash.read!()
+    sessions = Canary.Interactions.Session |> Ash.read!()
     {:ok, socket |> assign(sessions: sessions)}
   end
 end

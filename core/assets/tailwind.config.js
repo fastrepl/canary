@@ -13,10 +13,6 @@ module.exports = {
     "./svelte/**/*.svelte",
     "../deps/ash_authentication_phoenix/**/*.*ex",
   ],
-  daisyui: {
-    themes: ["lemonade"],
-    logs: false,
-  },
   theme: {
     extend: {
       colors: {
@@ -25,7 +21,7 @@ module.exports = {
     },
   },
   plugins: [
-    require("daisyui"),
+    require("@tailwindcss/forms"),
     // Allows prefixing tailwind classes with LiveView classes to add rules
     // only when LiveView classes are applied, for example:
     //

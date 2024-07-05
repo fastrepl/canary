@@ -107,6 +107,10 @@ defmodule Canary.MixProject do
         "tailwind canary --minify",
         "cmd --cd assets node build.js --deploy",
         "phx.digest"
+      ],
+      "ash.clean": [
+        "ash_postgres.squash_snapshots",
+        "cmd npx prettier priv/resource_snapshots -w"
       ]
     ]
   end

@@ -56,15 +56,11 @@ config :canary, :root, File.cwd!()
 
 config :canary, Oban,
   engine: Oban.Engines.Basic,
-  queues: [default: 10, embedder: 10, fetcher: 10, pruner: 5],
+  queues: [default: 10, ingester: 1],
   repo: Canary.Repo,
   plugins: [
     {Oban.Plugins.Pruner, max_age: 60 * 60 * 24 * 7},
-    {Oban.Plugins.Lifeline, rescue_after: :timer.minutes(5)},
-    {Oban.Plugins.Cron,
-     crontab: [
-       {"0 0 * * *", Canary.Workers.Updater, queue: :default}
-     ]}
+    {Oban.Plugins.Lifeline, rescue_after: :timer.minutes(5)}
   ]
 
 config :canary, Canary.Repo, types: Canary.PostgrexTypes
@@ -73,8 +69,8 @@ config :canary,
   ash_domains: [
     Canary.Accounts,
     Canary.Sources,
-    Canary.Clients,
-    Canary.Sessions
+    Canary.Interactions,
+    Canary.Github
   ]
 
 config :hammer,

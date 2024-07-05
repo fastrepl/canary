@@ -1,0 +1,131 @@
+{
+  "attributes": [
+    {
+      "default": "nil",
+      "size": null,
+      "type": "text",
+      "source": "refresh_token",
+      "references": null,
+      "allow_nil?": true,
+      "generated?": false,
+      "primary_key?": false
+    },
+    {
+      "default": "nil",
+      "size": null,
+      "type": "utc_datetime_usec",
+      "source": "access_token_expires_at",
+      "references": null,
+      "allow_nil?": true,
+      "generated?": false,
+      "primary_key?": false
+    },
+    {
+      "default": "nil",
+      "size": null,
+      "type": "text",
+      "source": "access_token",
+      "references": null,
+      "allow_nil?": true,
+      "generated?": false,
+      "primary_key?": false
+    },
+    {
+      "default": "nil",
+      "size": null,
+      "type": "text",
+      "source": "uid",
+      "references": null,
+      "allow_nil?": false,
+      "generated?": false,
+      "primary_key?": false
+    },
+    {
+      "default": "nil",
+      "size": null,
+      "type": "text",
+      "source": "strategy",
+      "references": null,
+      "allow_nil?": false,
+      "generated?": false,
+      "primary_key?": false
+    },
+    {
+      "default": "fragment(\"gen_random_uuid()\")",
+      "size": null,
+      "type": "uuid",
+      "source": "id",
+      "references": null,
+      "allow_nil?": false,
+      "generated?": false,
+      "primary_key?": true
+    },
+    {
+      "default": "nil",
+      "size": null,
+      "type": "uuid",
+      "source": "user_id",
+      "references": {
+        "name": "user_identities_user_id_fkey",
+        "table": "users",
+        "schema": "public",
+        "on_delete": null,
+        "multitenancy": {
+          "global": null,
+          "attribute": null,
+          "strategy": null
+        },
+        "primary_key?": true,
+        "destination_attribute": "id",
+        "deferrable": false,
+        "index?": false,
+        "match_type": null,
+        "match_with": null,
+        "on_update": null,
+        "destination_attribute_default": null,
+        "destination_attribute_generated": null
+      },
+      "allow_nil?": true,
+      "generated?": false,
+      "primary_key?": false
+    }
+  ],
+  "table": "user_identities",
+  "hash": "FC01C71D3C5A5764F2E62560465AC9D9BB6475EF35637A4AD824632EE7822211",
+  "repo": "Elixir.Canary.Repo",
+  "identities": [
+    {
+      "name": "unique_on_strategy_and_uid_and_user_id",
+      "keys": [
+        {
+          "type": "atom",
+          "value": "strategy"
+        },
+        {
+          "type": "atom",
+          "value": "uid"
+        },
+        {
+          "type": "atom",
+          "value": "user_id"
+        }
+      ],
+      "where": null,
+      "nils_distinct?": true,
+      "all_tenants?": false,
+      "index_name": "user_identities_unique_on_strategy_and_uid_and_user_id_index",
+      "base_filter": null
+    }
+  ],
+  "schema": null,
+  "multitenancy": {
+    "global": null,
+    "attribute": null,
+    "strategy": null
+  },
+  "base_filter": null,
+  "check_constraints": [],
+  "custom_indexes": [],
+  "custom_statements": [],
+  "has_create_action": true
+}

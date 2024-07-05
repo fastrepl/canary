@@ -1,5 +1,5 @@
-Mox.defmock(Canary.Sessions.Responder.Mock, for: Canary.Sessions.Responder)
-Application.put_env(:canary, :session_responder, Canary.Sessions.Responder.Mock)
+Mox.defmock(Canary.Interactions.Responder.Mock, for: Canary.Interactions.Responder)
+Application.put_env(:canary, :responder, Canary.Interactions.Responder.Mock)
 
 Mox.defmock(Canary.AI.Mock, for: Canary.AI)
 Application.put_env(:canary, :ai, Canary.AI.Mock)

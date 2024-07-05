@@ -7,4 +7,22 @@ defmodule Canary.Accounts.Secrets do
       :error -> :error
     end
   end
+
+  def secret_for([:authentication, :strategies, :github, :client_id], Canary.Accounts.User, _) do
+    get_config(:client_id)
+  end
+
+  def secret_for([:authentication, :strategies, :github, :redirect_uri], Canary.Accounts.User, _) do
+    get_config(:redirect_uri)
+  end
+
+  def secret_for([:authentication, :strategies, :github, :client_secret], Canary.Accounts.User, _) do
+    get_config(:client_secret)
+  end
+
+  defp get_config(key) do
+    :canary
+    |> Application.get_env(:github, [])
+    |> Keyword.fetch(key)
+  end
 end

@@ -4,109 +4,77 @@ defmodule Canary.Sources.Document do
     data_layer: AshPostgres.DataLayer
 
   attributes do
-    integer_primary_key :id
+    uuid_primary_key :id, public?: true
+    create_timestamp :created_at, public?: true
 
-    attribute :updated_at, :utc_datetime_usec
-
-    attribute :source_id, :uuid do
-      allow_nil? false
-    end
-
-    attribute :source_url, :string do
-      # this can we url of docs or github, but not all document can be referenced by url
-      allow_nil? true
-    end
-
-    attribute :content, :string do
-      allow_nil? false
-    end
-
-    attribute :content_hash, :binary do
-      allow_nil? false
-    end
-
-    attribute :content_embedding, :vector do
-      # at ingest time, we intentionally leave this to nil.
-      allow_nil? true
-    end
+    attribute :absolute_path, :string, allow_nil?: true, public?: true
+    attribute :content_hash, :binary, allow_nil?: false
   end
 
   identities do
-    identity :unique_content, [:source_id, :content_hash]
+    identity :unique_content, [:content_hash]
   end
 
   relationships do
     belongs_to :source, Canary.Sources.Source
+    has_many :chunks, Canary.Sources.Chunk
+  end
+
+  calculations do
+    calculate :url, :string, Canary.Sources.Calculations.PathToUrl
   end
 
   actions do
-    defaults [:read, :destroy]
+    defaults [:destroy]
 
-    create :ingest do
-      argument :source_id, :uuid do
-        allow_nil? false
-      end
+    read :read do
+      primary? true
+      prepare build(load: [:url])
+    end
 
-      argument :source_url, :string do
-        allow_nil? true
-      end
+    read :find do
+      argument :source_id, :uuid, allow_nil?: false
+      argument :absolute_path, :string, allow_nil?: true
+      argument :content_hash, :string, allow_nil?: false
 
-      argument :content, :string do
-        allow_nil? false
-      end
+      get? true
+      filter expr(source_id == ^arg(:source_id))
+      filter expr(absolute_path == ^arg(:absolute_path))
+      filter expr(content_hash == ^arg(:content_hash))
+    end
 
-      change set_attribute(:source_id, expr(^arg(:source_id)))
-      change set_attribute(:source_url, expr(^arg(:source_url)))
-      change set_attribute(:content, expr(^arg(:content)))
-      change set_attribute(:updated_at, &DateTime.utc_now/0)
+    create :ingest_text do
+      transaction? true
+
+      argument :source, :map, allow_nil?: false
+      argument :absolute_path, :string, allow_nil?: true
+      argument :content, :string, allow_nil?: false
+
+      change manage_relationship(:source, :source, type: :append)
+      change set_attribute(:absolute_path, expr(^arg(:absolute_path)))
 
       change {
         Canary.Sources.Changes.Hash,
         source_attr: :content, hash_attr: :content_hash
       }
 
-      change fn changeset, _ ->
-        Ash.Changeset.after_action(changeset, fn changeset, doc ->
-          Canary.Workers.Embedder.new(%{"document_id" => doc.id}) |> Oban.insert!()
-          {:ok, doc}
-        end)
-      end
-
-      upsert? true
-      upsert_identity :unique_content
-      upsert_fields [:updated_at]
-    end
-
-    read :hybrid_search do
-      argument :text, :string do
-        allow_nil? false
-      end
-
-      argument :embedding, :vector do
-        allow_nil? false
-      end
-
-      argument :threshold, :float do
-        allow_nil? true
-      end
-
-      manual Canary.Sources.Document.HybridSearch
-    end
-
-    update :set_embedding do
-      argument :embedding, :vector do
-        allow_nil? false
-      end
-
-      change set_attribute(:content_embedding, expr(^arg(:embedding)))
+      change Canary.Sources.Changes.CreateChunksFromDocument
     end
   end
 
+  code_interface do
+    define :ingest_text,
+      args: [:source, :absolute_path, :content],
+      action: :ingest_text
+  end
+
   postgres do
-    table "source_documents"
+    table "documents"
     repo Canary.Repo
 
-    migration_types content_embedding: {:vector, 384}
+    references do
+      reference :source, on_delete: :delete
+    end
   end
 end
 
@@ -114,7 +82,7 @@ defmodule Canary.Sources.Document.HybridSearch do
   use Ash.Resource.ManualRead
 
   @index_name "search_index"
-  @table_name "source_documents"
+  @table_name "documents"
   @table_text_field "content"
   @table_vector_field "content_embedding"
 
@@ -184,7 +152,7 @@ defmodule Canary.Sources.Document.Migration do
   use Ecto.Migration
 
   @index_name "search_index"
-  @table_name "source_documents"
+  @table_name "documents"
   @table_vector_field "content_embedding"
   @table_id_field "id"
   @distance_metric "vector_cosine_ops"
