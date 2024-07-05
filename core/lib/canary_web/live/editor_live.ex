@@ -4,13 +4,7 @@ defmodule CanaryWeb.EditorLive do
 
   def render(assigns) do
     ~H"""
-    <.content_header>
-      <div class="breadcrumbs text-md flex flex-row items-center justify-between">
-        <ul>
-          <li><a>Editor</a></li>
-        </ul>
-      </div>
-    </.content_header>
+    <.content_header />
 
     <.svelte name="Editor" socket={@socket} props={%{}} />
     """
