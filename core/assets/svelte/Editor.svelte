@@ -1,8 +1,11 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { clsx } from "clsx";
-
   import { EditorView } from "@codemirror/view";
+
+  import type { Live } from "$lib/interfaces";
+
+  export let live: Live;
 
   let element: HTMLDivElement;
   let view: EditorView;

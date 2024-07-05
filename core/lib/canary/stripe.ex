@@ -51,8 +51,7 @@ defmodule Canary.Stripe.WebhookListener do
     # https://docs.stripe.com/cli/listen
     args = [
       "listen",
-      "--skip-update",
-      "--color",
+      "--skip-verify",
       "--forward-to",
       forward_to
     ]

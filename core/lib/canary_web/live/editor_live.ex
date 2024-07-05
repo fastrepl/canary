@@ -11,6 +11,8 @@ defmodule CanaryWeb.EditorLive do
         </ul>
       </div>
     </.content_header>
+
+    <.svelte name="Editor" socket={@socket} props={%{}} />
     """
   end
 
