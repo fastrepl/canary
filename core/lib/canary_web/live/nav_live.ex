@@ -10,10 +10,8 @@ defmodule CanaryWeb.NavLive do
     active_tab =
       case socket.view do
         CanaryWeb.HomeLive -> :home
-        CanaryWeb.SourcesLive -> :sources
-        CanaryWeb.SourceLive -> :sources
         CanaryWeb.EditorLive -> :editor
-        CanaryWeb.SessionsLive -> :sessions
+        CanaryWeb.InteractionsLive -> :interactions
         CanaryWeb.SettingsLive -> :settings
         _ -> nil
       end

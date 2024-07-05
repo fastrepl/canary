@@ -9,11 +9,12 @@ defmodule CanaryWeb.Layouts do
     ~H"""
     <aside class="drawer-side z-10">
       <label for="canary-drawer" class="drawer-overlay"></label>
-      <nav class="flex min-h-screen w-72 flex-col gap-2 overflow-y-auto bg-base-100 px-6 pt-10 pb-4">
-        <.link class="mx-4 font-black flex flex-row gap-2" href="/">
-          <span>🐤</span>
-          <span>Canary</span>
-        </.link>
+      <nav class="flex min-h-screen w-56 flex-col gap-2 overflow-y-auto bg-base-100 px-6 pt-10 pb-4">
+        <div class="mx-4 font-black flex flex-row gap-2">
+          <button class="text-lg" data-toggle-theme="dark,light">🐤</button>
+          <.link navigate={~p"/"}>Canary</.link>
+        </div>
+
         <ul class="menu">
           <li>
             <.link class={if @active_tab == :home, do: "active"} navigate={~p"/"}>
@@ -24,19 +25,7 @@ defmodule CanaryWeb.Layouts do
                   else: "hero-home"
                 )
               ]} />
-              <span>Home</span>
-            </.link>
-          </li>
-          <li>
-            <.link class={if @active_tab == :sources, do: "active"} navigate={~p"/sources"}>
-              <span class={[
-                "h-4 w-4",
-                if(@active_tab == :sources,
-                  do: "hero-book-open-solid",
-                  else: "hero-book-open"
-                )
-              ]} />
-              <span>Sources</span>
+              <span>Overview</span>
             </.link>
           </li>
           <li>
@@ -44,23 +33,23 @@ defmodule CanaryWeb.Layouts do
               <span class={[
                 "h-4 w-4",
                 if(@active_tab == :editor,
-                  do: "hero-megaphone-solid",
-                  else: "hero-megaphone"
+                  do: "hero-pencil-square-solid",
+                  else: "hero-pencil-square"
                 )
               ]} />
               <span>Editor</span>
             </.link>
           </li>
           <li>
-            <.link class={if @active_tab == :sessions, do: "active"} navigate={~p"/sessions"}>
+            <.link class={if @active_tab == :interactions, do: "active"} navigate={~p"/interactions"}>
               <span class={[
                 "h-4 w-4",
-                if(@active_tab == :sessions,
-                  do: "hero-rectangle-stack-solid",
-                  else: "hero-rectangle-stack"
+                if(@active_tab == :interactions,
+                  do: "hero-megaphone-solid",
+                  else: "hero-megaphone"
                 )
               ]} />
-              <span>Sessions</span>
+              <span>Interactions</span>
             </.link>
           </li>
           <li>
