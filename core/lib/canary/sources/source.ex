@@ -18,6 +18,7 @@ defmodule Canary.Sources.Source do
 
   relationships do
     belongs_to :account, Canary.Accounts.Account
+    has_one :github_repo, Canary.Github.Repo
     has_many :documents, Canary.Sources.Document
     has_many :clients, Canary.Interactions.Client
   end

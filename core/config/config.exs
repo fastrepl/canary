@@ -69,7 +69,8 @@ config :canary,
   ash_domains: [
     Canary.Accounts,
     Canary.Sources,
-    Canary.Interactions
+    Canary.Interactions,
+    Canary.Github
   ]
 
 config :hammer,
