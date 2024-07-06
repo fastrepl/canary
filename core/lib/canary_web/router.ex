@@ -33,6 +33,9 @@ defmodule CanaryWeb.Router do
   scope "/" do
     pipe_through :browser
 
+    get "/checkout/seat", CanaryWeb.CheckoutController, :seat
+    get "/checkout/chat", CanaryWeb.CheckoutController, :chat
+
     ash_authentication_live_session :default,
       layout: {CanaryWeb.Layouts, :app},
       on_mount: [
