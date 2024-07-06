@@ -1,4 +1,24 @@
-defmodule CanaryWeb.GithubWebhookPlug do
+defmodule CanaryWeb.Plugs.LoadAccountFromUser do
+  import Plug.Conn
+
+  def init(opts), do: opts
+
+  def call(conn, _opts) do
+    case conn.assigns[:current_user] do
+      nil -> conn |> assign(:current_account, nil)
+      user -> conn |> assign(:current_account, current_account(user))
+    end
+  end
+
+  defp current_account(user) do
+    user
+    |> Ash.load!(:accounts)
+    |> Map.get(:accounts)
+    |> Enum.at(0)
+  end
+end
+
+defmodule CanaryWeb.Plugs.GithubWebhook do
   @behaviour Plug
 
   require Logger

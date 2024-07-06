@@ -37,7 +37,7 @@ defmodule CanaryWeb.Endpoint do
   plug Plug.RequestId
   plug Plug.Telemetry, event_prefix: [:phoenix, :endpoint]
 
-  plug CanaryWeb.GithubWebhookPlug,
+  plug CanaryWeb.Plugs.GithubWebhook,
     at: "/webhook/github",
     handler: CanaryWeb.GithubWebhookHandler
 

@@ -4,13 +4,14 @@ defmodule CanaryWeb.Layouts do
   embed_templates "layouts/*"
 
   attr :active_tab, :any, default: nil
+  attr :current_account, :any, default: nil
 
   def side_menu(assigns) do
     ~H"""
     <aside class="drawer-side z-10">
       <label for="canary-drawer" class="drawer-overlay"></label>
       <nav class="flex min-h-screen w-52 flex-col gap-2 overflow-y-auto bg-base-100 px-6 pt-10 pb-4">
-        <div class="mx-4 font-black flex flex-row gap-2">
+        <div class="mx-4 font-black flex flex-row items-center gap-2">
           <button class="text-lg" data-toggle-theme="dark,light">🐤</button>
           <.link navigate={~p"/"}>Canary</.link>
         </div>
@@ -69,7 +70,7 @@ defmodule CanaryWeb.Layouts do
         <div class="flex flex-row items-center justify-between mt-auto">
           <select class="select select-bordered select-sm w-[110px]">
             <option selected>
-              <%= @current_user |> get_in([Access.key(:accounts), Access.at(0), Access.key(:name)]) %>
+              <%= @current_account.name %>
             </option>
           </select>
 

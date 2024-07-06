@@ -2,6 +2,10 @@ defmodule CanaryWeb.CheckoutController do
   use CanaryWeb, :controller
   require Logger
 
+  def seat(%{assigns: %{current_account: nil}} = conn, _params) do
+    conn |> redirect(to: "/settings")
+  end
+
   def seat(conn, _params) do
     url = CanaryWeb.Endpoint.url()
     price = Application.get_env(:canary, :stripe) |> Keyword.fetch!(:seat_price_id)
@@ -13,7 +17,7 @@ defmodule CanaryWeb.CheckoutController do
       success_url: url <> "/settings",
       cancel_url: url <> "/settings",
       automatic_tax: %{enabled: true},
-      metadata: %{"account_id" => "TODO"}
+      metadata: %{"account_id" => conn.assigns.current_account.id}
     }
 
     case Stripe.Checkout.Session.create(params) do
@@ -28,6 +32,10 @@ defmodule CanaryWeb.CheckoutController do
     end
   end
 
+  def chat(%{assigns: %{current_account: nil}} = conn, _params) do
+    conn |> redirect(to: "/settings")
+  end
+
   def chat(conn, _params) do
     url = CanaryWeb.Endpoint.url()
     price = Application.get_env(:canary, :stripe) |> Keyword.fetch!(:chat_price_id)
@@ -39,7 +47,7 @@ defmodule CanaryWeb.CheckoutController do
       success_url: url <> "/settings",
       cancel_url: url <> "/settings",
       automatic_tax: %{enabled: true},
-      metadata: %{"account_id" => "TODO"}
+      metadata: %{"account_id" => conn.assigns.current_account.id}
     }
 
     case Stripe.Checkout.Session.create(params) do
