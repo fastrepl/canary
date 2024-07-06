@@ -44,7 +44,7 @@ defmodule CanaryWeb.Endpoint do
   plug Stripe.WebhookPlug,
     at: "/webhook/stripe",
     handler: CanaryWeb.StripeWebhookHandler,
-    secret: "whsec_4b43f33c1f5330c12013c5d3dc06076f00247b4b32ec9400cc09033289a817e3"
+    secret: {Application, :get_env, [:canary, :stripe_webhook_secret]}
 
   plug Plug.Parsers,
     parsers: [:urlencoded, :multipart, :json],

@@ -40,7 +40,21 @@ defmodule Canary.StripeWebhookListener do
 
   @impl true
   def handle_info({port, {:data, {:eol, line}}}, port) do
-    Logger.info("stripe: #{line}")
+    secret = extract_secret(line)
+
+    if is_nil(secret) do
+      Logger.info("stripe: #{line}")
+    else
+      Application.put_env(:canary, :stripe_webhook_secret, secret)
+    end
+
     {:noreply, port}
+  end
+
+  defp extract_secret(text) do
+    case Regex.run(~r/webhook signing secret is (whsec_[a-f0-9]{64})/, text) do
+      [_, secret] -> secret
+      _ -> nil
+    end
   end
 end

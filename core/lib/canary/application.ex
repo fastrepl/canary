@@ -48,8 +48,9 @@ defmodule Canary.Application do
 
   defp stripe do
     if Application.get_env(:canary, :dev_routes, false) and
+         not is_nil(Application.get_env(:canary, :stripe)) and
          Phoenix.Endpoint.server?(:canary, CanaryWeb.Endpoint) do
-      [{Canary.StripeWebhookListener, [forward_to: "/webhook/stripe"]}]
+      [{Canary.StripeWebhookListener, [forward_to: "http://localhost:4000/webhook/stripe"]}]
     else
       []
     end
