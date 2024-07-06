@@ -4,6 +4,7 @@ defmodule CanaryWeb.Layouts do
   embed_templates "layouts/*"
 
   attr :active_tab, :any, default: nil
+  attr :current_user, :any, default: nil
   attr :current_account, :any, default: nil
 
   def side_menu(assigns) do
@@ -68,7 +69,7 @@ defmodule CanaryWeb.Layouts do
         </ul>
 
         <div class="flex flex-row items-center justify-between mt-auto">
-          <select class="select select-bordered select-sm w-[110px]">
+          <select class="select select-bordered select-sm w-[120px]">
             <option selected>
               <%= @current_account.name %>
             </option>
@@ -77,7 +78,9 @@ defmodule CanaryWeb.Layouts do
           <div class="dropdown dropdown-top dropdown-end">
             <div tabindex="0" role="button" class="avatar placeholder">
               <div class="bg-neutral text-neutral-content w-8 rounded-full">
-                <span class="text-lg">U</span>
+                <span class="text-md">
+                  <%= @current_user.email |> to_string() |> String.at(0) |> String.upcase() %>
+                </span>
               </div>
             </div>
             <ul

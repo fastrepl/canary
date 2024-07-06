@@ -6,5 +6,9 @@
       <%= @inner_content %>
     </div>
   </main>
-  <CanaryWeb.Layouts.side_menu active_tab={@active_tab} current_account={@current_account} />
+  <CanaryWeb.Layouts.side_menu
+    active_tab={@active_tab}
+    current_user={@current_user}
+    current_account={@current_account}
+  />
 </div>
