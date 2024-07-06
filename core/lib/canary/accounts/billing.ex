@@ -30,13 +30,31 @@ defmodule Canary.Accounts.Billing do
       change set_attribute(:stripe_subscription, expr(^arg(:stripe_subscription)))
     end
 
-    update :update do
+    update :update_stripe_customer do
+      require_atomic? false
       argument :stripe_customer, :map, allow_nil?: true
+
+      change {Canary.Accounts.Changes.StructToMap, attribute: :stripe_customer}
+      change set_attribute(:stripe_customer, expr(^arg(:stripe_customer)))
+    end
+
+    update :update_stripe_subscription do
+      require_atomic? false
       argument :stripe_subscription, :map, allow_nil?: true
 
-      change set_attribute(:stripe_customer, expr(^arg(:stripe_customer)))
+      change {Canary.Accounts.Changes.StructToMap, attribute: :stripe_subscription}
       change set_attribute(:stripe_subscription, expr(^arg(:stripe_subscription)))
     end
+  end
+
+  code_interface do
+    define :update_stripe_customer,
+      args: [:stripe_customer],
+      action: :update_stripe_customer
+
+    define :update_stripe_subscription,
+      args: [:stripe_subscription],
+      action: :update_stripe_subscription
   end
 
   postgres do
