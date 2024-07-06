@@ -4,7 +4,8 @@ defmodule CanaryWeb.LiveUserAuth do
 
   def on_mount(:live_user_optional, _params, _session, socket) do
     if socket.assigns[:current_user] do
-      {:cont, socket}
+      user = socket.assigns[:current_user]
+      {:cont, socket |> assign(:current_user, Ash.load!(user, :accounts))}
     else
       {:cont, assign(socket, :current_user, nil)}
     end
@@ -12,7 +13,8 @@ defmodule CanaryWeb.LiveUserAuth do
 
   def on_mount(:live_user_required, _params, _session, socket) do
     if socket.assigns[:current_user] do
-      {:cont, socket}
+      user = socket.assigns[:current_user]
+      {:cont, socket |> assign(:current_user, Ash.load!(user, :accounts))}
     else
       {:halt, Phoenix.LiveView.redirect(socket, to: ~p"/sign-in")}
     end

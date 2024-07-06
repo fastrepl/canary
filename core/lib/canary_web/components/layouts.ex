@@ -9,7 +9,7 @@ defmodule CanaryWeb.Layouts do
     ~H"""
     <aside class="drawer-side z-10">
       <label for="canary-drawer" class="drawer-overlay"></label>
-      <nav class="flex min-h-screen w-56 flex-col gap-2 overflow-y-auto bg-base-100 px-6 pt-10 pb-4">
+      <nav class="flex min-h-screen w-52 flex-col gap-2 overflow-y-auto bg-base-100 px-6 pt-10 pb-4">
         <div class="mx-4 font-black flex flex-row gap-2">
           <button class="text-lg" data-toggle-theme="dark,light">🐤</button>
           <.link navigate={~p"/"}>Canary</.link>
@@ -65,9 +65,28 @@ defmodule CanaryWeb.Layouts do
             </.link>
           </li>
         </ul>
-        <.link href="/sign-out" class="btn btn-sm btn-outline btn-neutral no-animation mt-auto">
-          Log out
-        </.link>
+
+        <div class="flex flex-row items-center justify-between mt-auto">
+          <select class="select select-bordered select-sm w-[110px]">
+            <option selected>
+              <%= @current_user |> get_in([Access.key(:accounts), Access.at(0), Access.key(:name)]) %>
+            </option>
+          </select>
+
+          <div class="dropdown dropdown-top dropdown-end">
+            <div tabindex="0" role="button" class="avatar placeholder">
+              <div class="bg-neutral text-neutral-content w-8 rounded-full">
+                <span class="text-lg">U</span>
+              </div>
+            </div>
+            <ul
+              tabindex="0"
+              class="dropdown-content menu bg-base-200 rounded-box z-[1] w-32 p-2 shadow"
+            >
+              <li><.link href="/sign-out">Log out</.link></li>
+            </ul>
+          </div>
+        </div>
       </nav>
     </aside>
     """
