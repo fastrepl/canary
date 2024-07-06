@@ -15,7 +15,9 @@ anyhow = "1.0"
 text-splitter = { version = "0.13.3", features = ["tiktoken-rs", "markdown"] }
 tiktoken-rs = "0.5.9"
 htmd = "0.1.5"
+git2 = "0.18.3"
 
 [dev-dependencies]
 insta = "1.38.0"
 include_uri = "0.1.1"
+nanoid = "0.4.0"
