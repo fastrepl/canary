@@ -21,17 +21,8 @@ defmodule Canary.Accounts.Account do
     has_one :billing, Canary.Accounts.Billing
   end
 
-  aggregates do
-    count :num_users, :users
-  end
-
   actions do
-    defaults [:destroy]
-
-    read :read do
-      primary? true
-      prepare build(load: [:num_users])
-    end
+    defaults [:read]
 
     create :create do
       argument :user, :map, allow_nil?: false
