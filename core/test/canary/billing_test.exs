@@ -18,19 +18,11 @@ defmodule Canary.Test.Billing do
     assert account.billing.stripe_customer == nil
     assert account.billing.stripe_subscription == nil
 
-    args = %{
-      stripe_customer: %{id: "cus_123"},
-      stripe_subscription: %{id: "sub_123"}
-    }
-
-    updated =
-      account.billing
-      |> Ash.Changeset.for_update(:update, args)
-      |> Ash.update!()
+    updated = Billing.update_stripe_customer!(account.billing, %{id: "cus_123"})
 
     [found] =
       Billing
-      |> Ash.Query.filter(stripe_customer[:id] == ^args.stripe_customer.id)
+      |> Ash.Query.filter(stripe_customer[:id] == "cus_123")
       |> Ash.Query.limit(1)
       |> Ash.read!()
 

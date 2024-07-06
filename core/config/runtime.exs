@@ -169,4 +169,4 @@ if config_env() == :prod and System.get_env("OTEL_COLLECTOR_URL") do
     otlp_headers: [{"Authorization", "Bearer #{System.fetch_env!("OTEL_COLLECTOR_URL_AUTH")}"}]
 end
 
-config :fastrepl, :clone_dir, System.get_env("REPO_DIR", "./tmp")
+config :canary, :clone_dir, System.get_env("REPO_DIR", "./tmp")
