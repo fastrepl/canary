@@ -7,8 +7,8 @@
       "source": "id",
       "references": null,
       "allow_nil?": false,
-      "generated?": false,
-      "primary_key?": true
+      "primary_key?": true,
+      "generated?": false
     },
     {
       "default": "fragment(\"(now() AT TIME ZONE 'utc')\")",
@@ -17,18 +17,8 @@
       "source": "created_at",
       "references": null,
       "allow_nil?": false,
-      "generated?": false,
-      "primary_key?": false
-    },
-    {
-      "default": "nil",
-      "size": null,
-      "type": "text",
-      "source": "name",
-      "references": null,
-      "allow_nil?": false,
-      "generated?": false,
-      "primary_key?": false
+      "primary_key?": false,
+      "generated?": false
     },
     {
       "default": "nil",
@@ -37,8 +27,8 @@
       "source": "type",
       "references": null,
       "allow_nil?": false,
-      "generated?": false,
-      "primary_key?": false
+      "primary_key?": false,
+      "generated?": false
     },
     {
       "default": "nil",
@@ -47,8 +37,8 @@
       "source": "discord_server_id",
       "references": null,
       "allow_nil?": true,
-      "generated?": false,
-      "primary_key?": false
+      "primary_key?": false,
+      "generated?": false
     },
     {
       "default": "nil",
@@ -57,8 +47,8 @@
       "source": "discord_channel_id",
       "references": null,
       "allow_nil?": true,
-      "generated?": false,
-      "primary_key?": false
+      "primary_key?": false,
+      "generated?": false
     },
     {
       "default": "nil",
@@ -68,30 +58,30 @@
       "references": {
         "name": "clients_source_id_fkey",
         "table": "sources",
-        "schema": "public",
         "on_delete": "delete",
+        "primary_key?": true,
+        "schema": "public",
         "multitenancy": {
           "global": null,
-          "attribute": null,
-          "strategy": null
+          "strategy": null,
+          "attribute": null
         },
-        "primary_key?": true,
         "destination_attribute": "id",
-        "deferrable": false,
-        "index?": false,
-        "match_type": null,
-        "match_with": null,
         "on_update": null,
+        "deferrable": false,
+        "match_with": null,
+        "match_type": null,
+        "index?": false,
         "destination_attribute_default": null,
         "destination_attribute_generated": null
       },
-      "allow_nil?": true,
-      "generated?": false,
-      "primary_key?": false
+      "allow_nil?": false,
+      "primary_key?": false,
+      "generated?": false
     }
   ],
   "table": "clients",
-  "hash": "291E21D44AA2A3202AFED6AFD09AAA42792A7237CEA35C3272CA0D87B2EA0960",
+  "hash": "A46545B75349914BEAF3D3B7D8BDCE59C90FB4D44BC0EA5B72CBBA61D067A48B",
   "repo": "Elixir.Canary.Repo",
   "identities": [
     {
@@ -103,43 +93,25 @@
         },
         {
           "type": "atom",
-          "value": "name"
+          "value": "type"
         }
       ],
       "where": null,
-      "nils_distinct?": true,
+      "base_filter": null,
       "all_tenants?": false,
-      "index_name": "clients_unique_client_index",
-      "base_filter": null
-    },
-    {
-      "name": "unique_discord",
-      "keys": [
-        {
-          "type": "atom",
-          "value": "discord_server_id"
-        },
-        {
-          "type": "atom",
-          "value": "discord_channel_id"
-        }
-      ],
-      "where": null,
       "nils_distinct?": true,
-      "all_tenants?": false,
-      "index_name": "clients_unique_discord_index",
-      "base_filter": null
+      "index_name": "clients_unique_client_index"
     }
   ],
   "schema": null,
-  "multitenancy": {
-    "global": null,
-    "attribute": null,
-    "strategy": null
-  },
-  "base_filter": null,
   "check_constraints": [],
   "custom_indexes": [],
+  "multitenancy": {
+    "global": null,
+    "strategy": null,
+    "attribute": null
+  },
+  "base_filter": null,
   "custom_statements": [],
   "has_create_action": true
 }

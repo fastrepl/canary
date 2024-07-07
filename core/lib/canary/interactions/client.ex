@@ -6,8 +6,6 @@ defmodule Canary.Interactions.Client do
   attributes do
     uuid_primary_key :id
     create_timestamp :created_at
-
-    attribute :name, :string, allow_nil?: false
     attribute :type, :atom, constraints: [one_of: [:discord]], allow_nil?: false
 
     attribute :discord_server_id, :integer, allow_nil?: true
@@ -15,12 +13,11 @@ defmodule Canary.Interactions.Client do
   end
 
   identities do
-    identity :unique_client, [:source_id, :name]
-    identity :unique_discord, [:discord_server_id, :discord_channel_id]
+    identity :unique_client, [:source_id, :type]
   end
 
   relationships do
-    belongs_to :source, Canary.Sources.Source
+    belongs_to :source, Canary.Sources.Source, allow_nil?: false
   end
 
   actions do
@@ -40,13 +37,10 @@ defmodule Canary.Interactions.Client do
 
     create :create_discord do
       argument :source, :map, allow_nil?: false
-      argument :name, :string, allow_nil?: false
-
       argument :discord_server_id, :integer, allow_nil?: false
       argument :discord_channel_id, :integer, allow_nil?: false
 
       change set_attribute(:type, :discord)
-      change set_attribute(:name, expr(^arg(:name)))
       change manage_relationship(:source, :source, type: :append)
       change set_attribute(:discord_server_id, expr(^arg(:discord_server_id)))
       change set_attribute(:discord_channel_id, expr(^arg(:discord_channel_id)))
@@ -59,7 +53,7 @@ defmodule Canary.Interactions.Client do
       action: :find_discord
 
     define :create_discord,
-      args: [:source, :name, :discord_server_id, :discord_channel_id],
+      args: [:source, :discord_server_id, :discord_channel_id],
       action: :create_discord
   end
 

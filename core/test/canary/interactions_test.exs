@@ -32,13 +32,10 @@ defmodule Canary.Test.Interactions do
       account = account_fixture()
       source = Source.create!(account, :docusaurus, "https://example.com", "/docs")
 
-      client_1 = Client.create_discord!(source, "discord/1", 1, 2)
-      client_2 = Client.create_discord!(source, "discord/2", 3, 4)
-      assert client_1.id != client_2.id
+      client_1 = Client.create_discord!(source, 1, 2)
 
-      {:ok, client_3} = Client.find_discord(1, 2)
-      assert client_3.id == client_1.id
-      assert client_3.source_id == source.id
+      {:ok, client_2} = Client.find_discord(1, 2)
+      assert client_1.id == client_2.id
 
       {:error, _} = Client.find_discord(3, 3)
     end
