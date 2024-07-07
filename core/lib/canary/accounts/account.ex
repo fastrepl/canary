@@ -14,6 +14,7 @@ defmodule Canary.Accounts.Account do
       through Canary.Accounts.AccountUser
     end
 
+    has_one :github_app, Canary.Github.App
     has_one :source, Canary.Sources.Source
     has_many :sessions, Canary.Interactions.Session
 

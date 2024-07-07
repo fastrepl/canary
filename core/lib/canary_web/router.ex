@@ -48,6 +48,12 @@ defmodule CanaryWeb.Router do
       live "/interactions", CanaryWeb.InteractionsLive, :none
       live "/settings", CanaryWeb.SettingsLive, :none
     end
+
+    ash_authentication_live_session :others,
+      layout: {CanaryWeb.Layouts, :root},
+      on_mount: [{CanaryWeb.LiveUserAuth, :live_user_required}] do
+      live "/setup/github", CanaryWeb.GithubSetupLive, :none
+    end
   end
 
   scope "/api" do

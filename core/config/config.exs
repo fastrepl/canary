@@ -56,7 +56,7 @@ config :canary, :root, File.cwd!()
 
 config :canary, Oban,
   engine: Oban.Engines.Basic,
-  queues: [default: 10, ingester: 1],
+  queues: [default: 10, ingester: 1, stripe: 50],
   repo: Canary.Repo,
   plugins: [
     {Oban.Plugins.Pruner, max_age: 60 * 60 * 24 * 7},
@@ -79,6 +79,8 @@ config :hammer,
 # https://ash-hq.org/docs/guides/ash_json_api/latest/tutorials/getting-started-with-ash-json-api#accept-json_api-content-type
 config :mime, :types, %{"application/vnd.api+json" => ["json"]}
 config :mime, :extensions, %{"json" => "application/vnd.api+json"}
+
+config :canary, :github_app_url, "https://github.com/apps/getcanary-dev/installations/new"
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

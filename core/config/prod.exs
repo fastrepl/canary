@@ -30,5 +30,7 @@ config :opentelemetry,
   ],
   sampler: {:parent_based, %{root: {:trace_id_ratio_based, 1.0}}}
 
+config :canary, :github_app_url, "https://github.com/apps/getcanary/installations/new"
+
 # Runtime production configuration, including reading
 # of environment variables, is done on config/runtime.exs.
