@@ -32,11 +32,32 @@ defmodule Canary.Accounts.Account do
       change manage_relationship(:user, :users, type: :append)
       change set_attribute(:name, expr(^arg(:name)))
     end
+
+    update :add_member do
+      require_atomic? false
+      argument :user, :map, allow_nil?: false
+
+      change manage_relationship(:user, :users, type: :append)
+      change Canary.Accounts.Changes.StripeReportSeat
+    end
+
+    update :remove_member do
+      require_atomic? false
+      argument :user, :map, allow_nil?: false
+
+      change manage_relationship(:user, :users, type: :remove)
+      change Canary.Accounts.Changes.StripeReportSeat
+    end
   end
 
   changes do
     change Canary.Accounts.Changes.InitUsage, on: [:create]
     change Canary.Accounts.Changes.InitBilling, on: [:create]
+  end
+
+  code_interface do
+    define :add_member, args: [:user], action: :add_member
+    define :remove_member, args: [:user], action: :remove_member
   end
 
   postgres do

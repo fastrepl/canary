@@ -1,4 +1,4 @@
-defmodule Canary.Checks.IsMaster do
+defmodule Canary.Accounts.Checks.IsMaster do
   use Ash.Policy.SimpleCheck
 
   def describe(_) do
@@ -19,7 +19,7 @@ end
 
 defimpl AshPhoenix.FormData.Error, for: Ash.Error.Forbidden.Policy do
   alias Ash.Error.Forbidden.Policy
-  alias Canary.Checks.IsMaster
+  alias Canary.Accounts.Checks.IsMaster
 
   def to_form_error(%Policy{facts: %{{IsMaster, [access_type: :filter]} => false}}) do
     {:email, "invalid email", nil}

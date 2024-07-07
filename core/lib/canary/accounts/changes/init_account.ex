@@ -5,7 +5,8 @@ defmodule Canary.Accounts.Changes.InitAccount do
 
   @impl true
   def change(changeset, _, _) do
-    Ash.Changeset.after_action(changeset, fn _, user ->
+    changeset
+    |> Ash.Changeset.after_action(fn _, user ->
       case Canary.Accounts.Account
            |> Ash.Changeset.for_create(:create, %{user: user, name: @default_account_name})
            |> Ash.create() do

@@ -3,7 +3,8 @@ defmodule Canary.Accounts.Changes.InitBilling do
 
   @impl true
   def change(changeset, _, _) do
-    Ash.Changeset.after_action(changeset, fn _, account ->
+    changeset
+    |> Ash.Changeset.after_action(fn _, account ->
       case Canary.Accounts.Billing
            |> Ash.Changeset.for_create(:create, %{account: account})
            |> Ash.create() do
