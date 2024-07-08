@@ -1,0 +1,25 @@
+{
+  "name": "@getcanary/tracker",
+  "version": "0.0.3",
+  "license": "MIT",
+  "main": "script.js",
+  "files": [
+    "script.js"
+  ],
+  "scripts": {
+    "build": "npx esbuild index.js --minify --outfile=script.js",
+    "format": "npx prettier . --write",
+    "test": "npx playwright test",
+    "test:ui": "npx playwright test --ui",
+    "pub": "npm run build && npm publish --access public"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.45.1",
+    "@types/node": "^20.14.10",
+    "@wdio/cli": "^8.39.1",
+    "esbuild": "^0.23.0",
+    "prettier": "^3.3.2",
+    "typescript": "^5.2.2",
+    "vite": "^5.3.1"
+  }
+}
