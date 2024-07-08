@@ -8,7 +8,7 @@ export default defineConfig({
   build: {
     lib: {
       entry: resolve(__dirname, "src/main.ts"),
-      name: "@canary/core",
+      name: "@getcanary/core",
       fileName: "index",
     },
   },

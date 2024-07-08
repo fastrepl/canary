@@ -1,1 +1,1 @@
-# @canary/docs
+# @getcanary/docs

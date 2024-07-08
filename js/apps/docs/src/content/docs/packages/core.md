@@ -1,5 +1,5 @@
 ---
-title: "@canary/core"
+title: "@getcanary/core"
 ---
 
 https://github.com/fastrepl/canary/tree/main/js/packages/core

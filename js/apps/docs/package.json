@@ -1,5 +1,5 @@
 {
-  "name": "@canary/docs",
+  "name": "@getcanary/docs",
   "type": "module",
   "private": true,
   "scripts": {
