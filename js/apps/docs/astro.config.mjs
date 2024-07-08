@@ -53,7 +53,7 @@ export default defineConfig({
           collapsed: true,
           autogenerate: { directory: "others" },
         },
-        ...openAPISidebarGroups
+        ...openAPISidebarGroups,
       ],
       customCss: ["./src/styles/theme.css"],
       plugins: [
