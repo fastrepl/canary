@@ -1,26 +1,47 @@
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
+import { createRef } from "lit/directives/ref.js";
+import { portal } from "lit-modal-portal";
+
+import "./canary-dialog";
+import "./canary-panel";
 
 @customElement("canary-search")
 export class CanarySearch extends LitElement {
-  @property({ type: Number })
-  count = 0;
+  @property() endpoint = "";
+
+  ref = createRef<HTMLDialogElement>();
 
   render() {
     return html`
-      <button @click=${this._onClick}>count is ${this.count}</button>
+      <slot @click=${this._handleOpen}></slot>
+      ${portal(
+        html`
+          <canary-dialog .ref=${this.ref}>
+            <canary-panel endpoint=${this.endpoint}></canary-panel>
+          </canary-dialog>
+        `,
+        document.body,
+      )}
     `;
   }
 
-  private _onClick() {
-    this.count++;
+  private _handleOpen() {
+    this.ref.value?.showModal();
   }
 
-  static styles = css`
-    button {
-      padding: 2em;
-    }
-  `;
+  static styles = [
+    css`
+      :host {
+        --canary-brand-color: #e0ecf7;
+      }
+    `,
+    css`
+      ::slotted(*) {
+        cursor: pointer;
+      }
+    `,
+  ];
 }
 
 declare global {

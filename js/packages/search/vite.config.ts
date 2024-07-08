@@ -1,5 +1,6 @@
 import { defineConfig } from "vite";
 import { resolve } from "path";
+import mockServer from "vite-plugin-mock-server";
 
 export default defineConfig({
   build: {
@@ -9,4 +10,10 @@ export default defineConfig({
       fileName: "canary-search",
     },
   },
+  plugins: [
+    mockServer({
+      mockRootDir: ".",
+      mockTsSuffix: "mock.ts",
+    }),
+  ],
 });

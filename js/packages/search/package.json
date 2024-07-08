@@ -1,6 +1,6 @@
 {
   "name": "@getcanary/search",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "type": "module",
   "main": "dist/canary-search.js",
   "module": "dist/canary-search.js",
@@ -12,11 +12,14 @@
     "format": "npx prettier . --write"
   },
   "dependencies": {
-    "lit": "^3.1.4"
+    "@lit/task": "^1.0.1",
+    "lit": "^3.1.4",
+    "lit-modal-portal": "^0.7.0"
   },
   "devDependencies": {
     "ts-lit-plugin": "^2.0.2",
     "typescript": "^5.2.2",
-    "vite": "^5.3.1"
+    "vite": "^5.3.1",
+    "vite-plugin-mock-server": "^1.2.0"
   }
 }
