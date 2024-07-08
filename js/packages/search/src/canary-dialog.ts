@@ -7,28 +7,19 @@ export class CanaryDialog extends LitElement {
   @property({ attribute: false })
   ref: Ref<HTMLDialogElement> = createRef();
 
-  firstUpdated() {
-    document.addEventListener("click", this.handleClick.bind(this));
-  }
-
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    document.removeEventListener("click", this.handleClick.bind(this));
+  render() {
+    return html`
+      <dialog ${ref(this.ref)} @click=${this.handleClick}>
+        <slot></slot>
+      </dialog>
+    `;
   }
 
   private handleClick(e: MouseEvent) {
     const dialog = this.ref.value;
-    if (dialog?.open && e.target instanceof CanaryDialog) {
+    if (dialog?.open && (e.target as any)["nodeName"] === "DIALOG") {
       dialog.close();
     }
-  }
-
-  render() {
-    return html`
-      <dialog ${ref(this.ref)}>
-        <slot></slot>
-      </dialog>
-    `;
   }
 
   static styles = [

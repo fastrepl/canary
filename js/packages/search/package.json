@@ -1,6 +1,6 @@
 {
   "name": "@getcanary/search",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "type": "module",
   "main": "dist/canary-search.js",
   "module": "dist/canary-search.js",
@@ -13,8 +13,7 @@
   },
   "dependencies": {
     "@lit/task": "^1.0.1",
-    "lit": "^3.1.4",
-    "lit-modal-portal": "^0.7.0"
+    "lit": "^3.1.4"
   },
   "devDependencies": {
     "ts-lit-plugin": "^2.0.2",

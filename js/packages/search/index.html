@@ -5,21 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@getcanary/search</title>
     <script type="module" src="/src/canary-search.ts"></script>
+
+    <style>
+      button {
+        background-color: black;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 8px 16px;
+        font-size: 16px;
+      }
+
+      canary-search {
+        --canary-brand-color: #f4ffd2;
+      }
+    </style>
   </head>
   <body>
     <canary-search endpoint="http://localhost:5173">
-      <button
-        style="
-          background-color: black;
-          color: white;
-          border: none;
-          border-radius: 8px;
-          padding: 8px 16px;
-          font-size: 16px;
-        "
-      >
-        Search
-      </button>
+      <button>Search</button>
     </canary-search>
   </body>
 </html>

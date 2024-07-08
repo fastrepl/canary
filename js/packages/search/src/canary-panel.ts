@@ -3,7 +3,7 @@ import { customElement, property } from "lit/decorators.js";
 import { Task } from "@lit/task";
 
 import "./icons/magnifying-glass";
-import type { SearchResult } from "./types";
+import { type SearchResult } from "./shared";
 
 @customElement("canary-panel")
 export class CanaryPanel extends LitElement {
@@ -77,11 +77,6 @@ export class CanaryPanel extends LitElement {
   }
 
   static styles = [
-    css`
-      :host {
-        --canary-brand-color: #e0ecf7;
-      }
-    `,
     css`
       .hero-magnifying-glass {
         width: 1rem;

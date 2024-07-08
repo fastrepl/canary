@@ -1,7 +1,6 @@
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { createRef } from "lit/directives/ref.js";
-import { portal } from "lit-modal-portal";
 
 import "./canary-dialog";
 import "./canary-panel";
@@ -15,14 +14,9 @@ export class CanarySearch extends LitElement {
   render() {
     return html`
       <slot @click=${this._handleOpen}></slot>
-      ${portal(
-        html`
-          <canary-dialog .ref=${this.ref}>
-            <canary-panel endpoint=${this.endpoint}></canary-panel>
-          </canary-dialog>
-        `,
-        document.body,
-      )}
+      <canary-dialog .ref=${this.ref}>
+        <canary-panel endpoint=${this.endpoint}></canary-panel>
+      </canary-dialog>
     `;
   }
 
@@ -31,11 +25,6 @@ export class CanarySearch extends LitElement {
   }
 
   static styles = [
-    css`
-      :host {
-        --canary-brand-color: #e0ecf7;
-      }
-    `,
     css`
       ::slotted(*) {
         cursor: pointer;
