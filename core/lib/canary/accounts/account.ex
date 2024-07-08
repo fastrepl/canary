@@ -17,9 +17,13 @@ defmodule Canary.Accounts.Account do
     has_one :github_app, Canary.Github.App
     has_one :source, Canary.Sources.Source
     has_many :sessions, Canary.Interactions.Session
-
-    has_one :usage, Canary.Accounts.Usage
     has_one :billing, Canary.Accounts.Billing
+  end
+
+  aggregates do
+    count :chat_usage_last_hour, [:sessions, :messages] do
+      filter expr(created_at >= ago(1, :hour) and role == :assistant)
+    end
   end
 
   actions do
@@ -51,7 +55,6 @@ defmodule Canary.Accounts.Account do
   end
 
   changes do
-    change Canary.Accounts.Changes.InitUsage, on: [:create]
     change Canary.Accounts.Changes.InitBilling, on: [:create]
   end
 

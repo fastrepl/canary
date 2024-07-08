@@ -60,7 +60,8 @@ config :canary, Oban,
   repo: Canary.Repo,
   plugins: [
     {Oban.Plugins.Pruner, max_age: 60 * 60 * 24 * 7},
-    {Oban.Plugins.Lifeline, rescue_after: :timer.minutes(5)}
+    {Oban.Plugins.Lifeline, rescue_after: :timer.minutes(5)},
+    {Oban.Plugins.Cron, crontab: [{"0 * * * *", Canary.Workers.StripeReport}]}
   ]
 
 config :canary, Canary.Repo, types: Canary.PostgrexTypes

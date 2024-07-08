@@ -7,8 +7,18 @@
       "source": "id",
       "references": null,
       "allow_nil?": false,
-      "generated?": false,
-      "primary_key?": true
+      "primary_key?": true,
+      "generated?": false
+    },
+    {
+      "default": "fragment(\"(now() AT TIME ZONE 'utc')\")",
+      "size": null,
+      "type": "utc_datetime_usec",
+      "source": "created_at",
+      "references": null,
+      "allow_nil?": false,
+      "primary_key?": false,
+      "generated?": false
     },
     {
       "default": "nil",
@@ -17,18 +27,28 @@
       "source": "type",
       "references": null,
       "allow_nil?": false,
-      "generated?": false,
-      "primary_key?": false
+      "primary_key?": false,
+      "generated?": false
     },
     {
       "default": "nil",
       "size": null,
-      "type": "bigint",
-      "source": "client_session_id",
+      "type": "text",
+      "source": "base_url",
       "references": null,
       "allow_nil?": false,
-      "generated?": false,
-      "primary_key?": false
+      "primary_key?": false,
+      "generated?": false
+    },
+    {
+      "default": "nil",
+      "size": null,
+      "type": "text",
+      "source": "base_path",
+      "references": null,
+      "allow_nil?": false,
+      "primary_key?": false,
+      "generated?": false
     },
     {
       "default": "nil",
@@ -36,66 +56,43 @@
       "type": "uuid",
       "source": "account_id",
       "references": {
-        "name": "sessions_account_id_fkey",
+        "name": "sources_account_id_fkey",
         "table": "accounts",
-        "schema": "public",
+        "primary_key?": true,
         "on_delete": null,
+        "schema": "public",
         "multitenancy": {
           "global": null,
           "attribute": null,
           "strategy": null
         },
-        "primary_key?": true,
         "destination_attribute": "id",
-        "deferrable": false,
-        "index?": false,
-        "match_type": null,
-        "match_with": null,
         "on_update": null,
+        "deferrable": false,
+        "match_with": null,
+        "match_type": null,
+        "index?": false,
         "destination_attribute_default": null,
         "destination_attribute_generated": null
       },
       "allow_nil?": true,
-      "generated?": false,
-      "primary_key?": false
+      "primary_key?": false,
+      "generated?": false
     }
   ],
-  "table": "sessions",
-  "hash": "6D8768E4B65C57B3A2557A4C851DAE8ABECED2C39EF7406A75483746EFCC83FB",
+  "table": "sources",
+  "hash": "0555A6C642AC0B7DAFDB142E46F1A334CACD16FB09DA4E044E415A45E74F72B9",
   "repo": "Elixir.Canary.Repo",
-  "identities": [
-    {
-      "name": "unique_session",
-      "keys": [
-        {
-          "type": "atom",
-          "value": "account_id"
-        },
-        {
-          "type": "atom",
-          "value": "type"
-        },
-        {
-          "type": "atom",
-          "value": "client_session_id"
-        }
-      ],
-      "where": null,
-      "nils_distinct?": true,
-      "all_tenants?": false,
-      "index_name": "sessions_unique_session_index",
-      "base_filter": null
-    }
-  ],
   "schema": null,
+  "base_filter": null,
+  "check_constraints": [],
+  "identities": [],
+  "custom_indexes": [],
   "multitenancy": {
     "global": null,
     "attribute": null,
     "strategy": null
   },
-  "base_filter": null,
-  "check_constraints": [],
-  "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true
 }

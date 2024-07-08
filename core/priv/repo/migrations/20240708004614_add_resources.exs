@@ -37,12 +37,6 @@ defmodule Canary.Repo.Migrations.AddResources do
              name: "user_identities_unique_on_strategy_and_uid_and_user_id_index"
            )
 
-    create table(:usages, primary_key: false) do
-      add :id, :uuid, null: false, default: fragment("gen_random_uuid()"), primary_key: true
-      add :generation, :bigint, default: 0
-      add :account_id, :uuid
-    end
-
     create table(:tokens, primary_key: false) do
       add :updated_at, :utc_datetime_usec,
         null: false,
@@ -177,7 +171,6 @@ defmodule Canary.Repo.Migrations.AddResources do
         null: false,
         default: fragment("(now() AT TIME ZONE 'utc')")
 
-      add :name, :text, null: false
       add :type, :text, null: false
       add :discord_server_id, :bigint
       add :discord_channel_id, :bigint
@@ -189,14 +182,11 @@ defmodule Canary.Repo.Migrations.AddResources do
             type: :uuid,
             prefix: "public",
             on_delete: :delete_all
-          )
+          ),
+          null: false
     end
 
-    create unique_index(:clients, [:source_id, :name], name: "clients_unique_client_index")
-
-    create unique_index(:clients, [:discord_server_id, :discord_channel_id],
-             name: "clients_unique_discord_index"
-           )
+    create unique_index(:clients, [:source_id, :type], name: "clients_unique_client_index")
 
     create table(:chunks, primary_key: false) do
       add :id, :uuid, null: false, default: fragment("gen_random_uuid()"), primary_key: true
@@ -223,16 +213,6 @@ defmodule Canary.Repo.Migrations.AddResources do
 
     create table(:accounts, primary_key: false) do
       add :id, :uuid, null: false, default: fragment("gen_random_uuid()"), primary_key: true
-    end
-
-    alter table(:usages) do
-      modify :account_id,
-             references(:accounts,
-               column: :id,
-               name: "usages_account_id_fkey",
-               type: :uuid,
-               prefix: "public"
-             )
     end
 
     alter table(:sources) do
@@ -363,12 +343,6 @@ defmodule Canary.Repo.Migrations.AddResources do
       modify :account_id, :uuid
     end
 
-    drop constraint(:usages, "usages_account_id_fkey")
-
-    alter table(:usages) do
-      modify :account_id, :uuid
-    end
-
     drop table(:accounts)
 
     drop table(:billings)
@@ -377,11 +351,7 @@ defmodule Canary.Repo.Migrations.AddResources do
 
     drop table(:chunks)
 
-    drop_if_exists unique_index(:clients, [:discord_server_id, :discord_channel_id],
-                     name: "clients_unique_discord_index"
-                   )
-
-    drop_if_exists unique_index(:clients, [:source_id, :name],
+    drop_if_exists unique_index(:clients, [:source_id, :type],
                      name: "clients_unique_client_index"
                    )
 
@@ -430,8 +400,6 @@ defmodule Canary.Repo.Migrations.AddResources do
     drop table(:sources)
 
     drop table(:tokens)
-
-    drop table(:usages)
 
     drop_if_exists unique_index(:user_identities, [:strategy, :uid, :user_id],
                      name: "user_identities_unique_on_strategy_and_uid_and_user_id_index"

@@ -7,18 +7,28 @@
       "source": "id",
       "references": null,
       "allow_nil?": false,
-      "generated?": false,
-      "primary_key?": true
+      "primary_key?": true,
+      "generated?": false
     },
     {
-      "default": "0",
+      "default": "nil",
       "size": null,
-      "type": "bigint",
-      "source": "generation",
+      "type": "map",
+      "source": "stripe_customer",
       "references": null,
       "allow_nil?": true,
-      "generated?": false,
-      "primary_key?": false
+      "primary_key?": false,
+      "generated?": false
+    },
+    {
+      "default": "nil",
+      "size": null,
+      "type": "map",
+      "source": "stripe_subscription",
+      "references": null,
+      "allow_nil?": true,
+      "primary_key?": false,
+      "generated?": false
     },
     {
       "default": "nil",
@@ -26,43 +36,43 @@
       "type": "uuid",
       "source": "account_id",
       "references": {
-        "name": "usages_account_id_fkey",
+        "name": "billings_account_id_fkey",
         "table": "accounts",
+        "primary_key?": true,
+        "on_delete": "nothing",
         "schema": "public",
-        "on_delete": null,
         "multitenancy": {
           "global": null,
           "attribute": null,
           "strategy": null
         },
-        "primary_key?": true,
         "destination_attribute": "id",
-        "deferrable": false,
-        "index?": false,
-        "match_type": null,
-        "match_with": null,
         "on_update": null,
+        "deferrable": false,
+        "match_with": null,
+        "match_type": null,
+        "index?": false,
         "destination_attribute_default": null,
         "destination_attribute_generated": null
       },
       "allow_nil?": true,
-      "generated?": false,
-      "primary_key?": false
+      "primary_key?": false,
+      "generated?": false
     }
   ],
-  "table": "usages",
-  "hash": "98DC9D45DA9FDBA26DEF51FC5ACA4AD9BB4FA4366BBF1B28FD45199D47E0310D",
+  "table": "billings",
+  "hash": "C4BFABB927CCB74773E87FF61B968415AFF78DFA06285A8F3577F7CFA80FCA1B",
   "repo": "Elixir.Canary.Repo",
-  "identities": [],
   "schema": null,
+  "base_filter": null,
+  "check_constraints": [],
+  "identities": [],
+  "custom_indexes": [],
   "multitenancy": {
     "global": null,
     "attribute": null,
     "strategy": null
   },
-  "base_filter": null,
-  "check_constraints": [],
-  "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true
 }

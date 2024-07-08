@@ -11,16 +11,6 @@
       "generated?": false
     },
     {
-      "default": "fragment(\"(now() AT TIME ZONE 'utc')\")",
-      "size": null,
-      "type": "utc_datetime_usec",
-      "source": "created_at",
-      "references": null,
-      "allow_nil?": false,
-      "primary_key?": false,
-      "generated?": false
-    },
-    {
       "default": "nil",
       "size": null,
       "type": "text",
@@ -34,19 +24,9 @@
       "default": "nil",
       "size": null,
       "type": "bigint",
-      "source": "discord_server_id",
+      "source": "client_session_id",
       "references": null,
-      "allow_nil?": true,
-      "primary_key?": false,
-      "generated?": false
-    },
-    {
-      "default": "nil",
-      "size": null,
-      "type": "bigint",
-      "source": "discord_channel_id",
-      "references": null,
-      "allow_nil?": true,
+      "allow_nil?": false,
       "primary_key?": false,
       "generated?": false
     },
@@ -54,17 +34,17 @@
       "default": "nil",
       "size": null,
       "type": "uuid",
-      "source": "source_id",
+      "source": "account_id",
       "references": {
-        "name": "clients_source_id_fkey",
-        "table": "sources",
-        "on_delete": "delete",
+        "name": "sessions_account_id_fkey",
+        "table": "accounts",
         "primary_key?": true,
+        "on_delete": null,
         "schema": "public",
         "multitenancy": {
           "global": null,
-          "strategy": null,
-          "attribute": null
+          "attribute": null,
+          "strategy": null
         },
         "destination_attribute": "id",
         "on_update": null,
@@ -75,43 +55,47 @@
         "destination_attribute_default": null,
         "destination_attribute_generated": null
       },
-      "allow_nil?": false,
+      "allow_nil?": true,
       "primary_key?": false,
       "generated?": false
     }
   ],
-  "table": "clients",
-  "hash": "A46545B75349914BEAF3D3B7D8BDCE59C90FB4D44BC0EA5B72CBBA61D067A48B",
+  "table": "sessions",
+  "hash": "9C7BEABE4E2551B0E68091C33C4EE7B08E8D4A416894C116FCDBC9EC1FE25DC3",
   "repo": "Elixir.Canary.Repo",
+  "schema": null,
+  "base_filter": null,
+  "check_constraints": [],
   "identities": [
     {
-      "name": "unique_client",
+      "name": "unique_session",
       "keys": [
         {
           "type": "atom",
-          "value": "source_id"
+          "value": "account_id"
         },
         {
           "type": "atom",
           "value": "type"
+        },
+        {
+          "type": "atom",
+          "value": "client_session_id"
         }
       ],
       "where": null,
       "base_filter": null,
       "all_tenants?": false,
       "nils_distinct?": true,
-      "index_name": "clients_unique_client_index"
+      "index_name": "sessions_unique_session_index"
     }
   ],
-  "schema": null,
-  "check_constraints": [],
   "custom_indexes": [],
   "multitenancy": {
     "global": null,
-    "strategy": null,
-    "attribute": null
+    "attribute": null,
+    "strategy": null
   },
-  "base_filter": null,
   "custom_statements": [],
   "has_create_action": true
 }

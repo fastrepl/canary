@@ -7,8 +7,8 @@
       "source": "id",
       "references": null,
       "allow_nil?": false,
-      "generated?": false,
-      "primary_key?": true
+      "primary_key?": true,
+      "generated?": false
     },
     {
       "default": "fragment(\"(now() AT TIME ZONE 'utc')\")",
@@ -17,8 +17,8 @@
       "source": "created_at",
       "references": null,
       "allow_nil?": false,
-      "generated?": false,
-      "primary_key?": false
+      "primary_key?": false,
+      "generated?": false
     },
     {
       "default": "nil",
@@ -28,26 +28,26 @@
       "references": {
         "name": "messages_session_id_fkey",
         "table": "sessions",
-        "schema": "public",
+        "primary_key?": true,
         "on_delete": null,
+        "schema": "public",
         "multitenancy": {
           "global": null,
           "attribute": null,
           "strategy": null
         },
-        "primary_key?": true,
         "destination_attribute": "id",
-        "deferrable": false,
-        "index?": false,
-        "match_type": null,
-        "match_with": null,
         "on_update": null,
+        "deferrable": false,
+        "match_with": null,
+        "match_type": null,
+        "index?": false,
         "destination_attribute_default": null,
         "destination_attribute_generated": null
       },
       "allow_nil?": false,
-      "generated?": false,
-      "primary_key?": false
+      "primary_key?": false,
+      "generated?": false
     },
     {
       "default": "nil",
@@ -56,8 +56,8 @@
       "source": "role",
       "references": null,
       "allow_nil?": false,
-      "generated?": false,
-      "primary_key?": false
+      "primary_key?": false,
+      "generated?": false
     },
     {
       "default": "nil",
@@ -66,23 +66,23 @@
       "source": "content",
       "references": null,
       "allow_nil?": false,
-      "generated?": false,
-      "primary_key?": false
+      "primary_key?": false,
+      "generated?": false
     }
   ],
   "table": "messages",
-  "hash": "20AD823A36A5AC8E887B92F5E9D53B4A818DD7773CE68226A561C658DCC77575",
+  "hash": "05E07CE1811E26BC343309E281D357234B0C99E41E0C366EC8FABE9145B85F4C",
   "repo": "Elixir.Canary.Repo",
-  "identities": [],
   "schema": null,
+  "base_filter": null,
+  "check_constraints": [],
+  "identities": [],
+  "custom_indexes": [],
   "multitenancy": {
     "global": null,
     "attribute": null,
     "strategy": null
   },
-  "base_filter": null,
-  "check_constraints": [],
-  "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true
 }
