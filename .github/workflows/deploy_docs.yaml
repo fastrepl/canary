@@ -18,8 +18,8 @@ jobs:
           node-version: 20
           cache: npm
           cache-dependency-path: js/package-lock.json
-      - run: npm ci -w @canary/docs
-      - run: npm run build -w @canary/docs
+      - run: npm ci -w @getcanary/docs
+      - run: npm run build -w @getcanary/docs
       - name: Deploy
         uses: cloudflare/wrangler-action@v3
         with:
