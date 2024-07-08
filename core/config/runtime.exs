@@ -170,3 +170,5 @@ if config_env() == :prod and System.get_env("OTEL_COLLECTOR_URL") do
 end
 
 config :canary, :clone_dir, System.get_env("REPO_DIR", "./tmp")
+
+config :canary, :tinybird_api_key, System.get_env("TINYBIRD_API_KEY")

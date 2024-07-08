@@ -1,7 +1,30 @@
 defmodule CanaryWeb.PublicApiController do
   use CanaryWeb, :controller
+  require Logger
 
-  def submit(conn, %{"id" => _id, "content" => _content}) do
+  def analytics(conn, %{"type" => type, "payload" => payload}) do
+    res =
+      Req.post(
+        base_url: "https://api.tinybird.co/v0",
+        url: "/events?name=#{type}",
+        json: payload
+      )
+
+    case res do
+      {:ok, %{status: 200}} ->
+        conn |> send_resp(200, "") |> halt()
+
+      error ->
+        Logger.error("while handling analytics event: #{inspect(error)}")
+        conn |> send_resp(200, "") |> halt()
+    end
+  end
+
+  def search(conn, _) do
+    conn |> send_resp(200, "") |> halt()
+  end
+
+  def ask(conn, %{"id" => _id, "content" => _content}) do
     conn =
       conn
       |> put_resp_content_type("text/event-stream")
