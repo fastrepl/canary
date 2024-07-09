@@ -2,10 +2,13 @@ import { LitElement, css, html, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { Task } from "@lit/task";
 
+import { type SearchResultItem } from "./types";
+
 import "./icons/magnifying-glass";
 import "./icons/question-mark-circle";
 import "./canary-toggle";
-import { type SearchResultItem } from "./types";
+import "./canary-input-search";
+import "./canary-input-ask";
 
 @customElement("canary-panel")
 export class CanaryPanel extends LitElement {
@@ -16,7 +19,8 @@ export class CanaryPanel extends LitElement {
 
   private _task = new Task(this, {
     task: async ([query], { signal }) => {
-      const url = `${this.endpoint}/api/v1/search`;
+      const op = this.mode === "Ask" ? "ask" : "search";
+      const url = `${this.endpoint}/api/v1/${op}`;
       const params = {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -30,7 +34,7 @@ export class CanaryPanel extends LitElement {
       }
       return response.json();
     },
-    args: () => [this.query],
+    args: () => [this.query, this.mode],
   });
 
   render() {
@@ -39,25 +43,19 @@ export class CanaryPanel extends LitElement {
         <div class="input-wrapper">
           ${this.mode === "Search"
             ? html`
-                <div class="input-icon">
-                  <hero-magnifying-glass></hero-magnifying-glass>
-                </div>
+                <canary-input-search
+                  @tab=${this._handleTab}
+                  @change=${this._handleChange}
+                >
+                </canary-input-search>
               `
             : html`
-                <div class="input-icon">
-                  <hero-question-mark-circle></hero-question-mark-circle>
-                </div>
+                <canary-input-ask
+                  @tab=${this._handleTab}
+                  @change=${this._handleChange}
+                >
+                </canary-input-ask>
               `}
-          <input
-            type="text"
-            autocomplete="off"
-            autofocus
-            placeholder=${this.mode === "Search"
-              ? "Search for anything..."
-              : "Ask anything..."}
-            @input=${this._handleInput}
-            @keydown=${this._handleKeyDown}
-          />
           <canary-toggle
             left="Search"
             right="Ask"
@@ -98,25 +96,20 @@ export class CanaryPanel extends LitElement {
     `;
   }
 
-  private _handleInput(e: KeyboardEvent) {
-    const input = e.target as HTMLInputElement;
-    this.query = input.value;
+  private _handleChange(e: CustomEvent) {
+    this.query = e.detail;
   }
 
-  private _handleKeyDown(e: KeyboardEvent) {
-    if (e.key === "Tab") {
-      e.preventDefault();
+  private _handleTab(_e: CustomEvent) {
+    if (this.mode === "Search") {
       this.mode = "Ask";
+    } else {
+      this.mode = "Search";
     }
   }
 
   static styles = [
     css`
-      .input-icon {
-        width: 1rem;
-        height: 1rem;
-      }
-
       div.container {
         padding: 8px 16px;
         border: none;
@@ -132,43 +125,16 @@ export class CanaryPanel extends LitElement {
       }
     `,
     css`
-      input {
-        width: 60vw;
-        max-width: 600px;
-        height: 30px;
-        outline: none;
-        border: none;
-        font-size: 16px;
-      }
-
-      input::placeholder {
-        color: #9f9f9f;
-        font-size: 14px;
-      }
-    `,
-    css`
-      button.ask {
-        padding: 12px 16px;
-        width: 100%;
-        background-color: transparent;
-        border: none;
-        outline: none;
-        text-align: start;
-        font-size: 16px;
-        color: #9f9f9f;
-        font-weight: 100;
-      }
-
-      button.ask:hover {
-        background-color: var(--canary-brand);
-      }
-    `,
-    css`
       .row {
         height: 50px;
         padding: 12px 16px;
         border: 1px solid #e3e3e3;
         border-radius: 8px;
+
+        display: flex;
+        flex-direction: column;
+        text-decoration: none;
+        color: inherit;
       }
 
       .row:hover {
@@ -190,18 +156,11 @@ export class CanaryPanel extends LitElement {
         overflow-y: auto;
       }
 
-      a.row {
-        display: flex;
-        flex-direction: column;
-        text-decoration: none;
-        color: inherit;
-      }
-
-      a.row .title {
+      .title {
         font-size: 16px;
       }
 
-      a.row .preview {
+      .preview {
         font-size: 14px;
       }
     `,
