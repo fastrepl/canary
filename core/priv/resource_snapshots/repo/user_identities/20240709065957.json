@@ -1,6 +1,56 @@
 {
   "attributes": [
     {
+      "default": "nil",
+      "size": null,
+      "type": "text",
+      "source": "refresh_token",
+      "references": null,
+      "allow_nil?": true,
+      "primary_key?": false,
+      "generated?": false
+    },
+    {
+      "default": "nil",
+      "size": null,
+      "type": "utc_datetime_usec",
+      "source": "access_token_expires_at",
+      "references": null,
+      "allow_nil?": true,
+      "primary_key?": false,
+      "generated?": false
+    },
+    {
+      "default": "nil",
+      "size": null,
+      "type": "text",
+      "source": "access_token",
+      "references": null,
+      "allow_nil?": true,
+      "primary_key?": false,
+      "generated?": false
+    },
+    {
+      "default": "nil",
+      "size": null,
+      "type": "text",
+      "source": "uid",
+      "references": null,
+      "allow_nil?": false,
+      "primary_key?": false,
+      "generated?": false
+    },
+    {
+      "default": "nil",
+      "size": null,
+      "type": "text",
+      "source": "strategy",
+      "references": null,
+      "allow_nil?": false,
+      "primary_key?": false,
+      "generated?": false
+    },
+    {
       "default": "fragment(\"gen_random_uuid()\")",
       "size": null,
       "type": "uuid",
@@ -11,50 +61,20 @@
       "generated?": false
     },
     {
-      "default": "fragment(\"(now() AT TIME ZONE 'utc')\")",
-      "size": null,
-      "type": "utc_datetime_usec",
-      "source": "created_at",
-      "references": null,
-      "allow_nil?": false,
-      "primary_key?": false,
-      "generated?": false
-    },
-    {
-      "default": "nil",
-      "size": null,
-      "type": "text",
-      "source": "absolute_path",
-      "references": null,
-      "allow_nil?": true,
-      "primary_key?": false,
-      "generated?": false
-    },
-    {
-      "default": "nil",
-      "size": null,
-      "type": "binary",
-      "source": "content_hash",
-      "references": null,
-      "allow_nil?": false,
-      "primary_key?": false,
-      "generated?": false
-    },
-    {
       "default": "nil",
       "size": null,
       "type": "uuid",
-      "source": "source_id",
+      "source": "user_id",
       "references": {
-        "name": "documents_source_id_fkey",
-        "table": "sources",
+        "name": "user_identities_user_id_fkey",
+        "table": "users",
+        "on_delete": null,
         "primary_key?": true,
-        "on_delete": "delete",
         "schema": "public",
         "multitenancy": {
           "global": null,
-          "attribute": null,
-          "strategy": null
+          "strategy": null,
+          "attribute": null
         },
         "destination_attribute": "id",
         "on_update": null,
@@ -70,34 +90,42 @@
       "generated?": false
     }
   ],
-  "table": "documents",
-  "hash": "EED9926911A080ABA1D87DAF1B24EC0B53FADFCF36B6D533ABF4AA93C93CA80A",
+  "table": "user_identities",
+  "hash": "4B8F053105C151DBAD2BD98DA7BCD0FB5BA3E66B63D09B0C825A6816D95832FE",
   "repo": "Elixir.Canary.Repo",
-  "schema": null,
-  "base_filter": null,
-  "check_constraints": [],
   "identities": [
     {
-      "name": "unique_content",
+      "name": "unique_on_strategy_and_uid_and_user_id",
       "keys": [
         {
           "type": "atom",
-          "value": "content_hash"
+          "value": "strategy"
+        },
+        {
+          "type": "atom",
+          "value": "uid"
+        },
+        {
+          "type": "atom",
+          "value": "user_id"
         }
       ],
       "where": null,
+      "index_name": "user_identities_unique_on_strategy_and_uid_and_user_id_index",
       "base_filter": null,
       "all_tenants?": false,
-      "nils_distinct?": true,
-      "index_name": "documents_unique_content_index"
+      "nils_distinct?": true
     }
   ],
+  "schema": null,
+  "check_constraints": [],
   "custom_indexes": [],
   "multitenancy": {
     "global": null,
-    "attribute": null,
-    "strategy": null
+    "strategy": null,
+    "attribute": null
   },
+  "base_filter": null,
   "custom_statements": [],
   "has_create_action": true
 }

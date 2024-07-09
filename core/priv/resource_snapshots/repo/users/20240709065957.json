@@ -32,11 +32,8 @@
     }
   ],
   "table": "users",
-  "hash": "3CA98E1C1E7DF5EAE5A134B83649D23C1D11F25E6C3C17753BC372F0FE5B9990",
+  "hash": "DC01D3F273D33B3B17D397CD9D59D1418C57A3727167952645DAF5F2B6434B96",
   "repo": "Elixir.Canary.Repo",
-  "schema": null,
-  "base_filter": null,
-  "check_constraints": [],
   "identities": [
     {
       "name": "unique_email",
@@ -47,18 +44,21 @@
         }
       ],
       "where": null,
+      "index_name": "users_unique_email_index",
       "base_filter": null,
       "all_tenants?": false,
-      "nils_distinct?": true,
-      "index_name": "users_unique_email_index"
+      "nils_distinct?": true
     }
   ],
+  "schema": null,
+  "check_constraints": [],
   "custom_indexes": [],
   "multitenancy": {
     "global": null,
-    "attribute": null,
-    "strategy": null
+    "strategy": null,
+    "attribute": null
   },
+  "base_filter": null,
   "custom_statements": [],
   "has_create_action": true
 }

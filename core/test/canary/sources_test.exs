@@ -32,14 +32,26 @@ defmodule Canary.Test.Sources do
   end
 
   describe "chunk" do
-    test "search", %{source: source} do
+    test "hybrid_search", %{source: source} do
       Canary.AI.Mock
       |> expect(:embedding, 1, fn _ -> {:ok, [Enum.to_list(1..384)]} end)
 
-      Document.ingest_text!(source, "/docs/intro.md", "ttt")
+      Document.ingest_text!(source, "/docs/intro.md", "t")
 
-      {:ok, chunks} = Chunk.search("ttt", Enum.to_list(1..384), 0)
+      {:ok, chunks} = Chunk.hybrid_search("t", Enum.to_list(1..384), 0)
       assert length(chunks) == 1
+    end
+
+    test "fts_search", %{source: source} do
+      Canary.AI.Mock
+      |> expect(:embedding, 3, fn _ -> {:ok, [Enum.to_list(1..384)]} end)
+
+      Document.ingest_text!(source, "/docs/intro.md", "ttt")
+      Document.ingest_text!(source, "/docs/intro.md", "a bbb bbb cddbb")
+      Document.ingest_text!(source, "/docs/intro.md", "ccc")
+
+      {:ok, [chunk]} = Chunk.fts_search("bbb")
+      assert chunk.content == "a <mark>bbb</mark> <mark>bbb</mark> cdd<mark>bb</mark>"
     end
   end
 end

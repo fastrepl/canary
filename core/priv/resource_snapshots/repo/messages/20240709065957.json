@@ -11,10 +11,10 @@
       "generated?": false
     },
     {
-      "default": "nil",
+      "default": "fragment(\"(now() AT TIME ZONE 'utc')\")",
       "size": null,
-      "type": "bigint",
-      "source": "installation_id",
+      "type": "utc_datetime_usec",
+      "source": "created_at",
       "references": null,
       "allow_nil?": false,
       "primary_key?": false,
@@ -24,17 +24,17 @@
       "default": "nil",
       "size": null,
       "type": "uuid",
-      "source": "account_id",
+      "source": "session_id",
       "references": {
-        "name": "github_apps_account_id_fkey",
-        "table": "accounts",
+        "name": "messages_session_id_fkey",
+        "table": "sessions",
+        "on_delete": null,
         "primary_key?": true,
-        "on_delete": "delete",
         "schema": "public",
         "multitenancy": {
           "global": null,
-          "attribute": null,
-          "strategy": null
+          "strategy": null,
+          "attribute": null
         },
         "destination_attribute": "id",
         "on_update": null,
@@ -45,24 +45,44 @@
         "destination_attribute_default": null,
         "destination_attribute_generated": null
       },
-      "allow_nil?": true,
+      "allow_nil?": false,
+      "primary_key?": false,
+      "generated?": false
+    },
+    {
+      "default": "nil",
+      "size": null,
+      "type": "text",
+      "source": "role",
+      "references": null,
+      "allow_nil?": false,
+      "primary_key?": false,
+      "generated?": false
+    },
+    {
+      "default": "nil",
+      "size": null,
+      "type": "text",
+      "source": "content",
+      "references": null,
+      "allow_nil?": false,
       "primary_key?": false,
       "generated?": false
     }
   ],
-  "table": "github_apps",
-  "hash": "F171C6526EAA29BD215691B36556C4DA1A90A894F8F66D82AC7782B77C747D33",
+  "table": "messages",
+  "hash": "6945BADE1A3B9CFA18C57EF66FBBC2F552A42480EBF1214D2021E25E5D646F2A",
   "repo": "Elixir.Canary.Repo",
-  "schema": null,
-  "base_filter": null,
-  "check_constraints": [],
   "identities": [],
+  "schema": null,
+  "check_constraints": [],
   "custom_indexes": [],
   "multitenancy": {
     "global": null,
-    "attribute": null,
-    "strategy": null
+    "strategy": null,
+    "attribute": null
   },
+  "base_filter": null,
   "custom_statements": [],
   "has_create_action": true
 }

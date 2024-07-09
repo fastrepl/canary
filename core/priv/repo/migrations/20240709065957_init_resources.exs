@@ -1,4 +1,4 @@
-defmodule Canary.Repo.Migrations.AddResources do
+defmodule Canary.Repo.Migrations.InitResources do
   @moduledoc """
   Updates resources based on their most recent snapshots.
 
@@ -189,7 +189,7 @@ defmodule Canary.Repo.Migrations.AddResources do
     create unique_index(:clients, [:source_id, :type], name: "clients_unique_client_index")
 
     create table(:chunks, primary_key: false) do
-      add :id, :uuid, null: false, default: fragment("gen_random_uuid()"), primary_key: true
+      add :id, :bigserial, null: false, primary_key: true
       add :content, :text, null: false
       add :embedding, :vector, null: false, size: 384
       add :url, :text

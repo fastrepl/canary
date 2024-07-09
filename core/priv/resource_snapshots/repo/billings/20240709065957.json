@@ -38,13 +38,13 @@
       "references": {
         "name": "billings_account_id_fkey",
         "table": "accounts",
-        "primary_key?": true,
         "on_delete": "nothing",
+        "primary_key?": true,
         "schema": "public",
         "multitenancy": {
           "global": null,
-          "attribute": null,
-          "strategy": null
+          "strategy": null,
+          "attribute": null
         },
         "destination_attribute": "id",
         "on_update": null,
@@ -61,18 +61,18 @@
     }
   ],
   "table": "billings",
-  "hash": "C4BFABB927CCB74773E87FF61B968415AFF78DFA06285A8F3577F7CFA80FCA1B",
+  "hash": "694637BA6643C0DCE3A6A974F951A58FA9FBE6E1A636813EE1F8D2558BE5EE06",
   "repo": "Elixir.Canary.Repo",
-  "schema": null,
-  "base_filter": null,
-  "check_constraints": [],
   "identities": [],
+  "schema": null,
+  "check_constraints": [],
   "custom_indexes": [],
   "multitenancy": {
     "global": null,
-    "attribute": null,
-    "strategy": null
+    "strategy": null,
+    "attribute": null
   },
+  "base_filter": null,
   "custom_statements": [],
   "has_create_action": true
 }

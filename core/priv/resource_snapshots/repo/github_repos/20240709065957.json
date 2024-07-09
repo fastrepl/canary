@@ -28,13 +28,13 @@
       "references": {
         "name": "github_repos_app_id_fkey",
         "table": "github_apps",
-        "primary_key?": true,
         "on_delete": "delete",
+        "primary_key?": true,
         "schema": "public",
         "multitenancy": {
           "global": null,
-          "attribute": null,
-          "strategy": null
+          "strategy": null,
+          "attribute": null
         },
         "destination_attribute": "id",
         "on_update": null,
@@ -57,13 +57,13 @@
       "references": {
         "name": "github_repos_source_id_fkey",
         "table": "sources",
-        "primary_key?": true,
         "on_delete": null,
+        "primary_key?": true,
         "schema": "public",
         "multitenancy": {
           "global": null,
-          "attribute": null,
-          "strategy": null
+          "strategy": null,
+          "attribute": null
         },
         "destination_attribute": "id",
         "on_update": null,
@@ -80,11 +80,8 @@
     }
   ],
   "table": "github_repos",
-  "hash": "C5DD4F90CD0B1AB883133FD788442A015B0E57B7198BFB41582FACC8B6B8E99F",
+  "hash": "4BF61DA3A7EE819DFE54114C4276A6AFE03071B2F1C189CAC0E1471C9E59F16A",
   "repo": "Elixir.Canary.Repo",
-  "schema": null,
-  "base_filter": null,
-  "check_constraints": [],
   "identities": [
     {
       "name": "unique_repo",
@@ -99,18 +96,21 @@
         }
       ],
       "where": null,
+      "index_name": "github_repos_unique_repo_index",
       "base_filter": null,
       "all_tenants?": false,
-      "nils_distinct?": true,
-      "index_name": "github_repos_unique_repo_index"
+      "nils_distinct?": true
     }
   ],
+  "schema": null,
+  "check_constraints": [],
   "custom_indexes": [],
   "multitenancy": {
     "global": null,
-    "attribute": null,
-    "strategy": null
+    "strategy": null,
+    "attribute": null
   },
+  "base_filter": null,
   "custom_statements": [],
   "has_create_action": true
 }

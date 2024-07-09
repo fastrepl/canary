@@ -23,18 +23,48 @@
     {
       "default": "nil",
       "size": null,
+      "type": "text",
+      "source": "type",
+      "references": null,
+      "allow_nil?": false,
+      "primary_key?": false,
+      "generated?": false
+    },
+    {
+      "default": "nil",
+      "size": null,
+      "type": "text",
+      "source": "base_url",
+      "references": null,
+      "allow_nil?": false,
+      "primary_key?": false,
+      "generated?": false
+    },
+    {
+      "default": "nil",
+      "size": null,
+      "type": "text",
+      "source": "base_path",
+      "references": null,
+      "allow_nil?": false,
+      "primary_key?": false,
+      "generated?": false
+    },
+    {
+      "default": "nil",
+      "size": null,
       "type": "uuid",
-      "source": "session_id",
+      "source": "account_id",
       "references": {
-        "name": "messages_session_id_fkey",
-        "table": "sessions",
-        "primary_key?": true,
+        "name": "sources_account_id_fkey",
+        "table": "accounts",
         "on_delete": null,
+        "primary_key?": true,
         "schema": "public",
         "multitenancy": {
           "global": null,
-          "attribute": null,
-          "strategy": null
+          "strategy": null,
+          "attribute": null
         },
         "destination_attribute": "id",
         "on_update": null,
@@ -45,44 +75,24 @@
         "destination_attribute_default": null,
         "destination_attribute_generated": null
       },
-      "allow_nil?": false,
-      "primary_key?": false,
-      "generated?": false
-    },
-    {
-      "default": "nil",
-      "size": null,
-      "type": "text",
-      "source": "role",
-      "references": null,
-      "allow_nil?": false,
-      "primary_key?": false,
-      "generated?": false
-    },
-    {
-      "default": "nil",
-      "size": null,
-      "type": "text",
-      "source": "content",
-      "references": null,
-      "allow_nil?": false,
+      "allow_nil?": true,
       "primary_key?": false,
       "generated?": false
     }
   ],
-  "table": "messages",
-  "hash": "05E07CE1811E26BC343309E281D357234B0C99E41E0C366EC8FABE9145B85F4C",
+  "table": "sources",
+  "hash": "FD2FE6372BCD56F7A14EEAB97C4DAE4629F1DDDB5345B60B94B8C1D6D37CB3D0",
   "repo": "Elixir.Canary.Repo",
-  "schema": null,
-  "base_filter": null,
-  "check_constraints": [],
   "identities": [],
+  "schema": null,
+  "check_constraints": [],
   "custom_indexes": [],
   "multitenancy": {
     "global": null,
-    "attribute": null,
-    "strategy": null
+    "strategy": null,
+    "attribute": null
   },
+  "base_filter": null,
   "custom_statements": [],
   "has_create_action": true
 }

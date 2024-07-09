@@ -11,20 +11,10 @@
       "generated?": false
     },
     {
-      "default": "nil",
+      "default": "fragment(\"(now() AT TIME ZONE 'utc')\")",
       "size": null,
-      "type": "text",
-      "source": "type",
-      "references": null,
-      "allow_nil?": false,
-      "primary_key?": false,
-      "generated?": false
-    },
-    {
-      "default": "nil",
-      "size": null,
-      "type": "bigint",
-      "source": "client_session_id",
+      "type": "utc_datetime_usec",
+      "source": "created_at",
       "references": null,
       "allow_nil?": false,
       "primary_key?": false,
@@ -36,15 +26,15 @@
       "type": "uuid",
       "source": "account_id",
       "references": {
-        "name": "sessions_account_id_fkey",
+        "name": "feedbacks_account_id_fkey",
         "table": "accounts",
-        "primary_key?": true,
         "on_delete": null,
+        "primary_key?": true,
         "schema": "public",
         "multitenancy": {
           "global": null,
-          "attribute": null,
-          "strategy": null
+          "strategy": null,
+          "attribute": null
         },
         "destination_attribute": "id",
         "on_update": null,
@@ -60,42 +50,19 @@
       "generated?": false
     }
   ],
-  "table": "sessions",
-  "hash": "9C7BEABE4E2551B0E68091C33C4EE7B08E8D4A416894C116FCDBC9EC1FE25DC3",
+  "table": "feedbacks",
+  "hash": "5AD4E0304E40C12D7DCDBBB5BE8E16C3BE7BFCCB4903803FDB951BF076902387",
   "repo": "Elixir.Canary.Repo",
+  "identities": [],
   "schema": null,
-  "base_filter": null,
   "check_constraints": [],
-  "identities": [
-    {
-      "name": "unique_session",
-      "keys": [
-        {
-          "type": "atom",
-          "value": "account_id"
-        },
-        {
-          "type": "atom",
-          "value": "type"
-        },
-        {
-          "type": "atom",
-          "value": "client_session_id"
-        }
-      ],
-      "where": null,
-      "base_filter": null,
-      "all_tenants?": false,
-      "nils_distinct?": true,
-      "index_name": "sessions_unique_session_index"
-    }
-  ],
   "custom_indexes": [],
   "multitenancy": {
     "global": null,
-    "attribute": null,
-    "strategy": null
+    "strategy": null,
+    "attribute": null
   },
+  "base_filter": null,
   "custom_statements": [],
-  "has_create_action": true
+  "has_create_action": false
 }

@@ -58,13 +58,13 @@
       "references": {
         "name": "clients_source_id_fkey",
         "table": "sources",
-        "primary_key?": true,
         "on_delete": "delete",
+        "primary_key?": true,
         "schema": "public",
         "multitenancy": {
           "global": null,
-          "attribute": null,
-          "strategy": null
+          "strategy": null,
+          "attribute": null
         },
         "destination_attribute": "id",
         "on_update": null,
@@ -81,11 +81,8 @@
     }
   ],
   "table": "clients",
-  "hash": "8501C06A57212F7374918C053D7E48FD88EB8AE352CF2470E7DA4C428F7810D6",
+  "hash": "73676B503F903DE6C9FCE296C4F9CC12727D49723428E08844631A295C29C701",
   "repo": "Elixir.Canary.Repo",
-  "schema": null,
-  "base_filter": null,
-  "check_constraints": [],
   "identities": [
     {
       "name": "unique_client",
@@ -100,18 +97,21 @@
         }
       ],
       "where": null,
+      "index_name": "clients_unique_client_index",
       "base_filter": null,
       "all_tenants?": false,
-      "nils_distinct?": true,
-      "index_name": "clients_unique_client_index"
+      "nils_distinct?": true
     }
   ],
+  "schema": null,
+  "check_constraints": [],
   "custom_indexes": [],
   "multitenancy": {
     "global": null,
-    "attribute": null,
-    "strategy": null
+    "strategy": null,
+    "attribute": null
   },
+  "base_filter": null,
   "custom_statements": [],
   "has_create_action": true
 }

@@ -13,30 +13,10 @@
     {
       "default": "nil",
       "size": null,
-      "type": "text",
-      "source": "content",
+      "type": "bigint",
+      "source": "installation_id",
       "references": null,
       "allow_nil?": false,
-      "primary_key?": false,
-      "generated?": false
-    },
-    {
-      "default": "nil",
-      "size": 384,
-      "type": ["vector", 384],
-      "source": "embedding",
-      "references": null,
-      "allow_nil?": false,
-      "primary_key?": false,
-      "generated?": false
-    },
-    {
-      "default": "nil",
-      "size": null,
-      "type": "text",
-      "source": "url",
-      "references": null,
-      "allow_nil?": true,
       "primary_key?": false,
       "generated?": false
     },
@@ -44,17 +24,17 @@
       "default": "nil",
       "size": null,
       "type": "uuid",
-      "source": "document_id",
+      "source": "account_id",
       "references": {
-        "name": "chunks_document_id_fkey",
-        "table": "documents",
-        "primary_key?": true,
+        "name": "github_apps_account_id_fkey",
+        "table": "accounts",
         "on_delete": "delete",
+        "primary_key?": true,
         "schema": "public",
         "multitenancy": {
           "global": null,
-          "attribute": null,
-          "strategy": null
+          "strategy": null,
+          "attribute": null
         },
         "destination_attribute": "id",
         "on_update": null,
@@ -70,19 +50,19 @@
       "generated?": false
     }
   ],
-  "table": "chunks",
-  "hash": "B51CE1E84F6D5999739FB9001AB5BDA2110763F8EF05F810E48808F4CDBC094D",
+  "table": "github_apps",
+  "hash": "FB24CC243B25648A0414CDF205B93F2DF2BD11636C40BF662A8EB672AC33E13B",
   "repo": "Elixir.Canary.Repo",
-  "schema": null,
-  "base_filter": null,
-  "check_constraints": [],
   "identities": [],
+  "schema": null,
+  "check_constraints": [],
   "custom_indexes": [],
   "multitenancy": {
     "global": null,
-    "attribute": null,
-    "strategy": null
+    "strategy": null,
+    "attribute": null
   },
+  "base_filter": null,
   "custom_statements": [],
   "has_create_action": true
 }

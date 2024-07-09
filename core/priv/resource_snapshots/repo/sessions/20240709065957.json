@@ -11,16 +11,6 @@
       "generated?": false
     },
     {
-      "default": "fragment(\"(now() AT TIME ZONE 'utc')\")",
-      "size": null,
-      "type": "utc_datetime_usec",
-      "source": "created_at",
-      "references": null,
-      "allow_nil?": false,
-      "primary_key?": false,
-      "generated?": false
-    },
-    {
       "default": "nil",
       "size": null,
       "type": "text",
@@ -33,18 +23,8 @@
     {
       "default": "nil",
       "size": null,
-      "type": "text",
-      "source": "base_url",
-      "references": null,
-      "allow_nil?": false,
-      "primary_key?": false,
-      "generated?": false
-    },
-    {
-      "default": "nil",
-      "size": null,
-      "type": "text",
-      "source": "base_path",
+      "type": "bigint",
+      "source": "client_session_id",
       "references": null,
       "allow_nil?": false,
       "primary_key?": false,
@@ -56,15 +36,15 @@
       "type": "uuid",
       "source": "account_id",
       "references": {
-        "name": "sources_account_id_fkey",
+        "name": "sessions_account_id_fkey",
         "table": "accounts",
-        "primary_key?": true,
         "on_delete": null,
+        "primary_key?": true,
         "schema": "public",
         "multitenancy": {
           "global": null,
-          "attribute": null,
-          "strategy": null
+          "strategy": null,
+          "attribute": null
         },
         "destination_attribute": "id",
         "on_update": null,
@@ -80,19 +60,42 @@
       "generated?": false
     }
   ],
-  "table": "sources",
-  "hash": "0555A6C642AC0B7DAFDB142E46F1A334CACD16FB09DA4E044E415A45E74F72B9",
+  "table": "sessions",
+  "hash": "F246904D82C9A0B221BF32AB0F8269A4595492E05C65A0D8691566D144618A15",
   "repo": "Elixir.Canary.Repo",
+  "identities": [
+    {
+      "name": "unique_session",
+      "keys": [
+        {
+          "type": "atom",
+          "value": "account_id"
+        },
+        {
+          "type": "atom",
+          "value": "type"
+        },
+        {
+          "type": "atom",
+          "value": "client_session_id"
+        }
+      ],
+      "where": null,
+      "index_name": "sessions_unique_session_index",
+      "base_filter": null,
+      "all_tenants?": false,
+      "nils_distinct?": true
+    }
+  ],
   "schema": null,
-  "base_filter": null,
   "check_constraints": [],
-  "identities": [],
   "custom_indexes": [],
   "multitenancy": {
     "global": null,
-    "attribute": null,
-    "strategy": null
+    "strategy": null,
+    "attribute": null
   },
+  "base_filter": null,
   "custom_statements": [],
   "has_create_action": true
 }

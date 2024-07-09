@@ -1,20 +1,33 @@
 {
   "attributes": [
     {
-      "default": "fragment(\"gen_random_uuid()\")",
+      "default": "nil",
       "size": null,
-      "type": "uuid",
+      "type": "bigint",
       "source": "id",
       "references": null,
       "allow_nil?": false,
       "primary_key?": true,
+      "generated?": true
+    },
+    {
+      "default": "nil",
+      "size": null,
+      "type": "text",
+      "source": "content",
+      "references": null,
+      "allow_nil?": false,
+      "primary_key?": false,
       "generated?": false
     },
     {
-      "default": "fragment(\"(now() AT TIME ZONE 'utc')\")",
-      "size": null,
-      "type": "utc_datetime_usec",
-      "source": "created_at",
+      "default": "nil",
+      "size": 384,
+      "type": [
+        "vector",
+        384
+      ],
+      "source": "embedding",
       "references": null,
       "allow_nil?": false,
       "primary_key?": false,
@@ -23,18 +36,28 @@
     {
       "default": "nil",
       "size": null,
+      "type": "text",
+      "source": "url",
+      "references": null,
+      "allow_nil?": true,
+      "primary_key?": false,
+      "generated?": false
+    },
+    {
+      "default": "nil",
+      "size": null,
       "type": "uuid",
-      "source": "account_id",
+      "source": "document_id",
       "references": {
-        "name": "feedbacks_account_id_fkey",
-        "table": "accounts",
+        "name": "chunks_document_id_fkey",
+        "table": "documents",
+        "on_delete": "delete",
         "primary_key?": true,
-        "on_delete": null,
         "schema": "public",
         "multitenancy": {
           "global": null,
-          "attribute": null,
-          "strategy": null
+          "strategy": null,
+          "attribute": null
         },
         "destination_attribute": "id",
         "on_update": null,
@@ -50,19 +73,19 @@
       "generated?": false
     }
   ],
-  "table": "feedbacks",
-  "hash": "A3CCDA10AEB389A29A62629102C40AAE4662F9F581DDB486FDBE97F801765078",
+  "table": "chunks",
+  "hash": "AB07CD5C78B5A1D0657E8DF501BC92A726643FDCE5F9CAA82F87C4FAB12D922B",
   "repo": "Elixir.Canary.Repo",
-  "schema": null,
-  "base_filter": null,
-  "check_constraints": [],
   "identities": [],
+  "schema": null,
+  "check_constraints": [],
   "custom_indexes": [],
   "multitenancy": {
     "global": null,
-    "attribute": null,
-    "strategy": null
+    "strategy": null,
+    "attribute": null
   },
+  "base_filter": null,
   "custom_statements": [],
-  "has_create_action": false
+  "has_create_action": true
 }
