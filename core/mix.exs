@@ -84,7 +84,10 @@ defmodule Canary.MixProject do
       {:live_svelte, "~> 0.13.2"},
       {:stripity_stripe, "~> 3.2"},
       {:oapi_github, "~> 0.3.3"},
-      {:httpoison, "~> 2.2"}
+      {:httpoison, "~> 2.2"},
+      {:crawler,
+       git: "https://github.com/fredwu/crawler.git",
+       ref: "6866bbe287c760b7e4bba1925e80f2a4494d7af3"}
     ]
   end
 
