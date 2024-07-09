@@ -1,5 +1,9 @@
-export type SearchResult = Array<{
-  title: string;
-  preview: string;
+export type SearchResultItem = {
   url: string;
-}>;
+  excerpt: string;
+  meta: SearchResultMeta;
+};
+
+type SearchResultMeta = {
+  title: string;
+};

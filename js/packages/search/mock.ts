@@ -5,9 +5,9 @@ const mocks: MockHandler[] = [
     pattern: "/api/v1/search",
     handle: (req, res) => {
       const items = Array(Math.round(Math.random() * 20)).fill({
-        title: "123",
-        preview: "123",
         url: "https://example.com",
+        excerpt: "123",
+        meta: { title: "123" },
       });
 
       setTimeout(() => {

@@ -3,13 +3,13 @@ import { customElement, property } from "lit/decorators.js";
 import { Task } from "@lit/task";
 
 import "./icons/magnifying-glass";
-import { type SearchResult } from "./shared";
+import { type SearchResultItem } from "./shared";
 
 @customElement("canary-panel")
 export class CanaryPanel extends LitElement {
   @property() endpoint = "";
   @property() query = "";
-  @property({ type: Array }) result: SearchResult = [];
+  @property({ type: Array }) result: SearchResultItem[] = [];
 
   private _task = new Task(this, {
     task: async ([query], { signal }) => {
@@ -44,8 +44,16 @@ export class CanaryPanel extends LitElement {
           />
         </div>
 
-        <button class="ask row">Ask AI</button>
-        <div class="results">${this.render_results()}</div>
+        <div class="results-wrapper">
+          <button class="ask row">Ask AI</button>
+          <div class="results">${this.render_results()}</div>
+        </div>
+        <div class="logo">
+          Powered by
+          <a href="https://github.com/fastrepl/canary" target="_blank">
+            🐤 Canary
+          </a>
+        </div>
       </div>
     `;
   }
@@ -57,12 +65,12 @@ export class CanaryPanel extends LitElement {
         pending: () => html`
           ${Array(5).fill(html` <div class="row skeleton"></div> `)}
         `,
-        complete: (items) =>
+        complete: (items: SearchResultItem[]) =>
           items.map(
-            ({ title, preview, url }: any) => html`
+            ({ url, excerpt, meta }) => html`
               <a class="row" href="${url}">
-                <span class="title">${title}</span>
-                <span class="preview">${preview}</span>
+                <span class="title">${meta.title}</span>
+                <span class="preview">${excerpt}</span>
               </a>
             `,
           ),
@@ -84,9 +92,15 @@ export class CanaryPanel extends LitElement {
       }
 
       div.container {
-        padding: 4px 16px;
+        padding: 8px 16px;
         border: none;
         outline: none;
+      }
+
+      div.results-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
       }
 
       div.search-wrapper {
@@ -126,17 +140,20 @@ export class CanaryPanel extends LitElement {
       }
 
       button.ask:hover {
-        background-color: var(--canary-brand-color);
+        background-color: var(--canary-brand);
       }
     `,
     css`
       .row {
         height: 50px;
+        padding: 12px 16px;
+        border: 1px solid #e3e3e3;
+        border-radius: 8px;
       }
 
       .row:hover {
-        background-color: var(--canary-brand-color);
-        border-color: var(--canary-brand-color);
+        background-color: var(--canary-brand);
+        border-color: var(--canary-brand-border);
       }
     `,
 
@@ -158,13 +175,6 @@ export class CanaryPanel extends LitElement {
         flex-direction: column;
         text-decoration: none;
         color: inherit;
-        padding: 12px 16px;
-        border: 1px solid gray;
-        border-radius: 8px;
-      }
-
-      a.row:hover {
-        background-color: var(--canary-brand-color);
       }
 
       a.row .title {
@@ -177,9 +187,14 @@ export class CanaryPanel extends LitElement {
     `,
     css`
       .skeleton {
+        border: none;
         background-color: #e3e3e3;
         border-radius: 8px;
         animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
+
+      .skeleton:hover {
+        background-color: #f1f1f1;
       }
 
       @keyframes pulse {
@@ -190,6 +205,23 @@ export class CanaryPanel extends LitElement {
         50% {
           opacity: 0.5;
         }
+      }
+    `,
+    css`
+      .logo {
+        padding-top: 14px;
+        text-align: end;
+        font-size: 14px;
+        color: #9f9f9f;
+      }
+
+      .logo a {
+        text-decoration: none;
+        color: #9f9f9f;
+      }
+      .logo a:hover {
+        text-decoration: underline;
+        color: #9f9f9f;
       }
     `,
   ];
