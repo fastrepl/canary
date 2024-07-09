@@ -18,16 +18,16 @@ defmodule CanaryWeb.Router do
     plug CORSPlug
   end
 
-  scope "/", CanaryWeb do
+  scope "/" do
     pipe_through :browser
 
-    sign_in_route(
-      register_path: "/register",
-      overrides: [CanaryWeb.AuthOverrides, AshAuthentication.Phoenix.Overrides.Default]
-    )
+    live_session :auth, layout: {CanaryWeb.Layouts, :root} do
+      live "/register", CanaryWeb.AuthLive.Index, :register
+      live "/sign-in", CanaryWeb.AuthLive.Index, :sign_in
+    end
 
-    sign_out_route(AuthController)
-    auth_routes_for(Canary.Accounts.User, to: AuthController)
+    sign_out_route(CanaryWeb.AuthController)
+    auth_routes_for(Canary.Accounts.User, to: CanaryWeb.AuthController)
     reset_route([])
   end
 
@@ -47,6 +47,8 @@ defmodule CanaryWeb.Router do
       live "/editor", CanaryWeb.EditorHomeLive, :none
       live "/interactions", CanaryWeb.InteractionsLive, :none
       live "/settings", CanaryWeb.SettingsLive, :none
+
+      live "/form", CanaryWeb.FormLive, :none
     end
 
     ash_authentication_live_session :others,
