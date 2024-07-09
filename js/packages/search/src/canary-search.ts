@@ -32,9 +32,3 @@ export class CanarySearch extends LitElement {
     `,
   ];
 }
-
-declare global {
-  interface HTMLElementTagNameMap {
-    "canary-search": CanarySearch;
-  }
-}

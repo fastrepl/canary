@@ -3,13 +3,16 @@ import { customElement, property } from "lit/decorators.js";
 import { Task } from "@lit/task";
 
 import "./icons/magnifying-glass";
-import { type SearchResultItem } from "./shared";
+import "./icons/question-mark-circle";
+import "./canary-toggle";
+import { type SearchResultItem } from "./types";
 
 @customElement("canary-panel")
 export class CanaryPanel extends LitElement {
   @property() endpoint = "";
   @property() query = "";
   @property({ type: Array }) result: SearchResultItem[] = [];
+  @property() mode = "Search";
 
   private _task = new Task(this, {
     task: async ([query], { signal }) => {
@@ -33,21 +36,37 @@ export class CanaryPanel extends LitElement {
   render() {
     return html`
       <div class="container">
-        <div class="search-wrapper">
-          <div class="hero-magnifying-glass"><hero-magnifying-glass /></div>
+        <div class="input-wrapper">
+          ${this.mode === "Search"
+            ? html`
+                <div class="input-icon">
+                  <hero-magnifying-glass></hero-magnifying-glass>
+                </div>
+              `
+            : html`
+                <div class="input-icon">
+                  <hero-question-mark-circle></hero-question-mark-circle>
+                </div>
+              `}
           <input
-            type="search"
+            type="text"
             autocomplete="off"
             autofocus
-            placeholder="Search for anything..."
+            placeholder=${this.mode === "Search"
+              ? "Search for anything..."
+              : "Ask anything..."}
             @input=${this._handleInput}
+            @keydown=${this._handleKeyDown}
           />
+          <canary-toggle
+            left="Search"
+            right="Ask"
+            selected=${this.mode}
+            @toggle=${(e: CustomEvent) => (this.mode = e.detail)}
+          ></canary-toggle>
         </div>
 
-        <div class="results-wrapper">
-          <button class="ask row">Ask AI</button>
-          <div class="results">${this.render_results()}</div>
-        </div>
+        <div class="results">${this.render_results()}</div>
         <div class="logo">
           Powered by
           <a href="https://github.com/fastrepl/canary" target="_blank">
@@ -79,14 +98,21 @@ export class CanaryPanel extends LitElement {
     `;
   }
 
-  private _handleInput(e: Event) {
+  private _handleInput(e: KeyboardEvent) {
     const input = e.target as HTMLInputElement;
     this.query = input.value;
   }
 
+  private _handleKeyDown(e: KeyboardEvent) {
+    if (e.key === "Tab") {
+      e.preventDefault();
+      this.mode = "Ask";
+    }
+  }
+
   static styles = [
     css`
-      .hero-magnifying-glass {
+      .input-icon {
         width: 1rem;
         height: 1rem;
       }
@@ -97,28 +123,22 @@ export class CanaryPanel extends LitElement {
         outline: none;
       }
 
-      div.results-wrapper {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-      }
-
-      div.search-wrapper {
+      div.input-wrapper {
         display: flex;
         align-items: center;
         gap: 8px;
         color: #9f9f9f;
+        margin-bottom: 8px;
       }
     `,
     css`
       input {
         width: 60vw;
         max-width: 600px;
-        height: 40px;
+        height: 30px;
         outline: none;
         border: none;
         font-size: 16px;
-        font-weight: 100;
       }
 
       input::placeholder {
@@ -209,7 +229,7 @@ export class CanaryPanel extends LitElement {
     `,
     css`
       .logo {
-        padding-top: 14px;
+        padding-top: 8px;
         text-align: end;
         font-size: 14px;
         color: #9f9f9f;
