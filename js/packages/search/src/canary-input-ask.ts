@@ -66,7 +66,7 @@ export class CanaryInputAsk extends LitElement {
 
     if (e.key === "Tab") {
       e.preventDefault();
-      const event = new CustomEvent("tab");
+      const event = new CustomEvent("toggle", { detail: "Search" });
       this.dispatchEvent(event);
     }
   }

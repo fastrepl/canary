@@ -14,12 +14,14 @@ import "./canary-input-ask";
 export class CanaryPanel extends LitElement {
   @property() endpoint = "";
   @property() query = "";
-  @property({ type: Array }) result: SearchResultItem[] = [];
   @property() mode = "Search";
+  @property() askResult = "";
+  @property({ type: Array }) searchResult: SearchResultItem[] = [];
 
   private _task = new Task(this, {
     task: async ([query], { signal }) => {
       const op = this.mode === "Ask" ? "ask" : "search";
+
       const url = `${this.endpoint}/api/v1/${op}`;
       const params = {
         method: "POST",
@@ -32,9 +34,37 @@ export class CanaryPanel extends LitElement {
       if (!response.ok) {
         throw new Error();
       }
-      return response.json();
+
+      if (op === "search") {
+        return response.json();
+      }
+
+      const reader = response.body
+        ?.pipeThrough(new TextDecoderStream())
+        .getReader();
+      if (!reader) {
+        throw new Error();
+      }
+
+      let completion = "";
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) {
+          break;
+        }
+
+        const items = value
+          .split("\n\n")
+          .flatMap((s) => s.split("data: "))
+          .filter(Boolean);
+
+        completion += items.join("");
+        this.askResult = completion;
+      }
+
+      return this.askResult;
     },
-    args: () => [this.query, this.mode],
+    args: () => [this.mode, this.query],
   });
 
   render() {
@@ -44,15 +74,15 @@ export class CanaryPanel extends LitElement {
           ${this.mode === "Search"
             ? html`
                 <canary-input-search
-                  @tab=${this._handleTab}
                   @change=${this._handleChange}
+                  @toggle=${this._handleToggle}
                 >
                 </canary-input-search>
               `
             : html`
                 <canary-input-ask
-                  @tab=${this._handleTab}
                   @change=${this._handleChange}
+                  @toggle=${this._handleToggle}
                 >
                 </canary-input-ask>
               `}
@@ -60,7 +90,7 @@ export class CanaryPanel extends LitElement {
             left="Search"
             right="Ask"
             selected=${this.mode}
-            @toggle=${(e: CustomEvent) => (this.mode = e.detail)}
+            @toggle=${this._handleToggle}
           ></canary-toggle>
         </div>
 
@@ -79,18 +109,30 @@ export class CanaryPanel extends LitElement {
     return html`
       ${this._task.render({
         initial: () => nothing,
-        pending: () => html`
-          ${Array(5).fill(html` <div class="row skeleton"></div> `)}
-        `,
-        complete: (items: SearchResultItem[]) =>
-          items.map(
-            ({ url, excerpt, meta }) => html`
-              <a class="row" href="${url}">
-                <span class="title">${meta.title}</span>
-                <span class="preview">${excerpt}</span>
-              </a>
-            `,
-          ),
+        pending: () =>
+          this.mode === "Search"
+            ? html` ${Array(5).fill(html` <div class="row skeleton"></div> `)} `
+            : html`
+                <div class="row">
+                  <span class="title">${this.askResult}</span>
+                </div>
+              `,
+        complete:
+          this.mode === "Search"
+            ? (items: SearchResultItem[]) =>
+                items.map(
+                  ({ url, excerpt, meta }) => html`
+                    <a class="row" href="${url}">
+                      <span class="title">${meta.title}</span>
+                      <span class="preview">${excerpt}</span>
+                    </a>
+                  `,
+                )
+            : (completion: string) => html`
+                <div class="row">
+                  <span class="title">${completion}</span>
+                </div>
+              `,
         error: (error) => html`<p>Oops, something went wrong: ${error}</p>`,
       })}
     `;
@@ -100,12 +142,8 @@ export class CanaryPanel extends LitElement {
     this.query = e.detail;
   }
 
-  private _handleTab(_e: CustomEvent) {
-    if (this.mode === "Search") {
-      this.mode = "Ask";
-    } else {
-      this.mode = "Search";
-    }
+  private _handleToggle(e: CustomEvent) {
+    this.mode = e.detail;
   }
 
   static styles = [

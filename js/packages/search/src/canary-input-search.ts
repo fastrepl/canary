@@ -22,6 +22,7 @@ export class CanaryInputSearch extends LitElement {
       </div>
     `;
   }
+
   static styles = css`
     .container {
       display: flex;
@@ -58,7 +59,7 @@ export class CanaryInputSearch extends LitElement {
   private _handleKeyDown(e: KeyboardEvent) {
     if (e.key === "Tab") {
       e.preventDefault();
-      const event = new CustomEvent("tab");
+      const event = new CustomEvent("toggle", { detail: "Ask" });
       this.dispatchEvent(event);
     }
   }
