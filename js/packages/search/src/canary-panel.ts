@@ -1,5 +1,5 @@
 import { LitElement, css, html, nothing } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { customElement, property, state } from "lit/decorators.js";
 import { Task } from "@lit/task";
 
 import { type SearchResultItem } from "./types";
@@ -13,20 +13,25 @@ import "./canary-input-ask";
 @customElement("canary-panel")
 export class CanaryPanel extends LitElement {
   @property() endpoint = "";
+  @property() public_key = "";
   @property() query = "";
   @property() mode = "Search";
-  @property() askResult = "";
-  @property({ type: Array }) searchResult: SearchResultItem[] = [];
+  @state() askResult = "";
+  @state() searchResult: SearchResultItem[] = [];
 
   private _task = new Task(this, {
-    task: async ([query], { signal }) => {
-      const op = this.mode === "Ask" ? "ask" : "search";
+    task: async ([mode, query], { signal }) => {
+      if (query === "") {
+        return [];
+      }
+
+      const op = mode === "Ask" ? "ask" : "search";
 
       const url = `${this.endpoint}/api/v1/${op}`;
       const params = {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ query }),
+        body: JSON.stringify({ query, public_key: this.public_key }),
         signal,
       };
 
@@ -42,6 +47,7 @@ export class CanaryPanel extends LitElement {
       const reader = response.body
         ?.pipeThrough(new TextDecoderStream())
         .getReader();
+
       if (!reader) {
         throw new Error();
       }
@@ -95,6 +101,7 @@ export class CanaryPanel extends LitElement {
         </div>
 
         <div class="results">${this.render_results()}</div>
+
         <div class="logo">
           Powered by
           <a href="https://github.com/fastrepl/canary" target="_blank">
@@ -114,26 +121,33 @@ export class CanaryPanel extends LitElement {
             ? html` ${Array(5).fill(html` <div class="row skeleton"></div> `)} `
             : html`
                 <div class="row">
-                  <span class="title">${this.askResult}</span>
+                  <span class="title">${this.query}</span>
+                  <span class="preview">${this.askResult}</span>
                 </div>
               `,
         complete:
           this.mode === "Search"
             ? (items: SearchResultItem[]) =>
-                items.map(
-                  ({ url, excerpt, meta }) => html`
-                    <a class="row" href="${url}">
-                      <span class="title">${meta.title}</span>
-                      <span class="preview">${excerpt}</span>
-                    </a>
-                  `,
-                )
+                items.length === 0
+                  ? nothing
+                  : items.map(
+                      ({ url, excerpt, meta }) => html`
+                        <a class="row" href="${url}">
+                          <span class="title">${meta.title}</span>
+                          <span class="preview">${excerpt}</span>
+                        </a>
+                      `,
+                    )
             : (completion: string) => html`
                 <div class="row">
-                  <span class="title">${completion}</span>
+                  <span class="title">${this.query}</span>
+                  <span class="preview">${completion}</span>
                 </div>
               `,
-        error: (error) => html`<p>Oops, something went wrong: ${error}</p>`,
+        error: (_error) =>
+          html`<div class="row error">
+            <span class="title">Oops, something went wrong!</span>
+          </div>`,
       })}
     `;
   }
@@ -228,7 +242,7 @@ export class CanaryPanel extends LitElement {
       .logo {
         padding-top: 8px;
         text-align: end;
-        font-size: 14px;
+        font-size: 12px;
         color: #9f9f9f;
       }
 
@@ -238,7 +252,7 @@ export class CanaryPanel extends LitElement {
       }
       .logo a:hover {
         text-decoration: underline;
-        color: #9f9f9f;
+        color: black;
       }
     `,
   ];
