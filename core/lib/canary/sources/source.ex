@@ -17,6 +17,10 @@ defmodule Canary.Sources.Source do
     has_many :documents, Canary.Sources.Document
   end
 
+  aggregates do
+    count :num_documents, :documents
+  end
+
   actions do
     defaults [:destroy]
 
@@ -35,8 +39,8 @@ defmodule Canary.Sources.Source do
     end
   end
 
-  aggregates do
-    count :num_documents, :documents
+  changes do
+    change Canary.Sources.Changes.InitSource, on: [:create]
   end
 
   code_interface do
