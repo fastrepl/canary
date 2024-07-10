@@ -24,11 +24,16 @@ defmodule CanaryWeb.Router do
     live_session :auth, layout: {CanaryWeb.Layouts, :root} do
       live "/register", CanaryWeb.AuthLive.Index, :register
       live "/sign-in", CanaryWeb.AuthLive.Index, :sign_in
+      live "/reset-request", CanaryWeb.AuthLive.Index, :reset_request
     end
 
     sign_out_route(CanaryWeb.AuthController)
     auth_routes_for(Canary.Accounts.User, to: CanaryWeb.AuthController)
-    reset_route([])
+
+    reset_route(
+      live_view: CanaryWeb.AuthLive.Index,
+      layout: {CanaryWeb.Layouts, :root}
+    )
   end
 
   scope "/" do

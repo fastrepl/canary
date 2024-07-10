@@ -15,13 +15,20 @@ defmodule CanaryWeb.AuthLive.Index do
             <img src="https://picsum.photos/id/222/1200/1200?blur" alt="Login" class="h-full" />
           </figure>
           <.live_component
-            module={CanaryWeb.AuthLive.AuthForm}
+            module={
+              cond do
+                @live_action == :reset_request -> CanaryWeb.AuthLive.ResetRequestForm
+                @live_action == :reset -> CanaryWeb.AuthLive.ResetForm
+                true -> CanaryWeb.AuthLive.AuthForm
+              end
+            }
             id={@id}
             form={@form}
             register?={@live_action == :register}
             alternative_path={@alternative_path}
             alternative_message={@alternative_message}
             action={@action}
+            token={assigns[:token]}
           />
         </main>
       </div>
@@ -65,6 +72,39 @@ defmodule CanaryWeb.AuthLive.Index do
     |> assign(
       :form,
       AshPhoenix.Form.for_action(Canary.Accounts.User, :sign_in_with_password,
+        domain: Canary.Accounts,
+        as: "user"
+      )
+    )
+  end
+
+  defp apply_action(socket, :reset_request, _params) do
+    socket
+    |> assign(:id, "reset-request-form")
+    |> assign(:alternative_path, ~p"/register")
+    |> assign(:alternative_message, "Need an account?")
+    |> assign(:main_message, "Reset your password")
+    |> assign(:action, ~p"/auth//user/password/reset_request")
+    |> assign(
+      :form,
+      AshPhoenix.Form.for_action(Canary.Accounts.User, :request_password_reset_with_password,
+        domain: Canary.Accounts,
+        as: "user"
+      )
+    )
+  end
+
+  defp apply_action(socket, :reset, params) do
+    socket
+    |> assign(:id, "reset-form")
+    |> assign(:alternative_path, ~p"/register")
+    |> assign(:alternative_message, "Need an account?")
+    |> assign(:main_message, "Reset your password")
+    |> assign(:action, ~p"/auth//user/password/reset")
+    |> assign(:token, params["token"])
+    |> assign(
+      :form,
+      AshPhoenix.Form.for_action(Canary.Accounts.User, :password_reset_with_password,
         domain: Canary.Accounts,
         as: "user"
       )

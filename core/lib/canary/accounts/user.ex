@@ -49,6 +49,10 @@ defmodule Canary.Accounts.User do
     strategies do
       password :password do
         identity_field :email
+
+        resettable do
+          sender Canary.UserNotifier.ResetPassword
+        end
       end
 
       if Application.compile_env(:canary, :github) do

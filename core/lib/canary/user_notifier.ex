@@ -6,18 +6,7 @@ defmodule Canary.UserNotifier do
 
   @sender {"Canary", "yujonglee@getcanary.dev"}
 
-  def deliver_invite_link(email, %{url: url}) do
-    {html, text} = render_content(&invite_content/1, %{url: url})
-
-    deliver(
-      to: email,
-      subject: "You are invited to join Canary!",
-      html_body: html,
-      text_body: text
-    )
-  end
-
-  defp deliver(opts) do
+  def deliver(opts) do
     email =
       new(
         from: @sender,
@@ -32,21 +21,7 @@ defmodule Canary.UserNotifier do
     end
   end
 
-  def invite_content(assigns) do
-    ~H"""
-    <.email_layout>
-      <h1>Hey there!</h1>
-
-      <p>Please use this link to sign in to Canary:</p>
-
-      <a href={@url}><%= @url %></a>
-
-      <p>If you didn't request this email, feel free to ignore this.</p>
-    </.email_layout>
-    """
-  end
-
-  defp email_layout(assigns) do
+  def default_layout(assigns) do
     ~H"""
     <!DOCTYPE html>
     <html lang="en">
@@ -71,6 +46,14 @@ defmodule Canary.UserNotifier do
     """
   end
 
+  def render_content(content_fn, assigns) do
+    template = content_fn.(assigns)
+    html = heex_to_html(template)
+    text = html_to_text(html)
+
+    {html, text}
+  end
+
   defp heex_to_html(template) do
     template
     |> Phoenix.HTML.Safe.to_iodata()
@@ -83,12 +66,45 @@ defmodule Canary.UserNotifier do
     |> Floki.find("body")
     |> Floki.text(sep: "\n\n")
   end
+end
 
-  defp render_content(content_fn, assigns) do
-    template = content_fn.(assigns)
-    html = heex_to_html(template)
-    text = html_to_text(html)
+defmodule Canary.UserNotifier.ResetPassword do
+  import Phoenix.Component
+  import Canary.UserNotifier, only: [deliver: 1, render_content: 2, default_layout: 1]
 
-    {html, text}
+  use AshAuthentication.Sender
+  use CanaryWeb, :verified_routes
+
+  @impl AshAuthentication.Sender
+  def send(user, token, _) do
+    assigns = %{user: user, url: url(~p"/password-reset/#{token}")}
+    {html, text} = render_content(&tpl/1, assigns)
+
+    deliver(
+      to: to_string(user.email),
+      subject: "Canary: Reset your password",
+      html_body: html,
+      text_body: text
+    )
+
+    :ok
+  end
+
+  defp tpl(assigns) do
+    ~H"""
+    <.default_layout>
+      <p>
+        Hi <%= @user.email %>,
+      </p>
+
+      <p>
+        <a href={@url}>Click here</a> to reset your password.
+      </p>
+
+      <p>
+        If you didn't request this change, please ignore this.
+      </p>
+    </.default_layout>
+    """
   end
 end

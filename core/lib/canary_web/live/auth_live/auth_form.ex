@@ -52,18 +52,16 @@ defmodule CanaryWeb.AuthLive.AuthForm do
           </div>
         <% end %>
 
-        <%= if not @register? do %>
-          <div class="flex items-center">
-            <%= if Application.get_env(:canary, :email) do %>
-              <div class="label">
-                <a class="link-hover link label-text-alt" href="/">Forgot password?</a>
-              </div>
-            <% end %>
-            <.link class="link-hover link label-text-alt ml-auto" navigate={@alternative_path}>
-              <%= @alternative_message %>
-            </.link>
-          </div>
-        <% end %>
+        <div class="flex items-center">
+          <%= if not @register? do %>
+            <div class="label">
+              <a class="link-hover link label-text-alt" href="/reset-request">Forgot password?</a>
+            </div>
+          <% end %>
+          <.link class="link-hover link label-text-alt ml-auto" navigate={@alternative_path}>
+            <%= @alternative_message %>
+          </.link>
+        </div>
 
         <button class="btn btn-neutral" type="submit">Login</button>
 
