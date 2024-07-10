@@ -39,10 +39,6 @@ defmodule Canary.Sources.Source do
     end
   end
 
-  changes do
-    change Canary.Sources.Changes.InitSource, on: [:create]
-  end
-
   code_interface do
     define :create_web, args: [:account, :web_base_url], action: :create_web
   end
