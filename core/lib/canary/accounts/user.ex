@@ -8,7 +8,7 @@ defmodule Canary.Accounts.User do
     uuid_primary_key :id
 
     attribute :email, :ci_string, allow_nil?: false, public?: true
-    attribute :hashed_password, :string, allow_nil?: false, sensitive?: true
+    attribute :hashed_password, :string, allow_nil?: true, sensitive?: true
   end
 
   actions do
@@ -23,7 +23,7 @@ defmodule Canary.Accounts.User do
       argument :oauth_tokens, :map, allow_nil?: false
 
       upsert? true
-      upsert_identity :email
+      upsert_identity :unique_email
 
       change AshAuthentication.GenerateTokenChange
       change AshAuthentication.Strategy.OAuth2.IdentityChange
@@ -55,12 +55,10 @@ defmodule Canary.Accounts.User do
         end
       end
 
-      if Application.compile_env(:canary, :github) do
-        github do
-          client_id Canary.Accounts.Secrets
-          redirect_uri Canary.Accounts.Secrets
-          client_secret Canary.Accounts.Secrets
-        end
+      github :github do
+        client_id Canary.Accounts.Secrets
+        redirect_uri Canary.Accounts.Secrets
+        client_secret Canary.Accounts.Secrets
       end
     end
 

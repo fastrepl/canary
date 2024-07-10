@@ -1,4 +1,4 @@
 {
-  "installed": ["uuid-ossp", "citext", "ash-functions"],
-  "ash_functions_version": 3
+  "ash_functions_version": 4,
+  "installed": ["uuid-ossp", "citext", "ash-functions"]
 }

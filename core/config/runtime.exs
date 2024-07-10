@@ -171,4 +171,12 @@ end
 
 config :canary, :clone_dir, System.get_env("REPO_DIR", "./tmp")
 
-config :canary, :tinybird_api_key, System.get_env("TINYBIRD_API_KEY")
+config :canary, :tinybird,
+  api_key: System.get_env("TINYBIRD_API_KEY"),
+  base_url: System.get_env("TINYBIRD_BASE_URL")
+
+config :canary, :github,
+  enabled?: System.get_env("GITHUB_CLIENT_ID") != nil,
+  client_id: System.get_env("GITHUB_CLIENT_ID"),
+  client_secret: System.get_env("GITHUB_CLIENT_SECRET"),
+  redirect_uri: System.get_env("GITHUB_REDIRECT_URI")
