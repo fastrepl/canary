@@ -41,10 +41,6 @@ defmodule Canary.Accounts.User do
     end
   end
 
-  changes do
-    change Canary.Accounts.Changes.InitAccount, on: [:create]
-  end
-
   identities do
     identity :unique_email, [:email]
   end
