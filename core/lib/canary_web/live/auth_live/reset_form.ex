@@ -59,12 +59,16 @@ defmodule CanaryWeb.AuthLive.ResetForm do
   def handle_event("submit", %{"user" => params}, socket) do
     case AshPhoenix.Form.submit(socket.assigns.form, params: params) do
       {:ok, _} ->
-        {:noreply, socket |> redirect(to: ~p"/sign-in")}
+        socket = socket |> redirect(to: ~p"/sign-in")
+
+        {:noreply, socket}
 
       {:error, form} ->
-        {:noreply,
-         socket
-         |> assign(:form, AshPhoenix.Form.clear_value(form, [:password, :password_confirmation]))}
+        socket =
+          socket
+          |> assign(:form, AshPhoenix.Form.clear_value(form, [:password, :password_confirmation]))
+
+        {:noreply, socket}
     end
   end
 end

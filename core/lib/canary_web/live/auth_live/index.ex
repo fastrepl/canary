@@ -95,19 +95,30 @@ defmodule CanaryWeb.AuthLive.Index do
   end
 
   defp apply_action(socket, :reset, params) do
-    socket
-    |> assign(:id, "reset-form")
-    |> assign(:alternative_path, ~p"/register")
-    |> assign(:alternative_message, "Need an account?")
-    |> assign(:main_message, "Reset your password")
-    |> assign(:action, ~p"/auth//user/password/reset")
-    |> assign(:token, params["token"])
-    |> assign(
-      :form,
-      AshPhoenix.Form.for_action(Canary.Accounts.User, :password_reset_with_password,
-        domain: Canary.Accounts,
-        as: "user"
+    socket =
+      socket
+      |> assign(:id, "reset-form")
+      |> assign(:alternative_path, ~p"/register")
+      |> assign(:alternative_message, "Need an account?")
+      |> assign(:main_message, "Reset your password")
+      |> assign(:action, ~p"/auth//user/password/reset")
+      |> assign(:token, params["token"])
+
+    with {:ok, %{"sub" => subject}, resource} <-
+           AshAuthentication.Jwt.verify(params["token"], Canary.Accounts.User),
+         {:ok, user} <-
+           AshAuthentication.subject_to_user(subject, resource) do
+      socket
+      |> assign(
+        :form,
+        AshPhoenix.Form.for_action(user, :password_reset_with_password,
+          domain: Canary.Accounts,
+          as: "user"
+        )
       )
-    )
+    else
+      _ ->
+        socket |> redirect(to: ~p"/sign-in")
+    end
   end
 end
