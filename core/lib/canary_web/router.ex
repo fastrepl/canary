@@ -47,14 +47,13 @@ defmodule CanaryWeb.Router do
       live "/editor", CanaryWeb.EditorHomeLive, :none
       live "/interactions", CanaryWeb.InteractionsLive, :none
       live "/settings", CanaryWeb.SettingsLive, :none
-
-      live "/form", CanaryWeb.FormLive, :none
     end
 
     ash_authentication_live_session :others,
       layout: {CanaryWeb.Layouts, :root},
       on_mount: [{CanaryWeb.LiveUserAuth, :live_user_required}] do
       live "/setup/github", CanaryWeb.GithubSetupLive, :none
+      live "/onboarding", CanaryWeb.OnboardingLive, :none
     end
   end
 

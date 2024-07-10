@@ -15,8 +15,15 @@ defmodule CanaryWeb.HomeLive do
   end
 
   def mount(_params, _session, socket) do
-    sources = Canary.Sources.Source |> Ash.read!()
-    {:ok, socket |> assign(sources: sources)}
+    account = socket.assigns.current_account |> Ash.load!([:sources, :clients])
+
+    if length(account.sources) == 0 or length(account.clients) == 0 do
+      {:ok, socket |> redirect(to: ~p"/onboarding")}
+    else
+      {:ok, socket |> assign(current_account: account)}
+    end
+
+    {:ok, socket}
   end
 
   def handle_event("1", _, socket) do
