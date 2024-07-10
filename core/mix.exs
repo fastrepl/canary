@@ -87,7 +87,8 @@ defmodule Canary.MixProject do
       {:httpoison, "~> 2.2"},
       {:crawler,
        git: "https://github.com/fredwu/crawler.git",
-       ref: "6866bbe287c760b7e4bba1925e80f2a4494d7af3"}
+       ref: "6866bbe287c760b7e4bba1925e80f2a4494d7af3"},
+      {:resend, "~> 0.4.2"}
     ]
   end
 
