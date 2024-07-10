@@ -38,7 +38,7 @@ defmodule Canary.Test.Interactions do
       assert client_1.id != client_2.id
       assert client_1.id != client_3.id
 
-      client = Client.find_web!("https://example.com")
+      client = Client.find_web!("example.com")
       assert client.id == client_1.id
       assert client.account.id == account.id
       assert client.sources |> length() == 0

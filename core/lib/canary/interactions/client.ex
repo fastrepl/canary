@@ -54,11 +54,23 @@ defmodule Canary.Interactions.Client do
 
     create :create_web do
       argument :account, :map, allow_nil?: false
-      argument :web_host_url, :string, allow_nil?: false
+      argument :web_url, :string, allow_nil?: false
 
       change set_attribute(:type, :web)
       change manage_relationship(:account, :account, type: :append)
-      change set_attribute(:web_host_url, expr(^arg(:web_host_url)))
+
+      change fn changeset, _ ->
+        url = Ash.Changeset.get_argument(changeset, :web_url)
+
+        if is_nil(url) do
+          changeset
+        else
+          case URI.parse(url) do
+            %URI{host: nil} -> changeset
+            %URI{host: host} -> Ash.Changeset.change_attribute(changeset, :web_host_url, host)
+          end
+        end
+      end
     end
 
     create :create_discord do
@@ -97,7 +109,7 @@ defmodule Canary.Interactions.Client do
       action: :find_discord
 
     define :create_web,
-      args: [:account, :web_host_url],
+      args: [:account, :web_url],
       action: :create_web
 
     define :create_discord,

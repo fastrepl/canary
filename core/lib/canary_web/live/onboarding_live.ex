@@ -103,8 +103,8 @@ defmodule CanaryWeb.OnboardingLive do
                 <div class="form-control">
                   <label class="label"><span class="label-text">Website URL</span></label>
                   <input
-                    name={f[:web_host_url].name}
-                    value={f[:web_host_url].value}
+                    name={f[:web_url].name}
+                    value={f[:web_url].value}
                     type="url"
                     autocomplete="off"
                     class="input input-bordered w-full"
@@ -262,7 +262,7 @@ defmodule CanaryWeb.OnboardingLive do
 
       {:error, form} ->
         {:noreply,
-         socket |> assign(:web_client_form, AshPhoenix.Form.clear_value(form, [:web_host_url]))}
+         socket |> assign(:web_client_form, AshPhoenix.Form.clear_value(form, [:web_url]))}
     end
   end
 
