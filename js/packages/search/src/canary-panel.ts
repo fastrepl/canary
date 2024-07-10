@@ -1,23 +1,37 @@
 import { LitElement, css, html, nothing } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { customElement, property, state } from "lit/decorators.js";
 import { Task } from "@lit/task";
 
+import { type SearchResultItem } from "./types";
+
 import "./icons/magnifying-glass";
-import { type SearchResultItem } from "./shared";
+import "./icons/question-mark-circle";
+import "./canary-toggle";
+import "./canary-input-search";
+import "./canary-input-ask";
 
 @customElement("canary-panel")
 export class CanaryPanel extends LitElement {
   @property() endpoint = "";
+  @property() public_key = "";
   @property() query = "";
-  @property({ type: Array }) result: SearchResultItem[] = [];
+  @property() mode = "Search";
+  @state() askResult = "";
+  @state() searchResult: SearchResultItem[] = [];
 
   private _task = new Task(this, {
-    task: async ([query], { signal }) => {
-      const url = `${this.endpoint}/api/v1/search`;
+    task: async ([mode, query], { signal }) => {
+      if (query === "") {
+        return [];
+      }
+
+      const op = mode === "Ask" ? "ask" : "search";
+
+      const url = `${this.endpoint}/api/v1/${op}`;
       const params = {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ query }),
+        body: JSON.stringify({ query, public_key: this.public_key }),
         signal,
       };
 
@@ -25,29 +39,69 @@ export class CanaryPanel extends LitElement {
       if (!response.ok) {
         throw new Error();
       }
-      return response.json();
+
+      if (op === "search") {
+        return response.json();
+      }
+
+      const reader = response.body
+        ?.pipeThrough(new TextDecoderStream())
+        .getReader();
+
+      if (!reader) {
+        throw new Error();
+      }
+
+      let completion = "";
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) {
+          break;
+        }
+
+        const items = value
+          .split("\n\n")
+          .flatMap((s) => s.split("data: "))
+          .filter(Boolean);
+
+        completion += items.join("");
+        this.askResult = completion;
+      }
+
+      return this.askResult;
     },
-    args: () => [this.query],
+    args: () => [this.mode, this.query],
   });
 
   render() {
     return html`
       <div class="container">
-        <div class="search-wrapper">
-          <div class="hero-magnifying-glass"><hero-magnifying-glass /></div>
-          <input
-            type="search"
-            autocomplete="off"
-            autofocus
-            placeholder="Search for anything..."
-            @input=${this._handleInput}
-          />
+        <div class="input-wrapper">
+          ${this.mode === "Search"
+            ? html`
+                <canary-input-search
+                  @change=${this._handleChange}
+                  @toggle=${this._handleToggle}
+                >
+                </canary-input-search>
+              `
+            : html`
+                <canary-input-ask
+                  @change=${this._handleChange}
+                  @toggle=${this._handleToggle}
+                >
+                </canary-input-ask>
+              `}
+          <canary-toggle
+            left="Search"
+            right="Ask"
+            selected=${this.mode}
+            @toggle=${this._handleToggle}
+          ></canary-toggle>
         </div>
 
-        <div class="results-wrapper">
-          <button class="ask row">Ask AI</button>
-          <div class="results">${this.render_results()}</div>
-        </div>
+        <div class="results">${this.render_results()}</div>
+
         <div class="logo">
           Powered by
           <a href="https://github.com/fastrepl/canary" target="_blank">
@@ -62,85 +116,64 @@ export class CanaryPanel extends LitElement {
     return html`
       ${this._task.render({
         initial: () => nothing,
-        pending: () => html`
-          ${Array(5).fill(html` <div class="row skeleton"></div> `)}
-        `,
-        complete: (items: SearchResultItem[]) =>
-          items.map(
-            ({ url, excerpt, meta }) => html`
-              <a class="row" href="${url}">
-                <span class="title">${meta.title}</span>
-                <span class="preview">${excerpt}</span>
-              </a>
-            `,
-          ),
-        error: (error) => html`<p>Oops, something went wrong: ${error}</p>`,
+        pending: () =>
+          this.mode === "Search"
+            ? html` ${Array(5).fill(html` <div class="row skeleton"></div> `)} `
+            : html`
+                <div class="row">
+                  <span class="title">${this.query}</span>
+                  <span class="preview">${this.askResult}</span>
+                </div>
+              `,
+        complete:
+          this.mode === "Search"
+            ? (items: SearchResultItem[]) =>
+                items.length === 0
+                  ? nothing
+                  : items.map(
+                      ({ url, excerpt, meta }) => html`
+                        <a class="row" href="${url}">
+                          <span class="title">${meta.title}</span>
+                          <span class="preview">${excerpt}</span>
+                        </a>
+                      `,
+                    )
+            : (completion: string) => html`
+                <div class="row">
+                  <span class="title">${this.query}</span>
+                  <span class="preview">${completion}</span>
+                </div>
+              `,
+        error: (_error) =>
+          html`<div class="row error">
+            <span class="title">Oops, something went wrong!</span>
+          </div>`,
       })}
     `;
   }
 
-  private _handleInput(e: Event) {
-    const input = e.target as HTMLInputElement;
-    this.query = input.value;
+  private _handleChange(e: CustomEvent) {
+    this.query = e.detail;
+  }
+
+  private _handleToggle(e: CustomEvent) {
+    this.mode = e.detail;
   }
 
   static styles = [
     css`
-      .hero-magnifying-glass {
-        width: 1rem;
-        height: 1rem;
-      }
-
       div.container {
         padding: 8px 16px;
         border: none;
         outline: none;
       }
 
-      div.results-wrapper {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-      }
-
-      div.search-wrapper {
+      div.input-wrapper {
         display: flex;
         align-items: center;
         gap: 8px;
         color: #9f9f9f;
-      }
-    `,
-    css`
-      input {
-        width: 60vw;
-        max-width: 600px;
-        height: 40px;
-        outline: none;
-        border: none;
-        font-size: 16px;
-        font-weight: 100;
-      }
-
-      input::placeholder {
-        color: #9f9f9f;
-        font-size: 14px;
-      }
-    `,
-    css`
-      button.ask {
-        padding: 12px 16px;
-        width: 100%;
-        background-color: transparent;
-        border: none;
-        outline: none;
-        text-align: start;
-        font-size: 16px;
-        color: #9f9f9f;
-        font-weight: 100;
-      }
-
-      button.ask:hover {
-        background-color: var(--canary-brand);
+        margin-bottom: 8px;
       }
     `,
     css`
@@ -149,6 +182,11 @@ export class CanaryPanel extends LitElement {
         padding: 12px 16px;
         border: 1px solid #e3e3e3;
         border-radius: 8px;
+
+        display: flex;
+        flex-direction: column;
+        text-decoration: none;
+        color: inherit;
       }
 
       .row:hover {
@@ -170,18 +208,11 @@ export class CanaryPanel extends LitElement {
         overflow-y: auto;
       }
 
-      a.row {
-        display: flex;
-        flex-direction: column;
-        text-decoration: none;
-        color: inherit;
-      }
-
-      a.row .title {
+      .title {
         font-size: 16px;
       }
 
-      a.row .preview {
+      .preview {
         font-size: 14px;
       }
     `,
@@ -209,9 +240,9 @@ export class CanaryPanel extends LitElement {
     `,
     css`
       .logo {
-        padding-top: 14px;
+        padding-top: 8px;
         text-align: end;
-        font-size: 14px;
+        font-size: 12px;
         color: #9f9f9f;
       }
 
@@ -221,7 +252,7 @@ export class CanaryPanel extends LitElement {
       }
       .logo a:hover {
         text-decoration: underline;
-        color: #9f9f9f;
+        color: black;
       }
     `,
   ];

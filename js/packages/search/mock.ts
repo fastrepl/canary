@@ -13,7 +13,7 @@ const mocks: MockHandler[] = [
       setTimeout(() => {
         res.setHeader("Content-Type", "application/json");
         res.end(JSON.stringify(items));
-      }, Math.random() * 4000);
+      }, Math.random() * 2500);
     },
   },
   {
@@ -25,8 +25,32 @@ const mocks: MockHandler[] = [
         Connection: "keep-alive",
       });
 
-      res.write("data: sse\n\n");
-      res.end();
+      const generateChunk = () => {
+        const length = Math.random() < 0.5 ? 2 : 4;
+        return Array(length)
+          .fill(0)
+          .map(() => String.fromCharCode(97 + Math.floor(Math.random() * 26)))
+          .join("");
+      };
+
+      const size = Math.floor(Math.random() * 30) + 30;
+      let index = 0;
+
+      const interval = setInterval(() => {
+        if (index < size) {
+          const chunk = generateChunk();
+          res.write(`data: ${chunk} \n\n`);
+          index++;
+        } else {
+          clearInterval(interval);
+          res.end();
+        }
+      }, Math.random() * 50);
+
+      req.on("close", () => {
+        clearInterval(interval);
+        res.end();
+      });
     },
   },
 ];
