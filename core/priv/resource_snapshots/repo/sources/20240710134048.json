@@ -27,17 +27,7 @@
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "url",
-      "type": "text"
-    },
-    {
-      "allow_nil?": true,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "title",
+      "source": "type",
       "type": "text"
     },
     {
@@ -47,8 +37,8 @@
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "content_hash",
-      "type": "binary"
+      "source": "web_base_url",
+      "type": "text"
     },
     {
       "allow_nil?": true,
@@ -68,15 +58,15 @@
           "global": null,
           "strategy": null
         },
-        "name": "documents_source_id_fkey",
-        "on_delete": "delete",
+        "name": "sources_account_id_fkey",
+        "on_delete": null,
         "on_update": null,
         "primary_key?": true,
         "schema": "public",
-        "table": "sources"
+        "table": "accounts"
       },
       "size": null,
-      "source": "source_id",
+      "source": "account_id",
       "type": "uuid"
     }
   ],
@@ -85,27 +75,8 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "48989483BC993D79C8331B34FF08C10427893511AD61310B2093F6E3B71FBAA1",
-  "identities": [
-    {
-      "all_tenants?": false,
-      "base_filter": null,
-      "index_name": "documents_unique_content_index",
-      "keys": [
-        {
-          "type": "atom",
-          "value": "url"
-        },
-        {
-          "type": "atom",
-          "value": "content_hash"
-        }
-      ],
-      "name": "unique_content",
-      "nils_distinct?": true,
-      "where": null
-    }
-  ],
+  "hash": "E305712DA915D4942ED1CF586A31369E678FCA18CF479EA7DB92B9A4CBA35F35",
+  "identities": [],
   "multitenancy": {
     "attribute": null,
     "global": null,
@@ -113,5 +84,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "documents"
+  "table": "sources"
 }

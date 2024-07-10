@@ -1,23 +1,33 @@
 {
   "attributes": [
     {
-      "allow_nil?": false,
-      "default": "fragment(\"gen_random_uuid()\")",
-      "generated?": false,
-      "primary_key?": true,
-      "references": null,
-      "size": null,
-      "source": "id",
-      "type": "uuid"
-    },
-    {
-      "allow_nil?": false,
+      "allow_nil?": true,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "type",
+      "source": "refresh_token",
+      "type": "text"
+    },
+    {
+      "allow_nil?": true,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "access_token_expires_at",
+      "type": "utc_datetime_usec"
+    },
+    {
+      "allow_nil?": true,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "access_token",
       "type": "text"
     },
     {
@@ -27,8 +37,28 @@
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "client_session_id",
-      "type": "bigint"
+      "source": "uid",
+      "type": "text"
+    },
+    {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "strategy",
+      "type": "text"
+    },
+    {
+      "allow_nil?": false,
+      "default": "fragment(\"gen_random_uuid()\")",
+      "generated?": false,
+      "primary_key?": true,
+      "references": null,
+      "size": null,
+      "source": "id",
+      "type": "uuid"
     },
     {
       "allow_nil?": true,
@@ -48,15 +78,15 @@
           "global": null,
           "strategy": null
         },
-        "name": "sessions_account_id_fkey",
+        "name": "user_identities_user_id_fkey",
         "on_delete": null,
         "on_update": null,
         "primary_key?": true,
         "schema": "public",
-        "table": "accounts"
+        "table": "users"
       },
       "size": null,
-      "source": "account_id",
+      "source": "user_id",
       "type": "uuid"
     }
   ],
@@ -65,27 +95,27 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "5B7461EAAB77AF1A63EE044A4C07D69A0E2F3C96F9E7B49F0B75026D1A4D1A65",
+  "hash": "D9B0487E940CD9F608DDAEEE8E82C995A7C559BE0107E8C614A10237105A7A39",
   "identities": [
     {
       "all_tenants?": false,
       "base_filter": null,
-      "index_name": "sessions_unique_session_index",
+      "index_name": "user_identities_unique_on_strategy_and_uid_and_user_id_index",
       "keys": [
         {
           "type": "atom",
-          "value": "account_id"
+          "value": "strategy"
         },
         {
           "type": "atom",
-          "value": "type"
+          "value": "uid"
         },
         {
           "type": "atom",
-          "value": "client_session_id"
+          "value": "user_id"
         }
       ],
-      "name": "unique_session",
+      "name": "unique_on_strategy_and_uid_and_user_id",
       "nils_distinct?": true,
       "where": null
     }
@@ -97,5 +127,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "sessions"
+  "table": "user_identities"
 }

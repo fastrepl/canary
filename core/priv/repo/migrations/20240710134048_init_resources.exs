@@ -317,9 +317,43 @@ defmodule Canary.Repo.Migrations.InitResources do
           primary_key: true,
           null: false
     end
+
+    create table(:account_invites, primary_key: false) do
+      add :id, :uuid, null: false, default: fragment("gen_random_uuid()"), primary_key: true
+
+      add :created_at, :utc_datetime_usec,
+        null: false,
+        default: fragment("(now() AT TIME ZONE 'utc')")
+
+      add :email, :text, null: false
+
+      add :user_id,
+          references(:users,
+            column: :id,
+            name: "account_invites_user_id_fkey",
+            type: :uuid,
+            prefix: "public"
+          ),
+          null: false
+
+      add :account_id,
+          references(:accounts,
+            column: :id,
+            name: "account_invites_account_id_fkey",
+            type: :uuid,
+            prefix: "public"
+          ),
+          null: false
+    end
   end
 
   def down do
+    drop constraint(:account_invites, "account_invites_user_id_fkey")
+
+    drop constraint(:account_invites, "account_invites_account_id_fkey")
+
+    drop table(:account_invites)
+
     drop constraint(:account_users, "account_users_user_id_fkey")
 
     drop constraint(:account_users, "account_users_account_id_fkey")

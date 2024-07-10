@@ -25,26 +25,6 @@
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "type",
-      "type": "text"
-    },
-    {
-      "allow_nil?": false,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "web_base_url",
-      "type": "text"
-    },
-    {
-      "allow_nil?": true,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
       "references": {
         "deferrable": false,
         "destination_attribute": "id",
@@ -58,16 +38,36 @@
           "global": null,
           "strategy": null
         },
-        "name": "sources_account_id_fkey",
+        "name": "messages_session_id_fkey",
         "on_delete": null,
         "on_update": null,
         "primary_key?": true,
         "schema": "public",
-        "table": "accounts"
+        "table": "sessions"
       },
       "size": null,
-      "source": "account_id",
+      "source": "session_id",
       "type": "uuid"
+    },
+    {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "role",
+      "type": "text"
+    },
+    {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "content",
+      "type": "text"
     }
   ],
   "base_filter": null,
@@ -75,7 +75,7 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "8AA881877A9EE60DF2791EDDA3B5A76112C7806592CF45A83F3233F1CC4C0518",
+  "hash": "FA65821A4835861D7899C42B1CEF7DFE5133741BD20E4B81E3B7226877B142EE",
   "identities": [],
   "multitenancy": {
     "attribute": null,
@@ -84,5 +84,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "sources"
+  "table": "messages"
 }

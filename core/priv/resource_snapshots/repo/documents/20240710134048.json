@@ -12,16 +12,46 @@
     },
     {
       "allow_nil?": false,
+      "default": "fragment(\"(now() AT TIME ZONE 'utc')\")",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "created_at",
+      "type": "utc_datetime_usec"
+    },
+    {
+      "allow_nil?": false,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "full_name",
+      "source": "url",
+      "type": "text"
+    },
+    {
+      "allow_nil?": true,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "title",
       "type": "text"
     },
     {
       "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "content_hash",
+      "type": "binary"
+    },
+    {
+      "allow_nil?": true,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
@@ -38,15 +68,15 @@
           "global": null,
           "strategy": null
         },
-        "name": "github_repos_app_id_fkey",
+        "name": "documents_source_id_fkey",
         "on_delete": "delete",
         "on_update": null,
         "primary_key?": true,
         "schema": "public",
-        "table": "github_apps"
+        "table": "sources"
       },
       "size": null,
-      "source": "app_id",
+      "source": "source_id",
       "type": "uuid"
     }
   ],
@@ -55,23 +85,23 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "5C82AB006E6ACE1DEEF93916E095B46BBCEC735EB713323AA871162ED0F238A6",
+  "hash": "1F3BB4004285D7DD0A10B8A0978F64F6EED5F7070024B03863E75E681E12C9F0",
   "identities": [
     {
       "all_tenants?": false,
       "base_filter": null,
-      "index_name": "github_repos_unique_repo_index",
+      "index_name": "documents_unique_content_index",
       "keys": [
         {
           "type": "atom",
-          "value": "app_id"
+          "value": "url"
         },
         {
           "type": "atom",
-          "value": "full_name"
+          "value": "content_hash"
         }
       ],
-      "name": "unique_repo",
+      "name": "unique_content",
       "nils_distinct?": true,
       "where": null
     }
@@ -83,5 +113,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "github_repos"
+  "table": "documents"
 }

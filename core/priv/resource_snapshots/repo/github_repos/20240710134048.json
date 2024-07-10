@@ -17,18 +17,37 @@
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "email",
-      "type": "citext"
+      "source": "full_name",
+      "type": "text"
     },
     {
-      "allow_nil?": true,
+      "allow_nil?": false,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
-      "references": null,
+      "references": {
+        "deferrable": false,
+        "destination_attribute": "id",
+        "destination_attribute_default": null,
+        "destination_attribute_generated": null,
+        "index?": false,
+        "match_type": null,
+        "match_with": null,
+        "multitenancy": {
+          "attribute": null,
+          "global": null,
+          "strategy": null
+        },
+        "name": "github_repos_app_id_fkey",
+        "on_delete": "delete",
+        "on_update": null,
+        "primary_key?": true,
+        "schema": "public",
+        "table": "github_apps"
+      },
       "size": null,
-      "source": "hashed_password",
-      "type": "text"
+      "source": "app_id",
+      "type": "uuid"
     }
   ],
   "base_filter": null,
@@ -36,19 +55,23 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "7F081F9F91A9A5F0828CF9443B0803DF789B7573F6DEB06876944F6B887D5776",
+  "hash": "44DCE5E0733D052326B0799917F98E20B506A481CE2313967C770B0FC239DD8C",
   "identities": [
     {
       "all_tenants?": false,
       "base_filter": null,
-      "index_name": "users_unique_email_index",
+      "index_name": "github_repos_unique_repo_index",
       "keys": [
         {
           "type": "atom",
-          "value": "email"
+          "value": "app_id"
+        },
+        {
+          "type": "atom",
+          "value": "full_name"
         }
       ],
-      "name": "unique_email",
+      "name": "unique_repo",
       "nils_distinct?": true,
       "where": null
     }
@@ -60,5 +83,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "users"
+  "table": "github_repos"
 }

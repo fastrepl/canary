@@ -2,38 +2,29 @@
   "attributes": [
     {
       "allow_nil?": false,
-      "default": "nil",
+      "default": "fragment(\"gen_random_uuid()\")",
       "generated?": false,
       "primary_key?": true,
-      "references": {
-        "deferrable": false,
-        "destination_attribute": "id",
-        "destination_attribute_default": null,
-        "destination_attribute_generated": null,
-        "index?": false,
-        "match_type": null,
-        "match_with": null,
-        "multitenancy": {
-          "attribute": null,
-          "global": null,
-          "strategy": null
-        },
-        "name": "account_users_user_id_fkey",
-        "on_delete": null,
-        "on_update": null,
-        "primary_key?": true,
-        "schema": "public",
-        "table": "users"
-      },
+      "references": null,
       "size": null,
-      "source": "user_id",
+      "source": "id",
       "type": "uuid"
     },
     {
       "allow_nil?": false,
+      "default": "fragment(\"(now() AT TIME ZONE 'utc')\")",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "created_at",
+      "type": "utc_datetime_usec"
+    },
+    {
+      "allow_nil?": true,
       "default": "nil",
       "generated?": false,
-      "primary_key?": true,
+      "primary_key?": false,
       "references": {
         "deferrable": false,
         "destination_attribute": "id",
@@ -47,7 +38,7 @@
           "global": null,
           "strategy": null
         },
-        "name": "account_users_account_id_fkey",
+        "name": "feedbacks_account_id_fkey",
         "on_delete": null,
         "on_update": null,
         "primary_key?": true,
@@ -63,8 +54,8 @@
   "check_constraints": [],
   "custom_indexes": [],
   "custom_statements": [],
-  "has_create_action": true,
-  "hash": "E636830088A8F98218A5ABFA8B5CEDEB90906B5903DC448895BD19F95913EA4A",
+  "has_create_action": false,
+  "hash": "5F7B336AA53C301AA63884B706DFDF779BD1072E30A26C29960D0C637898A2D5",
   "identities": [],
   "multitenancy": {
     "attribute": null,
@@ -73,5 +64,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "account_users"
+  "table": "feedbacks"
 }
