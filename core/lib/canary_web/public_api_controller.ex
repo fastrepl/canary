@@ -1,6 +1,7 @@
 defmodule CanaryWeb.PublicApiController do
   use CanaryWeb, :controller
   require Logger
+  require Ash.Query
 
   def analytics(conn, %{"type" => type, "payload" => payload}) do
     res =
@@ -20,11 +21,36 @@ defmodule CanaryWeb.PublicApiController do
     end
   end
 
-  def search(conn, _) do
-    conn |> send_resp(200, "") |> halt()
+  def search(conn, %{"query" => query}) do
+    case Canary.Interactions.Client.find_web(conn.host) do
+      {:error, _} ->
+        conn |> send_resp(401, "") |> halt()
+
+      {:ok, client} ->
+        source_ids = client.sources |> Enum.map(& &1.id)
+
+        chunks =
+          Canary.Sources.Chunk
+          |> Ash.Query.filter(document.source_id in ^source_ids)
+          |> Ash.Query.for_read(:fts_search, %{text: query})
+          |> Ash.Query.limit(10)
+          |> Ash.read!()
+
+        ret =
+          chunks
+          |> Enum.map(fn chunk ->
+            %{
+              url: chunk.document.url,
+              excerpt: chunk.content,
+              meta: %{title: chunk.document.title}
+            }
+          end)
+
+        conn |> send_resp(200, Jason.encode!(ret)) |> halt()
+    end
   end
 
-  def ask(conn, %{"id" => _id, "content" => _content}) do
+  def ask(conn, %{"id" => id, "query" => query}) do
     conn =
       conn
       |> put_resp_content_type("text/event-stream")
@@ -32,10 +58,11 @@ defmodule CanaryWeb.PublicApiController do
       |> put_resp_header("connection", "keep-alive")
       |> send_chunked(200)
 
-    # {:ok, pid} = Canary.Sessions.find_or_start_session(id)
+    client = Canary.Interactions.Client.find_web!(conn.host)
+    source_ids = client.sources |> Enum.map(& &1.id)
 
-    # TODO: find client with public key
-    # GenServer.call(pid, {:submit, %{query: content}})
+    {:ok, session} = Canary.Interactions.find_or_create_session(client.account, {:web, id})
+    Canary.Interactions.Responder.run(%{session: session, source_ids: source_ids, request: query})
 
     receive_and_send(conn)
   end

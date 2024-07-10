@@ -10,8 +10,9 @@ defmodule Canary.Interactions.Responder do
 
   def run(args), do: impl().run(args)
 
-  defp impl,
-    do: Application.get_env(:canary, :responder, Canary.Interactions.Responder.LLM)
+  defp impl do
+    Application.get_env(:canary, :responder, Canary.Interactions.Responder.LLM)
+  end
 end
 
 defmodule Canary.Interactions.Responder.LLM do
@@ -30,7 +31,7 @@ defmodule Canary.Interactions.Responder.LLM do
       queries
       |> Enum.map(fn query ->
         Task.Supervisor.async_nolink(Canary.TaskSupervisor, fn ->
-          Canary.Sources.Document
+          Canary.Sources.Chunk
           |> Ash.Query.filter(source_id in ^source_ids)
           |> Ash.Query.for_read(:hybrid_search, %{text: query.text, embedding: query.embedding})
           |> Ash.Query.limit(6)

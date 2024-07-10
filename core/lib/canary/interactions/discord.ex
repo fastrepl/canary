@@ -124,7 +124,7 @@ defmodule Canary.Interactions.Discord do
   end
 
   defp find_client(guild_id, channel_id) do
-    Canary.Interactions.Client.find_discord(guild_id, channel_id)
+    Canary.Interactions.Client.find_discord!(guild_id, channel_id)
   end
 
   defp strip(s) do

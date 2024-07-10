@@ -36,7 +36,7 @@ defmodule Canary.Sources.Chunk.Migration do
       index_name => '#{@index_name}',
       table_name => '#{@table_name}',
       key_field => '#{@table_id_field}',
-      text_fields => '#{Jason.encode!(%{content: %{tokenizer: %{type: "ngram", min_gram: 1, max_gram: 5, prefix_only: false}}})}'
+      text_fields => '#{Jason.encode!(%{content: %{tokenizer: %{type: "ngram", min_gram: 2, max_gram: 5, prefix_only: false}}})}'
     );
     """)
   end

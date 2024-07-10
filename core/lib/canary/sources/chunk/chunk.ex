@@ -35,6 +35,7 @@ defmodule Canary.Sources.Chunk do
       argument :text, :string, allow_nil?: false
 
       manual Canary.Sources.Chunk.Search.fts()
+      prepare build(load: [:document])
     end
 
     read :hybrid_search do
@@ -43,6 +44,7 @@ defmodule Canary.Sources.Chunk do
       argument :threshold, :float, allow_nil?: true
 
       manual Canary.Sources.Chunk.Search.hydrid()
+      prepare build(load: [:document])
     end
   end
 
@@ -54,15 +56,6 @@ defmodule Canary.Sources.Chunk do
     define :hybrid_search,
       args: [:text, :embedding, {:optional, :threshold}],
       action: :hybrid_search
-  end
-
-  json_api do
-    type "chunk"
-
-    routes do
-      post(:fts_search, route: "/search/fts")
-      post(:hybrid_search, route: "/search/hybrid")
-    end
   end
 
   postgres do
