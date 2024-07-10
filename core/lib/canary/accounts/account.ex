@@ -54,6 +54,11 @@ defmodule Canary.Accounts.Account do
       change manage_relationship(:user, :users, type: :remove)
       change Canary.Accounts.Changes.StripeReportSeat
     end
+
+    update :update_name do
+      argument :name, :string, allow_nil?: false
+      change set_attribute(:name, expr(^arg(:name)))
+    end
   end
 
   changes do
@@ -61,6 +66,7 @@ defmodule Canary.Accounts.Account do
   end
 
   code_interface do
+    define :update_name, args: [:name], action: :update_name
     define :add_member, args: [:user], action: :add_member
     define :remove_member, args: [:user], action: :remove_member
   end
