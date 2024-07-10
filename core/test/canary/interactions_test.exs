@@ -28,16 +28,32 @@ defmodule Canary.Test.Interactions do
   end
 
   describe "client" do
-    test "create / find" do
+    test "create and find" do
       account = account_fixture()
-      source = Source.create!(account, :docusaurus, "https://example.com", "/docs")
 
-      client_1 = Client.create_discord!(source, 1, 2)
+      client_1 = Client.create_web!(account, "https://example.com")
+      client_2 = Client.create_web!(account, "https://getcanary.dev")
+      client_3 = Client.create_discord!(account, 1, 2)
 
-      {:ok, client_2} = Client.find_discord(1, 2)
-      assert client_1.id == client_2.id
+      assert client_1.id != client_2.id
+      assert client_1.id != client_3.id
 
-      {:error, _} = Client.find_discord(3, 3)
+      client = Client.find_web!("https://example.com")
+      assert client.id == client_1.id
+      assert client.account.id == account.id
+      assert client.sources |> length() == 0
+    end
+
+    test "modify sources" do
+      account = account_fixture()
+      source = Source.create_web!(account, "https://example.com")
+
+      client = Client.create_web!(account, "https://example.com") |> Ash.load!(:sources)
+      client = client |> Ash.load!(:sources)
+      assert client.sources |> length() == 0
+
+      client = Client.add_sources!(client, [source]) |> Ash.load!(:sources)
+      assert client.sources |> length() == 1
     end
   end
 end

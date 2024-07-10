@@ -7,18 +7,18 @@
       "source": "id",
       "references": null,
       "allow_nil?": false,
-      "primary_key?": true,
-      "generated?": false
+      "generated?": false,
+      "primary_key?": true
     },
     {
-      "default": "fragment(\"(now() AT TIME ZONE 'utc')\")",
+      "default": "nil",
       "size": null,
-      "type": "utc_datetime_usec",
-      "source": "created_at",
+      "type": "bigint",
+      "source": "installation_id",
       "references": null,
       "allow_nil?": false,
-      "primary_key?": false,
-      "generated?": false
+      "generated?": false,
+      "primary_key?": false
     },
     {
       "default": "nil",
@@ -26,43 +26,43 @@
       "type": "uuid",
       "source": "account_id",
       "references": {
-        "name": "feedbacks_account_id_fkey",
+        "name": "github_apps_account_id_fkey",
         "table": "accounts",
-        "on_delete": null,
-        "primary_key?": true,
         "schema": "public",
+        "on_delete": "delete",
         "multitenancy": {
           "global": null,
-          "strategy": null,
-          "attribute": null
+          "attribute": null,
+          "strategy": null
         },
+        "primary_key?": true,
         "destination_attribute": "id",
-        "on_update": null,
         "deferrable": false,
-        "match_with": null,
-        "match_type": null,
         "index?": false,
+        "match_type": null,
+        "match_with": null,
+        "on_update": null,
         "destination_attribute_default": null,
         "destination_attribute_generated": null
       },
       "allow_nil?": true,
-      "primary_key?": false,
-      "generated?": false
+      "generated?": false,
+      "primary_key?": false
     }
   ],
-  "table": "feedbacks",
-  "hash": "5AD4E0304E40C12D7DCDBBB5BE8E16C3BE7BFCCB4903803FDB951BF076902387",
+  "table": "github_apps",
+  "hash": "D37021F3ED8AAA584A3680F0CC3051405B806EF723F6B37F47380390690632EF",
   "repo": "Elixir.Canary.Repo",
   "identities": [],
   "schema": null,
-  "check_constraints": [],
-  "custom_indexes": [],
   "multitenancy": {
     "global": null,
-    "strategy": null,
-    "attribute": null
+    "attribute": null,
+    "strategy": null
   },
   "base_filter": null,
+  "check_constraints": [],
+  "custom_indexes": [],
   "custom_statements": [],
-  "has_create_action": false
+  "has_create_action": true
 }

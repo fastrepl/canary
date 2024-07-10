@@ -61,8 +61,7 @@ defmodule Canary.Repo.Migrations.InitResources do
         default: fragment("(now() AT TIME ZONE 'utc')")
 
       add :type, :text, null: false
-      add :base_url, :text, null: false
-      add :base_path, :text, null: false
+      add :web_base_url, :text, null: false
       add :account_id, :uuid
     end
 
@@ -96,8 +95,7 @@ defmodule Canary.Repo.Migrations.InitResources do
     create table(:github_repos, primary_key: false) do
       add :id, :uuid, null: false, default: fragment("gen_random_uuid()"), primary_key: true
       add :full_name, :text, null: false
-      add :app_id, :uuid
-      add :source_id, :uuid
+      add :app_id, :uuid, null: false
     end
 
     create table(:github_apps, primary_key: false) do
@@ -112,14 +110,6 @@ defmodule Canary.Repo.Migrations.InitResources do
                type: :uuid,
                prefix: "public",
                on_delete: :delete_all
-             )
-
-      modify :source_id,
-             references(:sources,
-               column: :id,
-               name: "github_repos_source_id_fkey",
-               type: :uuid,
-               prefix: "public"
              )
     end
 
@@ -149,7 +139,8 @@ defmodule Canary.Repo.Migrations.InitResources do
         null: false,
         default: fragment("(now() AT TIME ZONE 'utc')")
 
-      add :absolute_path, :text
+      add :url, :text, null: false
+      add :title, :text
       add :content_hash, :binary, null: false
 
       add :source_id,
@@ -162,7 +153,7 @@ defmodule Canary.Repo.Migrations.InitResources do
           )
     end
 
-    create unique_index(:documents, [:content_hash], name: "documents_unique_content_index")
+    create unique_index(:documents, [:url, :content_hash], name: "documents_unique_content_index")
 
     create table(:clients, primary_key: false) do
       add :id, :uuid, null: false, default: fragment("gen_random_uuid()"), primary_key: true
@@ -172,21 +163,35 @@ defmodule Canary.Repo.Migrations.InitResources do
         default: fragment("(now() AT TIME ZONE 'utc')")
 
       add :type, :text, null: false
+      add :web_host_url, :text
       add :discord_server_id, :bigint
       add :discord_channel_id, :bigint
+      add :account_id, :uuid, null: false
+    end
 
-      add :source_id,
-          references(:sources,
+    create table(:client_sources, primary_key: false) do
+      add :client_id,
+          references(:clients,
             column: :id,
-            name: "clients_source_id_fkey",
+            name: "client_sources_client_id_fkey",
             type: :uuid,
             prefix: "public",
             on_delete: :delete_all
           ),
+          primary_key: true,
+          null: false
+
+      add :source_id,
+          references(:sources,
+            column: :id,
+            name: "client_sources_source_id_fkey",
+            type: :uuid,
+            prefix: "public",
+            on_delete: :delete_all
+          ),
+          primary_key: true,
           null: false
     end
-
-    create unique_index(:clients, [:source_id, :type], name: "clients_unique_client_index")
 
     create table(:chunks, primary_key: false) do
       add :id, :bigserial, null: false, primary_key: true
@@ -260,6 +265,22 @@ defmodule Canary.Repo.Migrations.InitResources do
              )
     end
 
+    alter table(:clients) do
+      modify :account_id,
+             references(:accounts,
+               column: :id,
+               name: "clients_account_id_fkey",
+               type: :uuid,
+               prefix: "public"
+             )
+    end
+
+    create unique_index(:clients, [:discord_server_id, :discord_channel_id],
+             name: "clients_unique_discord_index"
+           )
+
+    create unique_index(:clients, [:web_host_url], name: "clients_unique_web_index")
+
     alter table(:billings) do
       modify :account_id,
              references(:accounts,
@@ -315,6 +336,18 @@ defmodule Canary.Repo.Migrations.InitResources do
       modify :account_id, :uuid
     end
 
+    drop_if_exists unique_index(:clients, [:web_host_url], name: "clients_unique_web_index")
+
+    drop_if_exists unique_index(:clients, [:discord_server_id, :discord_channel_id],
+                     name: "clients_unique_discord_index"
+                   )
+
+    drop constraint(:clients, "clients_account_id_fkey")
+
+    alter table(:clients) do
+      modify :account_id, :uuid
+    end
+
     drop constraint(:feedbacks, "feedbacks_account_id_fkey")
 
     alter table(:feedbacks) do
@@ -351,15 +384,15 @@ defmodule Canary.Repo.Migrations.InitResources do
 
     drop table(:chunks)
 
-    drop_if_exists unique_index(:clients, [:source_id, :type],
-                     name: "clients_unique_client_index"
-                   )
+    drop constraint(:client_sources, "client_sources_client_id_fkey")
 
-    drop constraint(:clients, "clients_source_id_fkey")
+    drop constraint(:client_sources, "client_sources_source_id_fkey")
+
+    drop table(:client_sources)
 
     drop table(:clients)
 
-    drop_if_exists unique_index(:documents, [:content_hash],
+    drop_if_exists unique_index(:documents, [:url, :content_hash],
                      name: "documents_unique_content_index"
                    )
 
@@ -380,10 +413,7 @@ defmodule Canary.Repo.Migrations.InitResources do
 
     drop constraint(:github_repos, "github_repos_app_id_fkey")
 
-    drop constraint(:github_repos, "github_repos_source_id_fkey")
-
     alter table(:github_repos) do
-      modify :source_id, :uuid
       modify :app_id, :uuid
     end
 

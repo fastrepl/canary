@@ -6,22 +6,39 @@ defmodule Canary.Interactions.Client do
   attributes do
     uuid_primary_key :id
     create_timestamp :created_at
-    attribute :type, :atom, constraints: [one_of: [:discord]], allow_nil?: false
+    attribute :type, :atom, constraints: [one_of: [:web, :discord]], allow_nil?: false
+
+    attribute :web_host_url, :string, allow_nil?: true
 
     attribute :discord_server_id, :integer, allow_nil?: true
     attribute :discord_channel_id, :integer, allow_nil?: true
   end
 
   identities do
-    identity :unique_client, [:source_id, :type]
+    identity :unique_web, [:web_host_url]
+    identity :unique_discord, [:discord_server_id, :discord_channel_id]
   end
 
   relationships do
-    belongs_to :source, Canary.Sources.Source, allow_nil?: false
+    belongs_to :account, Canary.Accounts.Account, allow_nil?: false
+
+    many_to_many :sources, Canary.Sources.Source do
+      through Canary.Interactions.ClientSource
+    end
   end
 
   actions do
     defaults [:read, :destroy]
+
+    read :find_web do
+      argument :web_host_url, :string, allow_nil?: false
+
+      filter expr(type == :web)
+      filter expr(web_host_url == ^arg(:web_host_url))
+
+      get? true
+      prepare build(load: [:account, :sources])
+    end
 
     read :find_discord do
       argument :discord_server_id, :integer, allow_nil?: false
@@ -32,37 +49,72 @@ defmodule Canary.Interactions.Client do
       filter expr(discord_channel_id == ^arg(:discord_channel_id))
 
       get? true
-      prepare build(load: [:source])
+      prepare build(load: [:account, :sources])
+    end
+
+    create :create_web do
+      argument :account, :map, allow_nil?: false
+      argument :web_host_url, :string, allow_nil?: false
+
+      change set_attribute(:type, :web)
+      change manage_relationship(:account, :account, type: :append)
+      change set_attribute(:web_host_url, expr(^arg(:web_host_url)))
     end
 
     create :create_discord do
-      argument :source, :map, allow_nil?: false
+      argument :account, :map, allow_nil?: false
       argument :discord_server_id, :integer, allow_nil?: false
       argument :discord_channel_id, :integer, allow_nil?: false
 
       change set_attribute(:type, :discord)
-      change manage_relationship(:source, :source, type: :append)
+      change manage_relationship(:account, :account, type: :append)
       change set_attribute(:discord_server_id, expr(^arg(:discord_server_id)))
       change set_attribute(:discord_channel_id, expr(^arg(:discord_channel_id)))
+    end
+
+    update :add_sources do
+      require_atomic? false
+
+      argument :sources, {:array, :map}, allow_nil?: true
+      change manage_relationship(:sources, :sources, type: :append)
+    end
+
+    update :remove_sources do
+      require_atomic? false
+
+      argument :sources, {:array, :map}, allow_nil?: true
+      change manage_relationship(:sources, :sources, type: :remove)
     end
   end
 
   code_interface do
+    define :find_web,
+      args: [:web_host_url],
+      action: :find_web
+
     define :find_discord,
       args: [:discord_server_id, :discord_channel_id],
       action: :find_discord
 
+    define :create_web,
+      args: [:account, :web_host_url],
+      action: :create_web
+
     define :create_discord,
-      args: [:source, :discord_server_id, :discord_channel_id],
+      args: [:account, :discord_server_id, :discord_channel_id],
       action: :create_discord
+
+    define :add_sources,
+      args: [:sources],
+      action: :add_sources
+
+    define :remove_sources,
+      args: [:sources],
+      action: :remove_sources
   end
 
   postgres do
     table "clients"
     repo Canary.Repo
-
-    references do
-      reference :source, on_delete: :delete
-    end
   end
 end

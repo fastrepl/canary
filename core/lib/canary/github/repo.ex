@@ -15,8 +15,7 @@ defmodule Canary.Github.Repo do
   end
 
   relationships do
-    belongs_to :app, Canary.Github.App
-    belongs_to :source, Canary.Sources.Source
+    belongs_to :app, Canary.Github.App, allow_nil?: false
   end
 
   actions do

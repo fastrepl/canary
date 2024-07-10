@@ -7,12 +7,13 @@ defmodule Canary.Sources.Document do
     uuid_primary_key :id, public?: true
     create_timestamp :created_at, public?: true
 
-    attribute :absolute_path, :string, allow_nil?: true, public?: true
+    attribute :url, :string, allow_nil?: false, public?: true
+    attribute :title, :string, allow_nil?: true, public?: true
     attribute :content_hash, :binary, allow_nil?: false
   end
 
   identities do
-    identity :unique_content, [:content_hash]
+    identity :unique_content, [:url, :content_hash]
   end
 
   relationships do
@@ -20,26 +21,17 @@ defmodule Canary.Sources.Document do
     has_many :chunks, Canary.Sources.Chunk
   end
 
-  calculations do
-    calculate :url, :string, Canary.Sources.Calculations.PathToUrl
-  end
-
   actions do
-    defaults [:destroy]
-
-    read :read do
-      primary? true
-      prepare build(load: [:url])
-    end
+    defaults [:read, :destroy]
 
     read :find do
       argument :source_id, :uuid, allow_nil?: false
-      argument :absolute_path, :string, allow_nil?: true
+      argument :url, :string, allow_nil?: false
       argument :content_hash, :string, allow_nil?: false
 
       get? true
       filter expr(source_id == ^arg(:source_id))
-      filter expr(absolute_path == ^arg(:absolute_path))
+      filter expr(url == ^arg(:url))
       filter expr(content_hash == ^arg(:content_hash))
     end
 
@@ -47,11 +39,13 @@ defmodule Canary.Sources.Document do
       transaction? true
 
       argument :source, :map, allow_nil?: false
-      argument :absolute_path, :string, allow_nil?: true
+      argument :url, :string, allow_nil?: false
+      argument :title, :string, allow_nil?: true
       argument :content, :string, allow_nil?: false
 
       change manage_relationship(:source, :source, type: :append)
-      change set_attribute(:absolute_path, expr(^arg(:absolute_path)))
+      change set_attribute(:title, expr(^arg(:title)))
+      change set_attribute(:url, expr(^arg(:url)))
 
       change {
         Canary.Sources.Changes.Hash,
@@ -64,7 +58,7 @@ defmodule Canary.Sources.Document do
 
   code_interface do
     define :ingest_text,
-      args: [:source, :absolute_path, :content],
+      args: [:source, :url, :title, :content],
       action: :ingest_text
   end
 

@@ -12,7 +12,7 @@ defmodule Canary.Test.Sources do
 
   setup do
     account = account_fixture()
-    source = Source.create!(account, :docusaurus, "https://example.com", "/docs")
+    source = Source.create_web!(account, "https://example.com")
 
     %{account: account, source: source}
   end
@@ -22,9 +22,7 @@ defmodule Canary.Test.Sources do
       Canary.AI.Mock
       |> expect(:embedding, 1, fn _ -> {:ok, [Enum.to_list(1..384)]} end)
 
-      doc = Document.ingest_text!(source, "/docs/intro.md", "Hello, world!")
-      doc = doc |> Ash.load!(:url)
-      assert doc.url == "https://example.com/docs/intro"
+      Document.ingest_text!(source, "url_1", "title_1", "t")
 
       assert Canary.Repo.all(Document) |> Enum.count() == 0 + 1
       assert Canary.Repo.all(Chunk) |> Enum.count() == 0 + 1
@@ -36,7 +34,7 @@ defmodule Canary.Test.Sources do
       Canary.AI.Mock
       |> expect(:embedding, 1, fn _ -> {:ok, [Enum.to_list(1..384)]} end)
 
-      Document.ingest_text!(source, "/docs/intro.md", "t")
+      Document.ingest_text!(source, "url_1", "title_1", "t")
 
       {:ok, chunks} = Chunk.hybrid_search("t", Enum.to_list(1..384), 0)
       assert length(chunks) == 1
@@ -46,9 +44,9 @@ defmodule Canary.Test.Sources do
       Canary.AI.Mock
       |> expect(:embedding, 3, fn _ -> {:ok, [Enum.to_list(1..384)]} end)
 
-      Document.ingest_text!(source, "/docs/intro.md", "ttt")
-      Document.ingest_text!(source, "/docs/intro.md", "a bbb bbb cddbb")
-      Document.ingest_text!(source, "/docs/intro.md", "ccc")
+      Document.ingest_text!(source, "url_1", "title_1", "ttt")
+      Document.ingest_text!(source, "url_2", "title_2", "a bbb bbb cddbb")
+      Document.ingest_text!(source, "url_3", "title_3", "ccc")
 
       {:ok, [chunk]} = Chunk.fts_search("bbb")
       assert chunk.content == "a <mark>bbb</mark> <mark>bbb</mark> cdd<mark>bb</mark>"

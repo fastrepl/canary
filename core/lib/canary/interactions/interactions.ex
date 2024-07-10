@@ -2,10 +2,11 @@ defmodule Canary.Interactions do
   use Ash.Domain
 
   resources do
-    resource Canary.Interactions.Client
     resource Canary.Interactions.Session
     resource Canary.Interactions.Message
     resource Canary.Interactions.Feedback
+    resource Canary.Interactions.Client
+    resource Canary.Interactions.ClientSource
   end
 
   alias Canary.Interactions.Session
