@@ -21,8 +21,14 @@ export default defineConfig({
           label: "Start Here",
           items: [
             { label: "README", link: "/intro/readme/" },
-            { label: "Self-host", link: "/intro/self-host/" },
-            { label: "Cloud", link: "/intro/cloud/" },
+            { label: "Hosted vs Self-host", link: "/intro/hosting/" },
+          ],
+        },
+        {
+          label: "Analytics",
+          items: [
+            { label: "Overview", link: "/analytics/overview/" },
+            { label: "Tracker", link: "/analytics/tracker/" },
           ],
         },
         {
@@ -30,8 +36,6 @@ export default defineConfig({
           items: [
             { label: "Overview", link: "/sources/overview/" },
             { label: "Website", link: "/sources/website/" },
-            { label: "Github", link: "/sources/github/" },
-            { label: "Notion", link: "/sources/notion/" },
           ],
         },
         {
@@ -40,7 +44,6 @@ export default defineConfig({
             { label: "Overview", link: "/clients/overview/" },
             { label: "Discord", link: "/clients/discord/" },
             { label: "Website", link: "/clients/website/" },
-            { label: "Slack", link: "/clients/slack/" },
           ],
         },
         {
