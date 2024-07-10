@@ -66,7 +66,7 @@ defmodule CanaryWeb.AuthLive.AuthForm do
         <button class="btn btn-neutral" type="submit">Login</button>
 
         <%= if Application.get_env(:canary, :github)[:enabled?] do %>
-          <button class="btn" type="button" phx-click="github" phx-target={@myself}>
+          <button class="btn fill-neutual" type="button" phx-click="github" phx-target={@myself}>
             <svg height="18" viewBox="0 0 16 16" width="32px">
               <path
                 fill-rule="evenodd"

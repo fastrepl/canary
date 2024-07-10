@@ -171,7 +171,7 @@ export class CanaryPanel extends LitElement {
       div.input-wrapper {
         display: flex;
         align-items: center;
-        gap: 8px;
+        justify-content: space-between;
         color: #9f9f9f;
         margin-bottom: 8px;
       }

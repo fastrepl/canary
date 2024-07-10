@@ -14,7 +14,7 @@ module.exports = {
     "../deps/ash_authentication_phoenix/**/*.*ex",
   ],
   daisyui: {
-    themes: ["dark", "light"],
+    themes: ["cmyk"],
   },
   plugins: [
     require("daisyui"),
