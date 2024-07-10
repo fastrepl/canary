@@ -2,7 +2,22 @@ defmodule Canary.Test.Reader do
   use ExUnit.Case, async: true
 
   describe "default" do
-    test "simple" do
+    test "title" do
+      html = """
+      <!doctype html>
+      <html>
+        <head>
+          <title>Canary</title>
+        </head>
+        <body>
+        </body>
+      </html>
+      """
+
+      assert Canary.Reader.title_from_html(html) == "Canary"
+    end
+
+    test "content" do
       html = """
       <!doctype html>
       <html>
@@ -27,7 +42,7 @@ defmodule Canary.Test.Reader do
         [Hex package](https://hex.pm/packages/floki)
         """)
 
-      assert Canary.Reader.html_to_md(html) == md
+      assert Canary.Reader.markdown_from_html(html) == md
     end
   end
 end

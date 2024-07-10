@@ -36,7 +36,7 @@ defmodule CanaryWeb.Dev.ReaderLive do
         params["url"]
         |> Req.get!()
         |> Map.get(:body)
-        |> Canary.Reader.html_to_md()
+        |> Canary.Reader.markdown_from_html()
         |> Canary.Reader.chunk_markdown()
 
       {:noreply, socket |> assign(url: params["url"], chunks: chunks)}

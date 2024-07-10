@@ -1,5 +1,17 @@
 defmodule Canary.Reader do
-  def html_to_md(html) do
+  def title_from_html(html) do
+    case Floki.parse_document(html) do
+      {:ok, document} ->
+        document
+        |> Floki.find("head title")
+        |> Floki.text()
+
+      _ ->
+        nil
+    end
+  end
+
+  def markdown_from_html(html) do
     html
     |> Canary.Native.html_to_md()
     |> String.trim()
