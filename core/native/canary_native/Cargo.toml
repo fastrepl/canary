@@ -12,9 +12,9 @@ crate-type = ["cdylib"]
 [dependencies]
 rustler = "0.32.1"
 anyhow = "1.0"
-text-splitter = { version = "0.13.3", features = ["tiktoken-rs", "markdown"] }
+text-splitter = { version = "0.14.1", features = ["tiktoken-rs", "markdown"] }
 tiktoken-rs = "0.5.9"
-htmd = "0.1.5"
+htmd = "0.1.6"
 git2 = "0.18.3"
 
 [dev-dependencies]
