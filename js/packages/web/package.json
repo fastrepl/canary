@@ -1,9 +1,10 @@
 {
-  "name": "@getcanary/search",
-  "version": "0.0.4",
+  "name": "@getcanary/web",
+  "version": "0.0.2",
   "type": "module",
-  "main": "dist/canary-search.js",
-  "module": "dist/canary-search.js",
+  "files": [
+    "components"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
