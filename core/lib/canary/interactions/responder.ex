@@ -1,25 +1,25 @@
 defmodule Canary.Interactions.Responder do
-  @type args :: %{
-          request: String.t(),
-          session: any(),
-          source_ids: list(any()),
-          handle_delta: function()
-        }
+  alias Canary.Interactions.Responder
 
-  @callback run(args()) :: any()
+  @callback run(
+              session :: any(),
+              query :: String.t(),
+              source_ids :: list(any()),
+              handle_delta :: function()
+            ) :: {:ok, any()} | {:error, any()}
 
-  def run(args), do: impl().run(args)
-
-  defp impl do
-    Application.get_env(:canary, :responder, Canary.Interactions.Responder.LLM)
+  def run(session, query, source_ids, handle_delta \\ nil) do
+    impl().run(session, query, source_ids, handle_delta)
   end
+
+  defp impl, do: Application.get_env(:canary, :responder, Responder.Default)
 end
 
-defmodule Canary.Interactions.Responder.LLM do
+defmodule Canary.Interactions.Responder.Default do
   @behaviour Canary.Interactions.Responder
   require Ash.Query
 
-  def run(%{session: session, source_ids: source_ids, request: request} = args) do
+  def run(session, request, source_ids, handle_delta) do
     Task.Supervisor.start_child(Canary.TaskSupervisor, fn ->
       Canary.Interactions.Message.add_user!(session, request)
     end)
@@ -32,7 +32,7 @@ defmodule Canary.Interactions.Responder.LLM do
       |> Enum.map(fn query ->
         Task.Supervisor.async_nolink(Canary.TaskSupervisor, fn ->
           Canary.Sources.Chunk
-          |> Ash.Query.filter(source_id in ^source_ids)
+          |> Ash.Query.filter(document.source_id in ^source_ids)
           |> Ash.Query.for_read(:hybrid_search, %{text: query.text, embedding: query.embedding})
           |> Ash.Query.limit(6)
           |> Ash.read!()
@@ -43,6 +43,7 @@ defmodule Canary.Interactions.Responder.LLM do
       |> Enum.uniq_by(& &1.id)
 
     {:ok, docs} = Canary.Reranker.run(request, docs, top_n: 6, threshold: 0.4)
+    safe_handel_delta(handle_delta, %{type: :resources, resources: docs})
 
     messages = [
       %{
@@ -62,13 +63,15 @@ defmodule Canary.Interactions.Responder.LLM do
       }
     ]
 
+    {:ok, pid} = Agent.start_link(fn -> "" end)
+
     {:ok, completion} =
       Canary.AI.chat(
         %{
           model: model,
           messages: messages,
           max_tokens: 300,
-          stream: args[:handle_delta] != nil
+          stream: handle_delta != nil
         },
         callback: fn data ->
           case data do
@@ -76,11 +79,13 @@ defmodule Canary.Interactions.Responder.LLM do
               :ok
 
             %{"choices" => [%{"delta" => %{"content" => content}}]} ->
-              args[:handle_delta].(content)
+              handle_delta.(%{type: :progress, content: content})
+              Agent.update(pid, &(&1 <> content))
           end
         end
       )
 
+    completion = if completion == "", do: Agent.get(pid, & &1), else: completion
     response = if docs != [], do: "#{completion}\n\n#{render_sources(docs)}", else: completion
 
     Task.Supervisor.start_child(Canary.TaskSupervisor, fn ->
@@ -119,10 +124,14 @@ defmodule Canary.Interactions.Responder.LLM do
 
   defp render_sources(docs) do
     docs
-    |> Enum.map(& &1.source_url)
+    |> Enum.map(& &1.document.url)
     |> Enum.reject(&is_nil/1)
     |> Enum.uniq()
     |> Enum.map(fn url -> "- <#{url}>" end)
     |> Enum.join("\n")
+  end
+
+  defp safe_handel_delta(func, arg) do
+    if is_function(func, 1), do: func.(arg), else: :noop
   end
 end
