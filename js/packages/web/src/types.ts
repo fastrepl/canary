@@ -17,13 +17,3 @@ declare global {
     "hero-question-mark-circle": HeroIconQuestionMarkCircle;
   }
 }
-
-export type SearchResultItem = {
-  url: string;
-  excerpt: string;
-  meta: SearchResultMeta;
-};
-
-type SearchResultMeta = {
-  title: string;
-};

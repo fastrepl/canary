@@ -1,8 +1,10 @@
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
+import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import { Task } from "@lit/task";
 
-import type { SearchResultItem } from "./types";
+import { highlighter } from "@nlux/highlighter";
+import { createMarkdownStreamParser } from "@nlux/markdown";
 
 import "./icons/magnifying-glass";
 import "./icons/question-mark-circle";
@@ -13,14 +15,21 @@ import "./canary-toggle";
 import "./canary-input-search";
 import "./canary-input-ask";
 
+import { GITHUB_REPO_URL } from "./constants";
+import { randomInteger } from "./utils";
+
+import * as core from "./core";
+import type { SearchResultItem } from "./core";
+import { content } from "./styles";
+
 @customElement("canary-panel")
 export class CanaryPanel extends LitElement {
   @property() endpoint = "";
-  @property() public_key = "";
   @property() query = "";
   @property() mode = "Search";
   @state() askResult = "";
   @state() searchResult: SearchResultItem[] = [];
+  @state() responseContainer: HTMLDivElement = document.createElement("div");
 
   private _task = new Task(this, {
     task: async ([mode, query], { signal }) => {
@@ -28,50 +37,30 @@ export class CanaryPanel extends LitElement {
         return [];
       }
 
-      const op = mode === "Ask" ? "ask" : "search";
-
-      const url = `${this.endpoint}/api/v1/${op}`;
-      const params = {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ query, public_key: this.public_key }),
-        signal,
-      };
-
-      const response = await fetch(url, params);
-      if (!response.ok) {
-        throw new Error();
+      if (mode === "Search") {
+        const result = await core.search(this.endpoint, this.query, signal);
+        return result;
       }
 
-      if (op === "search") {
-        return response.json();
+      const parser = createMarkdownStreamParser(this.responseContainer, {
+        syntaxHighlighter: highlighter,
+      });
+
+      if (mode === "Ask") {
+        await core.ask(
+          this.endpoint,
+          randomInteger(),
+          this.query,
+          (delta) => {
+            if (delta.type === "progress") {
+              parser.next(delta.content);
+            }
+          },
+          signal,
+        );
+
+        return this.askResult;
       }
-
-      const reader = response.body
-        ?.pipeThrough(new TextDecoderStream())
-        .getReader();
-
-      if (!reader) {
-        throw new Error();
-      }
-
-      let completion = "";
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) {
-          break;
-        }
-
-        const items = value
-          .split("\n\n")
-          .flatMap((s) => s.split("data: "))
-          .filter(Boolean);
-
-        completion += items.join("");
-        this.askResult = completion;
-      }
-
-      return this.askResult;
     },
     args: () => [this.mode, this.query],
   });
@@ -106,10 +95,7 @@ export class CanaryPanel extends LitElement {
         <div class="results">${this.render_results()}</div>
 
         <div class="logo">
-          Powered by
-          <a href="https://github.com/fastrepl/canary" target="_blank">
-            🐤 Canary
-          </a>
+          Powered by <a href=${GITHUB_REPO_URL} target="_blank">🐤 Canary</a>
         </div>
       </div>
     `;
@@ -121,7 +107,11 @@ export class CanaryPanel extends LitElement {
         initial: () => nothing,
         pending: () =>
           this.mode === "Search"
-            ? html` ${Array(5).fill(html` <div class="row skeleton"></div> `)} `
+            ? html`
+                ${Array(Math.round(Math.random() * 3) + 2).fill(
+                  html`<div class="row skeleton"></div>`,
+                )}
+              `
             : html`
                 <div class="messages"></div>
                   <div class="user-message">
@@ -130,7 +120,7 @@ export class CanaryPanel extends LitElement {
                   </div>
                   <div class="ai-message">
                     <hero-light-bulb class="icon"></hero-light-bulb>
-                    <span>${this.askResult}</span>  
+                    ${this.responseContainer}
                   </div>
                 </div>
               `,
@@ -140,14 +130,14 @@ export class CanaryPanel extends LitElement {
                 items.length === 0
                   ? nothing
                   : items.map(
-                      ({ url, excerpt, meta }) => html`
+                      ({ title, url, excerpt }) => html`
                         <a class="row" href="${url}">
-                          <span class="title">${meta.title}</span>
-                          <span class="preview">${excerpt}</span>
+                          <span class="title">${title}</span>
+                          <span class="preview">${unsafeHTML(excerpt)}</span>
                         </a>
                       `,
                     )
-            : (completion: string) => html`
+            : () => html`
                 <div class="messages"></div>
                   <div class="user-message">
                     <hero-user class="icon"></hero-user>
@@ -155,14 +145,16 @@ export class CanaryPanel extends LitElement {
                   </div>
                   <div class="ai-message">
                     <hero-light-bulb class="icon"></hero-light-bulb>
-                    <span>${completion}</span>  
+                    ${this.responseContainer}
                   </div>
                 </div>
                 `,
-        error: (_error) =>
-          html`<div class="row error">
+        error: (error) => {
+          console.error(error);
+          return html` <div class="row error">
             <span class="title">Oops, something went wrong!</span>
-          </div>`,
+          </div>`;
+        },
       })}
     `;
   }
@@ -176,6 +168,7 @@ export class CanaryPanel extends LitElement {
   }
 
   static styles = [
+    content,
     css`
       div.container {
         padding: 8px 16px;
@@ -200,6 +193,7 @@ export class CanaryPanel extends LitElement {
 
         display: flex;
         flex-direction: column;
+        gap: 4px;
         text-decoration: none;
         color: inherit;
       }
@@ -251,11 +245,17 @@ export class CanaryPanel extends LitElement {
       }
 
       .title {
+        font-weight: 500;
         font-size: 16px;
       }
 
       .preview {
         font-size: 14px;
+      }
+
+      mark {
+        background-color: var(--canary-brand);
+        color: black;
       }
     `,
     css`

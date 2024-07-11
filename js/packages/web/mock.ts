@@ -4,16 +4,16 @@ const mocks: MockHandler[] = [
   {
     pattern: "/api/v1/search",
     handle: (req, res) => {
-      const items = Array(Math.round(Math.random() * 20)).fill({
+      const items = Array(Math.round(Math.random() * 5 + 5)).fill({
+        title: "123",
         url: "https://example.com",
         excerpt: "123",
-        meta: { title: "123" },
       });
 
       setTimeout(() => {
         res.setHeader("Content-Type", "application/json");
         res.end(JSON.stringify(items));
-      }, Math.random() * 2500);
+      }, Math.random() * 500);
     },
   },
   {
@@ -25,27 +25,21 @@ const mocks: MockHandler[] = [
         Connection: "keep-alive",
       });
 
-      const generateChunk = () => {
-        const length = Math.random() < 0.5 ? 2 : 4;
-        return Array(length)
-          .fill(0)
-          .map(() => String.fromCharCode(97 + Math.floor(Math.random() * 26)))
-          .join("");
-      };
-
-      const size = Math.floor(Math.random() * 30) + 30;
+      const chunkSize = Math.floor(Math.random() * 3) + 3; // 3-5 characters
       let index = 0;
 
       const interval = setInterval(() => {
-        if (index < size) {
-          const chunk = generateChunk();
-          res.write(`data: ${chunk} \n\n`);
-          index++;
+        if (index < RESPONSE.length) {
+          const chunk = RESPONSE.slice(index, index + chunkSize);
+          res.write(
+            `data: ${JSON.stringify({ type: "progress", content: chunk })} \n\n`,
+          );
+          index += chunkSize;
         } else {
           clearInterval(interval);
           res.end();
         }
-      }, Math.random() * 50);
+      }, Math.random() * 60);
 
       req.on("close", () => {
         clearInterval(interval);
@@ -54,5 +48,27 @@ const mocks: MockHandler[] = [
     },
   },
 ];
+
+const RESPONSE = `
+# The Whimsical World of Flibbertigibbets
+
+## Introduction
+
+In the land of Zorkle, flibbertigibbets roam free, spreading their peculiar brand of gobbledygook wherever they wander. This response will explore the fascinating realm of these nonsensical creatures.
+
+## Key Characteristics of Flibbertigibbets
+
+1. **Appearance**
+   - Resemble a cross between a turnip and a disco ball
+   - Sport iridescent feathers made of crystallized bubblegum
+
+2. **Behavior**
+   - Communicate through interpretive dance and armpit noises
+   - Have a peculiar fondness for wearing monocles on their elbows
+
+3. **Diet**
+   - Subsist primarily on a diet of rainbow-flavored air
+   - Occasionally indulge in gourmet clouds with a side of bottled giggles
+`.trim();
 
 export default mocks;
