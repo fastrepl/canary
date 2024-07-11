@@ -2,10 +2,13 @@ import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { Task } from "@lit/task";
 
-import { type SearchResultItem } from "./types";
+import type { SearchResultItem } from "./types";
 
 import "./icons/magnifying-glass";
 import "./icons/question-mark-circle";
+import "./icons/light-bulb";
+import "./icons/user";
+
 import "./canary-toggle";
 import "./canary-input-search";
 import "./canary-input-ask";
@@ -120,9 +123,15 @@ export class CanaryPanel extends LitElement {
           this.mode === "Search"
             ? html` ${Array(5).fill(html` <div class="row skeleton"></div> `)} `
             : html`
-                <div class="row">
-                  <span class="title">${this.query}</span>
-                  <span class="preview">${this.askResult}</span>
+                <div class="messages"></div>
+                  <div class="user-message">
+                    <hero-user class="icon"></hero-user>
+                    <span>${this.query}</span>  
+                  </div>
+                  <div class="ai-message">
+                    <hero-light-bulb class="icon"></hero-light-bulb>
+                    <span>${this.askResult}</span>  
+                  </div>
                 </div>
               `,
         complete:
@@ -139,11 +148,17 @@ export class CanaryPanel extends LitElement {
                       `,
                     )
             : (completion: string) => html`
-                <div class="row">
-                  <span class="title">${this.query}</span>
-                  <span class="preview">${completion}</span>
+                <div class="messages"></div>
+                  <div class="user-message">
+                    <hero-user class="icon"></hero-user>
+                    <span>${this.query}</span>  
+                  </div>
+                  <div class="ai-message">
+                    <hero-light-bulb class="icon"></hero-light-bulb>
+                    <span>${completion}</span>  
+                  </div>
                 </div>
-              `,
+                `,
         error: (_error) =>
           html`<div class="row error">
             <span class="title">Oops, something went wrong!</span>
@@ -194,7 +209,34 @@ export class CanaryPanel extends LitElement {
         border-color: var(--canary-brand-border);
       }
     `,
+    css`
+      .messages {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
 
+      .user-message {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 6px;
+        border: 1px solid #e3e3e3;
+        border-radius: 8px;
+        padding: 4px;
+        width: fit-content;
+      }
+
+      .ai-message {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 6px;
+        border: 1px solid #e3e3e3;
+        border-radius: 8px;
+        padding: 4px;
+      }
+    `,
     css`
       div.results {
         display: flex;
@@ -239,6 +281,14 @@ export class CanaryPanel extends LitElement {
       }
     `,
     css`
+      .icon {
+        display: flex;
+        margin-top: 2px;
+        margin-bottom: auto;
+        width: 1rem;
+        height: 1rem;
+      }
+
       .logo {
         padding-top: 8px;
         text-align: end;
