@@ -12,8 +12,7 @@ import "./icons/light-bulb";
 import "./icons/user";
 
 import "./canary-toggle";
-import "./canary-input-search";
-import "./canary-input-ask";
+import "./canary-input";
 
 import { GITHUB_REPO_URL } from "./constants";
 import { randomInteger } from "./utils";
@@ -175,21 +174,24 @@ export class CanaryPanel extends LitElement {
         padding: 8px 16px;
         border: none;
         outline: none;
+        background-color: var(--canary-color-black);
       }
 
       div.input-wrapper {
         display: flex;
-        align-items: center;
         justify-content: space-between;
-        color: #9f9f9f;
+        align-items: center;
+        border-radius: 8px;
         margin-bottom: 8px;
+        padding: 1px 8px;
+        background-color: var(--canary-color-gray-6);
       }
     `,
     css`
       .row {
         height: 50px;
         padding: 12px 16px;
-        border: 1px solid #e3e3e3;
+        border: 1px solid var(--canary-color-gray-5);
         border-radius: 8px;
 
         display: flex;
@@ -200,8 +202,8 @@ export class CanaryPanel extends LitElement {
       }
 
       .row:hover {
-        background-color: var(--canary-brand);
-        border-color: var(--canary-brand-border);
+        background-color: var(--canary-color-accent-low);
+        border-color: var(--canary-color-accent);
       }
     `,
     css`
@@ -216,7 +218,7 @@ export class CanaryPanel extends LitElement {
         flex-direction: row;
         align-items: center;
         gap: 6px;
-        border: 1px solid #e3e3e3;
+        border: 1px solid var(--canary-color-gray-5);
         border-radius: 8px;
         padding: 4px;
         width: fit-content;
@@ -227,7 +229,7 @@ export class CanaryPanel extends LitElement {
         flex-direction: row;
         align-items: center;
         gap: 6px;
-        border: 1px solid #e3e3e3;
+        border: 1px solid var(--canary-color-gray-5);
         border-radius: 8px;
         padding: 4px;
       }
@@ -255,20 +257,20 @@ export class CanaryPanel extends LitElement {
       }
 
       mark {
-        background-color: var(--canary-brand);
+        background-color: var(--canary-color-accent-low);
         color: black;
       }
     `,
     css`
       .skeleton {
         border: none;
-        background-color: #e3e3e3;
+        background-color: var(--canary-color-gray-5);
         border-radius: 8px;
         animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
       }
 
       .skeleton:hover {
-        background-color: #f1f1f1;
+        background-color: var(--canary-color-gray-4);
       }
 
       @keyframes pulse {
@@ -288,23 +290,23 @@ export class CanaryPanel extends LitElement {
         margin-bottom: auto;
         width: 1rem;
         height: 1rem;
-        color: #999;
+        color: var(--canary-color-gray-3);
       }
 
       .logo {
         padding-top: 8px;
         text-align: end;
         font-size: 12px;
-        color: #9f9f9f;
+        color: var(--canary-color-gray-2);
       }
 
       .logo a {
         text-decoration: none;
-        color: #9f9f9f;
+        color: var(--canary-color-gray-1);
       }
       .logo a:hover {
         text-decoration: underline;
-        color: black;
+        color: var(--canary-color-white);
       }
     `,
   ];

@@ -2,7 +2,7 @@ import { CanarySearch } from "./canary-search";
 import { CanaryDialog } from "./canary-dialog";
 import { CanaryPanel } from "./canary-panel";
 import { CanaryInputSearch } from "./canary-input-search";
-import { CanaryInputAsk } from "./canary-input-ask";
+import { CanaryInputAsk } from "./canary-input";
 import { HeroIconMagnifyingGlass } from "./icons/magnifying-glass";
 import { HeroIconQuestionMarkCircle } from "./icons/question-mark-circle";
 

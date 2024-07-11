@@ -22,10 +22,6 @@ export class CanaryDialog extends LitElement {
     }
   }
 
-  updated() {
-    this.ref.value?.showModal();
-  }
-
   static styles = [
     css`
       dialog {

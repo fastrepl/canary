@@ -3,10 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@getcanary/search</title>
+    <title>@getcanary/web</title>
     <script type="module" src="/src/canary-search.ts"></script>
+    <script type="module" src="/src/canary-panel.ts"></script>
 
     <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
       button {
         background-color: black;
         color: white;
@@ -16,15 +23,84 @@
         font-size: 16px;
       }
 
-      canary-search {
-        --canary-brand: #f4ffd2;
-        --canary-brand-border: #d2ee7b;
+      pre {
+        border: 1px solid #e3e3e3;
+        width: fit-content;
+        padding: 8px;
+      }
+
+      div.side {
+        display: flex;
+        flex-direction: row;
+        gap: 20px;
+      }
+
+      .light {
+        --canary-color-accent-low: #c0e2b8;
+        --canary-color-accent: #258100;
+        --canary-color-accent-high: #0d3e00;
+        --canary-color-white: #151a13;
+        --canary-color-gray-1: #1f2a1c;
+        --canary-color-gray-2: #303c2d;
+        --canary-color-gray-3: #4f5c4d;
+        --canary-color-gray-4: #82907f;
+        --canary-color-gray-5: #bdc4bb;
+        --canary-color-gray-6: #eaf0e8;
+        --canary-color-gray-7: #f4f7f3;
+        --canary-color-black: #ffffff;
+
+        background-color: var(--canary-color-black);
+        height: 700px;
+        border: 1px solid var(--canary-color-white);
+      }
+
+      .dark {
+        --canary-color-accent-low: #072d00;
+        --canary-color-accent: #247f00;
+        --canary-color-accent-high: #aad7a0;
+        --canary-color-white: #ffffff;
+        --canary-color-gray-1: #eaf0e8;
+        --canary-color-gray-2: #bdc4bb;
+        --canary-color-gray-3: #82907f;
+        --canary-color-gray-4: #4f5c4d;
+        --canary-color-gray-5: #303c2d;
+        --canary-color-gray-6: #1f2a1c;
+        --canary-color-black: #151a13;
+
+        background-color: var(--canary-color-black);
+        height: 700px;
+        border: 1px solid var(--canary-color-white);
+        color: var(--canary-color-white);
+      }
+
+      :root {
+        --canary-primary-light: color-mix(
+          in srgb,
+          var(--canary-primary) 80%,
+          white
+        );
+        --canary-primary-dark: color-mix(
+          in srgb,
+          var(--canary-primary) 80%,
+          black
+        );
       }
     </style>
   </head>
   <body>
     <canary-search endpoint="http://localhost:5173">
-      <button>Search</button>
+      <button>Modal</button>
     </canary-search>
+
+    <div class="side">
+      <div class="light" style="width: 50%">
+        <span>light</span>
+        <canary-panel endpoint="http://localhost:5173"></canary-panel>
+      </div>
+      <div class="dark" style="width: 50%">
+        <span>dark</span>
+        <canary-panel endpoint="http://localhost:5173"></canary-panel>
+      </div>
+    </div>
   </body>
 </html>

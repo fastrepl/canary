@@ -49,31 +49,28 @@ export class CanaryToggle extends LitElement {
 
       .tab {
         padding: 4px 8px;
-        border: 1px solid #e3e3e3;
-        color: #616161;
         font-size: 12px;
+        border: 1px solid var(--canary-color-gray-4);
+
+        color: var(--canary-color-gray-1);
+        background-color: var(--canary-color-gray-6);
       }
 
       .left {
         border-radius: 8px 0 0 8px;
         border-right: none;
       }
-      .left:hover {
-        background-color: var(--canary-brand);
-        border-color: var(--canary-brand-border);
-      }
 
       .right {
         border-radius: 0 8px 8px 0;
         border-left: none;
       }
-      .right:hover {
-        background-color: var(--canary-brand);
-        border-color: var(--canary-brand-border);
-      }
 
+      .left:hover,
+      .right:hover,
       .selected {
-        background-color: var(--canary-brand);
+        color: var(--canary-color-gray-6);
+        background-color: var(--canary-color-gray-1);
       }
     `,
   ];
