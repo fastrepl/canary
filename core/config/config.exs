@@ -56,12 +56,16 @@ config :canary, :root, File.cwd!()
 
 config :canary, Oban,
   engine: Oban.Engines.Basic,
-  queues: [default: 10, ingester: 1, fetcher: 10, stripe: 50],
+  queues: [ingester: 1, updater: 5, fetcher: 10, stripe: 50],
   repo: Canary.Repo,
   plugins: [
     {Oban.Plugins.Pruner, max_age: 60 * 60 * 24 * 7},
     {Oban.Plugins.Lifeline, rescue_after: :timer.minutes(5)},
-    {Oban.Plugins.Cron, crontab: [{"0 * * * *", Canary.Workers.StripeReport}]}
+    {Oban.Plugins.Cron,
+     crontab: [
+       {"0 * * * *", Canary.Workers.StripeReport},
+       {"0 0 * * *", Canary.Workers.SourceUpdate}
+     ]}
   ]
 
 config :canary, Canary.Repo, types: Canary.PostgrexTypes
