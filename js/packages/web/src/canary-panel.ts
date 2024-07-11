@@ -42,11 +42,12 @@ export class CanaryPanel extends LitElement {
         return result;
       }
 
-      const parser = createMarkdownStreamParser(this.responseContainer, {
-        syntaxHighlighter: highlighter,
-      });
-
       if (mode === "Ask") {
+        this.responseContainer.textContent = "";
+        const parser = createMarkdownStreamParser(this.responseContainer, {
+          syntaxHighlighter: highlighter,
+        });
+
         await core.ask(
           this.endpoint,
           randomInteger(),
@@ -287,6 +288,7 @@ export class CanaryPanel extends LitElement {
         margin-bottom: auto;
         width: 1rem;
         height: 1rem;
+        color: #999;
       }
 
       .logo {

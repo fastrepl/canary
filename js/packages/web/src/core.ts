@@ -51,26 +51,31 @@ export const ask = async (
   }
 
   while (true) {
-    const { done, value } = await reader.read();
-    if (done) {
+    try {
+      const { done, value } = await reader.read();
+      if (done) {
+        break;
+      }
+
+      value
+        .split("\n\n")
+        .flatMap((s) => s.split("data: "))
+        .filter(Boolean)
+        .map((s) => JSON.parse(s) as Delta)
+        .forEach(handleDelta);
+    } catch (error) {
+      if (error instanceof Error && error.name !== "AbortError") {
+        console.error(error);
+      }
+
       break;
     }
-
-    value
-      .split("\n\n")
-      .flatMap((s) => s.split("data: "))
-      .filter(Boolean)
-      .map((s) => JSON.parse(s) as Delta)
-      .forEach(handleDelta);
   }
 
   return null;
 };
 
-export type Delta =
-  | DeltaError
-  | DeltaProgress
-  | DeltaComplete;
+export type Delta = DeltaError | DeltaProgress | DeltaComplete;
 
 type DeltaError = {
   type: "error";
