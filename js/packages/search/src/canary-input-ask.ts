@@ -62,6 +62,9 @@ export class CanaryInputAsk extends LitElement {
       e.preventDefault();
       const event = new CustomEvent("change", { detail: this.query });
       this.dispatchEvent(event);
+
+      this.query = "";
+      (e.target as HTMLInputElement).value = "";
     }
 
     if (e.key === "Tab") {
