@@ -1,8 +1,6 @@
 import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
 
-import starlightOpenAPI, { openAPISidebarGroups } from "starlight-openapi";
-
 // https://astro.build/config
 export default defineConfig({
   redirects: { "/": "/intro/readme/" },
@@ -25,10 +23,13 @@ export default defineConfig({
           ],
         },
         {
-          label: "Analytics",
+          label: "Integrations",
           items: [
-            { label: "Overview", link: "/analytics/overview/" },
-            { label: "Tracker", link: "/analytics/tracker/" },
+            { label: "Overview", link: "/integrations/overview/" },
+            { label: "Starlight", link: "/integrations/starlight/" },
+            { label: "Docusaurus", link: "/integrations/docusaurus/" },
+            { label: "Nextra", link: "/integrations/nextra/" },
+            { label: "VitePress", link: "/integrations/vitepress/" },
           ],
         },
         {
@@ -47,6 +48,13 @@ export default defineConfig({
           ],
         },
         {
+          label: "Analytics",
+          items: [
+            { label: "Overview", link: "/analytics/overview/" },
+            { label: "Tracker", link: "/analytics/tracker/" },
+          ],
+        },
+        {
           label: "Packages",
           collapsed: true,
           autogenerate: { directory: "packages" },
@@ -56,19 +64,8 @@ export default defineConfig({
           collapsed: true,
           autogenerate: { directory: "others" },
         },
-        ...openAPISidebarGroups,
       ],
       customCss: ["./src/styles/theme.css"],
-      plugins: [
-        starlightOpenAPI([
-          {
-            base: "api",
-            label: "API Reference",
-            schema: "https://cloud.getcanary.dev/api/openapi",
-            collapsed: true,
-          },
-        ]),
-      ],
     }),
   ],
 });
