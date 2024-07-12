@@ -1,6 +1,7 @@
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
+import { classMap } from "lit/directives/class-map.js";
 import { Task } from "@lit/task";
 
 import { highlighter } from "@nlux/highlighter";
@@ -30,8 +31,20 @@ export class CanaryPanel extends LitElement {
   @property() query = "";
   @property() mode = "Search";
   @state() askResult = "";
-  @state() searchResult: SearchResultItem[] = [];
   @state() responseContainer: HTMLDivElement = document.createElement("div");
+
+  @state() searchResult: SearchResultItem[] = [];
+  @state() searchIndex = 0;
+
+  connectedCallback() {
+    super.connectedCallback();
+    this.addEventListener("keydown", this._handleNavigation);
+  }
+
+  disconnectedCallback() {
+    this.removeEventListener("keydown", this._handleNavigation);
+    super.disconnectedCallback();
+  }
 
   private _task = new Task(this, {
     task: async ([mode, query], { signal }) => {
@@ -46,6 +59,10 @@ export class CanaryPanel extends LitElement {
           this.query,
           signal,
         );
+
+        this.searchIndex = 0;
+        this.searchResult = result;
+
         return result;
       }
 
@@ -149,8 +166,14 @@ export class CanaryPanel extends LitElement {
                       </div>
                     `
                   : items.map(
-                      ({ title, url, excerpt }) => html`
-                        <a class="row" href="${url}">
+                      ({ title, url, excerpt }, index) => html`
+                        <a
+                          class=${classMap({
+                            row: true,
+                            selected: index === this.searchIndex,
+                          })}
+                          href="${url}"
+                        >
                           <span class="title">${title}</span>
                           <span class="preview">${unsafeHTML(excerpt)}</span>
                         </a>
@@ -179,6 +202,30 @@ export class CanaryPanel extends LitElement {
         },
       })}
     `;
+  }
+
+  private _handleNavigation(e: KeyboardEvent) {
+    switch (e.key) {
+      case "ArrowUp":
+        e.preventDefault();
+        this._moveSelection(-1);
+        break;
+      case "ArrowDown":
+        e.preventDefault();
+        this._moveSelection(1);
+        break;
+      case "Enter":
+        e.preventDefault();
+        window.open(this.searchResult[this.searchIndex].url);
+        break;
+    }
+  }
+
+  private _moveSelection(delta: number) {
+    const next = this.searchIndex + delta;
+    if (next > -1 && next < this.searchResult.length) {
+      this.searchIndex = next;
+    }
   }
 
   private _handleChange(e: CustomEvent) {
@@ -228,7 +275,8 @@ export class CanaryPanel extends LitElement {
         color: inherit;
       }
 
-      .row:hover {
+      .row:hover,
+      .row.selected {
         background-color: var(--canary-color-accent-low);
         border-color: var(--canary-color-accent);
       }
