@@ -16,7 +16,13 @@ defmodule CanaryWeb.HomeLive do
         </div>
         <div class="stat">
           <div class="stat-title">Status</div>
-          <div class="stat-value"><%= @job.state %></div>
+          <div class="stat-value">
+            <%= if is_nil(@job) do %>
+              Idle
+            <% else %>
+              <%= @job.state %>
+            <% end %>
+          </div>
         </div>
         <div class="stat">
           <div class="stat-title flex flex-row items-center gap-2">
