@@ -87,6 +87,20 @@ config :mime, :extensions, %{"json" => "application/vnd.api+json"}
 
 config :canary, :github_app_url, "https://github.com/apps/getcanary-dev/installations/new"
 
+config :ash, :tracer, [AshAppsignal]
+
+config :ash_appsignal,
+  trace_types: [
+    :custom,
+    :action,
+    :before_transaction,
+    :before_action,
+    :after_transaction,
+    :after_action,
+    :custom_flow_step,
+    :flow
+  ]
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"
