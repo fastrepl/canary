@@ -25,7 +25,8 @@ defmodule CanaryWeb.PublicApiController do
   def search(conn, %{"key" => key, "query" => query}) do
     case Canary.Interactions.Client.find_web(key) do
       {:ok, client} ->
-        if Application.get_env(:canary, :env) == :prod and client.web_host_url != conn.host do
+        if Application.get_env(:canary, :env) == :prod and
+             conn.host not in [client.web_host_url, "cloud.getcanary.dev"] do
           conn |> send_resp(422, "") |> halt()
         else
           {:ok, results} = Searcher.run(query, Enum.map(client.sources, & &1.id))
