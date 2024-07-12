@@ -1,24 +1,9 @@
 defmodule Canary.UserNotifier do
-  import Swoosh.Email
   import Phoenix.Component
 
-  alias Canary.Mailer
-
-  @sender {"Canary", "yujonglee@getcanary.dev"}
-
-  def deliver(opts) do
-    email =
-      new(
-        from: @sender,
-        to: opts[:to],
-        subject: opts[:subject],
-        html_body: opts[:html_body],
-        text_body: opts[:text_body]
-      )
-
-    with {:ok, _metadata} <- Mailer.deliver(email) do
-      {:ok, email}
-    end
+  def deliver(args) do
+    Canary.Workers.Email.new(args)
+    |> Oban.insert()
   end
 
   def default_layout(assigns) do
@@ -80,12 +65,12 @@ defmodule Canary.UserNotifier.ResetPassword do
     assigns = %{user: user, url: url(~p"/password-reset/#{token}")}
     {html, text} = render_content(&tpl/1, assigns)
 
-    deliver(
+    deliver(%{
       to: to_string(user.email),
       subject: "Canary: Reset your password",
       html_body: html,
       text_body: text
-    )
+    })
 
     :ok
   end
