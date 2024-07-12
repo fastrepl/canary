@@ -20,13 +20,10 @@ end
 
 defmodule Canary.Crawler.Sitemap do
   def run(given_url) do
-    sitemap_url =
+    urls =
       given_url
-      |> URI.new!()
-      |> Map.update!(:path, fn path -> "#{path}/sitemap.xml" end)
-      |> URI.to_string()
-
-    urls = parse_sitemap(sitemap_url)
+      |> list_sitemaps()
+      |> Enum.flat_map(&parse_sitemap/1)
 
     if urls == [] do
       {:error, :not_found}
@@ -40,14 +37,25 @@ defmodule Canary.Crawler.Sitemap do
     end
   end
 
-  defp parse_sitemap(sitemap_url) do
-    result =
-      Req.new()
-      |> ReqCrawl.Sitemap.attach()
-      |> Req.get!(url: sitemap_url)
-      |> get_in([Access.key(:private), :crawl_sitemap, Access.elem(1)])
+  defp list_sitemaps(url) do
+    robots_url = URI.new!(url) |> Map.put(:path, "/robots.txt") |> URI.to_string()
+    maybe_sitemap = URI.new!(url) |> Map.put(:path, "/sitemap.xml") |> URI.to_string()
 
-    (result || [])
+    case Req.new() |> ReqCrawl.Robots.attach() |> Req.get(url: robots_url) do
+      {:ok, %{private: %{crawl_robots: %{sitemaps: urls}}}} -> urls
+      _ -> [maybe_sitemap]
+    end
+  end
+
+  defp parse_sitemap(sitemap_url) do
+    urls =
+      case Req.new() |> ReqCrawl.Sitemap.attach() |> Req.get(url: sitemap_url) do
+        {:ok, %{private: %{crawl_sitemap: {:sitemap, list}}}} -> list
+        {:ok, %{private: %{crawl_sitemap: {:sitemapindex, list}}}} -> list
+        _ -> []
+      end
+
+    urls
     |> Enum.flat_map(fn url ->
       if String.contains?(url, "sitemap") and String.ends_with?(url, ".xml") do
         parse_sitemap(url)
