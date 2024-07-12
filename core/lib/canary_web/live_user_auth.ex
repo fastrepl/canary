@@ -26,6 +26,14 @@ defmodule CanaryWeb.LiveUserAuth do
     end
   end
 
+  def on_mount(:live_ensure_account, _params, _session, socket) do
+    if socket.assigns[:current_account] do
+      {:cont, socket}
+    else
+      {:halt, Phoenix.LiveView.redirect(socket, to: ~p"/onboarding")}
+    end
+  end
+
   defp current_account(socket) do
     socket.assigns[:current_user]
     |> Ash.load!(:accounts)

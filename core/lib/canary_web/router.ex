@@ -45,6 +45,7 @@ defmodule CanaryWeb.Router do
       layout: {CanaryWeb.Layouts, :app},
       on_mount: [
         {CanaryWeb.LiveUserAuth, :live_user_required},
+        {CanaryWeb.LiveUserAuth, :live_ensure_account},
         CanaryWeb.NavLive
       ] do
       live "/", CanaryWeb.HomeLive, :none
