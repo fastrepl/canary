@@ -93,3 +93,42 @@ defmodule Canary.UserNotifier.ResetPassword do
     """
   end
 end
+
+defmodule Canary.UserNotifier.MemberInvite do
+  import Phoenix.Component
+  import Canary.UserNotifier, only: [deliver: 1, render_content: 2, default_layout: 1]
+
+  use CanaryWeb, :verified_routes
+
+  def send(%Canary.Accounts.Invite{} = invite) do
+    assigns = %{url: url(~p"/sign-in"), invitee: invite.email, inviter: invite.user.email}
+    {html, text} = render_content(&tpl/1, assigns)
+
+    deliver(%{
+      to: to_string(invite.email),
+      subject: "Canary: Member Invite",
+      html_body: html,
+      text_body: text
+    })
+
+    :ok
+  end
+
+  defp tpl(assigns) do
+    ~H"""
+    <.default_layout>
+      <p>
+        Hi <%= @invitee %>, <%= @inviter %> invited you to join Canary.
+      </p>
+
+      <p>
+        <a href={@url}>Click here</a> to sign in.
+      </p>
+
+      <p>
+        If you are not expecting this, feel free to ignore this.
+      </p>
+    </.default_layout>
+    """
+  end
+end

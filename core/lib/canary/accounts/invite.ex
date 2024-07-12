@@ -16,14 +16,17 @@ defmodule Canary.Accounts.Invite do
   end
 
   actions do
-    defaults [:read, :destroy]
+    defaults [:destroy]
+
+    read :read do
+      primary? true
+      prepare build(load: [:user, :account])
+    end
 
     read :verify do
-      argument :id, :uuid, allow_nil?: false
       argument :email, :string, allow_nil?: false
 
       get? true
-      filter expr(id == ^arg(:id))
       filter expr(email == ^arg(:email))
       filter expr(created_at > ago(30, :minute))
     end
@@ -36,6 +39,7 @@ defmodule Canary.Accounts.Invite do
       change set_attribute(:email, expr(^arg(:email)))
       change manage_relationship(:user, :user, type: :append)
       change manage_relationship(:account, :account, type: :append)
+      change load [:user, :account]
     end
   end
 
