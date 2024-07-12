@@ -88,7 +88,9 @@ defmodule Canary.MixProject do
       {:crawler,
        git: "https://github.com/fredwu/crawler.git",
        ref: "6866bbe287c760b7e4bba1925e80f2a4494d7af3"},
-      {:resend, "~> 0.4.2"}
+      {:resend, "~> 0.4.2"},
+      {:appsignal, "~> 2.0"},
+      {:appsignal_phoenix, "~> 2.0"}
     ]
   end
 
