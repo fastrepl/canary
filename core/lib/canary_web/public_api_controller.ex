@@ -22,48 +22,56 @@ defmodule CanaryWeb.PublicApiController do
     end
   end
 
-  def search(conn, %{"query" => query}) do
-    with {:ok, client} <- Canary.Interactions.Client.find_web(conn.host),
-         {:ok, results} <- Searcher.run(query, Enum.map(client.sources, & &1.id)) do
-      conn
-      |> put_resp_content_type("application/json")
-      |> send_resp(200, Jason.encode!(results))
-      |> halt()
-    else
+  def search(conn, %{"key" => key, "query" => query}) do
+    case Canary.Interactions.Client.find_web(key) do
+      {:ok, client} ->
+        if Application.get_env(:canary, :env) == :prod and client.web_host_url != conn.host do
+          conn |> send_resp(422, "") |> halt()
+        else
+          {:ok, results} = Searcher.run(query, Enum.map(client.sources, & &1.id))
+
+          conn
+          |> put_resp_content_type("application/json")
+          |> send_resp(200, Jason.encode!(results))
+          |> halt()
+        end
+
       _ ->
-        conn
-        |> send_resp(422, "")
-        |> halt()
+        conn |> send_resp(422, "") |> halt()
     end
   end
 
-  def ask(conn, %{"id" => id, "query" => query}) do
-    with {:ok, client} <- Canary.Interactions.Client.find_web(conn.host),
-         {:ok, session} <- Canary.Interactions.find_or_create_session(client.account, {:web, id}) do
-      conn =
-        conn
-        |> put_resp_content_type("text/event-stream")
-        |> put_resp_header("cache-control", "no-cache")
-        |> put_resp_header("connection", "keep-alive")
-        |> send_chunked(200)
+  def ask(conn, %{"id" => id, "key" => key, "query" => query}) do
+    case Canary.Interactions.Client.find_web(key) do
+      {:ok, client} ->
+        if Application.get_env(:canary, :env) == :prod and client.web_host_url != conn.host do
+          conn |> send_resp(422, "") |> halt()
+        else
+          {:ok, session} = Canary.Interactions.find_or_create_session(client.account, {:web, id})
 
-      here = self()
+          conn =
+            conn
+            |> put_resp_content_type("text/event-stream")
+            |> put_resp_header("cache-control", "no-cache")
+            |> put_resp_header("connection", "keep-alive")
+            |> send_chunked(200)
 
-      Task.Supervisor.start_child(Canary.TaskSupervisor, fn ->
-        Canary.Interactions.Responder.run(
-          session,
-          query,
-          Enum.map(client.sources, & &1.id),
-          fn data -> send(here, data) end
-        )
-      end)
+          here = self()
 
-      receive_and_send(conn)
-    else
+          Task.Supervisor.start_child(Canary.TaskSupervisor, fn ->
+            Canary.Interactions.Responder.run(
+              session,
+              query,
+              Enum.map(client.sources, & &1.id),
+              fn data -> send(here, data) end
+            )
+          end)
+
+          receive_and_send(conn)
+        end
+
       _ ->
-        conn
-        |> send_resp(422, "")
-        |> halt()
+        conn |> send_resp(422, "") |> halt()
     end
   end
 
