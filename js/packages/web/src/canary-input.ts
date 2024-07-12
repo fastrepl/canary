@@ -37,6 +37,8 @@ const STYLE = css`
 
 @customElement("canary-input-search")
 export class CanaryInputSearch extends LitElement {
+  @property() value = "";
+
   render() {
     return html`
       <div class="container">
@@ -45,11 +47,13 @@ export class CanaryInputSearch extends LitElement {
         </div>
         <input
           type="text"
+          value=${this.value}
           autocomplete="off"
-          autofocus
           placeholder="Search for anything..."
           @input=${this._handleInput}
           @keydown=${this._handleKeyDown}
+          autofocus
+          onfocus="this.setSelectionRange(this.value.length,this.value.length);"
         />
       </div>
     `;
@@ -74,7 +78,7 @@ export class CanaryInputSearch extends LitElement {
 
 @customElement("canary-input-ask")
 export class CanaryInputAsk extends LitElement {
-  @property() query = "";
+  @property() value = "";
 
   render() {
     return html`
@@ -84,11 +88,13 @@ export class CanaryInputAsk extends LitElement {
         </div>
         <input
           type="text"
+          value=${this.value}
           autocomplete="off"
-          autofocus
           placeholder="Ask anything..."
           @input=${this._handleInput}
           @keydown=${this._handleKeyDown}
+          autofocus
+          onfocus="this.setSelectionRange(this.value.length,this.value.length);"
         />
       </div>
     `;
@@ -98,16 +104,16 @@ export class CanaryInputAsk extends LitElement {
 
   private _handleInput(e: KeyboardEvent) {
     const input = e.target as HTMLInputElement;
-    this.query = input.value;
+    this.value = input.value;
   }
 
   private _handleKeyDown(e: KeyboardEvent) {
     if (e.key === "Enter") {
       e.preventDefault();
-      const event = new CustomEvent("change", { detail: this.query });
+      const event = new CustomEvent("change", { detail: this.value });
       this.dispatchEvent(event);
 
-      this.query = "";
+      this.value = "";
       (e.target as HTMLInputElement).value = "";
     }
 

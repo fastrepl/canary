@@ -28,8 +28,9 @@ export class CanaryPanel extends LitElement {
   @property() endpoint = "";
   @property() hljs = "github";
 
-  @property() query = "";
   @property() mode = "Search";
+  @property() query = "";
+
   @state() askResult = "";
   @state() responseContainer: HTMLDivElement = document.createElement("div");
 
@@ -104,6 +105,7 @@ export class CanaryPanel extends LitElement {
           ${this.mode === "Search"
             ? html`
                 <canary-input-search
+                  value=${this.query}
                   @change=${this._handleChange}
                   @toggle=${this._handleToggle}
                 >
@@ -111,6 +113,7 @@ export class CanaryPanel extends LitElement {
               `
             : html`
                 <canary-input-ask
+                  value=${this.query}
                   @change=${this._handleChange}
                   @toggle=${this._handleToggle}
                 >

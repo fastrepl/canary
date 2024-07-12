@@ -80,16 +80,13 @@
     </style>
   </head>
   <body>
-    <canary-search endpoint="http://localhost:5173">
-      <button>Modal</button>
-    </canary-search>
-
     <div class="side">
       <div class="light" style="width: 50%">
         <span>light</span>
         <canary-panel
           endpoint="http://localhost:5173"
           hljs="github"
+          query="hello"
         ></canary-panel>
       </div>
       <div class="dark" style="width: 50%">
@@ -97,6 +94,7 @@
         <canary-panel
           hljs="github-dark"
           endpoint="http://localhost:5173"
+          query="hello"
         ></canary-panel>
       </div>
     </div>
