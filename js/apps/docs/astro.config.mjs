@@ -66,6 +66,18 @@ export default defineConfig({
         },
       ],
       customCss: ["./src/styles/theme.css"],
+      head: [
+        {
+          tag: "script",
+          attrs: {
+            type: "module",
+            src: "https://unpkg.com/@getcanary/web@latest/components/canary-search.js",
+          },
+        },
+      ],
+      components: {
+        Search: "./src/components/Search.astro",
+      },
     }),
   ],
 });

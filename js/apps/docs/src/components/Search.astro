@@ -1,0 +1,108 @@
+---
+import { Icon } from "@astrojs/starlight/components";
+
+const { labels } = Astro.props;
+
+const ENDPOINT = "https://cloud.getcanary.dev";
+---
+
+<canary-search endpoint={ENDPOINT}>
+  <!-- https://github.com/withastro/starlight/blob/c5f1a8dd483485d626c568c7bd68423926c28ece/packages/starlight/components/Search.astro#L23-L34 -->
+  <button aria-label={labels["search.label"]} aria-keyshortcuts="Control+K">
+    <Icon name="magnifier" />
+    <span class="sl-hidden md:sl-block" aria-hidden="true"
+      >{labels["search.label"]}</span
+    >
+    <kbd class="sl-hidden md:sl-flex" style="display: none;">
+      <kbd>{labels["search.ctrlKey"]}</kbd><kbd>K</kbd>
+    </kbd>
+  </button>
+</canary-search>
+
+<!-- https://github.com/withastro/starlight/blob/c5f1a8dd483485d626c568c7bd68423926c28ece/packages/starlight/components/Search.astro#L66-L78 -->
+<script is:inline>
+  (() => {
+    const openBtn = document.querySelector("button");
+    const shortcut = openBtn?.querySelector("kbd");
+    if (!openBtn || !(shortcut instanceof HTMLElement)) return;
+    const platformKey = shortcut.querySelector("kbd");
+    if (platformKey && /(Mac|iPhone|iPod|iPad)/i.test(navigator.platform)) {
+      platformKey.textContent = "⌘";
+      openBtn.setAttribute("aria-keyshortcuts", "Meta+K");
+    }
+    shortcut.style.display = "";
+  })();
+</script>
+
+<!-- https://github.com/withastro/starlight/blob/c5f1a8dd483485d626c568c7bd68423926c28ece/packages/starlight/components/Search.astro#L121-L126 -->
+<script>
+  window.addEventListener("keydown", (e) => {
+    if ((e.metaKey === true || e.ctrlKey === true) && e.key === "k") {
+      e.preventDefault();
+      const button = document.querySelector("button");
+      button?.click();
+    }
+  });
+</script>
+
+<style>
+  /* https://github.com/withastro/starlight/blob/c5f1a8dd483485d626c568c7bd68423926c28ece/packages/starlight/components/Search.astro#L165 */
+
+  canary-search {
+    --canary-color-accent: var(--sl-color-accent);
+    --canary-color-accent-low: var(--sl-color-accent-low);
+    --canary-color-accent-high: var(--sl-color-accent-high);
+    --canary-color-white: var(--sl-color-white);
+    --canary-color-gray-1: var(--sl-color-gray-1);
+    --canary-color-gray-2: var(--sl-color-gray-2);
+    --canary-color-gray-3: var(--sl-color-gray-3);
+    --canary-color-gray-4: var(--sl-color-gray-4);
+    --canary-color-gray-5: var(--sl-color-gray-5);
+    --canary-color-gray-6: var(--sl-color-gray-6);
+    --canary-color-black: var(--sl-color-black);
+
+    display: contents;
+  }
+
+  button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: 0;
+    background-color: transparent;
+    color: var(--sl-color-gray-1);
+    cursor: pointer;
+    height: 2.5rem;
+    font-size: var(--sl-text-xl);
+  }
+
+  @media (min-width: 50rem) {
+    button {
+      border: 1px solid var(--sl-color-gray-5);
+      border-radius: 0.5rem;
+      padding-inline-start: 0.75rem;
+      padding-inline-end: 0.5rem;
+      background-color: var(--sl-color-black);
+      color: var(--sl-color-gray-2);
+      font-size: var(--sl-text-sm);
+      width: 100%;
+      max-width: 22rem;
+    }
+    button:hover {
+      border-color: var(--sl-color-gray-2);
+      color: var(--sl-color-white);
+    }
+
+    button > :last-child {
+      margin-inline-start: auto;
+    }
+  }
+
+  button > kbd {
+    border-radius: 0.25rem;
+    font-size: var(--sl-text-2xs);
+    gap: 0.25em;
+    padding-inline: 0.375rem;
+    background-color: var(--sl-color-gray-6);
+  }
+</style>
