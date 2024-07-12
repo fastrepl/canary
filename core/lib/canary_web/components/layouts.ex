@@ -11,7 +11,7 @@ defmodule CanaryWeb.Layouts do
     ~H"""
     <aside class="drawer-side z-10">
       <label for="canary-drawer" class="drawer-overlay"></label>
-      <nav class="flex min-h-screen w-52 flex-col gap-2 overflow-y-auto bg-base-100 px-6 pt-10 pb-4">
+      <nav class="flex min-h-screen w-52 flex-col gap-2 overflow-y-auto bg-base-200 px-6 pt-10 pb-4">
         <div class="mx-4 font-black flex flex-row items-center gap-2">
           <button class="text-lg" data-toggle-theme="dark,light">🐤</button>
           <.link navigate={~p"/"}>Canary</.link>
@@ -27,10 +27,10 @@ defmodule CanaryWeb.Layouts do
                   else: "hero-home"
                 )
               ]} />
-              <span>Overview</span>
+              <span>Home</span>
             </.link>
           </li>
-          <li>
+          <%!-- <li>
             <.link class={if @active_tab == :editor, do: "active"} navigate={~p"/editor"}>
               <span class={[
                 "h-4 w-4",
@@ -53,7 +53,7 @@ defmodule CanaryWeb.Layouts do
               ]} />
               <span>Interactions</span>
             </.link>
-          </li>
+          </li> --%>
           <li>
             <.link class={if @active_tab == :settings, do: "active"} navigate={~p"/settings"}>
               <span class={[
@@ -85,7 +85,7 @@ defmodule CanaryWeb.Layouts do
             </div>
             <ul
               tabindex="0"
-              class="dropdown-content menu bg-base-200 rounded-box z-[1] w-32 p-2 shadow"
+              class="dropdown-content menu bg-base-100 rounded-box z-[1] w-24 p-0 shadow"
             >
               <li><.link href="/sign-out">Log out</.link></li>
             </ul>

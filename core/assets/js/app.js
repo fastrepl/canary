@@ -24,6 +24,8 @@ import topbar from "../vendor/topbar";
 import { getHooks } from "live_svelte";
 import * as Components from "../svelte/**/*.svelte";
 
+import { format } from "timeago.js";
+
 let csrfToken = document
   .querySelector("meta[name='csrf-token']")
   .getAttribute("content");
@@ -32,12 +34,26 @@ let hooks = {
   ...getHooks(Components),
   LocalTime: {
     mounted() {
-      this.updated();
+      this.fn();
     },
     updated() {
+      this.fn();
+    },
+    fn() {
       let dt = new Date(this.el.textContent);
       this.el.textContent = dt.toLocaleString();
       this.el.classList.remove("invisible");
+    },
+  },
+  TimeAgo: {
+    mounted() {
+      this.fn();
+    },
+    updated() {
+      this.fn();
+    },
+    fn() {
+      this.el.textContent = format(this.el.textContent, "en_US");
     },
   },
 };

@@ -33,7 +33,6 @@ defmodule Canary.Crawler.Sitemap do
     else
       pairs =
         urls
-        |> Enum.filter(fn url -> String.starts_with?(url, given_url) end)
         |> Enum.map(&fetch_url/1)
         |> Enum.reject(&is_nil/1)
 

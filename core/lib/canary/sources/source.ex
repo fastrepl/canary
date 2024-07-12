@@ -19,6 +19,7 @@ defmodule Canary.Sources.Source do
 
   aggregates do
     count :num_documents, :documents
+    max :last_updated, :documents, :created_at
   end
 
   actions do
@@ -26,7 +27,7 @@ defmodule Canary.Sources.Source do
 
     read :read do
       primary? true
-      prepare build(load: [:num_documents])
+      prepare build(load: [:num_documents, :last_updated])
     end
 
     create :create_web do
