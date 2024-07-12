@@ -185,5 +185,5 @@ config :appsignal, :config,
   otp_app: :canary,
   name: "canary",
   push_api_key: System.get_env("APPSIGNAL_PUSH_API_KEY"),
-  env: Mix.env(),
+  env: Application.fetch_env!(:canary, :env),
   active: System.get_env("APPSIGNAL_PUSH_API_KEY") != nil
