@@ -2,9 +2,39 @@
   "attributes": [
     {
       "allow_nil?": false,
-      "default": "nil",
+      "default": "fragment(\"gen_random_uuid()\")",
       "generated?": false,
       "primary_key?": true,
+      "references": null,
+      "size": null,
+      "source": "id",
+      "type": "uuid"
+    },
+    {
+      "allow_nil?": false,
+      "default": "fragment(\"(now() AT TIME ZONE 'utc')\")",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "created_at",
+      "type": "utc_datetime_usec"
+    },
+    {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "email",
+      "type": "text"
+    },
+    {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
       "references": {
         "deferrable": false,
         "destination_attribute": "id",
@@ -18,22 +48,22 @@
           "global": null,
           "strategy": null
         },
-        "name": "client_sources_client_id_fkey",
-        "on_delete": "delete",
+        "name": "account_invites_user_id_fkey",
+        "on_delete": null,
         "on_update": null,
         "primary_key?": true,
         "schema": "public",
-        "table": "clients"
+        "table": "users"
       },
       "size": null,
-      "source": "client_id",
+      "source": "user_id",
       "type": "uuid"
     },
     {
       "allow_nil?": false,
       "default": "nil",
       "generated?": false,
-      "primary_key?": true,
+      "primary_key?": false,
       "references": {
         "deferrable": false,
         "destination_attribute": "id",
@@ -47,15 +77,15 @@
           "global": null,
           "strategy": null
         },
-        "name": "client_sources_source_id_fkey",
-        "on_delete": "delete",
+        "name": "account_invites_account_id_fkey",
+        "on_delete": null,
         "on_update": null,
         "primary_key?": true,
         "schema": "public",
-        "table": "sources"
+        "table": "accounts"
       },
       "size": null,
-      "source": "source_id",
+      "source": "account_id",
       "type": "uuid"
     }
   ],
@@ -64,7 +94,7 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "F3D8314A266B415C417469094E1C0B5D2143DC62E8BF6C5F586955FA3279BAAD",
+  "hash": "F6F3F5044E8F501712EF33F3BA2A9697453DC42B5743BF17251953B2DBEE4E71",
   "identities": [],
   "multitenancy": {
     "attribute": null,
@@ -73,5 +103,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "client_sources"
+  "table": "account_invites"
 }

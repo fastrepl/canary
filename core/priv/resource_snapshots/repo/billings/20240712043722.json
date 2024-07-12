@@ -2,33 +2,13 @@
   "attributes": [
     {
       "allow_nil?": false,
-      "default": "nil",
-      "generated?": true,
+      "default": "fragment(\"gen_random_uuid()\")",
+      "generated?": false,
       "primary_key?": true,
       "references": null,
       "size": null,
       "source": "id",
-      "type": "bigint"
-    },
-    {
-      "allow_nil?": false,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "content",
-      "type": "text"
-    },
-    {
-      "allow_nil?": false,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": 384,
-      "source": "embedding",
-      "type": ["vector", 384]
+      "type": "uuid"
     },
     {
       "allow_nil?": true,
@@ -37,8 +17,18 @@
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "url",
-      "type": "text"
+      "source": "stripe_customer",
+      "type": "map"
+    },
+    {
+      "allow_nil?": true,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "stripe_subscription",
+      "type": "map"
     },
     {
       "allow_nil?": true,
@@ -58,15 +48,15 @@
           "global": null,
           "strategy": null
         },
-        "name": "chunks_document_id_fkey",
-        "on_delete": "delete",
+        "name": "billings_account_id_fkey",
+        "on_delete": "nothing",
         "on_update": null,
         "primary_key?": true,
         "schema": "public",
-        "table": "documents"
+        "table": "accounts"
       },
       "size": null,
-      "source": "document_id",
+      "source": "account_id",
       "type": "uuid"
     }
   ],
@@ -75,7 +65,7 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "819BB6704E9F3D14EC2AF61C881F23EC0724ECFF4B6FF19CA40E89C4BF09BA95",
+  "hash": "BB3F3E32499A7A5B2C1CB791026E58F1C766E86FEEB731C84B768595B89C3009",
   "identities": [],
   "multitenancy": {
     "attribute": null,
@@ -84,5 +74,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "chunks"
+  "table": "billings"
 }

@@ -27,37 +27,48 @@
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "email",
+      "source": "type",
       "type": "text"
     },
     {
-      "allow_nil?": false,
+      "allow_nil?": true,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
-      "references": {
-        "deferrable": false,
-        "destination_attribute": "id",
-        "destination_attribute_default": null,
-        "destination_attribute_generated": null,
-        "index?": false,
-        "match_type": null,
-        "match_with": null,
-        "multitenancy": {
-          "attribute": null,
-          "global": null,
-          "strategy": null
-        },
-        "name": "account_invites_user_id_fkey",
-        "on_delete": null,
-        "on_update": null,
-        "primary_key?": true,
-        "schema": "public",
-        "table": "users"
-      },
+      "references": null,
       "size": null,
-      "source": "user_id",
-      "type": "uuid"
+      "source": "web_host_url",
+      "type": "text"
+    },
+    {
+      "allow_nil?": true,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "web_public_key",
+      "type": "text"
+    },
+    {
+      "allow_nil?": true,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "discord_server_id",
+      "type": "bigint"
+    },
+    {
+      "allow_nil?": true,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "discord_channel_id",
+      "type": "bigint"
     },
     {
       "allow_nil?": false,
@@ -77,7 +88,7 @@
           "global": null,
           "strategy": null
         },
-        "name": "account_invites_account_id_fkey",
+        "name": "clients_account_id_fkey",
         "on_delete": null,
         "on_update": null,
         "primary_key?": true,
@@ -94,8 +105,41 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "B05E9A7B7CA5571ACD75E443437E4074814629EB6A877C9E10EEA93846C5EDF9",
-  "identities": [],
+  "hash": "9CEC8FA550515FE1A30A84A39F82373CD8EC021BD5EDFDEE010021FF42CE363E",
+  "identities": [
+    {
+      "all_tenants?": false,
+      "base_filter": null,
+      "index_name": "clients_unique_discord_index",
+      "keys": [
+        {
+          "type": "atom",
+          "value": "discord_server_id"
+        },
+        {
+          "type": "atom",
+          "value": "discord_channel_id"
+        }
+      ],
+      "name": "unique_discord",
+      "nils_distinct?": true,
+      "where": null
+    },
+    {
+      "all_tenants?": false,
+      "base_filter": null,
+      "index_name": "clients_unique_web_index",
+      "keys": [
+        {
+          "type": "atom",
+          "value": "web_public_key"
+        }
+      ],
+      "name": "unique_web",
+      "nils_distinct?": true,
+      "where": null
+    }
+  ],
   "multitenancy": {
     "attribute": null,
     "global": null,
@@ -103,5 +147,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "account_invites"
+  "table": "clients"
 }

@@ -164,6 +164,7 @@ defmodule Canary.Repo.Migrations.InitResources do
 
       add :type, :text, null: false
       add :web_host_url, :text
+      add :web_public_key, :text
       add :discord_server_id, :bigint
       add :discord_channel_id, :bigint
       add :account_id, :uuid, null: false
@@ -279,7 +280,7 @@ defmodule Canary.Repo.Migrations.InitResources do
              name: "clients_unique_discord_index"
            )
 
-    create unique_index(:clients, [:web_host_url], name: "clients_unique_web_index")
+    create unique_index(:clients, [:web_public_key], name: "clients_unique_web_index")
 
     alter table(:billings) do
       modify :account_id,
@@ -370,7 +371,7 @@ defmodule Canary.Repo.Migrations.InitResources do
       modify :account_id, :uuid
     end
 
-    drop_if_exists unique_index(:clients, [:web_host_url], name: "clients_unique_web_index")
+    drop_if_exists unique_index(:clients, [:web_public_key], name: "clients_unique_web_index")
 
     drop_if_exists unique_index(:clients, [:discord_server_id, :discord_channel_id],
                      name: "clients_unique_discord_index"

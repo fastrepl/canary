@@ -9,13 +9,14 @@ defmodule Canary.Interactions.Client do
     attribute :type, :atom, constraints: [one_of: [:web, :discord]], allow_nil?: false
 
     attribute :web_host_url, :string, allow_nil?: true
+    attribute :web_public_key, :string, allow_nil?: true
 
     attribute :discord_server_id, :integer, allow_nil?: true
     attribute :discord_channel_id, :integer, allow_nil?: true
   end
 
   identities do
-    identity :unique_web, [:web_host_url]
+    identity :unique_web, [:web_public_key]
     identity :unique_discord, [:discord_server_id, :discord_channel_id]
   end
 
@@ -31,10 +32,10 @@ defmodule Canary.Interactions.Client do
     defaults [:read, :destroy]
 
     read :find_web do
-      argument :web_host_url, :string, allow_nil?: false
+      argument :web_public_key, :string, allow_nil?: false
 
       filter expr(type == :web)
-      filter expr(web_host_url == ^arg(:web_host_url))
+      filter expr(web_public_key == ^arg(:web_public_key))
 
       get? true
       prepare build(load: [:account, :sources])
@@ -58,6 +59,7 @@ defmodule Canary.Interactions.Client do
 
       change set_attribute(:type, :web)
       change manage_relationship(:account, :account, type: :append)
+      change {Canary.Interactions.Changes.Key, attribute: :web_public_key, prefix: "pk_"}
 
       change fn changeset, _ ->
         url = Ash.Changeset.get_argument(changeset, :web_url)
@@ -101,7 +103,7 @@ defmodule Canary.Interactions.Client do
 
   code_interface do
     define :find_web,
-      args: [:web_host_url],
+      args: [:web_public_key],
       action: :find_web
 
     define :find_discord,

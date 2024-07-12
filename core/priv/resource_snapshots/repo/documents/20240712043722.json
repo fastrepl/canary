@@ -21,6 +21,36 @@
       "type": "utc_datetime_usec"
     },
     {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "url",
+      "type": "text"
+    },
+    {
+      "allow_nil?": true,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "title",
+      "type": "text"
+    },
+    {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "content_hash",
+      "type": "binary"
+    },
+    {
       "allow_nil?": true,
       "default": "nil",
       "generated?": false,
@@ -38,15 +68,15 @@
           "global": null,
           "strategy": null
         },
-        "name": "feedbacks_account_id_fkey",
-        "on_delete": null,
+        "name": "documents_source_id_fkey",
+        "on_delete": "delete",
         "on_update": null,
         "primary_key?": true,
         "schema": "public",
-        "table": "accounts"
+        "table": "sources"
       },
       "size": null,
-      "source": "account_id",
+      "source": "source_id",
       "type": "uuid"
     }
   ],
@@ -54,9 +84,28 @@
   "check_constraints": [],
   "custom_indexes": [],
   "custom_statements": [],
-  "has_create_action": false,
-  "hash": "5F7B336AA53C301AA63884B706DFDF779BD1072E30A26C29960D0C637898A2D5",
-  "identities": [],
+  "has_create_action": true,
+  "hash": "856566811F8AD10FD84BD2D564B2CA0DD7A4AA4CDCA35EBC19EF699E1BD173A0",
+  "identities": [
+    {
+      "all_tenants?": false,
+      "base_filter": null,
+      "index_name": "documents_unique_content_index",
+      "keys": [
+        {
+          "type": "atom",
+          "value": "url"
+        },
+        {
+          "type": "atom",
+          "value": "content_hash"
+        }
+      ],
+      "name": "unique_content",
+      "nils_distinct?": true,
+      "where": null
+    }
+  ],
   "multitenancy": {
     "attribute": null,
     "global": null,
@@ -64,5 +113,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "feedbacks"
+  "table": "documents"
 }

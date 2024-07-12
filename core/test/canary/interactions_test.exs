@@ -35,13 +35,12 @@ defmodule Canary.Test.Interactions do
       client_2 = Client.create_web!(account, "https://getcanary.dev")
       client_3 = Client.create_discord!(account, 1, 2)
 
-      assert client_1.id != client_2.id
-      assert client_1.id != client_3.id
+      assert client_1.web_public_key != client_2.web_public_key
+      assert client_3.web_public_key == nil
 
-      client = Client.find_web!("example.com")
+      client = Client.find_web!(client_1.web_public_key)
       assert client.id == client_1.id
-      assert client.account.id == account.id
-      assert client.sources |> length() == 0
+      assert client.web_host_url == "example.com"
     end
 
     test "modify sources" do
