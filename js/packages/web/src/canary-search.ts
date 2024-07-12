@@ -9,6 +9,7 @@ import "./canary-panel";
 export class CanarySearch extends LitElement {
   @property() key = "";
   @property() endpoint = "";
+  @property() hljs = "github";
 
   ref = createRef<HTMLDialogElement>();
 

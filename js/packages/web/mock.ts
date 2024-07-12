@@ -54,7 +54,14 @@ const RESPONSE = `
 
 ## Introduction
 
-In the land of Zorkle, flibbertigibbets roam free, spreading their peculiar brand of gobbledygook wherever they wander. This response will explore the fascinating realm of these nonsensical creatures.
+In the land of Zorkle, flibbertigibbets roam free, spreading their peculiar brand of gobbledygook wherever they wander. 
+
+\`\`\`python
+def hello():
+  print("hello")
+
+hello()
+\`\`\`
 
 ## Key Characteristics of Flibbertigibbets
 
@@ -65,10 +72,6 @@ In the land of Zorkle, flibbertigibbets roam free, spreading their peculiar bran
 2. **Behavior**
    - Communicate through interpretive dance and armpit noises
    - Have a peculiar fondness for wearing monocles on their elbows
-
-3. **Diet**
-   - Subsist primarily on a diet of rainbow-flavored air
-   - Occasionally indulge in gourmet clouds with a side of bottled giggles
 `.trim();
 
 export default mocks;

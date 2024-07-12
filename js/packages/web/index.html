@@ -23,12 +23,6 @@
         font-size: 16px;
       }
 
-      pre {
-        border: 1px solid #e3e3e3;
-        width: fit-content;
-        padding: 8px;
-      }
-
       div.side {
         display: flex;
         flex-direction: row;
@@ -49,10 +43,15 @@
         --canary-color-gray-7: #f4f7f3;
         --canary-color-black: #ffffff;
 
-        background-color: var(--canary-color-black);
+        background-color: white;
+        border: 1px solid black;
+        color: black;
+
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        padding: 20px;
         height: 700px;
-        border: 1px solid var(--canary-color-white);
-        color: var(--canary-color-black);
       }
 
       .dark {
@@ -68,10 +67,15 @@
         --canary-color-gray-6: #1f2a1c;
         --canary-color-black: #151a13;
 
-        background-color: var(--canary-color-black);
+        background-color: black;
+        border: 1px solid white;
+        color: white;
+
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        padding: 20px;
         height: 700px;
-        border: 1px solid var(--canary-color-white);
-        color: var(--canary-color-white);
       }
     </style>
   </head>
@@ -83,11 +87,17 @@
     <div class="side">
       <div class="light" style="width: 50%">
         <span>light</span>
-        <canary-panel endpoint="http://localhost:5173"></canary-panel>
+        <canary-panel
+          endpoint="http://localhost:5173"
+          hljs="github"
+        ></canary-panel>
       </div>
       <div class="dark" style="width: 50%">
         <span>dark</span>
-        <canary-panel endpoint="http://localhost:5173"></canary-panel>
+        <canary-panel
+          hljs="github-dark"
+          endpoint="http://localhost:5173"
+        ></canary-panel>
       </div>
     </div>
   </body>

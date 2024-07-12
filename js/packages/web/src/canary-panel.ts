@@ -25,6 +25,7 @@ import { content } from "./styles";
 export class CanaryPanel extends LitElement {
   @property() key = "";
   @property() endpoint = "";
+  @property() hljs = "github";
 
   @property() query = "";
   @property() mode = "Search";
@@ -52,6 +53,8 @@ export class CanaryPanel extends LitElement {
         this.responseContainer.textContent = "";
         const parser = createMarkdownStreamParser(this.responseContainer, {
           syntaxHighlighter: highlighter,
+          waitTimeBeforeStreamCompletion: 20 * 1000,
+          showCodeBlockCopyButton: false,
         });
 
         await core.ask(
@@ -75,6 +78,10 @@ export class CanaryPanel extends LitElement {
 
   render() {
     return html`
+      <link
+        rel="stylesheet"
+        href="https://unpkg.com/highlight.js@11.9.0/styles/${this.hljs}.css"
+      />
       <div class="container">
         <div class="input-wrapper">
           ${this.mode === "Search"
@@ -190,6 +197,7 @@ export class CanaryPanel extends LitElement {
         border: none;
         border-radius: 8px;
         outline: none;
+        color: var(--canary-color-gray-1);
         background-color: var(--canary-color-black);
         box-shadow:
           0 20px 25px -5px rgb(0 0 0 / 0.1),
@@ -237,7 +245,7 @@ export class CanaryPanel extends LitElement {
         flex-direction: row;
         align-items: center;
         gap: 6px;
-        border: 1px solid var(--canary-color-gray-5);
+        border: 1px solid var(--canary-color-gray-6);
         border-radius: 8px;
         padding: 4px;
         width: fit-content;
@@ -248,7 +256,7 @@ export class CanaryPanel extends LitElement {
         flex-direction: row;
         align-items: center;
         gap: 6px;
-        border: 1px solid var(--canary-color-gray-5);
+        border: 1px solid var(--canary-color-gray-6);
         border-radius: 8px;
         padding: 4px;
       }
