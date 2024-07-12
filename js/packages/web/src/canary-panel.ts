@@ -7,11 +7,6 @@ import { Task } from "@lit/task";
 import { highlighter } from "@nlux/highlighter";
 import { createMarkdownStreamParser } from "@nlux/markdown";
 
-import "./icons/magnifying-glass";
-import "./icons/question-mark-circle";
-import "./icons/light-bulb";
-import "./icons/user";
-
 import "./canary-toggle";
 import "./canary-input";
 
@@ -129,9 +124,12 @@ export class CanaryPanel extends LitElement {
 
         <div class="results">${this.render_results()}</div>
 
-        <div class="logo">
-          Powered by <a href=${GITHUB_REPO_URL} target="_blank">🐤 Canary</a>
-        </div>
+        ${this.query == ""
+          ? nothing
+          : html` <div class="logo">
+              Powered by
+              <a href=${GITHUB_REPO_URL} target="_blank">🐤 Canary</a>
+            </div>`}
       </div>
     `;
   }
@@ -142,32 +140,15 @@ export class CanaryPanel extends LitElement {
         initial: () => nothing,
         pending: () =>
           this.mode === "Search"
-            ? html`
-                ${Array(Math.round(Math.random() * 3) + 2).fill(
-                  html`<div class="row skeleton"></div>`,
-                )}
-              `
-            : html`
-                <div class="messages"></div>
-                  <div class="user-message">
-                    <hero-user class="icon"></hero-user>
-                    <span>${this.query}</span>  
-                  </div>
-                  <div class="ai-message">
-                    <hero-light-bulb class="icon"></hero-light-bulb>
-                    ${this.responseContainer}
-                  </div>
-                </div>
-              `,
+            ? html` <div class="skeleton-container">
+                ${Array(4).fill(html`<div class="row skeleton"></div>`)}
+              </div>`
+            : html` <div class="ai-message">${this.responseContainer}</div> `,
         complete:
           this.mode === "Search"
             ? (items: SearchResultItem[]) =>
                 items.length === 0
-                  ? html`
-                      <div class="row error">
-                        <span class="title">No results found</span>
-                      </div>
-                    `
+                  ? nothing
                   : items.map(
                       ({ title, url, excerpt }, index) => html`
                         <a
@@ -185,18 +166,9 @@ export class CanaryPanel extends LitElement {
             : () =>
                 this.query !== ""
                   ? html`
-                <div class="messages"></div>
-                  <div class="user-message">
-                    <hero-user class="icon"></hero-user>
-                    <span>${this.query}</span>  
-                  </div>
-                  <div class="ai-message">
-                    <hero-light-bulb class="icon"></hero-light-bulb>
-                    ${this.responseContainer}
-                  </div>
-                </div>
-                `
-                  : html` <div>Nothing found</div> `,
+                      <div class="ai-message">${this.responseContainer}</div>
+                    `
+                  : nothing,
         error: (error) => {
           console.error(error);
           return html` <div class="row error">
@@ -236,6 +208,10 @@ export class CanaryPanel extends LitElement {
   }
 
   private _handleToggle(e: CustomEvent) {
+    if (this.mode === "Ask") {
+      this.query = "";
+    }
+
     this.mode = e.detail;
   }
 
@@ -243,7 +219,7 @@ export class CanaryPanel extends LitElement {
     content,
     css`
       div.container {
-        padding: 8px 12px;
+        padding: 8px 8px;
         border: none;
         border-radius: 8px;
         outline: none;
@@ -285,31 +261,10 @@ export class CanaryPanel extends LitElement {
       }
     `,
     css`
-      .messages {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-      }
-
-      .user-message {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        gap: 6px;
-        border: 1px solid var(--canary-color-gray-6);
-        border-radius: 8px;
-        padding: 4px;
-        width: fit-content;
-      }
-
       .ai-message {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        gap: 6px;
         border: 1px solid var(--canary-color-gray-6);
         border-radius: 8px;
-        padding: 4px;
+        padding: 0px 12px;
       }
     `,
     css`
@@ -340,6 +295,13 @@ export class CanaryPanel extends LitElement {
       }
     `,
     css`
+      .skeleton-container {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        height: 500px;
+      }
+
       .skeleton {
         border: none;
         background-color: var(--canary-color-gray-5);

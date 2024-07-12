@@ -10,10 +10,13 @@ const mocks: MockHandler[] = [
         excerpt: "123",
       });
 
-      setTimeout(() => {
-        res.setHeader("Content-Type", "application/json");
-        res.end(JSON.stringify(items));
-      }, Math.random() * 500);
+      setTimeout(
+        () => {
+          res.setHeader("Content-Type", "application/json");
+          res.end(JSON.stringify(items));
+        },
+        Math.random() * 200 + 400,
+      );
     },
   },
   {

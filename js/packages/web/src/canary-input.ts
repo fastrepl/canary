@@ -20,7 +20,7 @@ const STYLE = css`
   }
 
   input {
-    flex-grow: 1;
+    width: 400px;
     height: 30px;
     outline: none;
     border: none;
