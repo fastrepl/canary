@@ -7,6 +7,7 @@ import "./canary-panel";
 
 @customElement("canary-search")
 export class CanarySearch extends LitElement {
+  @property() key = "";
   @property() endpoint = "";
 
   ref = createRef<HTMLDialogElement>();
@@ -15,7 +16,7 @@ export class CanarySearch extends LitElement {
     return html`
       <slot @click=${this._handleOpen}></slot>
       <canary-dialog .ref=${this.ref}>
-        <canary-panel endpoint=${this.endpoint}></canary-panel>
+        <canary-panel key=${this.key} endpoint=${this.endpoint}> </canary-panel>
       </canary-dialog>
     `;
   }

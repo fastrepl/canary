@@ -1,6 +1,7 @@
 // This should be moved to @getcanary/core at some point
 
 export const search = async (
+  key: string,
   endpoint: string,
   query: string,
   signal?: AbortSignal,
@@ -10,7 +11,7 @@ export const search = async (
   const params = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ query }),
+    body: JSON.stringify({ key, query }),
     signal,
   };
 
@@ -23,6 +24,7 @@ export const search = async (
 };
 
 export const ask = async (
+  key: string,
   endpoint: string,
   id: number,
   query: string,
@@ -33,7 +35,7 @@ export const ask = async (
   const params = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ query, id }),
+    body: JSON.stringify({ id, key, query }),
     signal,
   };
 

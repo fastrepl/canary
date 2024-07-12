@@ -23,7 +23,9 @@ import { content } from "./styles";
 
 @customElement("canary-panel")
 export class CanaryPanel extends LitElement {
+  @property() key = "";
   @property() endpoint = "";
+
   @property() query = "";
   @property() mode = "Search";
   @state() askResult = "";
@@ -37,7 +39,12 @@ export class CanaryPanel extends LitElement {
       }
 
       if (mode === "Search") {
-        const result = await core.search(this.endpoint, this.query, signal);
+        const result = await core.search(
+          this.key,
+          this.endpoint,
+          this.query,
+          signal,
+        );
         return result;
       }
 
@@ -48,6 +55,7 @@ export class CanaryPanel extends LitElement {
         });
 
         await core.ask(
+          this.key,
           this.endpoint,
           randomInteger(),
           this.query,
@@ -128,7 +136,11 @@ export class CanaryPanel extends LitElement {
           this.mode === "Search"
             ? (items: SearchResultItem[]) =>
                 items.length === 0
-                  ? nothing
+                  ? html`
+                      <div class="row error">
+                        <span class="title">No results found</span>
+                      </div>
+                    `
                   : items.map(
                       ({ title, url, excerpt }) => html`
                         <a class="row" href="${url}">
@@ -137,7 +149,9 @@ export class CanaryPanel extends LitElement {
                         </a>
                       `,
                     )
-            : () => html`
+            : () =>
+                this.query !== ""
+                  ? html`
                 <div class="messages"></div>
                   <div class="user-message">
                     <hero-user class="icon"></hero-user>
@@ -148,7 +162,8 @@ export class CanaryPanel extends LitElement {
                     ${this.responseContainer}
                   </div>
                 </div>
-                `,
+                `
+                  : html` <div>Nothing found</div> `,
         error: (error) => {
           console.error(error);
           return html` <div class="row error">
@@ -171,10 +186,14 @@ export class CanaryPanel extends LitElement {
     content,
     css`
       div.container {
-        padding: 8px 16px;
+        padding: 8px 12px;
         border: none;
+        border-radius: 8px;
         outline: none;
         background-color: var(--canary-color-black);
+        box-shadow:
+          0 20px 25px -5px rgb(0 0 0 / 0.1),
+          0 8px 10px -6px rgb(0 0 0 / 0.1);
       }
 
       div.input-wrapper {
@@ -191,7 +210,7 @@ export class CanaryPanel extends LitElement {
       .row {
         height: 50px;
         padding: 12px 16px;
-        border: 1px solid var(--canary-color-gray-5);
+        border: 1px solid var(--canary-color-gray-6);
         border-radius: 8px;
 
         display: flex;
