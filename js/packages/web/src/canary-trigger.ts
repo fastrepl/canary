@@ -12,8 +12,8 @@ export class CanaryTrigger extends LitElement {
         <span>Search</span>
 
         <kbd>
-          <kbd>⌘</kbd>
-          <kbd>K</kbd>
+          <kbd class="meta">⌘</kbd>
+          <kbd class="key">K</kbd>
         </kbd>
       </button>
     `;
@@ -77,12 +77,23 @@ export class CanaryTrigger extends LitElement {
     }
 
     button > kbd {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
       display: none;
       border-radius: 0.25rem;
-      font-size: 0.7rem;
       gap: 0.25em;
       padding-inline: 0.375rem;
       background-color: var(--canary-color-gray-6);
+    }
+
+    kbd.meta {
+      font-size: 0.75rem;
+    }
+
+    kbd.key {
+      font-size: 0.55rem;
     }
 
     span {
