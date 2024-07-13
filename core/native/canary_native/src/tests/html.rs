@@ -12,18 +12,14 @@ fn simple() {
 
     # LiteLLM - Getting Started
 
-    [https://github.com/BerriAI/litellm](https://github.com/BerriAI/litellm)
-
-    ## **Call 100+ LLMs using the same Input/Output Format**[​](#call-100-llms-using-the-same-inputoutput-format "Direct link to call-100-llms-using-the-same-inputoutput-format")
+    ## **Call 100+ LLMs using the same Input/Output Format**
 
     *   Translate inputs to provider's `completion`, `embedding`, and `image_generation` endpoints
-    *   [Consistent output](https://docs.litellm.ai/docs/completion/output), text responses will always be available at `['choices'][0]['message']['content']`
-    *   Retry/fallback logic across multiple deployments (e.g. Azure/OpenAI) - [Router](https://docs.litellm.ai/docs/routing)
-    *   Track spend & set budgets per project [OpenAI Proxy Server](https://docs.litellm.ai/docs/simple_proxy)
+    *   , text responses will always be available at `['choices'][0]['message']['content']`
+    *   Retry/fallback logic across multiple deployments (e.g. Azure/OpenAI) -
+    *   Track spend & set budgets per project
 
-    ## Basic usage[​](#basic-usage "Direct link to Basic usage")
-
-    [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/BerriAI/litellm/blob/main/cookbook/liteLLM_Getting_Started.ipynb)
+    ## Basic usage
 
     ```shell
     pip install litellm  
@@ -132,7 +128,7 @@ fn simple() {
     )  
     ```
 
-    ## Streaming[​](#streaming "Direct link to Streaming")
+    ## Streaming
 
     Set `stream=True` in the `completion` args.
 
@@ -246,7 +242,7 @@ fn simple() {
     )  
     ```
 
-    ## Exception handling[​](#exception-handling "Direct link to Exception handling")
+    ## Exception handling
 
     LiteLLM maps exceptions across all supported providers to the OpenAI exceptions. All our exceptions inherit from OpenAI's exception types, so any error-handling you have for that, should work out of the box with LiteLLM.
 
@@ -262,7 +258,7 @@ fn simple() {
         print(e)  
     ```
 
-    ## Logging Observability - Log LLM Input/Output ([Docs](https://docs.litellm.ai/docs/observability/callbacks))[​](#logging-observability---log-llm-inputoutput-docs "Direct link to logging-observability---log-llm-inputoutput-docs")
+    ## Logging Observability - Log LLM Input/Output ()
 
     LiteLLM exposes pre defined callbacks to send data to Lunary, Langfuse, Helicone, Promptlayer, Traceloop, Slack
 
@@ -270,6 +266,7 @@ fn simple() {
     from litellm import completion  
       
     ## set env variables for logging tools  
+    os.environ["HELICONE_API_KEY"] = "your-helicone-key"  
     os.environ["LANGFUSE_PUBLIC_KEY"] = ""  
     os.environ["LANGFUSE_SECRET_KEY"] = ""  
     os.environ["LUNARY_PUBLIC_KEY"] = "your-lunary-public-key"  
@@ -283,9 +280,9 @@ fn simple() {
     response = completion(model="gpt-3.5-turbo", messages=[{"role": "user", "content": "Hi 👋 - i'm openai"}])  
     ```
 
-    ## Track Costs, Usage, Latency for streaming[​](#track-costs-usage-latency-for-streaming "Direct link to Track Costs, Usage, Latency for streaming")
+    ## Track Costs, Usage, Latency for streaming
 
-    Use a callback function for this - more info on custom callbacks: [https://docs.litellm.ai/docs/observability/custom\_callback](https://docs.litellm.ai/docs/observability/custom_callback)
+    Use a callback function for this - more info on custom callbacks: 
 
     ```python
     import litellm  
@@ -317,7 +314,7 @@ fn simple() {
     )  
     ```
 
-    ## OpenAI Proxy[​](#openai-proxy "Direct link to OpenAI Proxy")
+    ## OpenAI Proxy
 
     Track spend across multiple projects/people
 
@@ -325,20 +322,20 @@ fn simple() {
 
     The proxy provides:
 
-    1.  [Hooks for auth](https://docs.litellm.ai/docs/proxy/virtual_keys#custom-auth)
-    2.  [Hooks for logging](https://docs.litellm.ai/docs/proxy/logging#step-1---create-your-custom-litellm-callback-class)
-    3.  [Cost tracking](https://docs.litellm.ai/docs/proxy/virtual_keys#tracking-spend)
-    4.  [Rate Limiting](https://docs.litellm.ai/docs/proxy/users#set-rate-limits)
+    1.  
+    2.  
+    3.  
+    4.  
 
-    ### 📖 Proxy Endpoints - [Swagger Docs](https://litellm-api.up.railway.app/)[​](#-proxy-endpoints---swagger-docs "Direct link to -proxy-endpoints---swagger-docs")
+    ### 📖 Proxy Endpoints -
 
-    ### Quick Start Proxy - CLI[​](#quick-start-proxy---cli "Direct link to Quick Start Proxy - CLI")
+    ### Quick Start Proxy - CLI
 
     ```shell
     pip install 'litellm[proxy]'  
     ```
 
-    #### Step 1: Start litellm proxy[​](#step-1-start-litellm-proxy "Direct link to Step 1: Start litellm proxy")
+    #### Step 1: Start litellm proxy
 
     ```shell
     $ litellm --model huggingface/bigcode/starcoder  
@@ -346,7 +343,7 @@ fn simple() {
     #INFO: Proxy running on http://0.0.0.0:8000  
     ```
 
-    #### Step 2: Make ChatCompletions Request to Proxy[​](#step-2-make-chatcompletions-request-to-proxy "Direct link to Step 2: Make ChatCompletions Request to Proxy")
+    #### Step 2: Make ChatCompletions Request to Proxy
 
     ```python
     import openai # openai v1.0.0+  
@@ -362,21 +359,31 @@ fn simple() {
     print(response)  
     ```
 
-    ## More details[​](#more-details "Direct link to More details")
+    ## More details
 
-    *   [exception mapping](/exception_mapping.md)
-    *   [retries + model fallbacks for completion()](/completion/reliable_completions.md)
-    *   [proxy virtual keys & spend management](/tutorials/fallbacks.md)
+    *   
+    *   
+    *   
 
-    *   [**Call 100+ LLMs using the same Input/Output Format**](#call-100-llms-using-the-same-inputoutput-format)
-    *   [Basic usage](#basic-usage)
-    *   [Streaming](#streaming)
-    *   [Exception handling](#exception-handling)
-    *   [Logging Observability - Log LLM Input/Output (Docs)](#logging-observability---log-llm-inputoutput-docs)
-    *   [Track Costs, Usage, Latency for streaming](#track-costs-usage-latency-for-streaming)
-    *   [OpenAI Proxy](#openai-proxy)
-        *   [📖 Proxy Endpoints - Swagger Docs](#-proxy-endpoints---swagger-docs)
-        *   [Quick Start Proxy - CLI](#quick-start-proxy---cli)
-    *   [More details](#more-details)
+    *   
+    *   
+    *   
+    *   
+    *   
+    *   
+    *   *
+        *
+    *
+    "###);
+}
+
+#[test]
+fn fragment_link() {
+    let html = include_str_from_url!("https://docs.getcanary.dev/integrations/vitepress");
+    let md = html::to_md(&html).unwrap();
+    assert_snapshot!(md, @r###"
+    Integrations - VitePress | 🐤 Canary
+
+    # Integrations - VitePress
     "###);
 }

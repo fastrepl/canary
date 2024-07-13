@@ -33,15 +33,7 @@ defmodule Canary.Test.Reader do
       </html>
       """
 
-      md =
-        String.trim("""
-        Floki
-
-        Enables search using CSS selectors[Github page](https://github.com/philss/floki)philss
-
-        [Hex package](https://hex.pm/packages/floki)
-        """)
-
+      md = "Floki\n\nEnables search using CSS selectorsphilss"
       assert Canary.Reader.markdown_from_html(html) == md
     end
   end
