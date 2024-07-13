@@ -7,6 +7,12 @@
     <script type="module" src="/src/canary-search.ts"></script>
     <script type="module" src="/src/canary-panel.ts"></script>
 
+    <script type="module" src="/src/canary-slack-logo.ts"></script>
+    <script type="module" src="/src/canary-discord-logo.ts"></script>
+
+    <script type="module" src="/src/canary-wrapper-starlight.ts"></script>
+    <script type="module" src="/src/canary-trigger.ts"></script>
+
     <style>
       body {
         display: flex;
@@ -23,10 +29,12 @@
         font-size: 16px;
       }
 
-      div.side {
+      div.page {
+        height: 100vh;
+        background-color: #f1f1f1;
         display: flex;
-        flex-direction: row;
-        gap: 20px;
+        flex-direction: column;
+        gap: 10px;
       }
 
       .light {
@@ -77,26 +85,67 @@
         padding: 20px;
         height: 700px;
       }
+
+      :root {
+        --sl-color-accent-low: #00273d;
+        --sl-color-accent: #0071a7;
+        --sl-color-accent-high: #92d1fe;
+        --sl-color-white: #ffffff;
+        --sl-color-gray-1: #e7eff2;
+        --sl-color-gray-2: #bac4c8;
+        --sl-color-gray-3: #7b8f96;
+        --sl-color-gray-4: #495c62;
+        --sl-color-gray-5: #2a3b41;
+        --sl-color-gray-6: #182a2f;
+        --sl-color-black: #121a1c;
+      }
+      :root[data-theme="light"] {
+        --sl-color-accent-low: #b0deff;
+        --sl-color-accent: #0073aa;
+        --sl-color-accent-high: #003653;
+        --sl-color-white: #121a1c;
+        --sl-color-gray-1: #182a2f;
+        --sl-color-gray-2: #2a3b41;
+        --sl-color-gray-3: #495c62;
+        --sl-color-gray-4: #7b8f96;
+        --sl-color-gray-5: #bac4c8;
+        --sl-color-gray-6: #e7eff2;
+        --sl-color-gray-7: #f3f7f9;
+        --sl-color-black: #ffffff;
+      }
     </style>
   </head>
   <body>
-    <div class="side">
-      <div class="light" style="width: 50%">
-        <span>light</span>
-        <canary-panel
-          endpoint="http://localhost:5173"
-          hljs="github"
-          query="hello"
-        ></canary-panel>
+    <div class="page">
+      <a id="panel" href="#panel">panel</a>
+
+      <div style="display: flex; flex-direction: row; gap: 20px">
+        <div class="light">
+          <canary-panel
+            endpoint="http://localhost:5173"
+            hljs="github"
+            query="hello"
+          ></canary-panel>
+        </div>
+        <div class="dark">
+          <canary-panel
+            hljs="github-dark"
+            endpoint="http://localhost:5173"
+            query="hello"
+          ></canary-panel>
+        </div>
       </div>
-      <div class="dark" style="width: 50%">
-        <span>dark</span>
-        <canary-panel
-          hljs="github-dark"
-          endpoint="http://localhost:5173"
-          query="hello"
-        ></canary-panel>
-      </div>
+    </div>
+
+    <div class="page">
+      <a id="logo" href="#logo">logo</a>
+
+      <canary-slack-logo url="/"></canary-slack-logo>
+      <canary-discord-logo url="/"></canary-discord-logo>
+
+      <canary-wrapper-starlight>
+        <canary-trigger></canary-trigger>
+      </canary-wrapper-starlight>
     </div>
   </body>
 </html>

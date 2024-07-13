@@ -299,7 +299,7 @@ export class CanaryPanel extends LitElement {
         display: flex;
         flex-direction: column;
         gap: 8px;
-        height: 500px;
+        height: 350px;
       }
 
       .skeleton {
@@ -324,15 +324,6 @@ export class CanaryPanel extends LitElement {
       }
     `,
     css`
-      .icon {
-        display: flex;
-        margin-top: 2px;
-        margin-bottom: auto;
-        width: 1rem;
-        height: 1rem;
-        color: var(--canary-color-gray-3);
-      }
-
       .logo {
         padding-top: 8px;
         text-align: end;

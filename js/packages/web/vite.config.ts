@@ -5,10 +5,18 @@ import mockServer from "vite-plugin-mock-server";
 export default defineConfig({
   build: {
     lib: {
-      entry: {
-        "canary-search": resolve(__dirname, "src/canary-search.ts"),
-        "canary-panel": resolve(__dirname, "src/canary-panel.ts"),
-      },
+      entry: [
+        "canary-search",
+        "canary-panel",
+        "canary-trigger",
+        "canary-wrapper-starlight",
+        "canary-wrapper-docusaurus",
+        "canary-discord-logo",
+        "canary-slack-logo",
+      ].reduce(
+        (acc, cur) => ({ ...acc, [cur]: resolve(__dirname, `src/${cur}.ts`) }),
+        {} as Record<string, string>,
+      ),
       formats: ["es"],
       fileName: (_, entryName) => `${entryName}.js`,
     },

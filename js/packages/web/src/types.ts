@@ -2,6 +2,7 @@ import { CanarySearch } from "./canary-search";
 import { CanaryDialog } from "./canary-dialog";
 import { CanaryPanel } from "./canary-panel";
 import { CanaryInputAsk, CanaryInputSearch } from "./canary-input";
+import { CanaryHeroIcon } from "./canary-hero-icon";
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -10,5 +11,6 @@ declare global {
     "canary-panel": CanaryPanel;
     "canary-input-ask": CanaryInputAsk;
     "canary-input-search": CanaryInputSearch;
+    "canary-hero-icon": CanaryHeroIcon;
   }
 }
