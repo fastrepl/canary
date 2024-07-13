@@ -7,13 +7,15 @@
     <script type="module" src="/src/canary-search.ts"></script>
     <script type="module" src="/src/canary-panel.ts"></script>
 
-    <script type="module" src="/src/canary-slack-logo.ts"></script>
-    <script type="module" src="/src/canary-discord-logo.ts"></script>
+    <script type="module" src="/src/canary-logo-slack.ts"></script>
+    <script type="module" src="/src/canary-logo-discord.ts"></script>
 
     <script type="module" src="/src/canary-wrapper-starlight.ts"></script>
     <script type="module" src="/src/canary-trigger.ts"></script>
+
     <script type="module" src="/src/canary-callout-slack.ts"></script>
     <script type="module" src="/src/canary-callout-discord.ts"></script>
+    <script type="module" src="/src/canary-callout-cal.ts"></script>
 
     <style>
       body {
@@ -126,7 +128,7 @@
           <canary-panel
             endpoint="http://localhost:5173"
             hljs="github"
-            query="hello"
+            query="meeting"
           >
             <canary-callout-discord
               slot="callout"
@@ -136,6 +138,11 @@
               slot="callout"
               url="https://discord.gg/Y8bJkzuQZU"
             ></canary-callout-slack>
+
+            <canary-callout-cal
+              slot="callout"
+              url="https://discord.gg/Y8bJkzuQZU"
+            ></canary-callout-cal>
           </canary-panel>
         </div>
 
@@ -157,8 +164,8 @@
     <div class="page">
       <a id="logo" href="#logo">logo</a>
 
-      <canary-slack-logo url="/"></canary-slack-logo>
-      <canary-discord-logo url="/"></canary-discord-logo>
+      <canary-logo-slack url="/"></canary-logo-slack>
+      <canary-logo-discord url="/"></canary-logo-discord>
 
       <canary-search>
         <canary-trigger></canary-trigger>

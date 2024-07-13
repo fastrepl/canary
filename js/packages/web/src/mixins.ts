@@ -16,10 +16,18 @@ export function CalloutMixin<T extends Constructor<LitElement>>(superClass: T) {
       target: this.closest(ELEMENT_NAME),
       config: { attributeFilter: [ATTRIBUTE_NAME] },
       callback: (mutations) => {
+        if (mutations.length === 0) {
+          const target = this.closest(ELEMENT_NAME);
+          const initial = target?.getAttribute(ATTRIBUTE_NAME) ?? "";
+          this.requestUpdate();
+          return initial;
+        }
+
         const m = mutations.find((m) => m.attributeName === ATTRIBUTE_NAME);
         if (!m?.target) {
           return "";
         }
+
         return (m.target as HTMLElement).getAttribute(ATTRIBUTE_NAME) ?? "";
       },
     });

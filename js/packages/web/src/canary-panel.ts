@@ -123,8 +123,10 @@ export class CanaryPanel extends LitElement {
           ></canary-toggle>
         </div>
 
-        <slot name="callout"></slot>
-        <div class="results">${this.render_results()}</div>
+        ${this.mode === "Search"
+          ? html`<div class="callouts"><slot name="callout"></slot></div>`
+          : nothing}
+        <div class="results">${this.results()}</div>
 
         ${this.footer()}
       </div>
@@ -144,7 +146,7 @@ export class CanaryPanel extends LitElement {
     `;
   }
 
-  render_results() {
+  results() {
     return html`
       ${this._task.render({
         initial: () => nothing,
@@ -245,7 +247,7 @@ export class CanaryPanel extends LitElement {
         justify-content: space-between;
         align-items: center;
         border-radius: 8px;
-        margin-bottom: 8px;
+        margin-bottom: 4px;
         padding: 1px 8px;
         background-color: var(--canary-color-gray-6);
       }
@@ -278,6 +280,13 @@ export class CanaryPanel extends LitElement {
       }
     `,
     css`
+      div.callouts {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        margin-bottom: 12px;
+      }
+
       div.results {
         display: flex;
         flex-direction: column;

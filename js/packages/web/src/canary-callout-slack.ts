@@ -1,12 +1,17 @@
-import { LitElement, html, css } from "lit";
+import { LitElement, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
 import { CalloutMixin } from "./mixins";
-import "./canary-slack-logo";
+import { callout } from "./styles";
+
+import "./canary-logo-slack";
+import "./canary-hero-icon";
 
 @customElement("canary-callout-slack")
 export class CanaryCalloutSlack extends CalloutMixin(LitElement) {
+  @property() message = "Looking for help?";
   @property() url = "";
+
   @property({ type: Array }) keywords: string[] = [
     "slack",
     "help",
@@ -16,11 +21,19 @@ export class CanaryCalloutSlack extends CalloutMixin(LitElement) {
 
   renderCallout() {
     return html`
-      <div>
-        <a href=${this.url} target="_blank">Slack</a>
-      </div>
+      <button @click=${this._handleClick}>
+        <span> 👋 ${this.message} </span>
+        <div>
+          <canary-logo-slack url=${this.url}></canary-logo-slack>
+          <canary-hero-icon name="chevron-right"></canary-hero-icon>
+        </div>
+      </button>
     `;
   }
 
-  static styles = css``;
+  private _handleClick() {
+    window.open(this.url, "_blank");
+  }
+
+  static styles = callout;
 }

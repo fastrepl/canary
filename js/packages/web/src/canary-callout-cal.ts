@@ -4,19 +4,19 @@ import { customElement, property } from "lit/decorators.js";
 import { CalloutMixin } from "./mixins";
 import { callout } from "./styles";
 
-import "./canary-logo-discord";
+import "./canary-logo-cal";
 import "./canary-hero-icon";
 
-@customElement("canary-callout-discord")
-export class CanaryCalloutDiscord extends CalloutMixin(LitElement) {
-  @property() message = "Looking for help?";
+@customElement("canary-callout-cal")
+export class CanaryCalloutCal extends CalloutMixin(LitElement) {
+  @property() message = "Wanna schedule a call?";
   @property() url = "";
 
   @property({ type: Array }) keywords: string[] = [
-    "discord",
-    "help",
-    "support",
-    "community",
+    "meeting",
+    "schedule",
+    "cal.com",
+    "calend",
   ];
 
   renderCallout() {
@@ -24,7 +24,7 @@ export class CanaryCalloutDiscord extends CalloutMixin(LitElement) {
       <button @click=${this._handleClick}>
         <span> 👋 ${this.message} </span>
         <div>
-          <canary-logo-discord url=${this.url}></canary-logo-discord>
+          <canary-logo-cal url=${this.url}></canary-logo-cal>
           <canary-hero-icon name="chevron-right"></canary-hero-icon>
         </div>
       </button>

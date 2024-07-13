@@ -11,8 +11,10 @@ export default defineConfig({
         "canary-trigger",
         "canary-wrapper-starlight",
         "canary-wrapper-docusaurus",
-        "canary-slack-logo",
-        "canary-discord-logo",
+        "canary-logo-cal",
+        "canary-logo-slack",
+        "canary-logo-discord",
+        "canary-callout-cal",
         "canary-callout-slack",
         "canary-callout-discord",
       ].reduce(
