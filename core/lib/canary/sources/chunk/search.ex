@@ -20,7 +20,7 @@ defmodule Canary.Sources.Chunk.FTS do
   use Ash.Resource.ManualRead
 
   @index_name "search_index"
-  @table_text_field "content"
+  @table_content_field "content"
 
   def read(ash_query, _ecto_query, _opts, _context) do
     text = ash_query.arguments.text
@@ -34,8 +34,8 @@ defmodule Canary.Sources.Chunk.FTS do
     """
 
     params = [
-      @table_text_field,
-      ~s(#{@table_text_field}:"#{text}")
+      @table_content_field,
+      ~s(#{@table_content_field}:"#{text}")
     ]
 
     query
@@ -69,7 +69,7 @@ defmodule Canary.Sources.Chunk.Hybrid do
 
   @index_name "search_index"
   @table_name "chunks"
-  @table_text_field "content"
+  @table_content_field "content"
   @table_vector_field "embedding"
 
   def read(ash_query, _ecto_query, _opts, _context) do
@@ -114,7 +114,7 @@ defmodule Canary.Sources.Chunk.Hybrid do
     """
 
     params = [
-      ~s(#{@table_text_field}:"#{text}"),
+      ~s(#{@table_content_field}:"#{text}"),
       ~s('#{embedding}' <-> #{@table_vector_field}),
       threshold,
       n

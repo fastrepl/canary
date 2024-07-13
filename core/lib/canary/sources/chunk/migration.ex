@@ -2,10 +2,21 @@ defmodule Canary.Sources.Chunk.Migration do
   use Ecto.Migration
 
   @index_name "search_index"
-  @table_name "chunks"
-  @table_vector_field "embedding"
-  @table_id_field "id"
   @distance_metric "vector_cosine_ops"
+
+  @table_name "chunks"
+  @table_id_field "id"
+  @table_vector_field "embedding"
+  @table_content_field "content"
+
+  defp index_config() do
+    %{
+      @table_content_field => %{
+        tokenizer: %{type: "ngram", min_gram: 2, max_gram: 6, prefix_only: false},
+        normalizer: "lowercase"
+      }
+    }
+  end
 
   def up do
     hnsw_up()
@@ -36,7 +47,7 @@ defmodule Canary.Sources.Chunk.Migration do
       index_name => '#{@index_name}',
       table_name => '#{@table_name}',
       key_field => '#{@table_id_field}',
-      text_fields => '#{Jason.encode!(%{content: %{tokenizer: %{type: "ngram", min_gram: 2, max_gram: 5, prefix_only: false}}})}'
+      text_fields => '#{Jason.encode!(index_config())}'
     );
     """)
   end
