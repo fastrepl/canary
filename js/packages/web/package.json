@@ -13,6 +13,7 @@
     "format": "npx prettier . --write"
   },
   "dependencies": {
+    "@lit-labs/observers": "^2.0.2",
     "@lit/task": "^1.0.1",
     "@nlux/highlighter": "^2.14.0",
     "@nlux/markdown": "^2.14.0",

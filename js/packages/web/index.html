@@ -12,6 +12,8 @@
 
     <script type="module" src="/src/canary-wrapper-starlight.ts"></script>
     <script type="module" src="/src/canary-trigger.ts"></script>
+    <script type="module" src="/src/canary-callout-slack.ts"></script>
+    <script type="module" src="/src/canary-callout-discord.ts"></script>
 
     <style>
       body {
@@ -125,14 +127,29 @@
             endpoint="http://localhost:5173"
             hljs="github"
             query="hello"
-          ></canary-panel>
+          >
+            <canary-callout-discord
+              slot="callout"
+              url="https://discord.gg/Y8bJkzuQZU"
+            ></canary-callout-discord>
+            <canary-callout-slack
+              slot="callout"
+              url="https://discord.gg/Y8bJkzuQZU"
+            ></canary-callout-slack>
+          </canary-panel>
         </div>
+
         <div class="dark">
           <canary-panel
             hljs="github-dark"
             endpoint="http://localhost:5173"
             query="hello"
-          ></canary-panel>
+          >
+            <canary-callout-discord
+              slot="callout"
+              url="https://discord.gg/Y8bJkzuQZU"
+            ></canary-callout-discord>
+          </canary-panel>
         </div>
       </div>
     </div>

@@ -11,8 +11,10 @@ export default defineConfig({
         "canary-trigger",
         "canary-wrapper-starlight",
         "canary-wrapper-docusaurus",
-        "canary-discord-logo",
         "canary-slack-logo",
+        "canary-discord-logo",
+        "canary-callout-slack",
+        "canary-callout-discord",
       ].reduce(
         (acc, cur) => ({ ...acc, [cur]: resolve(__dirname, `src/${cur}.ts`) }),
         {} as Record<string, string>,

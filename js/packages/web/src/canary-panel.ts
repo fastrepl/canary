@@ -24,7 +24,7 @@ export class CanaryPanel extends LitElement {
   @property() hljs = "github";
 
   @property() mode = "Search";
-  @property() query = "";
+  @property({ reflect: true }) query = "";
 
   @state() askResult = "";
   @state() responseContainer: HTMLDivElement = document.createElement("div");
@@ -95,6 +95,7 @@ export class CanaryPanel extends LitElement {
         rel="stylesheet"
         href="https://unpkg.com/highlight.js@11.9.0/styles/${this.hljs}.css"
       />
+
       <div class="container">
         <div class="input-wrapper">
           ${this.mode === "Search"
@@ -122,15 +123,24 @@ export class CanaryPanel extends LitElement {
           ></canary-toggle>
         </div>
 
+        <slot name="callout"></slot>
         <div class="results">${this.render_results()}</div>
 
-        ${this.query == ""
-          ? nothing
-          : html` <div class="logo">
+        ${this.footer()}
+      </div>
+    `;
+  }
+
+  footer() {
+    return html`
+      ${this.query == ""
+        ? nothing
+        : html`
+            <div class="logo">
               Powered by
               <a href=${GITHUB_REPO_URL} target="_blank">🐤 Canary</a>
-            </div>`}
-      </div>
+            </div>
+          `}
     `;
   }
 
