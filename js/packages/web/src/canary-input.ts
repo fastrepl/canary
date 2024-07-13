@@ -1,8 +1,7 @@
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
-import "./icons/question-mark-circle";
-import "./icons/magnifying-glass";
+import "./canary-hero-icon";
 
 const STYLE = css`
   .container {
@@ -12,11 +11,6 @@ const STYLE = css`
     border-radius: 8px;
     color: var(--canary-color-gray-1);
     background-color: var(--canary-color-gray-6);
-  }
-
-  .icon {
-    width: 1rem;
-    height: 1rem;
   }
 
   input {
@@ -42,9 +36,7 @@ export class CanaryInputSearch extends LitElement {
   render() {
     return html`
       <div class="container">
-        <div class="icon">
-          <hero-magnifying-glass></hero-magnifying-glass>
-        </div>
+        <canary-hero-icon name="magnifying-glass"></canary-hero-icon>
         <input
           type="text"
           value=${this.value}
@@ -83,9 +75,7 @@ export class CanaryInputAsk extends LitElement {
   render() {
     return html`
       <div class="container">
-        <div class="icon">
-          <hero-question-mark-circle></hero-question-mark-circle>
-        </div>
+        <canary-hero-icon name="question-mark-circle"></canary-hero-icon>
         <input
           type="text"
           value=${this.value}
