@@ -19,6 +19,28 @@ export class CanaryTrigger extends LitElement {
     `;
   }
 
+  connectedCallback() {
+    super.connectedCallback();
+    this.addEventListener("keydown", this._handleShortcut);
+  }
+
+  disconnectedCallback() {
+    this.removeEventListener("keydown", this._handleShortcut);
+    super.disconnectedCallback();
+  }
+
+  private _handleShortcut(e: KeyboardEvent) {
+    if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
+      e.preventDefault();
+
+      const event = new MouseEvent("click", {
+        bubbles: true,
+        cancelable: true,
+      });
+      this.dispatchEvent(event);
+    }
+  }
+
   static styles = css`
     button {
       display: flex;
@@ -57,14 +79,10 @@ export class CanaryTrigger extends LitElement {
     button > kbd {
       display: none;
       border-radius: 0.25rem;
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       gap: 0.25em;
       padding-inline: 0.375rem;
       background-color: var(--canary-color-gray-6);
-    }
-
-    kbd {
-      font-family: var(--canary-font);
     }
 
     span {
