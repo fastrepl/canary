@@ -24,3 +24,5 @@ dist-ssr
 *.sw?
 
 components
+
+*storybook.log
