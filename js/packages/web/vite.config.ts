@@ -9,6 +9,7 @@ export default defineConfig({
         "canary-panel",
         "canary-trigger",
         "canary-modal",
+        "canary-radio",
         "canary-wrapper-starlight",
         "canary-wrapper-docusaurus",
         "canary-logo-cal",

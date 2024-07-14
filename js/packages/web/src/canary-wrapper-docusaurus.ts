@@ -9,6 +9,13 @@ export class CanaryWrapperDocusaurus extends LitElement {
 
   static styles = css`
     :host {
+      --canary-font-family: var(
+        --ifm-font-family-base,
+        Arial,
+        Helvetica,
+        sans-serif
+      );
+
       --canary-color-white: var(--ifm-color-white);
       --canary-color-gray-1: var(--ifm-color-gray-100);
       --canary-color-gray-2: var(--ifm-color-gray-200);

@@ -12,6 +12,10 @@ export class CanaryWrapperDefault extends LitElement {
   }
 
   static styles = css`
+    :host {
+      --canary-font-family: Arial, Helvetica, sans-serif;
+    }
+
     div[data-theme="light"] {
       --canary-color-accent-low: #c0e2b8;
       --canary-color-accent: #258100;

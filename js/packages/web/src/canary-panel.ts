@@ -6,7 +6,7 @@ import { Task } from "@lit/task";
 import { highlighter } from "@nlux/highlighter";
 import { createMarkdownStreamParser } from "@nlux/markdown";
 
-import "./canary-toggle";
+import "./canary-radio";
 import "./canary-input";
 import "./canary-reference";
 import "./canary-reference-skeleton";
@@ -117,12 +117,14 @@ export class CanaryPanel extends LitElement {
                 >
                 </canary-input-ask>
               `}
-          <canary-toggle
-            left="Search"
-            right="Ask"
-            selected=${this.mode}
-            @toggle=${this._handleToggle}
-          ></canary-toggle>
+
+          <slot name="radio">
+            <canary-radio
+              .options=${["Search", "Ask"]}
+              selected=${this.mode}
+              @change=${this._handleToggle}
+            ></canary-radio>
+          </slot>
         </div>
 
         ${this.mode === "Search"
