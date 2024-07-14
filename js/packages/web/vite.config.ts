@@ -6,9 +6,9 @@ export default defineConfig({
   build: {
     lib: {
       entry: [
-        "canary-search",
         "canary-panel",
         "canary-trigger",
+        "canary-modal",
         "canary-wrapper-starlight",
         "canary-wrapper-docusaurus",
         "canary-logo-cal",

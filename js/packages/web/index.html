@@ -4,14 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@getcanary/web</title>
-    <script type="module" src="/src/canary-search.ts"></script>
+    <script type="module" src="/src/canary-modal.ts"></script>
     <script type="module" src="/src/canary-panel.ts"></script>
 
     <script type="module" src="/src/canary-logo-slack.ts"></script>
     <script type="module" src="/src/canary-logo-discord.ts"></script>
 
-    <script type="module" src="/src/canary-wrapper-starlight.ts"></script>
     <script type="module" src="/src/canary-trigger.ts"></script>
+    <script type="module" src="/src/canary-wrapper-default.ts"></script>
+    <script type="module" src="/src/canary-wrapper-starlight.ts"></script>
 
     <script type="module" src="/src/canary-callout-slack.ts"></script>
     <script type="module" src="/src/canary-callout-discord.ts"></script>
@@ -43,19 +44,6 @@
       }
 
       .light {
-        --canary-color-accent-low: #c0e2b8;
-        --canary-color-accent: #258100;
-        --canary-color-accent-high: #0d3e00;
-        --canary-color-white: #151a13;
-        --canary-color-gray-1: #1f2a1c;
-        --canary-color-gray-2: #303c2d;
-        --canary-color-gray-3: #4f5c4d;
-        --canary-color-gray-4: #82907f;
-        --canary-color-gray-5: #bdc4bb;
-        --canary-color-gray-6: #eaf0e8;
-        --canary-color-gray-7: #f4f7f3;
-        --canary-color-black: #ffffff;
-
         background-color: black;
         border: 1px solid black;
         color: black;
@@ -68,18 +56,6 @@
       }
 
       .dark {
-        --canary-color-accent-low: #072d00;
-        --canary-color-accent: #247f00;
-        --canary-color-accent-high: #aad7a0;
-        --canary-color-white: #ffffff;
-        --canary-color-gray-1: #eaf0e8;
-        --canary-color-gray-2: #bdc4bb;
-        --canary-color-gray-3: #82907f;
-        --canary-color-gray-4: #4f5c4d;
-        --canary-color-gray-5: #303c2d;
-        --canary-color-gray-6: #1f2a1c;
-        --canary-color-black: #151a13;
-
         background-color: white;
         border: 1px solid black;
         color: white;
@@ -90,34 +66,6 @@
         padding: 20px;
         height: 700px;
       }
-
-      :root {
-        --sl-color-accent-low: #00273d;
-        --sl-color-accent: #0071a7;
-        --sl-color-accent-high: #92d1fe;
-        --sl-color-white: #ffffff;
-        --sl-color-gray-1: #e7eff2;
-        --sl-color-gray-2: #bac4c8;
-        --sl-color-gray-3: #7b8f96;
-        --sl-color-gray-4: #495c62;
-        --sl-color-gray-5: #2a3b41;
-        --sl-color-gray-6: #182a2f;
-        --sl-color-black: #121a1c;
-      }
-      :root[data-theme="light"] {
-        --sl-color-accent-low: #b0deff;
-        --sl-color-accent: #0073aa;
-        --sl-color-accent-high: #003653;
-        --sl-color-white: #121a1c;
-        --sl-color-gray-1: #182a2f;
-        --sl-color-gray-2: #2a3b41;
-        --sl-color-gray-3: #495c62;
-        --sl-color-gray-4: #7b8f96;
-        --sl-color-gray-5: #bac4c8;
-        --sl-color-gray-6: #e7eff2;
-        --sl-color-gray-7: #f3f7f9;
-        --sl-color-black: #ffffff;
-      }
     </style>
   </head>
   <body>
@@ -126,42 +74,46 @@
 
       <div style="display: flex; flex-direction: row; gap: 20px">
         <div class="light">
-          <canary-panel
-            endpoint="http://localhost:5173"
-            hljs="github"
-            query="meeting"
-          >
-            <canary-callout-discord
-              slot="callout"
-              url="https://discord.gg/Y8bJkzuQZU"
-            ></canary-callout-discord>
-            <canary-callout-slack
-              slot="callout"
-              url="https://discord.gg/Y8bJkzuQZU"
-            ></canary-callout-slack>
+          <canary-wrapper-default theme="light">
+            <canary-panel
+              endpoint="http://localhost:5173"
+              hljs="github"
+              query="meeting"
+            >
+              <canary-callout-discord
+                slot="callout"
+                url="https://discord.gg/Y8bJkzuQZU"
+              ></canary-callout-discord>
+              <canary-callout-slack
+                slot="callout"
+                url="https://discord.gg/Y8bJkzuQZU"
+              ></canary-callout-slack>
 
-            <canary-callout-cal
-              slot="callout"
-              url="https://discord.gg/Y8bJkzuQZU"
-            ></canary-callout-cal>
-          </canary-panel>
+              <canary-callout-cal
+                slot="callout"
+                url="https://discord.gg/Y8bJkzuQZU"
+              ></canary-callout-cal>
+            </canary-panel>
+          </canary-wrapper-default>
         </div>
 
         <div class="dark">
-          <canary-panel
-            hljs="github-dark"
-            endpoint="http://localhost:5173"
-            query="hello"
-          >
-            <canary-callout-discord
-              slot="callout"
-              url="https://discord.gg/Y8bJkzuQZU"
-            ></canary-callout-discord>
-            <canary-callout-calendly
-              slot="callout"
-              url="https://discord.gg/Y8bJkzuQZU"
-            ></canary-callout-calendly>
-          </canary-panel>
+          <canary-wrapper-default theme="dark">
+            <canary-panel
+              hljs="github-dark"
+              endpoint="http://localhost:5173"
+              query="hello"
+            >
+              <canary-callout-discord
+                slot="callout"
+                url="https://discord.gg/Y8bJkzuQZU"
+              ></canary-callout-discord>
+              <canary-callout-calendly
+                slot="callout"
+                url="https://discord.gg/Y8bJkzuQZU"
+              ></canary-callout-calendly>
+            </canary-panel>
+          </canary-wrapper-default>
         </div>
       </div>
     </div>
@@ -172,9 +124,47 @@
       <canary-logo-slack url="/"></canary-logo-slack>
       <canary-logo-discord url="/"></canary-logo-discord>
 
-      <canary-search>
-        <canary-trigger></canary-trigger>
-      </canary-search>
+      <canary-wrapper-default theme="dark">
+        <canary-modal>
+          <canary-trigger slot="trigger"></canary-trigger>
+          <canary-panel
+            slot="body"
+            endpoint="http://localhost:5173"
+            query="hello"
+          >
+            <canary-callout-discord
+              slot="callout"
+              url="https://discord.gg/Y8bJkzuQZU"
+            ></canary-callout-discord>
+            <canary-callout-cal
+              slot="callout"
+              url="https://discord.gg/Y8bJkzuQZU"
+            >
+            </canary-callout-cal>
+          </canary-panel>
+        </canary-modal>
+      </canary-wrapper-default>
+
+      <canary-wrapper-default theme="light">
+        <canary-modal>
+          <canary-trigger slot="trigger"></canary-trigger>
+          <canary-panel
+            slot="body"
+            endpoint="http://localhost:5173"
+            query="i need some help"
+          >
+            <canary-callout-discord
+              slot="callout"
+              url="https://discord.gg/Y8bJkzuQZU"
+            ></canary-callout-discord>
+            <canary-callout-cal
+              slot="callout"
+              url="https://discord.gg/Y8bJkzuQZU"
+            >
+            </canary-callout-cal>
+          </canary-panel>
+        </canary-modal>
+      </canary-wrapper-default>
     </div>
   </body>
 </html>
