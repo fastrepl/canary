@@ -25,7 +25,7 @@ export class CanaryCalloutDiscord extends CalloutMixin(LitElement) {
         <span> 👋 ${this.message} </span>
         <div>
           <canary-logo-discord url=${this.url}></canary-logo-discord>
-          <canary-hero-icon name="chevron-right"></canary-hero-icon>
+          <canary-hero-icon name="arrow-up-right"></canary-hero-icon>
         </div>
       </button>
     `;
