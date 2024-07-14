@@ -10,7 +10,6 @@ import "./canary-hero-icon";
 @customElement("canary-callout-calendly")
 export class CanaryCalloutCalendly extends CalloutMixin(LitElement) {
   @property() message = "Wanna schedule a call?";
-  @property() url = "";
 
   @property({ type: Array }) keywords: string[] = [
     "meeting",

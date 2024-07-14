@@ -1,4 +1,6 @@
 import { html } from "lit";
+import type { Meta, StoryObj } from "@storybook/web-components";
+
 import "./canary-trigger";
 
 const render = (_: any) => {
@@ -8,8 +10,9 @@ const render = (_: any) => {
 export default {
   render,
   title: "Public/canary-trigger",
-  tags: ["!autodocs"],
-};
+  parameters: {
+    sourceLink: "canary-trigger.stories.ts",
+  },
+} satisfies Meta;
 
-export const Light = { args: {} };
-export const Dark = { args: {} };
+export const Default: StoryObj = { args: {} };

@@ -41,10 +41,16 @@ export class CanaryLogoCal extends LitElement {
       display: none;
     }
 
+    :root[data-theme="light"] a.light {
+      display: flex;
+    }
     :root[data-theme="light"] a.dark {
       display: none;
     }
 
+    :root[data-theme="dark"] a.dark {
+      display: flex;
+    }
     :root[data-theme="dark"] a.light {
       display: none;
     }

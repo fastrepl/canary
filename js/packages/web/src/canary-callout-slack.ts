@@ -10,7 +10,6 @@ import "./canary-hero-icon";
 @customElement("canary-callout-slack")
 export class CanaryCalloutSlack extends CalloutMixin(LitElement) {
   @property() message = "Looking for help?";
-  @property() url = "";
 
   @property({ type: Array }) keywords: string[] = [
     "slack",

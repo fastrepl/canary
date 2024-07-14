@@ -10,7 +10,6 @@ import "./canary-hero-icon";
 @customElement("canary-callout-discord")
 export class CanaryCalloutDiscord extends CalloutMixin(LitElement) {
   @property() message = "Looking for help?";
-  @property() url = "";
 
   @property({ type: Array }) keywords: string[] = [
     "discord",

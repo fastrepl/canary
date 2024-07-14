@@ -1,5 +1,5 @@
 import { LitElement, css, html } from "lit";
-import { customElement } from "lit/decorators.js";
+import { customElement, property } from "lit/decorators.js";
 import { createRef } from "lit/directives/ref.js";
 
 import "./canary-dialog";
@@ -7,6 +7,7 @@ import "./canary-dialog";
 @customElement("canary-modal")
 export class CanaryModal extends LitElement {
   ref = createRef<HTMLDialogElement>();
+  @property({ type: Boolean }) open = false;
 
   render() {
     return html`

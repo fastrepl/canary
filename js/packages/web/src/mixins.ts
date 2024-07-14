@@ -11,32 +11,38 @@ export function CalloutMixin<T extends Constructor<LitElement>>(superClass: T) {
   class Mixin extends superClass {
     @property() url = "";
     @property({ type: Array }) keywords: string[] = [];
+    @property({ type: Boolean }) forceShow = false;
 
-    private _observer = new MutationController<string>(this, {
-      target: this.closest(ELEMENT_NAME),
-      config: { attributeFilter: [ATTRIBUTE_NAME] },
-      callback: (mutations) => {
-        if (mutations.length === 0) {
-          const target = this.closest(ELEMENT_NAME);
-          const initial = target?.getAttribute(ATTRIBUTE_NAME) ?? "";
-          this.requestUpdate();
-          return initial;
-        }
+    private _observer: MutationController<string> =
+      new MutationController<string>(this, {
+        target: this.closest(ELEMENT_NAME),
+        config: { attributeFilter: [ATTRIBUTE_NAME] },
+        callback: (mutations) => {
+          if (mutations.length === 0) {
+            const target = this.closest(ELEMENT_NAME);
+            const initial = target?.getAttribute(ATTRIBUTE_NAME) ?? "";
+            this.requestUpdate();
+            return initial;
+          }
 
-        const m = mutations.find((m) => m.attributeName === ATTRIBUTE_NAME);
-        if (!m?.target) {
-          return "";
-        }
+          const m = mutations.find((m) => m.attributeName === ATTRIBUTE_NAME);
+          if (!m?.target) {
+            return "";
+          }
 
-        return (m.target as HTMLElement).getAttribute(ATTRIBUTE_NAME) ?? "";
-      },
-    });
+          return (m.target as HTMLElement).getAttribute(ATTRIBUTE_NAME) ?? "";
+        },
+      });
 
     render() {
       return this.show() ? this.renderCallout() : nothing;
     }
 
     private show() {
+      if (this.forceShow) {
+        return true;
+      }
+
       const query = this._observer.value;
       return this.keywords.some((keyword) => (query ?? "").includes(keyword));
     }
