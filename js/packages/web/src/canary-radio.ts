@@ -71,6 +71,10 @@ export class CanaryRadio extends LitElement {
         font-size: 12px;
         border: 1px solid var(--canary-color-gray-6);
 
+        display: flex;
+        align-items: center;
+        height: 14px;
+
         color: var(--canary-color-gray-3);
         background-color: var(--canary-color-black);
       }

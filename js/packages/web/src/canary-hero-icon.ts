@@ -32,7 +32,7 @@ export class CanaryHeroIcon extends LitElement {
       height: 1em;
       padding-top: 0.3em;
 
-      color: var(--canary-color-gray-3);
+      color: var(--canary-color-gray-4);
     }
   `;
 }

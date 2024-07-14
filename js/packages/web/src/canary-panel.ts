@@ -11,6 +11,7 @@ import "./canary-input";
 import "./canary-reference";
 import "./canary-reference-skeleton";
 import "./canary-footer";
+import "./canary-loading-dots";
 
 import { randomInteger } from "./utils";
 
@@ -150,7 +151,11 @@ export class CanaryPanel extends LitElement {
               </div>`
             : html`
                 <div class="ai-message">
-                  ${this.responseContainer}
+                  ${
+                    this.responseContainer.textContent == ""
+                      ? html`<canary-loading-dots></canary-loading-dots>`
+                      : this.responseContainer
+                  }
 
              <div class="references">
                           ${this.askReferences.map(
@@ -218,8 +223,10 @@ export class CanaryPanel extends LitElement {
         this._moveSelection(1);
         break;
       case "Enter":
-        e.preventDefault();
-        window.open(this.searchReferences[this.searchIndex].url);
+        if (this.mode === "Search") {
+          e.preventDefault();
+          window.open(this.searchReferences[this.searchIndex].url);
+        }
         break;
     }
   }

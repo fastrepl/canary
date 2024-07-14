@@ -27,6 +27,10 @@ const STYLE = css`
     color: var(--canary-color-gray-3);
     font-size: 14px;
   }
+
+  canary-hero-icon {
+    padding-top: 2px;
+  }
 `;
 
 @customElement("canary-input-search")

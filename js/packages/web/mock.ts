@@ -21,7 +21,9 @@ const mocks: MockHandler[] = [
   },
   {
     pattern: "/api/v1/ask",
-    handle: (req, res) => {
+    handle: async (req, res) => {
+      await new Promise((resolve) => setTimeout(resolve, Math.random() * 2000));
+
       res.writeHead(200, {
         "Content-Type": "text/event-stream",
         "Cache-Control": "no-cache",
@@ -34,9 +36,11 @@ const mocks: MockHandler[] = [
       const interval = setInterval(() => {
         if (index < RESPONSE.length) {
           const chunk = RESPONSE.slice(index, index + chunkSize);
+
           res.write(
             `data: ${JSON.stringify({ type: "progress", content: chunk })} \n\n`,
           );
+
           index += chunkSize;
         } else {
           clearInterval(interval);

@@ -77,6 +77,7 @@ export class CanaryReference extends LitElement {
       cursor: pointer;
     }
 
+    .selected,
     .container:hover {
       background-color: var(--canary-color-accent-low);
     }
@@ -130,6 +131,10 @@ export class CanaryReference extends LitElement {
       font-weight: lighter;
       color: var(--canary-color-gray-3);
       font-size: 12px;
+    }
+
+    canary-hero-icon {
+      padding-top: 3px;
     }
 
     .path {
