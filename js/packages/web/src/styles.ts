@@ -22,6 +22,7 @@ export const callout = css`
     border-radius: 8px;
     padding: 8px 16px;
     background-color: var(--canary-color-gray-6);
+    margin-bottom: 8px;
   }
   button:hover {
     background-color: var(--canary-color-accent-low);

@@ -262,10 +262,8 @@ export class CanaryPanel extends LitElement {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        border-radius: 8px;
         margin-bottom: 4px;
         padding: 1px 8px;
-        background-color: var(--canary-color-gray-6);
       }
     `,
     css`
@@ -276,12 +274,16 @@ export class CanaryPanel extends LitElement {
       }
     `,
     css`
-      div.references,
-      div.callouts {
+      div.references {
         display: flex;
         flex-direction: column;
         gap: 6px;
         padding-bottom: 8px;
+      }
+
+      div.callouts {
+        display: flex;
+        flex-direction: column;
       }
 
       div.results {

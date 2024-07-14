@@ -45,8 +45,14 @@ export class CanaryRadio extends LitElement {
 
   private _handleClick(option: string) {
     this.selected = option;
-    const event = new Event("change", { bubbles: true, composed: true });
-    this.dispatchEvent(event);
+
+    this.dispatchEvent(
+      new CustomEvent("change", {
+        bubbles: true,
+        composed: true,
+        detail: option,
+      }),
+    );
   }
 
   static styles = [
@@ -63,16 +69,16 @@ export class CanaryRadio extends LitElement {
 
         padding: 4px 8px;
         font-size: 12px;
-        border: 1px solid var(--canary-color-gray-4);
+        border: 1px solid var(--canary-color-gray-6);
 
-        color: var(--canary-color-gray-1);
-        background-color: var(--canary-color-gray-6);
+        color: var(--canary-color-gray-3);
+        background-color: var(--canary-color-black);
       }
 
       .tab:hover,
       .selected {
-        color: var(--canary-color-gray-6);
-        background-color: var(--canary-color-gray-1);
+        color: var(--canary-color-white);
+        background-color: var(--canary-color-gray-6);
       }
 
       input {

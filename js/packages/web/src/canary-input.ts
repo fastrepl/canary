@@ -10,7 +10,7 @@ const STYLE = css`
     gap: 8px;
     border-radius: 8px;
     color: var(--canary-color-gray-1);
-    background-color: var(--canary-color-gray-6);
+    background-color: var(--canary-color-black);
   }
 
   input {
@@ -20,7 +20,7 @@ const STYLE = css`
     border: none;
     font-size: 16px;
     color: var(--canary-color-gray-1);
-    background-color: var(--canary-color-gray-6);
+    background-color: var(--canary-color-black);
   }
 
   input::placeholder {
