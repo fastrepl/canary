@@ -9,6 +9,8 @@ export class CanaryWrapperStarlight extends LitElement {
 
   static styles = css`
     :host {
+      width: 100%;
+
       --canary-color-white: var(--sl-color-white);
       --canary-color-gray-1: var(--sl-color-gray-1);
       --canary-color-gray-2: var(--sl-color-gray-2);

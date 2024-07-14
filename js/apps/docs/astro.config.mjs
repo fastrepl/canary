@@ -67,13 +67,20 @@ export default defineConfig({
       ],
       customCss: ["./src/styles/theme.css"],
       head: [
-        {
+        ...[
+          "canary-wrapper-starlight",
+          "canary-modal",
+          "canary-trigger",
+          "canary-panel",
+          "canary-callout-cal",
+          "canary-callout-discord",
+        ].map((c) => ({
           tag: "script",
           attrs: {
             type: "module",
-            src: "https://unpkg.com/@getcanary/web@latest/components/canary-search.js",
+            src: `https://unpkg.com/@getcanary/web@latest/components/${c}.js`,
           },
-        },
+        })),
       ],
       components: {
         Search: "./src/components/Search.astro",
