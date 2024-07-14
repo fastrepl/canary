@@ -8,8 +8,9 @@ import { createMarkdownStreamParser } from "@nlux/markdown";
 import "./canary-toggle";
 import "./canary-input";
 import "./canary-reference";
+import "./canary-reference-skeleton";
+import "./canary-footer";
 
-import { GITHUB_REPO_URL } from "./constants";
 import { randomInteger } from "./utils";
 
 import * as core from "./core";
@@ -127,21 +128,8 @@ export class CanaryPanel extends LitElement {
           : nothing}
         <div class="results">${this.results()}</div>
 
-        ${this.footer()}
+        <canary-footer></canary-footer>
       </div>
-    `;
-  }
-
-  footer() {
-    return html`
-      ${this.query == ""
-        ? nothing
-        : html`
-            <div class="logo">
-              Powered by
-              <a href=${GITHUB_REPO_URL} target="_blank">🐤 Canary</a>
-            </div>
-          `}
     `;
   }
 
@@ -152,7 +140,9 @@ export class CanaryPanel extends LitElement {
         pending: () =>
           this.mode === "Search"
             ? html` <div class="skeleton-container">
-                ${Array(4).fill(html`<div class="row skeleton"></div>`)}
+                ${Array(4).fill(
+                  html`<canary-reference-skeleton></canary-reference-skeleton>`,
+                )}
               </div>`
             : html` <div class="ai-message">${this.responseContainer}</div> `,
         complete:
@@ -178,7 +168,7 @@ export class CanaryPanel extends LitElement {
                   : nothing,
         error: (error) => {
           console.error(error);
-          return html` <div class="row error">
+          return html` <div class="error">
             <span class="title">Oops, something went wrong!</span>
           </div>`;
         },
@@ -248,26 +238,6 @@ export class CanaryPanel extends LitElement {
       }
     `,
     css`
-      .row {
-        height: 50px;
-        padding: 12px 16px;
-        border: 1px solid var(--canary-color-gray-6);
-        border-radius: 8px;
-
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-        text-decoration: none;
-        color: inherit;
-      }
-
-      .row:hover,
-      .row.selected {
-        background-color: var(--canary-color-accent-low);
-        border-color: var(--canary-color-accent);
-      }
-    `,
-    css`
       .ai-message {
         border: 1px solid var(--canary-color-gray-6);
         border-radius: 8px;
@@ -279,7 +249,7 @@ export class CanaryPanel extends LitElement {
         display: flex;
         flex-direction: column;
         gap: 4px;
-        margin-bottom: 12px;
+        padding-bottom: 8px;
       }
 
       div.results {
@@ -300,27 +270,6 @@ export class CanaryPanel extends LitElement {
         flex-direction: column;
         gap: 8px;
         height: 350px;
-      }
-
-      .skeleton {
-        border: none;
-        background-color: var(--canary-color-gray-5);
-        border-radius: 8px;
-        animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-      }
-
-      .skeleton:hover {
-        background-color: var(--canary-color-gray-4);
-      }
-
-      @keyframes pulse {
-        0%,
-        100% {
-          opacity: 1;
-        }
-        50% {
-          opacity: 0.5;
-        }
       }
     `,
     css`
