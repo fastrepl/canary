@@ -44,6 +44,12 @@ const mocks: MockHandler[] = [
         }
       }, Math.random() * 60);
 
+      setTimeout(() => {
+        res.write(
+          `data: ${JSON.stringify({ type: "references", items: [{ title: "123", url: "https://example.com/a/b" }] })} \n\n`,
+        );
+      }, 2000);
+
       req.on("close", () => {
         clearInterval(interval);
         res.end();

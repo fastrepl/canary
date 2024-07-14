@@ -9,7 +9,7 @@ import "./canary-hero-icon";
 export class CanaryReference extends LitElement {
   @property() url = "";
   @property() title = "";
-  @property() excerpt = "";
+  @property() excerpt: string | undefined = undefined;
   @property({ type: Boolean }) selected = false;
 
   render() {
@@ -21,7 +21,9 @@ export class CanaryReference extends LitElement {
         <div class="content">
           ${this.depth()}
           <span class="title">${this.title} </span>
-          <span class="excerpt">${unsafeHTML(this.excerpt)} </span>
+          ${this.excerpt
+            ? html`<span class="excerpt">${unsafeHTML(this.excerpt)} </span>`
+            : nothing}
         </div>
         <div class="arrow">
           <canary-hero-icon name="chevron-right"></canary-hero-icon>
@@ -34,7 +36,7 @@ export class CanaryReference extends LitElement {
     const paths = new URL(this.url).pathname.split("/");
     const parts = paths
       .map((path, _) => {
-        const text = path.split("-").join(" ");
+        const text = path.replace(/-/g, " ");
         return text.charAt(0).toUpperCase() + text.slice(1);
       })
       .filter(Boolean)

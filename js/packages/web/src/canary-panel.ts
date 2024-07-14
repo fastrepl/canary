@@ -1,5 +1,6 @@
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
+import { ifDefined } from "lit/directives/if-defined.js";
 import { Task } from "@lit/task";
 
 import { highlighter } from "@nlux/highlighter";
@@ -13,8 +14,7 @@ import "./canary-footer";
 
 import { randomInteger } from "./utils";
 
-import * as core from "./core";
-import type { SearchResultItem } from "./core";
+import { type Reference, ask, search } from "./core";
 import { content } from "./styles";
 
 @customElement("canary-panel")
@@ -26,10 +26,10 @@ export class CanaryPanel extends LitElement {
   @property() mode = "Search";
   @property({ reflect: true }) query = "";
 
-  @state() askResult = "";
+  @state() askReferences: Reference[] = [];
   @state() responseContainer: HTMLDivElement = document.createElement("div");
 
-  @state() searchResult: SearchResultItem[] = [];
+  @state() searchReferences: Reference[] = [];
   @state() searchIndex = 0;
 
   connectedCallback() {
@@ -49,7 +49,7 @@ export class CanaryPanel extends LitElement {
       }
 
       if (mode === "Search") {
-        const result = await core.search(
+        const result = await search(
           this.key,
           this.endpoint,
           this.query,
@@ -57,9 +57,8 @@ export class CanaryPanel extends LitElement {
         );
 
         this.searchIndex = 0;
-        this.searchResult = result;
-
-        return result;
+        this.searchReferences = result;
+        return this.searchReferences;
       }
 
       if (mode === "Ask") {
@@ -70,7 +69,7 @@ export class CanaryPanel extends LitElement {
           showCodeBlockCopyButton: false,
         });
 
-        await core.ask(
+        await ask(
           this.key,
           this.endpoint,
           randomInteger(),
@@ -79,11 +78,14 @@ export class CanaryPanel extends LitElement {
             if (delta.type === "progress") {
               parser.next(delta.content);
             }
+            if (delta.type === "references") {
+              this.askReferences = delta.items;
+            }
           },
           signal,
         );
 
-        return this.askResult;
+        return this.askReferences;
       }
     },
     args: () => [this.mode, this.query],
@@ -144,28 +146,55 @@ export class CanaryPanel extends LitElement {
                   html`<canary-reference-skeleton></canary-reference-skeleton>`,
                 )}
               </div>`
-            : html` <div class="ai-message">${this.responseContainer}</div> `,
+            : html`
+                <div class="ai-message">
+                  ${this.responseContainer}
+
+             <div class="references">
+                          ${this.askReferences.map(
+                            (item) =>
+                              html` <canary-reference
+                                title=${item.title}
+                                url=${item.url}
+                              ></canary-reference>`,
+                          )}
+                        </div>
+                      </div>
+                  </div>
+                </div>
+              `,
         complete:
           this.mode === "Search"
-            ? (items: SearchResultItem[]) =>
-                items.length === 0
+            ? (items) =>
+                !items || items.length === 0
                   ? nothing
                   : items.map(
                       ({ title, url, excerpt }, index) => html`
                         <canary-reference
                           title=${title}
                           url=${url}
-                          excerpt=${excerpt}
+                          excerpt=${ifDefined(excerpt)}
                           ?selected=${index === this.searchIndex}
                         ></canary-reference>
                       `,
                     )
-            : () =>
-                this.query !== ""
-                  ? html`
-                      <div class="ai-message">${this.responseContainer}</div>
-                    `
-                  : nothing,
+            : (items) =>
+                this.query === ""
+                  ? nothing
+                  : html`
+                      <div class="ai-message">
+                        ${this.responseContainer}
+                        <div class="references">
+                          ${(items ?? []).map(
+                            (item) =>
+                              html` <canary-reference
+                                title=${item.title}
+                                url=${item.url}
+                              ></canary-reference>`,
+                          )}
+                        </div>
+                      </div>
+                    `,
         error: (error) => {
           console.error(error);
           return html` <div class="error">
@@ -188,14 +217,14 @@ export class CanaryPanel extends LitElement {
         break;
       case "Enter":
         e.preventDefault();
-        window.open(this.searchResult[this.searchIndex].url);
+        window.open(this.searchReferences[this.searchIndex].url);
         break;
     }
   }
 
   private _moveSelection(delta: number) {
     const next = this.searchIndex + delta;
-    if (next > -1 && next < this.searchResult.length) {
+    if (next > -1 && next < this.searchReferences.length) {
       this.searchIndex = next;
     }
   }
@@ -245,10 +274,11 @@ export class CanaryPanel extends LitElement {
       }
     `,
     css`
+      div.references,
       div.callouts {
         display: flex;
         flex-direction: column;
-        gap: 4px;
+        gap: 6px;
         padding-bottom: 8px;
       }
 

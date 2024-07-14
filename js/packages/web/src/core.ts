@@ -77,7 +77,11 @@ export const ask = async (
   return null;
 };
 
-export type Delta = DeltaError | DeltaProgress | DeltaComplete;
+export type Delta =
+  | DeltaError
+  | DeltaProgress
+  | DeltaComplete
+  | DeltaReferences;
 
 type DeltaError = {
   type: "error";
@@ -93,8 +97,13 @@ type DeltaComplete = {
   type: "complete";
 };
 
-export type SearchResultItem = {
+type DeltaReferences = {
+  type: "references";
+  items: Reference[];
+};
+
+export type Reference = {
   title: string;
   url: string;
-  excerpt: string;
+  excerpt?: string;
 };
