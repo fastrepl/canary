@@ -1,7 +1,5 @@
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
-import { unsafeHTML } from "lit/directives/unsafe-html.js";
-import { classMap } from "lit/directives/class-map.js";
 import { Task } from "@lit/task";
 
 import { highlighter } from "@nlux/highlighter";
@@ -9,6 +7,7 @@ import { createMarkdownStreamParser } from "@nlux/markdown";
 
 import "./canary-toggle";
 import "./canary-input";
+import "./canary-reference";
 
 import { GITHUB_REPO_URL } from "./constants";
 import { randomInteger } from "./utils";
@@ -163,16 +162,12 @@ export class CanaryPanel extends LitElement {
                   ? nothing
                   : items.map(
                       ({ title, url, excerpt }, index) => html`
-                        <a
-                          class=${classMap({
-                            row: true,
-                            selected: index === this.searchIndex,
-                          })}
-                          href="${url}"
-                        >
-                          <span class="title">${title}</span>
-                          <span class="preview">${unsafeHTML(excerpt)}</span>
-                        </a>
+                        <canary-reference
+                          title=${title}
+                          url=${url}
+                          excerpt=${excerpt}
+                          ?selected=${index === this.searchIndex}
+                        ></canary-reference>
                       `,
                     )
             : () =>
@@ -297,20 +292,6 @@ export class CanaryPanel extends LitElement {
 
       div.results:hover {
         overflow-y: auto;
-      }
-
-      .title {
-        font-weight: 500;
-        font-size: 16px;
-      }
-
-      .preview {
-        font-size: 14px;
-      }
-
-      mark {
-        background-color: var(--canary-color-accent-low);
-        color: black;
       }
     `,
     css`

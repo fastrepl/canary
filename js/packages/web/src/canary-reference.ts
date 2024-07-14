@@ -1,5 +1,7 @@
-import { LitElement, html, css } from "lit";
+import { LitElement, html, css, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
+import { classMap } from "lit/directives/class-map.js";
+import { unsafeHTML } from "lit/directives/unsafe-html.js";
 
 import "./canary-hero-icon";
 
@@ -7,16 +9,22 @@ import "./canary-hero-icon";
 export class CanaryReference extends LitElement {
   @property() url = "";
   @property() title = "";
+  @property() excerpt = "";
+  @property({ type: Boolean }) selected = false;
 
   render() {
     return html`
-      <div class="container" @click=${this._handleClick}>
+      <div
+        class=${classMap({ container: true, selected: this.selected })}
+        @click=${this._handleClick}
+      >
         <div class="content">
           ${this.depth()}
           <span class="title">${this.title} </span>
+          <span class="excerpt">${unsafeHTML(this.excerpt)} </span>
         </div>
         <div class="arrow">
-          <canary-hero-icon name="arrow-up-right"></canary-hero-icon>
+          <canary-hero-icon name="chevron-right"></canary-hero-icon>
         </div>
       </div>
     `;
@@ -29,19 +37,22 @@ export class CanaryReference extends LitElement {
         const text = path.split("-").join(" ");
         return text.charAt(0).toUpperCase() + text.slice(1);
       })
+      .filter(Boolean)
       .slice(-4);
 
     return html`
-      <div class="paths">
-        ${parts.map((part, i) =>
-          i < parts.length - 1
-            ? html`
-                <span class="path">${part}</span>
-                <canary-hero-icon name="chevron-right"></canary-hero-icon>
-              `
-            : html`<span class="path">${part}</span>`,
-        )}
-      </div>
+      ${parts.length == 0
+        ? nothing
+        : html`<div class="paths">
+            ${parts.map((part, i) =>
+              i < parts.length - 1
+                ? html`
+                    <span class="path">${part}</span>
+                    <canary-hero-icon name="chevron-right"></canary-hero-icon>
+                  `
+                : html`<span class="path">${part}</span>`,
+            )}
+          </div>`}
     `;
   }
 
@@ -56,7 +67,7 @@ export class CanaryReference extends LitElement {
       align-items: center;
       justify-content: space-between;
 
-      padding: 8px 20px;
+      padding: 8px 16px;
       border: 1px solid var(--canary-color-gray-5);
       border-radius: 8px;
       background-color: var(--canary-color-black);
@@ -91,6 +102,21 @@ export class CanaryReference extends LitElement {
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+    }
+
+    .excerpt {
+      color: var(--canary-color-gray-2);
+      font-size: 12px;
+
+      max-width: 400px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .excerpt mark {
+      background-color: var(--canary-color-accent-low);
+      color: black;
     }
 
     .paths {
