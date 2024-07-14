@@ -7,11 +7,15 @@ defmodule CanaryWeb.HomeLive do
     <div class="flex flex-col">
       <section class="stats stats-vertical w-full shadow-sm xl:stats-horizontal">
         <div class="stat">
-          <div class="stat-title">Primary Source</div>
-          <div class="stat-value"><%= URI.parse(@web_source.web_base_url).host %></div>
+          <div class="stat-title">Source</div>
+          <div class="stat-value">
+            <a href={@web_source.web_base_url} target="_blank" class="link link-hover">
+              <%= URI.parse(@web_source.web_base_url).host %>
+            </a>
+          </div>
         </div>
         <div class="stat">
-          <div class="stat-title">Indexed Documents</div>
+          <div class="stat-title">Documents</div>
           <div class="stat-value"><%= @web_source.num_documents %></div>
         </div>
         <div class="stat">
@@ -26,7 +30,7 @@ defmodule CanaryWeb.HomeLive do
         </div>
         <div class="stat">
           <div class="stat-title flex flex-row items-center gap-2">
-            <span>Last Updated</span>
+            <span>Updated</span>
             <span
               phx-click="fetch"
               class="hero-arrow-path-solid h-4 w-4 text-neutural cursor-pointer"
@@ -45,8 +49,16 @@ defmodule CanaryWeb.HomeLive do
         <div></div>
       </section>
 
-      <section class="shadow-md mt-10 rounded-xl">
-        <canary-panel key={@web_client.web_public_key} endpoint={CanaryWeb.Endpoint.url()}>
+      <pre class="mt-8">
+        <%= @web_client.web_public_key %>
+      </pre>
+
+      <section class="shadow-md mt-10 rounded-xl max-w-2xl">
+        <canary-panel
+          key={@web_client.web_public_key}
+          endpoint={CanaryWeb.Endpoint.url()}
+          hljs="github"
+        >
         </canary-panel>
       </section>
 
@@ -77,7 +89,7 @@ defmodule CanaryWeb.HomeLive do
 
     query =
       from j in Oban.Job,
-        where: j.worker == "Canary.Workers.Fetcher",
+        where: j.worker == ^to_string(Canary.Workers.Fetcher),
         where: j.args["source_id"] == ^source.id,
         order_by: [desc: j.inserted_at],
         limit: 1
@@ -89,7 +101,6 @@ defmodule CanaryWeb.HomeLive do
       |> assign(web_client: client)
       |> assign(:job, Canary.Repo.all(query) |> Enum.at(0))
 
-    IO.inspect(socket.assigns.job)
     {:ok, socket}
   end
 
