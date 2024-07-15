@@ -1,21 +1,21 @@
 import { html } from "lit";
 import type { Meta, StoryObj } from "@storybook/web-components";
-import "./canary-wrapper-starlight";
+import "./canary-styles-starlight";
 import "./canary-trigger";
 
 const render = (_: any) => {
   return html`
-    <canary-wrapper-starlight>
+    <canary-styles-starlight>
       <canary-trigger></canary-trigger>
-    </canary-wrapper-starlight>
+    </canary-styles-starlight>
   `;
 };
 
 export default {
   render,
-  title: "Public/canary-wrapper-starlight",
+  title: "Public/canary-styles-starlight",
   parameters: {
-    sourceLink: "canary-wrapper-starlight.stories.ts",
+    sourceLink: "canary-styles-starlight.stories.ts",
   },
 } satisfies Meta;
 

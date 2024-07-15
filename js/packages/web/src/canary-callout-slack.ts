@@ -6,13 +6,13 @@ import { callout } from "./styles";
 
 import "./canary-logo-slack";
 import "./canary-hero-icon";
-import { StripeArray } from "./converters";
+import { StringArray } from "./converters";
 
 @customElement("canary-callout-slack")
 export class CanaryCalloutSlack extends CalloutMixin(LitElement) {
   @property() message = "Looking for help?";
 
-  @property({ reflect: true, converter: StripeArray })
+  @property({ reflect: true, converter: StringArray })
   keywords: string[] = ["slack", "help", "support", "community"];
 
   renderCallout() {

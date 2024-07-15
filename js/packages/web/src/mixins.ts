@@ -1,11 +1,10 @@
 import { LitElement, nothing } from "lit";
-import { property } from "lit/decorators.js";
-import { MutationController } from "@lit-labs/observers/mutation-controller.js";
+import { property, state } from "lit/decorators.js";
+
+import { consume } from "@lit/context";
+import { queryContext } from "./contexts";
 
 type Constructor<T = {}> = new (...args: any[]) => T;
-
-const ELEMENT_NAME = "canary-panel";
-const ATTRIBUTE_NAME = "query";
 
 export function CalloutMixin<T extends Constructor<LitElement>>(superClass: T) {
   class Mixin extends superClass {
@@ -13,19 +12,9 @@ export function CalloutMixin<T extends Constructor<LitElement>>(superClass: T) {
     @property({ type: Array }) keywords: string[] = [];
     @property({ type: Boolean }) forceShow = false;
 
-    private _observer: MutationController<string> =
-      new MutationController<string>(this, {
-        target: this.closest(ELEMENT_NAME),
-        config: { attributeFilter: [ATTRIBUTE_NAME] },
-        callback: (mutations) => {
-          const m = mutations.find((m) => m.attributeName === ATTRIBUTE_NAME);
-          if (!m?.target) {
-            return "";
-          }
-
-          return (m.target as HTMLElement).getAttribute(ATTRIBUTE_NAME) ?? "";
-        },
-      });
+    @consume({ context: queryContext, subscribe: true })
+    @state()
+    query = "";
 
     render() {
       return this.show() ? this.renderCallout() : nothing;
@@ -36,8 +25,9 @@ export function CalloutMixin<T extends Constructor<LitElement>>(superClass: T) {
         return true;
       }
 
-      const query = this._observer.value;
-      return this.keywords.some((keyword) => (query ?? "").includes(keyword));
+      return this.keywords.some((keyword) =>
+        (this.query ?? "").includes(keyword),
+      );
     }
 
     protected renderCallout(): unknown {

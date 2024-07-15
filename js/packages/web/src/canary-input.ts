@@ -1,6 +1,11 @@
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
+import { CANARY_MODE_PREV, CANARY_MODE_NEXT } from "./events";
+
+import { consume } from "@lit/context";
+import { queryContext } from "./contexts";
+
 import "./canary-hero-icon";
 
 const STYLE = css`
@@ -40,7 +45,9 @@ const STYLE = css`
 
 @customElement("canary-input-search")
 export class CanaryInputSearch extends LitElement {
-  @property() value = "";
+  @consume({ context: queryContext, subscribe: true })
+  @property({ reflect: true })
+  value = "";
 
   render() {
     return html`
@@ -71,7 +78,7 @@ export class CanaryInputSearch extends LitElement {
   private _handleKeyDown(e: KeyboardEvent) {
     if (e.key === "Tab") {
       e.preventDefault();
-      const event = new CustomEvent("toggle", { detail: "Ask" });
+      const event = new CustomEvent(CANARY_MODE_NEXT);
       this.dispatchEvent(event);
     }
   }
@@ -79,7 +86,9 @@ export class CanaryInputSearch extends LitElement {
 
 @customElement("canary-input-ask")
 export class CanaryInputAsk extends LitElement {
-  @property() value = "";
+  @consume({ context: queryContext, subscribe: true })
+  @property({ reflect: true })
+  value = "";
 
   render() {
     return html`
@@ -118,7 +127,7 @@ export class CanaryInputAsk extends LitElement {
 
     if (e.key === "Tab") {
       e.preventDefault();
-      const event = new CustomEvent("toggle", { detail: "Search" });
+      const event = new CustomEvent(CANARY_MODE_PREV);
       this.dispatchEvent(event);
     }
   }

@@ -1,8 +1,8 @@
 import { LitElement, html, css } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
-@customElement("canary-wrapper-default")
-export class CanaryWrapperDefault extends LitElement {
+@customElement("canary-styles-default")
+export class CanaryStylesDefault extends LitElement {
   @property() theme = "light";
 
   render() {

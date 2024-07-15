@@ -2,7 +2,7 @@ import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { Task } from "@lit/task";
 
-import "./canary-radio";
+import "./canary-mode-tabs";
 import "./canary-input";
 import "./canary-reference";
 import "./canary-reference-skeleton";
@@ -13,23 +13,44 @@ import "./canary-markdown";
 import "./canary-search-results";
 
 import { randomInteger } from "./utils";
+import { StringArray } from "./converters";
 
 import { type Reference, ask, search } from "./core";
+import { provide, consume } from "@lit/context";
+import {
+  modeContext,
+  queryContext,
+  searchReferencesContext,
+  providerContext,
+  type ProviderContext,
+} from "./contexts";
 
 @customElement("canary-panel")
 export class CanaryPanel extends LitElement {
-  @property() key = "";
-  @property() endpoint = "";
+  @property({ reflect: true, converter: StringArray })
+  modes: [string, string] = ["Search", "Ask"];
+
+  @provide({ context: modeContext })
+  @property({ reflect: true })
+  mode = this.modes[0];
+
+  @consume({ context: providerContext, subscribe: true })
+  @state()
+  provider: ProviderContext | undefined = undefined;
+
   @property() hljs = "github-dark";
 
-  @property() mode = "Search";
-  @property({ reflect: true }) query = "";
+  @provide({ context: queryContext })
+  @property()
+  query = "";
 
   @state() askReferences: Reference[] = [];
   @state() askLoading = false;
   @state() response = "";
 
-  @state() searchReferences: Reference[] = [];
+  @provide({ context: searchReferencesContext })
+  @state()
+  searchReferences: Reference[] = [];
 
   private _task = new Task(this, {
     task: async ([mode, query], { signal }) => {
@@ -38,12 +59,7 @@ export class CanaryPanel extends LitElement {
       }
 
       if (mode === "Search") {
-        const result = await search(
-          this.key,
-          this.endpoint,
-          this.query,
-          signal,
-        );
+        const result = await search(this.provider, this.query, signal);
 
         this.searchReferences = result;
         return this.searchReferences;
@@ -54,8 +70,7 @@ export class CanaryPanel extends LitElement {
         this.response = "";
 
         await ask(
-          this.key,
-          this.endpoint,
+          this.provider,
           randomInteger(),
           this.query,
           (delta) => {
@@ -84,27 +99,24 @@ export class CanaryPanel extends LitElement {
           ${this.mode === "Search"
             ? html`
                 <canary-input-search
-                  value=${this.query}
                   @change=${this._handleChange}
-                  @toggle=${this._handleToggle}
+                  @canary-mode-next=${this._handleModeNext}
                 >
                 </canary-input-search>
               `
             : html`
                 <canary-input-ask
-                  value=${this.query}
                   @change=${this._handleChange}
-                  @toggle=${this._handleToggle}
+                  @canary-mode-prev=${this._handleModePrev}
                 >
                 </canary-input-ask>
               `}
 
-          <slot name="radio">
-            <canary-radio
-              .options=${["Search", "Ask"]}
-              selected=${this.mode}
-              @change=${this._handleToggle}
-            ></canary-radio>
+          <slot name="mode-tabs">
+            <canary-mode-tabs
+              @canary-mode-set=${this._handleModeSet}
+              .options=${this.modes}
+            ></canary-mode-tabs>
           </slot>
         </div>
 
@@ -155,10 +167,7 @@ export class CanaryPanel extends LitElement {
               `,
         complete:
           this.mode === "Search"
-            ? (items) =>
-                html`<canary-search-results
-                  .items=${items ?? []}
-                ></canary-search-results>`
+            ? (_) => html`<canary-search-results></canary-search-results>`
             : (items) =>
                 this.query === ""
                   ? nothing
@@ -191,11 +200,15 @@ export class CanaryPanel extends LitElement {
     this.query = e.detail;
   }
 
-  private _handleToggle(e: CustomEvent) {
-    if (this.mode === "Ask") {
-      this.query = "";
-    }
+  private _handleModePrev(_: CustomEvent) {
+    this.mode = this.modes[0];
+  }
 
+  private _handleModeNext(_: CustomEvent) {
+    this.mode = this.modes[1];
+  }
+
+  private _handleModeSet(e: CustomEvent) {
     this.mode = e.detail;
   }
 
@@ -247,7 +260,7 @@ export class CanaryPanel extends LitElement {
         display: flex;
         flex-direction: column;
         gap: 8px;
-        height: 350px;
+        height: 325px;
       }
     `,
     css`

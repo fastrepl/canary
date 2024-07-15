@@ -1,3 +1,6 @@
+import { CanaryProviderCloud } from "./canary-provider-cloud";
+import { CanaryProviderPagefind } from "./canary-provider-pagefind";
+
 import { CanaryModal } from "./canary-modal";
 import { CanaryDialog } from "./canary-dialog";
 import { CanaryPanel } from "./canary-panel";
@@ -17,11 +20,20 @@ import { CanaryCalloutDiscord } from "./canary-callout-discord";
 import { CanaryReference } from "./canary-reference";
 import { CanaryReferenceSkeleton } from "./canary-reference-skeleton";
 
+import { CanaryModeTabs } from "./canary-mode-tabs";
+import { CanarySearchTabs } from "./canary-search-tabs";
+
 import { CanaryFooter } from "./canary-footer";
 import { CanaryMarkdown } from "./canary-markdown";
 
+import { CanaryStylesDefault } from "./canary-styles-default";
+import { CanaryStylesStarlight } from "./canary-styles-starlight";
+import { CanaryStylesDocusaurus } from "./canary-styles-docusaurus";
+
 declare global {
   interface HTMLElementTagNameMap {
+    "canary-provider-cloud": CanaryProviderCloud;
+    "canary-provider-pagefind": CanaryProviderPagefind;
     "canary-modal": CanaryModal;
     "canary-dialog": CanaryDialog;
     "canary-panel": CanaryPanel;
@@ -40,5 +52,10 @@ declare global {
     "canary-reference-skeleton": CanaryReferenceSkeleton;
     "canary-footer": CanaryFooter;
     "canary-markdown": CanaryMarkdown;
+    "canary-mode-tabs": CanaryModeTabs;
+    "canary-search-tabs": CanarySearchTabs;
+    "canary-styles-default": CanaryStylesDefault;
+    "canary-styles-starlight": CanaryStylesStarlight;
+    "canary-styles-docusaurus": CanaryStylesDocusaurus;
   }
 }

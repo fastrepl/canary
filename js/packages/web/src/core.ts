@@ -1,77 +1,91 @@
-// This should be moved to @getcanary/core at some point
+import { type ProviderContext } from "./contexts";
 
 export const search = async (
-  key: string,
-  endpoint: string,
+  provider: ProviderContext | undefined | null,
   query: string,
   signal?: AbortSignal,
 ) => {
-  const url = `${endpoint}/api/v1/search`;
-
-  const params = {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ key, query }),
-    signal,
-  };
-
-  const response = await fetch(url, params);
-  if (!response.ok) {
-    throw new Error();
+  if (!provider) {
+    throw new Error("Provider not found");
   }
 
-  return response.json();
+  if (provider.type === "cloud") {
+    const url = `${provider.endpoint}/api/v1/search`;
+
+    const params = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ key: provider.key, query }),
+      signal,
+    };
+
+    const response = await fetch(url, params);
+    if (!response.ok) {
+      throw new Error();
+    }
+
+    return response.json();
+  }
+
+  return [];
 };
 
 export const ask = async (
-  key: string,
-  endpoint: string,
+  provider: ProviderContext | undefined | null,
   id: number,
   query: string,
   handleDelta: (delta: Delta) => void = () => {},
   signal?: AbortSignal,
 ) => {
-  const url = `${endpoint}/api/v1/ask`;
-  const params = {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ id, key, query }),
-    signal,
-  };
-
-  const response = await fetch(url, params);
-  if (!response.ok) {
-    throw new Error();
+  if (!provider) {
+    throw new Error("Provider not found");
   }
 
-  const reader = response.body
-    ?.pipeThrough(new TextDecoderStream())
-    .getReader();
+  if (provider.type === "cloud") {
+    const url = `${provider.endpoint}/api/v1/ask`;
+    const params = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id, key: provider.key, query }),
+      signal,
+    };
 
-  if (!reader) {
-    throw new Error();
-  }
+    const response = await fetch(url, params);
+    if (!response.ok) {
+      throw new Error();
+    }
 
-  while (true) {
-    try {
-      const { done, value } = await reader.read();
-      if (done) {
+    const reader = response.body
+      ?.pipeThrough(new TextDecoderStream())
+      .getReader();
+
+    if (!reader) {
+      throw new Error();
+    }
+
+    while (true) {
+      try {
+        const { done, value } = await reader.read();
+        if (done) {
+          break;
+        }
+
+        value
+          .split("\n\n")
+          .flatMap((s) => s.split("data: "))
+          .filter(Boolean)
+          .map((s) => JSON.parse(s) as Delta)
+          .forEach(handleDelta);
+      } catch (error) {
+        if (error instanceof Error && error.name !== "AbortError") {
+          console.error(error);
+        }
+
         break;
       }
-
-      value
-        .split("\n\n")
-        .flatMap((s) => s.split("data: "))
-        .filter(Boolean)
-        .map((s) => JSON.parse(s) as Delta)
-        .forEach(handleDelta);
-    } catch (error) {
-      if (error instanceof Error && error.name !== "AbortError") {
-        console.error(error);
-      }
-
-      break;
     }
+
+    return null;
   }
 
   return null;

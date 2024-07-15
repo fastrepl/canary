@@ -1,13 +1,19 @@
 import { LitElement, html, css } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
+import { customElement, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 
 import { type Reference } from "./core";
 import "./canary-reference";
 
+import { consume } from "@lit/context";
+import { searchReferencesContext } from "./contexts";
+
 @customElement("canary-search-results")
 export class CanarySearchResults extends LitElement {
-  @property({ attribute: false, type: Array }) items: Reference[] = [];
+  @consume({ context: searchReferencesContext, subscribe: true })
+  @state()
+  items: Reference[] = [];
+
   @state() selectedIndex = 0;
 
   connectedCallback() {

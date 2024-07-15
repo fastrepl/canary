@@ -1,6 +1,6 @@
 {
   "name": "@getcanary/web",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "type": "module",
   "main": "components/index.js",
   "files": [
@@ -17,7 +17,7 @@
     "chromatic": "chromatic --exit-zero-on-changes"
   },
   "dependencies": {
-    "@lit-labs/observers": "^2.0.2",
+    "@lit/context": "^1.1.2",
     "@lit/task": "^1.0.1",
     "highlight.js": "^11.10.0",
     "lit": "^3.1.4",

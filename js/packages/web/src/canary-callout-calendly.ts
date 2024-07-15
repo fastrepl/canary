@@ -6,13 +6,13 @@ import { callout } from "./styles";
 
 import "./canary-logo-calendly";
 import "./canary-hero-icon";
-import { StripeArray } from "./converters";
+import { StringArray } from "./converters";
 
 @customElement("canary-callout-calendly")
 export class CanaryCalloutCalendly extends CalloutMixin(LitElement) {
   @property() message = "Wanna schedule a call?";
 
-  @property({ reflect: true, converter: StripeArray })
+  @property({ reflect: true, converter: StringArray })
   keywords: string[] = ["meeting", "schedule", "calend"];
 
   renderCallout() {

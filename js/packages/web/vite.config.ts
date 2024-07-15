@@ -6,19 +6,19 @@ export default defineConfig({
     lib: {
       entry: [
         "index",
+        ...["canary-provider-cloud", "canary-provider-pagefind"],
         "canary-panel",
         "canary-trigger",
         "canary-modal",
-        "canary-radio",
-        "canary-wrapper-starlight",
-        "canary-wrapper-docusaurus",
-        "canary-logo-cal",
-        "canary-logo-slack",
-        "canary-logo-discord",
-        "canary-callout-cal",
-        "canary-callout-slack",
-        "canary-callout-discord",
         "canary-markdown",
+        ...["canary-logo-cal", "canary-logo-slack", "canary-logo-discord"],
+        ...[
+          "canary-callout-cal",
+          "canary-callout-slack",
+          "canary-callout-discord",
+        ],
+        ...["canary-styles-starlight", "canary-styles-docusaurus"],
+        ...["canary-mode-tabs", "canary-search-tabs"],
       ].reduce(
         (acc, cur) => ({ ...acc, [cur]: resolve(__dirname, `src/${cur}.ts`) }),
         {} as Record<string, string>,

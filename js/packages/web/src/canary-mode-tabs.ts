@@ -2,14 +2,19 @@ import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 
-import { StripeArray } from "./converters";
+import { consume } from "@lit/context";
+import { modeContext } from "./contexts";
+import { CANARY_MODE_SET } from "./events";
 
-@customElement("canary-radio")
-export class CanaryRadio extends LitElement {
-  @property({ reflect: true, converter: StripeArray })
+import { StringArray } from "./converters";
+
+@customElement("canary-mode-tabs")
+export class CanaryModeTabs extends LitElement {
+  @property({ reflect: true, converter: StringArray })
   options: string[] = [];
 
-  @property({ type: String, reflect: true })
+  @consume({ context: modeContext, subscribe: true })
+  @property({ reflect: true })
   selected = this.options[0];
 
   render() {
@@ -41,15 +46,8 @@ export class CanaryRadio extends LitElement {
   }
 
   private _handleClick(option: string) {
-    this.selected = option;
-
-    this.dispatchEvent(
-      new CustomEvent("change", {
-        bubbles: true,
-        composed: true,
-        detail: option,
-      }),
-    );
+    const event = new CustomEvent(CANARY_MODE_SET, { detail: option });
+    this.dispatchEvent(event);
   }
 
   static styles = [

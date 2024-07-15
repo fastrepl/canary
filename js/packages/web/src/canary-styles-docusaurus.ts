@@ -1,8 +1,8 @@
 import { LitElement, html, css } from "lit";
 import { customElement } from "lit/decorators.js";
 
-@customElement("canary-wrapper-docusaurus")
-export class CanaryWrapperDocusaurus extends LitElement {
+@customElement("canary-styles-docusaurus")
+export class CanaryStylesDocusaurus extends LitElement {
   render() {
     return html`<slot></slot>`;
   }
