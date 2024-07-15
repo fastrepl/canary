@@ -1,52 +1,48 @@
-import { LitElement, css, html } from "lit";
+import { LitElement, css, html, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 
 import { consume } from "@lit/context";
-import { modeContext } from "./contexts";
-import { CANARY_MODE_SET } from "./events";
-
-import { StringArray } from "./converters";
+import { modeContext, defaultModeContext, type ModeContext } from "./contexts";
 
 @customElement("canary-mode-tabs")
 export class CanaryModeTabs extends LitElement {
-  @property({ reflect: true, converter: StringArray })
-  options: string[] = [];
-
   @consume({ context: modeContext, subscribe: true })
-  @property({ reflect: true })
-  selected = this.options[0];
+  @property({ attribute: false })
+  mode: ModeContext = defaultModeContext;
 
   render() {
     return html`
-      <div class="tabs">
-        ${this.options.map(
-          (option, index) =>
-            html`<div
-              class=${classMap({
-                tab: true,
-                selected: option === this.selected,
-                left: index === 0,
-                right: index === this.options.length - 1,
-              })}
-              @click=${() => this._handleClick(option)}
-            >
-              <input
-                type="radio"
-                name="mode"
-                .id=${option}
-                .value=${option}
-                ?checked=${option === this.selected}
-              />
-              <label>${option}</label>
-            </div>`,
-        )}
-      </div>
+      ${this.mode.options.size < 2
+        ? nothing
+        : html` <div class="tabs">
+            ${Array.from(this.mode.options).map(
+              (option, index) =>
+                html`<div
+                  class=${classMap({
+                    tab: true,
+                    selected: option === this.mode.current,
+                    left: index === 0,
+                    right: index === this.mode.options.size - 1,
+                  })}
+                  @click=${() => this._handleClick(option)}
+                >
+                  <input
+                    type="radio"
+                    name="mode"
+                    .id=${option}
+                    .value=${option}
+                    ?checked=${option === this.mode.current}
+                  />
+                  <label>${option}</label>
+                </div>`,
+            )}
+          </div>`}
     `;
   }
 
   private _handleClick(option: string) {
-    const event = new CustomEvent(CANARY_MODE_SET, { detail: option });
+    const event = new CustomEvent("set", { detail: option });
     this.dispatchEvent(event);
   }
 

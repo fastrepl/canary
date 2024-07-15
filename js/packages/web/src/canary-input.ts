@@ -1,12 +1,16 @@
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
-import { CANARY_MODE_PREV, CANARY_MODE_NEXT } from "./events";
-
 import { consume } from "@lit/context";
-import { queryContext } from "./contexts";
+import {
+  defaultModeContext,
+  ModeContext,
+  modeContext,
+  queryContext,
+} from "./contexts";
 
 import "./canary-hero-icon";
+import { classMap } from "lit/directives/class-map.js";
 
 const STYLE = css`
   :host {
@@ -20,6 +24,9 @@ const STYLE = css`
     border-radius: 8px;
     color: var(--canary-color-gray-1);
     background-color: var(--canary-color-black);
+  }
+  .container.hide {
+    display: none;
   }
 
   input {
@@ -49,9 +56,18 @@ export class CanaryInputSearch extends LitElement {
   @property({ reflect: true })
   value = "";
 
+  @consume({ context: modeContext, subscribe: true })
+  @property({ attribute: false })
+  mode: ModeContext = defaultModeContext;
+
   render() {
     return html`
-      <div class="container">
+      <div
+        class=${classMap({
+          container: true,
+          hide: this.mode.current === "Ask",
+        })}
+      >
         <canary-hero-icon name="magnifying-glass"></canary-hero-icon>
         <input
           type="text"
@@ -71,14 +87,18 @@ export class CanaryInputSearch extends LitElement {
 
   private _handleInput(e: KeyboardEvent) {
     const input = e.target as HTMLInputElement;
-    const event = new CustomEvent("change", { detail: input.value });
+    const event = new CustomEvent("change", {
+      detail: input.value,
+      bubbles: true,
+      composed: true,
+    });
     this.dispatchEvent(event);
   }
 
   private _handleKeyDown(e: KeyboardEvent) {
     if (e.key === "Tab") {
       e.preventDefault();
-      const event = new CustomEvent(CANARY_MODE_NEXT);
+      const event = new CustomEvent("tab", { bubbles: true, composed: true });
       this.dispatchEvent(event);
     }
   }
@@ -90,9 +110,18 @@ export class CanaryInputAsk extends LitElement {
   @property({ reflect: true })
   value = "";
 
+  @consume({ context: modeContext, subscribe: true })
+  @property({ attribute: false })
+  mode: ModeContext = defaultModeContext;
+
   render() {
     return html`
-      <div class="container">
+      <div
+        class=${classMap({
+          container: true,
+          hide: this.mode.current === "Search",
+        })}
+      >
         <canary-hero-icon name="question-mark-circle"></canary-hero-icon>
         <input
           type="text"
@@ -118,7 +147,11 @@ export class CanaryInputAsk extends LitElement {
   private _handleKeyDown(e: KeyboardEvent) {
     if (e.key === "Enter") {
       e.preventDefault();
-      const event = new CustomEvent("change", { detail: this.value });
+      const event = new CustomEvent("change", {
+        detail: this.value,
+        bubbles: true,
+        composed: true,
+      });
       this.dispatchEvent(event);
 
       this.value = "";
@@ -127,7 +160,7 @@ export class CanaryInputAsk extends LitElement {
 
     if (e.key === "Tab") {
       e.preventDefault();
-      const event = new CustomEvent(CANARY_MODE_PREV);
+      const event = new CustomEvent("tab", { bubbles: true, composed: true });
       this.dispatchEvent(event);
     }
   }

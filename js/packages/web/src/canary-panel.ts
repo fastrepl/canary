@@ -1,5 +1,10 @@
 import { LitElement, css, html, nothing } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
+import {
+  customElement,
+  property,
+  state,
+  queryAssignedElements,
+} from "lit/decorators.js";
 import { Task } from "@lit/task";
 
 import "./canary-mode-tabs";
@@ -13,12 +18,13 @@ import "./canary-markdown";
 import "./canary-search-results";
 
 import { randomInteger } from "./utils";
-import { StringArray } from "./converters";
 
 import { type Reference, ask, search } from "./core";
 import { provide, consume } from "@lit/context";
 import {
   modeContext,
+  defaultModeContext,
+  type ModeContext,
   queryContext,
   searchReferencesContext,
   providerContext,
@@ -27,30 +33,32 @@ import {
 
 @customElement("canary-panel")
 export class CanaryPanel extends LitElement {
-  @property({ reflect: true, converter: StringArray })
-  modes: [string, string] = ["Search", "Ask"];
-
   @provide({ context: modeContext })
-  @property({ reflect: true })
-  mode = this.modes[0];
+  @property({ attribute: false })
+  mode: ModeContext = defaultModeContext;
 
   @consume({ context: providerContext, subscribe: true })
   @state()
   provider: ProviderContext | undefined = undefined;
 
-  @property() hljs = "github-dark";
-
   @provide({ context: queryContext })
   @property()
   query = "";
 
+  @provide({ context: searchReferencesContext })
+  @state()
+  searchReferences: Reference[] = [];
+
+  @property() hljs = "github-dark";
   @state() askReferences: Reference[] = [];
   @state() askLoading = false;
   @state() response = "";
 
-  @provide({ context: searchReferencesContext })
-  @state()
-  searchReferences: Reference[] = [];
+  @queryAssignedElements({ slot: "input-search" })
+  inputSearch!: Array<HTMLElement>;
+
+  @queryAssignedElements({ slot: "input-ask" })
+  inputAsk!: Array<HTMLElement>;
 
   private _task = new Task(this, {
     task: async ([mode, query], { signal }) => {
@@ -89,38 +97,50 @@ export class CanaryPanel extends LitElement {
         return this.askReferences;
       }
     },
-    args: () => [this.mode, this.query],
+    args: () => [this.mode.current, this.query],
   });
+
+  firstUpdated() {
+    let options = this.mode.options;
+
+    if (this.inputSearch.length > 0) {
+      options.add("Search");
+    } else {
+      options.delete("Search");
+    }
+
+    if (this.inputAsk.length > 0) {
+      options.add("Ask");
+    } else {
+      options.delete("Ask");
+    }
+
+    this.mode = { ...this.mode, options };
+  }
 
   render() {
     return html`
       <div class="container">
         <div class="input-wrapper">
-          ${this.mode === "Search"
-            ? html`
-                <canary-input-search
-                  @change=${this._handleChange}
-                  @canary-mode-next=${this._handleModeNext}
-                >
-                </canary-input-search>
-              `
-            : html`
-                <canary-input-ask
-                  @change=${this._handleChange}
-                  @canary-mode-prev=${this._handleModePrev}
-                >
-                </canary-input-ask>
-              `}
+          <slot
+            name="input-search"
+            @change=${this._handleChange}
+            @tab=${this._handleTab}
+          >
+          </slot>
+          <slot
+            name="input-ask"
+            @change=${this._handleChange}
+            @tab=${this._handleTab}
+          >
+          </slot>
 
           <slot name="mode-tabs">
-            <canary-mode-tabs
-              @canary-mode-set=${this._handleModeSet}
-              .options=${this.modes}
-            ></canary-mode-tabs>
+            <canary-mode-tabs @set=${this._handleModeSet}></canary-mode-tabs>
           </slot>
         </div>
 
-        ${this.mode === "Search"
+        ${this.mode.current === "Search"
           ? html`<div class="callouts"><slot name="callout"></slot></div>`
           : nothing}
         <div class="results">${this.results()}</div>
@@ -135,7 +155,7 @@ export class CanaryPanel extends LitElement {
       ${this._task.render({
         initial: () => nothing,
         pending: () =>
-          this.mode === "Search"
+          this.mode.current === "Search"
             ? html` <div class="skeleton-container">
                 ${Array(4).fill(
                   html`<canary-reference-skeleton></canary-reference-skeleton>`,
@@ -166,7 +186,7 @@ export class CanaryPanel extends LitElement {
                 </div>
               `,
         complete:
-          this.mode === "Search"
+          this.mode.current === "Search"
             ? (_) => html`<canary-search-results></canary-search-results>`
             : (items) =>
                 this.query === ""
@@ -200,12 +220,13 @@ export class CanaryPanel extends LitElement {
     this.query = e.detail;
   }
 
-  private _handleModePrev(_: CustomEvent) {
-    this.mode = this.modes[0];
-  }
-
-  private _handleModeNext(_: CustomEvent) {
-    this.mode = this.modes[1];
+  private _handleTab(_: CustomEvent) {
+    if (this.mode.current === "Search" && this.mode.options.size > 1) {
+      this.mode.current = "Ask";
+    }
+    if (this.mode.current === "Ask" && this.mode.options.size > 1) {
+      this.mode.current = "Search";
+    }
   }
 
   private _handleModeSet(e: CustomEvent) {

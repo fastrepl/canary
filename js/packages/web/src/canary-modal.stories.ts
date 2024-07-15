@@ -6,13 +6,16 @@ import "./canary-provider-cloud";
 import "./canary-modal";
 import "./canary-trigger";
 import "./canary-panel";
+import "./canary-input";
 
 const render = (_: any) => {
   return html`
     <canary-provider-cloud endpoint="http://localhost:6006" key="key">
       <canary-modal>
         <canary-trigger data-testid="trigger" slot="trigger"></canary-trigger>
-        <canary-panel slot="body"></canary-panel>
+        <canary-panel slot="body">
+          <canary-input-search slot="input-search"></canary-input-search>
+        </canary-panel>
       </canary-modal>
     </canary-provider-cloud>
   `;
