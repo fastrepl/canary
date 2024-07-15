@@ -21,11 +21,11 @@ export class CanaryTrigger extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-    this.addEventListener("keydown", this._handleShortcut);
+    document.addEventListener("keydown", this._handleShortcut);
   }
 
   disconnectedCallback() {
-    this.removeEventListener("keydown", this._handleShortcut);
+    document.removeEventListener("keydown", this._handleShortcut);
     super.disconnectedCallback();
   }
 

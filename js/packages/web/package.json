@@ -18,9 +18,9 @@
   "dependencies": {
     "@lit-labs/observers": "^2.0.2",
     "@lit/task": "^1.0.1",
-    "@nlux/highlighter": "^2.14.0",
-    "@nlux/markdown": "^2.14.0",
-    "lit": "^3.1.4"
+    "highlight.js": "^11.10.0",
+    "lit": "^3.1.4",
+    "marked": "^13.0.2"
   },
   "devDependencies": {
     "@ljcl/storybook-addon-cssprops": "^4.0.0",

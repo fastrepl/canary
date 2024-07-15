@@ -17,6 +17,7 @@ export default defineConfig({
         "canary-callout-cal",
         "canary-callout-slack",
         "canary-callout-discord",
+        "canary-markdown",
       ].reduce(
         (acc, cur) => ({ ...acc, [cur]: resolve(__dirname, `src/${cur}.ts`) }),
         {} as Record<string, string>,

@@ -18,6 +18,7 @@ import { CanaryReference } from "./canary-reference";
 import { CanaryReferenceSkeleton } from "./canary-reference-skeleton";
 
 import { CanaryFooter } from "./canary-footer";
+import { CanaryMarkdown } from "./canary-markdown";
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -38,5 +39,6 @@ declare global {
     "canary-reference": CanaryReference;
     "canary-reference-skeleton": CanaryReferenceSkeleton;
     "canary-footer": CanaryFooter;
+    "canary-markdown": CanaryMarkdown;
   }
 }

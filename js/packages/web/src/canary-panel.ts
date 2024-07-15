@@ -3,9 +3,6 @@ import { customElement, property, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { Task } from "@lit/task";
 
-import { highlighter } from "@nlux/highlighter";
-import { createMarkdownStreamParser } from "@nlux/markdown";
-
 import "./canary-radio";
 import "./canary-input";
 import "./canary-reference";
@@ -13,11 +10,11 @@ import "./canary-reference-skeleton";
 import "./canary-footer";
 import "./canary-loading-dots";
 import "./canary-error";
+import "./canary-markdown";
 
 import { randomInteger } from "./utils";
 
 import { type Reference, ask, search } from "./core";
-import { content } from "./styles";
 
 @customElement("canary-panel")
 export class CanaryPanel extends LitElement {
@@ -30,7 +27,7 @@ export class CanaryPanel extends LitElement {
 
   @state() askReferences: Reference[] = [];
   @state() askLoading = false;
-  @state() responseContainer: HTMLDivElement = document.createElement("div");
+  @state() response = "";
 
   @state() searchReferences: Reference[] = [];
   @state() searchIndex = 0;
@@ -66,13 +63,7 @@ export class CanaryPanel extends LitElement {
 
       if (mode === "Ask") {
         this.askLoading = true;
-        this.responseContainer.textContent = "";
-
-        const parser = createMarkdownStreamParser(this.responseContainer, {
-          syntaxHighlighter: highlighter,
-          waitTimeBeforeStreamCompletion: 20 * 1000,
-          showCodeBlockCopyButton: false,
-        });
+        this.response = "";
 
         await ask(
           this.key,
@@ -83,7 +74,7 @@ export class CanaryPanel extends LitElement {
             this.askLoading = false;
 
             if (delta.type === "progress") {
-              parser.next(delta.content);
+              this.response += delta.content;
             }
             if (delta.type === "references") {
               this.askReferences = delta.items;
@@ -100,11 +91,6 @@ export class CanaryPanel extends LitElement {
 
   render() {
     return html`
-      <link
-        rel="stylesheet"
-        href="https://unpkg.com/highlight.js@11.9.0/styles/${this.hljs}.css"
-      />
-
       <div class="container">
         <div class="input-wrapper">
           ${this.mode === "Search"
@@ -160,7 +146,10 @@ export class CanaryPanel extends LitElement {
                   ${
                     this.askLoading
                       ? html`<canary-loading-dots></canary-loading-dots>`
-                      : this.responseContainer
+                      : html`<canary-markdown
+                          hljs=${this.hljs}
+                          .content=${this.response}
+                        ></canary-markdown>`
                   }
 
              <div class="references">
@@ -197,7 +186,10 @@ export class CanaryPanel extends LitElement {
                   ? nothing
                   : html`
                       <div class="ai-message">
-                        ${this.responseContainer}
+                        <canary-markdown
+                          hljs=${this.hljs}
+                          .content=${this.response}
+                        ></canary-markdown>
                         <div class="references">
                           ${(items ?? []).map(
                             (item) =>
@@ -256,7 +248,6 @@ export class CanaryPanel extends LitElement {
   }
 
   static styles = [
-    content,
     css`
       div.container {
         max-width: 500px;
