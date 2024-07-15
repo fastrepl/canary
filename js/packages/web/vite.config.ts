@@ -1,6 +1,5 @@
 import { defineConfig } from "vite";
 import { resolve } from "path";
-import mockServer from "vite-plugin-mock-server";
 
 export default defineConfig({
   build: {
@@ -27,10 +26,4 @@ export default defineConfig({
     },
     outDir: "components",
   },
-  plugins: [
-    mockServer({
-      mockRootDir: ".",
-      mockTsSuffix: "mock.ts",
-    }),
-  ],
 });

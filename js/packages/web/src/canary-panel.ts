@@ -28,6 +28,7 @@ export class CanaryPanel extends LitElement {
   @property({ reflect: true }) query = "";
 
   @state() askReferences: Reference[] = [];
+  @state() askLoading = false;
   @state() responseContainer: HTMLDivElement = document.createElement("div");
 
   @state() searchReferences: Reference[] = [];
@@ -63,7 +64,9 @@ export class CanaryPanel extends LitElement {
       }
 
       if (mode === "Ask") {
+        this.askLoading = true;
         this.responseContainer.textContent = "";
+
         const parser = createMarkdownStreamParser(this.responseContainer, {
           syntaxHighlighter: highlighter,
           waitTimeBeforeStreamCompletion: 20 * 1000,
@@ -76,6 +79,8 @@ export class CanaryPanel extends LitElement {
           randomInteger(),
           this.query,
           (delta) => {
+            this.askLoading = false;
+
             if (delta.type === "progress") {
               parser.next(delta.content);
             }
@@ -152,7 +157,7 @@ export class CanaryPanel extends LitElement {
             : html`
                 <div class="ai-message">
                   ${
-                    this.responseContainer.textContent == ""
+                    this.askLoading
                       ? html`<canary-loading-dots></canary-loading-dots>`
                       : this.responseContainer
                   }
@@ -172,8 +177,8 @@ export class CanaryPanel extends LitElement {
               `,
         complete:
           this.mode === "Search"
-            ? (items) =>
-                !items || items.length === 0
+            ? (items) => {
+                return !items || items.length === 0
                   ? nothing
                   : items.map(
                       ({ title, url, excerpt }, index) => html`
@@ -184,7 +189,8 @@ export class CanaryPanel extends LitElement {
                           ?selected=${index === this.searchIndex}
                         ></canary-reference>
                       `,
-                    )
+                    );
+              }
             : (items) =>
                 this.query === ""
                   ? nothing

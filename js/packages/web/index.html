@@ -6,165 +6,26 @@
     <title>@getcanary/web</title>
     <script type="module" src="/src/canary-modal.ts"></script>
     <script type="module" src="/src/canary-panel.ts"></script>
-
-    <script type="module" src="/src/canary-logo-slack.ts"></script>
-    <script type="module" src="/src/canary-logo-discord.ts"></script>
-
     <script type="module" src="/src/canary-trigger.ts"></script>
-    <script type="module" src="/src/canary-wrapper-default.ts"></script>
-    <script type="module" src="/src/canary-wrapper-starlight.ts"></script>
-
-    <script type="module" src="/src/canary-callout-slack.ts"></script>
     <script type="module" src="/src/canary-callout-discord.ts"></script>
-    <script type="module" src="/src/canary-callout-cal.ts"></script>
-    <script type="module" src="/src/canary-callout-calendly.ts"></script>
-
-    <style>
-      body {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-      }
-
-      button {
-        background-color: black;
-        color: white;
-        border: none;
-        border-radius: 8px;
-        padding: 8px 16px;
-        font-size: 16px;
-      }
-
-      div.page {
-        height: 100vh;
-        background-color: #f1f1f1;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-      }
-
-      .light {
-        background-color: black;
-        border: 1px solid black;
-        color: black;
-
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-        padding: 20px;
-        height: 700px;
-      }
-
-      .dark {
-        background-color: white;
-        border: 1px solid black;
-        color: white;
-
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-        padding: 20px;
-        height: 700px;
-      }
-    </style>
+    <script type="module" src="/src/canary-wrapper-default.ts"></script>
   </head>
   <body>
-    <div class="page">
-      <a id="panel" href="#panel">panel</a>
-
-      <div style="display: flex; flex-direction: row; gap: 20px">
-        <div class="light">
-          <canary-wrapper-default theme="light">
-            <canary-panel
-              endpoint="http://localhost:5173"
-              hljs="github"
-              query="meeting"
-            >
-              <canary-callout-discord
-                slot="callout"
-                url="https://discord.gg/Y8bJkzuQZU"
-              ></canary-callout-discord>
-              <canary-callout-slack
-                slot="callout"
-                url="https://discord.gg/Y8bJkzuQZU"
-              ></canary-callout-slack>
-
-              <canary-callout-cal
-                slot="callout"
-                url="https://discord.gg/Y8bJkzuQZU"
-              ></canary-callout-cal>
-            </canary-panel>
-          </canary-wrapper-default>
-        </div>
-
-        <div class="dark">
-          <canary-wrapper-default theme="dark">
-            <canary-panel
-              hljs="github-dark"
-              endpoint="http://localhost:5173"
-              query="hello"
-            >
-              <canary-callout-discord
-                slot="callout"
-                url="https://discord.gg/Y8bJkzuQZU"
-              ></canary-callout-discord>
-              <canary-callout-calendly
-                slot="callout"
-                url="https://discord.gg/Y8bJkzuQZU"
-              ></canary-callout-calendly>
-            </canary-panel>
-          </canary-wrapper-default>
-        </div>
-      </div>
-    </div>
-
-    <div class="page">
-      <a id="logo" href="#logo">logo</a>
-
-      <canary-logo-slack url="/"></canary-logo-slack>
-      <canary-logo-discord url="/"></canary-logo-discord>
-
-      <canary-wrapper-default theme="dark">
-        <canary-modal>
-          <canary-trigger slot="trigger"></canary-trigger>
-          <canary-panel
-            slot="body"
-            endpoint="http://localhost:5173"
-            query="hello"
-          >
-            <canary-callout-discord
-              slot="callout"
-              url="https://discord.gg/Y8bJkzuQZU"
-            ></canary-callout-discord>
-            <canary-callout-cal
-              slot="callout"
-              url="https://discord.gg/Y8bJkzuQZU"
-            >
-            </canary-callout-cal>
-          </canary-panel>
-        </canary-modal>
-      </canary-wrapper-default>
-
-      <canary-wrapper-default theme="light">
-        <canary-modal>
-          <canary-trigger slot="trigger"></canary-trigger>
-          <canary-panel
-            slot="body"
-            endpoint="http://localhost:5173"
-            query="i need some help"
-          >
-            <canary-callout-discord
-              slot="callout"
-              url="https://discord.gg/Y8bJkzuQZU"
-            ></canary-callout-discord>
-            <canary-callout-cal
-              slot="callout"
-              url="https://discord.gg/Y8bJkzuQZU"
-            >
-            </canary-callout-cal>
-          </canary-panel>
-        </canary-modal>
-      </canary-wrapper-default>
-    </div>
+    <canary-wrapper-default theme="dark">
+      <canary-modal>
+        <canary-trigger slot="trigger"></canary-trigger>
+        <canary-panel
+          slot="body"
+          hljs="github-dark"
+          endpoint="http://localhost:5173"
+          query="where can I find a discord server?"
+        >
+          <canary-callout-discord
+            slot="callout"
+            url="https://discord.gg/Y8bJkzuQZU"
+          ></canary-callout-discord>
+        </canary-panel>
+      </canary-modal>
+    </canary-wrapper-default>
   </body>
 </html>
