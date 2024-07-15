@@ -4,6 +4,10 @@ import { customElement, property } from "lit/decorators.js";
 import "./canary-hero-icon";
 
 const STYLE = css`
+  :host {
+    flex-grow: 1;
+  }
+
   .container {
     display: flex;
     align-items: center;
@@ -14,8 +18,9 @@ const STYLE = css`
   }
 
   input {
-    width: 400px;
+    width: 100%;
     height: 30px;
+
     outline: none;
     border: none;
     font-size: 16px;
@@ -30,6 +35,7 @@ const STYLE = css`
 
   canary-hero-icon {
     padding-top: 2px;
+    width: 24px;
   }
 `;
 

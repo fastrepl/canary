@@ -2,18 +2,15 @@ import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 
+import { StripeArray } from "./converters";
+
 @customElement("canary-radio")
 export class CanaryRadio extends LitElement {
-  @property({
-    type: Array,
-    reflect: true,
-    converter: {
-      fromAttribute: (v, _) => String(v).split(","),
-      toAttribute: (v, _) => (Array.isArray(v) ? v.join(",") : v),
-    },
-  })
+  @property({ reflect: true, converter: StripeArray })
   options: string[] = [];
-  @property({ type: String, reflect: true }) selected = this.options[0];
+
+  @property({ type: String, reflect: true })
+  selected = this.options[0];
 
   render() {
     return html`

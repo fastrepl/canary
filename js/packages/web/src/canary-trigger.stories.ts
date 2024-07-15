@@ -15,4 +15,11 @@ export default {
   },
 } satisfies Meta;
 
-export const Default: StoryObj = { args: {} };
+export const Desktop: StoryObj = {
+  args: {},
+  parameters: { viewport: { disable: true } },
+};
+export const Mobile: StoryObj = {
+  args: {},
+  parameters: { viewport: { defaultViewport: "mobile1", disable: false } },
+};

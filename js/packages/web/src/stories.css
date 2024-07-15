@@ -1,3 +1,7 @@
+:root {
+  --canary-font-family: Arial, Helvetica, sans-serif;
+}
+
 .bg-gray-100 {
   background-color: #f3f4f6;
 }

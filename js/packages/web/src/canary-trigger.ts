@@ -7,7 +7,7 @@ import "./canary-hero-icon";
 export class CanaryTrigger extends LitElement {
   render() {
     return html`
-      <button>
+      <button aria-label="Search">
         <canary-hero-icon name="magnifying-glass"></canary-hero-icon>
         <span>Search</span>
 

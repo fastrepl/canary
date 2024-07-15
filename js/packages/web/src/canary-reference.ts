@@ -118,8 +118,10 @@ export class CanaryReference extends LitElement {
     }
 
     .excerpt mark {
-      background-color: var(--canary-color-accent-low);
-      color: black;
+      background-color: var(--canary-color-accent-high);
+      color: var(--canary-color-black);
+      border-radius: 2px;
+      padding: 0 2px;
     }
 
     .paths {
@@ -131,10 +133,6 @@ export class CanaryReference extends LitElement {
       font-weight: lighter;
       color: var(--canary-color-gray-3);
       font-size: 12px;
-    }
-
-    canary-hero-icon {
-      padding-top: 3px;
     }
 
     .path {

@@ -12,6 +12,7 @@ import "./canary-reference";
 import "./canary-reference-skeleton";
 import "./canary-footer";
 import "./canary-loading-dots";
+import "./canary-error";
 
 import { randomInteger } from "./utils";
 
@@ -210,9 +211,7 @@ export class CanaryPanel extends LitElement {
                     `,
         error: (error) => {
           console.error(error);
-          return html` <div class="error">
-            <span class="title">Oops, something went wrong!</span>
-          </div>`;
+          return html` <canary-error></canary-error>`;
         },
       })}
     `;
@@ -260,6 +259,7 @@ export class CanaryPanel extends LitElement {
     content,
     css`
       div.container {
+        max-width: 500px;
         padding: 8px 8px;
         border: none;
         border-radius: 8px;
@@ -273,10 +273,10 @@ export class CanaryPanel extends LitElement {
 
       div.input-wrapper {
         display: flex;
-        justify-content: space-between;
         align-items: center;
+        gap: 8px;
         margin-bottom: 4px;
-        padding: 1px 8px;
+        padding: 1px 6px;
       }
     `,
     css`

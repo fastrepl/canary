@@ -10,10 +10,10 @@ const config: StorybookConfig = {
   addons: [
     getAbsolutePath("@ljcl/storybook-addon-cssprops"),
     getAbsolutePath("storybook-source-link"),
-    getAbsolutePath("@storybook/addon-storysource"),
     getAbsolutePath("@storybook/addon-themes"),
     getAbsolutePath("@storybook/addon-a11y"),
     getAbsolutePath("@storybook/addon-viewport"),
+    getAbsolutePath("@storybook/addon-interactions"),
   ],
   framework: {
     name: getAbsolutePath("@storybook/web-components-vite"),

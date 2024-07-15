@@ -35,11 +35,12 @@ const preview: Preview = {
       viewports: {
         ...MINIMAL_VIEWPORTS,
       },
+      disable: true,
     },
     msw: {
       handlers: {
-        default: [
-          http.post("/api/v1/search", async () => {
+        search: [
+          http.post(/.*\/api\/v1\/search/, async () => {
             const items = Array(Math.round(Math.random() * 5 + 5)).fill(
               mockSearchReference(),
             );
@@ -47,7 +48,9 @@ const preview: Preview = {
             await delay(Math.random() * 300 + 200);
             return HttpResponse.json(items);
           }),
-          http.post("/api/v1/ask", async () => {
+        ],
+        ask: [
+          http.post(/.*\/api\/v1\/ask/, async () => {
             await delay(Math.random() * 2000);
 
             const encoder = new TextEncoder();
