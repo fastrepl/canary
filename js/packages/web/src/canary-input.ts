@@ -34,7 +34,6 @@ const STYLE = css`
   }
 
   canary-hero-icon {
-    padding-top: 2px;
     width: 24px;
   }
 `;

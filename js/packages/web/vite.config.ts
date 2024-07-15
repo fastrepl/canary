@@ -5,6 +5,7 @@ export default defineConfig({
   build: {
     lib: {
       entry: [
+        "index",
         "canary-panel",
         "canary-trigger",
         "canary-modal",

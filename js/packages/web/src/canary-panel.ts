@@ -1,6 +1,5 @@
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
-import { ifDefined } from "lit/directives/if-defined.js";
 import { Task } from "@lit/task";
 
 import "./canary-radio";
@@ -11,6 +10,7 @@ import "./canary-footer";
 import "./canary-loading-dots";
 import "./canary-error";
 import "./canary-markdown";
+import "./canary-search-results";
 
 import { randomInteger } from "./utils";
 
@@ -20,7 +20,7 @@ import { type Reference, ask, search } from "./core";
 export class CanaryPanel extends LitElement {
   @property() key = "";
   @property() endpoint = "";
-  @property() hljs = "github";
+  @property() hljs = "github-dark";
 
   @property() mode = "Search";
   @property({ reflect: true }) query = "";
@@ -30,17 +30,6 @@ export class CanaryPanel extends LitElement {
   @state() response = "";
 
   @state() searchReferences: Reference[] = [];
-  @state() searchIndex = 0;
-
-  connectedCallback() {
-    super.connectedCallback();
-    this.addEventListener("keydown", this._handleNavigation);
-  }
-
-  disconnectedCallback() {
-    this.removeEventListener("keydown", this._handleNavigation);
-    super.disconnectedCallback();
-  }
 
   private _task = new Task(this, {
     task: async ([mode, query], { signal }) => {
@@ -56,7 +45,6 @@ export class CanaryPanel extends LitElement {
           signal,
         );
 
-        this.searchIndex = 0;
         this.searchReferences = result;
         return this.searchReferences;
       }
@@ -167,20 +155,10 @@ export class CanaryPanel extends LitElement {
               `,
         complete:
           this.mode === "Search"
-            ? (items) => {
-                return !items || items.length === 0
-                  ? nothing
-                  : items.map(
-                      ({ title, url, excerpt }, index) => html`
-                        <canary-reference
-                          title=${title}
-                          url=${url}
-                          excerpt=${ifDefined(excerpt)}
-                          ?selected=${index === this.searchIndex}
-                        ></canary-reference>
-                      `,
-                    );
-              }
+            ? (items) =>
+                html`<canary-search-results
+                  .items=${items ?? []}
+                ></canary-search-results>`
             : (items) =>
                 this.query === ""
                   ? nothing
@@ -207,32 +185,6 @@ export class CanaryPanel extends LitElement {
         },
       })}
     `;
-  }
-
-  private _handleNavigation(e: KeyboardEvent) {
-    switch (e.key) {
-      case "ArrowUp":
-        e.preventDefault();
-        this._moveSelection(-1);
-        break;
-      case "ArrowDown":
-        e.preventDefault();
-        this._moveSelection(1);
-        break;
-      case "Enter":
-        if (this.mode === "Search") {
-          e.preventDefault();
-          window.open(this.searchReferences[this.searchIndex].url);
-        }
-        break;
-    }
-  }
-
-  private _moveSelection(delta: number) {
-    const next = this.searchIndex + delta;
-    if (next > -1 && next < this.searchReferences.length) {
-      this.searchIndex = next;
-    }
   }
 
   private _handleChange(e: CustomEvent) {
@@ -288,18 +240,6 @@ export class CanaryPanel extends LitElement {
       div.callouts {
         display: flex;
         flex-direction: column;
-      }
-
-      div.results {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        max-height: 50vh;
-        overflow-y: hidden;
-      }
-
-      div.results:hover {
-        overflow-y: auto;
       }
     `,
     css`

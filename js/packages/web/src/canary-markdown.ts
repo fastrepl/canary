@@ -9,7 +9,7 @@ hljs.registerLanguage("javascript", javascript);
 
 @customElement("canary-markdown")
 export class CanaryMarkdown extends LitElement {
-  @property({ type: String }) hljs = "github";
+  @property({ type: String }) hljs = "github-dark";
   @property({ attribute: false }) content = "";
   @state() html = "";
 
@@ -55,6 +55,11 @@ export class CanaryMarkdown extends LitElement {
     h5,
     h6 {
       font-size: 1.25em;
+    }
+
+    pre,
+    code {
+      border-radius: 8px;
     }
   `;
 }
