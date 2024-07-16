@@ -30,6 +30,10 @@ export const callout = css`
 `;
 
 export const input = css`
+  :host {
+    flex-grow: 1;
+  }
+
   .container {
     display: flex;
     align-items: center;

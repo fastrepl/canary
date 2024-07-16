@@ -38,6 +38,7 @@ export class CanaryDialog extends LitElement {
       }
 
       dialog {
+        max-width: 500px;
         margin: 0 auto;
         width: 100%;
         top: 40px;
@@ -48,14 +49,6 @@ export class CanaryDialog extends LitElement {
         box-shadow:
           0 20px 25px -5px rgb(0 0 0 / 0.1),
           0 8px 10px -6px rgb(0 0 0 / 0.1);
-      }
-
-      @media (min-width: 768px) {
-        dialog {
-          left: 50%;
-          transform: translateX(-50%);
-          max-width: 500px;
-        }
       }
     `,
   ];

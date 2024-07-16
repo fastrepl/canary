@@ -17,8 +17,8 @@ import "./canary-markdown";
 import "./canary-reference";
 import "./canary-loading-dots";
 
-@customElement("canary-panel-ask")
-export class CanaryPanelAsk extends LitElement {
+@customElement("canary-ask-results")
+export class CanaryAskResults extends LitElement {
   @consume({ context: providerContext, subscribe: false })
   @state()
   provider!: ProviderContext;
@@ -27,14 +27,18 @@ export class CanaryPanelAsk extends LitElement {
   @state()
   query = "";
 
-  @property() response = "";
-  @property({ attribute: false }) references: Reference[] = [];
+  @state() loading = false;
+  @state() response = "";
+  @state() references: Reference[] = [];
 
   @property() hljs = "github";
-  @state() loading = false;
 
   private _task = new Task(this, {
     task: async ([query], { signal }) => {
+      if (query === "") {
+        return null;
+      }
+
       this.response = "";
       this.references = [];
       this.loading = true;
@@ -54,6 +58,7 @@ export class CanaryPanelAsk extends LitElement {
         },
         signal,
       );
+
       return null;
     },
     args: () => [this.query],

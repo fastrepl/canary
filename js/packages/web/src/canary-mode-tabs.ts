@@ -42,7 +42,11 @@ export class CanaryModeTabs extends LitElement {
   }
 
   private _handleClick(option: string) {
-    const event = new CustomEvent("set", { detail: option });
+    const event = new CustomEvent("mode-set", {
+      detail: option,
+      bubbles: true,
+      composed: true,
+    });
     this.dispatchEvent(event);
   }
 

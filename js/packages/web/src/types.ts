@@ -6,11 +6,11 @@ import { CanaryModal } from "./canary-modal";
 import { CanaryDialog } from "./canary-dialog";
 import { CanaryContent } from "./canary-content";
 
-import { CanaryInputAsk } from "./canary-input-ask";
-import { CanaryInputSearch } from "./canary-input-search";
+import { CanaryAskInout } from "./canary-ask-input";
+import { CanarySearchInput } from "./canary-search-input";
 
-import { CanaryPanelSearch } from "./canary-panel-search";
-import { CanaryPanelAsk } from "./canary-panel-ask";
+import { CanarySearch } from "./canary-search";
+import { CanaryAsk } from "./canary-ask";
 
 import { CanaryHeroIcon } from "./canary-hero-icon";
 import { CanaryLogoCal } from "./canary-logo-cal";
@@ -27,7 +27,6 @@ import { CanaryReference } from "./canary-reference";
 import { CanaryReferenceSkeleton } from "./canary-reference-skeleton";
 
 import { CanaryModeTabs } from "./canary-mode-tabs";
-import { CanarySearchTabs } from "./canary-search-tabs";
 
 import { CanaryFooter } from "./canary-footer";
 import { CanaryMarkdown } from "./canary-markdown";
@@ -44,10 +43,10 @@ declare global {
     "canary-modal": CanaryModal;
     "canary-dialog": CanaryDialog;
     "canary-content": CanaryContent;
-    "canary-input-ask": CanaryInputAsk;
-    "canary-input-search": CanaryInputSearch;
-    "canary-panel-search": CanaryPanelSearch;
-    "canary-panel-ask": CanaryPanelAsk;
+    "canary-search": CanarySearch;
+    "canary-search-input": CanarySearchInput;
+    "canary-ask": CanaryAsk;
+    "canary-ask-input": CanaryAskInout;
     "canary-hero-icon": CanaryHeroIcon;
     "canary-logo-cal": CanaryLogoCal;
     "canary-logo-calendly": CanaryLogoCalendly;
@@ -62,7 +61,6 @@ declare global {
     "canary-footer": CanaryFooter;
     "canary-markdown": CanaryMarkdown;
     "canary-mode-tabs": CanaryModeTabs;
-    "canary-search-tabs": CanarySearchTabs;
     "canary-styles-default": CanaryStylesDefault;
     "canary-styles-starlight": CanaryStylesStarlight;
     "canary-styles-docusaurus": CanaryStylesDocusaurus;

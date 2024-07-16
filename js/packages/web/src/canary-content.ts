@@ -1,4 +1,4 @@
-import { LitElement, css, html, nothing } from "lit";
+import { LitElement, css, html } from "lit";
 import {
   customElement,
   property,
@@ -16,11 +16,6 @@ import {
   type ProviderContext,
 } from "./contexts";
 
-import "./canary-reference";
-import "./canary-reference-skeleton";
-
-import "./canary-error";
-import "./canary-mode-tabs";
 import "./canary-footer";
 
 @customElement("canary-content")
@@ -37,22 +32,22 @@ export class CanaryContent extends LitElement {
   @property()
   query = "";
 
-  @queryAssignedElements({ slot: "input-search" })
-  inputSearch!: Array<HTMLElement>;
+  @queryAssignedElements({ slot: "search" })
+  searchElements!: Array<HTMLElement>;
 
-  @queryAssignedElements({ slot: "input-ask" })
-  inputAsk!: Array<HTMLElement>;
+  @queryAssignedElements({ slot: "ask" })
+  askElements!: Array<HTMLElement>;
 
   firstUpdated() {
     let options = this.mode.options;
 
-    if (this.inputSearch.length > 0) {
+    if (this.searchElements.length > 0) {
       options.add("Search");
     } else {
       options.delete("Search");
     }
 
-    if (this.inputAsk.length > 0) {
+    if (this.askElements.length > 0) {
       options.add("Ask");
     } else {
       options.delete("Ask");
@@ -63,33 +58,14 @@ export class CanaryContent extends LitElement {
 
   render() {
     return html`
-      <div class="container">
-        <div class="input-wrapper">
-          <slot
-            name="input-search"
-            @change=${this._handleChange}
-            @tab=${this._handleTab}
-          >
-          </slot>
-          <slot
-            name="input-ask"
-            @change=${this._handleChange}
-            @tab=${this._handleTab}
-          >
-          </slot>
-
-          <slot name="mode-tabs">
-            <canary-mode-tabs @set=${this._handleModeSet}></canary-mode-tabs>
-          </slot>
-        </div>
-
-        ${this.mode.current === "Search"
-          ? html`<div class="callouts"><slot name="callout"></slot></div>`
-          : nothing}
-        ${this.mode.current === "Search"
-          ? html`<slot name="panel-search"></slot>`
-          : html`<slot name="panel-ask"></slot>`}
-
+      <div
+        class="container"
+        @mode-set=${this._handleModeSet}
+        @input-tab=${this._handleTab}
+        @input-change=${this._handleChange}
+      >
+        <slot name="search"></slot>
+        <slot name="ask"></slot>
         <canary-footer></canary-footer>
       </div>
     `;
@@ -119,45 +95,18 @@ export class CanaryContent extends LitElement {
     css`
       div.container {
         max-width: 500px;
-        padding: 8px 8px;
-        border: none;
-        border-radius: 8px;
-        outline: none;
+
         color: var(--canary-color-gray-1);
         background-color: var(--canary-color-black);
+
+        outline: none;
+        padding: 8px 8px;
+
+        border: none;
+        border-radius: 8px;
         box-shadow:
           0 20px 25px -5px rgb(0 0 0 / 0.1),
           0 8px 10px -6px rgb(0 0 0 / 0.1);
-      }
-
-      div.input-wrapper {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin-bottom: 4px;
-        padding: 1px 6px;
-      }
-
-      div.callouts {
-        display: flex;
-        flex-direction: column;
-      }
-    `,
-    css`
-      .logo {
-        padding-top: 8px;
-        text-align: end;
-        font-size: 12px;
-        color: var(--canary-color-gray-2);
-      }
-
-      .logo a {
-        text-decoration: none;
-        color: var(--canary-color-gray-1);
-      }
-      .logo a:hover {
-        text-decoration: underline;
-        color: var(--canary-color-white);
       }
     `,
   ];

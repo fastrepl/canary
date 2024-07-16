@@ -1,23 +1,23 @@
 import { LitElement, html, css } from "lit";
-import { customElement, state, property } from "lit/decorators.js";
+import { customElement, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
+import { Task } from "@lit/task";
 
 import { consume } from "@lit/context";
-import { ProviderContext, providerContext, queryContext } from "./contexts";
+import {
+  providerContext,
+  type ProviderContext,
+  queryContext,
+} from "./contexts";
 
-import { Task } from "@lit/task";
-import { Reference } from "./types";
+import type { Reference } from "./types";
 
 import "./canary-reference";
 import "./canary-reference-skeleton";
 import "./canary-error";
 
-// @ts-ignore
-import { parse } from "./grammers/groups";
-type GroupDefinition = { name: string; pattern: RegExp | null };
-
-@customElement("canary-panel-search")
-export class CanaryPanelSearch extends LitElement {
+@customElement("canary-search-results")
+export class CanarySearchResults extends LitElement {
   @consume({ context: providerContext, subscribe: false })
   @state()
   provider!: ProviderContext;
@@ -26,17 +26,13 @@ export class CanaryPanelSearch extends LitElement {
   @state()
   query = "";
 
-  @property({ converter: { fromAttribute: (v) => parse(v) } })
-  groups: GroupDefinition[] = [];
-
   @state() references: Reference[] = [];
-  @state() selectedIndex = 0;
+  @state() selected = -1;
 
   private _task = new Task(this, {
     task: async ([query], { signal }) => {
       const result = await this.provider.search(query, signal);
-      this.references = result;
-      return null;
+      return result;
     },
     args: () => [this.query],
   });
@@ -65,20 +61,20 @@ export class CanaryPanelSearch extends LitElement {
             </div>`,
           pending: () =>
             html` <div class="skeleton-container">
-              ${Array(4).fill(
+              ${Array(5).fill(
                 html`<canary-reference-skeleton></canary-reference-skeleton>`,
               )}
             </div>`,
-          complete: () =>
-            html`${this.references.map(
+          complete: (references) =>
+            html`${references.map(
               ({ title, url, excerpt }, index) => html`
                 <canary-reference
                   title=${title}
                   url=${url}
                   excerpt=${ifDefined(excerpt)}
-                  ?selected=${index === this.selectedIndex}
+                  ?selected=${index === this.selected}
                   @mouseover=${() => {
-                    this.selectedIndex = index;
+                    this.selected = index;
                   }}
                 ></canary-reference>
               `,
@@ -87,6 +83,13 @@ export class CanaryPanelSearch extends LitElement {
         })}
       </div>
     `;
+  }
+
+  private _moveSelection(delta: number) {
+    const next = this.selected + delta;
+    if (next > -1 && next < this.references.length) {
+      this.selected = next;
+    }
   }
 
   private _handleUpDown = (e: KeyboardEvent) => {
@@ -106,29 +109,25 @@ export class CanaryPanelSearch extends LitElement {
     if (e.key !== "Enter") {
       e.preventDefault();
 
-      const item = this.references?.[this.selectedIndex];
+      if (this.selected < 0) {
+        return;
+      }
+
+      const item = this.references?.[this.selected];
       if (item) {
         window.open(item.url, "_blank");
       }
     }
   };
 
-  private _moveSelection(delta: number) {
-    const next = this.selectedIndex + delta;
-    if (next > -1 && next < this.references.length) {
-      this.selectedIndex = next;
-    }
-  }
-
   static styles = css`
     .container {
       display: flex;
       flex-direction: column;
       gap: 8px;
-      max-height: 50vh;
+      max-height: 425px;
       overflow-y: hidden;
     }
-
     .container:hover {
       overflow-y: auto;
     }
@@ -137,7 +136,7 @@ export class CanaryPanelSearch extends LitElement {
       display: flex;
       flex-direction: column;
       gap: 8px;
-      height: 325px;
+      height: 425px;
     }
   `;
 }

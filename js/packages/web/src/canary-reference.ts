@@ -74,6 +74,7 @@ export class CanaryReference extends LitElement {
       border-radius: 8px;
       background-color: var(--canary-color-black);
 
+      font-family: var(--canary-font-family);
       cursor: pointer;
     }
 

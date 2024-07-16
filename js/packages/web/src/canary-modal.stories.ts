@@ -6,7 +6,9 @@ import "./canary-provider-cloud";
 import "./canary-modal";
 import "./canary-trigger";
 import "./canary-content";
-import "./canary-input-search";
+import "./canary-search";
+import "./canary-search-input";
+import "./canary-search-results";
 
 const render = (_: any) => {
   return html`
@@ -14,14 +16,10 @@ const render = (_: any) => {
       <canary-modal>
         <canary-trigger slot="trigger" data-testid="trigger"></canary-trigger>
         <canary-content slot="content">
-          <canary-input-search slot="input-search"></canary-input-search>
-          <canary-input-ask slot="input-ask"></canary-input-ask>
-          <canary-panel-search slot="panel-search"></canary-panel-search>
-          <canary-panel-ask slot="panel-ask"></canary-panel-ask>
-          <canary-callout-discord
-            slot="callout"
-            url="https://discord.gg/Y8bJkzuQZU"
-          ></canary-callout-discord>
+          <canary-search slot="search">
+            <canary-search-input slot="input"></canary-search-input>
+            <canary-search-results slot="results"></canary-search-results>
+          </canary-search>
         </canary-content>
       </canary-modal>
     </canary-provider-cloud>

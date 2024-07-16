@@ -5,22 +5,16 @@ export default defineConfig({
   build: {
     lib: {
       entry: [
+        "index",
         ...[
           "canary-provider-mock",
           "canary-provider-cloud",
           "canary-provider-pagefind",
         ],
-        "canary-content",
-        "canary-trigger",
-        ...["canary-input-ask", "canary-input-search"],
-        ...["canary-panel-search", "canary-panel-ask"],
-        "canary-modal",
-        "canary-markdown",
         ...[
-          "canary-logo-cal",
-          "canary-logo-calendly",
-          "canary-logo-slack",
-          "canary-logo-discord",
+          "canary-styles-default",
+          "canary-styles-starlight",
+          "canary-styles-docusaurus",
         ],
         ...[
           "canary-callout-cal",
@@ -28,8 +22,16 @@ export default defineConfig({
           "canary-callout-slack",
           "canary-callout-discord",
         ],
-        ...["canary-styles-starlight", "canary-styles-docusaurus"],
-        ...["canary-mode-tabs", "canary-search-tabs"],
+        "canary-modal",
+        "canary-trigger",
+        "canary-content",
+        ...[
+          "canary-search",
+          "canary-search-input",
+          "canary-search-results",
+          "canary-search-results-group",
+        ],
+        ...["canary-ask", "canary-ask-input", "canary-ask-results"],
       ].reduce(
         (acc, cur) => ({ ...acc, [cur]: resolve(__dirname, `src/${cur}.ts`) }),
         {} as Record<string, string>,

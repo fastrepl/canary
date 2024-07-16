@@ -5,11 +5,14 @@ import { http, HttpResponse } from "msw";
 import "./canary-provider-cloud";
 import "./canary-content";
 
-import "./canary-input-search";
-import "./canary-input-ask";
+import "./canary-ask";
+import "./canary-ask-input";
+import "./canary-ask-results";
 
-import "./canary-panel-search";
-import "./canary-panel-ask";
+import "./canary-search";
+import "./canary-search-input";
+import "./canary-search-results";
+import "./canary-search-results-group";
 
 import "./canary-callout-cal";
 import "./canary-callout-discord";
@@ -19,8 +22,10 @@ const render = ({ type }: any) => {
     return html`
       <canary-provider-cloud endpoint="http://localhost:6006" key="key">
         <canary-content query="hi">
-          <canary-input-search slot="input-search"></canary-input-search>
-          <canary-panel-search slot="panel-search"></canary-panel-search>
+          <canary-search slot="search">
+            <canary-search-input slot="input"></canary-search-input>
+            <canary-search-results slot="results"></canary-search-results>
+          </canary-search>
         </canary-content>
       </canary-provider-cloud>
     `;
@@ -30,11 +35,12 @@ const render = ({ type }: any) => {
     return html`
       <canary-provider-cloud endpoint="http://localhost:6006" key="key">
         <canary-content query="hi">
-          <canary-input-search slot="input-search"> </canary-input-search>
-          <canary-panel-search
-            slot="panel-search"
-            groups="Docs:*;API:api"
-          ></canary-panel-search>
+          <canary-search slot="search">
+            <canary-search-input slot="input"></canary-search-input>
+            <canary-search-results-group
+              slot="results"
+            ></canary-search-results-group>
+          </canary-search>
         </canary-content>
       </canary-provider-cloud>
     `;
@@ -44,20 +50,11 @@ const render = ({ type }: any) => {
     return html`
       <canary-provider-cloud endpoint="http://localhost:6006" key="key">
         <canary-content query="discord">
-          <canary-input-search slot="input-search"></canary-input-search>
-          <canary-panel-search slot="panel-search"></canary-panel-search>
-          <canary-callout-discord slot="callout"></canary-callout-discord>
-        </canary-content>
-      </canary-provider-cloud>
-    `;
-  }
-
-  if (type === "search-empty") {
-    return html`
-      <canary-provider-cloud endpoint="http://localhost:6006" key="key">
-        <canary-content>
-          <canary-input-search slot="input-search"></canary-input-search>
-          <canary-panel-search slot="panel-search"></canary-panel-search>
+          <canary-search slot="search">
+            <canary-search-input slot="input"></canary-search-input>
+            <canary-search-results slot="results"></canary-search-results>
+            <canary-callout-discord slot="callout"></canary-callout-discord>
+          </canary-search>
         </canary-content>
       </canary-provider-cloud>
     `;
@@ -67,8 +64,10 @@ const render = ({ type }: any) => {
     return html`
       <canary-provider-cloud endpoint="http://localhost:6006" key="key">
         <canary-content query="hi">
-          <canary-input-search slot="input-search"></canary-input-search>
-          <canary-panel-search slot="panel-search"></canary-panel-search>
+          <canary-search slot="search">
+            <canary-search-input slot="input"></canary-search-input>
+            <canary-search-results slot="results"></canary-search-results>
+          </canary-search>
         </canary-content>
       </canary-provider-cloud>
     `;
@@ -78,23 +77,14 @@ const render = ({ type }: any) => {
     return html`
       <canary-provider-cloud endpoint="http://localhost:6006" key="key">
         <canary-content query="hi">
-          <canary-input-search slot="input-search"></canary-input-search>
-          <canary-panel-search slot="panel-search"></canary-panel-search>
-          <canary-input-ask slot="input-ask"></canary-input-ask>
-          <canary-panel-ask slot="panel-ask"></canary-panel-ask>
-        </canary-content>
-      </canary-provider-cloud>
-    `;
-  }
-
-  if (type === "search-ask-empty") {
-    return html`
-      <canary-provider-cloud endpoint="http://localhost:6006" key="key">
-        <canary-content>
-          <canary-panel-search slot="panel-search"></canary-panel-search>
-          <canary-input-ask slot="input-ask"></canary-input-ask>
-          <canary-panel-ask slot="panel-ask"></canary-panel-ask>
-          <canary-input-search slot="input-search"></canary-input-search>
+          <canary-search slot="search">
+            <canary-search-input slot="input"></canary-search-input>
+            <canary-search-results slot="results"></canary-search-results>
+          </canary-search>
+          <canary-ask slot="ask">
+            <canary-ask-input slot="input"></canary-ask-input>
+            <canary-ask-results slot="results"></canary-ask-results>
+          </canary-ask>
         </canary-content>
       </canary-provider-cloud>
     `;
@@ -104,10 +94,10 @@ const render = ({ type }: any) => {
     return html`
       <canary-provider-cloud endpoint="http://localhost:6006" key="key">
         <canary-content query="hi">
-          <canary-input-search slot="input-search"></canary-input-search>
-          <canary-panel-search slot="panel-search"></canary-panel-search>
-          <canary-input-ask slot="input-ask"></canary-input-ask>
-          <canary-panel-ask slot="panel-ask"></canary-panel-ask>
+          <canary-search-input slot="search-input"></canary-search-input>
+          <canary-search slot="search"></canary-search>
+          <canary-ask-input slot="ask-input"></canary-ask-input>
+          <canary-ask slot="ask"></canary-ask>
         </canary-content>
       </canary-provider-cloud>
     `;
@@ -130,10 +120,6 @@ export const Search: StoryObj = {
 
 export const SearchGroup: StoryObj = {
   args: { type: "search-group" },
-};
-
-export const SearchEmpty: StoryObj = {
-  args: { type: "search-empty" },
 };
 
 export const SearchError: StoryObj = {
@@ -160,10 +146,6 @@ export const SearchMobile: StoryObj = {
 
 export const SearchAsk: StoryObj = {
   args: { type: "search-ask" },
-};
-
-export const SearchAskEmpty: StoryObj = {
-  args: { type: "search-ask-empty" },
 };
 
 export const SearchAskError: StoryObj = {

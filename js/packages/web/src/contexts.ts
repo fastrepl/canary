@@ -1,8 +1,11 @@
 import { createContext } from "@lit/context";
 
-import type { Delta } from "./types";
+import type { Delta, Reference } from "./types";
 
-type SearchFunction = (query: string, signal?: AbortSignal) => Promise<any>;
+type SearchFunction = (
+  query: string,
+  signal?: AbortSignal,
+) => Promise<Reference[]>;
 type AskFunction = (
   id: number,
   query: string,
@@ -35,8 +38,6 @@ export type ProviderContext =
   | PagefindProviderContext
   | CloudProviderContext;
 
-export const providerContext = createContext<ProviderContext>({});
-
 export type ModeContext = {
   options: Set<"Search" | "Ask">;
   current: "Search" | "Ask";
@@ -45,6 +46,9 @@ export const defaultModeContext: ModeContext = {
   options: new Set<"Search" | "Ask">(["Search"]),
   current: "Search",
 };
-export const modeContext = createContext<ModeContext>(defaultModeContext);
 
-export const queryContext = createContext<string>("query");
+const ctx = <T>(key: string) => createContext<T>(Symbol(key));
+
+export const providerContext = ctx<ProviderContext>("provider");
+export const modeContext = ctx<ModeContext>("mode");
+export const queryContext = ctx<string>("query");

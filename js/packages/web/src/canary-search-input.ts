@@ -12,8 +12,8 @@ import {
 import { input } from "./styles";
 import "./canary-hero-icon";
 
-@customElement("canary-input-ask")
-export class CanaryInputAsk extends LitElement {
+@customElement("canary-search-input")
+export class CanarySearchInput extends LitElement {
   @consume({ context: queryContext, subscribe: true })
   @property({ reflect: true })
   value = "";
@@ -24,20 +24,13 @@ export class CanaryInputAsk extends LitElement {
 
   render() {
     return html`
-      <style>
-        :host {
-          flex-grow: ${this.mode.current === "Search" ? "0" : "1"};
-          display: ${this.mode.current === "Search" ? "none" : "block"};
-        }
-      </style>
-
       <div class="container">
-        <canary-hero-icon name="question-mark-circle"></canary-hero-icon>
+        <canary-hero-icon name="magnifying-glass"></canary-hero-icon>
         <input
           type="text"
           value=${this.value}
           autocomplete="off"
-          placeholder="Ask anything..."
+          placeholder="Search for anything..."
           @input=${this._handleInput}
           @keydown=${this._handleKeyDown}
           autofocus
@@ -51,26 +44,23 @@ export class CanaryInputAsk extends LitElement {
 
   private _handleInput(e: KeyboardEvent) {
     const input = e.target as HTMLInputElement;
-    this.value = input.value;
+
+    const event = new CustomEvent("input-change", {
+      detail: input.value,
+      bubbles: true,
+      composed: true,
+    });
+    this.dispatchEvent(event);
   }
 
   private _handleKeyDown(e: KeyboardEvent) {
-    if (e.key === "Enter") {
+    if (e.key === "Tab") {
       e.preventDefault();
-      const event = new CustomEvent("change", {
-        detail: this.value,
+
+      const event = new CustomEvent("input-tab", {
         bubbles: true,
         composed: true,
       });
-      this.dispatchEvent(event);
-
-      this.value = "";
-      (e.target as HTMLInputElement).value = "";
-    }
-
-    if (e.key === "Tab") {
-      e.preventDefault();
-      const event = new CustomEvent("tab", { bubbles: true, composed: true });
       this.dispatchEvent(event);
     }
   }

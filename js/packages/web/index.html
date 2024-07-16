@@ -7,12 +7,14 @@
     <script type="module" src="/src/canary-provider-mock.ts"></script>
     <script type="module" src="/src/canary-styles-default.ts"></script>
     <script type="module" src="/src/canary-modal.ts"></script>
-    <script type="module" src="/src/canary-content.ts"></script>
     <script type="module" src="/src/canary-trigger.ts"></script>
-    <script type="module" src="/src/canary-input-search.ts"></script>
-    <script type="module" src="/src/canary-input-ask.ts"></script>
-    <script type="module" src="/src/canary-panel-search.ts"></script>
-    <script type="module" src="/src/canary-panel-ask.ts"></script>
+    <script type="module" src="/src/canary-content.ts"></script>
+    <script type="module" src="/src/canary-search.ts"></script>
+    <script type="module" src="/src/canary-search-input.ts"></script>
+    <script type="module" src="/src/canary-search-results.ts"></script>
+    <script type="module" src="/src/canary-ask.ts"></script>
+    <script type="module" src="/src/canary-ask-input.ts"></script>
+    <script type="module" src="/src/canary-ask-results.ts"></script>
   </head>
   <body>
     <canary-provider-mock>
@@ -20,10 +22,14 @@
         <canary-modal>
           <canary-trigger slot="trigger"></canary-trigger>
           <canary-content slot="content">
-            <canary-input-search slot="input-search"></canary-input-search>
-            <canary-input-ask slot="input-ask"></canary-input-ask>
-            <canary-panel-search slot="panel-search"></canary-panel-search>
-            <canary-panel-ask slot="panel-ask"></canary-panel-ask>
+            <canary-search slot="search">
+              <canary-search-input slot="input"></canary-search-input>
+              <canary-search-results slot="results"></canary-search-results>
+            </canary-search>
+            <canary-ask slot="ask">
+              <canary-ask-input slot="input"></canary-ask-input>
+              <canary-ask-results slot="results"></canary-ask-results>
+            </canary-ask>
           </canary-content>
         </canary-modal>
       </canary-styles-default>

@@ -12,8 +12,8 @@ import {
 import { input } from "./styles";
 import "./canary-hero-icon";
 
-@customElement("canary-input-search")
-export class CanaryInputSearch extends LitElement {
+@customElement("canary-ask-input")
+export class CanaryAskInout extends LitElement {
   @consume({ context: queryContext, subscribe: true })
   @property({ reflect: true })
   value = "";
@@ -24,20 +24,13 @@ export class CanaryInputSearch extends LitElement {
 
   render() {
     return html`
-      <style>
-        :host {
-          flex-grow: ${this.mode.current === "Ask" ? "0" : "1"};
-          display: ${this.mode.current === "Ask" ? "none" : "block"};
-        }
-      </style>
-
       <div class="container">
-        <canary-hero-icon name="magnifying-glass"></canary-hero-icon>
+        <canary-hero-icon name="question-mark-circle"></canary-hero-icon>
         <input
           type="text"
           value=${this.value}
           autocomplete="off"
-          placeholder="Search for anything..."
+          placeholder="Ask anything..."
           @input=${this._handleInput}
           @keydown=${this._handleKeyDown}
           autofocus
@@ -51,18 +44,28 @@ export class CanaryInputSearch extends LitElement {
 
   private _handleInput(e: KeyboardEvent) {
     const input = e.target as HTMLInputElement;
-    const event = new CustomEvent("change", {
-      detail: input.value,
-      bubbles: true,
-      composed: true,
-    });
-    this.dispatchEvent(event);
+    this.value = input.value;
   }
 
   private _handleKeyDown(e: KeyboardEvent) {
+    if (e.key === "Enter") {
+      e.preventDefault();
+
+      const event = new CustomEvent("input-change", {
+        detail: this.value,
+        bubbles: true,
+        composed: true,
+      });
+      this.dispatchEvent(event);
+    }
+
     if (e.key === "Tab") {
       e.preventDefault();
-      const event = new CustomEvent("tab", { bubbles: true, composed: true });
+
+      const event = new CustomEvent("input-tab", {
+        bubbles: true,
+        composed: true,
+      });
       this.dispatchEvent(event);
     }
   }
