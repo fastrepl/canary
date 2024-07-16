@@ -43,11 +43,13 @@ export class CanaryResultSearch extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-    document.addEventListener("keydown", this._handleNavigation);
+    document.addEventListener("keydown", this._handleUpDown);
+    this.addEventListener("keydown", this._handleEnter);
   }
 
   disconnectedCallback() {
-    document.removeEventListener("keydown", this._handleNavigation);
+    document.removeEventListener("keydown", this._handleUpDown);
+    this.removeEventListener("keydown", this._handleEnter);
     super.disconnectedCallback();
   }
 
@@ -87,7 +89,7 @@ export class CanaryResultSearch extends LitElement {
     `;
   }
 
-  private _handleNavigation = (e: KeyboardEvent) => {
+  private _handleUpDown = (e: KeyboardEvent) => {
     switch (e.key) {
       case "ArrowUp":
         e.preventDefault();
@@ -97,14 +99,17 @@ export class CanaryResultSearch extends LitElement {
         e.preventDefault();
         this._moveSelection(1);
         break;
-      case "Enter":
-        e.preventDefault();
+    }
+  };
 
-        const item = this.references?.[this.selectedIndex];
-        if (item) {
-          window.open(item.url, "_blank");
-        }
-        break;
+  private _handleEnter = (e: KeyboardEvent) => {
+    if (e.key !== "Enter") {
+      e.preventDefault();
+
+      const item = this.references?.[this.selectedIndex];
+      if (item) {
+        window.open(item.url, "_blank");
+      }
     }
   };
 
