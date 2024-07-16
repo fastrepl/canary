@@ -32,6 +32,7 @@ export class CanarySearchResults extends LitElement {
   private _task = new Task(this, {
     task: async ([query], { signal }) => {
       const result = await this.provider.search(query, signal);
+      this.references = result;
       return result;
     },
     args: () => [this.query],
@@ -39,14 +40,22 @@ export class CanarySearchResults extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-    document.addEventListener("keydown", this._handleUpDown);
-    this.addEventListener("keydown", this._handleEnter);
+    document.addEventListener("keydown", this._handleKeyDown);
   }
 
   disconnectedCallback() {
-    document.removeEventListener("keydown", this._handleUpDown);
-    this.removeEventListener("keydown", this._handleEnter);
+    document.removeEventListener("keydown", this._handleKeyDown);
     super.disconnectedCallback();
+  }
+
+  updated(changedProperties: Map<string, any>) {
+    if (
+      changedProperties.has("references") &&
+      this.selected < 0 &&
+      this.references.length > 0
+    ) {
+      this.selected = 0;
+    }
   }
 
   render() {
@@ -92,7 +101,7 @@ export class CanarySearchResults extends LitElement {
     }
   }
 
-  private _handleUpDown = (e: KeyboardEvent) => {
+  private _handleKeyDown = (e: KeyboardEvent) => {
     switch (e.key) {
       case "ArrowUp":
         e.preventDefault();
@@ -102,21 +111,17 @@ export class CanarySearchResults extends LitElement {
         e.preventDefault();
         this._moveSelection(1);
         break;
-    }
-  };
+      case "Enter":
+        e.preventDefault();
+        if (this.selected < 0) {
+          return;
+        }
 
-  private _handleEnter = (e: KeyboardEvent) => {
-    if (e.key !== "Enter") {
-      e.preventDefault();
-
-      if (this.selected < 0) {
-        return;
-      }
-
-      const item = this.references?.[this.selected];
-      if (item) {
-        window.open(item.url, "_blank");
-      }
+        const item = this.references?.[this.selected];
+        if (item) {
+          window.open(item.url, "_blank");
+        }
+        break;
     }
   };
 

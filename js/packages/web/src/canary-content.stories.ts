@@ -39,6 +39,7 @@ const render = ({ type }: any) => {
             <canary-search-input slot="input"></canary-search-input>
             <canary-search-results-group
               slot="results"
+              groups="Docs:*;API:api"
             ></canary-search-results-group>
           </canary-search>
         </canary-content>
