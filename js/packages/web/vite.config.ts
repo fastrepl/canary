@@ -5,7 +5,11 @@ export default defineConfig({
   build: {
     lib: {
       entry: [
-        ...["canary-provider-cloud", "canary-provider-pagefind"],
+        ...[
+          "canary-provider-mock",
+          "canary-provider-cloud",
+          "canary-provider-pagefind",
+        ],
         "canary-content",
         "canary-trigger",
         ...["canary-input-ask", "canary-input-search"],

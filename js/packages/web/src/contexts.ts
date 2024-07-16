@@ -2,31 +2,39 @@ import { createContext } from "@lit/context";
 
 import type { Delta } from "./types";
 
+type SearchFunction = (query: string, signal?: AbortSignal) => Promise<any>;
+type AskFunction = (
+  id: number,
+  query: string,
+  handleDelta: (delta: Delta) => void,
+  signal?: AbortSignal,
+) => Promise<any>;
+
 export type CloudProviderContext = {
   type: "cloud";
   endpoint: string;
   key: string;
-  search: (query: string, signal?: AbortSignal) => Promise<any>;
-  ask: (
-    id: number,
-    query: string,
-    handleDelta: (delta: Delta) => void,
-    signal?: AbortSignal,
-  ) => Promise<any>;
+  search: SearchFunction;
+  ask: AskFunction;
 };
 
 export type PagefindProviderContext = {
   type: "pagefind";
-  search: (query: string, signal?: AbortSignal) => Promise<any>;
-  ask: (
-    id: number,
-    query: string,
-    handleDelta: (delta: Delta) => void,
-    signal?: AbortSignal,
-  ) => Promise<any>;
+  search: SearchFunction;
+  ask: AskFunction;
 };
 
-export type ProviderContext = PagefindProviderContext | CloudProviderContext;
+export type MockProviderContext = {
+  type: "mock";
+  search: SearchFunction;
+  ask: AskFunction;
+};
+
+export type ProviderContext =
+  | MockProviderContext
+  | PagefindProviderContext
+  | CloudProviderContext;
+
 export const providerContext = createContext<ProviderContext>({});
 
 export type ModeContext = {

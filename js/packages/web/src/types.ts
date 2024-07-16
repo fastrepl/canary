@@ -1,3 +1,4 @@
+import { CanaryProviderMock } from "./canary-provider-mock";
 import { CanaryProviderCloud } from "./canary-provider-cloud";
 import { CanaryProviderPagefind } from "./canary-provider-pagefind";
 
@@ -37,6 +38,7 @@ import { CanaryStylesDocusaurus } from "./canary-styles-docusaurus";
 
 declare global {
   interface HTMLElementTagNameMap {
+    "canary-provider-mock": CanaryProviderMock;
     "canary-provider-cloud": CanaryProviderCloud;
     "canary-provider-pagefind": CanaryProviderPagefind;
     "canary-modal": CanaryModal;
