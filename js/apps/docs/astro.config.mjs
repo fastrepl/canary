@@ -68,16 +68,22 @@ export default defineConfig({
       customCss: ["./src/styles/theme.css"],
       head: [
         ...[
-          "canary-wrapper-starlight",
+          "canary-provider-cloud",
+          "canary-styles-starlight",
           "canary-modal",
+          "canary-input-search",
+          "canary-input-ask",
+          "canary-result-search",
+          "canary-result-ask",
           "canary-trigger",
-          "canary-panel",
+          "canary-content",
           "canary-callout-cal",
           "canary-callout-discord",
         ].map((c) => ({
           tag: "script",
           attrs: {
             type: "module",
+            // src: `http://localhost:3000/${c}.js`,
             src: `https://unpkg.com/@getcanary/web@latest/components/${c}.js`,
           },
         })),
