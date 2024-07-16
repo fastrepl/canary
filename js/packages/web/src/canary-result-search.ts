@@ -3,16 +3,18 @@ import { customElement, state, property } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 
 import { consume } from "@lit/context";
-import { ProviderContext, providerContext, queryContext } from "./contexts";
+import { ProviderContext, providerContext, queryContext } from "./contexts.js";
 
 import { Task } from "@lit/task";
 import { Reference } from "./types";
 
 import "./canary-reference";
 import "./canary-reference-skeleton";
+import "./canary-error";
 
 // @ts-ignore
 import { parse } from "./grammers/groups.js";
+type GroupDefinition = { name: string; pattern: RegExp | null };
 
 @customElement("canary-result-search")
 export class CanaryResultSearch extends LitElement {
@@ -24,8 +26,8 @@ export class CanaryResultSearch extends LitElement {
   @state()
   query = "";
 
-  @property({ converter: (v) => parse(v), reflect: true })
-  groups: Record<string, RegExp | null> = {};
+  @property({ converter: { fromAttribute: (v) => parse(v) } })
+  groups: GroupDefinition[] = [];
 
   @state() references: Reference[] = [];
   @state() selectedIndex = 0;
@@ -79,10 +81,12 @@ export class CanaryResultSearch extends LitElement {
                 ></canary-reference>
               `,
             )}`,
+          error: () => html`<canary-error></canary-error>`,
         })}
       </div>
     `;
   }
+
   private _handleNavigation = (e: KeyboardEvent) => {
     switch (e.key) {
       case "ArrowUp":

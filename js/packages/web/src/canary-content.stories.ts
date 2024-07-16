@@ -4,10 +4,15 @@ import { http, HttpResponse } from "msw";
 
 import "./canary-provider-cloud";
 import "./canary-content";
-import "./canary-callout-cal";
-import "./canary-callout-discord";
+
 import "./canary-input-search";
 import "./canary-input-ask";
+
+import "./canary-result-search";
+import "./canary-result-ask";
+
+import "./canary-callout-cal";
+import "./canary-callout-discord";
 
 const render = ({ type }: any) => {
   if (type === "search") {
@@ -15,6 +20,7 @@ const render = ({ type }: any) => {
       <canary-provider-cloud endpoint="http://localhost:6006" key="key">
         <canary-content query="hi">
           <canary-input-search slot="input-search"></canary-input-search>
+          <canary-result-search slot="result-search"></canary-result-search>
         </canary-content>
       </canary-provider-cloud>
     `;
@@ -39,6 +45,7 @@ const render = ({ type }: any) => {
       <canary-provider-cloud endpoint="http://localhost:6006" key="key">
         <canary-content query="discord">
           <canary-input-search slot="input-search"></canary-input-search>
+          <canary-result-search slot="result-search"></canary-result-search>
           <canary-callout-discord slot="callout"></canary-callout-discord>
         </canary-content>
       </canary-provider-cloud>
@@ -50,6 +57,7 @@ const render = ({ type }: any) => {
       <canary-provider-cloud endpoint="http://localhost:6006" key="key">
         <canary-content>
           <canary-input-search slot="input-search"></canary-input-search>
+          <canary-result-search slot="result-search"></canary-result-search>
         </canary-content>
       </canary-provider-cloud>
     `;
@@ -60,6 +68,7 @@ const render = ({ type }: any) => {
       <canary-provider-cloud endpoint="http://localhost:6006" key="key">
         <canary-content query="hi">
           <canary-input-search slot="input-search"></canary-input-search>
+          <canary-result-search slot="result-search"></canary-result-search>
         </canary-content>
       </canary-provider-cloud>
     `;
@@ -70,7 +79,9 @@ const render = ({ type }: any) => {
       <canary-provider-cloud endpoint="http://localhost:6006" key="key">
         <canary-content query="hi">
           <canary-input-search slot="input-search"></canary-input-search>
+          <canary-result-search slot="result-search"></canary-result-search>
           <canary-input-ask slot="input-ask"></canary-input-ask>
+          <canary-result-ask slot="result-ask"></canary-result-ask>
         </canary-content>
       </canary-provider-cloud>
     `;
@@ -80,8 +91,10 @@ const render = ({ type }: any) => {
     return html`
       <canary-provider-cloud endpoint="http://localhost:6006" key="key">
         <canary-content>
-          <canary-input-search slot="input-search"></canary-input-search>
+          <canary-result-search slot="result-search"></canary-result-search>
           <canary-input-ask slot="input-ask"></canary-input-ask>
+          <canary-result-ask slot="result-ask"></canary-result-ask>
+          <canary-input-search slot="input-search"></canary-input-search>
         </canary-content>
       </canary-provider-cloud>
     `;
@@ -92,7 +105,9 @@ const render = ({ type }: any) => {
       <canary-provider-cloud endpoint="http://localhost:6006" key="key">
         <canary-content query="hi">
           <canary-input-search slot="input-search"></canary-input-search>
+          <canary-result-search slot="result-search"></canary-result-search>
           <canary-input-ask slot="input-ask"></canary-input-ask>
+          <canary-result-ask slot="result-ask"></canary-result-ask>
         </canary-content>
       </canary-provider-cloud>
     `;

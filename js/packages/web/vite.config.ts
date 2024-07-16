@@ -5,7 +5,6 @@ export default defineConfig({
   build: {
     lib: {
       entry: [
-        "index",
         ...["canary-provider-cloud", "canary-provider-pagefind"],
         "canary-content",
         "canary-trigger",

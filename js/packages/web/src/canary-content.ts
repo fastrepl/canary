@@ -16,12 +16,6 @@ import {
   type ProviderContext,
 } from "./contexts";
 
-import "./canary-input-ask";
-import "./canary-input-search";
-
-import "./canary-result-ask";
-import "./canary-result-search";
-
 import "./canary-reference";
 import "./canary-reference-skeleton";
 
@@ -94,12 +88,8 @@ export class CanaryContent extends LitElement {
           : nothing}
         <div class="results">
           ${this.mode.current === "Search"
-            ? html`<slot name="result-search">
-                <canary-result-search></canary-result-search>
-              </slot>`
-            : html`<slot name="result-ask">
-                <canary-result-ask></canary-result-ask>
-              </slot>`}
+            ? html`<slot name="result-search"></slot>`
+            : html`<slot name="result-ask"></slot>`}
         </div>
 
         <canary-footer></canary-footer>

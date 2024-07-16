@@ -23,7 +23,11 @@
     "plugins": [
       {
         "name": "ts-lit-plugin",
-        "strict": true
+        "strict": true,
+        "rules": {
+          "no-complex-attribute-binding": "off",
+          "no-incompatible-type-binding": "off"
+        }
       }
     ]
   },

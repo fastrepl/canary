@@ -10,11 +10,18 @@ import "./canary-input-search";
 
 const render = (_: any) => {
   return html`
-    <canary-provider-cloud endpoint="http://localhost:6006" key="key">
+    <canary-provider-cloud key="key" endpoint="http://localhost:6006">
       <canary-modal>
-        <canary-trigger data-testid="trigger" slot="trigger"></canary-trigger>
+        <canary-trigger slot="trigger" data-testid="trigger"></canary-trigger>
         <canary-content slot="content">
           <canary-input-search slot="input-search"></canary-input-search>
+          <canary-input-ask slot="input-ask"></canary-input-ask>
+          <canary-result-search slot="result-search"></canary-result-search>
+          <canary-result-ask slot="result-ask"></canary-result-ask>
+          <canary-callout-discord
+            slot="callout"
+            url="https://discord.gg/Y8bJkzuQZU"
+          ></canary-callout-discord>
         </canary-content>
       </canary-modal>
     </canary-provider-cloud>
