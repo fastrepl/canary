@@ -9,7 +9,7 @@ import {
 } from "./contexts";
 
 import { Task } from "@lit/task";
-import { ask, type Reference } from "./core";
+import type { Reference } from "./types";
 
 import { randomInteger } from "./utils";
 
@@ -39,8 +39,7 @@ export class CanaryResultAsk extends LitElement {
       this.references = [];
       this.loading = true;
 
-      await ask(
-        this.provider,
+      await this.provider.ask(
         randomInteger(),
         query,
         (delta) => {

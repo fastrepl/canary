@@ -20,6 +20,20 @@ const render = ({ type }: any) => {
     `;
   }
 
+  if (type === "search-group") {
+    return html`
+      <canary-provider-cloud endpoint="http://localhost:6006" key="key">
+        <canary-content query="hi">
+          <canary-input-search slot="input-search"> </canary-input-search>
+          <canary-result-search
+            slot="result-search"
+            groups="Docs:*;API:api"
+          ></canary-result-search>
+        </canary-content>
+      </canary-provider-cloud>
+    `;
+  }
+
   if (type === "search-callout") {
     return html`
       <canary-provider-cloud endpoint="http://localhost:6006" key="key">
@@ -97,6 +111,10 @@ export default {
 
 export const Search: StoryObj = {
   args: { type: "search" },
+};
+
+export const SearchGroup: StoryObj = {
+  args: { type: "search-group" },
 };
 
 export const SearchEmpty: StoryObj = {

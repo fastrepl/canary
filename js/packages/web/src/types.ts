@@ -1,4 +1,5 @@
 import { CanaryProviderCloud } from "./canary-provider-cloud";
+import { CanaryProviderPagefind } from "./canary-provider-pagefind";
 
 import { CanaryModal } from "./canary-modal";
 import { CanaryDialog } from "./canary-dialog";
@@ -37,6 +38,7 @@ import { CanaryStylesDocusaurus } from "./canary-styles-docusaurus";
 declare global {
   interface HTMLElementTagNameMap {
     "canary-provider-cloud": CanaryProviderCloud;
+    "canary-provider-pagefind": CanaryProviderPagefind;
     "canary-modal": CanaryModal;
     "canary-dialog": CanaryDialog;
     "canary-content": CanaryContent;
@@ -64,3 +66,34 @@ declare global {
     "canary-styles-docusaurus": CanaryStylesDocusaurus;
   }
 }
+
+export type Delta =
+  | DeltaError
+  | DeltaProgress
+  | DeltaComplete
+  | DeltaReferences;
+
+type DeltaError = {
+  type: "error";
+  reason: string;
+};
+
+type DeltaProgress = {
+  type: "progress";
+  content: string;
+};
+
+type DeltaComplete = {
+  type: "complete";
+};
+
+type DeltaReferences = {
+  type: "references";
+  items: Reference[];
+};
+
+export type Reference = {
+  title: string;
+  url: string;
+  excerpt?: string;
+};

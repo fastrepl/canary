@@ -1,4 +1,5 @@
 import "./canary-provider-cloud";
+import "./canary-provider-pagefind";
 
 import "./canary-styles-starlight";
 import "./canary-styles-docusaurus";

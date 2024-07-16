@@ -5,13 +5,14 @@ import { ifDefined } from "lit/directives/if-defined.js";
 import { consume } from "@lit/context";
 import { ProviderContext, providerContext, queryContext } from "./contexts";
 
-import { StringRegexRecord } from "./converters";
-
 import { Task } from "@lit/task";
-import { search, type Reference } from "./core";
+import { Reference } from "./types";
 
 import "./canary-reference";
 import "./canary-reference-skeleton";
+
+// @ts-ignore
+import { parse } from "./grammers/groups.js";
 
 @customElement("canary-result-search")
 export class CanaryResultSearch extends LitElement {
@@ -23,15 +24,15 @@ export class CanaryResultSearch extends LitElement {
   @state()
   query = "";
 
-  @property({ converter: StringRegexRecord, reflect: true })
-  groups = {};
+  @property({ converter: (v) => parse(v), reflect: true })
+  groups: Record<string, RegExp | null> = {};
 
   @state() references: Reference[] = [];
   @state() selectedIndex = 0;
 
   private _task = new Task(this, {
     task: async ([query], { signal }) => {
-      const result = await search(this.provider, query, signal);
+      const result = await this.provider.search(query, signal);
       this.references = result;
       return null;
     },

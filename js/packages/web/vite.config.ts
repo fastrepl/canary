@@ -6,7 +6,7 @@ export default defineConfig({
     lib: {
       entry: [
         "index",
-        ...["canary-provider-cloud"],
+        ...["canary-provider-cloud", "canary-provider-pagefind"],
         "canary-content",
         "canary-trigger",
         ...["canary-input-ask", "canary-input-search"],
@@ -35,5 +35,8 @@ export default defineConfig({
       fileName: (_, entryName) => `${entryName}.js`,
     },
     outDir: "components",
+    rollupOptions: {
+      external: ["/pagefind/pagefind.js"],
+    },
   },
 });

@@ -17,7 +17,15 @@ export default {
 
 export const Headers: StoryObj = {
   args: {
-    content: "# Hello World",
+    content: `
+# Hello World
+123
+
+## Hello World
+234
+
+### Hello World
+345`,
   },
 };
 
