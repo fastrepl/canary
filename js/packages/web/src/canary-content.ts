@@ -86,11 +86,9 @@ export class CanaryContent extends LitElement {
         ${this.mode.current === "Search"
           ? html`<div class="callouts"><slot name="callout"></slot></div>`
           : nothing}
-        <div class="results">
-          ${this.mode.current === "Search"
-            ? html`<slot name="result-search"></slot>`
-            : html`<slot name="result-ask"></slot>`}
-        </div>
+        ${this.mode.current === "Search"
+          ? html`<slot name="panel-search"></slot>`
+          : html`<slot name="panel-ask"></slot>`}
 
         <canary-footer></canary-footer>
       </div>

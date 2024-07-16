@@ -3,7 +3,7 @@ import { customElement, state, property } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 
 import { consume } from "@lit/context";
-import { ProviderContext, providerContext, queryContext } from "./contexts.js";
+import { ProviderContext, providerContext, queryContext } from "./contexts";
 
 import { Task } from "@lit/task";
 import { Reference } from "./types";
@@ -13,11 +13,11 @@ import "./canary-reference-skeleton";
 import "./canary-error";
 
 // @ts-ignore
-import { parse } from "./grammers/groups.js";
+import { parse } from "./grammers/groups";
 type GroupDefinition = { name: string; pattern: RegExp | null };
 
-@customElement("canary-result-search")
-export class CanaryResultSearch extends LitElement {
+@customElement("canary-panel-search")
+export class CanaryPanelSearch extends LitElement {
   @consume({ context: providerContext, subscribe: false })
   @state()
   provider!: ProviderContext;

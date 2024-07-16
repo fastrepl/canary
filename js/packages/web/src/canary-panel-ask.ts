@@ -17,8 +17,8 @@ import "./canary-markdown";
 import "./canary-reference";
 import "./canary-loading-dots";
 
-@customElement("canary-result-ask")
-export class CanaryResultAsk extends LitElement {
+@customElement("canary-panel-ask")
+export class CanaryPanelAsk extends LitElement {
   @consume({ context: providerContext, subscribe: false })
   @state()
   provider!: ProviderContext;

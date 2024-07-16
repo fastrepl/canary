@@ -16,8 +16,8 @@ const render = (_: any) => {
         <canary-content slot="content">
           <canary-input-search slot="input-search"></canary-input-search>
           <canary-input-ask slot="input-ask"></canary-input-ask>
-          <canary-result-search slot="result-search"></canary-result-search>
-          <canary-result-ask slot="result-ask"></canary-result-ask>
+          <canary-panel-search slot="panel-search"></canary-panel-search>
+          <canary-panel-ask slot="panel-ask"></canary-panel-ask>
           <canary-callout-discord
             slot="callout"
             url="https://discord.gg/Y8bJkzuQZU"

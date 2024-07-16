@@ -8,8 +8,8 @@ import "./canary-content";
 import "./canary-input-search";
 import "./canary-input-ask";
 
-import "./canary-result-search";
-import "./canary-result-ask";
+import "./canary-panel-search";
+import "./canary-panel-ask";
 
 import "./canary-callout-cal";
 import "./canary-callout-discord";
@@ -20,7 +20,7 @@ const render = ({ type }: any) => {
       <canary-provider-cloud endpoint="http://localhost:6006" key="key">
         <canary-content query="hi">
           <canary-input-search slot="input-search"></canary-input-search>
-          <canary-result-search slot="result-search"></canary-result-search>
+          <canary-panel-search slot="panel-search"></canary-panel-search>
         </canary-content>
       </canary-provider-cloud>
     `;
@@ -31,10 +31,10 @@ const render = ({ type }: any) => {
       <canary-provider-cloud endpoint="http://localhost:6006" key="key">
         <canary-content query="hi">
           <canary-input-search slot="input-search"> </canary-input-search>
-          <canary-result-search
-            slot="result-search"
+          <canary-panel-search
+            slot="panel-search"
             groups="Docs:*;API:api"
-          ></canary-result-search>
+          ></canary-panel-search>
         </canary-content>
       </canary-provider-cloud>
     `;
@@ -45,7 +45,7 @@ const render = ({ type }: any) => {
       <canary-provider-cloud endpoint="http://localhost:6006" key="key">
         <canary-content query="discord">
           <canary-input-search slot="input-search"></canary-input-search>
-          <canary-result-search slot="result-search"></canary-result-search>
+          <canary-panel-search slot="panel-search"></canary-panel-search>
           <canary-callout-discord slot="callout"></canary-callout-discord>
         </canary-content>
       </canary-provider-cloud>
@@ -57,7 +57,7 @@ const render = ({ type }: any) => {
       <canary-provider-cloud endpoint="http://localhost:6006" key="key">
         <canary-content>
           <canary-input-search slot="input-search"></canary-input-search>
-          <canary-result-search slot="result-search"></canary-result-search>
+          <canary-panel-search slot="panel-search"></canary-panel-search>
         </canary-content>
       </canary-provider-cloud>
     `;
@@ -68,7 +68,7 @@ const render = ({ type }: any) => {
       <canary-provider-cloud endpoint="http://localhost:6006" key="key">
         <canary-content query="hi">
           <canary-input-search slot="input-search"></canary-input-search>
-          <canary-result-search slot="result-search"></canary-result-search>
+          <canary-panel-search slot="panel-search"></canary-panel-search>
         </canary-content>
       </canary-provider-cloud>
     `;
@@ -79,9 +79,9 @@ const render = ({ type }: any) => {
       <canary-provider-cloud endpoint="http://localhost:6006" key="key">
         <canary-content query="hi">
           <canary-input-search slot="input-search"></canary-input-search>
-          <canary-result-search slot="result-search"></canary-result-search>
+          <canary-panel-search slot="panel-search"></canary-panel-search>
           <canary-input-ask slot="input-ask"></canary-input-ask>
-          <canary-result-ask slot="result-ask"></canary-result-ask>
+          <canary-panel-ask slot="panel-ask"></canary-panel-ask>
         </canary-content>
       </canary-provider-cloud>
     `;
@@ -91,9 +91,9 @@ const render = ({ type }: any) => {
     return html`
       <canary-provider-cloud endpoint="http://localhost:6006" key="key">
         <canary-content>
-          <canary-result-search slot="result-search"></canary-result-search>
+          <canary-panel-search slot="panel-search"></canary-panel-search>
           <canary-input-ask slot="input-ask"></canary-input-ask>
-          <canary-result-ask slot="result-ask"></canary-result-ask>
+          <canary-panel-ask slot="panel-ask"></canary-panel-ask>
           <canary-input-search slot="input-search"></canary-input-search>
         </canary-content>
       </canary-provider-cloud>
@@ -105,9 +105,9 @@ const render = ({ type }: any) => {
       <canary-provider-cloud endpoint="http://localhost:6006" key="key">
         <canary-content query="hi">
           <canary-input-search slot="input-search"></canary-input-search>
-          <canary-result-search slot="result-search"></canary-result-search>
+          <canary-panel-search slot="panel-search"></canary-panel-search>
           <canary-input-ask slot="input-ask"></canary-input-ask>
-          <canary-result-ask slot="result-ask"></canary-result-ask>
+          <canary-panel-ask slot="panel-ask"></canary-panel-ask>
         </canary-content>
       </canary-provider-cloud>
     `;

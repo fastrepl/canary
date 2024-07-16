@@ -13,7 +13,7 @@ export default defineConfig({
         "canary-content",
         "canary-trigger",
         ...["canary-input-ask", "canary-input-search"],
-        ...["canary-result-search", "canary-result-ask"],
+        ...["canary-panel-search", "canary-panel-ask"],
         "canary-modal",
         "canary-markdown",
         ...[

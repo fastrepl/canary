@@ -9,8 +9,8 @@ import { CanaryContent } from "./canary-content";
 import { CanaryInputAsk } from "./canary-input-ask";
 import { CanaryInputSearch } from "./canary-input-search";
 
-import { CanaryResultSearch } from "./canary-result-search";
-import { CanaryResultAsk } from "./canary-result-ask";
+import { CanaryPanelSearch } from "./canary-panel-search";
+import { CanaryPanelAsk } from "./canary-panel-ask";
 
 import { CanaryHeroIcon } from "./canary-hero-icon";
 import { CanaryLogoCal } from "./canary-logo-cal";
@@ -46,8 +46,8 @@ declare global {
     "canary-content": CanaryContent;
     "canary-input-ask": CanaryInputAsk;
     "canary-input-search": CanaryInputSearch;
-    "canary-result-search": CanaryResultSearch;
-    "canary-result-ask": CanaryResultAsk;
+    "canary-panel-search": CanaryPanelSearch;
+    "canary-panel-ask": CanaryPanelAsk;
     "canary-hero-icon": CanaryHeroIcon;
     "canary-logo-cal": CanaryLogoCal;
     "canary-logo-calendly": CanaryLogoCalendly;
