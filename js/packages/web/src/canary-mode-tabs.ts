@@ -13,7 +13,7 @@ export class CanaryModeTabs extends LitElement {
 
   render() {
     return html`
-      ${this.mode.options.size < 2
+      ${!this.mode.options || this.mode.options.size < 2
         ? nothing
         : html` <div class="tabs">
             ${Array.from(this.mode.options).map(

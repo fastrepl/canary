@@ -1,5 +1,5 @@
 import { LitElement, html, css } from "lit";
-import { customElement, state } from "lit/decorators.js";
+import { customElement, state, property } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 
 import { type Reference } from "./core";
@@ -8,13 +8,18 @@ import "./canary-reference";
 import { consume } from "@lit/context";
 import { searchReferencesContext } from "./contexts";
 
-@customElement("canary-search-results")
-export class CanarySearchResults extends LitElement {
+import { StringRegexRecord } from "./converters";
+
+@customElement("canary-result-search")
+export class CanaryResultSearch extends LitElement {
   @consume({ context: searchReferencesContext, subscribe: true })
   @state()
   items: Reference[] = [];
 
   @state() selectedIndex = 0;
+
+  @property({ converter: StringRegexRecord, reflect: true })
+  groups = {};
 
   connectedCallback() {
     super.connectedCallback();

@@ -1,7 +1,7 @@
 import { html } from "lit";
 import type { Meta, StoryObj } from "@storybook/web-components";
 
-import "./canary-panel";
+import "./canary-content";
 import "./canary-callout-cal";
 import "./canary-callout-discord";
 import { type Reference } from "./core";
@@ -19,14 +19,8 @@ const items: Reference[] = [
   },
 ];
 
-const render = ({ type }: any) => {
-  if (type === "grouped") {
-    return html`
-      <canary-search-results .items=${items}></canary-search-results>
-    `;
-  }
-
-  return html`<canary-search-results .items=${items}></canary-search-results> `;
+const render = (_: any) => {
+  return html`<canary-result-search .items=${items}></canary-result-search> `;
 };
 
 export default {
@@ -39,7 +33,4 @@ export default {
 
 export const Default: StoryObj = {
   args: { type: "default" },
-};
-export const Grouped: StoryObj = {
-  args: { type: "grouped" },
 };

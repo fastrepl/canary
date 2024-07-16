@@ -3,18 +3,19 @@ import type { Meta, StoryObj } from "@storybook/web-components";
 import { http, HttpResponse } from "msw";
 
 import "./canary-provider-cloud";
-import "./canary-panel";
+import "./canary-content";
 import "./canary-callout-cal";
 import "./canary-callout-discord";
-import "./canary-input";
+import "./canary-input-search";
+import "./canary-input-ask";
 
 const render = ({ type }: any) => {
   if (type === "search") {
     return html`
       <canary-provider-cloud endpoint="http://localhost:6006" key="key">
-        <canary-panel query="hi">
+        <canary-content query="hi">
           <canary-input-search slot="input-search"></canary-input-search>
-        </canary-panel>
+        </canary-content>
       </canary-provider-cloud>
     `;
   }
@@ -22,10 +23,10 @@ const render = ({ type }: any) => {
   if (type === "search-callout") {
     return html`
       <canary-provider-cloud endpoint="http://localhost:6006" key="key">
-        <canary-panel query="discord">
+        <canary-content query="discord">
           <canary-input-search slot="input-search"></canary-input-search>
           <canary-callout-discord slot="callout"></canary-callout-discord>
-        </canary-panel>
+        </canary-content>
       </canary-provider-cloud>
     `;
   }
@@ -33,9 +34,9 @@ const render = ({ type }: any) => {
   if (type === "search-empty") {
     return html`
       <canary-provider-cloud endpoint="http://localhost:6006" key="key">
-        <canary-panel>
+        <canary-content>
           <canary-input-search slot="input-search"></canary-input-search>
-        </canary-panel>
+        </canary-content>
       </canary-provider-cloud>
     `;
   }
@@ -43,9 +44,9 @@ const render = ({ type }: any) => {
   if (type === "search-error") {
     return html`
       <canary-provider-cloud endpoint="http://localhost:6006" key="key">
-        <canary-panel query="hi">
+        <canary-content query="hi">
           <canary-input-search slot="input-search"></canary-input-search>
-        </canary-panel>
+        </canary-content>
       </canary-provider-cloud>
     `;
   }
@@ -53,10 +54,10 @@ const render = ({ type }: any) => {
   if (type === "search-ask") {
     return html`
       <canary-provider-cloud endpoint="http://localhost:6006" key="key">
-        <canary-panel query="hi">
+        <canary-content query="hi">
           <canary-input-search slot="input-search"></canary-input-search>
           <canary-input-ask slot="input-ask"></canary-input-ask>
-        </canary-panel>
+        </canary-content>
       </canary-provider-cloud>
     `;
   }
@@ -64,10 +65,10 @@ const render = ({ type }: any) => {
   if (type === "search-ask-empty") {
     return html`
       <canary-provider-cloud endpoint="http://localhost:6006" key="key">
-        <canary-panel>
+        <canary-content>
           <canary-input-search slot="input-search"></canary-input-search>
           <canary-input-ask slot="input-ask"></canary-input-ask>
-        </canary-panel>
+        </canary-content>
       </canary-provider-cloud>
     `;
   }
@@ -75,22 +76,22 @@ const render = ({ type }: any) => {
   if (type === "search-ask-error") {
     return html`
       <canary-provider-cloud endpoint="http://localhost:6006" key="key">
-        <canary-panel query="hi">
+        <canary-content query="hi">
           <canary-input-search slot="input-search"></canary-input-search>
           <canary-input-ask slot="input-ask"></canary-input-ask>
-        </canary-panel>
+        </canary-content>
       </canary-provider-cloud>
     `;
   }
 
-  return html`<canary-panel></canary-panel>`;
+  return html`<canary-content></canary-content>`;
 };
 
 export default {
   render,
-  title: "Public/canary-panel",
+  title: "Public/canary-content",
   parameters: {
-    sourceLink: "canary-panel.stories.ts",
+    sourceLink: "canary-content.stories.ts",
   },
 } satisfies Meta;
 

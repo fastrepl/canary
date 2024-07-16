@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@getcanary/web</title>
     <script type="module" src="/src/canary-modal.ts"></script>
-    <script type="module" src="/src/canary-panel.ts"></script>
+    <script type="module" src="/src/canary-content.ts"></script>
     <script type="module" src="/src/canary-trigger.ts"></script>
     <script type="module" src="/src/canary-callout-discord.ts"></script>
     <script type="module" src="/src/canary-wrapper-default.ts"></script>
@@ -14,7 +14,7 @@
     <canary-wrapper-default theme="dark">
       <canary-modal>
         <canary-trigger slot="trigger"></canary-trigger>
-        <canary-panel
+        <canary-content
           slot="body"
           hljs="github-dark"
           endpoint="http://localhost:5173"
@@ -24,7 +24,7 @@
             slot="callout"
             url="https://discord.gg/Y8bJkzuQZU"
           ></canary-callout-discord>
-        </canary-panel>
+        </canary-content>
       </canary-modal>
     </canary-wrapper-default>
   </body>

@@ -1,10 +1,14 @@
 import { CanaryProviderCloud } from "./canary-provider-cloud";
-import { CanaryProviderPagefind } from "./canary-provider-pagefind";
 
 import { CanaryModal } from "./canary-modal";
 import { CanaryDialog } from "./canary-dialog";
-import { CanaryPanel } from "./canary-panel";
-import { CanaryInputAsk, CanaryInputSearch } from "./canary-input";
+import { CanaryContent } from "./canary-content";
+
+import { CanaryInputAsk } from "./canary-input-ask";
+import { CanaryInputSearch } from "./canary-input-search";
+
+import { CanaryResultSearch } from "./canary-result-search";
+import { CanaryResultAsk } from "./canary-result-ask";
 
 import { CanaryHeroIcon } from "./canary-hero-icon";
 import { CanaryLogoCal } from "./canary-logo-cal";
@@ -33,12 +37,13 @@ import { CanaryStylesDocusaurus } from "./canary-styles-docusaurus";
 declare global {
   interface HTMLElementTagNameMap {
     "canary-provider-cloud": CanaryProviderCloud;
-    "canary-provider-pagefind": CanaryProviderPagefind;
     "canary-modal": CanaryModal;
     "canary-dialog": CanaryDialog;
-    "canary-panel": CanaryPanel;
+    "canary-content": CanaryContent;
     "canary-input-ask": CanaryInputAsk;
     "canary-input-search": CanaryInputSearch;
+    "canary-result-search": CanaryResultSearch;
+    "canary-result-ask": CanaryResultAsk;
     "canary-hero-icon": CanaryHeroIcon;
     "canary-logo-cal": CanaryLogoCal;
     "canary-logo-calendly": CanaryLogoCalendly;

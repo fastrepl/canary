@@ -21,5 +21,12 @@ export const defaultModeContext: ModeContext = {
 };
 export const modeContext = createContext<ModeContext>(defaultModeContext);
 
-export const queryContext = createContext<string>("");
-export const searchReferencesContext = createContext<Reference[]>([]);
+export const queryContext = createContext<string>("query");
+
+export const searchReferencesContext =
+  createContext<Reference[]>("search-references");
+
+export const askReferencesContext =
+  createContext<Reference[]>("ask-references");
+
+export const askResponseContext = createContext<string>("ask-response");

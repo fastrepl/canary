@@ -28,3 +28,33 @@ export const callout = css`
     color: var(--canary-color-gray-2);
   }
 `;
+
+export const input = css`
+  .container {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    border-radius: 8px;
+    color: var(--canary-color-gray-1);
+    background-color: var(--canary-color-black);
+  }
+
+  input {
+    width: 100%;
+    height: 30px;
+    outline: none;
+    border: none;
+    font-size: 16px;
+    color: var(--canary-color-gray-1);
+    background-color: var(--canary-color-black);
+  }
+
+  input::placeholder {
+    color: var(--canary-color-gray-3);
+    font-size: 14px;
+  }
+
+  canary-hero-icon {
+    width: 24px;
+  }
+`;

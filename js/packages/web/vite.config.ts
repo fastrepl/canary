@@ -6,14 +6,22 @@ export default defineConfig({
     lib: {
       entry: [
         "index",
-        ...["canary-provider-cloud", "canary-provider-pagefind"],
-        "canary-panel",
+        ...["canary-provider-cloud"],
+        "canary-content",
         "canary-trigger",
+        ...["canary-input-ask", "canary-input-search"],
+        ...["canary-result-search", "canary-result-ask"],
         "canary-modal",
         "canary-markdown",
-        ...["canary-logo-cal", "canary-logo-slack", "canary-logo-discord"],
+        ...[
+          "canary-logo-cal",
+          "canary-logo-calendly",
+          "canary-logo-slack",
+          "canary-logo-discord",
+        ],
         ...[
           "canary-callout-cal",
+          "canary-callout-calendly",
           "canary-callout-slack",
           "canary-callout-discord",
         ],

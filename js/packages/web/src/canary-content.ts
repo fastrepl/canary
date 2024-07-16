@@ -7,19 +7,9 @@ import {
 } from "lit/decorators.js";
 import { Task } from "@lit/task";
 
-import "./canary-mode-tabs";
-import "./canary-input";
-import "./canary-reference";
-import "./canary-reference-skeleton";
-import "./canary-footer";
-import "./canary-loading-dots";
-import "./canary-error";
-import "./canary-markdown";
-import "./canary-search-results";
-
 import { randomInteger } from "./utils";
-
 import { type Reference, ask, search } from "./core";
+
 import { provide, consume } from "@lit/context";
 import {
   modeContext,
@@ -29,17 +19,33 @@ import {
   searchReferencesContext,
   providerContext,
   type ProviderContext,
+  askReferencesContext,
+  askResponseContext,
 } from "./contexts";
 
-@customElement("canary-panel")
-export class CanaryPanel extends LitElement {
+import "./canary-input-ask";
+import "./canary-input-search";
+
+import "./canary-result-ask";
+import "./canary-result-search";
+
+import "./canary-reference";
+import "./canary-reference-skeleton";
+
+import "./canary-error";
+import "./canary-mode-tabs";
+import "./canary-footer";
+
+
+@customElement("canary-content")
+export class CanaryContent extends LitElement {
+  @consume({ context: providerContext, subscribe: false })
+  @state()
+  provider: ProviderContext | undefined = undefined;
+
   @provide({ context: modeContext })
   @property({ attribute: false })
   mode: ModeContext = defaultModeContext;
-
-  @consume({ context: providerContext, subscribe: true })
-  @state()
-  provider: ProviderContext | undefined = undefined;
 
   @provide({ context: queryContext })
   @property()
@@ -49,10 +55,13 @@ export class CanaryPanel extends LitElement {
   @state()
   searchReferences: Reference[] = [];
 
-  @property() hljs = "github-dark";
-  @state() askReferences: Reference[] = [];
-  @state() askLoading = false;
-  @state() response = "";
+  @provide({ context: askReferencesContext })
+  @property({ attribute: false })
+  askReferences: Reference[] = [];
+
+  @provide({ context: askResponseContext })
+  @property({ attribute: false })
+  askResponse = "";
 
   @queryAssignedElements({ slot: "input-search" })
   inputSearch!: Array<HTMLElement>;
@@ -74,18 +83,18 @@ export class CanaryPanel extends LitElement {
       }
 
       if (mode === "Ask") {
-        this.askLoading = true;
-        this.response = "";
+        // this.askLoading = true;
+        this.askResponse = "";
 
         await ask(
           this.provider,
           randomInteger(),
           this.query,
           (delta) => {
-            this.askLoading = false;
+            // this.askLoading = false;
 
             if (delta.type === "progress") {
-              this.response += delta.content;
+              this.askResponse += delta.content;
             }
             if (delta.type === "references") {
               this.askReferences = delta.items;
@@ -162,52 +171,20 @@ export class CanaryPanel extends LitElement {
                 )}
               </div>`
             : html`
-                <div class="ai-message">
-                  ${
-                    this.askLoading
-                      ? html`<canary-loading-dots></canary-loading-dots>`
-                      : html`<canary-markdown
-                          hljs=${this.hljs}
-                          .content=${this.response}
-                        ></canary-markdown>`
-                  }
-
-             <div class="references">
-                          ${this.askReferences.map(
-                            (item) =>
-                              html` <canary-reference
-                                title=${item.title}
-                                url=${item.url}
-                              ></canary-reference>`,
-                          )}
-                        </div>
-                      </div>
-                  </div>
-                </div>
+                <slot name="result-ask">
+                  <canary-result-ask></canary-result-ask>
+                </slot>
               `,
         complete:
           this.mode.current === "Search"
-            ? (_) => html`<canary-search-results></canary-search-results>`
-            : (items) =>
-                this.query === ""
-                  ? nothing
-                  : html`
-                      <div class="ai-message">
-                        <canary-markdown
-                          hljs=${this.hljs}
-                          .content=${this.response}
-                        ></canary-markdown>
-                        <div class="references">
-                          ${(items ?? []).map(
-                            (item) =>
-                              html` <canary-reference
-                                title=${item.title}
-                                url=${item.url}
-                              ></canary-reference>`,
-                          )}
-                        </div>
-                      </div>
-                    `,
+            ? (_) =>
+                html` <slot name="result-search">
+                  <canary-result-search></canary-result-search>
+                </slot>`
+            : () =>
+                html`<slot name="result-ask">
+                  <canary-result-ask></canary-result-ask>
+                </slot>`,
         error: (error) => {
           console.error(error);
           return html` <canary-error></canary-error>`;
@@ -221,16 +198,19 @@ export class CanaryPanel extends LitElement {
   }
 
   private _handleTab(_: CustomEvent) {
-    if (this.mode.current === "Search" && this.mode.options.size > 1) {
-      this.mode.current = "Ask";
+    if (!this.mode.options || this.mode.options.size < 2) {
+      return;
     }
-    if (this.mode.current === "Ask" && this.mode.options.size > 1) {
-      this.mode.current = "Search";
+
+    if (this.mode.current === "Search") {
+      this.mode = { ...this.mode, current: "Ask" };
+    } else {
+      this.mode = { ...this.mode, current: "Search" };
     }
   }
 
   private _handleModeSet(e: CustomEvent) {
-    this.mode = e.detail;
+    this.mode = { ...this.mode, current: e.detail };
   }
 
   static styles = [
@@ -257,20 +237,6 @@ export class CanaryPanel extends LitElement {
       }
     `,
     css`
-      .ai-message {
-        border: 1px solid var(--canary-color-gray-6);
-        border-radius: 8px;
-        padding: 0px 12px;
-      }
-    `,
-    css`
-      div.references {
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-        padding-bottom: 8px;
-      }
-
       div.callouts {
         display: flex;
         flex-direction: column;

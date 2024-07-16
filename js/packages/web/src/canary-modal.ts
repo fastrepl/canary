@@ -13,7 +13,7 @@ export class CanaryModal extends LitElement {
     return html`
       <slot name="trigger" @click=${this._handleOpen}></slot>
       <canary-dialog .ref=${this.ref}>
-        <slot name="body"></slot>
+        <slot name="content"></slot>
       </canary-dialog>
     `;
   }

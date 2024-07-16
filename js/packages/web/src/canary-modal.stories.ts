@@ -5,17 +5,17 @@ import { within, userEvent } from "@storybook/test";
 import "./canary-provider-cloud";
 import "./canary-modal";
 import "./canary-trigger";
-import "./canary-panel";
-import "./canary-input";
+import "./canary-content";
+import "./canary-input-search";
 
 const render = (_: any) => {
   return html`
     <canary-provider-cloud endpoint="http://localhost:6006" key="key">
       <canary-modal>
         <canary-trigger data-testid="trigger" slot="trigger"></canary-trigger>
-        <canary-panel slot="body">
+        <canary-content slot="content">
           <canary-input-search slot="input-search"></canary-input-search>
-        </canary-panel>
+        </canary-content>
       </canary-modal>
     </canary-provider-cloud>
   `;
