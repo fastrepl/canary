@@ -5,10 +5,6 @@ import {
   state,
   queryAssignedElements,
 } from "lit/decorators.js";
-import { Task } from "@lit/task";
-
-import { randomInteger } from "./utils";
-import { type Reference, ask, search } from "./core";
 
 import { provide, consume } from "@lit/context";
 import {
@@ -16,11 +12,8 @@ import {
   defaultModeContext,
   type ModeContext,
   queryContext,
-  searchReferencesContext,
   providerContext,
   type ProviderContext,
-  askReferencesContext,
-  askResponseContext,
 } from "./contexts";
 
 import "./canary-input-ask";
@@ -36,7 +29,6 @@ import "./canary-error";
 import "./canary-mode-tabs";
 import "./canary-footer";
 
-
 @customElement("canary-content")
 export class CanaryContent extends LitElement {
   @consume({ context: providerContext, subscribe: false })
@@ -51,63 +43,11 @@ export class CanaryContent extends LitElement {
   @property()
   query = "";
 
-  @provide({ context: searchReferencesContext })
-  @state()
-  searchReferences: Reference[] = [];
-
-  @provide({ context: askReferencesContext })
-  @property({ attribute: false })
-  askReferences: Reference[] = [];
-
-  @provide({ context: askResponseContext })
-  @property({ attribute: false })
-  askResponse = "";
-
   @queryAssignedElements({ slot: "input-search" })
   inputSearch!: Array<HTMLElement>;
 
   @queryAssignedElements({ slot: "input-ask" })
   inputAsk!: Array<HTMLElement>;
-
-  private _task = new Task(this, {
-    task: async ([mode, query], { signal }) => {
-      if (query === "") {
-        return [];
-      }
-
-      if (mode === "Search") {
-        const result = await search(this.provider, this.query, signal);
-
-        this.searchReferences = result;
-        return this.searchReferences;
-      }
-
-      if (mode === "Ask") {
-        // this.askLoading = true;
-        this.askResponse = "";
-
-        await ask(
-          this.provider,
-          randomInteger(),
-          this.query,
-          (delta) => {
-            // this.askLoading = false;
-
-            if (delta.type === "progress") {
-              this.askResponse += delta.content;
-            }
-            if (delta.type === "references") {
-              this.askReferences = delta.items;
-            }
-          },
-          signal,
-        );
-
-        return this.askReferences;
-      }
-    },
-    args: () => [this.mode.current, this.query],
-  });
 
   firstUpdated() {
     let options = this.mode.options;
@@ -152,44 +92,18 @@ export class CanaryContent extends LitElement {
         ${this.mode.current === "Search"
           ? html`<div class="callouts"><slot name="callout"></slot></div>`
           : nothing}
-        <div class="results">${this.results()}</div>
+        <div class="results">
+          ${this.mode.current === "Search"
+            ? html`<slot name="result-search">
+                <canary-result-search></canary-result-search>
+              </slot>`
+            : html`<slot name="result-ask">
+                <canary-result-ask></canary-result-ask>
+              </slot>`}
+        </div>
 
         <canary-footer></canary-footer>
       </div>
-    `;
-  }
-
-  results() {
-    return html`
-      ${this._task.render({
-        initial: () => nothing,
-        pending: () =>
-          this.mode.current === "Search"
-            ? html` <div class="skeleton-container">
-                ${Array(4).fill(
-                  html`<canary-reference-skeleton></canary-reference-skeleton>`,
-                )}
-              </div>`
-            : html`
-                <slot name="result-ask">
-                  <canary-result-ask></canary-result-ask>
-                </slot>
-              `,
-        complete:
-          this.mode.current === "Search"
-            ? (_) =>
-                html` <slot name="result-search">
-                  <canary-result-search></canary-result-search>
-                </slot>`
-            : () =>
-                html`<slot name="result-ask">
-                  <canary-result-ask></canary-result-ask>
-                </slot>`,
-        error: (error) => {
-          console.error(error);
-          return html` <canary-error></canary-error>`;
-        },
-      })}
     `;
   }
 
@@ -235,19 +149,10 @@ export class CanaryContent extends LitElement {
         margin-bottom: 4px;
         padding: 1px 6px;
       }
-    `,
-    css`
+
       div.callouts {
         display: flex;
         flex-direction: column;
-      }
-    `,
-    css`
-      .skeleton-container {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        height: 325px;
       }
     `,
     css`

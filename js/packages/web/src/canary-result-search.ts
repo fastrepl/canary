@@ -2,24 +2,41 @@ import { LitElement, html, css } from "lit";
 import { customElement, state, property } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 
-import { type Reference } from "./core";
-import "./canary-reference";
-
 import { consume } from "@lit/context";
-import { searchReferencesContext } from "./contexts";
+import { ProviderContext, providerContext, queryContext } from "./contexts";
 
 import { StringRegexRecord } from "./converters";
 
+import { Task } from "@lit/task";
+import { search, type Reference } from "./core";
+
+import "./canary-reference";
+import "./canary-reference-skeleton";
+
 @customElement("canary-result-search")
 export class CanaryResultSearch extends LitElement {
-  @consume({ context: searchReferencesContext, subscribe: true })
+  @consume({ context: providerContext, subscribe: false })
   @state()
-  items: Reference[] = [];
+  provider!: ProviderContext;
 
-  @state() selectedIndex = 0;
+  @consume({ context: queryContext, subscribe: true })
+  @state()
+  query = "";
 
   @property({ converter: StringRegexRecord, reflect: true })
   groups = {};
+
+  @state() references: Reference[] = [];
+  @state() selectedIndex = 0;
+
+  private _task = new Task(this, {
+    task: async ([query], { signal }) => {
+      const result = await search(this.provider, query, signal);
+      this.references = result;
+      return null;
+    },
+    args: () => [this.query],
+  });
 
   connectedCallback() {
     super.connectedCallback();
@@ -34,23 +51,37 @@ export class CanaryResultSearch extends LitElement {
   render() {
     return html`
       <div class="container">
-        ${this.items.map(
-          ({ title, url, excerpt }, index) => html`
-            <canary-reference
-              title=${title}
-              url=${url}
-              excerpt=${ifDefined(excerpt)}
-              ?selected=${index === this.selectedIndex}
-              @mouseover=${() => {
-                this.selectedIndex = index;
-              }}
-            ></canary-reference>
-          `,
-        )}
+        ${this._task.render({
+          initial: () =>
+            html` <div class="skeleton-container">
+              ${Array(4).fill(
+                html`<canary-reference-skeleton></canary-reference-skeleton>`,
+              )}
+            </div>`,
+          pending: () =>
+            html` <div class="skeleton-container">
+              ${Array(4).fill(
+                html`<canary-reference-skeleton></canary-reference-skeleton>`,
+              )}
+            </div>`,
+          complete: () =>
+            html`${this.references.map(
+              ({ title, url, excerpt }, index) => html`
+                <canary-reference
+                  title=${title}
+                  url=${url}
+                  excerpt=${ifDefined(excerpt)}
+                  ?selected=${index === this.selectedIndex}
+                  @mouseover=${() => {
+                    this.selectedIndex = index;
+                  }}
+                ></canary-reference>
+              `,
+            )}`,
+        })}
       </div>
     `;
   }
-
   private _handleNavigation = (e: KeyboardEvent) => {
     switch (e.key) {
       case "ArrowUp":
@@ -64,7 +95,7 @@ export class CanaryResultSearch extends LitElement {
       case "Enter":
         e.preventDefault();
 
-        const item = this.items?.[this.selectedIndex];
+        const item = this.references?.[this.selectedIndex];
         if (item) {
           window.open(item.url, "_blank");
         }
@@ -74,7 +105,7 @@ export class CanaryResultSearch extends LitElement {
 
   private _moveSelection(delta: number) {
     const next = this.selectedIndex + delta;
-    if (next > -1 && next < this.items.length) {
+    if (next > -1 && next < this.references.length) {
       this.selectedIndex = next;
     }
   }
@@ -90,6 +121,13 @@ export class CanaryResultSearch extends LitElement {
 
     .container:hover {
       overflow-y: auto;
+    }
+
+    .skeleton-container {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      height: 325px;
     }
   `;
 }

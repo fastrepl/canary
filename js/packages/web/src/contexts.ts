@@ -1,7 +1,5 @@
 import { createContext } from "@lit/context";
 
-import { type Reference } from "./core";
-
 export type CloudProviderContext = {
   type: "cloud";
   endpoint: string;
@@ -22,11 +20,3 @@ export const defaultModeContext: ModeContext = {
 export const modeContext = createContext<ModeContext>(defaultModeContext);
 
 export const queryContext = createContext<string>("query");
-
-export const searchReferencesContext =
-  createContext<Reference[]>("search-references");
-
-export const askReferencesContext =
-  createContext<Reference[]>("ask-references");
-
-export const askResponseContext = createContext<string>("ask-response");
