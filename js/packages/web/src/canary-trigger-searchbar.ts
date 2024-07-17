@@ -3,8 +3,8 @@ import { customElement } from "lit/decorators.js";
 
 import "./canary-hero-icon";
 
-@customElement("canary-trigger")
-export class CanaryTrigger extends LitElement {
+@customElement("canary-trigger-searchbar")
+export class CanaryTriggerSearchbar extends LitElement {
   render() {
     return html`
       <button aria-label="Search">

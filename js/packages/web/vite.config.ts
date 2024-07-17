@@ -23,8 +23,8 @@ export default defineConfig({
           "canary-callout-discord",
         ],
         "canary-modal",
-        "canary-trigger",
         "canary-content",
+        "canary-trigger-searchbar",
         ...[
           "canary-search",
           "canary-search-input",

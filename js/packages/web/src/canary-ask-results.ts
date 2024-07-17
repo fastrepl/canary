@@ -1,4 +1,4 @@
-import { LitElement, html, css } from "lit";
+import { LitElement, html, css, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 
 import { consume } from "@lit/context";
@@ -65,28 +65,32 @@ export class CanaryAskResults extends LitElement {
   });
 
   render() {
-    return html`
-      <div class="container">
-        ${this._task.render({
-          initial: () => html`<canary-loading-dots></canary-loading-dots>`,
-          pending: () =>
-            html`${this.loading
-              ? html`<canary-loading-dots></canary-loading-dots>`
-              : this._content()}`,
-          complete: () =>
-            html`${this.loading
-              ? html`<canary-loading-dots></canary-loading-dots>`
-              : this._content()}`,
-        })}
-      </div>
-    `;
+    return this.query === ""
+      ? nothing
+      : html`
+          <div class="container">
+            ${this._task.render({
+              initial: () => html`<canary-loading-dots></canary-loading-dots>`,
+              pending: () =>
+                html`${this.loading
+                  ? html`<canary-loading-dots></canary-loading-dots>`
+                  : this._content()}`,
+              complete: () =>
+                html`${this.loading
+                  ? html`<canary-loading-dots></canary-loading-dots>`
+                  : this._content()}`,
+            })}
+          </div>
+        `;
   }
 
   private _content() {
-    return html` <canary-markdown
+    return html`
+      <canary-markdown
         .hljs=${this.hljs}
         .content=${this.response}
       ></canary-markdown>
+
       <div class="references">
         ${this.references.map(
           (reference) =>
@@ -95,7 +99,8 @@ export class CanaryAskResults extends LitElement {
               url=${reference.url}
             ></canary-reference>`,
         )}
-      </div>`;
+      </div>
+    `;
   }
 
   static styles = css`

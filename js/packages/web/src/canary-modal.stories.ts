@@ -4,7 +4,7 @@ import { within, userEvent } from "@storybook/test";
 
 import "./canary-provider-cloud";
 import "./canary-modal";
-import "./canary-trigger";
+import "./canary-trigger-searchbar";
 import "./canary-content";
 import "./canary-search";
 import "./canary-search-input";

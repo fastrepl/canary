@@ -39,7 +39,7 @@ const render = ({ type }: any) => {
             <canary-search-input slot="input"></canary-search-input>
             <canary-search-results-group
               slot="results"
-              groups="Docs:*;API:api"
+              groups="Docs:*;API:/api/.+$"
             ></canary-search-results-group>
           </canary-search>
         </canary-content>
@@ -69,6 +69,19 @@ const render = ({ type }: any) => {
             <canary-search-input slot="input"></canary-search-input>
             <canary-search-results slot="results"></canary-search-results>
           </canary-search>
+        </canary-content>
+      </canary-provider-cloud>
+    `;
+  }
+
+  if (type === "ask") {
+    return html`
+      <canary-provider-cloud endpoint="http://localhost:6006" key="key">
+        <canary-content>
+          <canary-ask slot="ask">
+            <canary-ask-input slot="input"></canary-ask-input>
+            <canary-ask-results slot="results"></canary-ask-results>
+          </canary-ask>
         </canary-content>
       </canary-provider-cloud>
     `;
@@ -143,6 +156,10 @@ export const SearchCallout: StoryObj = {
 export const SearchMobile: StoryObj = {
   args: { type: "search" },
   parameters: { viewport: { defaultViewport: "mobile1", disable: false } },
+};
+
+export const Ask: StoryObj = {
+  args: { type: "ask" },
 };
 
 export const SearchAsk: StoryObj = {

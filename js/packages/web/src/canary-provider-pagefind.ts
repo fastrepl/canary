@@ -4,7 +4,7 @@ import { customElement, property, state } from "lit/decorators.js";
 import { provide } from "@lit/context";
 import { providerContext, type ProviderContext } from "./contexts";
 
-import { Delta } from "./types";
+import type { Delta, Reference } from "./types";
 
 @customElement("canary-provider-pagefind")
 export class CanaryProviderPagefind extends LitElement {
@@ -12,25 +12,19 @@ export class CanaryProviderPagefind extends LitElement {
   @state()
   root: ProviderContext = { type: "pagefind" } as ProviderContext;
 
-  @property() baseUrl = "";
-  @property() bundlePath = "";
-
   @state() pagefind: { search: (query: string) => Promise<any> } | null = null;
+
+  @property() baseUrl = "";
 
   async connectedCallback() {
     super.connectedCallback();
 
-    // @ts-ignore
-    const pagefind = await import("/pagefind/pagefind.js");
+    const pagefind = await this._importPagefind();
     if (!pagefind) {
       throw new Error("Pagefind is not available");
     }
 
-    await pagefind.options({
-      baseUrl: this.baseUrl,
-      bundlePath: this.bundlePath,
-    });
-
+    this.pagefind = pagefind;
     pagefind.init();
 
     if (this.root.type !== "pagefind") {
@@ -41,17 +35,32 @@ export class CanaryProviderPagefind extends LitElement {
     this.root.ask = this.ask;
   }
 
+  private _importPagefind() {
+    if (!this.baseUrl) {
+      // @ts-ignore
+      return import("/pagefind/pagefind.js");
+    }
+
+    return import(new URL("/pagefind/pagefind.js", this.baseUrl).href);
+  }
+
   render() {
     return html`<slot></slot>`;
   }
 
   search = async (query: string, _signal?: AbortSignal) => {
     const search = await this.pagefind!.search(query);
-    const results = await Promise.all(
-      search.results.slice(0, 10).map((r: any) => r.data()),
+
+    const results: Reference[] = await Promise.all(
+      search.results.slice(0, 10).map((result: any) =>
+        result.data().then((d: any) => ({
+          url: d.url,
+          title: d.meta.title,
+          excerpt: d.excerpt,
+        })),
+      ),
     );
 
-    console.log(results);
     return results;
   };
 

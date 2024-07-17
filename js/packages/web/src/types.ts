@@ -5,12 +5,13 @@ import { CanaryProviderPagefind } from "./canary-provider-pagefind";
 import { CanaryModal } from "./canary-modal";
 import { CanaryDialog } from "./canary-dialog";
 import { CanaryContent } from "./canary-content";
+import { CanaryTriggerSearchbar } from "./canary-trigger-searchbar";
 
 import { CanaryAskInout } from "./canary-ask-input";
 import { CanarySearchInput } from "./canary-search-input";
 
-import { CanarySearch } from "./canary-search";
 import { CanaryAsk } from "./canary-ask";
+import { CanarySearch } from "./canary-search";
 
 import { CanaryHeroIcon } from "./canary-hero-icon";
 import { CanaryLogoCal } from "./canary-logo-cal";
@@ -43,6 +44,7 @@ declare global {
     "canary-modal": CanaryModal;
     "canary-dialog": CanaryDialog;
     "canary-content": CanaryContent;
+    "canary-trigger-searchbar": CanaryTriggerSearchbar;
     "canary-search": CanarySearch;
     "canary-search-input": CanarySearchInput;
     "canary-ask": CanaryAsk;

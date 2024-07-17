@@ -1,4 +1,4 @@
-import { LitElement, html } from "lit";
+import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
 import { consume } from "@lit/context";
@@ -36,11 +36,21 @@ export class CanaryAskInout extends LitElement {
           autofocus
           onfocus="this.setSelectionRange(this.value.length,this.value.length);"
         />
+        <span>⏎</span>
       </div>
     `;
   }
 
-  static styles = input;
+  static styles = [
+    input,
+    css`
+      span {
+        font-size: 10px;
+        font-family: var(--canary-font-family);
+        color: var(--canary-color-gray-4);
+      }
+    `,
+  ];
 
   private _handleInput(e: KeyboardEvent) {
     const input = e.target as HTMLInputElement;

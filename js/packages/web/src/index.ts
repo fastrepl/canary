@@ -27,5 +27,5 @@ import "./canary-ask-results";
 
 // others
 import "./canary-modal";
-import "./canary-trigger";
+import "./canary-trigger-searchbar";
 import "./canary-content";

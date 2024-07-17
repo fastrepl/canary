@@ -39,6 +39,7 @@ export class CanaryContent extends LitElement {
   askElements!: Array<HTMLElement>;
 
   firstUpdated() {
+    let mode = this.mode.current;
     let options = this.mode.options;
 
     if (this.searchElements.length > 0) {
@@ -53,7 +54,13 @@ export class CanaryContent extends LitElement {
       options.delete("Ask");
     }
 
-    this.mode = { ...this.mode, options };
+    if (this.searchElements.length > 0) {
+      mode = "Search";
+    } else {
+      mode = "Ask";
+    }
+
+    this.mode = { current: mode, options };
   }
 
   render() {
