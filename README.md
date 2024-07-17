@@ -28,6 +28,8 @@
 
 ## Links
 
+- [yujonglee.com/canary](https://yujonglee.com/canary)
+  + My recent blog post about Canary.  
 - [cloud.getcanary.dev](https://cloud.getcanary.dev/)
   + Hosted version of Canary. Try for free.
 - [docs.getcanary.dev](https://docs.getcanary.dev/)
