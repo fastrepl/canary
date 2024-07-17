@@ -1,33 +1,13 @@
 {
   "attributes": [
     {
-      "allow_nil?": false,
-      "default": "fragment(\"gen_random_uuid()\")",
-      "generated?": false,
-      "primary_key?": true,
-      "references": null,
-      "size": null,
-      "source": "id",
-      "type": "uuid"
-    },
-    {
-      "allow_nil?": false,
-      "default": "fragment(\"(now() AT TIME ZONE 'utc')\")",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "created_at",
-      "type": "utc_datetime_usec"
-    },
-    {
-      "allow_nil?": false,
+      "allow_nil?": true,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "url",
+      "source": "refresh_token",
       "type": "text"
     },
     {
@@ -37,7 +17,17 @@
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "title",
+      "source": "access_token_expires_at",
+      "type": "utc_datetime_usec"
+    },
+    {
+      "allow_nil?": true,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "access_token",
       "type": "text"
     },
     {
@@ -47,8 +37,28 @@
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "content_hash",
-      "type": "binary"
+      "source": "uid",
+      "type": "text"
+    },
+    {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "strategy",
+      "type": "text"
+    },
+    {
+      "allow_nil?": false,
+      "default": "fragment(\"gen_random_uuid()\")",
+      "generated?": false,
+      "primary_key?": true,
+      "references": null,
+      "size": null,
+      "source": "id",
+      "type": "uuid"
     },
     {
       "allow_nil?": true,
@@ -68,15 +78,15 @@
           "global": null,
           "strategy": null
         },
-        "name": "documents_source_id_fkey",
-        "on_delete": "delete",
+        "name": "user_identities_user_id_fkey",
+        "on_delete": null,
         "on_update": null,
         "primary_key?": true,
         "schema": "public",
-        "table": "sources"
+        "table": "users"
       },
       "size": null,
-      "source": "source_id",
+      "source": "user_id",
       "type": "uuid"
     }
   ],
@@ -85,23 +95,27 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "856566811F8AD10FD84BD2D564B2CA0DD7A4AA4CDCA35EBC19EF699E1BD173A0",
+  "hash": "C1CDB4231E4B0AFA8ADCF1EF1F7819E01965E2708C1F615AD319A714607FC35B",
   "identities": [
     {
       "all_tenants?": false,
       "base_filter": null,
-      "index_name": "documents_unique_content_index",
+      "index_name": "user_identities_unique_on_strategy_and_uid_and_user_id_index",
       "keys": [
         {
           "type": "atom",
-          "value": "url"
+          "value": "strategy"
         },
         {
           "type": "atom",
-          "value": "content_hash"
+          "value": "uid"
+        },
+        {
+          "type": "atom",
+          "value": "user_id"
         }
       ],
-      "name": "unique_content",
+      "name": "unique_on_strategy_and_uid_and_user_id",
       "nils_distinct?": true,
       "where": null
     }
@@ -113,5 +127,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "documents"
+  "table": "user_identities"
 }

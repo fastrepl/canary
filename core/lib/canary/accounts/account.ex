@@ -22,12 +22,6 @@ defmodule Canary.Accounts.Account do
     has_one :billing, Canary.Accounts.Billing
   end
 
-  aggregates do
-    count :chat_usage_last_hour, [:sessions, :messages] do
-      filter expr(created_at >= ago(1, :hour) and role == :assistant)
-    end
-  end
-
   actions do
     defaults [:read]
 

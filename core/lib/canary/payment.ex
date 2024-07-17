@@ -1,18 +1,20 @@
 defmodule Canary.Payment do
-  @callback sync_seats(account :: map()) :: {:ok, map()} | {:error, any()}
-  @callback sync_chats(account :: map()) :: {:ok, map()} | {:error, any()}
+  @callback sync_seat(account :: map()) :: {:ok, map()} | {:error, any()}
+  @callback sync_ask(account :: map()) :: {:ok, map()} | {:error, any()}
+  @callback sync_search(account :: map()) :: {:ok, map()} | {:error, any()}
 
-  def sync_seats(account), do: impl().sync_seats(account)
-  def sync_chats(account), do: impl().sync_chats(account)
+  def sync_seat(account), do: impl().sync_seat(account)
+  def sync_ask(account), do: impl().sync_chats(account)
+  def sync_search(account), do: impl().sync_search(account)
 
   defp impl(), do: Application.get_env(:canary, :payment, Canary.Payment.Stripe)
 end
 
 defmodule Canary.Payment.Stripe do
   @behaviour Canary.Payment
-  @dialyzer {:nowarn_function, sync_seats: 1}
+  @dialyzer {:nowarn_function, sync_seat: 1}
 
-  def sync_seats(%Canary.Accounts.Account{} = account) do
+  def sync_seat(%Canary.Accounts.Account{} = account) do
     account = account |> Ash.load!([:users, :billing])
     subscription = account.billing.stripe_subscription
 
@@ -28,11 +30,11 @@ defmodule Canary.Payment.Stripe do
     end
   end
 
-  def sync_chats(%Canary.Accounts.Account{} = account) do
-    account = account |> Ash.load!([:billing, :chat_usage_last_hour])
+  def sync_ask(%Canary.Accounts.Account{} = account) do
+    account = account |> Ash.load!([:billing])
     subscription = account.billing.stripe_subscription
 
-    case find_item(subscription, chat_price_id()) do
+    case find_item(subscription, ask_price_id()) do
       nil ->
         :error
 
@@ -40,7 +42,25 @@ defmodule Canary.Payment.Stripe do
         item["id"]
         |> Stripe.UsageRecord.create(%{
           action: :set,
-          quantity: account.chat_usage_last_hour,
+          quantity: account.billing.count_ask,
+          timestamp: DateTime.utc_now() |> DateTime.to_unix()
+        })
+    end
+  end
+
+  def sync_search(%Canary.Accounts.Account{} = account) do
+    account = account |> Ash.load!([:billing])
+    subscription = account.billing.stripe_subscription
+
+    case find_item(subscription, search_price_id()) do
+      nil ->
+        :error
+
+      item ->
+        item["id"]
+        |> Stripe.UsageRecord.create(%{
+          action: :set,
+          quantity: account.billing.count_search,
           timestamp: DateTime.utc_now() |> DateTime.to_unix()
         })
     end
@@ -51,6 +71,9 @@ defmodule Canary.Payment.Stripe do
     |> Enum.find(fn item -> item["price"]["id"] == price_id end)
   end
 
-  defp seat_price_id, do: Application.get_env(:canary, :stripe) |> Keyword.fetch!(:seat_price_id)
-  defp chat_price_id, do: Application.get_env(:canary, :stripe) |> Keyword.fetch!(:chat_price_id)
+  defp stripe_config(), do: Application.get_env(:canary, :stripe)
+
+  defp seat_price_id, do: stripe_config() |> Keyword.fetch!(:seat_price_id)
+  defp ask_price_id, do: stripe_config() |> Keyword.fetch!(:ask_price_id)
+  defp search_price_id, do: stripe_config() |> Keyword.fetch!(:search_price_id)
 end

@@ -2,46 +2,23 @@
   "attributes": [
     {
       "allow_nil?": false,
-      "default": "nil",
-      "generated?": true,
+      "default": "fragment(\"gen_random_uuid()\")",
+      "generated?": false,
       "primary_key?": true,
       "references": null,
       "size": null,
       "source": "id",
-      "type": "bigint"
+      "type": "uuid"
     },
     {
       "allow_nil?": false,
-      "default": "nil",
+      "default": "fragment(\"(now() AT TIME ZONE 'utc')\")",
       "generated?": false,
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "content",
-      "type": "text"
-    },
-    {
-      "allow_nil?": false,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": 384,
-      "source": "embedding",
-      "type": [
-        "vector",
-        384
-      ]
-    },
-    {
-      "allow_nil?": true,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "url",
-      "type": "text"
+      "source": "created_at",
+      "type": "utc_datetime_usec"
     },
     {
       "allow_nil?": true,
@@ -61,15 +38,15 @@
           "global": null,
           "strategy": null
         },
-        "name": "chunks_document_id_fkey",
-        "on_delete": "delete",
+        "name": "feedbacks_account_id_fkey",
+        "on_delete": null,
         "on_update": null,
         "primary_key?": true,
         "schema": "public",
-        "table": "documents"
+        "table": "accounts"
       },
       "size": null,
-      "source": "document_id",
+      "source": "account_id",
       "type": "uuid"
     }
   ],
@@ -77,8 +54,8 @@
   "check_constraints": [],
   "custom_indexes": [],
   "custom_statements": [],
-  "has_create_action": true,
-  "hash": "C3D97D68DF0F35D5D0ED6AEA7B76952BA75BE419DD51F6CDCDD6B079E1D2861E",
+  "has_create_action": false,
+  "hash": "208D9F8646A606E715521E8550729D4F9A30B71440BBF5D5BF93393C397217E1",
   "identities": [],
   "multitenancy": {
     "attribute": null,
@@ -87,5 +64,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "chunks"
+  "table": "feedbacks"
 }

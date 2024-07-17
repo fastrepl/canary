@@ -214,6 +214,8 @@ defmodule Canary.Repo.Migrations.InitResources do
       add :id, :uuid, null: false, default: fragment("gen_random_uuid()"), primary_key: true
       add :stripe_customer, :map
       add :stripe_subscription, :map
+      add :count_ask, :bigint, null: false, default: 0
+      add :count_search, :bigint, null: false, default: 0
       add :account_id, :uuid
     end
 

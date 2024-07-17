@@ -12,22 +12,12 @@
     },
     {
       "allow_nil?": false,
-      "default": "fragment(\"(now() AT TIME ZONE 'utc')\")",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "created_at",
-      "type": "utc_datetime_usec"
-    },
-    {
-      "allow_nil?": false,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "email",
+      "source": "type",
       "type": "text"
     },
     {
@@ -35,32 +25,13 @@
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
-      "references": {
-        "deferrable": false,
-        "destination_attribute": "id",
-        "destination_attribute_default": null,
-        "destination_attribute_generated": null,
-        "index?": false,
-        "match_type": null,
-        "match_with": null,
-        "multitenancy": {
-          "attribute": null,
-          "global": null,
-          "strategy": null
-        },
-        "name": "account_invites_user_id_fkey",
-        "on_delete": null,
-        "on_update": null,
-        "primary_key?": true,
-        "schema": "public",
-        "table": "users"
-      },
+      "references": null,
       "size": null,
-      "source": "user_id",
-      "type": "uuid"
+      "source": "client_session_id",
+      "type": "bigint"
     },
     {
-      "allow_nil?": false,
+      "allow_nil?": true,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
@@ -77,7 +48,7 @@
           "global": null,
           "strategy": null
         },
-        "name": "account_invites_account_id_fkey",
+        "name": "sessions_account_id_fkey",
         "on_delete": null,
         "on_update": null,
         "primary_key?": true,
@@ -94,8 +65,31 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "F6F3F5044E8F501712EF33F3BA2A9697453DC42B5743BF17251953B2DBEE4E71",
-  "identities": [],
+  "hash": "5B7461EAAB77AF1A63EE044A4C07D69A0E2F3C96F9E7B49F0B75026D1A4D1A65",
+  "identities": [
+    {
+      "all_tenants?": false,
+      "base_filter": null,
+      "index_name": "sessions_unique_session_index",
+      "keys": [
+        {
+          "type": "atom",
+          "value": "account_id"
+        },
+        {
+          "type": "atom",
+          "value": "type"
+        },
+        {
+          "type": "atom",
+          "value": "client_session_id"
+        }
+      ],
+      "name": "unique_session",
+      "nils_distinct?": true,
+      "where": null
+    }
+  ],
   "multitenancy": {
     "attribute": null,
     "global": null,
@@ -103,5 +97,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "account_invites"
+  "table": "sessions"
 }

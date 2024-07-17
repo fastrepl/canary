@@ -11,6 +11,9 @@ defmodule Canary.Accounts.Billing do
 
     # https://docs.stripe.com/api/subscriptions/object
     attribute :stripe_subscription, :map, allow_nil?: true
+
+    attribute :count_ask, :integer, allow_nil?: false, default: 0
+    attribute :count_search, :integer, allow_nil?: false, default: 0
   end
 
   relationships do
@@ -45,6 +48,22 @@ defmodule Canary.Accounts.Billing do
       change {Canary.Accounts.Changes.StructToMap, attribute: :stripe_subscription}
       change set_attribute(:stripe_subscription, expr(^arg(:stripe_subscription)))
     end
+
+    update :increment_ask do
+      change atomic_update(:count_ask, expr(count_ask + 1))
+    end
+
+    update :increment_search do
+      change atomic_update(:count_search, expr(count_search + 1))
+    end
+
+    update :reset_ask do
+      change atomic_update(:count_ask, expr(0))
+    end
+
+    update :reset_search do
+      change atomic_update(:count_search, expr(0))
+    end
   end
 
   code_interface do
@@ -55,6 +74,11 @@ defmodule Canary.Accounts.Billing do
     define :update_stripe_subscription,
       args: [:stripe_subscription],
       action: :update_stripe_subscription
+
+    define :increment_ask, args: [], action: :increment_ask
+    define :increment_search, args: [], action: :increment_search
+    define :reset_ask, args: [], action: :reset_ask
+    define :reset_search, args: [], action: :reset_search
   end
 
   postgres do

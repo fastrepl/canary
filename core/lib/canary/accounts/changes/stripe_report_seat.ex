@@ -7,7 +7,7 @@ defmodule Canary.Accounts.Changes.StripeReportSeat do
     |> Ash.Changeset.after_transaction(fn _changeset, result ->
       case result do
         {:ok, account} ->
-          Canary.Payment.sync_seats(account)
+          Canary.Payment.sync_seat(account)
           {:ok, account}
 
         error ->

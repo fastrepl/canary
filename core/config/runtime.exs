@@ -149,10 +149,9 @@ if config_env() != :test do
     config :canary, :stripe,
       api_key: System.fetch_env!("STRIPE_SECRET_KEY"),
       public_key: System.fetch_env!("STRIPE_PUBLIC_KEY"),
-      seat_product_id: System.fetch_env!("STRIPE_SEAT_PRODUCT"),
       seat_price_id: System.fetch_env!("STRIPE_SEAT_PRICE"),
-      chat_product_id: System.fetch_env!("STRIPE_CHAT_PRODUCT"),
-      chat_price_id: System.fetch_env!("STRIPE_CHAT_PRICE"),
+      ask_price_id: System.fetch_env!("STRIPE_ASK_PRICE"),
+      search_price_id: System.fetch_env!("STRIPE_SEARCH_PRICE"),
       customer_portal_url: System.fetch_env!("STRIPE_CUSTOMER_PORTAL_URL"),
       webhook_secret: System.fetch_env!("STRIPE_WEBHOOK_SECRET")
 

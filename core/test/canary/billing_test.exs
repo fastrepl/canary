@@ -11,7 +11,7 @@ defmodule Canary.Test.Billing do
     assert account.billing != nil
   end
 
-  test "update billing" do
+  test "update stripe" do
     account = account_fixture()
     account = account |> Ash.load!(:billing)
 
@@ -27,5 +27,25 @@ defmodule Canary.Test.Billing do
       |> Ash.read!()
 
     assert found.id == updated.id
+  end
+
+  test "update usage" do
+    account = account_fixture()
+    account = account |> Ash.load!(:billing)
+
+    assert account.billing.count_ask == 0
+    assert account.billing.count_search == 0
+
+    updated = Billing.increment_ask!(account.billing)
+    assert updated.count_ask == 1
+    assert updated.count_search == 0
+
+    updated = Billing.increment_search!(account.billing)
+    assert updated.count_ask == 1
+    assert updated.count_search == 1
+
+    updated = Billing.reset_ask!(account.billing)
+    assert updated.count_ask == 0
+    assert updated.count_search == 1
   end
 end

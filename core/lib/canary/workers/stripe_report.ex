@@ -1,5 +1,5 @@
 defmodule Canary.Workers.StripeReport do
-  use Oban.Worker, queue: :stripe, max_attempts: 2
+  use Oban.Worker, queue: :stripe, max_attempts: 1
   require Ash.Query
 
   @impl true
@@ -11,7 +11,12 @@ defmodule Canary.Workers.StripeReport do
 
     accounts
     |> Enum.map(&%{account_id: &1.id})
-    |> Enum.map(&Canary.Workers.StripeReportChat.new/1)
+    |> Enum.flat_map(fn account ->
+      [
+        Canary.Workers.StripeReportAsk.new(%{account_id: account.id}),
+        Canary.Workers.StripeReportSearch.new(%{account_id: account.id})
+      ]
+    end)
     |> Oban.insert_all()
 
     :ok

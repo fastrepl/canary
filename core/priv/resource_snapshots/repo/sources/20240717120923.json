@@ -12,16 +12,36 @@
     },
     {
       "allow_nil?": false,
+      "default": "fragment(\"(now() AT TIME ZONE 'utc')\")",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "created_at",
+      "type": "utc_datetime_usec"
+    },
+    {
+      "allow_nil?": false,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "full_name",
+      "source": "type",
       "type": "text"
     },
     {
       "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "web_base_url",
+      "type": "text"
+    },
+    {
+      "allow_nil?": true,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
@@ -38,15 +58,15 @@
           "global": null,
           "strategy": null
         },
-        "name": "github_repos_app_id_fkey",
-        "on_delete": "delete",
+        "name": "sources_account_id_fkey",
+        "on_delete": null,
         "on_update": null,
         "primary_key?": true,
         "schema": "public",
-        "table": "github_apps"
+        "table": "accounts"
       },
       "size": null,
-      "source": "app_id",
+      "source": "account_id",
       "type": "uuid"
     }
   ],
@@ -55,27 +75,8 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "5A727BCEDDD055A85108C84285069B7AEF05E4F47200F388AB345C0855617680",
-  "identities": [
-    {
-      "all_tenants?": false,
-      "base_filter": null,
-      "index_name": "github_repos_unique_repo_index",
-      "keys": [
-        {
-          "type": "atom",
-          "value": "app_id"
-        },
-        {
-          "type": "atom",
-          "value": "full_name"
-        }
-      ],
-      "name": "unique_repo",
-      "nils_distinct?": true,
-      "where": null
-    }
-  ],
+  "hash": "8AA881877A9EE60DF2791EDDA3B5A76112C7806592CF45A83F3233F1CC4C0518",
+  "identities": [],
   "multitenancy": {
     "attribute": null,
     "global": null,
@@ -83,5 +84,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "github_repos"
+  "table": "sources"
 }
