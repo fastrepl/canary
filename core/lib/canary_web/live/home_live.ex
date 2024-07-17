@@ -37,7 +37,7 @@ defmodule CanaryWeb.HomeLive do
             />
           </div>
           <%= if @web_source.last_updated  do %>
-            <div id="updated" class="stat-value" phx-hook="TimeAgo">
+            <div id="updated" class="stat-value invisible" phx-hook="TimeAgo">
               <%= @web_source.last_updated %>
             </div>
           <% else %>
@@ -49,18 +49,45 @@ defmodule CanaryWeb.HomeLive do
         <div></div>
       </section>
 
-      <pre class="mt-8">
-        <%= @web_client.web_public_key %>
-      </pre>
+      <label class="form-control w-full max-w-xs mt-4">
+        <div class="label">
+          <span class="label-text">This is your public key.</span>
+          <button
+            id="pk"
+            phx-hook="Clipboard"
+            class="btn btn-sm btn-ghost"
+            data-clipboard-text={@web_client.web_public_key}
+          >
+            Click here copy
+          </button>
+        </div>
+        <input
+          type="text"
+          value={@web_client.web_public_key}
+          disabled
+          class="input input-bordered w-full max-w-xs "
+        />
+        <div class="label"></div>
+      </label>
 
-      <section class="shadow-md mt-10 rounded-xl max-w-2xl">
-        <canary-panel
-          key={@web_client.web_public_key}
-          endpoint={CanaryWeb.Endpoint.url()}
-          hljs="github"
-        >
-        </canary-panel>
-      </section>
+      <span class="text-sm mb-2">Try it out!</span>
+      <canary-styles-default theme="light">
+        <canary-provider-cloud key={@web_client.web_public_key} endpoint={CanaryWeb.Endpoint.url()}>
+          <canary-modal>
+            <canary-trigger-searchbar slot="trigger"></canary-trigger-searchbar>
+            <canary-content slot="content">
+              <canary-search slot="search">
+                <canary-search-input slot="input"></canary-search-input>
+                <canary-search-results slot="results"></canary-search-results>
+              </canary-search>
+              <canary-ask slot="ask">
+                <canary-ask-input slot="input"></canary-ask-input>
+                <canary-ask-results slot="results"></canary-ask-results>
+              </canary-ask>
+            </canary-content>
+          </canary-modal>
+        </canary-provider-cloud>
+      </canary-styles-default>
 
       <style>
         :root {

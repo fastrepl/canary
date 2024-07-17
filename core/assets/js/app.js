@@ -25,6 +25,19 @@ import { getHooks } from "live_svelte";
 import * as Components from "../svelte/**/*.svelte";
 
 import { format } from "timeago.js";
+import ClipboardJS from "clipboard";
+
+import "@getcanary/web/components/canary-provider-cloud";
+import "@getcanary/web/components/canary-styles-default";
+import "@getcanary/web/components/canary-modal";
+import "@getcanary/web/components/canary-trigger-searchbar";
+import "@getcanary/web/components/canary-content";
+import "@getcanary/web/components/canary-search";
+import "@getcanary/web/components/canary-search-input";
+import "@getcanary/web/components/canary-search-results";
+import "@getcanary/web/components/canary-ask";
+import "@getcanary/web/components/canary-ask-input";
+import "@getcanary/web/components/canary-ask-results";
 
 let csrfToken = document
   .querySelector("meta[name='csrf-token']")
@@ -54,6 +67,15 @@ let hooks = {
     },
     fn() {
       this.el.textContent = format(this.el.textContent, "en_US");
+      this.el.classList.remove("invisible");
+    },
+  },
+  Clipboard: {
+    mounted() {
+      this.clipboard = new ClipboardJS(this.el);
+      this.clipboard.on("success", (e) => {
+        this.el.textContent = "Copied!";
+      });
     },
   },
 };
