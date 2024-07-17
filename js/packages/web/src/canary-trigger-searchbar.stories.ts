@@ -4,14 +4,14 @@ import type { Meta, StoryObj } from "@storybook/web-components";
 import "./canary-trigger-searchbar";
 
 const render = (_: any) => {
-  return html` <canary-trigger></canary-trigger> `;
+  return html` <canary-trigger-searchbar></canary-trigger-searchbar> `;
 };
 
 export default {
   render,
-  title: "Public/canary-trigger",
+  title: "Public/canary-trigger-searchbar",
   parameters: {
-    sourceLink: "canary-trigger.stories.ts",
+    sourceLink: "canary-trigger-searchbar.stories.ts",
   },
 } satisfies Meta;
 

@@ -37,8 +37,7 @@ export class CanaryProviderPagefind extends LitElement {
 
   private _importPagefind() {
     if (!this.baseUrl) {
-      // @ts-ignore
-      return import("/pagefind/pagefind.js");
+      throw new Error("baseUrl is required");
     }
 
     return import(new URL("/pagefind/pagefind.js", this.baseUrl).href);

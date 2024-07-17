@@ -14,7 +14,10 @@ const render = (_: any) => {
   return html`
     <canary-provider-cloud key="key" endpoint="http://localhost:6006">
       <canary-modal>
-        <canary-trigger slot="trigger" data-testid="trigger"></canary-trigger>
+        <canary-trigger-searchbar
+          slot="trigger"
+          data-testid="trigger"
+        ></canary-trigger-searchbar>
         <canary-content slot="content">
           <canary-search slot="search">
             <canary-search-input slot="input"></canary-search-input>

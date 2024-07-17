@@ -20,6 +20,7 @@ export default defineConfig({
           items: [
             { label: "README", link: "/intro/readme/" },
             { label: "Hosted vs Self-host", link: "/intro/hosting/" },
+            { label: "Concepts", link: "/intro/concepts/" },
           ],
         },
         {
@@ -68,16 +69,15 @@ export default defineConfig({
       customCss: ["./src/styles/theme.css"],
       head: [
         ...[
-          "canary-provider-cloud",
+          // "canary-provider-cloud",
+          "canary-provider-pagefind",
           "canary-styles-starlight",
           "canary-modal",
-          "canary-input-search",
-          "canary-input-ask",
-          "canary-result-search",
-          "canary-result-ask",
-          "canary-trigger",
+          "canary-trigger-searchbar",
           "canary-content",
-          "canary-callout-cal",
+          "canary-search",
+          "canary-search-input",
+          "canary-search-results",
           "canary-callout-discord",
         ].map((c) => ({
           tag: "script",

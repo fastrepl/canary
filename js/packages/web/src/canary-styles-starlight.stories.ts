@@ -6,7 +6,7 @@ import "./canary-trigger-searchbar";
 const render = (_: any) => {
   return html`
     <canary-styles-starlight>
-      <canary-trigger></canary-trigger>
+      <canary-trigger-searchbar></canary-trigger-searchbar>
     </canary-styles-starlight>
   `;
 };

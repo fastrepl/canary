@@ -17,7 +17,7 @@ export class CanaryLogoCal extends LitElement {
   static styles = css`
     svg {
       width: 50px;
-      padding-bottom: 2px;
+      padding-top: 2px;
     }
 
     .light {
