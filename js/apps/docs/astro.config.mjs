@@ -1,15 +1,12 @@
 import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
 
-import canary from "@getcanary/starlight";
-
 // https://astro.build/config
 export default defineConfig({
   redirects: { "/": "/intro/readme/" },
   site: "https://docs.getcanary.dev",
   integrations: [
     starlight({
-      plugins: [canary()],
       title: "🐤 Canary",
       social: {
         github: "https://github.com/fastrepl/canary",
@@ -70,6 +67,27 @@ export default defineConfig({
         },
       ],
       customCss: ["./src/styles/theme.css"],
+      components: {
+        Search: "./src/components/search.astro",
+      },
+      head: [
+        ...[
+          "canary-provider-pagefind",
+          "canary-styles-starlight",
+          "canary-modal",
+          "canary-trigger-searchbar",
+          "canary-content",
+          "canary-search",
+          "canary-search-input",
+          "canary-search-results",
+        ].map((c) => ({
+          tag: "script",
+          attrs: {
+            type: "module",
+            src: `https://unpkg.com/@getcanary/web@0.0.31/components/${c}.js`,
+          },
+        })),
+      ],
     }),
   ],
 });

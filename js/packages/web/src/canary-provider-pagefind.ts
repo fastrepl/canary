@@ -40,6 +40,7 @@ export class CanaryProviderPagefind extends LitElement {
       throw new Error("baseUrl is required");
     }
 
+    /* @vite-ignore */
     return import(new URL("/pagefind/pagefind.js", this.baseUrl).href);
   }
 
