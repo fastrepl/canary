@@ -9,7 +9,6 @@ import {
 import { provide, consume } from "@lit/context";
 import {
   modeContext,
-  defaultModeContext,
   type ModeContext,
   queryContext,
   providerContext,
@@ -26,7 +25,10 @@ export class CanaryContent extends LitElement {
 
   @provide({ context: modeContext })
   @property({ attribute: false })
-  mode: ModeContext = defaultModeContext;
+  mode: ModeContext = {
+    options: new Set(["Search", "Ask"]),
+    current: "Search",
+  };
 
   @provide({ context: queryContext })
   @property()
@@ -61,6 +63,7 @@ export class CanaryContent extends LitElement {
     }
 
     this.mode = { current: mode, options };
+    console.log(this.mode);
   }
 
   render() {

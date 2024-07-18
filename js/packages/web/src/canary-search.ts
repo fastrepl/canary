@@ -2,7 +2,7 @@ import { consume } from "@lit/context";
 import { LitElement, html, css, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
-import { defaultModeContext, modeContext, type ModeContext } from "./contexts";
+import { modeContext, type ModeContext } from "./contexts";
 
 import "./canary-mode-tabs";
 
@@ -10,7 +10,7 @@ import "./canary-mode-tabs";
 export class CanarySearch extends LitElement {
   @consume({ context: modeContext, subscribe: true })
   @property({ attribute: false })
-  mode: ModeContext = defaultModeContext;
+  mode!: ModeContext;
 
   render() {
     return this.mode.current === "Search"

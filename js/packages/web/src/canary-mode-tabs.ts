@@ -3,13 +3,13 @@ import { customElement, property } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 
 import { consume } from "@lit/context";
-import { modeContext, defaultModeContext, type ModeContext } from "./contexts";
+import { modeContext, type ModeContext } from "./contexts";
 
 @customElement("canary-mode-tabs")
 export class CanaryModeTabs extends LitElement {
   @consume({ context: modeContext, subscribe: true })
   @property({ attribute: false })
-  mode: ModeContext = defaultModeContext;
+  mode!: ModeContext;
 
   render() {
     return html`

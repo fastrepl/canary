@@ -2,12 +2,7 @@ import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
 import { consume } from "@lit/context";
-import {
-  defaultModeContext,
-  ModeContext,
-  modeContext,
-  queryContext,
-} from "./contexts";
+import { ModeContext, modeContext, queryContext } from "./contexts";
 
 import { input } from "./styles";
 import "./canary-hero-icon";
@@ -20,7 +15,7 @@ export class CanaryAskInout extends LitElement {
 
   @consume({ context: modeContext, subscribe: true })
   @property({ attribute: false })
-  mode: ModeContext = defaultModeContext;
+  mode!: ModeContext;
 
   render() {
     return html`

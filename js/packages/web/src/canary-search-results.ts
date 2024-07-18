@@ -1,13 +1,15 @@
 import { LitElement, html, css } from "lit";
-import { customElement, state } from "lit/decorators.js";
+import { customElement, property, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { Task } from "@lit/task";
 
 import { consume } from "@lit/context";
 import {
+  queryContext,
+  modeContext,
+  type ModeContext,
   providerContext,
   type ProviderContext,
-  queryContext,
 } from "./contexts";
 
 import type { Reference } from "./types";
@@ -22,6 +24,10 @@ export class CanarySearchResults extends LitElement {
   @state()
   provider!: ProviderContext;
 
+  @consume({ context: modeContext, subscribe: true })
+  @property({ attribute: false })
+  mode!: ModeContext;
+
   @consume({ context: queryContext, subscribe: true })
   @state()
   query = "";
@@ -31,6 +37,10 @@ export class CanarySearchResults extends LitElement {
 
   private _task = new Task(this, {
     task: async ([query], { signal }) => {
+      if (this.mode.current !== "Search" || query === "") {
+        return [];
+      }
+
       const result = await this.provider.search(query, signal);
       this.references = result;
       return result;

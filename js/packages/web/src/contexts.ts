@@ -42,10 +42,6 @@ export type ModeContext = {
   options: Set<"Search" | "Ask">;
   current: "Search" | "Ask";
 };
-export const defaultModeContext: ModeContext = {
-  options: new Set<"Search" | "Ask">(["Search"]),
-  current: "Search",
-};
 
 const ctx = <T>(key: string) => createContext<T>(Symbol(key));
 

@@ -25,7 +25,7 @@ export class CanaryAskResults extends LitElement {
   @state()
   provider!: ProviderContext;
 
-  @consume({ context: modeContext, subscribe: false })
+  @consume({ context: modeContext, subscribe: true })
   @state()
   mode!: ModeContext;
 
@@ -41,7 +41,8 @@ export class CanaryAskResults extends LitElement {
 
   private _task = new Task(this, {
     task: async ([query], { signal }) => {
-      if (this.mode.current === "Search" || query === "") {
+      console.log(this.mode.current, query);
+      if (this.mode.current !== "Ask" || query === "") {
         return null;
       }
 

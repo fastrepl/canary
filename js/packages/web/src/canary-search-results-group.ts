@@ -29,7 +29,7 @@ export class CanarySearchResultsGroup extends LitElement {
   @state()
   provider!: ProviderContext;
 
-  @consume({ context: modeContext, subscribe: false })
+  @consume({ context: modeContext, subscribe: true })
   @state()
   mode!: ModeContext;
 
@@ -46,6 +46,10 @@ export class CanarySearchResultsGroup extends LitElement {
 
   private _task = new Task(this, {
     task: async ([query], { signal }) => {
+      if (this.mode.current !== "Search" || query === "") {
+        return {};
+      }
+
       const references = await this.provider.search(query, signal);
       this.references = references;
 
