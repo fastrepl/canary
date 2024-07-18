@@ -40,8 +40,8 @@ export class CanaryAskResults extends LitElement {
   @property() hljs = "github";
 
   private _task = new Task(this, {
-    task: async ([query], { signal }) => {
-      if (this.mode.current !== "Ask" || query === "") {
+    task: async ([mode, query], { signal }) => {
+      if (mode !== "Ask" || query === "") {
         return null;
       }
 

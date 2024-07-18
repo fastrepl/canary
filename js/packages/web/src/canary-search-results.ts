@@ -36,8 +36,8 @@ export class CanarySearchResults extends LitElement {
   @state() selected = -1;
 
   private _task = new Task(this, {
-    task: async ([query], { signal }) => {
-      if (this.mode.current !== "Search" || query === "") {
+    task: async ([mode, query], { signal }) => {
+      if (mode !== "Search" || query === "") {
         return [];
       }
 

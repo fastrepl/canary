@@ -45,8 +45,8 @@ export class CanarySearchResultsGroup extends LitElement {
   @state() groupedReferences: Record<string, Reference[]> = {};
 
   private _task = new Task(this, {
-    task: async ([query], { signal }) => {
-      if (this.mode.current !== "Search" || query === "") {
+    task: async ([mode, query], { signal }) => {
+      if (mode !== "Search" || query === "") {
         return {};
       }
 
@@ -75,7 +75,7 @@ export class CanarySearchResultsGroup extends LitElement {
       this.groupedReferences = grouped;
       return grouped;
     },
-    args: () => [this.query],
+    args: () => [this.mode.current, this.query],
   });
 
   updated(changedProperties: Map<string, any>) {
