@@ -26,44 +26,18 @@ export default defineConfig({
         {
           label: "Integrations",
           items: [
-            { label: "Overview", link: "/integrations/overview/" },
             { label: "Starlight", link: "/integrations/starlight/" },
             { label: "Docusaurus", link: "/integrations/docusaurus/" },
-            { label: "Nextra", link: "/integrations/nextra/" },
-            { label: "VitePress", link: "/integrations/vitepress/" },
-          ],
-        },
-        {
-          label: "Sources",
-          items: [
-            { label: "Overview", link: "/sources/overview/" },
-            { label: "Website", link: "/sources/website/" },
-          ],
-        },
-        {
-          label: "Clients",
-          items: [
-            { label: "Overview", link: "/clients/overview/" },
-            { label: "Discord", link: "/clients/discord/" },
-            { label: "Website", link: "/clients/website/" },
           ],
         },
         {
           label: "Analytics",
-          items: [
-            { label: "Overview", link: "/analytics/overview/" },
-            { label: "Tracker", link: "/analytics/tracker/" },
-          ],
+          items: [{ label: "Tracker", link: "/analytics/tracker/" }],
         },
         {
           label: "Packages",
           collapsed: true,
           autogenerate: { directory: "packages" },
-        },
-        {
-          label: "Miscellaneous",
-          collapsed: true,
-          autogenerate: { directory: "others" },
         },
       ],
       customCss: ["./src/styles/theme.css"],
