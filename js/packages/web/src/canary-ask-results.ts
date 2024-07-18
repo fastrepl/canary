@@ -41,7 +41,6 @@ export class CanaryAskResults extends LitElement {
 
   private _task = new Task(this, {
     task: async ([query], { signal }) => {
-      console.log(this.mode.current, query);
       if (this.mode.current !== "Ask" || query === "") {
         return null;
       }
@@ -68,7 +67,7 @@ export class CanaryAskResults extends LitElement {
 
       return null;
     },
-    args: () => [this.query],
+    args: () => [this.mode.current, this.query],
   });
 
   render() {

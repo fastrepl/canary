@@ -63,7 +63,6 @@ export class CanaryContent extends LitElement {
     }
 
     this.mode = { current: mode, options };
-    console.log(this.mode);
   }
 
   render() {
@@ -86,7 +85,7 @@ export class CanaryContent extends LitElement {
   }
 
   private _handleTab(_: CustomEvent) {
-    if (!this.mode.options || this.mode.options.size < 2) {
+    if (this.mode.options.size < 2) {
       return;
     }
 

@@ -45,7 +45,7 @@ export class CanarySearchResults extends LitElement {
       this.references = result;
       return result;
     },
-    args: () => [this.query],
+    args: () => [this.mode.current, this.query],
   });
 
   connectedCallback() {
