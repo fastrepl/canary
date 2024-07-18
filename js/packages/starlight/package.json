@@ -1,0 +1,27 @@
+{
+  "name": "@getcanary/starlight",
+  "version": "0.0.1",
+  "description": "Starlight plugin to replace search bar with Canary",
+  "author": "yujonglee <yujonglee@fastrepl.com>",
+  "license": "MIT",
+  "type": "module",
+  "files": [
+    "./index.js",
+    "./toc.astro"
+  ],
+  "exports": {
+    ".": "./index.js",
+    "./toc.astro": "./toc.astro"
+  },
+  "scripts": {
+    "format": "prettier -w .",
+    "pub": "npm publish --access public"
+  },
+  "dependencies": {
+    "@getcanary/web": "^0.0.31"
+  },
+  "devDependencies": {
+    "prettier": "^3.3.3",
+    "prettier-plugin-astro": "^0.14.1"
+  }
+}

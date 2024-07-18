@@ -1,0 +1,24 @@
+---
+import "@getcanary/web/components/canary-styles-starlight";
+import "@getcanary/web/components/canary-provider-pagefind";
+import "@getcanary/web/components/canary-modal";
+import "@getcanary/web/components/canary-trigger-searchbar";
+import "@getcanary/web/components/canary-content";
+import "@getcanary/web/components/canary-search";
+import "@getcanary/web/components/canary-search-input";
+import "@getcanary/web/components/canary-search-results";
+---
+
+<canary-styles-starlight>
+  <canary-provider-pagefind baseUrl={Astro.site.origin}>
+    <canary-modal>
+      <canary-trigger-searchbar slot="trigger"></canary-trigger-searchbar>
+      <canary-content slot="content">
+        <canary-search slot="search">
+          <canary-search-input slot="input"></canary-search-input>
+          <canary-search-results slot="results"></canary-search-results>
+        </canary-search>
+      </canary-content>
+    </canary-modal>
+  </canary-provider-pagefind>
+</canary-styles-starlight>
