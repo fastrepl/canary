@@ -108,6 +108,14 @@ export class CanarySearchResults extends LitElement {
     const next = this.selected + delta;
     if (next > -1 && next < this.references.length) {
       this.selected = next;
+
+      this.dispatchEvent(
+        new CustomEvent("results-select", {
+          bubbles: true,
+          composed: true,
+          detail: this.references[this.selected],
+        }),
+      );
     }
   }
 
@@ -120,17 +128,6 @@ export class CanarySearchResults extends LitElement {
       case "ArrowDown":
         e.preventDefault();
         this._moveSelection(1);
-        break;
-      case "Enter":
-        e.preventDefault();
-        if (this.selected < 0) {
-          return;
-        }
-
-        const item = this.references?.[this.selected];
-        if (item) {
-          window.open(item.url, "_blank");
-        }
         break;
     }
   };
