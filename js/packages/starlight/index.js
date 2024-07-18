@@ -7,7 +7,7 @@ const plugin = () => {
         updateConfig({
           components: {
             ...(config.components ?? {}),
-            Search: "@getcanary/starlight/Search.astro",
+            Search: "@getcanary/starlight/search.astro",
           },
         });
       },

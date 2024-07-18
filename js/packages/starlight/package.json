@@ -1,17 +1,17 @@
 {
   "name": "@getcanary/starlight",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "Starlight plugin to replace search bar with Canary",
   "author": "yujonglee <yujonglee@fastrepl.com>",
   "license": "MIT",
   "type": "module",
   "files": [
     "./index.js",
-    "./toc.astro"
+    "./search.astro"
   ],
   "exports": {
     ".": "./index.js",
-    "./toc.astro": "./toc.astro"
+    "./search.astro": "./search.astro"
   },
   "scripts": {
     "format": "prettier -w .",
