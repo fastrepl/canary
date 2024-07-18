@@ -1,6 +1,6 @@
 {
   "name": "@getcanary/starlight",
-  "version": "0.0.3",
+  "version": "0.0.5",
   "description": "Starlight plugin to replace search bar with Canary",
   "author": "yujonglee <yujonglee@fastrepl.com>",
   "license": "MIT",
@@ -16,9 +16,6 @@
   "scripts": {
     "format": "prettier -w .",
     "pub": "npm publish --access public"
-  },
-  "dependencies": {
-    "@getcanary/web": "^0.0.31"
   },
   "devDependencies": {
     "prettier": "^3.3.3",
