@@ -8,8 +8,8 @@ end
 defmodule Canary.Interactions.Searcher do
   alias Canary.Interactions.Searcher
 
-  @callback run(String.t(), list(any())) :: {:ok, list(Searcher.Result.t())} | {:error, any()}
-  def run(query, source_ids), do: impl().run(query, source_ids)
+  @callback run(String.t(), any()) :: {:ok, list(Searcher.Result.t())} | {:error, any()}
+  def run(query, client), do: impl().run(query, client)
 
   defp impl(), do: Application.get_env(:canary, :searcher, Searcher.Default)
 end
@@ -18,19 +18,26 @@ defmodule Canary.Interactions.Searcher.Default do
   @behaviour Canary.Interactions.Searcher
   require Ash.Query
 
+  alias Canary.Interactions.Client
   alias Canary.Interactions.Searcher.Result
 
-  def run(query, source_ids) do
+  @n 20
+
+  def run(query, %Client{account: account, sources: sources}) do
     op =
       Canary.Sources.Chunk
-      |> Ash.Query.filter(document.source_id in ^source_ids)
+      |> Ash.Query.filter(document.source_id in ^Enum.map(sources, & &1.id))
       |> Ash.Query.for_read(:fts_search, %{text: query})
-      |> Ash.Query.limit(10)
+      |> Ash.Query.limit(@n)
       |> Ash.read()
 
     case op do
-      {:ok, chunks} -> {:ok, transform(chunks)}
-      error -> error
+      {:ok, chunks} ->
+        Canary.Accounts.Billing.increment_search(account.billing)
+        {:ok, transform(chunks)}
+
+      error ->
+        error
     end
   end
 

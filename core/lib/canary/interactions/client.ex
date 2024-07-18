@@ -38,7 +38,7 @@ defmodule Canary.Interactions.Client do
       filter expr(web_public_key == ^arg(:web_public_key))
 
       get? true
-      prepare build(load: [:account, :sources])
+      prepare build(load: [:sources, account: [:billing]])
     end
 
     read :find_discord do
@@ -50,7 +50,7 @@ defmodule Canary.Interactions.Client do
       filter expr(discord_channel_id == ^arg(:discord_channel_id))
 
       get? true
-      prepare build(load: [:account, :sources])
+      prepare build(load: [:sources, account: [:billing]])
     end
 
     create :create_web do

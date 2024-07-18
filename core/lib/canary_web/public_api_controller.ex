@@ -4,6 +4,8 @@ defmodule CanaryWeb.PublicApiController do
 
   alias Canary.Interactions.Searcher
 
+  @safe_hosts ["cloud.getcanary.dev", "demo.getcanary.dev"]
+
   def analytics(conn, %{"type" => type, "payload" => payload}) do
     res =
       Req.post(
@@ -26,14 +28,14 @@ defmodule CanaryWeb.PublicApiController do
     case Canary.Interactions.Client.find_web(key) do
       {:ok, client} ->
         if Application.get_env(:canary, :env) == :prod and
-             conn.host not in [client.web_host_url, "cloud.getcanary.dev"] do
+             conn.host not in [client.web_host_url | @safe_hosts] do
           conn |> send_resp(401, conn.host) |> halt()
         else
           results =
-            if query in ["", " ", nil] do
+            if is_nil(query) or String.trim(query) == "" do
               []
             else
-              {:ok, results} = Searcher.run(query, Enum.map(client.sources, & &1.id))
+              {:ok, results} = Searcher.run(query, client)
               results
             end
 
@@ -52,7 +54,7 @@ defmodule CanaryWeb.PublicApiController do
     case Canary.Interactions.Client.find_web(key) do
       {:ok, client} ->
         if Application.get_env(:canary, :env) == :prod and
-             conn.host not in [client.web_host_url, "cloud.getcanary.dev"] do
+             conn.host not in [client.web_host_url | @safe_hosts] do
           conn |> send_resp(401, conn.host) |> halt()
         else
           {:ok, session} = Canary.Interactions.find_or_create_session(client.account, {:web, id})
@@ -70,7 +72,7 @@ defmodule CanaryWeb.PublicApiController do
             Canary.Interactions.Responder.run(
               session,
               query,
-              Enum.map(client.sources, & &1.id),
+              client,
               fn data -> send(here, data) end
             )
           end)

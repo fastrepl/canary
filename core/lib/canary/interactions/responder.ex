@@ -4,12 +4,12 @@ defmodule Canary.Interactions.Responder do
   @callback run(
               session :: any(),
               query :: String.t(),
-              source_ids :: list(any()),
+              client :: any(),
               handle_delta :: function()
             ) :: {:ok, any()} | {:error, any()}
 
-  def run(session, query, source_ids, handle_delta \\ nil) do
-    impl().run(session, query, source_ids, handle_delta)
+  def run(session, query, client, handle_delta \\ nil) do
+    impl().run(session, query, client, handle_delta)
   end
 
   defp impl, do: Application.get_env(:canary, :responder, Responder.Default)
@@ -19,7 +19,9 @@ defmodule Canary.Interactions.Responder.Default do
   @behaviour Canary.Interactions.Responder
   require Ash.Query
 
-  def run(session, request, source_ids, handle_delta) do
+  alias Canary.Interactions.Client
+
+  def run(session, request, %Client{account: account, sources: sources}, handle_delta) do
     Task.Supervisor.start_child(Canary.TaskSupervisor, fn ->
       Canary.Interactions.Message.add_user!(session, request)
     end)
@@ -32,7 +34,7 @@ defmodule Canary.Interactions.Responder.Default do
       |> Enum.map(fn query ->
         Task.Supervisor.async_nolink(Canary.TaskSupervisor, fn ->
           Canary.Sources.Chunk
-          |> Ash.Query.filter(document.source_id in ^source_ids)
+          |> Ash.Query.filter(document.source_id in ^Enum.map(sources, & &1.id))
           |> Ash.Query.for_read(:hybrid_search, %{text: query.text, embedding: query.embedding})
           |> Ash.Query.limit(6)
           |> Ash.read!()
@@ -70,7 +72,7 @@ defmodule Canary.Interactions.Responder.Default do
         %{
           model: model,
           messages: messages,
-          max_tokens: 300,
+          max_tokens: 600,
           stream: handle_delta != nil
         },
         callback: fn data ->
@@ -89,6 +91,7 @@ defmodule Canary.Interactions.Responder.Default do
     response = if docs != [], do: "#{completion}\n\n#{render_sources(docs)}", else: completion
 
     Task.Supervisor.start_child(Canary.TaskSupervisor, fn ->
+      Canary.Accounts.Billing.increment_ask(account.billing)
       Canary.Interactions.Message.add_assistant!(session, response)
     end)
 

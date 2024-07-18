@@ -79,7 +79,7 @@ defmodule Canary.Interactions.Discord do
           Canary.Tracing.attach_ctx(ctx)
 
           {:ok, res} =
-            Canary.Interactions.Responder.run(session, strip(user_msg.content), source_ids)
+            Canary.Interactions.Responder.run(session, strip(user_msg.content), client)
 
           send(pid, {:complete, %{content: res}})
         end)

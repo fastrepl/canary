@@ -94,6 +94,9 @@ defmodule Canary.AI.OpenAI do
 
       {:error, error} ->
         {:error, error}
+
+      _ ->
+        {:ok, ""}
     end
   end
 

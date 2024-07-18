@@ -58,7 +58,7 @@ defmodule CanaryWeb.HomeLive do
             class="btn btn-sm btn-ghost"
             data-clipboard-text={@web_client.web_public_key}
           >
-            Click here copy
+            Click here to copy
           </button>
         </div>
         <input
@@ -88,23 +88,6 @@ defmodule CanaryWeb.HomeLive do
           </canary-modal>
         </canary-provider-cloud>
       </canary-styles-default>
-
-      <style>
-        :root {
-          --canary-color-accent-low: #ead3b9;
-          --canary-color-accent: #955e00;
-          --canary-color-accent-high: #482b00;
-          --canary-color-white: #1d1711;
-          --canary-color-gray-1: #302416;
-          --canary-color-gray-2: #423627;
-          --canary-color-gray-3: #635546;
-          --canary-color-gray-4: #988978;
-          --canary-color-gray-5: #c8c1b8;
-          --canary-color-gray-6: #f3ece5;
-          --canary-color-gray-7: #f9f6f2;
-          --canary-color-black: #ffffff;
-        }
-      </style>
     </div>
     """
   end
@@ -116,7 +99,7 @@ defmodule CanaryWeb.HomeLive do
 
     query =
       from j in Oban.Job,
-        where: j.worker == ^to_string(Canary.Workers.Fetcher),
+        where: j.worker == "Canary.Workers.Fetcher",
         where: j.args["source_id"] == ^source.id,
         order_by: [desc: j.inserted_at],
         limit: 1
@@ -126,15 +109,17 @@ defmodule CanaryWeb.HomeLive do
       |> assign(current_account: account)
       |> assign(web_source: source)
       |> assign(web_client: client)
-      |> assign(:job, Canary.Repo.all(query) |> Enum.at(0))
+      |> assign(job: Canary.Repo.all(query) |> Enum.at(0))
 
     {:ok, socket}
   end
 
   def handle_event("fetch", _, socket) do
     source = socket.assigns.web_source
-    Canary.Workers.Fetcher.new(%{source_id: source.id}) |> Oban.insert()
 
-    {:noreply, socket}
+    case Canary.Workers.Fetcher.new(%{source_id: source.id}) |> Oban.insert() do
+      {:ok, job} -> {:noreply, socket |> assign(job: job)}
+      {:error, _} -> {:noreply, socket}
+    end
   end
 end
