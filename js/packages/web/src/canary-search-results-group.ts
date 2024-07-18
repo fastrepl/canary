@@ -6,9 +6,11 @@ import { classMap } from "lit/directives/class-map.js";
 
 import { consume } from "@lit/context";
 import {
+  queryContext,
+  modeContext,
+  type ModeContext,
   providerContext,
   type ProviderContext,
-  queryContext,
 } from "./contexts";
 
 import type { Reference } from "./types";
@@ -26,6 +28,10 @@ export class CanarySearchResultsGroup extends LitElement {
   @consume({ context: providerContext, subscribe: false })
   @state()
   provider!: ProviderContext;
+
+  @consume({ context: modeContext, subscribe: false })
+  @state()
+  mode!: ModeContext;
 
   @consume({ context: queryContext, subscribe: true })
   @state()

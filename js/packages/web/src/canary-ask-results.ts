@@ -4,8 +4,10 @@ import { customElement, property, state } from "lit/decorators.js";
 import { consume } from "@lit/context";
 import {
   queryContext,
+  modeContext,
   providerContext,
   type ProviderContext,
+  type ModeContext,
 } from "./contexts";
 
 import { Task } from "@lit/task";
@@ -23,6 +25,10 @@ export class CanaryAskResults extends LitElement {
   @state()
   provider!: ProviderContext;
 
+  @consume({ context: modeContext, subscribe: false })
+  @state()
+  mode!: ModeContext;
+
   @consume({ context: queryContext, subscribe: true })
   @state()
   query = "";
@@ -35,7 +41,7 @@ export class CanaryAskResults extends LitElement {
 
   private _task = new Task(this, {
     task: async ([query], { signal }) => {
-      if (query === "") {
+      if (this.mode.current === "Search" || query === "") {
         return null;
       }
 
