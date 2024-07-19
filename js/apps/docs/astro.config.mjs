@@ -21,6 +21,7 @@ export default defineConfig({
             { label: "README", link: "/intro/readme/" },
             { label: "Hosted vs Self-host", link: "/intro/hosting/" },
             { label: "Concepts", link: "/intro/concepts/" },
+            { label: "Customization", link: "/intro/customization/" },
           ],
         },
         {

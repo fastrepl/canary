@@ -2,4 +2,4 @@
 title: What is Canary?
 ---
 
-**`Canary`** provides you all the tools to provide **`Ask AI`** to your users, especially developers.
+**`Canary`** provides UI primitives for building AI-powered search-bar for docs with self-hostable infrastructure.

@@ -25,7 +25,7 @@ export default defineConfig({
 +          tag: "script",
 +          attrs: {
 +            type: "module",
-+            src: `https://unpkg.com/@getcanary/web@0.0.31/components/${c}.js`,
++            src: `https://unpkg.com/@getcanary/web@latest/components/${c}.js`,
 +          },
 +        })),
 +      ],
