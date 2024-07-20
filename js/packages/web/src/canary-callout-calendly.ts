@@ -8,7 +8,9 @@ import "./canary-logo-calendly";
 import "./canary-hero-icon";
 import { StringArray } from "./converters";
 
-@customElement("canary-callout-calendly")
+const NAME = "canary-callout-calendly";
+
+@customElement(NAME)
 export class CanaryCalloutCalendly extends CalloutMixin(LitElement) {
   @property() message = "Wanna schedule a call?";
 
@@ -32,4 +34,10 @@ export class CanaryCalloutCalendly extends CalloutMixin(LitElement) {
   }
 
   static styles = callout;
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    [NAME]: CanaryCalloutCalendly;
+  }
 }

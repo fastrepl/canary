@@ -6,7 +6,9 @@ import { providerContext, type ProviderContext } from "./contexts";
 
 import { Delta } from "./types";
 
-@customElement("canary-provider-mock")
+const NAME = "canary-provider-mock";
+
+@customElement(NAME)
 export class CanaryProviderMock extends LitElement {
   @provide({ context: providerContext })
   @state()
@@ -89,4 +91,10 @@ export class CanaryProviderMock extends LitElement {
     handleDelta({ type: "progress", content: " !" });
     return null;
   };
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    [NAME]: CanaryProviderMock;
+  }
 }

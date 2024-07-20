@@ -18,7 +18,9 @@ import "./canary-reference";
 import "./canary-reference-skeleton";
 import "./canary-error";
 
-@customElement("canary-search-results")
+const NAME = "canary-search-results";
+
+@customElement(NAME)
 export class CanarySearchResults extends LitElement {
   @consume({ context: providerContext, subscribe: false })
   @state()
@@ -151,4 +153,10 @@ export class CanarySearchResults extends LitElement {
       height: 425px;
     }
   `;
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    [NAME]: CanarySearchResults;
+  }
 }

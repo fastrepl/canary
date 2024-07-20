@@ -19,7 +19,9 @@ import "./canary-markdown";
 import "./canary-reference";
 import "./canary-loading-dots";
 
-@customElement("canary-ask-results")
+const NAME = "canary-ask-results";
+
+@customElement(NAME)
 export class CanaryAskResults extends LitElement {
   @consume({ context: providerContext, subscribe: false })
   @state()
@@ -123,4 +125,10 @@ export class CanaryAskResults extends LitElement {
       padding-bottom: 8px;
     }
   `;
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    [NAME]: CanaryAskResults;
+  }
 }

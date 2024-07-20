@@ -6,7 +6,9 @@ import { providerContext, type ProviderContext } from "./contexts";
 
 import { Delta } from "./types";
 
-@customElement("canary-provider-cloud")
+const NAME = "canary-provider-cloud";
+
+@customElement(NAME)
 export class CanaryProviderCloud extends LitElement {
   @provide({ context: providerContext })
   @state()
@@ -105,4 +107,10 @@ export class CanaryProviderCloud extends LitElement {
 
     return null;
   };
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    [NAME]: CanaryProviderCloud;
+  }
 }

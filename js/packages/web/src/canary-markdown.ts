@@ -7,7 +7,9 @@ import hljs from "highlight.js/lib/core";
 import javascript from "highlight.js/lib/languages/javascript";
 hljs.registerLanguage("javascript", javascript);
 
-@customElement("canary-markdown")
+const NAME = "canary-markdown";
+
+@customElement(NAME)
 export class CanaryMarkdown extends LitElement {
   @property({ type: String }) hljs = "github-dark";
   @property({ attribute: false }) content = "";
@@ -62,4 +64,10 @@ export class CanaryMarkdown extends LitElement {
       border-radius: 8px;
     }
   `;
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    [NAME]: CanaryMarkdown;
+  }
 }

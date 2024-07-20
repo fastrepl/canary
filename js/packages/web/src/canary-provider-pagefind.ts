@@ -6,7 +6,9 @@ import { providerContext, type ProviderContext } from "./contexts";
 
 import type { Delta, Reference } from "./types";
 
-@customElement("canary-provider-pagefind")
+const NAME = "canary-provider-pagefind";
+
+@customElement(NAME)
 export class CanaryProviderPagefind extends LitElement {
   @provide({ context: providerContext })
   @state()
@@ -72,4 +74,10 @@ export class CanaryProviderPagefind extends LitElement {
   ) => {
     throw new Error("'ask' is not supported for this provider");
   };
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    [NAME]: CanaryProviderPagefind;
+  }
 }

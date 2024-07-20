@@ -8,7 +8,9 @@ import type { Reference } from "./types";
 
 import "./canary-mode-tabs";
 
-@customElement("canary-search")
+const NAME = "canary-search";
+
+@customElement(NAME)
 export class CanarySearch extends LitElement {
   @consume({ context: modeContext, subscribe: true })
   @state()
@@ -69,4 +71,10 @@ export class CanarySearch extends LitElement {
       flex-direction: column;
     }
   `;
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    [NAME]: CanarySearch;
+  }
 }

@@ -8,7 +8,9 @@ import "./canary-logo-discord";
 import "./canary-hero-icon";
 import { StringArray } from "./converters";
 
-@customElement("canary-callout-discord")
+const NAME = "canary-callout-discord";
+
+@customElement(NAME)
 export class CanaryCalloutDiscord extends CalloutMixin(LitElement) {
   @property() message = "Looking for help?";
 
@@ -32,4 +34,10 @@ export class CanaryCalloutDiscord extends CalloutMixin(LitElement) {
   }
 
   static styles = callout;
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    [NAME]: CanaryCalloutDiscord;
+  }
 }

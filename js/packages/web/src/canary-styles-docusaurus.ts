@@ -1,7 +1,9 @@
 import { LitElement, html, css } from "lit";
 import { customElement } from "lit/decorators.js";
 
-@customElement("canary-styles-docusaurus")
+const NAME = "canary-styles-docusaurus";
+
+@customElement(NAME)
 export class CanaryStylesDocusaurus extends LitElement {
   render() {
     return html`<slot></slot>`;
@@ -38,4 +40,10 @@ export class CanaryStylesDocusaurus extends LitElement {
       --canary-color-accent-high: var(--ifm-color-primary-darker);
     }
   `;
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    [NAME]: CanaryStylesDocusaurus;
+  }
 }

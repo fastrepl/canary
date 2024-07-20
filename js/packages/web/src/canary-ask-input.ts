@@ -7,8 +7,10 @@ import { ModeContext, modeContext, queryContext } from "./contexts";
 import { input } from "./styles";
 import "./canary-hero-icon";
 
-@customElement("canary-ask-input")
-export class CanaryAskInout extends LitElement {
+const NAME = "canary-ask-input";
+
+@customElement(NAME)
+export class CanaryAskInput extends LitElement {
   @consume({ context: queryContext, subscribe: true })
   @property({ reflect: true })
   value = "";
@@ -73,5 +75,11 @@ export class CanaryAskInout extends LitElement {
       });
       this.dispatchEvent(event);
     }
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    [NAME]: CanaryAskInput;
   }
 }

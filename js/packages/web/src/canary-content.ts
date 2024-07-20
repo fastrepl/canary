@@ -17,7 +17,9 @@ import {
 
 import "./canary-footer";
 
-@customElement("canary-content")
+const NAME = "canary-content";
+
+@customElement(NAME)
 export class CanaryContent extends LitElement {
   @consume({ context: providerContext, subscribe: false })
   @state()
@@ -119,4 +121,10 @@ export class CanaryContent extends LitElement {
       }
     `,
   ];
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    [NAME]: CanaryContent;
+  }
 }

@@ -10,9 +10,7 @@ const render = (_: any) => {
 export default {
   render,
   title: "Public/canary-trigger-searchbar",
-  parameters: {
-    sourceLink: "canary-trigger-searchbar.stories.ts",
-  },
+  parameters: { sourceLink: "canary-trigger-searchbar.stories.ts" },
 } satisfies Meta;
 
 export const Desktop: StoryObj = {

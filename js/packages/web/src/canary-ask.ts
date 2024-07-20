@@ -6,7 +6,9 @@ import { modeContext, type ModeContext } from "./contexts";
 
 import "./canary-mode-tabs";
 
-@customElement("canary-ask")
+const NAME = "canary-ask";
+
+@customElement(NAME)
 export class CanaryAsk extends LitElement {
   @consume({ context: modeContext, subscribe: true })
   @property({ attribute: false })
@@ -42,4 +44,10 @@ export class CanaryAsk extends LitElement {
       padding: 1px 6px;
     }
   `;
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    [NAME]: CanaryAsk;
+  }
 }

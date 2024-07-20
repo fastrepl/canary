@@ -7,7 +7,9 @@ import { ModeContext, modeContext, queryContext } from "./contexts";
 import { input } from "./styles";
 import "./canary-hero-icon";
 
-@customElement("canary-search-input")
+const NAME = "canary-search-input";
+
+@customElement(NAME)
 export class CanarySearchInput extends LitElement {
   @consume({ context: queryContext, subscribe: true })
   @property({ reflect: true })
@@ -61,5 +63,11 @@ export class CanarySearchInput extends LitElement {
         this.dispatchEvent(new CustomEvent("input-tab", opts));
         break;
     }
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    [NAME]: CanarySearchInput;
   }
 }

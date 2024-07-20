@@ -3,7 +3,9 @@ import { customElement } from "lit/decorators.js";
 
 import { GITHUB_REPO_URL } from "./constants";
 
-@customElement("canary-footer")
+const NAME = "canary-footer";
+
+@customElement(NAME)
 export class CanaryFooter extends LitElement {
   render() {
     return html`
@@ -30,4 +32,10 @@ export class CanaryFooter extends LitElement {
       color: var(--canary-color-white);
     }
   `;
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    [NAME]: CanaryFooter;
+  }
 }

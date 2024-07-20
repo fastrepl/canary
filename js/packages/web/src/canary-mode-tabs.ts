@@ -5,7 +5,9 @@ import { classMap } from "lit/directives/class-map.js";
 import { consume } from "@lit/context";
 import { modeContext, type ModeContext } from "./contexts";
 
-@customElement("canary-mode-tabs")
+const NAME = "canary-mode-tabs";
+
+@customElement(NAME)
 export class CanaryModeTabs extends LitElement {
   @consume({ context: modeContext, subscribe: true })
   @property({ attribute: false })
@@ -95,4 +97,10 @@ export class CanaryModeTabs extends LitElement {
       }
     `,
   ];
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    [NAME]: CanaryModeTabs;
+  }
 }

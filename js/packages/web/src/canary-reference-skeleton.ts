@@ -1,7 +1,9 @@
 import { LitElement, html, css } from "lit";
 import { customElement } from "lit/decorators.js";
 
-@customElement("canary-reference-skeleton")
+const NAME = "canary-reference-skeleton";
+
+@customElement(NAME)
 export class CanaryReferenceSkeleton extends LitElement {
   render() {
     return html` <div class="skeleton"></div> `;
@@ -35,4 +37,10 @@ export class CanaryReferenceSkeleton extends LitElement {
       }
     }
   `;
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    [NAME]: CanaryReferenceSkeleton;
+  }
 }

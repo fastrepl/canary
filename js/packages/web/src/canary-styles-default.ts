@@ -1,7 +1,9 @@
 import { LitElement, html, css } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
-@customElement("canary-styles-default")
+const NAME = "canary-styles-default";
+
+@customElement(NAME)
 export class CanaryStylesDefault extends LitElement {
   @property() theme = "light";
 
@@ -45,4 +47,10 @@ export class CanaryStylesDefault extends LitElement {
       --canary-color-black: #151a13;
     }
   `;
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    [NAME]: CanaryStylesDefault;
+  }
 }

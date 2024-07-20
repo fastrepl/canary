@@ -4,7 +4,9 @@ import { createRef } from "lit/directives/ref.js";
 
 import "./canary-dialog";
 
-@customElement("canary-modal")
+const NAME = "canary-modal";
+
+@customElement(NAME)
 export class CanaryModal extends LitElement {
   ref = createRef<HTMLDialogElement>();
   @property({ type: Boolean }) open = false;
@@ -29,4 +31,10 @@ export class CanaryModal extends LitElement {
       }
     `,
   ];
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    [NAME]: CanaryModal;
+  }
 }

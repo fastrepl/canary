@@ -8,7 +8,9 @@ import "./canary-logo-slack";
 import "./canary-hero-icon";
 import { StringArray } from "./converters";
 
-@customElement("canary-callout-slack")
+const NAME = "canary-callout-slack";
+
+@customElement(NAME)
 export class CanaryCalloutSlack extends CalloutMixin(LitElement) {
   @property() message = "Looking for help?";
 
@@ -32,4 +34,10 @@ export class CanaryCalloutSlack extends CalloutMixin(LitElement) {
   }
 
   static styles = callout;
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    [NAME]: CanaryCalloutSlack;
+  }
 }

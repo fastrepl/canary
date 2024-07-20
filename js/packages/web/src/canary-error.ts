@@ -3,7 +3,9 @@ import { customElement } from "lit/decorators.js";
 
 import "./canary-hero-icon";
 
-@customElement("canary-error")
+const NAME = "canary-error";
+
+@customElement(NAME)
 export class CanaryError extends LitElement {
   render() {
     return html`
@@ -29,4 +31,10 @@ export class CanaryError extends LitElement {
       font-size: 14px;
     }
   `;
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    [NAME]: CanaryError;
+  }
 }

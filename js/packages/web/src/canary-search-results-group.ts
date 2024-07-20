@@ -23,7 +23,9 @@ import "./canary-error";
 import { parse } from "./grammers/groups";
 type GroupDefinition = { name: string; pattern: RegExp | null };
 
-@customElement("canary-search-results-group")
+const NAME = "canary-search-results-group";
+
+@customElement(NAME)
 export class CanarySearchResultsGroup extends LitElement {
   @consume({ context: providerContext, subscribe: false })
   @state()
@@ -226,4 +228,10 @@ export class CanarySearchResultsGroup extends LitElement {
       }
     `,
   ];
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    [NAME]: CanarySearchResultsGroup;
+  }
 }

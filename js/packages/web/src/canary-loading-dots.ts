@@ -1,7 +1,9 @@
 import { LitElement, html, css } from "lit";
 import { customElement } from "lit/decorators.js";
 
-@customElement("canary-loading-dots")
+const NAME = "canary-loading-dots";
+
+@customElement(NAME)
 export class CanaryLoadingDots extends LitElement {
   render() {
     return html`
@@ -45,4 +47,10 @@ export class CanaryLoadingDots extends LitElement {
       }
     }
   `;
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    [NAME]: CanaryLoadingDots;
+  }
 }

@@ -2,7 +2,9 @@ import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { ref, createRef, Ref } from "lit/directives/ref.js";
 
-@customElement("canary-dialog")
+const NAME = "canary-dialog";
+
+@customElement(NAME)
 export class CanaryDialog extends LitElement {
   @property({ attribute: false })
   ref: Ref<HTMLDialogElement> = createRef();
@@ -52,4 +54,10 @@ export class CanaryDialog extends LitElement {
       }
     `,
   ];
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    [NAME]: CanaryDialog;
+  }
 }

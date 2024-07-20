@@ -3,7 +3,9 @@ import { customElement } from "lit/decorators.js";
 
 import "./canary-hero-icon";
 
-@customElement("canary-trigger-searchbar")
+const NAME = "canary-trigger-searchbar";
+
+@customElement(NAME)
 export class CanaryTriggerSearchbar extends LitElement {
   render() {
     return html`
@@ -110,4 +112,10 @@ export class CanaryTriggerSearchbar extends LitElement {
       }
     }
   `;
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    [NAME]: CanaryTriggerSearchbar;
+  }
 }

@@ -5,7 +5,9 @@ import { unsafeHTML } from "lit/directives/unsafe-html.js";
 
 import "./canary-hero-icon";
 
-@customElement("canary-reference")
+const NAME = "canary-reference";
+
+@customElement(NAME)
 export class CanaryReference extends LitElement {
   @property() url = "";
   @property() title = "";
@@ -143,4 +145,10 @@ export class CanaryReference extends LitElement {
       white-space: nowrap;
     }
   `;
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    [NAME]: CanaryReference;
+  }
 }
