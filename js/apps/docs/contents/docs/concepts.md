@@ -1,6 +1,4 @@
----
-title: Concepts
----
+# Concepts
 
 ## Operation
 

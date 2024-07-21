@@ -1,34 +1,31 @@
----
-title: Integrations - Starlight
----
+# Starlight
 
 You can [override](https://starlight.astro.build/reference/overrides/#search) Starlight's default search component to use Canary's.
 
-```diff
+```js
 # astro.config.mjs
-# load more components as needed
 export default defineConfig({
   integrations: [
     starlight({
-+      components: { Search: "./src/components/search.astro" },
-+      head: [
-+        ...[
-+          "canary-provider-pagefind",
-+          "canary-styles-starlight",
-+          "canary-modal",
-+          "canary-trigger-searchbar",
-+          "canary-content",
-+          "canary-search",
-+          "canary-search-input",
-+          "canary-search-results",
-+        ].map((c) => ({
-+          tag: "script",
-+          attrs: {
-+            type: "module",
-+            src: `https://unpkg.com/@getcanary/web@latest/components/${c}.js`,
-+          },
-+        })),
-+      ],
+      components: { Search: "./src/components/search.astro" }, // [!code ++]
+      head: [ // [!code ++]
+        ...[ // [!code ++]
+          "canary-provider-pagefind", // [!code ++]
+          "canary-styles-starlight", // [!code ++]
+          "canary-modal", // [!code ++]
+          "canary-trigger-searchbar", // [!code ++]
+          "canary-content", // [!code ++]
+          "canary-search",  // [!code ++]
+          "canary-search-input", // [!code ++]
+          "canary-search-results", // [!code ++]
+        ].map((c) => ({ // [!code ++]
+          tag: "script", // [!code ++]
+          attrs: { // [!code ++]
+            type: "module", // [!code ++]
+            src: `https://unpkg.com/@getcanary/web@latest/components/${c}.js`, // [!code ++]
+          }, // [!code ++]
+        })), // [!code ++]
+      ], // [!code ++]
     }),
   ],
 });
