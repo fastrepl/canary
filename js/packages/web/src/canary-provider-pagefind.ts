@@ -2,9 +2,9 @@ import { LitElement, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 
 import { provide } from "@lit/context";
-import { providerContext, type ProviderContext } from "./contexts";
+import { providerContext } from "./contexts";
 
-import type { Delta, Reference } from "./types";
+import type { Delta, Reference, ProviderContext } from "./types";
 
 const NAME = "canary-provider-pagefind";
 

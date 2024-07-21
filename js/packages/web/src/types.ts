@@ -28,3 +28,52 @@ export type Reference = {
   url: string;
   excerpt?: string;
 };
+
+type SearchFunction = (
+  query: string,
+  signal?: AbortSignal,
+) => Promise<Reference[]>;
+
+type AskFunction = (
+  id: number,
+  query: string,
+  handleDelta: (delta: Delta) => void,
+  signal?: AbortSignal,
+) => Promise<any>;
+
+export type CloudProviderContext = {
+  type: "cloud";
+  endpoint: string;
+  key: string;
+  search: SearchFunction;
+  ask: AskFunction;
+};
+
+export type PagefindProviderContext = {
+  type: "pagefind";
+  search: SearchFunction;
+  ask: AskFunction;
+};
+
+export type MockProviderContext = {
+  type: "mock";
+  search: SearchFunction;
+  ask: AskFunction;
+};
+
+export type QueryProviderContext = string;
+
+export type ProviderContext =
+  | MockProviderContext
+  | PagefindProviderContext
+  | CloudProviderContext;
+
+export type ModeContext = {
+  options: Set<Mode>;
+  current: Mode;
+};
+
+export enum Mode {
+  Search = "Search",
+  Ask = "Ask",
+}

@@ -23,11 +23,11 @@ hello()
    - Have a peculiar fondness for wearing monocles on their elbows
 `.trim();
 
-export const mockSearchReference = () => {
+export const mockSearchReference = (query: string) => {
   return {
     title: "456",
-    url: "https://example.com/a/b",
-    excerpt: "123 <mark>456</mark> 789",
+    url: `https://example.com/a/b?query=${query}`,
+    excerpt: `mock response for <mark>${query}</mark>!`,
   };
 };
 

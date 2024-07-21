@@ -1,19 +1,11 @@
-import { LitElement, html, css } from "lit";
+import { LitElement, html, css, type PropertyValues } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
-import { Task } from "@lit/task";
 import { classMap } from "lit/directives/class-map.js";
 
-import { consume } from "@lit/context";
-import {
-  queryContext,
-  modeContext,
-  type ModeContext,
-  providerContext,
-  type ProviderContext,
-} from "./contexts";
-
 import type { Reference } from "./types";
+
+import { KeyboardSelectionController, SearchController } from "./controllers";
 
 import "./canary-reference";
 import "./canary-reference-skeleton";
@@ -27,77 +19,28 @@ const NAME = "canary-search-results-group";
 
 @customElement(NAME)
 export class CanarySearchResultsGroup extends LitElement {
-  @consume({ context: providerContext, subscribe: false })
-  @state()
-  provider!: ProviderContext;
-
-  @consume({ context: modeContext, subscribe: true })
-  @state()
-  mode!: ModeContext;
-
-  @consume({ context: queryContext, subscribe: true })
-  @state()
-  query = "";
-
   @property({ converter: { fromAttribute: parse } })
-  groups: GroupDefinition[] = [];
+  readonly groups: GroupDefinition[] = [];
+
   @state() selectedGroup = "";
-  @state() selectedReference = -1;
-  @state() references: Reference[] = [];
   @state() groupedReferences: Record<string, Reference[]> = {};
 
-  private _task = new Task(this, {
-    task: async ([mode, query], { signal }) => {
-      if (mode !== "Search" || query === "") {
-        return {};
-      }
-
-      const references = await this.provider.search(query, signal);
-      this.references = references;
-
-      const grouped = this.groups.reduce(
-        (acc, group) => ({ ...acc, [group.name]: [] }),
-        {} as Record<string, Reference[]>,
-      );
-
-      const fallbackGroup = this.groups.find((group) => group.pattern === null);
-
-      references.forEach((reference) => {
-        const matchedGroup = this.groups.find(
-          (group) => group.pattern && group.pattern.test(reference.url),
-        );
-
-        if (matchedGroup) {
-          grouped[matchedGroup.name].push(reference);
-        } else if (fallbackGroup) {
-          grouped[fallbackGroup.name].push(reference);
-        }
-      });
-
-      this.groupedReferences = grouped;
-      return grouped;
+  private search = new SearchController(this);
+  private selection = new KeyboardSelectionController<Reference>(this, {
+    handleEnter: (item) => {
+      window.open(item.url, "_blank");
     },
-    args: () => [this.mode.current, this.query],
   });
 
-  updated(changedProperties: Map<string, any>) {
+  updated(changed: PropertyValues<this>) {
     if (
-      changedProperties.has("groups") &&
+      changed.has("groups") &&
       !this.selectedGroup &&
       this.groups.length > 0
     ) {
       this.selectedGroup = this.groups[0].name;
     }
-
-    if (
-      changedProperties.has("references") &&
-      this.selectedReference < 0 &&
-      this.references.length > 0
-    ) {
-      this.selectedReference = 0;
-    }
   }
-
   render() {
     return html`
       <div class="container">
@@ -130,7 +73,7 @@ export class CanarySearchResultsGroup extends LitElement {
           )}
         </div>
 
-        ${this._task.render({
+        ${this.search.render({
           initial: () =>
             html` <div class="skeleton-container">
               ${Array(4).fill(
@@ -143,24 +86,59 @@ export class CanarySearchResultsGroup extends LitElement {
                 html`<canary-reference-skeleton></canary-reference-skeleton>`,
               )}
             </div>`,
-          complete: (groups) =>
-            html`${(groups?.[this.selectedGroup] ?? []).map(
+          complete: (references) => {
+            const grouped = this._groupReferences(references, this.groups);
+            this.groupedReferences = grouped;
+
+            const current = grouped[this.selectedGroup] ?? [];
+
+            this.selection.items = current;
+
+            return html`${current.map(
               ({ title, url, excerpt }, index) => html`
                 <canary-reference
                   title=${title}
                   url=${url}
                   excerpt=${ifDefined(excerpt)}
-                  ?selected=${index === this.selectedReference}
+                  ?selected=${index === this.selection.index}
                   @mouseover=${() => {
-                    this.selectedReference = index;
+                    this.selection.index = index;
                   }}
                 ></canary-reference>
               `,
-            )}`,
+            )}`;
+          },
+
           error: () => html`<canary-error></canary-error>`,
         })}
       </div>
     `;
+  }
+
+  private _groupReferences(
+    references: Reference[],
+    definitions: GroupDefinition[],
+  ) {
+    const grouped = definitions.reduce(
+      (acc, group) => ({ ...acc, [group.name]: [] }),
+      {} as Record<string, Reference[]>,
+    );
+
+    const fallbackGroup = definitions.find((group) => group.pattern === null);
+
+    references.forEach((reference) => {
+      const matchedGroup = definitions.find(
+        (group) => group.pattern && group.pattern.test(reference.url),
+      );
+
+      if (matchedGroup) {
+        grouped[matchedGroup.name].push(reference);
+      } else if (fallbackGroup) {
+        grouped[fallbackGroup.name].push(reference);
+      }
+    });
+
+    return grouped;
   }
 
   static styles = [

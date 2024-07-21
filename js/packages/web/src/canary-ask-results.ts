@@ -1,19 +1,7 @@
-import { LitElement, html, css, nothing } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
+import { LitElement, html, css } from "lit";
+import { customElement, property } from "lit/decorators.js";
 
-import { consume } from "@lit/context";
-import {
-  queryContext,
-  modeContext,
-  providerContext,
-  type ProviderContext,
-  type ModeContext,
-} from "./contexts";
-
-import { Task } from "@lit/task";
-import type { Reference } from "./types";
-
-import { randomInteger } from "./utils";
+import { AskController } from "./controllers";
 
 import "./canary-markdown";
 import "./canary-reference";
@@ -23,84 +11,35 @@ const NAME = "canary-ask-results";
 
 @customElement(NAME)
 export class CanaryAskResults extends LitElement {
-  @consume({ context: providerContext, subscribe: false })
-  @state()
-  provider!: ProviderContext;
-
-  @consume({ context: modeContext, subscribe: true })
-  @state()
-  mode!: ModeContext;
-
-  @consume({ context: queryContext, subscribe: true })
-  @state()
-  query = "";
-
-  @state() loading = false;
-  @state() response = "";
-  @state() references: Reference[] = [];
-
   @property() hljs = "github";
 
-  private _task = new Task(this, {
-    task: async ([mode, query], { signal }) => {
-      if (mode !== "Ask" || query === "") {
-        return null;
-      }
-
-      this.response = "";
-      this.references = [];
-      this.loading = true;
-
-      await this.provider.ask(
-        randomInteger(),
-        query,
-        (delta) => {
-          this.loading = false;
-
-          if (delta.type === "progress") {
-            this.response += delta.content;
-          }
-          if (delta.type === "references") {
-            this.references = delta.items;
-          }
-        },
-        signal,
-      );
-
-      return null;
-    },
-    args: () => [this.mode.current, this.query],
-  });
+  private ask = new AskController(this);
 
   render() {
-    return this.query === ""
-      ? nothing
-      : html`
-          <div class="container">
-            ${this._task.render({
-              initial: () => html`<canary-loading-dots></canary-loading-dots>`,
-              pending: () =>
-                html`${this.loading
-                  ? html`<canary-loading-dots></canary-loading-dots>`
-                  : this._content()}`,
-              complete: () =>
-                html`${this.loading
-                  ? html`<canary-loading-dots></canary-loading-dots>`
-                  : this._content()}`,
-            })}
-          </div>
-        `;
+    return html` <div class="container">
+      ${this.ask.render({
+        initial: () => html`<canary-loading-dots></canary-loading-dots>`,
+        pending: () =>
+          html`${this.ask.loading
+            ? html`<canary-loading-dots></canary-loading-dots>`
+            : this._content()}`,
+        complete: () =>
+          html`${this.ask.loading
+            ? html`<canary-loading-dots></canary-loading-dots>`
+            : this._content()}`,
+      })}
+    </div>`;
   }
 
   private _content() {
     return html`
       <canary-markdown
         .hljs=${this.hljs}
-        .content=${this.response}
+        .content=${this.ask.response}
       ></canary-markdown>
 
       <div class="references">
-        ${this.references.map(
+        ${this.ask.references.map(
           (reference) =>
             html` <canary-reference
               title=${reference.title}

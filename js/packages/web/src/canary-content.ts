@@ -6,14 +6,10 @@ import {
   queryAssignedElements,
 } from "lit/decorators.js";
 
+import { Mode, type ProviderContext, type ModeContext } from "./types";
+
 import { provide, consume } from "@lit/context";
-import {
-  modeContext,
-  type ModeContext,
-  queryContext,
-  providerContext,
-  type ProviderContext,
-} from "./contexts";
+import { modeContext, queryContext, providerContext } from "./contexts";
 
 import "./canary-footer";
 
@@ -28,8 +24,8 @@ export class CanaryContent extends LitElement {
   @provide({ context: modeContext })
   @property({ attribute: false })
   mode: ModeContext = {
-    options: new Set(["Search", "Ask"]),
-    current: "Search",
+    options: new Set([Mode.Search, Mode.Ask]),
+    current: Mode.Search,
   };
 
   @provide({ context: queryContext })
@@ -43,28 +39,28 @@ export class CanaryContent extends LitElement {
   askElements!: Array<HTMLElement>;
 
   firstUpdated() {
-    let mode = this.mode.current;
+    let current = this.mode.current;
     let options = this.mode.options;
 
     if (this.searchElements.length > 0) {
-      options.add("Search");
+      options.add(Mode.Search);
     } else {
-      options.delete("Search");
+      options.delete(Mode.Search);
     }
 
     if (this.askElements.length > 0) {
-      options.add("Ask");
+      options.add(Mode.Ask);
     } else {
-      options.delete("Ask");
+      options.delete(Mode.Ask);
     }
 
     if (this.searchElements.length > 0) {
-      mode = "Search";
+      current = Mode.Search;
     } else {
-      mode = "Ask";
+      current = Mode.Ask;
     }
 
-    this.mode = { current: mode, options };
+    this.mode = { current, options };
   }
 
   render() {
@@ -92,9 +88,9 @@ export class CanaryContent extends LitElement {
     }
 
     if (this.mode.current === "Search") {
-      this.mode = { ...this.mode, current: "Ask" };
+      this.mode = { ...this.mode, current: Mode.Ask };
     } else {
-      this.mode = { ...this.mode, current: "Search" };
+      this.mode = { ...this.mode, current: Mode.Search };
     }
   }
 

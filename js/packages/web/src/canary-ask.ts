@@ -2,7 +2,8 @@ import { consume } from "@lit/context";
 import { LitElement, html, css, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
-import { modeContext, type ModeContext } from "./contexts";
+import { modeContext } from "./contexts";
+import type { ModeContext } from "./types";
 
 import "./canary-mode-tabs";
 

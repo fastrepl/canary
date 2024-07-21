@@ -2,7 +2,8 @@ import { LitElement, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 
 import { provide } from "@lit/context";
-import { providerContext, type ProviderContext } from "./contexts";
+import { providerContext } from "./contexts";
+import type { ProviderContext } from "./types";
 
 import { Delta } from "./types";
 

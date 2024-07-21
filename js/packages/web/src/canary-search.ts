@@ -2,7 +2,8 @@ import { consume } from "@lit/context";
 import { LitElement, html, css, nothing } from "lit";
 import { customElement, state } from "lit/decorators.js";
 
-import { modeContext, type ModeContext, queryContext } from "./contexts";
+import { modeContext, queryContext } from "./contexts";
+import type { ModeContext, QueryProviderContext } from "./types";
 
 import type { Reference } from "./types";
 
@@ -18,7 +19,7 @@ export class CanarySearch extends LitElement {
 
   @consume({ context: queryContext, subscribe: true })
   @state()
-  query = "";
+  query: QueryProviderContext = "";
 
   @state()
   selectedReference: Reference | null = null;
@@ -28,7 +29,7 @@ export class CanarySearch extends LitElement {
       ? html`
           <div class="container">
             <div class="input-wrapper">
-              <slot name="input" @input-enter=${this._handleEnter}></slot>
+              <slot name="input"></slot>
               <slot name="mode-tabs">
                 <canary-mode-tabs></canary-mode-tabs>
               </slot>
@@ -36,20 +37,10 @@ export class CanarySearch extends LitElement {
             <div class="callouts">
               <slot name="callout"></slot>
             </div>
-            <slot name="results" @results-select=${this._handleSelect}></slot>
+            <slot name="results"></slot>
           </div>
         `
       : nothing;
-  }
-
-  private _handleEnter(_: CustomEvent) {
-    if (this.selectedReference) {
-      window.open(this.selectedReference.url, "_blank");
-    }
-  }
-
-  private _handleSelect(e: CustomEvent) {
-    this.selectedReference = e.detail;
   }
 
   static styles = css`

@@ -40,9 +40,10 @@ const preview: Preview = {
     msw: {
       handlers: {
         search: [
-          http.post(/.*\/api\/v1\/search/, async () => {
+          http.post(/.*\/api\/v1\/search/, async ({ request }) => {
+            const data = (await request.json()) as Record<string, string>;
             const items = Array(Math.round(Math.random() * 5 + 5)).fill(
-              mockSearchReference(),
+              mockSearchReference(data["query"]),
             );
 
             await delay(Math.random() * 300 + 200);

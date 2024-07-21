@@ -2,7 +2,8 @@ import { LitElement, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
 import { consume } from "@lit/context";
-import { ModeContext, modeContext, queryContext } from "./contexts";
+import { modeContext, queryContext } from "./contexts";
+import type { ModeContext } from "./types";
 
 import { input } from "./styles";
 import "./canary-hero-icon";
