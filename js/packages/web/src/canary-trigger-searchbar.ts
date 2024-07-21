@@ -1,5 +1,5 @@
 import { LitElement, html, css } from "lit";
-import { customElement } from "lit/decorators.js";
+import { customElement, property } from "lit/decorators.js";
 
 import "./canary-hero-icon";
 
@@ -7,16 +7,26 @@ const NAME = "canary-trigger-searchbar";
 
 @customElement(NAME)
 export class CanaryTriggerSearchbar extends LitElement {
+  @property({ type: String }) key: "cmdk" | "slash" = "cmdk";
+
   render() {
     return html`
       <button aria-label="Search">
         <canary-hero-icon name="magnifying-glass"></canary-hero-icon>
         <span>Search</span>
 
-        <kbd>
-          <kbd class="meta">⌘</kbd>
-          <kbd class="key">K</kbd>
-        </kbd>
+        ${this.key === "cmdk"
+          ? html`
+              <kbd>
+                <kbd class="meta">⌘</kbd>
+                <kbd class="key">K</kbd>
+              </kbd>
+            `
+          : html`
+              <kbd>
+                <kbd class="key">/</kbd>
+              </kbd>
+            `}
       </button>
     `;
   }
@@ -32,14 +42,25 @@ export class CanaryTriggerSearchbar extends LitElement {
   }
 
   private _handleShortcut(e: KeyboardEvent) {
-    if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
+    if (this._isShortcut(e)) {
       e.preventDefault();
 
-      const event = new MouseEvent("click", {
-        bubbles: true,
-        cancelable: true,
-      });
-      this.dispatchEvent(event);
+      this.dispatchEvent(
+        new MouseEvent("click", {
+          bubbles: true,
+          cancelable: true,
+        }),
+      );
+    }
+  }
+
+  private _isShortcut(e: KeyboardEvent) {
+    if (this.key === "cmdk") {
+      return e.key === "k" && (e.metaKey || e.ctrlKey);
+    }
+
+    if (this.key === "slash") {
+      return e.key === "/";
     }
   }
 
@@ -86,16 +107,16 @@ export class CanaryTriggerSearchbar extends LitElement {
       display: none;
       border-radius: 0.25rem;
       gap: 0.25em;
-      padding-inline: 0.375rem;
+      padding: 0.2rem 0.35rem;
       background-color: var(--canary-color-gray-6);
     }
 
     kbd.meta {
-      font-size: 0.75rem;
+      font-size: 0.85rem;
     }
 
     kbd.key {
-      font-size: 0.55rem;
+      font-size: 0.65rem;
     }
 
     span {
