@@ -2,8 +2,7 @@ import { LitElement, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
 import { consume } from "@lit/context";
-import { modeContext, queryContext } from "./contexts";
-import type { ModeContext } from "./types";
+import { queryContext } from "./contexts";
 
 import { input } from "./styles";
 import "./canary-hero-icon";
@@ -14,11 +13,7 @@ const NAME = "canary-search-input";
 export class CanarySearchInput extends LitElement {
   @consume({ context: queryContext, subscribe: true })
   @property({ reflect: true })
-  value = "";
-
-  @consume({ context: modeContext, subscribe: true })
-  @property({ attribute: false })
-  mode!: ModeContext;
+  query = "";
 
   render() {
     return html`
@@ -26,7 +21,7 @@ export class CanarySearchInput extends LitElement {
         <canary-hero-icon name="magnifying-glass"></canary-hero-icon>
         <input
           type="text"
-          value=${this.value}
+          value=${this.query}
           autocomplete="off"
           placeholder="Search for anything..."
           @input=${this._handleInput}
@@ -43,12 +38,13 @@ export class CanarySearchInput extends LitElement {
   private _handleInput(e: KeyboardEvent) {
     const input = e.target as HTMLInputElement;
 
-    const event = new CustomEvent("input-change", {
-      detail: input.value,
-      bubbles: true,
-      composed: true,
-    });
-    this.dispatchEvent(event);
+    this.dispatchEvent(
+      new CustomEvent("input-change", {
+        detail: input.value,
+        bubbles: true,
+        composed: true,
+      }),
+    );
   }
 
   private _handleKeyDown(e: KeyboardEvent) {

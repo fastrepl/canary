@@ -80,8 +80,7 @@ export class CanaryReference extends LitElement {
       cursor: pointer;
     }
 
-    .selected,
-    .container:hover {
+    .selected {
       background-color: var(--canary-color-accent-low);
     }
 

@@ -2,14 +2,13 @@ import { LitElement, css, html } from "lit";
 import {
   customElement,
   property,
-  state,
   queryAssignedElements,
 } from "lit/decorators.js";
 
-import { Mode, type ProviderContext, type ModeContext } from "./types";
+import { Mode, type ModeContext } from "./types";
 
-import { provide, consume } from "@lit/context";
-import { modeContext, queryContext, providerContext } from "./contexts";
+import { provide } from "@lit/context";
+import { modeContext, queryContext } from "./contexts";
 
 import "./canary-footer";
 
@@ -17,10 +16,6 @@ const NAME = "canary-content";
 
 @customElement(NAME)
 export class CanaryContent extends LitElement {
-  @consume({ context: providerContext, subscribe: false })
-  @state()
-  provider: ProviderContext | undefined = undefined;
-
   @provide({ context: modeContext })
   @property({ attribute: false })
   mode: ModeContext = {

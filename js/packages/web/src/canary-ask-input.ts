@@ -2,9 +2,7 @@ import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
 import { consume } from "@lit/context";
-import { modeContext, queryContext } from "./contexts";
-
-import type { ModeContext } from "./types";
+import { queryContext } from "./contexts";
 
 import { input } from "./styles";
 import "./canary-hero-icon";
@@ -15,11 +13,7 @@ const NAME = "canary-ask-input";
 export class CanaryAskInput extends LitElement {
   @consume({ context: queryContext, subscribe: true })
   @property({ reflect: true })
-  value = "";
-
-  @consume({ context: modeContext, subscribe: true })
-  @property({ attribute: false })
-  mode!: ModeContext;
+  query = "";
 
   render() {
     return html`
@@ -27,7 +21,7 @@ export class CanaryAskInput extends LitElement {
         <canary-hero-icon name="question-mark-circle"></canary-hero-icon>
         <input
           type="text"
-          value=${this.value}
+          value=${this.query}
           autocomplete="off"
           placeholder="Ask anything..."
           @input=${this._handleInput}
@@ -53,7 +47,7 @@ export class CanaryAskInput extends LitElement {
 
   private _handleInput(e: KeyboardEvent) {
     const input = e.target as HTMLInputElement;
-    this.value = input.value;
+    this.query = input.value;
   }
 
   private _handleKeyDown(e: KeyboardEvent) {
@@ -61,7 +55,7 @@ export class CanaryAskInput extends LitElement {
       e.preventDefault();
 
       const event = new CustomEvent("input-change", {
-        detail: this.value,
+        detail: this.query,
         bubbles: true,
         composed: true,
       });

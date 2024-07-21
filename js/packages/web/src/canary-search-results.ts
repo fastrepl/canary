@@ -54,7 +54,6 @@ export class CanarySearchResults extends LitElement {
               `,
             )}`;
           },
-
           error: () => html`<canary-error></canary-error>`,
         })}
       </div>

@@ -2,10 +2,8 @@ import { consume } from "@lit/context";
 import { LitElement, html, css, nothing } from "lit";
 import { customElement, state } from "lit/decorators.js";
 
-import { modeContext, queryContext } from "./contexts";
-import type { ModeContext, QueryProviderContext } from "./types";
-
-import type { Reference } from "./types";
+import { modeContext } from "./contexts";
+import type { ModeContext } from "./types";
 
 import "./canary-mode-tabs";
 
@@ -16,13 +14,6 @@ export class CanarySearch extends LitElement {
   @consume({ context: modeContext, subscribe: true })
   @state()
   mode!: ModeContext;
-
-  @consume({ context: queryContext, subscribe: true })
-  @state()
-  query: QueryProviderContext = "";
-
-  @state()
-  selectedReference: Reference | null = null;
 
   render() {
     return this.mode.current === "Search"

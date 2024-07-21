@@ -1,6 +1,6 @@
 import { consume } from "@lit/context";
 import { LitElement, html, css, nothing } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { customElement, state } from "lit/decorators.js";
 
 import { modeContext } from "./contexts";
 import type { ModeContext } from "./types";
@@ -12,7 +12,7 @@ const NAME = "canary-ask";
 @customElement(NAME)
 export class CanaryAsk extends LitElement {
   @consume({ context: modeContext, subscribe: true })
-  @property({ attribute: false })
+  @state()
   mode!: ModeContext;
 
   render() {
