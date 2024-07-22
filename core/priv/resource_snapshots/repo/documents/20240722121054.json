@@ -2,13 +2,23 @@
   "attributes": [
     {
       "allow_nil?": false,
-      "default": "nil",
-      "generated?": true,
+      "default": "fragment(\"gen_random_uuid()\")",
+      "generated?": false,
       "primary_key?": true,
       "references": null,
       "size": null,
       "source": "id",
-      "type": "bigint"
+      "type": "uuid"
+    },
+    {
+      "allow_nil?": false,
+      "default": "fragment(\"(now() AT TIME ZONE 'utc')\")",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "created_at",
+      "type": "utc_datetime_usec"
     },
     {
       "allow_nil?": false,
@@ -17,18 +27,8 @@
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "content",
+      "source": "url",
       "type": "text"
-    },
-    {
-      "allow_nil?": false,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": 384,
-      "source": "embedding",
-      "type": ["vector", 384]
     },
     {
       "allow_nil?": true,
@@ -37,8 +37,18 @@
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "url",
+      "source": "title",
       "type": "text"
+    },
+    {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "content_hash",
+      "type": "binary"
     },
     {
       "allow_nil?": true,
@@ -58,15 +68,15 @@
           "global": null,
           "strategy": null
         },
-        "name": "chunks_document_id_fkey",
+        "name": "documents_source_id_fkey",
         "on_delete": "delete",
         "on_update": null,
         "primary_key?": true,
         "schema": "public",
-        "table": "documents"
+        "table": "sources"
       },
       "size": null,
-      "source": "document_id",
+      "source": "source_id",
       "type": "uuid"
     }
   ],
@@ -75,8 +85,27 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "61F516A9B592FB82E72CB60B3A68DC8EBDEC6E5FDF1E7AF0634D5EDDF91AB266",
-  "identities": [],
+  "hash": "55B633D376CC17D5CD6B7E3BA03BB22D86BD659D4650FC81984881769354EE1B",
+  "identities": [
+    {
+      "all_tenants?": false,
+      "base_filter": null,
+      "index_name": "documents_unique_content_index",
+      "keys": [
+        {
+          "type": "atom",
+          "value": "url"
+        },
+        {
+          "type": "atom",
+          "value": "content_hash"
+        }
+      ],
+      "name": "unique_content",
+      "nils_distinct?": true,
+      "where": null
+    }
+  ],
   "multitenancy": {
     "attribute": null,
     "global": null,
@@ -84,5 +113,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "chunks"
+  "table": "documents"
 }

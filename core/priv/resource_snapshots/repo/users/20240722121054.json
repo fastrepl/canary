@@ -17,7 +17,17 @@
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "name",
+      "source": "email",
+      "type": "citext"
+    },
+    {
+      "allow_nil?": true,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "hashed_password",
       "type": "text"
     }
   ],
@@ -26,8 +36,23 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "99DBC1A177100353AE804A8BA401FD7D77AE91B76F20AD92EEA1D99B7BBFC20C",
-  "identities": [],
+  "hash": "4D7CECE9BCF9CDF6F17FE3D28FDB1F96A1A82AAA40B47519E2DACD24BA5091A2",
+  "identities": [
+    {
+      "all_tenants?": false,
+      "base_filter": null,
+      "index_name": "users_unique_email_index",
+      "keys": [
+        {
+          "type": "atom",
+          "value": "email"
+        }
+      ],
+      "name": "unique_email",
+      "nils_distinct?": true,
+      "where": null
+    }
+  ],
   "multitenancy": {
     "attribute": null,
     "global": null,
@@ -35,5 +60,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "accounts"
+  "table": "users"
 }

@@ -195,7 +195,7 @@ defmodule Canary.Repo.Migrations.InitResources do
     end
 
     create table(:chunks, primary_key: false) do
-      add :id, :bigserial, null: false, primary_key: true
+      add :id, :uuid, null: false, default: fragment("gen_random_uuid()"), primary_key: true
       add :content, :text, null: false
       add :embedding, :vector, null: false, size: 384
       add :url, :text

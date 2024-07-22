@@ -7,7 +7,7 @@ defmodule Canary.Sources.Chunk do
   @embedding_dimensions 384
 
   attributes do
-    integer_primary_key :id
+    uuid_primary_key :id
 
     attribute :content, :string, allow_nil?: false
     attribute :embedding, :vector, allow_nil?: false

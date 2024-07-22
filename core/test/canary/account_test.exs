@@ -7,7 +7,6 @@ defmodule Canary.Test.Account do
   setup :verify_on_exit!
 
   alias Canary.Accounts.Account
-  alias Canary.Interactions.{Session, Message}
 
   test "add and remove member" do
     Canary.Payment.Mock
