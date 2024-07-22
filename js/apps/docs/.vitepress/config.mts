@@ -76,6 +76,16 @@ export default defineConfig({
           ],
         },
         {
+          text: "Miscellaneous",
+          collapsed: true,
+          items: [
+            {
+              text: "Optimizations",
+              link: "/docs/miscellaneous/optimizations",
+            },
+          ],
+        },
+        {
           text: "References",
           collapsed: true,
           items: [
