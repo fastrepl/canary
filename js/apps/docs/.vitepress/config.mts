@@ -1,5 +1,5 @@
 import { fileURLToPath, URL } from "node:url";
-import { defineConfig, type HeadConfig } from "vitepress";
+import { defineConfig } from "vitepress";
 
 import { COMPONENTS_VERSION } from "../shared.data";
 
@@ -11,25 +11,6 @@ export default defineConfig({
   sitemap: { hostname: "https://getcanary.dev" },
   appearance: "force-dark",
   lastUpdated: true,
-  head: [
-    "canary-styles-default",
-    "canary-provider-mock",
-    "canary-modal",
-    "canary-trigger-searchbar",
-    "canary-content",
-    "canary-search",
-    "canary-search-input",
-    "canary-search-results",
-    "canary-ask",
-    "canary-ask-input",
-    "canary-ask-results",
-  ].map((tag) => [
-    "script",
-    {
-      type: "module",
-      src: `https://unpkg.com/@getcanary/web@${COMPONENTS_VERSION}/components/${tag}.js`,
-    },
-  ]),
   vue: {
     template: {
       compilerOptions: {
@@ -38,6 +19,7 @@ export default defineConfig({
     },
   },
   vite: {
+    base: "./",
     resolve: {
       alias: [
         {

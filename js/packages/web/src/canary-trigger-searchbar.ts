@@ -42,7 +42,17 @@ export class CanaryTriggerSearchbar extends LitElement {
   }
 
   private _handleShortcut(e: KeyboardEvent) {
-    if (this._isShortcut(e)) {
+    const isShortcut = () => {
+      if (this.key === "cmdk") {
+        return e.key === "k" && (e.metaKey || e.ctrlKey);
+      }
+
+      if (this.key === "slash") {
+        return e.key === "/";
+      }
+    };
+
+    if (isShortcut()) {
       e.preventDefault();
 
       this.dispatchEvent(
@@ -51,16 +61,6 @@ export class CanaryTriggerSearchbar extends LitElement {
           cancelable: true,
         }),
       );
-    }
-  }
-
-  private _isShortcut(e: KeyboardEvent) {
-    if (this.key === "cmdk") {
-      return e.key === "k" && (e.metaKey || e.ctrlKey);
-    }
-
-    if (this.key === "slash") {
-      return e.key === "/";
     }
   }
 
