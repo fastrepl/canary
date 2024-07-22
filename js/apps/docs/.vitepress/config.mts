@@ -5,10 +5,11 @@ import { COMPONENTS_VERSION } from "../shared.data";
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  contentProps: { test: "test" },
   title: "Canary",
   description: "Canary",
   srcDir: "./contents",
+  sitemap: { hostname: "https://getcanary.dev" },
+  lastUpdated: true,
   head: [
     "canary-styles-default",
     "canary-provider-mock",
@@ -53,17 +54,28 @@ export default defineConfig({
     nav: [
       { text: "Docs", link: "/docs" },
       { text: "Blog", link: "/blog" },
-      { text: "Cloud", link: "https://cloud.getcanary.dev" },
+      {
+        text: "Storybook",
+        link: "https://storybook.getcanary.dev",
+      },
+      {
+        text: "Playground",
+        link: "https://stackblitz.com/edit/canary?file=index.html",
+      },
+      {
+        text: "Cloud",
+        link: "https://cloud.getcanary.dev",
+      },
     ],
     sidebar: {
       "/docs/": [
         {
-          text: "Guides",
+          text: "Introduction",
           items: [
-            { text: "Get Started", link: "/docs" },
-            { text: "Concepts", link: "/docs/concepts" },
-            { text: "Customization", link: "/docs/customization" },
-            { text: "Analytics", link: "/docs/analytics" },
+            { text: "What is Canary?", link: "/docs/guide/what-is-canary" },
+            { text: "Why use Canary?", link: "/docs/guide/why-use-canary" },
+            { text: "Getting Started", link: "/docs/guide/getting-started" },
+            { text: "Concepts", link: "/docs/guide/concepts" },
           ],
         },
         {
@@ -75,9 +87,29 @@ export default defineConfig({
           ],
         },
         {
+          text: "Customization",
+          items: [
+            { text: "Compose Built-ins", link: "/docs/customization/compose" },
+            { text: "Bring Your Own", link: "/docs/customization/byo" },
+          ],
+        },
+        {
           text: "References",
           collapsed: true,
           items: [
+            {
+              text: "Controllers",
+              items: [
+                {
+                  text: "Operation",
+                  link: "/docs/controllers/operation",
+                },
+                {
+                  text: "Event",
+                  link: "/docs/controllers/event",
+                },
+              ],
+            },
             {
               text: "Components",
               items: [

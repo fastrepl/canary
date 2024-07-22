@@ -1,5 +1,3 @@
-# Provider
-
 <script setup>
 import { data } from '../../../shared.data.js'
 
@@ -9,6 +7,8 @@ const cloud = `https://unpkg.com/@getcanary/web@${v}/components/canary-provider-
 const pagefind = `https://unpkg.com/@getcanary/web@${v}/components/canary-provider-pagefind.js`;
 const mock = `https://unpkg.com/@getcanary/web@${v}/components/canary-provider-mock.js`;
 </script>
+
+# Provider
 
 ## `canary-provider-cloud`
 

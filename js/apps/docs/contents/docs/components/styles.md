@@ -1,5 +1,3 @@
-# Styles
-
 <script setup>
 import { data } from '../../../shared.data.js'
 
@@ -9,6 +7,8 @@ const default_ = `https://unpkg.com/@getcanary/web@${v}/components/canary-styles
 const starlight = `https://unpkg.com/@getcanary/web@${v}/components/canary-styles-starlight.js`;
 const docusaurus = `https://unpkg.com/@getcanary/web@${v}/components/canary-styles-docusaurus.js`;
 </script>
+
+# Styles
 
 ## `canary-styles-default`
 

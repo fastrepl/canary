@@ -32,6 +32,7 @@ export default defineConfig({
           "canary-search-results-group",
         ],
         ...["canary-ask", "canary-ask-input", "canary-ask-results"],
+        ...["contexts", "controllers", "mixins", "types"],
       ].reduce(
         (acc, cur) => ({ ...acc, [cur]: resolve(__dirname, `src/${cur}.ts`) }),
         {} as Record<string, string>,
