@@ -2,29 +2,9 @@
   "attributes": [
     {
       "allow_nil?": false,
-      "default": "fragment(\"gen_random_uuid()\")",
-      "generated?": false,
-      "primary_key?": true,
-      "references": null,
-      "size": null,
-      "source": "id",
-      "type": "uuid"
-    },
-    {
-      "allow_nil?": false,
-      "default": "fragment(\"(now() AT TIME ZONE 'utc')\")",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "created_at",
-      "type": "utc_datetime_usec"
-    },
-    {
-      "allow_nil?": false,
       "default": "nil",
       "generated?": false,
-      "primary_key?": false,
+      "primary_key?": true,
       "references": {
         "deferrable": false,
         "destination_attribute": "id",
@@ -38,36 +18,45 @@
           "global": null,
           "strategy": null
         },
-        "name": "messages_session_id_fkey",
-        "on_delete": null,
+        "name": "client_sources_client_id_fkey",
+        "on_delete": "delete",
         "on_update": null,
         "primary_key?": true,
         "schema": "public",
-        "table": "sessions"
+        "table": "clients"
       },
       "size": null,
-      "source": "session_id",
+      "source": "client_id",
       "type": "uuid"
     },
     {
       "allow_nil?": false,
       "default": "nil",
       "generated?": false,
-      "primary_key?": false,
-      "references": null,
+      "primary_key?": true,
+      "references": {
+        "deferrable": false,
+        "destination_attribute": "id",
+        "destination_attribute_default": null,
+        "destination_attribute_generated": null,
+        "index?": false,
+        "match_type": null,
+        "match_with": null,
+        "multitenancy": {
+          "attribute": null,
+          "global": null,
+          "strategy": null
+        },
+        "name": "client_sources_source_id_fkey",
+        "on_delete": "delete",
+        "on_update": null,
+        "primary_key?": true,
+        "schema": "public",
+        "table": "sources"
+      },
       "size": null,
-      "source": "role",
-      "type": "text"
-    },
-    {
-      "allow_nil?": false,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "content",
-      "type": "text"
+      "source": "source_id",
+      "type": "uuid"
     }
   ],
   "base_filter": null,
@@ -75,7 +64,7 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "9C549E2E2BE554B9CCDF96947FCB97AA5BF1A8B33BDB977A0CAC8561B3553C07",
+  "hash": "0445576917BC3860FF2C46196C61EAF26E4AB6D6D9D513301C1CFDB884F04E33",
   "identities": [],
   "multitenancy": {
     "attribute": null,
@@ -84,5 +73,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "messages"
+  "table": "client_sources"
 }

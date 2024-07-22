@@ -12,32 +12,12 @@
     },
     {
       "allow_nil?": false,
-      "default": "fragment(\"(now() AT TIME ZONE 'utc')\")",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "created_at",
-      "type": "utc_datetime_usec"
-    },
-    {
-      "allow_nil?": false,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "url",
-      "type": "text"
-    },
-    {
-      "allow_nil?": true,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "title",
+      "source": "type",
       "type": "text"
     },
     {
@@ -47,8 +27,8 @@
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "content_hash",
-      "type": "binary"
+      "source": "client_session_id",
+      "type": "bigint"
     },
     {
       "allow_nil?": true,
@@ -68,15 +48,15 @@
           "global": null,
           "strategy": null
         },
-        "name": "documents_source_id_fkey",
-        "on_delete": "delete",
+        "name": "sessions_account_id_fkey",
+        "on_delete": null,
         "on_update": null,
         "primary_key?": true,
         "schema": "public",
-        "table": "sources"
+        "table": "accounts"
       },
       "size": null,
-      "source": "source_id",
+      "source": "account_id",
       "type": "uuid"
     }
   ],
@@ -85,23 +65,27 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "48989483BC993D79C8331B34FF08C10427893511AD61310B2093F6E3B71FBAA1",
+  "hash": "912F4431BB053AD37E45506815ACFEA6F0277AD1F43A1B6EFE71FEEFBC72D4FE",
   "identities": [
     {
       "all_tenants?": false,
       "base_filter": null,
-      "index_name": "documents_unique_content_index",
+      "index_name": "sessions_unique_session_index",
       "keys": [
         {
           "type": "atom",
-          "value": "url"
+          "value": "account_id"
         },
         {
           "type": "atom",
-          "value": "content_hash"
+          "value": "type"
+        },
+        {
+          "type": "atom",
+          "value": "client_session_id"
         }
       ],
-      "name": "unique_content",
+      "name": "unique_session",
       "nils_distinct?": true,
       "where": null
     }
@@ -113,5 +97,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "documents"
+  "table": "sessions"
 }

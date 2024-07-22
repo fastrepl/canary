@@ -1,0 +1,13 @@
+SCHEMA >
+    `timestamp` DateTime64(3) `json:$.timestamp`,
+    `type` LowCardinality(String) `json:$.type`,
+    `website_id` String `json:$.payload.website_id`,
+    `url` String `json:$.payload.url`,
+    `title` String `json:$.payload.title`,
+    `referrer` String `json:$.payload.referrer`,
+    `query` Nullable(String) `json:$.payload.query`,
+    `tags` Array(String) `json:$.payload.tags[:]`
+
+ENGINE "MergeTree"
+ENGINE_PARTITION_KEY "toYYYYMM(timestamp)"
+ENGINE_SORTING_KEY "timestamp, website_id, type"

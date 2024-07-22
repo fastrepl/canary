@@ -44,12 +44,18 @@ defmodule Canary.Test.Sources do
       Canary.AI.Mock
       |> expect(:embedding, 3, fn _ -> {:ok, [Enum.to_list(1..384)]} end)
 
-      Document.ingest_text!(source, "url_1", "title_1", "ttt")
-      Document.ingest_text!(source, "url_2", "title_2", "a bbb bbb cddbb")
-      Document.ingest_text!(source, "url_3", "title_3", "ccc")
+      {:ok, chunks} = Chunk.fts_search("k")
+      assert length(chunks) == 0
 
-      {:ok, [chunk]} = Chunk.fts_search("bbb")
-      assert chunk.content == "a <mark>bbb</mark> <mark>bbb</mark> cdd<mark>bb</mark>"
+      Document.ingest_text!(source, "url_1", "title_1", "ttt")
+      Document.ingest_text!(source, "url_2", "title_2", "a bbb cbbb d")
+      Document.ingest_text!(source, "url_3", "title_3", "bbb")
+
+      {:ok, chunks} = Chunk.fts_search("bbb")
+      assert length(chunks) == 2
+
+      assert Enum.at(chunks, 0).content == "<mark>bbb</mark>"
+      assert Enum.at(chunks, 1).content == "a <mark>bbb</mark> c<mark>bbb</mark> d"
     end
   end
 end
