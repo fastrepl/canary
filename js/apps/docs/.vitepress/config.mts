@@ -9,6 +9,7 @@ export default defineConfig({
   description: "Canary",
   srcDir: "./contents",
   sitemap: { hostname: "https://getcanary.dev" },
+  appearance: "force-dark",
   lastUpdated: true,
   head: [
     "canary-styles-default",

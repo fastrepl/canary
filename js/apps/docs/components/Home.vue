@@ -1,17 +1,11 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import Hero from "./Hero.vue";
+import Pricing from "./Pricing.vue";
+</script>
 
 <template>
-  <div class="VPHome">TODO</div>
+  <main class="flex flex-col items-center justify-center">
+    <Hero />
+    <Pricing />
+  </main>
 </template>
-
-<style scoped>
-.VPHome {
-  margin-bottom: 96px;
-}
-
-@media (min-width: 768px) {
-  .VPHome {
-    margin-bottom: 128px;
-  }
-}
-</style>
