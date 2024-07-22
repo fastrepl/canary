@@ -19,7 +19,6 @@ export default defineConfig({
     },
   },
   vite: {
-    base: "./",
     resolve: {
       alias: [
         {
@@ -35,7 +34,7 @@ export default defineConfig({
     // https://vitepress.dev/reference/default-theme-config
     siteTitle: "🐤 Canary",
     nav: [
-      { text: "Docs", link: "/docs" },
+      { text: "Docs", link: "/docs/guide/what-is-canary.html" },
       { text: "Blog", link: "/blog" },
       {
         text: "Storybook",

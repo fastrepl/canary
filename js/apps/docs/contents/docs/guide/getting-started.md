@@ -1,8 +1,6 @@
 <script setup>
 import { data } from '../../../shared.data.js'
-
 const v = data["@getcanary/web"];
-const url = `https://unpkg.com/@getcanary/web@${v}/components/<NAME>.js`;
 </script>
 
 # Getting Started
@@ -24,13 +22,13 @@ npm install @getcanary/web
 ```
 
 ```js
-import "@getcanary/web/components/<NAME>.js";
+import "@getcanary/web/components/<NAME>";
 ```
 
 ### CDN
 
 ```html-vue
-<script type="module" src={{ url }}>
+<script type="module" src="https://unpkg.com/@getcanary/web@{{ v }}/components/<NAME>">
 ```
 
 ## Usage

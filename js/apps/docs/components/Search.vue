@@ -17,21 +17,23 @@ onMounted(async () => {
 </script>
 
 <template>
-  <canary-styles-default theme="light">
-    <canary-provider-mock>
-      <canary-modal>
-        <canary-trigger-searchbar slot="trigger"></canary-trigger-searchbar>
-        <canary-content slot="content">
-          <canary-search slot="search">
-            <canary-search-input slot="input"></canary-search-input>
-            <canary-search-results slot="results"></canary-search-results>
-          </canary-search>
-          <canary-ask slot="ask">
-            <canary-ask-input slot="input"></canary-ask-input>
-            <canary-ask-results slot="results"></canary-ask-results>
-          </canary-ask>
-        </canary-content>
-      </canary-modal>
-    </canary-provider-mock>
-  </canary-styles-default>
+  <div class="px-8 w-[320px]">
+    <canary-styles-default theme="light">
+      <canary-provider-mock>
+        <canary-modal>
+          <canary-trigger-searchbar slot="trigger"></canary-trigger-searchbar>
+          <canary-content slot="content">
+            <canary-search slot="search">
+              <canary-search-input slot="input"></canary-search-input>
+              <canary-search-results slot="results"></canary-search-results>
+            </canary-search>
+            <canary-ask slot="ask">
+              <canary-ask-input slot="input"></canary-ask-input>
+              <canary-ask-results slot="results"></canary-ask-results>
+            </canary-ask>
+          </canary-content>
+        </canary-modal>
+      </canary-provider-mock>
+    </canary-styles-default>
+  </div>
 </template>

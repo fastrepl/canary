@@ -1,28 +1,40 @@
+<script setup>
+import { data } from '../../../shared.data.js'
+const v = data["@getcanary/web"];
+</script>
+
 # Starlight
 
-You can [override](https://starlight.astro.build/reference/overrides/#search) Starlight's default search component to use Canary's.
+[Starlight](https://starlight.astro.build/) is a template built on top of Astro for building documentation.
+
+## Installation
+
+### NPM
+
+```bash
+npm install @getcanary/web
+```
 
 ```js
-# astro.config.mjs
+import "@getcanary/web/components/<NAME>";
+```
+
+### CDN
+
+```js-vue
+// astro.config.mjs
 export default defineConfig({
   integrations: [
     starlight({
-      components: { Search: "./src/components/search.astro" }, // [!code ++]
       head: [ // [!code ++]
         ...[ // [!code ++]
-          "canary-provider-pagefind", // [!code ++]
-          "canary-styles-starlight", // [!code ++]
-          "canary-modal", // [!code ++]
-          "canary-trigger-searchbar", // [!code ++]
-          "canary-content", // [!code ++]
-          "canary-search",  // [!code ++]
-          "canary-search-input", // [!code ++]
-          "canary-search-results", // [!code ++]
+          "canary-provider-cloud", // [!code ++]
+          // add more components here // [!code ++]
         ].map((c) => ({ // [!code ++]
           tag: "script", // [!code ++]
           attrs: { // [!code ++]
             type: "module", // [!code ++]
-            src: `https://unpkg.com/@getcanary/web@latest/components/${c}.js`, // [!code ++]
+            src: `https://unpkg.com/@getcanary/web@{{ v }}/components/${c}.js`, // [!code ++]
           }, // [!code ++]
         })), // [!code ++]
       ], // [!code ++]
@@ -31,28 +43,33 @@ export default defineConfig({
 });
 ```
 
-Now you can define your own search component.
+## Configuration
 
-It will look like below, but you can customize it to your liking.
+You can [override](https://starlight.astro.build/reference/overrides/#search) Starlight's default search component to use Canary's.
+
+### Step 1: Define your own search component
 
 ```html
-# src/components/search.astro
-<canary-styles-starlight>
-  <canary-provider-pagefind baseUrl="https://docs.getcanary.dev">
-    <canary-modal>
-      <canary-trigger-searchbar slot="trigger"></canary-trigger-searchbar>
-      <canary-content slot="content">
-        <canary-search slot="search">
-          <canary-search-input slot="input"></canary-search-input>
-          <canary-search-results slot="results"></canary-search-results>
-        </canary-search>
-      </canary-content>
-    </canary-modal>
-  </canary-provider-pagefind>
-</canary-styles-starlight>
+<!-- <YOUR_COMPONENT>.astro -->
+<script>
+  import "@getcanary/web/components/canary-provider-cloud";
+  // You can skip imports if you are using CDN.
+</script>
+
+<canary-provider-cloud key="KEY" endpoint="https://cloud.getcanary.dev">
+  <!-- Rest of the code -->
+</canary-provider-cloud>
 ```
 
-Two things to note:
+### Step 2: Override default search component
 
-1. `canary-provider-pagefind` lets you use existing search index from Pagefind.
-2. `canary-styles-starlight` reads the theme from Starlight and applies it to Canary.
+```js
+// astro.config.mjs
+export default defineConfig({
+  integrations: [
+    starlight({
+      components: { Search: "<YOUR_COMPONENT>.astro" }, // [!code ++]
+    }),
+  ],
+});
+```
