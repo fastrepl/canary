@@ -1,4 +1,5 @@
 import { h } from "vue";
+import { useRoute } from "vitepress";
 import DefaultTheme from "vitepress/theme";
 import "./tailwind.css";
 
@@ -12,8 +13,11 @@ export default {
     inject();
   },
   Layout() {
+    const route = useRoute();
+    const showSearch = () => /^\/docs/.test(route.path);
+
     return h(DefaultTheme.Layout, null, {
-      "nav-bar-content-before": () => h(Search),
+      "nav-bar-content-before": () => (showSearch() ? h(Search) : null),
     });
   },
 };
