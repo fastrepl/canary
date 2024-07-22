@@ -27,33 +27,40 @@ defmodule Canary.Sources.Chunk.FTS do
     run(text, [])
   end
 
+  defp run("", _opts), do: {:ok, []}
+
   defp run(text, _opts) do
     query = """
-    SELECT paradedb.highlight(doc.id, $1, '<mark>', '</mark>'), doc.*
-    FROM #{@index_name}.search($2) doc
+    with snippets AS (
+      SELECT * FROM #{@index_name}.snippet(
+        $1,
+        highlight_field => $2,
+        prefix => $3,
+        postfix => $4
+      )
+    )
+    SELECT snippets.snippet, chunks.*
+    FROM snippets
+    LEFT JOIN chunks ON snippets.id = chunks.id;
     """
 
     params = [
+      ~s(#{@table_content_field}:"#{text}"),
       @table_content_field,
-      ~s(#{@table_content_field}:"#{text}")
+      "<mark>",
+      "</mark>"
     ]
 
     query
     |> Canary.Repo.query(params)
     |> case do
       {:ok, %{rows: rows, columns: [_ | columns]}} ->
-        rows =
-          rows
-          |> Enum.map(fn [highlight | row] ->
-            {highlight, row}
-          end)
-
         docs =
           rows
-          |> Enum.map(fn {highlight, row} ->
+          |> Enum.map(fn [snippet | row] ->
             Canary.Sources.Chunk
             |> Canary.Repo.load({columns, row})
-            |> Map.put(:content, highlight)
+            |> Map.put(:content, snippet)
           end)
 
         {:ok, docs}
@@ -83,6 +90,8 @@ defmodule Canary.Sources.Chunk.Hybrid do
 
     run(text, embedding, opts)
   end
+
+  defp run("", _embedding, _opts), do: {:ok, []}
 
   defp run(text, embedding, opts) do
     n = opts[:limit] || 10
