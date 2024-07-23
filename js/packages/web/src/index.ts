@@ -5,8 +5,6 @@ import "./canary-provider-pagefind";
 
 // styles
 import "./canary-styles-default";
-import "./canary-styles-starlight";
-import "./canary-styles-docusaurus";
 
 // callouts
 import "./canary-callout-cal";

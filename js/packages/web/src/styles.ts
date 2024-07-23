@@ -10,11 +10,11 @@ export const callout = css`
     border: none;
     border-radius: 8px;
     padding: 8px 16px;
-    background-color: var(--canary-color-gray-6);
+    background-color: var(--canary-color-primary-90);
     margin-bottom: 8px;
   }
   button:hover {
-    background-color: var(--canary-color-accent-low);
+    background-color: var(--canary-color-primary-80);
   }
 
   div {
@@ -25,7 +25,7 @@ export const callout = css`
 
   span {
     font-weight: bold;
-    color: var(--canary-color-gray-2);
+    color: var(--canary-color-gray-0);
   }
 `;
 
@@ -61,5 +61,16 @@ export const input = css`
 
   canary-hero-icon {
     width: 24px;
+  }
+`;
+
+export const logo = css`
+  :host {
+    display: contents;
+  }
+
+  svg {
+    height: 16px;
+    max-width: 50px;
   }
 `;

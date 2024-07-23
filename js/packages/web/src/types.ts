@@ -61,7 +61,7 @@ export type MockProviderContext = {
   ask: AskFunction;
 };
 
-export type QueryProviderContext = string;
+export type QueryContext = string;
 
 export type ProviderContext =
   | MockProviderContext
@@ -77,3 +77,5 @@ export enum Mode {
   Search = "Search",
   Ask = "Ask",
 }
+
+export type ThemeContext = "light" | "dark";

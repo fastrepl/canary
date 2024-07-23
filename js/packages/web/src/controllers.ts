@@ -6,7 +6,7 @@ import { providerContext, modeContext, queryContext } from "./contexts";
 
 import {
   ProviderContext,
-  QueryProviderContext,
+  QueryContext,
   Mode,
   ModeContext,
   Reference,
@@ -16,7 +16,7 @@ import { randomInteger } from "./utils";
 export class SearchController {
   private _provider: ContextConsumer<{ __context__: ProviderContext }, any>;
   private _mode: ContextConsumer<{ __context__: ModeContext }, any>;
-  private _query: ContextConsumer<{ __context__: QueryProviderContext }, any>;
+  private _query: ContextConsumer<{ __context__: QueryContext }, any>;
   private _task: Task<[Mode, string], Reference[]>;
 
   constructor(host: ReactiveControllerHost & HTMLElement) {
@@ -63,7 +63,7 @@ export class AskController {
 
   private _provider: ContextConsumer<{ __context__: ProviderContext }, any>;
   private _mode: ContextConsumer<{ __context__: ModeContext }, any>;
-  private _query: ContextConsumer<{ __context__: QueryProviderContext }, any>;
+  private _query: ContextConsumer<{ __context__: QueryContext }, any>;
   private _task: Task<[Mode, string], null>;
 
   loading = false;

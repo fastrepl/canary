@@ -11,11 +11,7 @@ export default defineConfig({
           "canary-provider-cloud",
           "canary-provider-pagefind",
         ],
-        ...[
-          "canary-styles-default",
-          "canary-styles-starlight",
-          "canary-styles-docusaurus",
-        ],
+        ...["canary-styles-default"],
         ...[
           "canary-callout-cal",
           "canary-callout-calendly",
