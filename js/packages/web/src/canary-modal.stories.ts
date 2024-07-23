@@ -43,30 +43,15 @@ const play: StoryObj["play"] = async ({ canvasElement }) => {
   await userEvent.click(trigger);
 };
 
+export const Desktop: StoryObj = {
+  args: {},
+  play,
+};
+
 export const Mobile: StoryObj = {
   args: {},
   play,
   parameters: {
     viewport: { defaultViewport: "mobile1", disable: false },
-  },
-};
-
-export const Light: StoryObj = {
-  args: {},
-  play,
-  parameters: {
-    themes: {
-      themeOverride: "starlight-ocean-light",
-    },
-  },
-};
-
-export const Dark: StoryObj = {
-  args: {},
-  play,
-  parameters: {
-    themes: {
-      themeOverride: "starlight-ocean-dark",
-    },
   },
 };

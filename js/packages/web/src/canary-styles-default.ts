@@ -4,7 +4,9 @@ import { MutationController } from "@lit-labs/observers/mutation-controller.js";
 
 import { provide } from "@lit/context";
 import { themeContext } from "./contexts";
+
 import type { ThemeContext } from "./types";
+import { wrapper } from "./styles";
 
 const NAME = "canary-styles-default";
 
@@ -43,6 +45,7 @@ export class CanaryStylesDefault extends LitElement {
   }
 
   static styles = [
+    wrapper,
     css`
       :host {
         --canary-font-family: Arial, Helvetica, sans-serif;
@@ -90,6 +93,8 @@ export class CanaryStylesDefault extends LitElement {
       :host {
         --_canary-color-primary-ch: var(--canary-color-primary-ch, 30 296);
         --_canary-color-gray-ch: var(--canary-color-gray-ch, 0 0);
+
+        --canary-color-backdrop-overlay: lch(var(--l-80) var(--_canary-color-gray-ch) / 0.66);
 
         --canary-color-primary-0: lch(var(--l-0) var(--_canary-color-primary-ch));
         --canary-color-primary-5: lch(var(--l-5) var(--_canary-color-primary-ch));

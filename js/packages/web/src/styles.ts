@@ -73,3 +73,9 @@ export const logo = css`
     max-width: 50px;
   }
 `;
+
+export const wrapper = css`
+  :host {
+    display: contents;
+  }
+`;

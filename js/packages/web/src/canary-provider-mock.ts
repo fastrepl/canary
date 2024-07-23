@@ -5,7 +5,8 @@ import { provide } from "@lit/context";
 import { providerContext } from "./contexts";
 import type { ProviderContext } from "./types";
 
-import { Delta } from "./types";
+import type { Delta } from "./types";
+import { wrapper } from "./styles";
 
 const NAME = "canary-provider-mock";
 
@@ -29,6 +30,8 @@ export class CanaryProviderMock extends LitElement {
   render() {
     return html`<slot></slot>`;
   }
+
+  static styles = wrapper;
 
   search = async (_query: string, _signal?: AbortSignal) => {
     await new Promise((resolve) =>

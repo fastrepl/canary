@@ -6,6 +6,7 @@ import {
 } from "lit/decorators.js";
 
 import { Mode, type ModeContext } from "./types";
+import { wrapper } from "./styles";
 
 import { provide } from "@lit/context";
 import { modeContext, queryContext } from "./contexts";
@@ -94,6 +95,7 @@ export class CanaryContent extends LitElement {
   }
 
   static styles = [
+    wrapper,
     css`
       div.container {
         max-width: 500px;

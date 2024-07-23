@@ -5,7 +5,8 @@ import { provide } from "@lit/context";
 import { providerContext } from "./contexts";
 import type { ProviderContext } from "./types";
 
-import { Delta } from "./types";
+import type { Delta } from "./types";
+import { wrapper } from "./styles";
 
 const NAME = "canary-provider-cloud";
 
@@ -38,6 +39,8 @@ export class CanaryProviderCloud extends LitElement {
   render() {
     return html`<slot></slot>`;
   }
+
+  static styles = wrapper;
 
   search = async (query: string, signal?: AbortSignal) => {
     const url = `${this.endpoint}/api/v1/search`;
