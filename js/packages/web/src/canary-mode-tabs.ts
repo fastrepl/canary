@@ -62,7 +62,6 @@ export class CanaryModeTabs extends LitElement {
 
       .tab {
         cursor: pointer;
-        font-family: var(--canary-font-family);
         font-size: 12px;
 
         padding: 4px 8px;

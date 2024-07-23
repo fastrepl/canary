@@ -66,6 +66,8 @@ export class CanaryReference extends LitElement {
 
   static styles = css`
     .container {
+      cursor: pointer;
+
       display: flex;
       flex-direction: row;
       align-items: center;
@@ -75,9 +77,6 @@ export class CanaryReference extends LitElement {
       border: 1px solid var(--canary-color-gray-90);
       border-radius: 8px;
       background-color: var(--canary-color-gray-95);
-
-      font-family: var(--canary-font-family);
-      cursor: pointer;
     }
 
     .container:hover,

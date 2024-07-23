@@ -40,7 +40,6 @@ export class CanaryAskInput extends LitElement {
     css`
       span {
         font-size: 10px;
-        font-family: var(--canary-font-family);
         color: var(--canary-color-gray-30);
       }
     `,

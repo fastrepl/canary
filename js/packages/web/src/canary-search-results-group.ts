@@ -167,7 +167,6 @@ export class CanarySearchResultsGroup extends LitElement {
 
         gap: 8px;
         padding-left: 4px;
-        font-family: var(--canary-font-family);
         color: var(--canary-color-gray-10);
       }
 
@@ -187,7 +186,6 @@ export class CanarySearchResultsGroup extends LitElement {
     css`
       label {
         font-size: 12px;
-        font-family: var(--canary-font-family);
         text-decoration-skip-ink: none;
       }
     `,

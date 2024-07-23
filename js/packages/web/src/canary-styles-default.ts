@@ -56,7 +56,13 @@ export class CanaryStylesDefault extends LitElement {
     wrapper,
     css`
       :host {
-        --canary-font-family: Arial, Helvetica, sans-serif;
+        font-family: var(
+          --canary-font-family-base,
+          Arial,
+          Helvetica,
+          sans-serif
+        );
+        --canary-font-family-mono: Consolas, Monaco, Lucida Console;
       }
     `,
     css`
