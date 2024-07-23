@@ -40,6 +40,11 @@ export class CanaryTriggerSearchbar extends LitElement {
   }
 
   static styles = css`
+    :host {
+      display: contents;
+      width: fit-content;
+    }
+
     button {
       cursor: pointer;
       display: flex;

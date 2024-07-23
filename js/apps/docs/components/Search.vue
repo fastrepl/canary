@@ -17,7 +17,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="px-8 w-[320px]">
+  <div class="px-4 w-full">
     <canary-styles-default framework="vitepress">
       <canary-provider-mock>
         <canary-modal>

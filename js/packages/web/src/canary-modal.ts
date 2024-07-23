@@ -2,6 +2,7 @@ import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { createRef } from "lit/directives/ref.js";
 
+import { wrapper } from "./styles";
 import "./canary-dialog";
 
 const NAME = "canary-modal";
@@ -25,6 +26,7 @@ export class CanaryModal extends LitElement {
   }
 
   static styles = [
+    wrapper,
     css`
       ::slotted(*) {
         cursor: pointer;
