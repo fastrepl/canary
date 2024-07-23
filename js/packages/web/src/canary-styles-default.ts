@@ -5,37 +5,45 @@ import { MutationController } from "@lit-labs/observers/mutation-controller.js";
 import { provide } from "@lit/context";
 import { themeContext } from "./contexts";
 
-import type { ThemeContext } from "./types";
+import type { Framework, ThemeContext } from "./types";
 import { wrapper } from "./styles";
 
 const NAME = "canary-styles-default";
 
 @customElement(NAME)
 export class CanaryStylesDefault extends LitElement {
-  @property({ type: String }) themeTag = "html";
-  @property({ type: String }) themeAttr = "data-theme";
+  @property({ type: String }) framework: Framework = "starlight";
 
   @provide({ context: themeContext })
   @property({ type: String, reflect: true })
   theme: ThemeContext = "light";
 
-  constructor() {
-    super();
+  connectedCallback() {
+    super.connectedCallback();
 
-    const [target] = document.getElementsByTagName(this.themeTag);
+    const [target] = document.getElementsByTagName("html");
+    const useClassList = this.framework === "vitepress";
+
+    const extractTheme = (el: Element) => {
+      if (useClassList) {
+        return el.classList.contains("dark") ? "dark" : "light";
+      } else {
+        return (el.getAttribute("data-theme") || this.theme) as ThemeContext;
+      }
+    };
+
+    this.theme = extractTheme(target);
 
     new MutationController(this, {
       target,
-      config: { attributeFilter: [this.themeAttr] },
+      config: { attributeFilter: [useClassList ? "class" : "data-theme"] },
       callback: (mutations) => {
         const target = mutations[0]?.target as Element | undefined;
         if (!target) {
           return this.theme;
         }
 
-        const theme = target.getAttribute(this.themeAttr);
-        this.theme = (theme || this.theme) as ThemeContext;
-        return this.theme;
+        return (this.theme = extractTheme(target));
       },
     });
   }
