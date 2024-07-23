@@ -102,7 +102,8 @@ export class CanaryReference extends LitElement {
 
     .title {
       color: var(--canary-color-gray-10);
-      font-size: 14px;
+      font-size: 16px;
+      font-weight: 500;
 
       max-width: 400px;
       overflow: hidden;
@@ -112,7 +113,7 @@ export class CanaryReference extends LitElement {
 
     .excerpt {
       color: var(--canary-color-gray-20);
-      font-size: 12px;
+      font-size: 14px;
 
       max-width: 400px;
       overflow: hidden;
@@ -133,9 +134,8 @@ export class CanaryReference extends LitElement {
       align-items: center;
       gap: 2px;
 
-      font-weight: lighter;
       color: var(--canary-color-gray-30);
-      font-size: 12px;
+      font-size: 13px;
     }
 
     .path {

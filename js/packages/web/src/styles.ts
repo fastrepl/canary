@@ -79,3 +79,13 @@ export const wrapper = css`
     display: contents;
   }
 `;
+
+export const scrollContainer = css`
+  .container {
+    padding-left: 4px;
+    padding-right: 4px;
+
+    scrollbar-width: thin;
+    scrollbar-color: var(--canary-color-gray-90) var(--canary-color-gray-100);
+  }
+`;

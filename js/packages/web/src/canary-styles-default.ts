@@ -63,6 +63,9 @@ export class CanaryStylesDefault extends LitElement {
           sans-serif
         );
         --canary-font-family-mono: Consolas, Monaco, Lucida Console;
+
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
       }
     `,
     css`

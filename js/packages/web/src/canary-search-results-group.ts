@@ -3,6 +3,7 @@ import { customElement, property, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { classMap } from "lit/directives/class-map.js";
 
+import { scrollContainer } from "./styles";
 import type { Reference } from "./types";
 
 import { KeyboardSelectionController, SearchController } from "./controllers";
@@ -139,6 +140,7 @@ export class CanarySearchResultsGroup extends LitElement {
   }
 
   static styles = [
+    scrollContainer,
     css`
       .container {
         display: flex;

@@ -2,6 +2,7 @@ import { LitElement, html, css } from "lit";
 import { customElement } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 
+import { scrollContainer } from "./styles";
 import type { Reference } from "./types";
 
 import { SearchController, KeyboardSelectionController } from "./controllers";
@@ -60,25 +61,24 @@ export class CanarySearchResults extends LitElement {
     `;
   }
 
-  static styles = css`
-    .container {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      max-height: 425px;
-      overflow-y: hidden;
-    }
-    .container:hover {
-      overflow-y: auto;
-    }
-
-    .skeleton-container {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      height: 425px;
-    }
-  `;
+  static styles = [
+    scrollContainer,
+    css`
+      .container {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        max-height: 425px;
+        overflow-y: scroll;
+      }
+      .skeleton-container {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        height: 425px;
+      }
+    `,
+  ];
 }
 
 declare global {
