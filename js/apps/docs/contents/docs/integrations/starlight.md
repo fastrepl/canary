@@ -28,7 +28,7 @@ export default defineConfig({
     starlight({
       head: [ // [!code ++]
         ...[ // [!code ++]
-          "canary-provider-cloud", // [!code ++]
+          "canary-styles-default", // [!code ++]
           // add more components here // [!code ++]
         ].map((c) => ({ // [!code ++]
           tag: "script", // [!code ++]
@@ -49,17 +49,21 @@ You can [override](https://starlight.astro.build/reference/overrides/#search) St
 
 ### Step 1: Define your own search component
 
-```html
+```html{7}
 <!-- <YOUR_COMPONENT>.astro -->
 <script>
-  import "@getcanary/web/components/canary-provider-cloud";
+  import "@getcanary/web/components/canary-styles-default";
   // You can skip imports if you are using CDN.
 </script>
 
-<canary-provider-cloud key="KEY" endpoint="https://cloud.getcanary.dev">
+<canary-styles-default framework="starlight">
   <!-- Rest of the code -->
 </canary-provider-cloud>
 ```
+
+Specifying `framework="starlight"` is required to detect light/dark mode changes.
+
+> At this point, default styles are applied. For customization, please refer to [Styling](/docs/customization/styling) guide.
 
 ### Step 2: Override default search component
 

@@ -6,6 +6,7 @@ import {
 } from "lit/decorators.js";
 
 import { Mode, type ModeContext } from "./types";
+import { wrapper } from "./styles";
 
 import { provide } from "@lit/context";
 import { modeContext, queryContext } from "./contexts";
@@ -94,12 +95,11 @@ export class CanaryContent extends LitElement {
   }
 
   static styles = [
+    wrapper,
     css`
       div.container {
+        width: calc(100% - 16px);
         max-width: 500px;
-
-        color: var(--canary-color-gray-1);
-        background-color: var(--canary-color-black);
 
         outline: none;
         padding: 8px 8px;
@@ -109,6 +109,8 @@ export class CanaryContent extends LitElement {
         box-shadow:
           0 20px 25px -5px rgb(0 0 0 / 0.1),
           0 8px 10px -6px rgb(0 0 0 / 0.1);
+
+        background-color: var(--canary-color-gray-100);
       }
     `,
   ];

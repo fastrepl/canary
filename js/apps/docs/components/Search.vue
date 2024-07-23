@@ -17,8 +17,8 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="px-8 w-[320px]">
-    <canary-styles-default theme="light">
+  <div class="px-4 w-full">
+    <canary-styles-default framework="vitepress">
       <canary-provider-mock>
         <canary-modal>
           <canary-trigger-searchbar slot="trigger"></canary-trigger-searchbar>

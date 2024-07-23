@@ -5,6 +5,7 @@ import { provide } from "@lit/context";
 import { providerContext } from "./contexts";
 
 import type { Delta, Reference, ProviderContext } from "./types";
+import { wrapper } from "./styles";
 
 const NAME = "canary-provider-pagefind";
 
@@ -49,6 +50,8 @@ export class CanaryProviderPagefind extends LitElement {
   render() {
     return html`<slot></slot>`;
   }
+
+  static styles = wrapper;
 
   search = async (query: string, _signal?: AbortSignal) => {
     const search = await this.pagefind!.search(query);

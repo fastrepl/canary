@@ -10,7 +10,7 @@ const render = ({ type }: any) => {
   const callout = (() => {
     switch (type) {
       case "cal":
-        return html` <canary-callout-cal forceShow></canary-callout-cal> `;
+        return html`<canary-callout-cal forceShow></canary-callout-cal>`;
       case "calendly":
         return html`
           <canary-callout-calendly forceShow></canary-callout-calendly>

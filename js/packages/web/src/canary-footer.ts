@@ -21,15 +21,14 @@ export class CanaryFooter extends LitElement {
       padding-top: 8px;
       text-align: end;
       font-size: 12px;
-      color: var(--canary-color-gray-2);
       font-family: var(--canary-font-family);
     }
 
     a {
-      color: var(--canary-color-gray-1);
+      color: var(--canary-color-gray-20);
     }
     a:hover {
-      color: var(--canary-color-white);
+      color: var(--canary-color-gray-10);
     }
   `;
 }

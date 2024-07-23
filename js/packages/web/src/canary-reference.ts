@@ -27,7 +27,7 @@ export class CanaryReference extends LitElement {
             ? html`<span class="excerpt">${unsafeHTML(this.excerpt)} </span>`
             : nothing}
         </div>
-        <div class="arrow">
+        <div class=${classMap({ arrow: true, selected: this.selected })}>
           <canary-hero-icon name="chevron-right"></canary-hero-icon>
         </div>
       </div>
@@ -72,18 +72,20 @@ export class CanaryReference extends LitElement {
       justify-content: space-between;
 
       padding: 8px 16px;
-      border: 1px solid var(--canary-color-gray-5);
+      border: 1px solid var(--canary-color-gray-90);
       border-radius: 8px;
-      background-color: var(--canary-color-black);
+      background-color: var(--canary-color-gray-95);
 
       font-family: var(--canary-font-family);
       cursor: pointer;
     }
 
+    .container:hover,
     .selected {
-      background-color: var(--canary-color-accent-low);
+      background-color: var(--canary-color-primary-80);
     }
 
+    .selected .arrow,
     .container:hover .arrow {
       opacity: 1;
     }
@@ -100,7 +102,7 @@ export class CanaryReference extends LitElement {
     }
 
     .title {
-      color: var(--canary-color-gray-1);
+      color: var(--canary-color-gray-10);
       font-size: 14px;
 
       max-width: 400px;
@@ -110,7 +112,7 @@ export class CanaryReference extends LitElement {
     }
 
     .excerpt {
-      color: var(--canary-color-gray-2);
+      color: var(--canary-color-gray-20);
       font-size: 12px;
 
       max-width: 400px;
@@ -120,8 +122,8 @@ export class CanaryReference extends LitElement {
     }
 
     .excerpt mark {
-      background-color: var(--canary-color-accent-high);
-      color: var(--canary-color-black);
+      background-color: var(--canary-color-primary-10);
+      color: var(--canary-color-gray-90);
       border-radius: 2px;
       padding: 0 2px;
     }
@@ -133,7 +135,7 @@ export class CanaryReference extends LitElement {
       gap: 2px;
 
       font-weight: lighter;
-      color: var(--canary-color-gray-3);
+      color: var(--canary-color-gray-30);
       font-size: 12px;
     }
 

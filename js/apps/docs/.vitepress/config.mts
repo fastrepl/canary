@@ -9,7 +9,6 @@ export default defineConfig({
   description: "Canary",
   srcDir: "./contents",
   sitemap: { hostname: "https://getcanary.dev" },
-  appearance: "force-dark",
   lastUpdated: true,
   vue: {
     template: {
@@ -73,6 +72,7 @@ export default defineConfig({
           items: [
             { text: "Compose Built-ins", link: "/docs/customization/compose" },
             { text: "Bring Your Own", link: "/docs/customization/byo" },
+            { text: "Styling", link: "/docs/customization/styling" },
           ],
         },
         {

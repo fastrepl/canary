@@ -6,17 +6,18 @@ import { providerContext, modeContext, queryContext } from "./contexts";
 
 import {
   ProviderContext,
-  QueryProviderContext,
+  QueryContext,
   Mode,
   ModeContext,
   Reference,
+  TriggerShortcut,
 } from "./types";
 import { randomInteger } from "./utils";
 
 export class SearchController {
   private _provider: ContextConsumer<{ __context__: ProviderContext }, any>;
   private _mode: ContextConsumer<{ __context__: ModeContext }, any>;
-  private _query: ContextConsumer<{ __context__: QueryProviderContext }, any>;
+  private _query: ContextConsumer<{ __context__: QueryContext }, any>;
   private _task: Task<[Mode, string], Reference[]>;
 
   constructor(host: ReactiveControllerHost & HTMLElement) {
@@ -63,7 +64,7 @@ export class AskController {
 
   private _provider: ContextConsumer<{ __context__: ProviderContext }, any>;
   private _mode: ContextConsumer<{ __context__: ModeContext }, any>;
-  private _query: ContextConsumer<{ __context__: QueryProviderContext }, any>;
+  private _query: ContextConsumer<{ __context__: QueryContext }, any>;
   private _task: Task<[Mode, string], null>;
 
   loading = false;
@@ -216,4 +217,48 @@ export class KeyboardSelectionController<T> {
     this._items = items;
     this.host.requestUpdate();
   }
+}
+
+export class KeyboardTriggerController implements ReactiveController {
+  private host: ReactiveControllerHost & HTMLElement;
+  private _key: TriggerShortcut;
+
+  constructor(
+    host: ReactiveControllerHost & HTMLElement,
+    key: TriggerShortcut,
+  ) {
+    (this.host = host).addController(this as ReactiveController);
+    this._key = key;
+  }
+
+  hostConnected() {
+    document.addEventListener("keydown", this._handleKeyDown);
+  }
+
+  hostDisconnected() {
+    document.removeEventListener("keydown", this._handleKeyDown);
+  }
+
+  private _handleKeyDown = (e: KeyboardEvent) => {
+    const isShortcut = () => {
+      if (this._key === "cmdk") {
+        return e.key === "k" && (e.metaKey || e.ctrlKey);
+      }
+
+      if (this._key === "slash") {
+        return e.key === "/";
+      }
+    };
+
+    if (isShortcut()) {
+      e.preventDefault();
+
+      this.host.dispatchEvent(
+        new MouseEvent("click", {
+          bubbles: true,
+          cancelable: true,
+        }),
+      );
+    }
+  };
 }

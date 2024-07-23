@@ -30,7 +30,7 @@ import "@getcanary/web/components/<NAME>";
 export default defineConfig({
   ...
   head: [ // [!code ++]
-    "canary-provider-cloud", // [!code ++]
+    "canary-styles-default", // [!code ++]
     // add more components here // [!code ++]
   ].map((tag) => [ // [!code ++]
     "script", // [!code ++]
@@ -51,24 +51,28 @@ You should modify the default [Layout](https://vitepress.dev/guide/extending-def
 
 #### Step 1: Add a Search Component
 
-```html-vue
+```html-vue{14}
 <!-- <YOUR_COMPONENT_PATH>.vue -->
 <script setup lang="ts">
   import { onMounted } from "vue";
 
   // You can skip imports if you are using CDN.
   onMounted(async () => {
-    import("@getcanary/web/components/canary-provider-cloud");
+    import("@getcanary/web/components/canary-styles-default");
     // add more components here
   });
 </script>
 
 <template>
-  <canary-provider-cloud key="KEY" endpoint="https://cloud.getcanary.dev">
+  <canary-styles-default framework="vitepress">
     <!-- Rest of the code -->
-  </canary-provider-cloud>
+  </canary-styles-default>
 </template>
 ```
+
+Specifying `framework="vitepress"` is required to detect light/dark mode changes.
+
+> At this point, default styles are applied. For customization, please refer to [Styling](/docs/customization/styling) guide.
 
 #### Step 2: Modify the Layout
 

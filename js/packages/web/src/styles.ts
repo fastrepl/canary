@@ -10,11 +10,11 @@ export const callout = css`
     border: none;
     border-radius: 8px;
     padding: 8px 16px;
-    background-color: var(--canary-color-gray-6);
+    background-color: var(--canary-color-primary-90);
     margin-bottom: 8px;
   }
   button:hover {
-    background-color: var(--canary-color-accent-low);
+    background-color: var(--canary-color-primary-80);
   }
 
   div {
@@ -25,7 +25,7 @@ export const callout = css`
 
   span {
     font-weight: bold;
-    color: var(--canary-color-gray-2);
+    color: var(--canary-color-gray-0);
   }
 `;
 
@@ -40,8 +40,7 @@ export const input = css`
     align-items: center;
     gap: 4px;
     border-radius: 8px;
-    color: var(--canary-color-gray-1);
-    background-color: var(--canary-color-black);
+    background-color: var(--canary-color-gray-100);
   }
 
   input {
@@ -50,16 +49,33 @@ export const input = css`
     outline: none;
     border: none;
     font-size: 16px;
-    color: var(--canary-color-gray-1);
-    background-color: var(--canary-color-black);
+    color: var(--canary-color-gray-10);
+    background-color: var(--canary-color-gray-100);
   }
 
   input::placeholder {
-    color: var(--canary-color-gray-3);
+    color: var(--canary-color-gray-40);
     font-size: 14px;
   }
 
   canary-hero-icon {
     width: 24px;
+  }
+`;
+
+export const logo = css`
+  :host {
+    display: contents;
+  }
+
+  svg {
+    height: 20px;
+    max-width: 50px;
+  }
+`;
+
+export const wrapper = css`
+  :host {
+    display: contents;
   }
 `;

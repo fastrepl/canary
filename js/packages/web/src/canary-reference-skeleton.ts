@@ -15,12 +15,7 @@ export class CanaryReferenceSkeleton extends LitElement {
       border: none;
       border-radius: 8px;
       padding: 12px 16px;
-
-      background-color: var(--canary-color-gray-5);
-    }
-
-    .skeleton:hover {
-      background-color: var(--canary-color-gray-4);
+      background-color: var(--canary-color-gray-80);
     }
 
     .skeleton {

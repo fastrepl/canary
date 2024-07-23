@@ -26,13 +26,6 @@ export class CanaryDialog extends LitElement {
 
   static styles = [
     css`
-      :root {
-        --canary-color-backdrop-overlay: hsla(225, 9%, 36%, 0.66);
-      }
-      :root[data-theme="dark"] {
-        --canary-color-backdrop-overlay: hsla(223, 13%, 10%, 0.66);
-      }
-
       dialog::backdrop {
         background-color: var(--canary-color-backdrop-overlay);
         -webkit-backdrop-filter: blur(0.25rem);
@@ -40,14 +33,14 @@ export class CanaryDialog extends LitElement {
       }
 
       dialog {
+        width: 100%;
         max-width: 500px;
         margin: 0 auto;
-        width: 100%;
-        top: 40px;
+        top: 60px;
         padding: 0;
         border: none;
         outline: none;
-        border-radius: 10px;
+        border-radius: 8px;
         box-shadow:
           0 20px 25px -5px rgb(0 0 0 / 0.1),
           0 8px 10px -6px rgb(0 0 0 / 0.1);
