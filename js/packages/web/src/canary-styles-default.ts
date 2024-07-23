@@ -99,38 +99,43 @@ export class CanaryStylesDefault extends LitElement {
     // prettier-ignore
     css`
       :host {
-        --_canary-color-primary-ch: var(--canary-color-primary-ch, 30 296);
-        --_canary-color-gray-ch: var(--canary-color-gray-ch, 0 0);
+        --_canary-color-primary-c: var(--canary-color-primary-c, 0.1);
+        --_canary-color-primary-h: var(--canary-color-primary-h, 270);
+        --canary-color-primary-ch: var(--_canary-color-primary-c) var(--_canary-color-primary-h);
 
-        --canary-color-backdrop-overlay: lch(var(--l-80) var(--_canary-color-gray-ch) / 0.66);
+        --_canary-color-gray-c: var(--canary-color-gray-c, 0);
+        --_canary-color-gray-h: var(--canary-color-gray-h, 0);
+        --canary-color-gray-ch: var(--_canary-color-gray-c) var(--_canary-color-gray-h);
 
-        --canary-color-primary-0: lch(var(--l-0) var(--_canary-color-primary-ch));
-        --canary-color-primary-5: lch(var(--l-5) var(--_canary-color-primary-ch));
-        --canary-color-primary-10: lch(var(--l-10) var(--_canary-color-primary-ch));
-        --canary-color-primary-20: lch(var(--l-20) var(--_canary-color-primary-ch));
-        --canary-color-primary-30: lch(var(--l-30) var(--_canary-color-primary-ch));
-        --canary-color-primary-40: lch(var(--l-40) var(--_canary-color-primary-ch));
-        --canary-color-primary-50: lch(var(--l-50) var(--_canary-color-primary-ch));
-        --canary-color-primary-60: lch(var(--l-60) var(--_canary-color-primary-ch));
-        --canary-color-primary-70: lch(var(--l-70) var(--_canary-color-primary-ch));
-        --canary-color-primary-80: lch(var(--l-80) var(--_canary-color-primary-ch));
-        --canary-color-primary-90: lch(var(--l-90) var(--_canary-color-primary-ch));
-        --canary-color-primary-95: lch(var(--l-95) var(--_canary-color-primary-ch));
-        --canary-color-primary-100: lch(var(--l-100) var(--_canary-color-primary-ch));
+        --canary-color-backdrop-overlay: oklch(var(--l-80) var(--_canary-color-gray-ch) / 0.66);
+
+        --canary-color-primary-0: oklch(var(--l-0) var(--canary-color-primary-ch));
+        --canary-color-primary-5: oklch(var(--l-5) var(--canary-color-primary-ch));
+        --canary-color-primary-10: oklch(var(--l-10) var(--canary-color-primary-ch));
+        --canary-color-primary-20: oklch(var(--l-20) var(--canary-color-primary-ch));
+        --canary-color-primary-30: oklch(var(--l-30) var(--canary-color-primary-ch));
+        --canary-color-primary-40: oklch(var(--l-40) var(--canary-color-primary-ch));
+        --canary-color-primary-50: oklch(var(--l-50) var(--canary-color-primary-ch));
+        --canary-color-primary-60: oklch(var(--l-60) var(--canary-color-primary-ch));
+        --canary-color-primary-70: oklch(var(--l-70) var(--canary-color-primary-ch));
+        --canary-color-primary-80: oklch(var(--l-80) var(--canary-color-primary-ch));
+        --canary-color-primary-90: oklch(var(--l-90) var(--canary-color-primary-ch));
+        --canary-color-primary-95: oklch(var(--l-95) var(--canary-color-primary-ch));
+        --canary-color-primary-100: oklch(var(--l-100) var(--canary-color-primary-ch));
         
-        --canary-color-gray-0: lch(var(--l-0) var(--_canary-color-gray-ch));
-        --canary-color-gray-5: lch(var(--l-5) var(--_canary-color-gray-ch));
-        --canary-color-gray-10: lch(var(--l-10) var(--_canary-color-gray-ch));
-        --canary-color-gray-20: lch(var(--l-20) var(--_canary-color-gray-ch));
-        --canary-color-gray-30: lch(var(--l-30) var(--_canary-color-gray-ch));
-        --canary-color-gray-40: lch(var(--l-40) var(--_canary-color-gray-ch));
-        --canary-color-gray-50: lch(var(--l-50) var(--_canary-color-gray-ch));
-        --canary-color-gray-60: lch(var(--l-60) var(--_canary-color-gray-ch));
-        --canary-color-gray-70: lch(var(--l-70) var(--_canary-color-gray-ch));
-        --canary-color-gray-80: lch(var(--l-80) var(--_canary-color-gray-ch));
-        --canary-color-gray-90: lch(var(--l-90) var(--_canary-color-gray-ch));
-        --canary-color-gray-95: lch(var(--l-95) var(--_canary-color-gray-ch));
-        --canary-color-gray-100: lch(var(--l-100) var(--_canary-color-gray-ch));
+        --canary-color-gray-0: oklch(var(--l-0) var(--canary-color-gray-ch));
+        --canary-color-gray-5: oklch(var(--l-5) var(--canary-color-gray-ch));
+        --canary-color-gray-10: oklch(var(--l-10) var(--canary-color-gray-ch));
+        --canary-color-gray-20: oklch(var(--l-20) var(--canary-color-gray-ch));
+        --canary-color-gray-30: oklch(var(--l-30) var(--canary-color-gray-ch));
+        --canary-color-gray-40: oklch(var(--l-40) var(--canary-color-gray-ch));
+        --canary-color-gray-50: oklch(var(--l-50) var(--canary-color-gray-ch));
+        --canary-color-gray-60: oklch(var(--l-60) var(--canary-color-gray-ch));
+        --canary-color-gray-70: oklch(var(--l-70) var(--canary-color-gray-ch));
+        --canary-color-gray-80: oklch(var(--l-80) var(--canary-color-gray-ch));
+        --canary-color-gray-90: oklch(var(--l-90) var(--canary-color-gray-ch));
+        --canary-color-gray-95: oklch(var(--l-95) var(--canary-color-gray-ch));
+        --canary-color-gray-100: oklch(var(--l-100) var(--canary-color-gray-ch));
       }
     `,
   ];

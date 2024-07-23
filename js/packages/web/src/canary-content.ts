@@ -98,7 +98,7 @@ export class CanaryContent extends LitElement {
     wrapper,
     css`
       div.container {
-        width: 100%;
+        width: calc(100% - 16px);
         max-width: 500px;
 
         outline: none;

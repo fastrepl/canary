@@ -27,7 +27,7 @@ import "@getcanary/web/components/<NAME>";
 const config = {
   ...
   scripts: [ // [!code ++]
-    "canary-provider-cloud", // [!code ++]
+    "canary-styles-default", // [!code ++]
     // add more components here // [!code ++]
   ].map((c) => ({ // [!code ++]
     type: "module", // [!code ++]
@@ -49,16 +49,25 @@ npm run swizzle @docusaurus/theme-classic SearchBar -- --eject --javascript
 
 ### Step 2: Modify ejected component
 
-```js
+```js{12}
 // src/theme/SearchBar.js
-import "@getcanary/web/components/canary-provider-cloud";
-// You can skip imports if you are using CDN.
+import { useEffect } from "react";
 
 export default function SearchBar() {
+  // You can skip imports if you are using CDN.
+  useEffect(() => {
+    import("@getcanary/web/components/canary-styles-default");
+    // add more components here
+  }, []);
+
   return (
-    <canary-provider-cloud key="KEY" endpoint="https://cloud.getcanary.dev">
+    <canary-styles-default framework="docusaurus">
       {/* ... */}
     </canary-provider-cloud>
   );
 }
 ```
+
+Specifying `framework="docusaurus"` is required to detect light/dark mode changes.
+
+> At this point, default styles are applied. For customization, please refer to [Styling](/docs/customization/styling) guide.
