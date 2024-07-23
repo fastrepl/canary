@@ -31,7 +31,9 @@ const totalPrice = computed(
         </h2>
         <p class="mt-2 text-lg">
           We don't have "Talk to sales". Instead, we have
-          <a href="/" class="link link-underline">"Chat with founder".</a>
+          <a href="https://cal.com/yujonglee/canary" class="underline"
+            >"Chat with founder".</a
+          >
         </p>
       </div>
       <div class="flex flex-col flex-row gap-8 mt-12 items-center">

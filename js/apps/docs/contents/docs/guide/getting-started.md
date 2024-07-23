@@ -5,12 +5,6 @@ const v = data["@getcanary/web"];
 
 # Getting Started
 
-## Copy Public Key (Optional)
-
-> If you are not using `canary-provider-cloud`, you can skip this step.
-
-You can get your public key from our hosted service at [cloud.getcanary.dev](https://cloud.getcanary.dev).
-
 ## Installation
 
 > Please check out `integrations` section of the docs for details.
@@ -33,10 +27,26 @@ import "@getcanary/web/components/<NAME>";
 
 ## Usage
 
-> Please check out [Built-in Components](/docs/customization/builtin) section of the docs for details.
+This is typical usage of our components. For more details, please check out [Built-in Components](/docs/customization/builtin) page of the docs.
 
 ```html
-<canary-provider-cloud key="KEY" endpoint="https://cloud.getcanary.dev">
-  <!-- Rest of the code -->
-</canary-provider-cloud>
+<canary-styles-default framework="vitepress">
+  <canary-provider-cloud key="KEY" endpoint="https://cloud.getcanary.dev">
+    <canary-modal>
+      <canary-trigger-searchbar slot="trigger"></canary-trigger-searchbar>
+      <canary-content slot="content">
+        <canary-search slot="search">
+          <canary-search-input slot="input"></canary-search-input>
+          <canary-search-results slot="results"></canary-search-results>
+        </canary-search>
+        <canary-ask slot="ask">
+          <canary-ask-input slot="input"></canary-ask-input>
+          <canary-ask-results slot="results"></canary-ask-results>
+        </canary-ask>
+      </canary-content>
+    </canary-modal>
+  </canary-provider-cloud>
+</canary-styles-default>
 ```
+
+You can setup hosted search index and get `KEY` from [cloud.getcanary.dev](https://cloud.getcanary.dev) for free.
