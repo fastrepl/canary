@@ -53,6 +53,7 @@ export class CanaryStylesDefault extends LitElement {
         --canary-theme: "light";
 
         --l-0: 0%;
+        --l-5: 0%;
         --l-10: 10%;
         --l-20: 20%;
         --l-30: 30%;
@@ -62,6 +63,7 @@ export class CanaryStylesDefault extends LitElement {
         --l-70: 70%;
         --l-80: 80%;
         --l-90: 90%;
+        --l-95: 95%;
         --l-100: 100%;
       }
 
@@ -69,6 +71,7 @@ export class CanaryStylesDefault extends LitElement {
         --canary-theme: "dark";
 
         --l-0: 100%;
+        --l-5: 95%;
         --l-10: 90%;
         --l-20: 80%;
         --l-30: 70%;
@@ -78,6 +81,7 @@ export class CanaryStylesDefault extends LitElement {
         --l-70: 30%;
         --l-80: 20%;
         --l-90: 10%;
+        --l-95: 5%;
         --l-100: 0%;
       }
     `,
@@ -88,6 +92,7 @@ export class CanaryStylesDefault extends LitElement {
         --_canary-color-gray-ch: var(--canary-color-gray-ch, 0 0);
 
         --canary-color-primary-0: lch(var(--l-0) var(--_canary-color-primary-ch));
+        --canary-color-primary-5: lch(var(--l-5) var(--_canary-color-primary-ch));
         --canary-color-primary-10: lch(var(--l-10) var(--_canary-color-primary-ch));
         --canary-color-primary-20: lch(var(--l-20) var(--_canary-color-primary-ch));
         --canary-color-primary-30: lch(var(--l-30) var(--_canary-color-primary-ch));
@@ -97,9 +102,11 @@ export class CanaryStylesDefault extends LitElement {
         --canary-color-primary-70: lch(var(--l-70) var(--_canary-color-primary-ch));
         --canary-color-primary-80: lch(var(--l-80) var(--_canary-color-primary-ch));
         --canary-color-primary-90: lch(var(--l-90) var(--_canary-color-primary-ch));
+        --canary-color-primary-95: lch(var(--l-95) var(--_canary-color-primary-ch));
         --canary-color-primary-100: lch(var(--l-100) var(--_canary-color-primary-ch));
         
         --canary-color-gray-0: lch(var(--l-0) var(--_canary-color-gray-ch));
+        --canary-color-gray-5: lch(var(--l-5) var(--_canary-color-gray-ch));
         --canary-color-gray-10: lch(var(--l-10) var(--_canary-color-gray-ch));
         --canary-color-gray-20: lch(var(--l-20) var(--_canary-color-gray-ch));
         --canary-color-gray-30: lch(var(--l-30) var(--_canary-color-gray-ch));
@@ -109,6 +116,7 @@ export class CanaryStylesDefault extends LitElement {
         --canary-color-gray-70: lch(var(--l-70) var(--_canary-color-gray-ch));
         --canary-color-gray-80: lch(var(--l-80) var(--_canary-color-gray-ch));
         --canary-color-gray-90: lch(var(--l-90) var(--_canary-color-gray-ch));
+        --canary-color-gray-95: lch(var(--l-95) var(--_canary-color-gray-ch));
         --canary-color-gray-100: lch(var(--l-100) var(--_canary-color-gray-ch));
       }
     `,

@@ -27,7 +27,7 @@ export class CanaryReference extends LitElement {
             ? html`<span class="excerpt">${unsafeHTML(this.excerpt)} </span>`
             : nothing}
         </div>
-        <div class="arrow">
+        <div class=${classMap({ arrow: true, selected: this.selected })}>
           <canary-hero-icon name="chevron-right"></canary-hero-icon>
         </div>
       </div>
@@ -72,18 +72,19 @@ export class CanaryReference extends LitElement {
       justify-content: space-between;
 
       padding: 8px 16px;
-      border: 1px solid var(--canary-color-gray-5);
+      border: 1px solid var(--canary-color-gray-90);
       border-radius: 8px;
-      background-color: var(--canary-color-black);
+      background-color: var(--canary-color-gray-95);
 
       font-family: var(--canary-font-family);
       cursor: pointer;
     }
 
     .selected {
-      background-color: var(--canary-color-accent-low);
+      background-color: var(--canary-color-primary-95);
     }
 
+    .selected .arrow,
     .container:hover .arrow {
       opacity: 1;
     }

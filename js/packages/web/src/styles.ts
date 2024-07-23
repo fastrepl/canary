@@ -70,7 +70,7 @@ export const logo = css`
   }
 
   svg {
-    height: 16px;
+    height: 20px;
     max-width: 50px;
   }
 `;

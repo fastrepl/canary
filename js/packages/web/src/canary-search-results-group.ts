@@ -64,10 +64,7 @@ export class CanarySearchResultsGroup extends LitElement {
                   ?checked=${name === this.selectedGroup}
                 />
                 <label>
-                  <span class="name">${name}</span>
-                  <span class="count"
-                    >(${this.groupedReferences[name]?.length ?? 0})</span
-                  >
+                  ${`${name} (${this.groupedReferences[name]?.length ?? 0})`}
                 </label>
               </div>`,
           )}
@@ -171,10 +168,11 @@ export class CanarySearchResultsGroup extends LitElement {
         gap: 8px;
         padding-left: 4px;
         font-family: var(--canary-font-family);
+        color: var(--canary-color-gray-10);
       }
 
       .tab:hover {
-        color: var(--canary-color-white);
+        color: var(--canary-color-gray-0);
         text-decoration: underline;
       }
 
@@ -188,21 +186,9 @@ export class CanarySearchResultsGroup extends LitElement {
     `,
     css`
       label {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        gap: 2px;
-      }
-
-      .name {
         font-size: 12px;
         font-family: var(--canary-font-family);
-        color: var(--canary-color-gray-2);
-      }
-      .count {
-        font-size: 11px;
-        font-family: var(--canary-font-family);
-        color: var(--canary-color-gray-2);
+        text-decoration-skip-ink: none;
       }
     `,
   ];
