@@ -147,10 +147,6 @@ export class CanarySearchResultsGroup extends LitElement {
         flex-direction: column;
         gap: 10px;
         max-height: 425px;
-        overflow-y: hidden;
-      }
-      .container:hover {
-        overflow-y: auto;
       }
 
       .skeleton-container {

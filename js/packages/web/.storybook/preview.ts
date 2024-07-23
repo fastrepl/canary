@@ -31,7 +31,8 @@ const preview: Preview = {
       disable: true,
     },
     cssprops: {
-      "canary-color-primary-ch": { value: "30 296" },
+      "canary-color-primary-c": { value: "0.1" },
+      "canary-color-primary-h": { value: "260" },
     },
     msw: {
       handlers: {

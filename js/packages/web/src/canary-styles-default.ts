@@ -70,7 +70,8 @@ export class CanaryStylesDefault extends LitElement {
     `,
     css`
       :host {
-        --canary-theme: "light";
+        --canary-is-light: initial;
+        --canary-is-dark: ;
 
         --l-0: 0%;
         --l-5: 0%;
@@ -88,7 +89,8 @@ export class CanaryStylesDefault extends LitElement {
       }
 
       :host([theme="dark"]) {
-        --canary-theme: "dark";
+        --canary-is-light: ;
+        --canary-is-dark: initial;
 
         --l-0: 100%;
         --l-5: 95%;

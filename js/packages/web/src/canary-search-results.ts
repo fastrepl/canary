@@ -69,7 +69,6 @@ export class CanarySearchResults extends LitElement {
         flex-direction: column;
         gap: 8px;
         max-height: 425px;
-        overflow-y: scroll;
       }
       .skeleton-container {
         display: flex;

@@ -85,6 +85,7 @@ export const scrollContainer = css`
     padding-left: 4px;
     padding-right: 4px;
 
+    overflow-y: scroll;
     scrollbar-width: thin;
     scrollbar-color: var(--canary-color-gray-90) var(--canary-color-gray-100);
   }
