@@ -67,20 +67,20 @@ export class CanaryModeTabs extends LitElement {
 
         padding: 4px 8px;
         font-size: 12px;
-        border: 1px solid var(--canary-color-gray-6);
+        border: 1px solid var(--canary-color-gray-90);
 
         display: flex;
         align-items: center;
         height: 14px;
 
-        color: var(--canary-color-gray-3);
-        background-color: var(--canary-color-black);
+        color: var(--canary-color-gray-40);
+        background-color: var(--canary-color-gray-95);
       }
 
       .tab:hover,
       .selected {
-        color: var(--canary-color-white);
-        background-color: var(--canary-color-gray-6);
+        color: var(--canary-color-gray-0);
+        background-color: var(--canary-color-gray-90);
       }
 
       input {

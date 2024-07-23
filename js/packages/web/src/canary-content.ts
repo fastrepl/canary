@@ -98,9 +98,6 @@ export class CanaryContent extends LitElement {
       div.container {
         max-width: 500px;
 
-        color: var(--canary-color-gray-5);
-        background-color: var(--canary-color-gray-100);
-
         outline: none;
         padding: 8px 8px;
 
@@ -109,6 +106,8 @@ export class CanaryContent extends LitElement {
         box-shadow:
           0 20px 25px -5px rgb(0 0 0 / 0.1),
           0 8px 10px -6px rgb(0 0 0 / 0.1);
+
+        background-color: var(--canary-color-gray-100);
       }
     `,
   ];

@@ -1,7 +1,11 @@
 import { LitElement, html, css } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { customElement, state } from "lit/decorators.js";
 
 import { AskController } from "./controllers";
+
+import { consume } from "@lit/context";
+import { themeContext } from "./contexts";
+import { ThemeContext } from "./types";
 
 import "./canary-markdown";
 import "./canary-reference";
@@ -11,7 +15,9 @@ const NAME = "canary-ask-results";
 
 @customElement(NAME)
 export class CanaryAskResults extends LitElement {
-  @property() hljs = "github";
+  @consume({ context: themeContext, subscribe: true })
+  @state()
+  theme!: ThemeContext;
 
   private ask = new AskController(this);
 
@@ -34,7 +40,7 @@ export class CanaryAskResults extends LitElement {
   private _content() {
     return html`
       <canary-markdown
-        .hljs=${this.hljs}
+        .hljs=${this.theme === "dark" ? "github-dark" : "github"}
         .content=${this.ask.response}
       ></canary-markdown>
 
@@ -52,7 +58,7 @@ export class CanaryAskResults extends LitElement {
 
   static styles = css`
     .container {
-      border: 1px solid var(--canary-color-gray-6);
+      border: 1px solid var(--canary-color-gray-95);
       border-radius: 8px;
       padding: 2px 12px;
     }

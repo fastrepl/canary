@@ -80,8 +80,9 @@ export class CanaryReference extends LitElement {
       cursor: pointer;
     }
 
+    .container:hover,
     .selected {
-      background-color: var(--canary-color-primary-95);
+      background-color: var(--canary-color-primary-80);
     }
 
     .selected .arrow,
@@ -101,7 +102,7 @@ export class CanaryReference extends LitElement {
     }
 
     .title {
-      color: var(--canary-color-gray-1);
+      color: var(--canary-color-gray-10);
       font-size: 14px;
 
       max-width: 400px;
@@ -111,7 +112,7 @@ export class CanaryReference extends LitElement {
     }
 
     .excerpt {
-      color: var(--canary-color-gray-2);
+      color: var(--canary-color-gray-20);
       font-size: 12px;
 
       max-width: 400px;
@@ -121,8 +122,8 @@ export class CanaryReference extends LitElement {
     }
 
     .excerpt mark {
-      background-color: var(--canary-color-accent-high);
-      color: var(--canary-color-black);
+      background-color: var(--canary-color-primary-10);
+      color: var(--canary-color-gray-90);
       border-radius: 2px;
       padding: 0 2px;
     }
@@ -134,7 +135,7 @@ export class CanaryReference extends LitElement {
       gap: 2px;
 
       font-weight: lighter;
-      color: var(--canary-color-gray-3);
+      color: var(--canary-color-gray-30);
       font-size: 12px;
     }
 

@@ -23,6 +23,7 @@ export class CanaryAskInput extends LitElement {
           type="text"
           value=${this.query}
           autocomplete="off"
+          spellcheck="false"
           placeholder="Ask anything..."
           @input=${this._handleInput}
           @keydown=${this._handleKeyDown}
@@ -40,7 +41,7 @@ export class CanaryAskInput extends LitElement {
       span {
         font-size: 10px;
         font-family: var(--canary-font-family);
-        color: var(--canary-color-gray-4);
+        color: var(--canary-color-gray-30);
       }
     `,
   ];

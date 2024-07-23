@@ -40,8 +40,7 @@ export const input = css`
     align-items: center;
     gap: 4px;
     border-radius: 8px;
-    color: var(--canary-color-gray-1);
-    background-color: var(--canary-color-black);
+    background-color: var(--canary-color-gray-100);
   }
 
   input {
@@ -50,12 +49,12 @@ export const input = css`
     outline: none;
     border: none;
     font-size: 16px;
-    color: var(--canary-color-gray-1);
-    background-color: var(--canary-color-black);
+    color: var(--canary-color-gray-10);
+    background-color: var(--canary-color-gray-100);
   }
 
   input::placeholder {
-    color: var(--canary-color-gray-3);
+    color: var(--canary-color-gray-40);
     font-size: 14px;
   }
 

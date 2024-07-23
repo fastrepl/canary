@@ -23,6 +23,7 @@ export class CanarySearchInput extends LitElement {
           type="text"
           value=${this.query}
           autocomplete="off"
+          spellcheck="false"
           placeholder="Search for anything..."
           @input=${this._handleInput}
           @keydown=${this._handleKeyDown}
