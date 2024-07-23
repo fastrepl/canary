@@ -14,30 +14,16 @@ onMounted(async () => {
 });
 
 import Hero from "./Hero.vue";
+import Demo from "./Demo.vue";
 import Pricing from "./Pricing.vue";
 </script>
 
 <template>
-  <main class="flex flex-col items-center justify-center">
-    <Hero />
-
-    <div class="flex w-full justify-center">
-      <canary-styles-default framework="vitepress">
-        <canary-provider-mock>
-          <canary-content query="why use Canary?">
-            <canary-search slot="search">
-              <canary-search-input slot="input"></canary-search-input>
-              <canary-search-results slot="results"></canary-search-results>
-            </canary-search>
-            <canary-ask slot="ask">
-              <canary-ask-input slot="input"></canary-ask-input>
-              <canary-ask-results slot="results"></canary-ask-results>
-            </canary-ask>
-          </canary-content>
-        </canary-provider-mock>
-      </canary-styles-default>
-    </div>
-
-    <Pricing />
-  </main>
+  <canary-styles-default framework="vitepress">
+    <main class="flex flex-col items-center justify-center">
+      <Hero />
+      <Demo />
+      <Pricing />
+    </main>
+  </canary-styles-default>
 </template>

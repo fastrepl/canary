@@ -16,7 +16,7 @@ export class CanaryAsk extends LitElement {
   mode!: ModeContext;
 
   render() {
-    return this.mode.current === "Ask"
+    return this.mode?.current === "Ask"
       ? html`
           <div class="container">
             <div class="input-wrapper">

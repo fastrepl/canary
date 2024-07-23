@@ -16,7 +16,7 @@ export class CanarySearch extends LitElement {
   mode!: ModeContext;
 
   render() {
-    return this.mode.current === "Search"
+    return this.mode?.current === "Search"
       ? html`
           <div class="container">
             <div class="input-wrapper">

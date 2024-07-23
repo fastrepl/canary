@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const CLOUD_URL = "https://cloud.getcanary.dev";
+const GITHUB_URL = "https://github.com/fastrepl/canary";
 </script>
 
 <template>
@@ -21,12 +21,14 @@ const CLOUD_URL = "https://cloud.getcanary.dev";
               </p>
               <div class="mt-10 flex items-center justify-center gap-x-6">
                 <a
-                  :href="CLOUD_URL"
+                  href="/docs/guide/what-is-canary"
                   class="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >
                   Get started
                 </a>
-                <a href="/docs" class="hover:underline">Learn more →</a>
+                <a :href="GITHUB_URL" class="hover:underline"
+                  >⭐ Star us on GitHub →</a
+                >
               </div>
             </div>
 
