@@ -2,12 +2,15 @@ import { LitElement, html, css } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
 import "./canary-hero-icon";
+import { KeyboardTriggerController } from "./controllers";
+
+import type { TriggerShortcut } from "./types";
 
 const NAME = "canary-trigger-searchbar";
 
 @customElement(NAME)
 export class CanaryTriggerSearchbar extends LitElement {
-  @property({ type: String }) key: "cmdk" | "slash" = "cmdk";
+  @property({ type: String }) key: TriggerShortcut = "cmdk";
 
   render() {
     return html`
@@ -31,37 +34,9 @@ export class CanaryTriggerSearchbar extends LitElement {
     `;
   }
 
-  connectedCallback() {
-    super.connectedCallback();
-    document.addEventListener("keydown", this._handleShortcut);
-  }
-
-  disconnectedCallback() {
-    document.removeEventListener("keydown", this._handleShortcut);
-    super.disconnectedCallback();
-  }
-
-  private _handleShortcut(e: KeyboardEvent) {
-    const isShortcut = () => {
-      if (this.key === "cmdk") {
-        return e.key === "k" && (e.metaKey || e.ctrlKey);
-      }
-
-      if (this.key === "slash") {
-        return e.key === "/";
-      }
-    };
-
-    if (isShortcut()) {
-      e.preventDefault();
-
-      this.dispatchEvent(
-        new MouseEvent("click", {
-          bubbles: true,
-          cancelable: true,
-        }),
-      );
-    }
+  constructor() {
+    super();
+    new KeyboardTriggerController(this, this.key);
   }
 
   static styles = css`

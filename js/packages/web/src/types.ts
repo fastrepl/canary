@@ -81,3 +81,5 @@ export enum Mode {
 export type ThemeContext = "light" | "dark";
 
 export type Framework = "starlight" | "docusaurus" | "vitepress";
+
+export type TriggerShortcut = "cmdk" | "slash";

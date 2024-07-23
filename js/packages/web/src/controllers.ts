@@ -10,6 +10,7 @@ import {
   Mode,
   ModeContext,
   Reference,
+  TriggerShortcut,
 } from "./types";
 import { randomInteger } from "./utils";
 
@@ -216,4 +217,48 @@ export class KeyboardSelectionController<T> {
     this._items = items;
     this.host.requestUpdate();
   }
+}
+
+export class KeyboardTriggerController implements ReactiveController {
+  private host: ReactiveControllerHost & HTMLElement;
+  private _key: TriggerShortcut;
+
+  constructor(
+    host: ReactiveControllerHost & HTMLElement,
+    key: TriggerShortcut,
+  ) {
+    (this.host = host).addController(this as ReactiveController);
+    this._key = key;
+  }
+
+  hostConnected() {
+    document.addEventListener("keydown", this._handleKeyDown);
+  }
+
+  hostDisconnected() {
+    document.removeEventListener("keydown", this._handleKeyDown);
+  }
+
+  private _handleKeyDown = (e: KeyboardEvent) => {
+    const isShortcut = () => {
+      if (this._key === "cmdk") {
+        return e.key === "k" && (e.metaKey || e.ctrlKey);
+      }
+
+      if (this._key === "slash") {
+        return e.key === "/";
+      }
+    };
+
+    if (isShortcut()) {
+      e.preventDefault();
+
+      this.host.dispatchEvent(
+        new MouseEvent("click", {
+          bubbles: true,
+          cancelable: true,
+        }),
+      );
+    }
+  };
 }
