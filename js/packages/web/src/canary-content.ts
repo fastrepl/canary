@@ -83,7 +83,8 @@ export class CanaryContent extends LitElement {
       return;
     }
 
-    if (this.mode.current === "Search") {
+    // ? is added to prevent 'undefined' error we had in the past
+    if (this.mode?.current === "Search") {
       this.mode = { ...this.mode, current: Mode.Ask };
     } else {
       this.mode = { ...this.mode, current: Mode.Search };

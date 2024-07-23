@@ -70,9 +70,12 @@ export default defineConfig({
         {
           text: "Customization",
           items: [
-            { text: "Compose Built-ins", link: "/docs/customization/compose" },
-            { text: "Bring Your Own", link: "/docs/customization/byo" },
             { text: "Styling", link: "/docs/customization/styling" },
+            {
+              text: "Built-in components",
+              link: "/docs/customization/builtin",
+            },
+            { text: "Custom components", link: "/docs/customization/custom" },
           ],
         },
         {

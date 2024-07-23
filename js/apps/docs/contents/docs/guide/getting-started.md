@@ -33,7 +33,7 @@ import "@getcanary/web/components/<NAME>";
 
 ## Usage
 
-> Please check out [Compose Built-ins](/docs/customization/compose) section of the docs for details.
+> Please check out [Built-in Components](/docs/customization/builtin) section of the docs for details.
 
 ```html
 <canary-provider-cloud key="KEY" endpoint="https://cloud.getcanary.dev">

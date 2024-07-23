@@ -24,7 +24,7 @@ import Pricing from "./Pricing.vue";
     <div class="flex w-full justify-center">
       <canary-styles-default framework="vitepress">
         <canary-provider-mock>
-          <canary-content query="hi">
+          <canary-content query="why use Canary?">
             <canary-search slot="search">
               <canary-search-input slot="input"></canary-search-input>
               <canary-search-results slot="results"></canary-search-results>

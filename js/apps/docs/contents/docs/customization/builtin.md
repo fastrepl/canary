@@ -1,4 +1,4 @@
-# Compose Components
+# Built-in Components
 
 `Canary`'s main focus is to provide composable primitives, so you can build your own UI for any use-case.
 If there's something missing, please [open an issue](https://github.com/fastrepl/canary/issues/new).
