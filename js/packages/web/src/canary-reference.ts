@@ -41,6 +41,9 @@ export class CanaryReference extends LitElement {
         const text = path.replace(/-/g, " ");
         return text.charAt(0).toUpperCase() + text.slice(1);
       })
+      .map((text) =>
+        text.endsWith(".html") ? text.replace(".html", "") : text,
+      )
       .filter(Boolean)
       .slice(-4);
 

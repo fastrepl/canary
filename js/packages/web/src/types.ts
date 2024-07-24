@@ -39,7 +39,7 @@ type AskFunction = (
   query: string,
   handleDelta: (delta: Delta) => void,
   signal?: AbortSignal,
-) => Promise<any>;
+) => Promise<null>;
 
 export type CloudProviderContext = {
   type: "cloud";
@@ -55,6 +55,12 @@ export type PagefindProviderContext = {
   ask: AskFunction;
 };
 
+export type VitePressMinisearchProviderContext = {
+  type: "vitepress-minisearch";
+  search: SearchFunction;
+  ask: AskFunction;
+};
+
 export type MockProviderContext = {
   type: "mock";
   search: SearchFunction;
@@ -64,9 +70,10 @@ export type MockProviderContext = {
 export type QueryContext = string;
 
 export type ProviderContext =
+  | CloudProviderContext
   | MockProviderContext
   | PagefindProviderContext
-  | CloudProviderContext;
+  | VitePressMinisearchProviderContext;
 
 export type ModeContext = {
   options: Set<Mode>;

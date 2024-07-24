@@ -10,6 +10,7 @@ export default defineConfig({
           "canary-provider-mock",
           "canary-provider-cloud",
           "canary-provider-pagefind",
+          "canary-provider-vitepress-minisearch",
         ],
         ...["canary-styles-default"],
         ...[
@@ -38,7 +39,7 @@ export default defineConfig({
     },
     outDir: "components",
     rollupOptions: {
-      external: ["/pagefind/pagefind.js"],
+      external: ["/pagefind/pagefind.js", "@localSearchIndex", "minisearch"],
     },
   },
 });

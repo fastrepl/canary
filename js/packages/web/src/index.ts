@@ -2,6 +2,7 @@
 import "./canary-provider-mock";
 import "./canary-provider-cloud";
 import "./canary-provider-pagefind";
+import "./canary-provider-vitepress-minisearch";
 
 // styles
 import "./canary-styles-default";

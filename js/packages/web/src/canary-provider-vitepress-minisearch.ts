@@ -1,0 +1,117 @@
+import { LitElement, html } from "lit";
+import { customElement, property, state } from "lit/decorators.js";
+
+import { provide } from "@lit/context";
+import { providerContext } from "./contexts";
+
+import type { ProviderContext, Reference } from "./types";
+import { wrapper } from "./styles";
+
+const NAME = "canary-provider-vitepress-minisearch";
+
+type SearchResult = {
+  id: string;
+  title: string;
+  titles: string[];
+};
+
+@customElement(NAME)
+export class CanaryProviderVitepressMinisearch extends LitElement {
+  @provide({ context: providerContext })
+  @state()
+  root: ProviderContext = { type: "vitepress-minisearch" } as ProviderContext;
+
+  @property({ type: String }) localeIndex = "root";
+  @property({ type: Object }) miniSearchOptions: any = {
+    searchOptions: {},
+    options: {},
+  };
+
+  @state()
+  minisearch: {
+    search: (query: string) => SearchResult[];
+  } | null = null;
+
+  async connectedCallback() {
+    super.connectedCallback();
+    const data = await this._importIndexData();
+    const index = await this._buildIndex(data);
+
+    this.minisearch = {
+      search: (query) => index.search(query) as unknown as SearchResult[],
+    };
+
+    this.root.search = this.search;
+    this.root.ask = this.ask;
+  }
+
+  render() {
+    return html`<slot></slot>`;
+  }
+
+  private async _importIndexData() {
+    try {
+      // @ts-expect-error
+      const m = await import("@localSearchIndex");
+      const data = (await m.default[this.localeIndex]?.())?.default;
+      return data;
+    } catch (e) {
+      throw new Error(`Failed to import index from '@localSearchIndex': ${e}`);
+    }
+  }
+
+  private async _buildIndex(data: any) {
+    try {
+      const { default: MiniSearch } = await import("minisearch");
+      // https://github.com/vuejs/vitepress/blob/8f31a4c/src/client/theme-default/components/VPLocalSearchBox.vue#L72-L87
+      const index = MiniSearch.loadJSON(data, {
+        fields: ["title", "titles", "text"],
+        storeFields: ["title", "titles"],
+        searchOptions: {
+          fuzzy: 0.2,
+          prefix: true,
+          boost: { title: 4, text: 2, titles: 1 },
+          ...this.miniSearchOptions.searchOptions,
+        },
+        ...this.miniSearchOptions.options,
+      });
+
+      return index;
+    } catch (e) {
+      throw new Error(`Failed to import minisearch: ${e}`);
+    }
+  }
+
+  static styles = wrapper;
+
+  search = async (
+    query: string,
+    _signal?: AbortSignal,
+  ): Promise<Reference[]> => {
+    return new Promise((resolve) => {
+      if (!this.minisearch) {
+        resolve([]);
+        return;
+      }
+
+      const results = this.minisearch.search(query);
+      const references: Reference[] = results.map((result) => ({
+        url: new URL(result.id, window.location.origin).toString(),
+        title: result.title,
+        excerpt: result.titles.join(" "),
+      }));
+
+      resolve(references);
+    });
+  };
+
+  ask = async (..._: any[]) => {
+    throw new Error("'ask' is not supported for this provider");
+  };
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    [NAME]: CanaryProviderVitepressMinisearch;
+  }
+}
