@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
 
-onMounted(async () => {
+onMounted(() => {
   import("@getcanary/web/components/canary-styles-default");
   import("@getcanary/web/components/canary-provider-mock");
   import("@getcanary/web/components/canary-modal");

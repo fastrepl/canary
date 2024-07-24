@@ -99,7 +99,7 @@ const totalPrice = computed(
         <div class="w-full max-w-[400px] border p-3 shadow-sm rounded-lg">
           <div class="px-6 py-2 text-base-content">
             <h3 class="text-xl font-semibold text-primary">Hosted</h3>
-            <p class="mt-4 flex items-baseline">
+            <p class="my-4 flex items-baseline">
               <span class="text-5xl font-bold tracking-tight text-primary">
                 ${{ totalPrice }}
               </span>
@@ -108,7 +108,7 @@ const totalPrice = computed(
 
             <a
               href="/docs/guide/getting-started"
-              class="mt-6 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              class="rounded-md bg-blue-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
             >
               Get Started
             </a>

@@ -2,7 +2,7 @@
 import { onMounted } from "vue";
 import { useData } from "vitepress";
 
-onMounted(async () => {
+onMounted(() => {
   import("@getcanary/web/components/canary-styles-default");
   import("@getcanary/web/components/canary-provider-vitepress-minisearch");
   import("@getcanary/web/components/canary-modal");

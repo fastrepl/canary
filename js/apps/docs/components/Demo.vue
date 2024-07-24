@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from "vue";
 
-onMounted(async () => {
+onMounted(() => {
   import("@getcanary/web/components/canary-styles-default");
   import("@getcanary/web/components/canary-provider-mock");
   import("@getcanary/web/components/canary-trigger-searchbar");
@@ -24,8 +24,14 @@ const hue = ref(250);
 watch(
   [chroma, hue],
   ([c, h]) => {
-    document.documentElement.style.setProperty("--canary-color-primary-c", c);
-    document.documentElement.style.setProperty("--canary-color-primary-h", h);
+    document.documentElement.style.setProperty(
+      "--canary-color-primary-c",
+      c.toString(),
+    );
+    document.documentElement.style.setProperty(
+      "--canary-color-primary-h",
+      h.toString(),
+    );
   },
   { immediate: true },
 );

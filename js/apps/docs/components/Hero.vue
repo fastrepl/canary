@@ -10,7 +10,7 @@ const GITHUB_URL = "https://github.com/fastrepl/canary";
           <div class="mx-auto px-6 lg:px-8">
             <div class="mx-auto max-w-2xl text-center">
               <h1 class="text-4xl font-bold sm:text-6xl">
-                Questions <span class="text-indigo-500">Answered,</span>
+                Questions <span class="text-blue-500">Answered,</span>
                 Happy Developers.
               </h1>
               <p class="mt-6 text-lgt">
@@ -22,7 +22,7 @@ const GITHUB_URL = "https://github.com/fastrepl/canary";
               <div class="mt-10 flex items-center justify-center gap-x-6">
                 <a
                   href="/docs/guide/getting-started"
-                  class="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  class="rounded-md bg-blue-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                 >
                   Get started
                 </a>
