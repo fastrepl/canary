@@ -15,7 +15,8 @@
     "build-storybook": "storybook build",
     "chromatic": "chromatic --exit-zero-on-changes",
     "format": "prettier --plugin=prettier-plugin-pegjs . --write",
-    "peggy": "peggy src/grammers/groups.peggy --format es"
+    "peggy": "peggy src/grammers/groups.peggy --format es",
+    "test": "vitest run"
   },
   "dependencies": {
     "@lit-labs/observers": "^2.0.2",
@@ -45,7 +46,8 @@
     "storybook-source-link": "^4.0.1",
     "ts-lit-plugin": "^2.0.2",
     "typescript": "^5.2.2",
-    "vite": "^5.3.1"
+    "vite": "^5.3.1",
+    "vitest": "^2.0.4"
   },
   "msw": {
     "workerDirectory": [
