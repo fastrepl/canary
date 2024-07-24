@@ -4,7 +4,7 @@ import { ref, onMounted } from "vue";
 const loaded = ref(false);
 
 onMounted(() => {
-  const c1 = import("@getcanary/web/components/canary-styles-default");
+  const c1 = import("@getcanary/web/components/canary-root");
   const c2 = import("@getcanary/web/components/canary-provider-mock");
   const c3 = import("@getcanary/web/components/canary-content");
   const c4 = import("@getcanary/web/components/canary-search");
@@ -25,11 +25,11 @@ import Pricing from "./Pricing.vue";
 </script>
 
 <template>
-  <canary-styles-default framework="vitepress">
+  <canary-root framework="vitepress">
     <main class="flex flex-col items-center justify-center">
       <Hero />
       <Demo v-if="loaded" />
       <Pricing />
     </main>
-  </canary-styles-default>
+  </canary-root>
 </template>

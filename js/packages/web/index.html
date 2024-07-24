@@ -4,8 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@getcanary/web</title>
+    <script type="module" src="/src/canary-root.ts"></script>
     <script type="module" src="/src/canary-provider-mock.ts"></script>
-    <script type="module" src="/src/canary-styles-default.ts"></script>
     <script type="module" src="/src/canary-modal.ts"></script>
     <script type="module" src="/src/canary-trigger-searchbar.ts"></script>
     <script type="module" src="/src/canary-content.ts"></script>
@@ -18,7 +18,7 @@
   </head>
   <body>
     <canary-provider-mock>
-      <canary-styles-default theme="dark">
+      <canary-root theme="dark">
         <canary-modal>
           <canary-trigger-searchbar slot="trigger"></canary-trigger-searchbar>
           <canary-content slot="content">
@@ -32,7 +32,7 @@
             </canary-ask>
           </canary-content>
         </canary-modal>
-      </canary-styles-default>
+      </canary-root>
     </canary-provider-mock>
   </body>
 </html>

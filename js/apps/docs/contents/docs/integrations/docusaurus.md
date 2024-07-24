@@ -27,7 +27,7 @@ import "@getcanary/web/components/<NAME>";
 const config = {
   ...
   scripts: [ // [!code ++]
-    "canary-styles-default", // [!code ++]
+    "canary-root", // [!code ++]
     // add more components here // [!code ++]
   ].map((c) => ({ // [!code ++]
     type: "module", // [!code ++]
@@ -56,12 +56,12 @@ import { useEffect } from "react";
 export default function SearchBar() {
   // You can skip imports if you are using CDN.
   useEffect(() => {
-    import("@getcanary/web/components/canary-styles-default");
+    import("@getcanary/web/components/canary-root");
     // add more components here
   }, []);
 
   return (
-    <canary-styles-default framework="docusaurus">
+    <canary-root framework="docusaurus">
       {/* ... */}
     </canary-provider-cloud>
   );

@@ -2,7 +2,7 @@
 import { onMounted } from "vue";
 
 onMounted(() => {
-  import("@getcanary/web/components/canary-styles-default");
+  import("@getcanary/web/components/canary-root");
   import("@getcanary/web/components/canary-provider-mock");
   import("@getcanary/web/components/canary-modal");
   import("@getcanary/web/components/canary-trigger-searchbar");
@@ -18,7 +18,7 @@ onMounted(() => {
 
 <template>
   <div class="w-full max-w-[230px] pl-4 mr-auto">
-    <canary-styles-default framework="vitepress">
+    <canary-root framework="vitepress">
       <canary-provider-mock>
         <canary-modal>
           <canary-trigger-searchbar slot="trigger"></canary-trigger-searchbar>
@@ -34,6 +34,6 @@ onMounted(() => {
           </canary-content>
         </canary-modal>
       </canary-provider-mock>
-    </canary-styles-default>
+    </canary-root>
   </div>
 </template>

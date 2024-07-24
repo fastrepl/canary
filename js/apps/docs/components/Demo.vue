@@ -2,7 +2,7 @@
 import { onMounted, ref, watch } from "vue";
 
 onMounted(() => {
-  import("@getcanary/web/components/canary-styles-default");
+  import("@getcanary/web/components/canary-root");
   import("@getcanary/web/components/canary-provider-mock");
   import("@getcanary/web/components/canary-trigger-searchbar");
   import("@getcanary/web/components/canary-content");

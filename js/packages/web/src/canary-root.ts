@@ -1,26 +1,43 @@
 import { LitElement, html, css } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { customElement, property, state } from "lit/decorators.js";
 import { MutationController } from "@lit-labs/observers/mutation-controller.js";
 
 import { provide } from "@lit/context";
-import { themeContext } from "./contexts";
+import { themeContext, operationContext } from "./contexts";
 
-import type { Framework, ThemeContext } from "./types";
+import type { Framework, ThemeContext, OperationContext } from "./types";
 import { wrapper } from "./styles";
 
-const NAME = "canary-styles-default";
+const NAME = "canary-root";
 
 @customElement(NAME)
-export class CanaryStylesDefault extends LitElement {
+export class CanaryRoot extends LitElement {
   @property({ type: String }) framework: Framework = "starlight";
 
   @provide({ context: themeContext })
   @property({ type: String, reflect: true })
   theme: ThemeContext = "light";
 
+  @provide({ context: operationContext })
+  @state()
+  operation: OperationContext = { search: null, ask: null };
+
   connectedCallback() {
     super.connectedCallback();
+    this._handleThemeChange();
 
+    this.addEventListener("register", this._handleRegister);
+  }
+
+  disconnectedCallback() {
+    this.removeEventListener("register", this._handleRegister);
+  }
+
+  render() {
+    return html`<slot></slot>`;
+  }
+
+  private _handleThemeChange() {
     const [target] = document.getElementsByTagName("html");
     const useClassList = this.framework === "vitepress";
 
@@ -48,8 +65,9 @@ export class CanaryStylesDefault extends LitElement {
     });
   }
 
-  render() {
-    return html`<slot></slot>`;
+  private _handleRegister(e: Event) {
+    const ctx: OperationContext = (e as CustomEvent).detail;
+    this.operation = { ...this.operation, ...ctx };
   }
 
   static styles = [
@@ -154,6 +172,6 @@ export class CanaryStylesDefault extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    [NAME]: CanaryStylesDefault;
+    [NAME]: CanaryRoot;
   }
 }

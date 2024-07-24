@@ -30,7 +30,7 @@ import "@getcanary/web/components/<NAME>";
 export default defineConfig({
   ...
   head: [ // [!code ++]
-    "canary-styles-default", // [!code ++]
+    "canary-root", // [!code ++]
     // add more components here // [!code ++]
   ].map((tag) => [ // [!code ++]
     "script", // [!code ++]
@@ -60,15 +60,15 @@ You should modify the default [Layout](https://vitepress.dev/guide/extending-def
 
   // You can skip imports if you are using CDN.
   onMounted(() => {
-    import("@getcanary/web/components/canary-styles-default");
+    import("@getcanary/web/components/canary-root");
     // add more components here
   });
 </script>
 
 <template>
-  <canary-styles-default framework="vitepress">
+  <canary-root framework="vitepress">
     <!-- Rest of the code -->
-  </canary-styles-default>
+  </canary-root>
 </template>
 ```
 

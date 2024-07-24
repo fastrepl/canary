@@ -1,9 +1,5 @@
 import { LitElement, html } from "lit";
-import { customElement, state } from "lit/decorators.js";
-
-import { provide } from "@lit/context";
-import { providerContext } from "./contexts";
-import type { ProviderContext } from "./types";
+import { customElement } from "lit/decorators.js";
 
 import type { Delta } from "./types";
 import { wrapper } from "./styles";
@@ -12,19 +8,16 @@ const NAME = "canary-provider-mock";
 
 @customElement(NAME)
 export class CanaryProviderMock extends LitElement {
-  @provide({ context: providerContext })
-  @state()
-  root: ProviderContext = { type: "mock" } as ProviderContext;
-
   connectedCallback() {
     super.connectedCallback();
 
-    if (this.root.type !== "mock") {
-      throw new Error();
-    }
-
-    this.root.search = this.search;
-    this.root.ask = this.ask;
+    this.dispatchEvent(
+      new CustomEvent("register", {
+        detail: { search: this.search, ask: this.ask },
+        bubbles: true,
+        composed: true,
+      }),
+    );
   }
 
   render() {

@@ -1,11 +1,8 @@
 import { LitElement, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 
-import { provide } from "@lit/context";
-import { providerContext } from "./contexts";
-
-import type { ProviderContext, Reference } from "./types";
 import { wrapper } from "./styles";
+import type { Reference } from "./types";
 
 const NAME = "canary-provider-vitepress-minisearch";
 
@@ -17,10 +14,6 @@ type SearchResult = {
 
 @customElement(NAME)
 export class CanaryProviderVitepressMinisearch extends LitElement {
-  @provide({ context: providerContext })
-  @state()
-  root: ProviderContext = { type: "vitepress-minisearch" } as ProviderContext;
-
   @property({ type: String }) localeIndex = "root";
   @property({ type: Object }) miniSearchOptions: any = {
     searchOptions: {},
@@ -41,8 +34,13 @@ export class CanaryProviderVitepressMinisearch extends LitElement {
       search: (query) => index.search(query) as unknown as SearchResult[],
     };
 
-    this.root.search = this.search;
-    this.root.ask = this.ask;
+    this.dispatchEvent(
+      new CustomEvent("register", {
+        detail: { search: this.search, ask: this.ask },
+        bubbles: true,
+        composed: true,
+      }),
+    );
   }
 
   render() {

@@ -3,7 +3,7 @@ import { withThemeByDataAttribute } from "@storybook/addon-themes";
 import { MINIMAL_VIEWPORTS } from "@storybook/addon-viewport";
 
 import { html } from "lit";
-import "../src/canary-styles-default";
+import "../src/canary-root";
 
 import { http, HttpResponse, delay } from "msw";
 import { initialize, mswLoader } from "msw-storybook-addon";
@@ -15,7 +15,7 @@ import { MOCK_RESPONSE, mockAskReference, mockSearchReference } from "./mock";
 const preview: Preview = {
   loaders: [mswLoader],
   decorators: [
-    (story) => html`<canary-styles-default>${story()}</canary-styles-default>`,
+    (story) => html`<canary-root>${story()}</canary-root>`,
     withThemeByDataAttribute({
       themes: { light: "light", dark: "dark" },
       parentSelector: "html",

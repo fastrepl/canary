@@ -28,7 +28,7 @@ export default defineConfig({
     starlight({
       head: [ // [!code ++]
         ...[ // [!code ++]
-          "canary-styles-default", // [!code ++]
+          "canary-root", // [!code ++]
           // add more components here // [!code ++]
         ].map((c) => ({ // [!code ++]
           tag: "script", // [!code ++]
@@ -52,11 +52,11 @@ You can [override](https://starlight.astro.build/reference/overrides/#search) St
 ```html{7}
 <!-- <YOUR_COMPONENT>.astro -->
 <script>
-  import "@getcanary/web/components/canary-styles-default";
+  import "@getcanary/web/components/canary-root";
   // You can skip imports if you are using CDN.
 </script>
 
-<canary-styles-default framework="starlight">
+<canary-root framework="starlight">
   <!-- Rest of the code -->
 </canary-provider-cloud>
 ```

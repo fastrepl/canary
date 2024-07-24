@@ -1,9 +1,5 @@
 import { LitElement, html } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
-
-import { provide } from "@lit/context";
-import { providerContext } from "./contexts";
-import type { ProviderContext } from "./types";
+import { customElement, property } from "lit/decorators.js";
 
 import type { Delta } from "./types";
 import { wrapper } from "./styles";
@@ -12,10 +8,6 @@ const NAME = "canary-provider-cloud";
 
 @customElement(NAME)
 export class CanaryProviderCloud extends LitElement {
-  @provide({ context: providerContext })
-  @state()
-  root: ProviderContext = { type: "cloud" } as ProviderContext;
-
   @property() endpoint = "";
   @property() key = "";
 
@@ -26,14 +18,13 @@ export class CanaryProviderCloud extends LitElement {
       throw new Error("Endpoint and key are required");
     }
 
-    if (this.root.type !== "cloud") {
-      throw new Error();
-    }
-
-    this.root.endpoint = this.endpoint;
-    this.root.key = this.key;
-    this.root.search = this.search;
-    this.root.ask = this.ask;
+    this.dispatchEvent(
+      new CustomEvent("register", {
+        detail: { search: this.search, ask: this.ask },
+        bubbles: true,
+        composed: true,
+      }),
+    );
   }
 
   render() {

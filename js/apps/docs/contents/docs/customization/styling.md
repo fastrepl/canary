@@ -2,17 +2,17 @@
 
 ## Default Styles
 
-For most cases, [`canary-styles-default`](https://github.com/fastrepl/canary/blob/main/js/packages/web/src/canary-styles-default.ts) will be enough.
+For most cases, [`canary-root`](https://github.com/fastrepl/canary/blob/main/js/packages/web/src/canary-root.ts) will be enough.
 
 ### Light/Dark Mode
 
 ```html{1}
-<canary-styles-default framework="vitepress">
+<canary-root framework="vitepress">
     <!-- Rest of the code -->
-</canary-styles-default>
+</canary-root>
 ```
 
-Each documentation framework has its own way to add theme information to the dom. By providing `framework` attribute, `canary-styles-default` will handle the theme for you.
+Each documentation framework has its own way to add theme information to the dom. By providing `framework` attribute, `canary-root` will handle the theme for you.
 
 ### CSS Variables
 

@@ -1,20 +1,13 @@
 import { LitElement, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 
-import { provide } from "@lit/context";
-import { providerContext } from "./contexts";
-
-import type { Delta, Reference, ProviderContext } from "./types";
+import type { Delta, Reference } from "./types";
 import { wrapper } from "./styles";
 
 const NAME = "canary-provider-pagefind";
 
 @customElement(NAME)
 export class CanaryProviderPagefind extends LitElement {
-  @provide({ context: providerContext })
-  @state()
-  root: ProviderContext = { type: "pagefind" } as ProviderContext;
-
   @state() pagefind: { search: (query: string) => Promise<any> } | null = null;
 
   @property() baseUrl = "";
@@ -30,12 +23,13 @@ export class CanaryProviderPagefind extends LitElement {
     this.pagefind = pagefind;
     pagefind.init();
 
-    if (this.root.type !== "pagefind") {
-      throw new Error();
-    }
-
-    this.root.search = this.search;
-    this.root.ask = this.ask;
+    this.dispatchEvent(
+      new CustomEvent("register", {
+        detail: { search: this.search, ask: this.ask },
+        bubbles: true,
+        composed: true,
+      }),
+    );
   }
 
   private _importPagefind() {

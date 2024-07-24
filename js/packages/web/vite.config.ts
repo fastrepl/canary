@@ -5,14 +5,13 @@ export default defineConfig({
   build: {
     lib: {
       entry: [
-        "index",
+        ...["index", "canary-root"],
         ...[
           "canary-provider-mock",
           "canary-provider-cloud",
           "canary-provider-pagefind",
           "canary-provider-vitepress-minisearch",
         ],
-        ...["canary-styles-default"],
         ...[
           "canary-callout-cal",
           "canary-callout-calendly",

@@ -2,20 +2,20 @@ import { ReactiveController, ReactiveControllerHost } from "lit";
 import { Task, StatusRenderer } from "@lit/task";
 
 import { ContextConsumer } from "@lit/context";
-import { providerContext, modeContext, queryContext } from "./contexts";
+import { operationContext, modeContext, queryContext } from "./contexts";
 
 import {
-  ProviderContext,
-  QueryContext,
   Mode,
   ModeContext,
-  Reference,
+  QueryContext,
   TriggerShortcut,
+  OperationContext,
+  Reference,
 } from "./types";
 import { randomInteger } from "./utils";
 
 export class SearchController {
-  private _provider: ContextConsumer<{ __context__: ProviderContext }, any>;
+  private _operation: ContextConsumer<{ __context__: OperationContext }, any>;
   private _mode: ContextConsumer<{ __context__: ModeContext }, any>;
   private _query: ContextConsumer<{ __context__: QueryContext }, any>;
   private _task: Task<[Mode, string], Reference[]>;
@@ -23,8 +23,8 @@ export class SearchController {
   constructor(host: ReactiveControllerHost & HTMLElement) {
     host.addController(this as ReactiveController);
 
-    this._provider = new ContextConsumer(host, {
-      context: providerContext,
+    this._operation = new ContextConsumer(host, {
+      context: operationContext,
       subscribe: false,
     });
 
@@ -41,7 +41,7 @@ export class SearchController {
     this._task = new Task(
       host,
       async ([mode, query], { signal }) => {
-        const search = this._provider.value?.search;
+        const search = this._operation.value?.search;
 
         if (!mode || mode !== Mode.Search || !query?.trim() || !search) {
           return [];
@@ -62,7 +62,7 @@ export class SearchController {
 export class AskController {
   private host: ReactiveControllerHost;
 
-  private _provider: ContextConsumer<{ __context__: ProviderContext }, any>;
+  private _operation: ContextConsumer<{ __context__: OperationContext }, any>;
   private _mode: ContextConsumer<{ __context__: ModeContext }, any>;
   private _query: ContextConsumer<{ __context__: QueryContext }, any>;
   private _task: Task<[Mode, string], null>;
@@ -74,8 +74,8 @@ export class AskController {
   constructor(host: ReactiveControllerHost & HTMLElement) {
     (this.host = host).addController(this as ReactiveController);
 
-    this._provider = new ContextConsumer(host, {
-      context: providerContext,
+    this._operation = new ContextConsumer(host, {
+      context: operationContext,
       subscribe: false,
     });
 
@@ -92,7 +92,7 @@ export class AskController {
     this._task = new Task(
       host,
       async ([mode, query], { signal }) => {
-        const ask = this._provider.value?.ask;
+        const ask = this._operation.value?.ask;
 
         if (!mode || mode !== Mode.Ask || !query?.trim() || !ask) {
           return null;

@@ -30,7 +30,7 @@ import "@getcanary/web/components/<NAME>";
 This is typical usage of our components. For more details, please check out [Built-in Components](/docs/customization/builtin) page of the docs.
 
 ```html
-<canary-styles-default framework="vitepress">
+<canary-root framework="vitepress">
   <canary-provider-cloud key="KEY" endpoint="https://cloud.getcanary.dev">
     <canary-modal>
       <canary-trigger-searchbar slot="trigger"></canary-trigger-searchbar>
@@ -46,7 +46,7 @@ This is typical usage of our components. For more details, please check out [Bui
       </canary-content>
     </canary-modal>
   </canary-provider-cloud>
-</canary-styles-default>
+</canary-root>
 ```
 
 You can setup hosted search index and get `KEY` from [cloud.getcanary.dev](https://cloud.getcanary.dev) for free.

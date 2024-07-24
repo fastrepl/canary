@@ -41,39 +41,7 @@ type AskFunction = (
   signal?: AbortSignal,
 ) => Promise<null>;
 
-export type CloudProviderContext = {
-  type: "cloud";
-  endpoint: string;
-  key: string;
-  search: SearchFunction;
-  ask: AskFunction;
-};
-
-export type PagefindProviderContext = {
-  type: "pagefind";
-  search: SearchFunction;
-  ask: AskFunction;
-};
-
-export type VitePressMinisearchProviderContext = {
-  type: "vitepress-minisearch";
-  search: SearchFunction;
-  ask: AskFunction;
-};
-
-export type MockProviderContext = {
-  type: "mock";
-  search: SearchFunction;
-  ask: AskFunction;
-};
-
 export type QueryContext = string;
-
-export type ProviderContext =
-  | CloudProviderContext
-  | MockProviderContext
-  | PagefindProviderContext
-  | VitePressMinisearchProviderContext;
 
 export type ModeContext = {
   options: Set<Mode>;
@@ -90,3 +58,8 @@ export type ThemeContext = "light" | "dark";
 export type Framework = "starlight" | "docusaurus" | "vitepress";
 
 export type TriggerShortcut = "cmdk" | "slash";
+
+export type OperationContext = {
+  search?: SearchFunction | null;
+  ask?: AskFunction | null;
+};

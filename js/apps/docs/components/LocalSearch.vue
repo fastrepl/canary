@@ -3,7 +3,7 @@ import { onMounted } from "vue";
 import { useData } from "vitepress";
 
 onMounted(() => {
-  import("@getcanary/web/components/canary-styles-default");
+  import("@getcanary/web/components/canary-root");
   import("@getcanary/web/components/canary-provider-vitepress-minisearch");
   import("@getcanary/web/components/canary-modal");
   import("@getcanary/web/components/canary-trigger-searchbar");
@@ -18,7 +18,7 @@ const { localeIndex } = useData();
 
 <template>
   <div class="w-full max-w-[230px] pl-4 mr-auto">
-    <canary-styles-default framework="vitepress">
+    <canary-root framework="vitepress">
       <canary-provider-vitepress-minisearch :localeIndex="localeIndex">
         <canary-modal>
           <canary-trigger-searchbar slot="trigger"></canary-trigger-searchbar>
@@ -30,6 +30,6 @@ const { localeIndex } = useData();
           </canary-content>
         </canary-modal>
       </canary-provider-vitepress-minisearch>
-    </canary-styles-default>
+    </canary-root>
   </div>
 </template>
