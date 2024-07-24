@@ -16,9 +16,9 @@ export class CanaryReference extends LitElement {
 
   render() {
     return html`
-      <div
+      <a
+        href=${this.url}
         class=${classMap({ container: true, selected: this.selected })}
-        @click=${this._handleClick}
       >
         <div class="content">
           ${this.depth()}
@@ -30,7 +30,7 @@ export class CanaryReference extends LitElement {
         <div class=${classMap({ arrow: true, selected: this.selected })}>
           <canary-hero-icon name="chevron-right"></canary-hero-icon>
         </div>
-      </div>
+      </a>
     `;
   }
 
@@ -61,10 +61,6 @@ export class CanaryReference extends LitElement {
             )}
           </div>`}
     `;
-  }
-
-  private _handleClick() {
-    window.open(this.url, "_blank");
   }
 
   static styles = css`
@@ -146,6 +142,10 @@ export class CanaryReference extends LitElement {
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+    }
+
+    a {
+      text-decoration: none;
     }
   `;
 }
