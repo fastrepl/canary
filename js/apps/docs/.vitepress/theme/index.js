@@ -4,7 +4,7 @@ import DefaultTheme from "vitepress/theme";
 import "./tailwind.css";
 
 import { inject } from "@vercel/analytics";
-import Search from "../../components/Search.vue";
+import Search from "../../components/CloudSearch.vue";
 
 /** @type {import('vitepress').Theme} */
 export default {

@@ -26,10 +26,17 @@ export default defineConfig({
             new URL("../components/Home.vue", import.meta.url),
           ),
         },
+        // {
+        //   find: /^.*\/VPNavBarSearch\.vue$/,
+        //   replacement: fileURLToPath(
+        //     new URL("../components/LocalSearch.vue", import.meta.url),
+        //   ),
+        // },
       ],
     },
   },
   themeConfig: {
+    // search: { provider: "local" },
     // https://vitepress.dev/reference/default-theme-config
     siteTitle: "🐤 Canary",
     nav: [
