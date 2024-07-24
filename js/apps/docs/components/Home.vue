@@ -1,16 +1,22 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { ref, onMounted } from "vue";
 
-onMounted(async () => {
-  import("@getcanary/web/components/canary-styles-default");
-  import("@getcanary/web/components/canary-provider-mock");
-  import("@getcanary/web/components/canary-content");
-  import("@getcanary/web/components/canary-search");
-  import("@getcanary/web/components/canary-search-input");
-  import("@getcanary/web/components/canary-search-results");
-  import("@getcanary/web/components/canary-ask");
-  import("@getcanary/web/components/canary-ask-input");
-  import("@getcanary/web/components/canary-ask-results");
+const loaded = ref(false);
+
+onMounted(() => {
+  const c1 = import("@getcanary/web/components/canary-styles-default");
+  const c2 = import("@getcanary/web/components/canary-provider-mock");
+  const c3 = import("@getcanary/web/components/canary-content");
+  const c4 = import("@getcanary/web/components/canary-search");
+  const c5 = import("@getcanary/web/components/canary-search-input");
+  const c6 = import("@getcanary/web/components/canary-search-results");
+  const c7 = import("@getcanary/web/components/canary-ask");
+  const c8 = import("@getcanary/web/components/canary-ask-input");
+  const c9 = import("@getcanary/web/components/canary-ask-results");
+
+  Promise.all([c1, c2, c3, c4, c5, c6, c7, c8, c9]).then(() => {
+    loaded.value = true;
+  });
 });
 
 import Hero from "./Hero.vue";
@@ -22,7 +28,7 @@ import Pricing from "./Pricing.vue";
   <canary-styles-default framework="vitepress">
     <main class="flex flex-col items-center justify-center">
       <Hero />
-      <Demo />
+      <Demo v-if="loaded" />
       <Pricing />
     </main>
   </canary-styles-default>
