@@ -28,3 +28,4 @@ import "./canary-ask-results";
 import "./canary-modal";
 import "./canary-trigger-searchbar";
 import "./canary-content";
+import "./canary-tooltip";
