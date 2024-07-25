@@ -82,11 +82,13 @@ export const wrapper = css`
 
 export const scrollContainer = css`
   .container {
-    padding-left: 4px;
-    padding-right: 4px;
+    padding-left: 8px;
+    padding-right: 2px;
 
     overflow-y: scroll;
     scrollbar-width: thin;
-    scrollbar-color: var(--canary-color-gray-90) var(--canary-color-gray-100);
+    scrollbar-color: var(--canary-is-light, var(--canary-color-gray-90))
+      var(--canary-is-dark, var(--canary-color-gray-60))
+      var(--canary-color-gray-100);
   }
 `;

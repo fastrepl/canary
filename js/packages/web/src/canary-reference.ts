@@ -1,4 +1,4 @@
-import { LitElement, html, css, nothing } from "lit";
+import { LitElement, html, css, nothing, type PropertyValues } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
@@ -14,6 +14,12 @@ export class CanaryReference extends LitElement {
   @property() title = "";
   @property() excerpt: string | undefined = undefined;
   @property({ type: Boolean }) selected = false;
+
+  updated(changed: PropertyValues<this>) {
+    if (changed.get("selected")) {
+      this.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }
 
   render() {
     return html`
