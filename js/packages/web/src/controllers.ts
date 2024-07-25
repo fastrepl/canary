@@ -14,6 +14,16 @@ import {
 } from "./types";
 import { randomInteger } from "./utils";
 
+const wrapRenderer = <T>(renderer: StatusRenderer<T>) => {
+  return {
+    ...renderer,
+    error: (e) => {
+      console.error(e);
+      return renderer?.error?.(e);
+    },
+  } as StatusRenderer<T>;
+};
+
 export class SearchController {
   private _operation: ContextConsumer<{ __context__: OperationContext }, any>;
   private _mode: ContextConsumer<{ __context__: ModeContext }, any>;
@@ -25,7 +35,7 @@ export class SearchController {
 
     this._operation = new ContextConsumer(host, {
       context: operationContext,
-      subscribe: false,
+      subscribe: true,
     });
 
     this._mode = new ContextConsumer(host, {
@@ -55,7 +65,7 @@ export class SearchController {
   }
 
   render(renderFunctions: StatusRenderer<Reference[]>) {
-    return this._task.render(renderFunctions);
+    return this._task.render(wrapRenderer(renderFunctions));
   }
 }
 
@@ -146,7 +156,7 @@ export class AskController {
   }
 
   render(renderFunctions: StatusRenderer<null>) {
-    return this._task.render(renderFunctions);
+    return this._task.render(wrapRenderer(renderFunctions));
   }
 }
 

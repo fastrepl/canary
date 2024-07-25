@@ -3,6 +3,7 @@ import { customElement, property } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
 
+import { urlToParts } from "./utils";
 import "./canary-hero-icon";
 
 const NAME = "canary-reference";
@@ -35,17 +36,7 @@ export class CanaryReference extends LitElement {
   }
 
   depth() {
-    const paths = new URL(this.url).pathname.split("/");
-    const parts = paths
-      .map((path, _) => {
-        const text = path.replace(/-/g, " ");
-        return text.charAt(0).toUpperCase() + text.slice(1);
-      })
-      .map((text) =>
-        text.endsWith(".html") ? text.replace(".html", "") : text,
-      )
-      .filter(Boolean)
-      .slice(-4);
+    const parts = urlToParts(this.url);
 
     return html`
       ${parts.length == 0

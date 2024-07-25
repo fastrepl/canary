@@ -10,19 +10,13 @@ const NAME = "canary-provider-pagefind";
 export class CanaryProviderPagefind extends LitElement {
   @state() pagefind: { search: (query: string) => Promise<any> } | null = null;
 
-  @property({ type: String }) baseUrl = "";
-  @property({ type: String }) bundlePath = "/pagefind/pagefind.js";
+  @property({ type: String }) path = "/pagefind/pagefind.js";
 
   async connectedCallback() {
     super.connectedCallback();
 
     const pagefind = await this._importPagefind();
-    if (!pagefind) {
-      throw new Error("Pagefind is not available");
-    }
-
-    pagefind.init();
-    this.pagefind = pagefind;
+    this._initPagefind(pagefind);
 
     this.dispatchEvent(
       new CustomEvent("register", {
@@ -35,13 +29,22 @@ export class CanaryProviderPagefind extends LitElement {
 
   private async _importPagefind() {
     try {
-      const path = this.baseUrl
-        ? new URL(this.bundlePath, this.baseUrl).href
-        : this.bundlePath;
-
-      return import(path);
+      return import(
+        /* @vite-ignore */
+        /* webpackIgnore: true */
+        this.path
+      );
     } catch (e) {
-      throw new Error(`Failed to import index from '@localSearchIndex': ${e}`);
+      throw new Error(`Failed to import pagefind': ${e}`);
+    }
+  }
+
+  private async _initPagefind(pagefind: any) {
+    try {
+      pagefind.init();
+      this.pagefind = pagefind;
+    } catch (e) {
+      throw new Error(`Failed to initialize pagefind': ${e}`);
     }
   }
 

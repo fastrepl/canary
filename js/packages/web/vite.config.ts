@@ -3,6 +3,12 @@ import { resolve } from "path";
 
 export default defineConfig({
   build: {
+    minify: "terser",
+    terserOptions: {
+      format: {
+        comments: /webpackIgnore|@vite/,
+      },
+    },
     lib: {
       entry: [
         ...["index", "canary-root"],
@@ -39,7 +45,7 @@ export default defineConfig({
     },
     outDir: "components",
     rollupOptions: {
-      external: ["/pagefind/pagefind.js", "@localSearchIndex", "minisearch"],
+      external: ["@localSearchIndex", "minisearch"],
     },
   },
 });
