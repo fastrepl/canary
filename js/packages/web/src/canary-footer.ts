@@ -21,6 +21,7 @@ export class CanaryFooter extends LitElement {
       padding-top: 8px;
       text-align: end;
       font-size: 12px;
+      color: var(--canary-color-gray-20);
     }
 
     a {

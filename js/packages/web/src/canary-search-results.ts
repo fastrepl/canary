@@ -48,9 +48,6 @@ export class CanarySearchResults extends LitElement {
                   url=${url}
                   excerpt=${ifDefined(excerpt)}
                   ?selected=${index === this.selection.index}
-                  @mouseover=${() => {
-                    this.selection.index = index;
-                  }}
                 ></canary-reference>
               `,
             )}`;

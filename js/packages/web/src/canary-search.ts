@@ -25,10 +25,12 @@ export class CanarySearch extends LitElement {
                 <canary-mode-tabs></canary-mode-tabs>
               </slot>
             </div>
-            <div class="callouts">
-              <slot name="callout"></slot>
+            <div class="body">
+              <div class="callouts">
+                <slot name="callout"></slot>
+              </div>
+              <slot name="results"></slot>
             </div>
-            <slot name="results"></slot>
           </div>
         `
       : nothing;
@@ -51,6 +53,12 @@ export class CanarySearch extends LitElement {
     .callouts {
       display: flex;
       flex-direction: column;
+
+      padding-right: 12px;
+    }
+
+    .body {
+      padding-left: 4px;
     }
   `;
 }

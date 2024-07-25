@@ -10,11 +10,13 @@ export const callout = css`
     border: none;
     border-radius: 8px;
     padding: 8px 16px;
-    background-color: var(--canary-color-primary-90);
     margin-bottom: 8px;
+    background-color: var(--canary-is-light, var(--canary-color-primary-90))
+      var(--canary-is-dark, var(--canary-color-primary-80));
   }
   button:hover {
-    background-color: var(--canary-color-primary-80);
+    background-color: var(--canary-is-light, var(--canary-color-primary-95))
+      var(--canary-is-dark, var(--canary-color-primary-70));
   }
 
   div {
@@ -82,9 +84,6 @@ export const wrapper = css`
 
 export const scrollContainer = css`
   .container {
-    padding-left: 8px;
-    padding-right: 2px;
-
     overflow-y: scroll;
     scrollbar-width: thin;
     scrollbar-color: var(--canary-is-light, var(--canary-color-gray-90))

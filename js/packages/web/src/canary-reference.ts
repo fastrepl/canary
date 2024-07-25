@@ -120,7 +120,9 @@ export class CanaryReference extends LitElement {
     }
 
     .excerpt mark {
-      background-color: var(--canary-color-primary-20);
+      border-radius: 2px;
+      background-color: var(--canary-is-light, var(--canary-color-primary-30))
+        var(--canary-is-dark, var(--canary-color-primary-20));
       color: var(--canary-color-gray-90);
     }
 
