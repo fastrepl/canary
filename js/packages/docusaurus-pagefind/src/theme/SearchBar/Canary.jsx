@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
+import React from "react";
 
 export default function Canary({ path }) {
-  const [loaded, setLoaded] = useState(false);
+  const [loaded, setLoaded] = React.useState(false);
 
-  useEffect(() => {
+  React.useEffect(() => {
     Promise.all([
       import("@getcanary/web/components/canary-root"),
       import("@getcanary/web/components/canary-provider-pagefind"),

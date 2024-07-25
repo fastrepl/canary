@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import React from "react";
+
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import { usePluginData } from "@docusaurus/useGlobalData";
 
@@ -8,13 +9,13 @@ export default function Index() {
   const { siteConfig } = useDocusaurusContext();
   const { options } = usePluginData("docusaurus-plugin-pagefind-canary");
 
-  const [path, setPath] = useState("");
+  const [path, setPath] = React.useState("");
 
-  useEffect(() => {
+  React.useEffect(() => {
     setPath(`${siteConfig.baseUrl}pagefind/pagefind.js`);
   }, [siteConfig]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     for (const [k, v] of Object.entries(options?.styles ?? {})) {
       document.body.style.setProperty(k, v);
     }
