@@ -1,0 +1,33 @@
+{
+  "name": "@getcanary/docusaurus-pagefind",
+  "version": "0.0.2",
+  "author": "yujonglee <yujonglee@fastrepl.com>",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rm -rf dist && npm run transform && npm run copy && npm run format",
+    "copy": "cp -r src/theme dist",
+    "transform": "esbuild src/**/*.js --outdir=dist --format=cjs --platform=node --allow-overwrite",
+    "format": "npx prettier --write .",
+    "pub": "npm run build && npm publish --access public"
+  },
+  "dependencies": {
+    "@getcanary/web": "^0.0.42",
+    "cli-progress": "^3.12.0",
+    "micromatch": "^4.0.7",
+    "pagefind": "^1.1.0"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "devDependencies": {
+    "@docusaurus/module-type-aliases": "^3.4.0",
+    "@types/cli-progress": "^3.11.6",
+    "@types/micromatch": "^4.0.9",
+    "esbuild": "^0.23.0"
+  }
+}
