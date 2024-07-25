@@ -37,6 +37,7 @@ export class CanaryHeroIcon extends LitElement {
     svg {
       width: 1em;
       height: 1em;
+      padding-top: 0.075em;
       color: var(--canary-color-gray-30);
     }
   `;

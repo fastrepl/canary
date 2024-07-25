@@ -12,9 +12,10 @@ export const urlToParts = (url: string) => {
 
   const parts = paths
     .map((path, _) => {
-      const text = path.replace(/-/g, " ");
+      const text = path.replace(/[-_]/g, " ");
       return text.charAt(0).toUpperCase() + text.slice(1);
     })
+    .map((text) => (text.includes("#") ? text.split("#")[0] : text))
     .map((text) => (text.endsWith(".html") ? text.replace(".html", "") : text))
     .filter(Boolean)
     .slice(-4);

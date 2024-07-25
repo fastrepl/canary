@@ -2,6 +2,7 @@ import { LitElement, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 
 import type { Reference } from "./types";
+import type { PagefindResult } from "./types/pagefind";
 import { wrapper } from "./styles";
 
 const NAME = "canary-provider-pagefind";
@@ -59,13 +60,15 @@ export class CanaryProviderPagefind extends LitElement {
 
     return Promise.all(
       results.map((result: any) =>
-        result.data().then((d: any) => ({
-          url: d.url,
-          title: d.meta.title,
-          excerpt: d.excerpt,
-        })),
+        result.data().then((data: PagefindResult) => {
+          return data.sub_results.map((subResult) => ({
+            url: subResult.url,
+            title: `${subResult.title} | ${data.meta.title}`,
+            excerpt: subResult.excerpt,
+          }));
+        }),
       ),
-    );
+    ).then((arr) => arr.flat());
   };
 }
 

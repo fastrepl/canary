@@ -34,7 +34,13 @@ export default defineConfig({
           "canary-search-results-group",
         ],
         ...["canary-ask", "canary-ask-input", "canary-ask-results"],
-        ...["contexts", "controllers", "mixins", "types"],
+        ...[
+          "contexts",
+          "controllers",
+          "mixins",
+          "types/index",
+          "types/pagefind",
+        ],
         ...["canary-tooltip"],
       ].reduce(
         (acc, cur) => ({ ...acc, [cur]: resolve(__dirname, `src/${cur}.ts`) }),
