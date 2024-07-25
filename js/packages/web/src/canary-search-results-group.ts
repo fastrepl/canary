@@ -25,6 +25,7 @@ export class CanarySearchResultsGroup extends LitElement {
 
   @state() selectedGroup = "";
   @state() groupedReferences: Record<string, Reference[]> = {};
+  @state() groupCounts: Record<string, number> = {};
 
   private search = new SearchController(this);
   private selection = new KeyboardSelectionController<Reference>(this, {
@@ -34,29 +35,31 @@ export class CanarySearchResultsGroup extends LitElement {
   });
 
   updated(changed: PropertyValues<this>) {
-    if (
-      changed.has("groups") &&
-      !this.selectedGroup &&
-      this.groups.length > 0
-    ) {
-      this.selectedGroup = this.groups[0].name;
+    if (changed.has("groupedReferences")) {
+      const grouped = changed.get("groupedReferences")!;
+
+      const { name } = Object.entries(grouped).reduce(
+        (acc, [group, references]) => {
+          if (references.length > acc.length) {
+            return { ...acc, name: group, length: references.length };
+          }
+
+          return acc;
+        },
+        { name: this.groups[0].name, length: 0 },
+      );
+
+      this.selectedGroup = name;
     }
   }
+
   render() {
     return html`
       <div class="container">
         <div class="tabs">
           ${this.groups.map(
-            ({ name }, index) =>
-              html`<div
-                class=${classMap({
-                  tab: true,
-                  selected: name === this.selectedGroup,
-                  left: index === 0,
-                  right: index === this.groups.length - 1,
-                })}
-                @click=${() => (this.selectedGroup = name)}
-              >
+            ({ name }) =>
+              html`<div @click=${() => this._handleTabClick(name)}>
                 <input
                   type="radio"
                   name="mode"
@@ -64,8 +67,14 @@ export class CanarySearchResultsGroup extends LitElement {
                   .value=${name}
                   ?checked=${name === this.selectedGroup}
                 />
-                <label>
-                  ${`${name} (${this.groupedReferences[name]?.length ?? 0})`}
+                <label
+                  class=${classMap({
+                    tab: true,
+                    selectable: this.groupCounts[name] > 0,
+                    selected: name === this.selectedGroup,
+                  })}
+                >
+                  ${name}
                 </label>
               </div>`,
           )}
@@ -87,6 +96,12 @@ export class CanarySearchResultsGroup extends LitElement {
           complete: (references) => {
             const grouped = this._groupReferences(references, this.groups);
             this.groupedReferences = grouped;
+            this.groupCounts = Object.fromEntries(
+              Object.entries(grouped).map(([group, references]) => [
+                group,
+                references.length,
+              ]),
+            );
 
             const current = grouped[this.selectedGroup] ?? [];
 
@@ -99,9 +114,6 @@ export class CanarySearchResultsGroup extends LitElement {
                   url=${url}
                   excerpt=${ifDefined(excerpt)}
                   ?selected=${index === this.selection.index}
-                  @mouseover=${() => {
-                    this.selection.index = index;
-                  }}
                 ></canary-reference>
               `,
             )}`;
@@ -111,6 +123,10 @@ export class CanarySearchResultsGroup extends LitElement {
         })}
       </div>
     `;
+  }
+
+  private _handleTabClick(name: string) {
+    this.selectedGroup = name;
   }
 
   private _groupReferences(
@@ -158,30 +174,35 @@ export class CanarySearchResultsGroup extends LitElement {
     `,
     css`
       .tabs {
-        cursor: pointer;
         display: flex;
         flex-direction: row;
         align-items: center;
 
         gap: 8px;
         padding-left: 4px;
+
+        color: var(--canary-color-gray-50);
+        text-decoration-color: var(--canary-color-gray-50);
+      }
+
+      .tab {
+        cursor: pointer;
+      }
+
+      .selectable.tab:hover {
         color: var(--canary-color-gray-10);
-      }
-
-      .tab:hover {
-        color: var(--canary-color-gray-0);
         text-decoration: underline;
       }
 
-      .selected {
+      .selected.tab {
+        color: var(--canary-color-gray-10);
         text-decoration: underline;
+        text-decoration-color: var(--canary-color-gray-10);
       }
 
       input {
         display: none;
       }
-    `,
-    css`
       label {
         font-size: 12px;
         text-decoration-skip-ink: none;
