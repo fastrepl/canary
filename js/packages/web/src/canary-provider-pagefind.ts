@@ -1,7 +1,7 @@
 import { LitElement, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 
-import type { Delta, Reference } from "./types";
+import type { Reference } from "./types";
 import { wrapper } from "./styles";
 
 const NAME = "canary-provider-pagefind";
@@ -10,7 +10,8 @@ const NAME = "canary-provider-pagefind";
 export class CanaryProviderPagefind extends LitElement {
   @state() pagefind: { search: (query: string) => Promise<any> } | null = null;
 
-  @property() baseUrl = "";
+  @property({ type: String }) baseUrl = "";
+  @property({ type: String }) bundlePath = "/pagefind/pagefind.js";
 
   async connectedCallback() {
     super.connectedCallback();
@@ -20,25 +21,28 @@ export class CanaryProviderPagefind extends LitElement {
       throw new Error("Pagefind is not available");
     }
 
-    this.pagefind = pagefind;
     pagefind.init();
+    this.pagefind = pagefind;
 
     this.dispatchEvent(
       new CustomEvent("register", {
-        detail: { search: this.search, ask: this.ask },
+        detail: { search: this.search },
         bubbles: true,
         composed: true,
       }),
     );
   }
 
-  private _importPagefind() {
-    if (!this.baseUrl) {
-      throw new Error("baseUrl is required");
-    }
+  private async _importPagefind() {
+    try {
+      const path = this.baseUrl
+        ? new URL(this.bundlePath, this.baseUrl).href
+        : this.bundlePath;
 
-    /* @vite-ignore */
-    return import(new URL("/pagefind/pagefind.js", this.baseUrl).href);
+      return import(path);
+    } catch (e) {
+      throw new Error(`Failed to import index from '@localSearchIndex': ${e}`);
+    }
   }
 
   render() {
@@ -47,11 +51,11 @@ export class CanaryProviderPagefind extends LitElement {
 
   static styles = wrapper;
 
-  search = async (query: string, _signal?: AbortSignal) => {
-    const search = await this.pagefind!.search(query);
+  search = async (query: string, _?: AbortSignal): Promise<Reference[]> => {
+    const { results } = await this.pagefind!.search(query);
 
-    const results: Reference[] = await Promise.all(
-      search.results.slice(0, 10).map((result: any) =>
+    return Promise.all(
+      results.map((result: any) =>
         result.data().then((d: any) => ({
           url: d.url,
           title: d.meta.title,
@@ -59,17 +63,6 @@ export class CanaryProviderPagefind extends LitElement {
         })),
       ),
     );
-
-    return results;
-  };
-
-  ask = async (
-    _a: number,
-    _b: string,
-    _c: (delta: Delta) => void = () => {},
-    _d?: AbortSignal,
-  ) => {
-    throw new Error("'ask' is not supported for this provider");
   };
 }
 

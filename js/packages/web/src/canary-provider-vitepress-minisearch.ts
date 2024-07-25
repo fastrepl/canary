@@ -36,7 +36,7 @@ export class CanaryProviderVitepressMinisearch extends LitElement {
 
     this.dispatchEvent(
       new CustomEvent("register", {
-        detail: { search: this.search, ask: this.ask },
+        detail: { search: this.search },
         bubbles: true,
         composed: true,
       }),
@@ -101,10 +101,6 @@ export class CanaryProviderVitepressMinisearch extends LitElement {
 
       resolve(references);
     });
-  };
-
-  ask = async (..._: any[]) => {
-    throw new Error("'ask' is not supported for this provider");
   };
 }
 

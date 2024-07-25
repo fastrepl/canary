@@ -60,6 +60,6 @@ export type Framework = "starlight" | "docusaurus" | "vitepress";
 export type TriggerShortcut = "cmdk" | "slash";
 
 export type OperationContext = {
-  search?: SearchFunction | null;
-  ask?: AskFunction | null;
+  search: SearchFunction;
+  ask: AskFunction;
 };

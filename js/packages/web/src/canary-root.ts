@@ -20,7 +20,14 @@ export class CanaryRoot extends LitElement {
 
   @provide({ context: operationContext })
   @state()
-  operation: OperationContext = { search: null, ask: null };
+  operation: OperationContext = {
+    search: (..._) => {
+      throw new Error("'search' is not implemented");
+    },
+    ask: (..._) => {
+      throw new Error("'ask' is not implemented");
+    },
+  };
 
   connectedCallback() {
     super.connectedCallback();
