@@ -1,6 +1,6 @@
 {
   "name": "@getcanary/docusaurus-pagefind",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "author": "yujonglee <yujonglee@fastrepl.com>",
   "license": "MIT",
   "main": "dist/index.js",
@@ -21,8 +21,9 @@
     "pagefind": "^1.1.0"
   },
   "peerDependencies": {
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0"
+    "@docusaurus/core": "^2.0.0 || ^3.0.0",
+    "react": "^17 || ^18",
+    "react-dom": "^17 || ^18"
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "^3.4.0",
