@@ -1,6 +1,6 @@
 {
   "name": "@getcanary/web",
-  "version": "0.0.42",
+  "version": "0.0.43",
   "type": "module",
   "main": "components/index.js",
   "files": [
@@ -25,7 +25,8 @@
     "@lit/task": "^1.0.1",
     "highlight.js": "^11.10.0",
     "lit": "^3.1.4",
-    "marked": "^13.0.2"
+    "marked": "^13.0.2",
+    "p-debounce": "^4.0.0"
   },
   "devDependencies": {
     "@ljcl/storybook-addon-cssprops": "^4.0.0",

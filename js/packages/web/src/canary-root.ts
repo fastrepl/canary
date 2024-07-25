@@ -5,6 +5,8 @@ import { MutationController } from "@lit-labs/observers/mutation-controller.js";
 import { provide } from "@lit/context";
 import { themeContext, operationContext } from "./contexts";
 
+import pDebounce from "p-debounce";
+
 import type { Framework, ThemeContext, OperationContext } from "./types";
 import { wrapper } from "./styles";
 
@@ -74,6 +76,11 @@ export class CanaryRoot extends LitElement {
 
   private _handleRegister(e: Event) {
     const ctx: OperationContext = (e as CustomEvent).detail;
+    if (ctx.search) {
+      console.log("debouncing search");
+      ctx.search = pDebounce(ctx.search, 200);
+    }
+
     this.operation = { ...this.operation, ...ctx };
   }
 
