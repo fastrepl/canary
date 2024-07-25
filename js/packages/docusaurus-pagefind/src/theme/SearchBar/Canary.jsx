@@ -15,7 +15,9 @@ export default function Canary({ path }) {
       import("@getcanary/web/components/canary-search-results"),
     ])
       .then(() => setLoaded(true))
-      .catch(console.error);
+      .catch((e) =>
+        console.error("Maybe you forgot to install '@getcanary/web'?", e),
+      );
   }, []);
 
   if (!loaded) {
