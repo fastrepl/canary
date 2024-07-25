@@ -4,10 +4,10 @@ import { urlToParts } from "./utils";
 
 describe("urlToParts", () => {
   test("with host", () => {
-    expect(urlToParts("https://example.com/docs/abc/Bcd/d")).toEqual([
+    expect(urlToParts("https://example.com/docs/ab-c/B_cd/d")).toEqual([
       "Docs",
-      "Abc",
-      "Bcd",
+      "Ab c",
+      "B cd",
       "D",
     ]);
   });
