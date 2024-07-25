@@ -3,8 +3,6 @@ import path from "path";
 
 import micromatch from "micromatch";
 
-import { NAME } from "./shared";
-
 // inspired by:
 // https://github.com/praveenn77/docusaurus-lunr-search/blob/76c49c4/src/utils.js#L55
 export const getFilePaths = (routesPaths, outDir, baseUrl, options) => {
@@ -29,7 +27,7 @@ export const getFilePaths = (routesPaths, outDir, baseUrl, options) => {
 
     if (filePath && !fs.existsSync(filePath)) {
       console.warn(
-        `${NAME}: could not resolve file for route '${route}', it will be missing in the search index`,
+        `@getcanary/docusaurus-pagefind: could not resolve file for route '${route}', it will be missing in the search index`,
       );
       continue;
     }

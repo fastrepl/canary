@@ -1,6 +1,6 @@
 {
   "name": "@getcanary/docusaurus-pagefind",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "author": "yujonglee <yujonglee@fastrepl.com>",
   "license": "MIT",
   "main": "dist/index.js",
