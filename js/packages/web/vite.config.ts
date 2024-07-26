@@ -27,7 +27,7 @@ export default defineConfig({
         ],
         "canary-modal",
         "canary-content",
-        "canary-trigger-searchbar",
+        ...["canary-trigger-searchbar", "canary-trigger-logo"],
         ...[
           "canary-search",
           "canary-search-input",

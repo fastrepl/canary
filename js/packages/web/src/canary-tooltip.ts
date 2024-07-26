@@ -93,8 +93,8 @@ export class CanaryTooltip extends LitElement {
       top: 0;
       left: 0;
 
-      background: var(--canary-color-gray-95);
-      color: var(--canary-color-gray-5);
+      background: var(--canary-color-gray-5);
+      color: var(--canary-color-gray-95);
       font-weight: bold;
       padding: 5px;
       border-radius: 4px;
@@ -103,7 +103,7 @@ export class CanaryTooltip extends LitElement {
 
     #arrow {
       position: absolute;
-      background: var(--canary-color-gray-95);
+      background: var(--canary-color-gray-5);
       width: 8px;
       height: 8px;
       transform: rotate(45deg);

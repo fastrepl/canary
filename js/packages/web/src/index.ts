@@ -26,6 +26,7 @@ import "./canary-ask-results";
 
 // others
 import "./canary-modal";
-import "./canary-trigger-searchbar";
 import "./canary-content";
 import "./canary-tooltip";
+import "./canary-trigger-logo";
+import "./canary-trigger-searchbar";
