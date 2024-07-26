@@ -25,5 +25,5 @@ export default function Index() {
     return null;
   }
 
-  return <Canary path={path} />;
+  return <Canary options={{ ...options, path: path }} />;
 }

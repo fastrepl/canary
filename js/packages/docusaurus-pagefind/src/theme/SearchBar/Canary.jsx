@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function Canary({ path }) {
+export default function Canary({ options }) {
   const [loaded, setLoaded] = React.useState(false);
 
   React.useEffect(() => {
@@ -26,7 +26,7 @@ export default function Canary({ path }) {
 
   return (
     <canary-root framework="docusaurus">
-      <canary-provider-pagefind path={path}>
+      <canary-provider-pagefind options={options}>
         <canary-modal>
           <canary-trigger-searchbar slot="trigger"></canary-trigger-searchbar>
           <canary-content slot="content">
