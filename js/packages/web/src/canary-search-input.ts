@@ -39,6 +39,7 @@ export class CanarySearchInput extends LitElement {
   private _handleInput(e: KeyboardEvent) {
     const input = e.target as HTMLInputElement;
 
+    this.query = input.value;
     this.dispatchEvent(
       new CustomEvent("input-change", {
         detail: input.value,
