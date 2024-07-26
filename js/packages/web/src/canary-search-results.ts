@@ -29,7 +29,7 @@ export class CanarySearchResults extends LitElement {
       <div class="container">
         ${this.search.render({
           error: () => html`<canary-error></canary-error>`,
-          pending: () => this._renderReferences(),
+          pending: () => this._results(),
           complete: (references) => {
             if (!references) {
               return noChange;
@@ -38,16 +38,16 @@ export class CanarySearchResults extends LitElement {
             this.selection.items = references;
             this._references = references;
 
-            return this._renderReferences();
+            return this._results();
           },
         })}
       </div>
     `;
   }
 
-  private _renderReferences() {
+  private _results() {
     if (!this._references) {
-      return this._renderSkeletons(5);
+      return this._skeletons(5);
     }
 
     return html`${this._references.map(
@@ -62,7 +62,7 @@ export class CanarySearchResults extends LitElement {
     )}`;
   }
 
-  private _renderSkeletons(n: number) {
+  private _skeletons(n: number) {
     return html` <div class="skeleton-container">
       ${Array(n).fill(
         html`<canary-reference-skeleton></canary-reference-skeleton>`,

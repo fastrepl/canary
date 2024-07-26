@@ -11,8 +11,6 @@ import { wrapper } from "./styles";
 import { provide } from "@lit/context";
 import { modeContext, queryContext } from "./contexts";
 
-import "./canary-footer";
-
 const NAME = "canary-content";
 
 @customElement(NAME)
@@ -69,7 +67,7 @@ export class CanaryContent extends LitElement {
       >
         <slot name="search"></slot>
         <slot name="ask"></slot>
-        <canary-footer></canary-footer>
+        <slot name="footer"></slot>
       </div>
     `;
   }
