@@ -8,18 +8,15 @@ import { wrapper } from "./styles";
 const NAME = "canary-provider-pagefind";
 
 type Options = {
+  path?: string;
   styles?: Record<string, string>;
   pagefind?: { ranking: Record<string, number> };
 };
 
 @customElement(NAME)
 export class CanaryProviderPagefind extends LitElement {
-  @state() pagefind: { search: (query: string) => Promise<any> } | null = null;
-
-  // TODO: remove, get from options
-  @property({ type: String }) path = "/pagefind/pagefind.js";
-
   @property({ type: Object }) options: Options = {};
+  @state() pagefind: { search: (query: string) => Promise<any> } | null = null;
 
   async connectedCallback() {
     super.connectedCallback();
@@ -42,7 +39,7 @@ export class CanaryProviderPagefind extends LitElement {
       return import(
         /* @vite-ignore */
         /* webpackIgnore: true */
-        this.path
+        this.options?.path ?? "/pagefind/pagefind.js"
       );
     } catch (e) {
       throw new Error(`Failed to import pagefind': ${e}`);
@@ -95,7 +92,6 @@ export class CanaryProviderPagefind extends LitElement {
             },
             { subResult: data.sub_results[0], score: -1 },
           );
-          console.log(subResult, data);
 
           return {
             url: subResult.url,
