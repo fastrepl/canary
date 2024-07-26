@@ -32,7 +32,7 @@ export class CanarySearchResultsGroup extends LitElement {
   private _search = new SearchController(this);
   private _selection = new KeyboardSelectionController<Reference>(this, {
     handleEnter: (item) => {
-      window.open(item.url, "_blank");
+      window.location.href = item.url;
     },
   });
 
