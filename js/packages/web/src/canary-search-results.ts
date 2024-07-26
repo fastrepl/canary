@@ -7,9 +7,9 @@ import type { Reference } from "./types";
 
 import { SearchController, KeyboardSelectionController } from "./controllers";
 
+import "./canary-error";
 import "./canary-reference";
 import "./canary-reference-skeleton";
-import "./canary-error";
 
 const NAME = "canary-search-results";
 
@@ -22,44 +22,52 @@ export class CanarySearchResults extends LitElement {
     },
   });
 
+  private _references: Reference[] | null = null;
+
   render() {
     return html`
       <div class="container">
         ${this.search.render({
-          initial: () =>
-            html` <div class="skeleton-container">
-              ${Array(4).fill(
-                html`<canary-reference-skeleton></canary-reference-skeleton>`,
-              )}
-            </div>`,
-          pending: () =>
-            html` <div class="skeleton-container">
-              ${Array(5).fill(
-                html`<canary-reference-skeleton></canary-reference-skeleton>`,
-              )}
-            </div>`,
+          error: () => html`<canary-error></canary-error>`,
+          pending: () => this._renderReferences(),
           complete: (references) => {
             if (!references) {
               return noChange;
             }
 
             this.selection.items = references;
+            this._references = references;
 
-            return html`${references.map(
-              ({ title, url, excerpt }, index) => html`
-                <canary-reference
-                  title=${title}
-                  url=${url}
-                  excerpt=${ifDefined(excerpt)}
-                  ?selected=${index === this.selection.index}
-                ></canary-reference>
-              `,
-            )}`;
+            return this._renderReferences();
           },
-          error: () => html`<canary-error></canary-error>`,
         })}
       </div>
     `;
+  }
+
+  private _renderReferences() {
+    if (!this._references) {
+      return this._renderSkeletons(5);
+    }
+
+    return html`${this._references.map(
+      ({ title, url, excerpt }, index) => html`
+        <canary-reference
+          title=${title}
+          url=${url}
+          excerpt=${ifDefined(excerpt)}
+          ?selected=${index === this.selection.index}
+        ></canary-reference>
+      `,
+    )}`;
+  }
+
+  private _renderSkeletons(n: number) {
+    return html` <div class="skeleton-container">
+      ${Array(n).fill(
+        html`<canary-reference-skeleton></canary-reference-skeleton>`,
+      )}
+    </div>`;
   }
 
   static styles = [
