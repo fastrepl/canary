@@ -1,9 +1,6 @@
 import { LitElement, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
-import { consume } from "@lit/context";
-import { queryContext } from "./contexts";
-
 import { input } from "./styles";
 import "./canary-hero-icon";
 
@@ -11,9 +8,7 @@ const NAME = "canary-search-input";
 
 @customElement(NAME)
 export class CanarySearchInput extends LitElement {
-  @consume({ context: queryContext, subscribe: true })
-  @property({ reflect: true })
-  query = "";
+  @property({ reflect: true }) query = "";
 
   render() {
     return html`

@@ -77,7 +77,7 @@ export class CanaryRoot extends LitElement {
   private _handleRegister(e: Event) {
     const ctx: OperationContext = (e as CustomEvent).detail;
     if (ctx.search) {
-      ctx.search = pDebounce(ctx.search, 50);
+      ctx.search = pDebounce(ctx.search, 120);
     }
 
     this.operation = { ...this.operation, ...ctx };
