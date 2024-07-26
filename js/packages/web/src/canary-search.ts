@@ -53,8 +53,6 @@ export class CanarySearch extends LitElement {
     .callouts {
       display: flex;
       flex-direction: column;
-
-      padding-right: 12px;
     }
 
     .body {

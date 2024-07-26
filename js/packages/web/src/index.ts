@@ -7,6 +7,7 @@ import "./canary-provider-pagefind";
 import "./canary-provider-vitepress-minisearch";
 
 // callouts
+import "./canary-callout";
 import "./canary-callout-cal";
 import "./canary-callout-calendly";
 import "./canary-callout-slack";

@@ -12,7 +12,7 @@ const NAME = "canary-callout-slack";
 
 @customElement(NAME)
 export class CanaryCalloutSlack extends CalloutMixin(LitElement) {
-  @property() message = "Looking for help?";
+  @property() message = "👋 Looking for help?";
 
   @property({ reflect: true, converter: StringArray })
   keywords: string[] = ["slack", "help", "support", "community"];
@@ -20,7 +20,7 @@ export class CanaryCalloutSlack extends CalloutMixin(LitElement) {
   renderCallout() {
     return html`
       <button @click=${this._handleClick}>
-        <span> 👋 ${this.message} </span>
+        <span> ${this.message}</span>
         <div>
           <canary-logo-slack></canary-logo-slack>
           <canary-hero-icon name="arrow-up-right"></canary-hero-icon>

@@ -41,6 +41,7 @@ const render = ({ type }: any) => {
               slot="results"
               groups="Docs:*;API:/api/.+$"
             ></canary-search-results-group>
+            <canary-callout-discord slot="callout"></canary-callout-discord>
           </canary-search>
         </canary-content>
       </canary-provider-cloud>

@@ -12,7 +12,7 @@ const NAME = "canary-callout-discord";
 
 @customElement(NAME)
 export class CanaryCalloutDiscord extends CalloutMixin(LitElement) {
-  @property() message = "Looking for help?";
+  @property() message = "👋 Looking for help?";
 
   @property({ reflect: true, converter: StringArray })
   keywords: string[] = ["discord", "help", "support", "community"];
@@ -20,7 +20,7 @@ export class CanaryCalloutDiscord extends CalloutMixin(LitElement) {
   renderCallout() {
     return html`
       <button @click=${this._handleClick}>
-        <span> 👋 ${this.message} </span>
+        <span>${this.message}</span>
         <div>
           <canary-logo-discord></canary-logo-discord>
           <canary-hero-icon name="arrow-up-right"></canary-hero-icon>

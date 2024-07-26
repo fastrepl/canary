@@ -1,4 +1,4 @@
-import { LitElement, html, css, type PropertyValues } from "lit";
+import { LitElement, html, css, nothing, type PropertyValues } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { classMap } from "lit/directives/class-map.js";
@@ -21,111 +21,109 @@ const NAME = "canary-search-results-group";
 @customElement(NAME)
 export class CanarySearchResultsGroup extends LitElement {
   @property({ converter: { fromAttribute: parse } })
-  readonly groups: GroupDefinition[] = [];
+  groups: GroupDefinition[] = [];
 
   @state() selectedGroup = "";
   @state() groupedReferences: Record<string, Reference[]> = {};
   @state() groupCounts: Record<string, number> = {};
 
-  private search = new SearchController(this);
-  private selection = new KeyboardSelectionController<Reference>(this, {
+  private _search = new SearchController(this);
+  private _selection = new KeyboardSelectionController<Reference>(this, {
     handleEnter: (item) => {
       window.open(item.url, "_blank");
     },
   });
 
   updated(changed: PropertyValues<this>) {
-    if (changed.has("groupedReferences")) {
-      const grouped = changed.get("groupedReferences")!;
-
-      const { name } = Object.entries(grouped).reduce(
-        (acc, [group, references]) => {
-          if (references.length > acc.length) {
-            return { ...acc, name: group, length: references.length };
-          }
-
-          return acc;
-        },
-        { name: this.groups[0].name, length: 0 },
-      );
-
-      this.selectedGroup = name;
+    if (changed.get("groupedReferences") && !this.selectedGroup) {
+      this.selectedGroup = this.groups[0].name;
     }
   }
 
   render() {
     return html`
       <div class="container">
-        <div class="tabs">
-          ${this.groups.map(
-            ({ name }) =>
-              html`<div @click=${() => this._handleTabClick(name)}>
-                <input
-                  type="radio"
-                  name="mode"
-                  .id=${name}
-                  .value=${name}
-                  ?checked=${name === this.selectedGroup}
-                />
-                <label
-                  class=${classMap({
-                    tab: true,
-                    selectable: this.groupCounts[name] > 0,
-                    selected: name === this.selectedGroup,
-                  })}
-                >
-                  ${name}
-                </label>
-              </div>`,
-          )}
-        </div>
-
-        ${this.search.render({
-          initial: () =>
-            html` <div class="skeleton-container">
-              ${Array(4).fill(
-                html`<canary-reference-skeleton></canary-reference-skeleton>`,
-              )}
-            </div>`,
-          pending: () =>
-            html` <div class="skeleton-container">
-              ${Array(5).fill(
-                html`<canary-reference-skeleton></canary-reference-skeleton>`,
-              )}
-            </div>`,
+        ${this._tabs()}
+        ${this._search.render({
+          error: () => html`<canary-error></canary-error>`,
+          initial: () => this._skeletons(5),
+          pending: () => this._skeletons(5),
           complete: (references) => {
-            const grouped = this._groupReferences(references, this.groups);
-            this.groupedReferences = grouped;
-            this.groupCounts = Object.fromEntries(
-              Object.entries(grouped).map(([group, references]) => [
-                group,
-                references.length,
-              ]),
+            this.groupedReferences = this._groupReferences(
+              references,
+              this.groups,
             );
 
-            const current = grouped[this.selectedGroup] ?? [];
-
-            this.selection.items = current;
-
-            return html`${current.map(
-              ({ title, url, excerpt }, index) => html`
-                <canary-reference
-                  title=${title}
-                  url=${url}
-                  excerpt=${ifDefined(excerpt)}
-                  ?selected=${index === this.selection.index}
-                ></canary-reference>
-              `,
-            )}`;
+            return nothing;
           },
-
-          error: () => html`<canary-error></canary-error>`,
         })}
+        ${this._currentResults()}
       </div>
     `;
   }
 
-  private _handleTabClick(name: string) {
+  private _tabs() {
+    return html`
+      <div class="tabs">
+        ${this.groups.map(
+          ({ name }) =>
+            html`<div @click=${() => this._handleTabClick(name)}>
+              <input
+                type="radio"
+                name="mode"
+                .id=${name}
+                .value=${name}
+                ?checked=${name === this.selectedGroup}
+              />
+              <label
+                class=${classMap({
+                  tab: true,
+                  selectable: this.groupCounts[name] > 0,
+                  selected: name === this.selectedGroup,
+                })}
+              >
+                ${name}
+              </label>
+            </div>`,
+        )}
+      </div>
+    `;
+  }
+
+  private _currentResults() {
+    const grouped = this.groupedReferences;
+
+    this.groupCounts = Object.fromEntries(
+      Object.entries(grouped).map(([group, references]) => [
+        group,
+        references.length,
+      ]),
+    );
+
+    const current = grouped[this.selectedGroup] ?? [];
+    this._selection.items = current;
+
+    return html`${current.map(
+      ({ title, url, excerpt }, index) => html`
+        <canary-reference
+          title=${title}
+          url=${url}
+          excerpt=${ifDefined(excerpt)}
+          ?selected=${index === this._selection.index}
+        ></canary-reference>
+      `,
+    )}`;
+  }
+
+  private _skeletons(n: number) {
+    return html` <div class="skeleton-container">
+      ${Array(n).fill(
+        html`<canary-reference-skeleton></canary-reference-skeleton>`,
+      )}
+    </div>`;
+  }
+
+  private _handleTabClick(name: string): void {
     this.selectedGroup = name;
   }
 

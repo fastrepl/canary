@@ -19,6 +19,7 @@ export default defineConfig({
           "canary-provider-vitepress-minisearch",
         ],
         ...[
+          "canary-callout",
           "canary-callout-cal",
           "canary-callout-calendly",
           "canary-callout-slack",

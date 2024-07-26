@@ -12,7 +12,7 @@ const NAME = "canary-callout-calendly";
 
 @customElement(NAME)
 export class CanaryCalloutCalendly extends CalloutMixin(LitElement) {
-  @property() message = "Wanna schedule a call?";
+  @property() message = "👋 Wanna schedule a call?";
 
   @property({ reflect: true, converter: StringArray })
   keywords: string[] = ["meeting", "schedule", "calend"];
@@ -20,7 +20,7 @@ export class CanaryCalloutCalendly extends CalloutMixin(LitElement) {
   renderCallout() {
     return html`
       <button @click=${this._handleClick}>
-        <span> 👋 ${this.message} </span>
+        <span>${this.message}</span>
         <div>
           <canary-logo-calendly></canary-logo-calendly>
           <canary-hero-icon name="arrow-up-right"></canary-hero-icon>

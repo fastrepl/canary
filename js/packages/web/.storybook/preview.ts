@@ -42,6 +42,11 @@ const preview: Preview = {
             const items = Array(Math.round(Math.random() * 5 + 5)).fill(
               mockSearchReference(data["query"]),
             );
+            items.push({
+              title: "456",
+              url: `https://example.com/api/a`,
+              excerpt: `mock response for <mark>123</mark>!`,
+            });
 
             await delay(Math.random() * 300 + 200);
             return HttpResponse.json(items);
