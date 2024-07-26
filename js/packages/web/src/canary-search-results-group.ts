@@ -1,11 +1,4 @@
-import {
-  LitElement,
-  html,
-  css,
-  nothing,
-  noChange,
-  type PropertyValues,
-} from "lit";
+import { LitElement, html, css, noChange, type PropertyValues } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { classMap } from "lit/directives/class-map.js";
@@ -31,8 +24,10 @@ export class CanarySearchResultsGroup extends LitElement {
   groups: GroupDefinition[] = [];
 
   @state() selectedGroup = "";
-  @state() groupedReferences: Record<string, Reference[]> = {};
-  @state() groupCounts: Record<string, number> = {};
+  @state() groupedReferences: Record<
+    string,
+    (Reference & { index: number })[]
+  > = {};
 
   private _search = new SearchController(this);
   private _selection = new KeyboardSelectionController<Reference>(this, {
@@ -42,8 +37,25 @@ export class CanarySearchResultsGroup extends LitElement {
   });
 
   updated(changed: PropertyValues<this>) {
-    if (changed.get("groupedReferences") && !this.selectedGroup) {
+    if (!this.selectedGroup && this.groups.length > 0) {
       this.selectedGroup = this.groups[0].name;
+    }
+
+    if (changed.has("groupedReferences") && !changed.has("selectedGroup")) {
+      const relevantGroup = Object.entries(this.groupedReferences).reduce(
+        (acc, [group, references]) => {
+          if (!references?.length || !this.groupedReferences?.[acc]?.length) {
+            return acc;
+          }
+
+          return references[0].index < this.groupedReferences[acc][0].index
+            ? group
+            : acc;
+        },
+        this.selectedGroup,
+      );
+
+      this.selectedGroup = relevantGroup;
     }
   }
 
@@ -53,8 +65,7 @@ export class CanarySearchResultsGroup extends LitElement {
         ${this._tabs()}
         ${this._search.render({
           error: () => html`<canary-error></canary-error>`,
-          initial: () => this._skeletons(5),
-          pending: () => this._skeletons(5),
+          pending: () => this._currentResults(),
           complete: (references) => {
             if (!references) {
               return noChange;
@@ -64,54 +75,52 @@ export class CanarySearchResultsGroup extends LitElement {
               references,
               this.groups,
             );
-
-            return nothing;
+            return this._currentResults();
           },
         })}
-        ${this._currentResults()}
       </div>
     `;
   }
 
   private _tabs() {
-    return html`
-      <div class="tabs">
-        ${this.groups.map(
-          ({ name }) =>
-            html`<div @click=${() => this._handleTabClick(name)}>
-              <input
-                type="radio"
-                name="mode"
-                .id=${name}
-                .value=${name}
-                ?checked=${name === this.selectedGroup}
-              />
-              <label
-                class=${classMap({
-                  tab: true,
-                  selectable: this.groupCounts[name] > 0,
-                  selected: name === this.selectedGroup,
-                })}
-              >
-                ${name}
-              </label>
-            </div>`,
-        )}
-      </div>
-    `;
-  }
-
-  private _currentResults() {
-    const grouped = this.groupedReferences;
-
-    this.groupCounts = Object.fromEntries(
-      Object.entries(grouped).map(([group, references]) => [
+    const counts = Object.fromEntries(
+      Object.entries(this.groupedReferences).map(([group, references]) => [
         group,
         references.length,
       ]),
     );
 
-    const current = grouped[this.selectedGroup] ?? [];
+    return html`
+      <div class="tabs">
+        ${this.groups.map(({ name }) => {
+          const selected = name === this.selectedGroup;
+          const selectable = counts[name] > 0;
+
+          return html`<div
+            @click=${() => selectable && this._handleTabClick(name)}
+          >
+            <input
+              type="radio"
+              name="mode"
+              .id=${name}
+              .value=${name}
+              ?checked=${name === this.selectedGroup}
+            />
+            <label class=${classMap({ tab: true, selectable, selected })}>
+              ${name}
+            </label>
+          </div>`;
+        })}
+      </div>
+    `;
+  }
+
+  private _currentResults() {
+    if (Object.keys(this.groupedReferences).length === 0) {
+      return this._skeletons(5);
+    }
+
+    const current = this.groupedReferences[this.selectedGroup] ?? [];
     this._selection.items = current;
 
     return html`${current.map(
@@ -144,20 +153,20 @@ export class CanarySearchResultsGroup extends LitElement {
   ) {
     const grouped = definitions.reduce(
       (acc, group) => ({ ...acc, [group.name]: [] }),
-      {} as Record<string, Reference[]>,
+      {} as Record<string, (Reference & { index: number })[]>,
     );
 
     const fallbackGroup = definitions.find((group) => group.pattern === null);
 
-    references.forEach((reference) => {
+    references.forEach((reference, index) => {
       const matchedGroup = definitions.find(
         (group) => group.pattern && group.pattern.test(reference.url),
       );
 
       if (matchedGroup) {
-        grouped[matchedGroup.name].push(reference);
+        grouped[matchedGroup.name].push({ ...reference, index });
       } else if (fallbackGroup) {
-        grouped[fallbackGroup.name].push(reference);
+        grouped[fallbackGroup.name].push({ ...reference, index });
       }
     });
 

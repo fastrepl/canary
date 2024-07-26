@@ -30,3 +30,4 @@ import "./canary-content";
 import "./canary-tooltip";
 import "./canary-trigger-logo";
 import "./canary-trigger-searchbar";
+import "./canary-footer";

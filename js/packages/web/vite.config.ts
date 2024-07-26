@@ -35,6 +35,7 @@ export default defineConfig({
           "canary-search-results-group",
         ],
         ...["canary-ask", "canary-ask-input", "canary-ask-results"],
+        ...["canary-tooltip", "canary-footer"],
         ...[
           "contexts",
           "controllers",
@@ -42,7 +43,6 @@ export default defineConfig({
           "types/index",
           "types/pagefind",
         ],
-        ...["canary-tooltip"],
       ].reduce(
         (acc, cur) => ({ ...acc, [cur]: resolve(__dirname, `src/${cur}.ts`) }),
         {} as Record<string, string>,
