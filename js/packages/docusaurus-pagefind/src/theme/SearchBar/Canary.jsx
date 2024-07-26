@@ -26,7 +26,7 @@ export default function Canary({ options }) {
 
   return (
     <canary-root framework="docusaurus">
-      <canary-provider-pagefind options={options}>
+      <canary-provider-pagefind options={JSON.stringify(options)}>
         <canary-modal>
           <canary-trigger-searchbar slot="trigger"></canary-trigger-searchbar>
           <canary-content slot="content">

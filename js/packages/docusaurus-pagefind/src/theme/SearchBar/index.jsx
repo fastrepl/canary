@@ -15,12 +15,6 @@ export default function Index() {
     setPath(`${siteConfig.baseUrl}pagefind/pagefind.js`);
   }, [siteConfig]);
 
-  React.useEffect(() => {
-    for (const [k, v] of Object.entries(options?.styles ?? {})) {
-      document.body.style.setProperty(k, v);
-    }
-  }, [options]);
-
   if (!path) {
     return null;
   }
