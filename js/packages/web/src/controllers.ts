@@ -28,7 +28,7 @@ export class SearchController {
   private _operation: ContextConsumer<{ __context__: OperationContext }, any>;
   private _mode: ContextConsumer<{ __context__: ModeContext }, any>;
   private _query: ContextConsumer<{ __context__: QueryContext }, any>;
-  private _task: Task<[Mode, string], Reference[]>;
+  private _task: Task<[Mode, string], Reference[] | null>;
 
   constructor(host: ReactiveControllerHost & HTMLElement) {
     host.addController(this as ReactiveController);
@@ -58,13 +58,13 @@ export class SearchController {
         }
 
         const result = await search(query, signal);
-        return result as Reference[];
+        return result as Reference[] | null;
       },
       () => [this._mode.value?.current, this._query.value],
     );
   }
 
-  render(renderFunctions: StatusRenderer<Reference[]>) {
+  render(renderFunctions: StatusRenderer<Reference[] | null>) {
     return this._task.render(wrapRenderer(renderFunctions));
   }
 }

@@ -16,7 +16,7 @@ type Options = {
 @customElement(NAME)
 export class CanaryProviderPagefind extends LitElement {
   @property({ type: Object }) options: Options = {};
-  @state() pagefind: { search: (query: string) => Promise<any> } | null = null;
+  @state() pagefind: any = null;
 
   async connectedCallback() {
     super.connectedCallback();
@@ -48,10 +48,6 @@ export class CanaryProviderPagefind extends LitElement {
 
   private async _initPagefind(pagefind: any) {
     try {
-      if (this.options.pagefind) {
-        await pagefind.options(this.options.pagefind);
-      }
-
       pagefind.init();
       this.pagefind = pagefind;
     } catch (e) {
@@ -73,11 +69,21 @@ export class CanaryProviderPagefind extends LitElement {
 
   static styles = wrapper;
 
-  search = async (query: string, _?: AbortSignal): Promise<Reference[]> => {
-    const { results } = await this.pagefind!.search(query);
+  search = async (
+    query: string,
+    _?: AbortSignal,
+  ): Promise<Reference[] | null> => {
+    const search = await this.pagefind.debouncedSearch(
+      query,
+      this.options.pagefind ?? {},
+      200,
+    );
+    if (!search) {
+      return new Promise((resolve) => resolve(null));
+    }
 
     return Promise.all(
-      results.map((result: any) =>
+      search.results.map((result: any) =>
         result.data().then((data: PagefindResult) => {
           const { subResult } = data.sub_results.reduce(
             (acc, cur) => {

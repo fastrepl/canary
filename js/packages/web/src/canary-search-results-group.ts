@@ -1,4 +1,11 @@
-import { LitElement, html, css, nothing, type PropertyValues } from "lit";
+import {
+  LitElement,
+  html,
+  css,
+  nothing,
+  noChange,
+  type PropertyValues,
+} from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { classMap } from "lit/directives/class-map.js";
@@ -49,6 +56,10 @@ export class CanarySearchResultsGroup extends LitElement {
           initial: () => this._skeletons(5),
           pending: () => this._skeletons(5),
           complete: (references) => {
+            if (!references) {
+              return noChange;
+            }
+
             this.groupedReferences = this._groupReferences(
               references,
               this.groups,

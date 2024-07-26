@@ -1,4 +1,4 @@
-import { LitElement, html, css } from "lit";
+import { LitElement, html, css, noChange } from "lit";
 import { customElement } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 
@@ -39,6 +39,10 @@ export class CanarySearchResults extends LitElement {
               )}
             </div>`,
           complete: (references) => {
+            if (!references) {
+              return noChange;
+            }
+
             this.selection.items = references;
 
             return html`${references.map(

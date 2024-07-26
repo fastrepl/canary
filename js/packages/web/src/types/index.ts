@@ -32,7 +32,7 @@ export type Reference = {
 type SearchFunction = (
   query: string,
   signal?: AbortSignal,
-) => Promise<Reference[]>;
+) => Promise<Reference[] | null>;
 
 type AskFunction = (
   id: number,
