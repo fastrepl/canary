@@ -39,7 +39,11 @@ const config = {
 
 ## Configuration
 
-### Step 1: Eject existing SearchBar
+### Option 1: Using `@getcanary/docusaurus-pagefind`
+
+### Option 2: Generic
+
+#### Step 1: Eject existing SearchBar
 
 You should [eject](https://docusaurus.io/docs/swizzling#ejecting) existing SearchBar component first.
 
@@ -47,7 +51,7 @@ You should [eject](https://docusaurus.io/docs/swizzling#ejecting) existing Searc
 npm run swizzle @docusaurus/theme-classic SearchBar -- --eject --javascript
 ```
 
-### Step 2: Modify ejected component
+#### Step 2: Modify ejected component
 
 ```js{12}
 // src/theme/SearchBar.js
@@ -63,7 +67,7 @@ export default function SearchBar() {
   return (
     <canary-root framework="docusaurus">
       {/* ... */}
-    </canary-provider-cloud>
+    </canary-root>
   );
 }
 ```

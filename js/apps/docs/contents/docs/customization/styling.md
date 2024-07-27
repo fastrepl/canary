@@ -1,20 +1,8 @@
 # Styling
 
-## Default Styles
+[`canary-root`](https://github.com/fastrepl/canary/blob/main/js/packages/web/src/canary-root.ts) do the heavy lifting for you.
 
-For most cases, [`canary-root`](https://github.com/fastrepl/canary/blob/main/js/packages/web/src/canary-root.ts) will be enough.
-
-### Light/Dark Mode
-
-```html{1}
-<canary-root framework="vitepress">
-    <!-- Rest of the code -->
-</canary-root>
-```
-
-Each documentation framework has its own way to add theme information to the dom. By providing `framework` attribute, `canary-root` will handle the theme for you.
-
-### CSS Variables
+## CSS Variables
 
 All components in Canary renders inside a [shadow DOM](https://developer.mozilla.org/en/docs/Web/API/Web_components/Using_shadow_DOM). So CSS in your documentation website will not affect the styling of Canary components by default.
 
@@ -28,3 +16,21 @@ All components in Canary renders inside a [shadow DOM](https://developer.mozilla
 --canary-color-gray-c
 --canary-color-gray-h
 ```
+
+<script setup>
+import Styling from "../../../components/Styling.vue";
+</script>
+
+<div class="flex flex-col items-center justify-center">
+<Styling />
+</div>
+
+## Light/Dark Mode
+
+```html{1}
+<canary-root framework="vitepress">
+    <!-- Rest of the code -->
+</canary-root>
+```
+
+Each documentation framework has its own way to add theme information to the dom. By providing `framework` attribute, `canary-root` will handle the theme for you.

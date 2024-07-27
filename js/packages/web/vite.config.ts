@@ -35,7 +35,7 @@ export default defineConfig({
           "canary-search-results-group",
         ],
         ...["canary-ask", "canary-ask-input", "canary-ask-results"],
-        ...["canary-tooltip", "canary-footer"],
+        ...["canary-reference", "canary-tooltip", "canary-footer"],
         ...[
           "contexts",
           "controllers",

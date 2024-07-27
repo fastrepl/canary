@@ -1,5 +1,0 @@
-# Operation
-
-## `SearchController`
-
-## `AskController`

@@ -85,7 +85,7 @@ export default defineConfig({
           text: "Canary Cloud",
           items: [
             {
-              text: "What is cloud?",
+              text: "Introduction",
               link: "/docs/cloud/intro",
             },
           ],
@@ -97,50 +97,6 @@ export default defineConfig({
             {
               text: "Optimizations",
               link: "/docs/miscellaneous/optimizations",
-            },
-          ],
-        },
-        {
-          text: "References",
-          collapsed: true,
-          items: [
-            {
-              text: "Controllers",
-              items: [
-                {
-                  text: "Operation",
-                  link: "/docs/controllers/operation",
-                },
-                {
-                  text: "Event",
-                  link: "/docs/controllers/event",
-                },
-              ],
-            },
-            {
-              text: "Components",
-              items: [
-                {
-                  text: "Provider",
-                  link: "/docs/components/provider",
-                },
-                {
-                  text: "Styles",
-                  link: "/docs/components/styles",
-                },
-                {
-                  text: "Layout",
-                  link: "/docs/components/layout",
-                },
-                {
-                  text: "Search",
-                  link: "/docs/components/search",
-                },
-                {
-                  text: "Ask",
-                  link: "/docs/components/ask",
-                },
-              ],
             },
           ],
         },
