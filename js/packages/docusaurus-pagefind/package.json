@@ -11,7 +11,7 @@
     "build": "rm -rf dist && npm run transform && npm run copy && npm run format",
     "copy": "cp -r src/theme dist",
     "transform": "esbuild src/**/*.js --outdir=dist --format=cjs --platform=node --allow-overwrite",
-    "format": "npx prettier --write .",
+    "format": "prettier --write .",
     "pub": "npm run build && npm publish --access public"
   },
   "dependencies": {
@@ -20,8 +20,8 @@
     "pagefind": "^1.1.0"
   },
   "peerDependencies": {
-    "@getcanary/web": "*",
     "@docusaurus/core": "^2.0.0 || ^3.0.0",
+    "@getcanary/web": "*",
     "react": "^17 || ^18",
     "react-dom": "^17 || ^18"
   },
@@ -29,6 +29,7 @@
     "@docusaurus/module-type-aliases": "^3.4.0",
     "@types/cli-progress": "^3.11.6",
     "@types/micromatch": "^4.0.9",
-    "esbuild": "^0.23.0"
+    "esbuild": "^0.23.0",
+    "prettier": "^3.3.3"
   }
 }

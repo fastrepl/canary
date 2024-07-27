@@ -1,4 +1,4 @@
-import { LitElement, css, html } from "lit";
+import { LitElement, css, html, nothing } from "lit";
 import {
   customElement,
   property,
@@ -67,7 +67,7 @@ export class CanaryContent extends LitElement {
       >
         <slot name="search"></slot>
         <slot name="ask"></slot>
-        <slot name="footer"></slot>
+        ${this.query ? html`<slot name="footer"></slot>` : nothing}
       </div>
     `;
   }

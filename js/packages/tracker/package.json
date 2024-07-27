@@ -7,10 +7,10 @@
     "script.js"
   ],
   "scripts": {
-    "build": "npx esbuild index.js --minify --outfile=script.js",
-    "format": "npx prettier . --write",
-    "test": "npx playwright test",
-    "test:ui": "npx playwright test --ui",
+    "build": "esbuild index.js --minify --outfile=script.js",
+    "format": "prettier . --write",
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
     "pub": "npm run build && npm publish --access public"
   },
   "devDependencies": {
