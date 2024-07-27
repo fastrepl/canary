@@ -11,6 +11,22 @@ export default function plugin(_context, options) {
     async contentLoaded({ actions }) {
       actions.setGlobalData({ options });
     },
+    configureWebpack() {
+      if (process.env.NODE_ENV === "production") {
+        return {};
+      }
+
+      return {
+        module: {
+          rules: [
+            {
+              test: /pagefind\/*/,
+              use: [{ loader: "file-loader" }],
+            },
+          ],
+        },
+      };
+    },
     async postBuild({ routesPaths = [], outDir, baseUrl }) {
       const docs = getFilePaths(routesPaths, outDir, baseUrl, options);
       await buildIndex(outDir, docs);
