@@ -41,6 +41,11 @@ type AskFunction = (
   signal?: AbortSignal,
 ) => Promise<null>;
 
+type FeedbackFunction = (
+  url: string,
+  data: { content: string },
+) => Promise<null>;
+
 export type QueryContext = string;
 
 export type ModeContext = {
@@ -62,4 +67,5 @@ export type TriggerShortcut = "cmdk" | "slash";
 export type OperationContext = {
   search: SearchFunction;
   ask: AskFunction;
+  feedback: FeedbackFunction;
 };

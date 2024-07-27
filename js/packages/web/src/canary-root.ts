@@ -3,7 +3,11 @@ import { customElement, property, state } from "lit/decorators.js";
 import { MutationController } from "@lit-labs/observers/mutation-controller.js";
 
 import { provide } from "@lit/context";
-import { themeContext, operationContext } from "./contexts";
+import {
+  themeContext,
+  operationContext,
+  defaultOperationContext,
+} from "./contexts";
 
 import type { Framework, ThemeContext, OperationContext } from "./types";
 import { wrapper } from "./styles";
@@ -20,14 +24,7 @@ export class CanaryRoot extends LitElement {
 
   @provide({ context: operationContext })
   @state()
-  operation: OperationContext = {
-    search: (..._) => {
-      throw new Error("'search' is not implemented");
-    },
-    ask: (..._) => {
-      throw new Error("'ask' is not implemented");
-    },
-  };
+  operation: OperationContext = defaultOperationContext;
 
   connectedCallback() {
     super.connectedCallback();
