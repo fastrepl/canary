@@ -1,4 +1,4 @@
-export const COMPONENTS_VERSION = "0.0.31";
+export const COMPONENTS_VERSION = "0.0.55";
 
 export default {
   load() {

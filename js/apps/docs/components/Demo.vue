@@ -1,18 +1,19 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from "vue";
+import { useData } from "vitepress";
+
+const { localeIndex } = useData();
 
 onMounted(() => {
   import("@getcanary/web/components/canary-root");
+  import("@getcanary/web/components/canary-provider-vitepress-minisearch");
   import("@getcanary/web/components/canary-provider-mock");
+  import("@getcanary/web/components/canary-modal");
   import("@getcanary/web/components/canary-trigger-searchbar");
   import("@getcanary/web/components/canary-content");
   import("@getcanary/web/components/canary-search");
   import("@getcanary/web/components/canary-search-input");
   import("@getcanary/web/components/canary-search-results");
-  import("@getcanary/web/components/canary-ask");
-  import("@getcanary/web/components/canary-ask-input");
-  import("@getcanary/web/components/canary-ask-results");
-  import("@getcanary/web/components/canary-modal");
 });
 
 import Slider from "./Slider.vue";
@@ -50,32 +51,26 @@ watch(
     <ThemeSwitch />
   </div>
 
-  <canary-provider-mock>
-    <div class="flex flex-col w-full items-center justify-center gap-4">
-      <canary-modal>
-        <canary-trigger-searchbar slot="trigger"></canary-trigger-searchbar>
-        <canary-content slot="content">
+  <canary-root framework="vitepress">
+    <canary-provider-vitepress-minisearch :localeIndex="localeIndex">
+      <div class="flex flex-col w-full items-center justify-center gap-4">
+        <canary-modal>
+          <canary-trigger-searchbar slot="trigger"></canary-trigger-searchbar>
+          <canary-content slot="content">
+            <canary-search slot="search">
+              <canary-search-input slot="input"></canary-search-input>
+              <canary-search-results slot="results"> </canary-search-results>
+            </canary-search>
+          </canary-content>
+        </canary-modal>
+
+        <canary-content slot="content" query="why use Canary?">
           <canary-search slot="search">
             <canary-search-input slot="input"></canary-search-input>
-            <canary-search-results slot="results"></canary-search-results>
+            <canary-search-results slot="results"> </canary-search-results>
           </canary-search>
-          <canary-ask slot="ask">
-            <canary-ask-input slot="input"></canary-ask-input>
-            <canary-ask-results slot="results"></canary-ask-results>
-          </canary-ask>
         </canary-content>
-      </canary-modal>
-
-      <canary-content query="why use Canary?">
-        <canary-search slot="search">
-          <canary-search-input slot="input"></canary-search-input>
-          <canary-search-results slot="results"></canary-search-results>
-        </canary-search>
-        <canary-ask slot="ask">
-          <canary-ask-input slot="input"></canary-ask-input>
-          <canary-ask-results slot="results"></canary-ask-results>
-        </canary-ask>
-      </canary-content>
-    </div>
-  </canary-provider-mock>
+      </div>
+    </canary-provider-vitepress-minisearch>
+  </canary-root>
 </template>

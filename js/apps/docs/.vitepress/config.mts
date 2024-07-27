@@ -26,17 +26,17 @@ export default defineConfig({
             new URL("../components/Home.vue", import.meta.url),
           ),
         },
-        // {
-        //   find: /^.*\/VPNavBarSearch\.vue$/,
-        //   replacement: fileURLToPath(
-        //     new URL("../components/LocalSearch.vue", import.meta.url),
-        //   ),
-        // },
+        {
+          find: /^.*\/VPNavBarSearch\.vue$/,
+          replacement: fileURLToPath(
+            new URL("../components/LocalSearch.vue", import.meta.url),
+          ),
+        },
       ],
     },
   },
   themeConfig: {
-    // search: { provider: "local" },
+    search: { provider: "local" },
     // https://vitepress.dev/reference/default-theme-config
     siteTitle: "🐤 Canary",
     nav: [
@@ -49,10 +49,6 @@ export default defineConfig({
       {
         text: "Playground",
         link: "https://stackblitz.com/edit/canary?file=index.html",
-      },
-      {
-        text: "Cloud",
-        link: "https://cloud.getcanary.dev",
       },
     ],
     sidebar: {
@@ -83,6 +79,15 @@ export default defineConfig({
               link: "/docs/customization/builtin",
             },
             { text: "Custom components", link: "/docs/customization/custom" },
+          ],
+        },
+        {
+          text: "Canary Cloud",
+          items: [
+            {
+              text: "What is cloud?",
+              link: "/docs/cloud/intro",
+            },
           ],
         },
         {

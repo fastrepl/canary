@@ -21,7 +21,7 @@ onMounted(() => {
 
 import Hero from "./Hero.vue";
 import Demo from "./Demo.vue";
-import Pricing from "./Pricing.vue";
+// import Pricing from "./Pricing.vue";
 </script>
 
 <template>
@@ -29,7 +29,7 @@ import Pricing from "./Pricing.vue";
     <main class="flex flex-col items-center justify-center">
       <Hero />
       <Demo v-if="loaded" />
-      <Pricing />
+      <!-- <Pricing /> -->
     </main>
   </canary-root>
 </template>

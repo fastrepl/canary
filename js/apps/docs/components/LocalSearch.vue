@@ -10,7 +10,7 @@ onMounted(() => {
   import("@getcanary/web/components/canary-content");
   import("@getcanary/web/components/canary-search");
   import("@getcanary/web/components/canary-search-input");
-  import("@getcanary/web/components/canary-search-results");
+  import("@getcanary/web/components/canary-search-results-group");
 });
 
 const { localeIndex } = useData();
@@ -25,7 +25,11 @@ const { localeIndex } = useData();
           <canary-content slot="content">
             <canary-search slot="search">
               <canary-search-input slot="input"></canary-search-input>
-              <canary-search-results slot="results"></canary-search-results>
+              <canary-search-results-group
+                slot="results"
+                groups="Docs:*;Cloud:/cloud/.+$"
+              >
+              </canary-search-results-group>
             </canary-search>
           </canary-content>
         </canary-modal>
