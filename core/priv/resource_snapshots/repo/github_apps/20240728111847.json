@@ -12,33 +12,13 @@
     },
     {
       "allow_nil?": false,
-      "default": "fragment(\"(now() AT TIME ZONE 'utc')\")",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "created_at",
-      "type": "utc_datetime_usec"
-    },
-    {
-      "allow_nil?": false,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "type",
-      "type": "text"
-    },
-    {
-      "allow_nil?": false,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "web_base_url",
-      "type": "text"
+      "source": "installation_id",
+      "type": "bigint"
     },
     {
       "allow_nil?": true,
@@ -58,8 +38,8 @@
           "global": null,
           "strategy": null
         },
-        "name": "sources_account_id_fkey",
-        "on_delete": null,
+        "name": "github_apps_account_id_fkey",
+        "on_delete": "delete",
         "on_update": null,
         "primary_key?": true,
         "schema": "public",
@@ -75,7 +55,7 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "258C62A10E172D4F857F40932E395590BEC8CC6E04E425EB262F3F88730A2F84",
+  "hash": "D37021F3ED8AAA584A3680F0CC3051405B806EF723F6B37F47380390690632EF",
   "identities": [],
   "multitenancy": {
     "attribute": null,
@@ -84,5 +64,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "sources"
+  "table": "github_apps"
 }

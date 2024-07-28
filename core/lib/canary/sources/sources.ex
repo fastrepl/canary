@@ -4,6 +4,5 @@ defmodule Canary.Sources do
   resources do
     resource Canary.Sources.Source
     resource Canary.Sources.Document
-    resource Canary.Sources.Chunk
   end
 end

@@ -5,10 +5,6 @@ defprotocol Canary.Renderable do
   def render(t)
 end
 
-defimpl Canary.Renderable, for: Canary.Sources.Chunk do
-  def render(chunk), do: chunk.content
-end
-
 defimpl Canary.Renderable, for: Any do
   def render(value), do: to_string(value)
 end

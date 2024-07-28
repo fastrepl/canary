@@ -139,21 +139,24 @@ defmodule Canary.Repo.Migrations.InitResources do
         null: false,
         default: fragment("(now() AT TIME ZONE 'utc')")
 
+      add :updated_at, :utc_datetime_usec,
+        null: false,
+        default: fragment("(now() AT TIME ZONE 'utc')")
+
+      add :index_id, :bigint
       add :url, :text, null: false
-      add :title, :text
-      add :content_hash, :binary, null: false
+      add :hash, :binary, null: false
 
       add :source_id,
           references(:sources,
             column: :id,
             name: "documents_source_id_fkey",
             type: :uuid,
-            prefix: "public",
-            on_delete: :delete_all
+            prefix: "public"
           )
     end
 
-    create unique_index(:documents, [:url, :content_hash], name: "documents_unique_content_index")
+    create unique_index(:documents, [:url], name: "documents_unique_url_index")
 
     create table(:clients, primary_key: false) do
       add :id, :uuid, null: false, default: fragment("gen_random_uuid()"), primary_key: true
@@ -192,22 +195,6 @@ defmodule Canary.Repo.Migrations.InitResources do
           ),
           primary_key: true,
           null: false
-    end
-
-    create table(:chunks, primary_key: false) do
-      add :id, :uuid, null: false, default: fragment("gen_random_uuid()"), primary_key: true
-      add :content, :text, null: false
-      add :embedding, :vector, null: false, size: 384
-      add :url, :text
-
-      add :document_id,
-          references(:documents,
-            column: :id,
-            name: "chunks_document_id_fkey",
-            type: :uuid,
-            prefix: "public",
-            on_delete: :delete_all
-          )
     end
 
     create table(:billings, primary_key: false) do
@@ -417,10 +404,6 @@ defmodule Canary.Repo.Migrations.InitResources do
 
     drop table(:billings)
 
-    drop constraint(:chunks, "chunks_document_id_fkey")
-
-    drop table(:chunks)
-
     drop constraint(:client_sources, "client_sources_client_id_fkey")
 
     drop constraint(:client_sources, "client_sources_source_id_fkey")
@@ -429,9 +412,7 @@ defmodule Canary.Repo.Migrations.InitResources do
 
     drop table(:clients)
 
-    drop_if_exists unique_index(:documents, [:url, :content_hash],
-                     name: "documents_unique_content_index"
-                   )
+    drop_if_exists unique_index(:documents, [:url], name: "documents_unique_url_index")
 
     drop constraint(:documents, "documents_source_id_fkey")
 

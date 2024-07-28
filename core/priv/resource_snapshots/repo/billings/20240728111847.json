@@ -11,14 +11,44 @@
       "type": "uuid"
     },
     {
-      "allow_nil?": false,
-      "default": "fragment(\"(now() AT TIME ZONE 'utc')\")",
+      "allow_nil?": true,
+      "default": "nil",
       "generated?": false,
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "created_at",
-      "type": "utc_datetime_usec"
+      "source": "stripe_customer",
+      "type": "map"
+    },
+    {
+      "allow_nil?": true,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "stripe_subscription",
+      "type": "map"
+    },
+    {
+      "allow_nil?": false,
+      "default": "0",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "count_ask",
+      "type": "bigint"
+    },
+    {
+      "allow_nil?": false,
+      "default": "0",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "count_search",
+      "type": "bigint"
     },
     {
       "allow_nil?": true,
@@ -38,8 +68,8 @@
           "global": null,
           "strategy": null
         },
-        "name": "feedbacks_account_id_fkey",
-        "on_delete": null,
+        "name": "billings_account_id_fkey",
+        "on_delete": "nothing",
         "on_update": null,
         "primary_key?": true,
         "schema": "public",
@@ -54,8 +84,8 @@
   "check_constraints": [],
   "custom_indexes": [],
   "custom_statements": [],
-  "has_create_action": false,
-  "hash": "5AD4E0304E40C12D7DCDBBB5BE8E16C3BE7BFCCB4903803FDB951BF076902387",
+  "has_create_action": true,
+  "hash": "55973F4DA99B5842296EF44C673BF65772333F5989C4295F7115491A2DB20B31",
   "identities": [],
   "multitenancy": {
     "attribute": null,
@@ -64,5 +94,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "feedbacks"
+  "table": "billings"
 }

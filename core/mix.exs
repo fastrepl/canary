@@ -94,7 +94,7 @@ defmodule Canary.MixProject do
       {:ash_appsignal, "~> 0.1.2"},
       {:oapi_typesense,
        git: "https://github.com/fastrepl/open-api-typesense.git",
-       rev: "0740c0ff9e3a00dd868f9acdd46172be851fd082"}
+       rev: "bab31b99e353f87c53d62752601decd9c861ce0d"}
     ]
   end
 

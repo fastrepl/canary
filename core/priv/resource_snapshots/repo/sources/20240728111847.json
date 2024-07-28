@@ -12,6 +12,16 @@
     },
     {
       "allow_nil?": false,
+      "default": "fragment(\"(now() AT TIME ZONE 'utc')\")",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "created_at",
+      "type": "utc_datetime_usec"
+    },
+    {
+      "allow_nil?": false,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
@@ -27,8 +37,8 @@
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "client_session_id",
-      "type": "bigint"
+      "source": "web_base_url",
+      "type": "text"
     },
     {
       "allow_nil?": true,
@@ -48,7 +58,7 @@
           "global": null,
           "strategy": null
         },
-        "name": "sessions_account_id_fkey",
+        "name": "sources_account_id_fkey",
         "on_delete": null,
         "on_update": null,
         "primary_key?": true,
@@ -65,31 +75,8 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "912F4431BB053AD37E45506815ACFEA6F0277AD1F43A1B6EFE71FEEFBC72D4FE",
-  "identities": [
-    {
-      "all_tenants?": false,
-      "base_filter": null,
-      "index_name": "sessions_unique_session_index",
-      "keys": [
-        {
-          "type": "atom",
-          "value": "account_id"
-        },
-        {
-          "type": "atom",
-          "value": "type"
-        },
-        {
-          "type": "atom",
-          "value": "client_session_id"
-        }
-      ],
-      "name": "unique_session",
-      "nils_distinct?": true,
-      "where": null
-    }
-  ],
+  "hash": "0C5516626EE84CA3BB39E7A5418406AF0CA76B25FF22DD36F7593103CCC7A67B",
+  "identities": [],
   "multitenancy": {
     "attribute": null,
     "global": null,
@@ -97,5 +84,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "sessions"
+  "table": "sources"
 }
