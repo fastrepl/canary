@@ -71,7 +71,7 @@ defmodule CanaryWeb.HomeLive do
       </label>
 
       <span class="text-sm mb-2">Try it out!</span>
-      <canary-styles-default theme="light">
+      <canary-root>
         <canary-provider-cloud key={@web_client.web_public_key} endpoint={CanaryWeb.Endpoint.url()}>
           <canary-modal>
             <canary-trigger-searchbar slot="trigger"></canary-trigger-searchbar>
@@ -80,14 +80,10 @@ defmodule CanaryWeb.HomeLive do
                 <canary-search-input slot="input"></canary-search-input>
                 <canary-search-results slot="results"></canary-search-results>
               </canary-search>
-              <canary-ask slot="ask">
-                <canary-ask-input slot="input"></canary-ask-input>
-                <canary-ask-results slot="results"></canary-ask-results>
-              </canary-ask>
             </canary-content>
           </canary-modal>
         </canary-provider-cloud>
-      </canary-styles-default>
+      </canary-root>
     </div>
     """
   end

@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "format": "npx prettier --plugin prettier-plugin-svelte --write ."
+    "format": "prettier --plugin prettier-plugin-svelte --write ."
   },
   "devDependencies": {
     "@types/node": "^20.14.9",
@@ -18,7 +18,7 @@
     "@codemirror/lang-javascript": "^6.2.2",
     "@codemirror/lang-markdown": "^6.2.5",
     "@codemirror/lang-python": "^6.1.6",
-    "@getcanary/web": "^0.0.31",
+    "@getcanary/web": "^0.0.56",
     "clipboard": "^2.0.11",
     "clsx": "^2.1.1",
     "cm6-theme-basic-dark": "^0.2.0",

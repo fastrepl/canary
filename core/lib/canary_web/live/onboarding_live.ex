@@ -245,7 +245,7 @@ defmodule CanaryWeb.OnboardingLive do
     case AshPhoenix.Form.submit(socket.assigns.web_source_form, params: params) do
       {:ok, source} ->
         Canary.Workers.Fetcher.new(%{source_id: source.id}) |> Oban.insert()
-        {:noreply, socket |> assign(:current, 2)}
+        {:noreply, socket |> assign(:current_source, source) |> assign(:current, 2)}
 
       {:error, form} ->
         {:noreply,
@@ -258,7 +258,8 @@ defmodule CanaryWeb.OnboardingLive do
     params = Map.put(inputs, "account", socket.assigns.current_account)
 
     case AshPhoenix.Form.submit(socket.assigns.web_client_form, params: params) do
-      {:ok, _} ->
+      {:ok, client} ->
+        Canary.Interactions.Client.add_sources(client, [socket.assigns.current_source])
         {:noreply, socket |> assign(:current, 3)}
 
       {:error, form} ->
