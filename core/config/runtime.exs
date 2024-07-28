@@ -186,3 +186,9 @@ config :appsignal, :config,
   push_api_key: System.get_env("APPSIGNAL_PUSH_API_KEY"),
   env: Application.fetch_env!(:canary, :env),
   active: System.get_env("APPSIGNAL_PUSH_API_KEY") != nil
+
+if config_env() == :prod do
+  config :oapi_typesense,
+    base_url: System.get_env("TYPESENSE_BASE_URL"),
+    api_key: System.get_env("TYPESENSE_API_KEY")
+end

@@ -52,3 +52,5 @@ npm-debug.log
 /priv/svelte/
 
 .tinyb
+
+.typesense

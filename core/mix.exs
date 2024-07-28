@@ -91,7 +91,8 @@ defmodule Canary.MixProject do
       {:resend, "~> 0.4.2"},
       {:appsignal, "~> 2.0"},
       {:appsignal_phoenix, "~> 2.0"},
-      {:ash_appsignal, "~> 0.1.2"}
+      {:ash_appsignal, "~> 0.1.2"},
+      {:oapi_typesense, git: "https://github.com/fastrepl/open-api-typesense.git", branch: "main"}
     ]
   end
 

@@ -9,3 +9,11 @@ services:
       POSTGRES_DB: canary_dev
     ports:
       - 5432:5432
+  typesense:
+    image: typesense/typesense:26.0
+    restart: on-failure
+    ports:
+      - 8108:8108
+    volumes:
+      - ./.typesense/data:/data
+    command: --data-dir /data --api-key=canary --enable-cors
