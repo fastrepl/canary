@@ -7,7 +7,13 @@ mod tests;
 
 rustler::init!(
     "Elixir.Canary.Native",
-    [chunk_text, chunk_markdown, html_to_md, clone_depth]
+    [
+        chunk_text,
+        chunk_markdown,
+        html_to_md,
+        html_to_md_with_marker,
+        clone_depth
+    ]
 );
 
 #[rustler::nif]
@@ -23,6 +29,11 @@ fn chunk_markdown<'a>(content: &'a str, max_tokens: usize) -> Vec<String> {
 #[rustler::nif(schedule = "DirtyCpu")]
 fn html_to_md<'a>(content: &'a str) -> String {
     html::to_md(content).unwrap()
+}
+
+#[rustler::nif(schedule = "DirtyCpu")]
+fn html_to_md_with_marker<'a>(content: &'a str) -> String {
+    html::to_md_with_marker(content).unwrap()
 }
 
 #[rustler::nif(schedule = "DirtyIo")]

@@ -17,6 +17,30 @@ defmodule Canary.Reader do
     |> String.trim()
   end
 
+  def chunks_from_html(html) do
+    pattern = ~r/__CANARY__\(([^)]+)\)/
+    text = html |> Canary.Native.html_to_md_with_marker()
+
+    case Regex.scan(pattern, text) do
+      [] ->
+        [%{anchor: nil, content: text}]
+
+      _ ->
+        splits = Regex.split(pattern, text, include_captures: true)
+        [first | rest] = splits
+
+        chunks =
+          Enum.chunk_every(rest, 2)
+          |> Enum.map(fn [canary, content] ->
+            [_, anchor] = Regex.run(pattern, canary)
+            %{anchor: anchor, content: String.trim(content)}
+          end)
+
+        first_content = [first, Enum.at(chunks, 0).content] |> Enum.join("\n\n")
+        [%{anchor: nil, content: first_content} | chunks]
+    end
+  end
+
   def chunk_markdown(content) do
     content
     |> Canary.Native.chunk_markdown(1600)
