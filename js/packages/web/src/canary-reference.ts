@@ -1,10 +1,11 @@
 import { LitElement, html, css, nothing, type PropertyValues } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
-import { unsafeHTML } from "lit/directives/unsafe-html.js";
 
 import { urlToParts } from "./utils";
+
 import "./canary-hero-icon";
+import "./canary-snippet";
 
 const NAME = "canary-reference";
 
@@ -29,9 +30,10 @@ export class CanaryReference extends LitElement {
       >
         <div class="content">
           ${this.depth()}
-          <span class="title">${unsafeHTML(this.title)}</span>
+          <canary-snippet class="title" .value=${this.title}></canary-snippet>
           ${this.excerpt
-            ? html`<span class="excerpt">${unsafeHTML(this.excerpt)}</span>`
+            ? html`<canary-snippet class="excerpt" .value=${this.excerpt}>
+              </canary-snippet>`
             : nothing}
         </div>
         <div class=${classMap({ arrow: true, selected: this.selected })}>
@@ -99,34 +101,6 @@ export class CanaryReference extends LitElement {
       gap: 2px;
     }
 
-    .title {
-      color: var(--canary-color-gray-10);
-      font-size: 16px;
-      font-weight: 500;
-
-      max-width: 400px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    .excerpt {
-      color: var(--canary-color-gray-20);
-      font-size: 14px;
-
-      max-width: 400px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    mark {
-      border-radius: 2px;
-      background-color: var(--canary-is-light, var(--canary-color-primary-30))
-        var(--canary-is-dark, var(--canary-color-primary-20));
-      color: var(--canary-color-gray-90);
-    }
-
     .paths {
       display: flex;
       flex-direction: row;
@@ -146,6 +120,18 @@ export class CanaryReference extends LitElement {
 
     a {
       text-decoration: none;
+    }
+
+    .title {
+      --canary-snippet-color: var(--canary-color-gray-10);
+      --canary-snippet-font-size: 16px;
+      --canary-snippet-font-weight: 500;
+    }
+
+    .excerpt {
+      --canary-snippet-color: var(--canary-color-gray-20);
+      --canary-snippet-font-size: 14px;
+      --canary-snippet-font-weight: 400;
     }
   `;
 }
