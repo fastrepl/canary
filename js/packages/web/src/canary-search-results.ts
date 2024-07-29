@@ -3,7 +3,7 @@ import { customElement } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 
 import { scrollContainer } from "./styles";
-import type { Reference } from "./types";
+import type { SearchReference } from "./types";
 
 import { SearchController, KeyboardSelectionController } from "./controllers";
 
@@ -16,13 +16,13 @@ const NAME = "canary-search-results";
 @customElement(NAME)
 export class CanarySearchResults extends LitElement {
   private search = new SearchController(this);
-  private selection = new KeyboardSelectionController<Reference>(this, {
+  private selection = new KeyboardSelectionController<SearchReference>(this, {
     handleEnter: (item) => {
       window.location.href = item.url;
     },
   });
 
-  private _references: Reference[] | null = null;
+  private _references: SearchReference[] | null = null;
 
   render() {
     return html`
@@ -53,8 +53,8 @@ export class CanarySearchResults extends LitElement {
     return html`${this._references.map(
       ({ title, url, excerpt }, index) => html`
         <canary-reference
-          title=${title}
           url=${url}
+          title=${title}
           excerpt=${ifDefined(excerpt)}
           ?selected=${index === this.selection.index}
         ></canary-reference>

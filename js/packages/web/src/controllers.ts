@@ -10,7 +10,8 @@ import {
   QueryContext,
   TriggerShortcut,
   OperationContext,
-  Reference,
+  AskReference,
+  SearchReference,
 } from "./types";
 import { randomInteger } from "./utils";
 
@@ -30,7 +31,7 @@ export class SearchController {
   private _query: ContextConsumer<{ __context__: QueryContext }, any>;
   private _task: Task<
     [OperationContext["search"] | undefined, Mode, string],
-    Reference[] | null
+    SearchReference[] | null
   >;
 
   constructor(host: ReactiveControllerHost & HTMLElement) {
@@ -59,7 +60,7 @@ export class SearchController {
         }
 
         const result = await search(query, signal);
-        return result as Reference[] | null;
+        return result as SearchReference[] | null;
       },
       () => [
         this._operation.value?.search,
@@ -69,7 +70,7 @@ export class SearchController {
     );
   }
 
-  render(renderFunctions: StatusRenderer<Reference[] | null>) {
+  render(renderFunctions: StatusRenderer<SearchReference[] | null>) {
     return this._task.render(wrapRenderer(renderFunctions));
   }
 }
@@ -84,7 +85,7 @@ export class AskController {
 
   loading = false;
   response: string = "";
-  references: Reference[] = [];
+  references: AskReference[] = [];
 
   constructor(host: ReactiveControllerHost & HTMLElement) {
     (this.host = host).addController(this as ReactiveController);
@@ -150,7 +151,7 @@ export class AskController {
     }
   }
 
-  appendReferences(references: Reference[]) {
+  appendReferences(references: AskReference[]) {
     this.references = [...this.references, ...references];
     this.host.requestUpdate();
   }

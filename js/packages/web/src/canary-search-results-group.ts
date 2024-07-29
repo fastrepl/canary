@@ -4,7 +4,7 @@ import { ifDefined } from "lit/directives/if-defined.js";
 import { classMap } from "lit/directives/class-map.js";
 
 import { scrollContainer } from "./styles";
-import type { Reference } from "./types";
+import type { SearchReference } from "./types";
 
 import { KeyboardSelectionController, SearchController } from "./controllers";
 
@@ -26,11 +26,11 @@ export class CanarySearchResultsGroup extends LitElement {
   @state() selectedGroup = "";
   @state() groupedReferences: Record<
     string,
-    (Reference & { index: number })[]
+    (SearchReference & { index: number })[]
   > = {};
 
   private _search = new SearchController(this);
-  private _selection = new KeyboardSelectionController<Reference>(this, {
+  private _selection = new KeyboardSelectionController<SearchReference>(this, {
     handleEnter: (item) => {
       window.location.href = item.url;
     },
@@ -148,12 +148,12 @@ export class CanarySearchResultsGroup extends LitElement {
   }
 
   private _groupReferences(
-    references: Reference[],
+    references: SearchReference[],
     definitions: GroupDefinition[],
   ) {
     const grouped = definitions.reduce(
       (acc, group) => ({ ...acc, [group.name]: [] }),
-      {} as Record<string, (Reference & { index: number })[]>,
+      {} as Record<string, (SearchReference & { index: number })[]>,
     );
 
     const fallbackGroup = definitions.find((group) => group.pattern === null);

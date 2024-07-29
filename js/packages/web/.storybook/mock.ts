@@ -1,3 +1,5 @@
+import type { SearchReference, AskReference } from "../src/types";
+
 export const MOCK_RESPONSE = `
 # The Whimsical World of Flibbertigibbets
 
@@ -23,7 +25,7 @@ hello()
    - Have a peculiar fondness for wearing monocles on their elbows
 `.trim();
 
-export const mockSearchReference = (query: string) => {
+export const mockSearchReference = (query: string): SearchReference => {
   return {
     title: "456",
     url: `https://example.com/a/b?query=${query}`,
@@ -31,7 +33,7 @@ export const mockSearchReference = (query: string) => {
   };
 };
 
-export const mockAskReference = () => {
+export const mockAskReference = (): AskReference => {
   return {
     title: "456",
     url: "https://example.com/a/b",

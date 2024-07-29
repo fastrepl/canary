@@ -2,7 +2,7 @@ import { LitElement, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 
 import { wrapper } from "./styles";
-import type { Reference } from "./types";
+import type { SearchReference } from "./types";
 
 const NAME = "canary-provider-vitepress-minisearch";
 
@@ -85,7 +85,7 @@ export class CanaryProviderVitepressMinisearch extends LitElement {
   search = async (
     query: string,
     _signal?: AbortSignal,
-  ): Promise<Reference[]> => {
+  ): Promise<SearchReference[]> => {
     return new Promise((resolve) => {
       if (!this.minisearch) {
         resolve([]);
@@ -93,13 +93,13 @@ export class CanaryProviderVitepressMinisearch extends LitElement {
       }
 
       const results = this.minisearch.search(query);
-      const references: Reference[] = results.map((result) => ({
+      const hits: SearchReference[] = results.map((result) => ({
         url: new URL(result.id, window.location.origin).toString(),
         title: result.title,
-        excerpt: result.titles.join(" "),
+        titles: result.titles,
       }));
 
-      resolve(references);
+      resolve(hits);
     });
   };
 }

@@ -29,9 +29,9 @@ export class CanaryReference extends LitElement {
       >
         <div class="content">
           ${this.depth()}
-          <span class="title">${this.title} </span>
+          <span class="title">${unsafeHTML(this.title)}</span>
           ${this.excerpt
-            ? html`<span class="excerpt">${unsafeHTML(this.excerpt)} </span>`
+            ? html`<span class="excerpt">${unsafeHTML(this.excerpt)}</span>`
             : nothing}
         </div>
         <div class=${classMap({ arrow: true, selected: this.selected })}>
@@ -119,7 +119,7 @@ export class CanaryReference extends LitElement {
       white-space: nowrap;
     }
 
-    .excerpt mark {
+    mark {
       border-radius: 2px;
       background-color: var(--canary-is-light, var(--canary-color-primary-30))
         var(--canary-is-dark, var(--canary-color-primary-20));

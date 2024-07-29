@@ -1,7 +1,7 @@
 import { LitElement, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 
-import type { Reference } from "./types";
+import type { SearchReference } from "./types";
 import type { PagefindResult } from "./types/pagefind";
 import { wrapper } from "./styles";
 
@@ -72,7 +72,7 @@ export class CanaryProviderPagefind extends LitElement {
   search = async (
     query: string,
     _?: AbortSignal,
-  ): Promise<Reference[] | null> => {
+  ): Promise<SearchReference[] | null> => {
     const search = await this.pagefind.debouncedSearch(
       query,
       this.options.pagefind ?? {},
@@ -103,7 +103,7 @@ export class CanaryProviderPagefind extends LitElement {
             url: subResult.url,
             title: `${subResult.title} | ${data.meta.title}`,
             excerpt: subResult.excerpt,
-          };
+          } as SearchReference;
         }),
       ),
     );
