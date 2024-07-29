@@ -3,15 +3,21 @@
 
 <br/>
 
-<div align="center">
+<h4 align="center">
   <a href="https://discord.gg/Y8bJkzuQZU" target="_blank">
-      <img src="https://img.shields.io/static/v1?label=Join%20our&message=Discord&color=blue&logo=Discord&style=flat" alt="Discord">
+    <img src="https://raw.githubusercontent.com/storybooks/brand/master/badge/badge-storybook.svg" alt="Storybook">
   </a>
-</div>
+  <a href="https://discord.gg/Y8bJkzuQZU" target="_blank">
+    <img src="https://developer.stackblitz.com/img/open_in_stackblitz_small.svg" alt="Stackblitz">
+  </a>
+  <a href="https://discord.gg/Y8bJkzuQZU" target="_blank">
+    <img src="https://img.shields.io/static/v1?label=Join%20our&message=Discord&color=blue&logo=Discord&style=flat" alt="Discord">
+  </a>
+</h4>
 
 ## Links
 
-- [getcanary.dev/docs](https://getcanary.dev/docs/guide/getting-started.html)
+- [getcanary.dev/docs](https://getcanary.dev/docs)
   - Documentation powered by Canary.
 - [storybook.getcanary.dev](https://storybook.getcanary.dev/)
   - Build your own UI with our web components.
