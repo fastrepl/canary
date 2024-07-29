@@ -63,6 +63,7 @@ export class CanaryReference extends LitElement {
   static styles = css`
     .container {
       cursor: pointer;
+      overflow: hidden;
 
       display: flex;
       flex-direction: row;

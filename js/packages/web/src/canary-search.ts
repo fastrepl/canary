@@ -6,6 +6,7 @@ import { modeContext } from "./contexts";
 import type { ModeContext } from "./types";
 
 import "./canary-mode-tabs";
+import "./canary-search-empty";
 
 const NAME = "canary-search";
 
@@ -30,6 +31,9 @@ export class CanarySearch extends LitElement {
                 <slot name="callout"></slot>
               </div>
               <slot name="results"></slot>
+              <slot name="empty">
+                <canary-search-empty></canary-search-empty>
+              </slot>
             </div>
           </div>
         `
