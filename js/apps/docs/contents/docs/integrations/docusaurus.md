@@ -78,6 +78,8 @@ const config = {
             termSaturation: 1.5, // [!code ++]
           } // [!code ++]
         } // [!code ++]
+        includeRoutes: ["**/*"], // [!code ++]
+        excludeRoutes: ['/api*', '/api/*'], // [!code ++]
       },
     ],
   ],
