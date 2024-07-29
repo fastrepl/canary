@@ -36,6 +36,14 @@ export class CanarySearchResultsGroup extends LitElement {
     },
   });
 
+  connectedCallback(): void {
+    super.connectedCallback();
+
+    if (typeof this.groups === "string") {
+      this.groups = parse(this.groups);
+    }
+  }
+
   updated(changed: PropertyValues<this>) {
     if (!this.selectedGroup && this.groups.length > 0) {
       this.selectedGroup = this.groups[0].name;

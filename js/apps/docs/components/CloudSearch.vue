@@ -1,23 +1,29 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
+
+const loaded = ref(false);
 
 onMounted(() => {
-  import("@getcanary/web/components/canary-root");
-  import("@getcanary/web/components/canary-provider-mock");
-  import("@getcanary/web/components/canary-modal");
-  import("@getcanary/web/components/canary-trigger-searchbar");
-  import("@getcanary/web/components/canary-content");
-  import("@getcanary/web/components/canary-search");
-  import("@getcanary/web/components/canary-search-input");
-  import("@getcanary/web/components/canary-search-results");
-  import("@getcanary/web/components/canary-ask");
-  import("@getcanary/web/components/canary-ask-input");
-  import("@getcanary/web/components/canary-ask-results");
+  Promise.all([
+    import("@getcanary/web/components/canary-root"),
+    import("@getcanary/web/components/canary-provider-mock"),
+    import("@getcanary/web/components/canary-modal"),
+    import("@getcanary/web/components/canary-trigger-searchbar"),
+    import("@getcanary/web/components/canary-content"),
+    import("@getcanary/web/components/canary-search"),
+    import("@getcanary/web/components/canary-search-input"),
+    import("@getcanary/web/components/canary-search-results"),
+    import("@getcanary/web/components/canary-ask"),
+    import("@getcanary/web/components/canary-ask-input"),
+    import("@getcanary/web/components/canary-ask-results"),
+  ]).then(() => {
+    loaded.value = true;
+  });
 });
 </script>
 
 <template>
-  <div class="w-full max-w-[230px] pl-4 mr-auto">
+  <div class="w-full max-w-[230px] pl-4 mr-auto" v-if="loaded">
     <canary-root framework="vitepress">
       <canary-provider-mock>
         <canary-modal>
