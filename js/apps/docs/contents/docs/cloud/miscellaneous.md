@@ -1,6 +1,8 @@
-# Optimizations
+# Miscellaneous
 
-## Preconnect
+## Optimizations
+
+### Preconnect
 
 ```html
 <link rel="preconnect" href="https://cloud.getcanary.dev" crossorigin />

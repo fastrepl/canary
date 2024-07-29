@@ -1,8 +1,14 @@
 # Analytics
 
-> This is not implemented yet, but if you're open to give us some input, please [book a call](https://cal.com/yujonglee/canary).
+::: warning
+`Canary Cloud` is in active development. Not ready for production use yet.
+:::
 
-## Web
+## Data sources
+
+### Search Bar
+
+### Web
 
 ```html
 <script defer src="https://unpkg.com/@getcanary/tracker@latest"></script>

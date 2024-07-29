@@ -25,7 +25,7 @@ import Styling from "../../../components/Styling.vue";
 <Styling />
 </div>
 
-## Light/Dark Mode
+## Light / Dark Mode
 
 ```html{1}
 <canary-root framework="vitepress">
@@ -34,3 +34,5 @@ import Styling from "../../../components/Styling.vue";
 ```
 
 Each documentation framework has its own way to add theme information to the dom. By providing `framework` attribute, `canary-root` will handle the theme for you.
+
+Currently we support `docusaurus`, `vitepress`, and `starlight`.

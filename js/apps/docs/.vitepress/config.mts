@@ -10,6 +10,11 @@ export default defineConfig({
   srcDir: "./contents",
   sitemap: { hostname: "https://getcanary.dev" },
   lastUpdated: true,
+  markdown: {
+    image: {
+      lazyLoading: true,
+    },
+  },
   vue: {
     template: {
       compilerOptions: {
@@ -40,34 +45,25 @@ export default defineConfig({
     // https://vitepress.dev/reference/default-theme-config
     siteTitle: "🐤 Canary",
     nav: [
-      { text: "Docs", link: "/docs/guide/what-is-canary.html" },
+      { text: "Docs", link: "/docs" },
       { text: "Blog", link: "/blog" },
       {
-        text: "Storybook",
+        text: "📚 Storybook",
         link: "https://storybook.getcanary.dev",
       },
       {
-        text: "Playground",
+        text: "🛹 Playground",
         link: "https://stackblitz.com/edit/canary?file=index.html",
       },
     ],
     sidebar: {
       "/docs/": [
         {
-          text: "Introduction",
-          items: [
-            { text: "What is Canary?", link: "/docs/guide/what-is-canary" },
-            { text: "Why use Canary?", link: "/docs/guide/why-use-canary" },
-            { text: "Getting Started", link: "/docs/guide/getting-started" },
-            { text: "Concepts", link: "/docs/guide/concepts" },
-          ],
-        },
-        {
           text: "Integrations",
           items: [
             { text: "Docusaurus", link: "/docs/integrations/docusaurus" },
-            { text: "Starlight", link: "/docs/integrations/starlight" },
             { text: "VitePress", link: "/docs/integrations/vitepress" },
+            { text: "Starlight", link: "/docs/integrations/starlight" },
           ],
         },
         {
@@ -88,15 +84,30 @@ export default defineConfig({
               text: "Introduction",
               link: "/docs/cloud/intro",
             },
-          ],
-        },
-        {
-          text: "Miscellaneous",
-          collapsed: true,
-          items: [
             {
-              text: "Optimizations",
-              link: "/docs/miscellaneous/optimizations",
+              text: "Analytics",
+              link: "/docs/cloud/analytics",
+            },
+            {
+              text: "Integrations",
+              items: [
+                {
+                  text: "Docusaurus",
+                  link: "/docs/cloud/integrations/docusaurus",
+                },
+                {
+                  text: "VitePress",
+                  link: "/docs/cloud/integrations/vitepress",
+                },
+                {
+                  text: "Starlight",
+                  link: "/docs/cloud/integrations/starlight",
+                },
+              ],
+            },
+            {
+              text: "Miscellaneous",
+              link: "/docs/cloud/miscellaneous",
             },
           ],
         },

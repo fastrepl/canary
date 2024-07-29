@@ -64,7 +64,7 @@ watch(
           </canary-content>
         </canary-modal>
 
-        <canary-content slot="content" query="why use Canary?">
+        <canary-content slot="content" query="integrate">
           <canary-search slot="search">
             <canary-search-input slot="input"></canary-search-input>
             <canary-search-results slot="results"> </canary-search-results>

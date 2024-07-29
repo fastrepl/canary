@@ -47,6 +47,11 @@ watch(
   </div>
 
   <canary-root framework="vitepress">
-    <canary-reference url="https://example.com/docs/facilisi/odio" title="Tincidunt pretium varius" excerpt="Lorem ipsum odor amet, <mark>consectetuer</mark> adipiscing elit." selected></canary-reference>
+    <canary-reference
+      url="https://example.com/docs/facilisi/odio"
+      title="Tincidunt pretium varius"
+      excerpt="Lorem ipsum odor amet, <mark>consectetuer</mark> adipiscing elit."
+      selected
+    ></canary-reference>
   </canary-root>
 </template>
