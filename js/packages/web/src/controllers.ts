@@ -26,6 +26,8 @@ const wrapRenderer = <T>(renderer: StatusRenderer<T>) => {
 };
 
 export class SearchController {
+  private host: ReactiveControllerHost & HTMLElement;
+
   private _operation: ContextConsumer<{ __context__: OperationContext }, any>;
   private _mode: ContextConsumer<{ __context__: ModeContext }, any>;
   private _query: ContextConsumer<{ __context__: QueryContext }, any>;
@@ -35,7 +37,7 @@ export class SearchController {
   >;
 
   constructor(host: ReactiveControllerHost & HTMLElement) {
-    host.addController(this as ReactiveController);
+    (this.host = host).addController(this as ReactiveController);
 
     this._operation = new ContextConsumer(host, {
       context: operationContext,
@@ -60,6 +62,8 @@ export class SearchController {
         }
 
         const result = await search(query, signal);
+        this._afterSearch(query, result);
+
         return result as SearchReference[] | null;
       },
       () => [
@@ -67,6 +71,18 @@ export class SearchController {
         this._mode.value?.current,
         this._query.value,
       ],
+    );
+  }
+
+  private _afterSearch(query: string, result: SearchReference[] | null) {
+    const empty = query !== "" && result !== null && result.length === 0;
+
+    this.host.dispatchEvent(
+      new CustomEvent("empty", {
+        bubbles: true,
+        composed: true,
+        detail: empty,
+      }),
     );
   }
 

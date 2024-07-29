@@ -16,6 +16,8 @@ export class CanarySearch extends LitElement {
   @state()
   mode!: ModeContext;
 
+  @state() empty = false;
+
   render() {
     return this.mode?.current === "Search"
       ? html`
@@ -30,14 +32,20 @@ export class CanarySearch extends LitElement {
               <div class="callouts">
                 <slot name="callout"></slot>
               </div>
-              <slot name="results"></slot>
-              <slot name="empty">
-                <canary-search-empty></canary-search-empty>
-              </slot>
+              <slot name="results" @empty=${this._handleEmpty}></slot>
+              ${this.empty
+                ? html`<slot name="empty">
+                    <canary-search-empty></canary-search-empty>
+                  </slot>`
+                : nothing}
             </div>
           </div>
         `
       : nothing;
+  }
+
+  private _handleEmpty(e: CustomEvent) {
+    this.empty = e.detail;
   }
 
   static styles = css`
