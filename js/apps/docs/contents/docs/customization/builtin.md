@@ -48,7 +48,8 @@ But if you don't want modal, just can just use the `canary-content` component di
 
 ## `canary-search`, `canary-search-input`, `canary-search-results-*`
 
-`canary-search` is the default, but you can replace it with `canary-search-group`.
+- `canary-search-results` is the default, but you can replace it with `canary-search-results-tabs`.
+- For both `canary-search-results` and `canary-search-results-tabs`, you can use `group` attribute to group search results.
 
 ## `canary-ask`, `canary-ask-input`, `canary-ask-results`
 
