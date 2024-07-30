@@ -100,7 +100,7 @@ export class CanaryContent extends LitElement {
         max-width: 500px;
 
         outline: none;
-        padding: 8px 8px;
+        padding: 4px 8px 12px;
 
         border: none;
         border-radius: 8px;

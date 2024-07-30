@@ -17,11 +17,7 @@ export class CanarySnippet extends LitElement {
 
   static styles = css`
     span {
-      overflow: hidden;
-      text-overflow: ellipsis;
       white-space: nowrap;
-
-      max-width: var(--canary-snippet-max-width, 400px);
       color: var(--canary-snippet-color, var(--canary-color-gray-20));
       font-size: var(--canary-snippet-font-size, 14px);
       font-weight: var(--canary-snippet-font-weight, normal);

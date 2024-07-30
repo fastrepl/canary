@@ -32,6 +32,9 @@ export class CanarySearchResultsGroup extends LitElement {
   private _search = new SearchController(this);
   private _selection = new KeyboardSelectionController<SearchReference>(this, {
     handleEnter: (item) => {
+      this.dispatchEvent(
+        new CustomEvent("close", { bubbles: true, composed: true }),
+      );
       window.location.href = item.url;
     },
   });

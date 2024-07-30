@@ -24,8 +24,8 @@ export class CanaryReference extends LitElement {
 
   render() {
     return html`
-      <a
-        href=${this.url}
+      <button
+        @click=${this._handleClick}
         class=${classMap({ container: true, selected: this.selected })}
       >
         <div class="content">
@@ -39,8 +39,15 @@ export class CanaryReference extends LitElement {
         <div class=${classMap({ arrow: true, selected: this.selected })}>
           <canary-hero-icon name="chevron-right"></canary-hero-icon>
         </div>
-      </a>
+      </button>
     `;
+  }
+
+  private _handleClick() {
+    this.dispatchEvent(
+      new CustomEvent("close", { bubbles: true, composed: true }),
+    );
+    window.location.href = this.url;
   }
 
   depth() {
@@ -64,6 +71,7 @@ export class CanaryReference extends LitElement {
 
   static styles = css`
     .container {
+      position: relative;
       cursor: pointer;
       overflow: hidden;
 
@@ -72,7 +80,7 @@ export class CanaryReference extends LitElement {
       align-items: center;
       justify-content: space-between;
 
-      padding: 8px 16px;
+      padding: 8px 12px;
       border: 1px solid var(--canary-color-gray-90);
       border-radius: 8px;
       background-color: var(--canary-is-light, var(--canary-color-gray-95))
@@ -87,10 +95,13 @@ export class CanaryReference extends LitElement {
 
     .selected .arrow,
     .container:hover .arrow {
-      opacity: 1;
+      opacity: 0.5;
     }
 
     .arrow {
+      position: absolute;
+      top: 45%;
+      right: 8px;
       opacity: 0;
     }
 
@@ -98,7 +109,11 @@ export class CanaryReference extends LitElement {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      gap: 2px;
+      gap: 3px;
+
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: calc(100% - 20px);
     }
 
     .paths {
@@ -106,6 +121,7 @@ export class CanaryReference extends LitElement {
       flex-direction: row;
       align-items: center;
       gap: 2px;
+      margin-bottom: 2px;
 
       color: var(--canary-color-gray-30);
       font-size: 13px;
@@ -118,8 +134,9 @@ export class CanaryReference extends LitElement {
       white-space: nowrap;
     }
 
-    a {
-      text-decoration: none;
+    button {
+      cursor: pointer;
+      width: 100%;
     }
 
     .title {

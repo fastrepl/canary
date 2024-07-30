@@ -85,6 +85,7 @@ export const wrapper = css`
 export const scrollContainer = css`
   .container {
     overflow-y: scroll;
+    padding-right: 4px;
     scrollbar-width: thin;
     scrollbar-color: var(--canary-is-light, var(--canary-color-gray-90))
       var(--canary-is-dark, var(--canary-color-gray-60))

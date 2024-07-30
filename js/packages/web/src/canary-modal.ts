@@ -16,13 +16,17 @@ export class CanaryModal extends LitElement {
     return html`
       <slot name="trigger" @click=${this._handleOpen}></slot>
       <canary-dialog .ref=${this.ref}>
-        <slot name="content"></slot>
+        <slot name="content" @close=${this._handleClose}></slot>
       </canary-dialog>
     `;
   }
 
   private _handleOpen() {
     this.ref.value?.showModal();
+  }
+
+  private _handleClose() {
+    this.ref.value?.close();
   }
 
   static styles = [
