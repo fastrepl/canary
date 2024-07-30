@@ -25,12 +25,51 @@ hello()
    - Have a peculiar fondness for wearing monocles on their elbows
 `.trim();
 
-export const mockSearchReference = (query: string): SearchReference => {
-  return {
-    title: "456",
-    url: `https://example.com/a/b?query=${query}`,
-    excerpt: `mock response for <mark>${query}</mark>!`,
-  };
+export const mockSearchReferences = (query: string): SearchReference[] => {
+  return [
+    {
+      title: "456",
+      titles: ["aaaa", "bbb"],
+      url: `https://example.com/a/b?query=${query}`,
+      excerpt: `mock response for <mark>${query}</mark>!`,
+    },
+    {
+      title: "789",
+      titles: ["aaaa", "bbb"],
+      url: `https://example.com/a/b?query=${query}`,
+      excerpt: `mock response for <mark>${query}</mark>!`,
+    },
+    {
+      title: "123",
+      titles: [],
+      url: `https://example.com/a/b?query=${query}`,
+      excerpt: `mock response for <mark>${query}</mark>!`,
+    },
+    {
+      title: "234",
+      titles: ["bbb"],
+      url: `https://example.com/a/b?query=${query}`,
+      excerpt: `mock response for <mark>${query}</mark>!`,
+    },
+    {
+      title: "234",
+      titles: ["ccc"],
+      url: `https://example.com/a/b?query=${query}`,
+      excerpt: `mock response for <mark>${query}</mark>!`,
+    },
+    {
+      title: "234",
+      titles: ["ccc"],
+      url: `https://example.com/a/b?query=${query}`,
+      excerpt: `mock response for <mark>${query}</mark>!`,
+    },
+    {
+      title: "234",
+      titles: ["ccc"],
+      url: `https://example.com/a/b?query=${query}`,
+      excerpt: `mock response for <mark>${query}</mark>!`,
+    },
+  ];
 };
 
 export const mockAskReference = (): AskReference => {

@@ -10,7 +10,7 @@ import { initialize, mswLoader } from "msw-storybook-addon";
 initialize();
 
 import "../src/stories.css";
-import { MOCK_RESPONSE, mockAskReference, mockSearchReference } from "./mock";
+import { MOCK_RESPONSE, mockAskReference, mockSearchReferences } from "./mock";
 
 const preview: Preview = {
   loaders: [mswLoader],
@@ -39,14 +39,7 @@ const preview: Preview = {
         search: [
           http.post(/.*\/api\/v1\/search/, async ({ request }) => {
             const data = (await request.json()) as Record<string, string>;
-            const items = Array(Math.round(Math.random() * 5 + 5)).fill(
-              mockSearchReference(data["query"]),
-            );
-            items.push({
-              title: "456",
-              url: `https://example.com/api/a`,
-              excerpt: `mock response for <mark>123</mark>!`,
-            });
+            const items = mockSearchReferences(data["query"]);
 
             await delay(Math.random() * 300 + 200);
             return HttpResponse.json(items);

@@ -1,3 +1,5 @@
+import type { SearchReference } from "./types";
+
 export const randomInteger = () => {
   return Math.floor(Math.random() * 1000000000000000);
 };
@@ -21,4 +23,33 @@ export const urlToParts = (url: string) => {
     .slice(-4);
 
   return parts;
+};
+
+type GroupedResult = {
+  name: string | null;
+  items: (SearchReference & { index: number })[];
+};
+
+export const groupSearchReferences = (
+  references: SearchReference[],
+): GroupedResult[] => {
+  const groups: GroupedResult[] = [];
+  let currentGroup: GroupedResult | null = null;
+
+  for (const [index, ref] of references.entries()) {
+    if (!ref.titles || ref.titles.length === 0) {
+      groups.push({ name: null, items: [{ ...ref, index }] });
+      currentGroup = null;
+      continue;
+    }
+
+    const [pageTitle] = ref.titles;
+    if (!currentGroup || currentGroup.name !== pageTitle) {
+      currentGroup = { name: pageTitle, items: [] };
+      groups.push(currentGroup);
+    }
+    currentGroup.items.push({ ...ref, index });
+  }
+
+  return groups;
 };

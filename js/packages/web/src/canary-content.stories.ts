@@ -12,7 +12,7 @@ import "./canary-ask-results";
 import "./canary-search";
 import "./canary-search-input";
 import "./canary-search-results";
-import "./canary-search-results-group";
+import "./canary-search-results-tabs";
 
 import "./canary-callout-cal";
 import "./canary-callout-discord";
@@ -37,10 +37,25 @@ const render = ({ type }: any) => {
         <canary-content query="hi">
           <canary-search slot="search">
             <canary-search-input slot="input"></canary-search-input>
-            <canary-search-results-group
+            <canary-search-results slot="results" group></canary-search-results>
+            <canary-callout-discord slot="callout"></canary-callout-discord>
+          </canary-search>
+        </canary-content>
+      </canary-provider-cloud>
+    `;
+  }
+
+  if (type === "search-tabs") {
+    return html`
+      <canary-provider-cloud endpoint="http://localhost:6006" key="key">
+        <canary-content query="hi">
+          <canary-search slot="search">
+            <canary-search-input slot="input"></canary-search-input>
+            <canary-search-results-tabs
               slot="results"
-              groups="Docs:*;API:/api/.+$"
-            ></canary-search-results-group>
+              group
+              tabs="Docs:*;API:/api/.+$"
+            ></canary-search-results-tabs>
             <canary-callout-discord slot="callout"></canary-callout-discord>
           </canary-search>
         </canary-content>
@@ -133,8 +148,12 @@ export const Search: StoryObj = {
   args: { type: "search" },
 };
 
-export const SearchGroup: StoryObj = {
+export const SearchWithGroup: StoryObj = {
   args: { type: "search-group" },
+};
+
+export const SearchWithTabs: StoryObj = {
+  args: { type: "search-tabs" },
 };
 
 export const SearchError: StoryObj = {

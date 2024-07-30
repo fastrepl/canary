@@ -17,7 +17,7 @@ import "./canary-callout-discord";
 import "./canary-search";
 import "./canary-search-input";
 import "./canary-search-results";
-import "./canary-search-results-group";
+import "./canary-search-results-tabs";
 
 // ask
 import "./canary-ask";

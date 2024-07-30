@@ -106,10 +106,13 @@ export class CanaryProviderPagefind extends LitElement {
         (result) =>
           ({
             url: result.url,
-            title: `${result.title} | ${result.meta.title}`,
+            title: result.title,
+            titles:
+              result.meta.title === result.title ? [] : [result.meta.title],
             excerpt: result.excerpt,
           }) as SearchReference,
-      );
+      )
+      .slice(0, 30);
   };
 }
 

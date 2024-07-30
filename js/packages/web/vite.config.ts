@@ -32,7 +32,7 @@ export default defineConfig({
           "canary-search",
           "canary-search-input",
           "canary-search-results",
-          "canary-search-results-group",
+          "canary-search-results-tabs",
         ],
         ...["canary-ask", "canary-ask-input", "canary-ask-results"],
         ...["canary-reference", "canary-tooltip", "canary-footer"],
