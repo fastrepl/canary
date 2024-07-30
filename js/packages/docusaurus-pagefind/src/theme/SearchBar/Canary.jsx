@@ -32,7 +32,10 @@ export default function Canary({ options }) {
           <canary-content slot="content">
             <canary-search slot="search">
               <canary-search-input slot="input"></canary-search-input>
-              <canary-search-results slot="results"></canary-search-results>
+              <canary-search-results
+                slot="results"
+                group
+              ></canary-search-results>
             </canary-search>
           </canary-content>
         </canary-modal>

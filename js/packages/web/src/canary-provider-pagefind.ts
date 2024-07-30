@@ -23,7 +23,6 @@ export class CanaryProviderPagefind extends LitElement {
 
     const pagefind = await this._importPagefind();
     this._initPagefind(pagefind);
-    this._applyStyles();
 
     this.dispatchEvent(
       new CustomEvent("register", {
@@ -52,14 +51,6 @@ export class CanaryProviderPagefind extends LitElement {
       this.pagefind = pagefind;
     } catch (e) {
       throw new Error(`Failed to initialize pagefind': ${e}`);
-    }
-  }
-
-  private _applyStyles() {
-    if (this.options.styles) {
-      Object.entries(this.options.styles).forEach(([key, value]) => {
-        document.body.style.setProperty(key, value);
-      });
     }
   }
 
