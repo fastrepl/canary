@@ -36,3 +36,5 @@ config :canary, Oban, testing: :inline
 
 config :ash, :disable_async?, true
 config :ash, :missed_notifications, :ignore
+
+config :canary, :typesense, collection: "canary_test"

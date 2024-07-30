@@ -17,11 +17,21 @@
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "full_name",
+      "source": "type",
       "type": "text"
     },
     {
       "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "client_session_id",
+      "type": "bigint"
+    },
+    {
+      "allow_nil?": true,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
@@ -38,15 +48,15 @@
           "global": null,
           "strategy": null
         },
-        "name": "github_repos_app_id_fkey",
-        "on_delete": "delete",
+        "name": "sessions_account_id_fkey",
+        "on_delete": null,
         "on_update": null,
         "primary_key?": true,
         "schema": "public",
-        "table": "github_apps"
+        "table": "accounts"
       },
       "size": null,
-      "source": "app_id",
+      "source": "account_id",
       "type": "uuid"
     }
   ],
@@ -55,23 +65,27 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "5A727BCEDDD055A85108C84285069B7AEF05E4F47200F388AB345C0855617680",
+  "hash": "20639908AB5E85B0F1AA1F94D88306B920D5AE4B707D9CAAE689B2C68809B842",
   "identities": [
     {
       "all_tenants?": false,
       "base_filter": null,
-      "index_name": "github_repos_unique_repo_index",
+      "index_name": "sessions_unique_session_index",
       "keys": [
         {
           "type": "atom",
-          "value": "app_id"
+          "value": "account_id"
         },
         {
           "type": "atom",
-          "value": "full_name"
+          "value": "type"
+        },
+        {
+          "type": "atom",
+          "value": "client_session_id"
         }
       ],
-      "name": "unique_repo",
+      "name": "unique_session",
       "nils_distinct?": true,
       "where": null
     }
@@ -83,5 +97,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "github_repos"
+  "table": "sessions"
 }

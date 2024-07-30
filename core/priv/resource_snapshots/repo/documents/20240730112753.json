@@ -1,23 +1,33 @@
 {
   "attributes": [
     {
-      "allow_nil?": true,
-      "default": "nil",
+      "allow_nil?": false,
+      "default": "fragment(\"gen_random_uuid()\")",
       "generated?": false,
-      "primary_key?": false,
+      "primary_key?": true,
       "references": null,
       "size": null,
-      "source": "refresh_token",
-      "type": "text"
+      "source": "id",
+      "type": "uuid"
     },
     {
-      "allow_nil?": true,
-      "default": "nil",
+      "allow_nil?": false,
+      "default": "fragment(\"(now() AT TIME ZONE 'utc')\")",
       "generated?": false,
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "access_token_expires_at",
+      "source": "created_at",
+      "type": "utc_datetime_usec"
+    },
+    {
+      "allow_nil?": false,
+      "default": "fragment(\"(now() AT TIME ZONE 'utc')\")",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "updated_at",
       "type": "utc_datetime_usec"
     },
     {
@@ -27,7 +37,17 @@
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "access_token",
+      "source": "index_id",
+      "type": "bigint"
+    },
+    {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "url",
       "type": "text"
     },
     {
@@ -37,28 +57,8 @@
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "uid",
-      "type": "text"
-    },
-    {
-      "allow_nil?": false,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "strategy",
-      "type": "text"
-    },
-    {
-      "allow_nil?": false,
-      "default": "fragment(\"gen_random_uuid()\")",
-      "generated?": false,
-      "primary_key?": true,
-      "references": null,
-      "size": null,
-      "source": "id",
-      "type": "uuid"
+      "source": "hash",
+      "type": "binary"
     },
     {
       "allow_nil?": true,
@@ -78,15 +78,15 @@
           "global": null,
           "strategy": null
         },
-        "name": "user_identities_user_id_fkey",
+        "name": "documents_source_id_fkey",
         "on_delete": null,
         "on_update": null,
         "primary_key?": true,
         "schema": "public",
-        "table": "users"
+        "table": "sources"
       },
       "size": null,
-      "source": "user_id",
+      "source": "source_id",
       "type": "uuid"
     }
   ],
@@ -95,27 +95,23 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "FC01C71D3C5A5764F2E62560465AC9D9BB6475EF35637A4AD824632EE7822211",
+  "hash": "4A5D0ECFBEEC4FDE3B10E668F71D8E6EFA5763821349F5EDBD5C8C2418C30E84",
   "identities": [
     {
       "all_tenants?": false,
       "base_filter": null,
-      "index_name": "user_identities_unique_on_strategy_and_uid_and_user_id_index",
+      "index_name": "documents_unique_document_index",
       "keys": [
         {
           "type": "atom",
-          "value": "strategy"
+          "value": "source_id"
         },
         {
           "type": "atom",
-          "value": "uid"
-        },
-        {
-          "type": "atom",
-          "value": "user_id"
+          "value": "url"
         }
       ],
-      "name": "unique_on_strategy_and_uid_and_user_id",
+      "name": "unique_document",
       "nils_distinct?": true,
       "where": null
     }
@@ -127,5 +123,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "user_identities"
+  "table": "documents"
 }

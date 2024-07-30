@@ -11,67 +11,47 @@
       "type": "uuid"
     },
     {
+      "allow_nil?": true,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "stripe_customer",
+      "type": "map"
+    },
+    {
+      "allow_nil?": true,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "stripe_subscription",
+      "type": "map"
+    },
+    {
       "allow_nil?": false,
-      "default": "fragment(\"(now() AT TIME ZONE 'utc')\")",
+      "default": "0",
       "generated?": false,
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "created_at",
-      "type": "utc_datetime_usec"
-    },
-    {
-      "allow_nil?": false,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "type",
-      "type": "text"
-    },
-    {
-      "allow_nil?": true,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "web_host_url",
-      "type": "text"
-    },
-    {
-      "allow_nil?": true,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "web_public_key",
-      "type": "text"
-    },
-    {
-      "allow_nil?": true,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "discord_server_id",
-      "type": "bigint"
-    },
-    {
-      "allow_nil?": true,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "discord_channel_id",
+      "source": "count_ask",
       "type": "bigint"
     },
     {
       "allow_nil?": false,
+      "default": "0",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "count_search",
+      "type": "bigint"
+    },
+    {
+      "allow_nil?": true,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
@@ -88,8 +68,8 @@
           "global": null,
           "strategy": null
         },
-        "name": "clients_account_id_fkey",
-        "on_delete": null,
+        "name": "billings_account_id_fkey",
+        "on_delete": "nothing",
         "on_update": null,
         "primary_key?": true,
         "schema": "public",
@@ -105,41 +85,8 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "9CEC8FA550515FE1A30A84A39F82373CD8EC021BD5EDFDEE010021FF42CE363E",
-  "identities": [
-    {
-      "all_tenants?": false,
-      "base_filter": null,
-      "index_name": "clients_unique_discord_index",
-      "keys": [
-        {
-          "type": "atom",
-          "value": "discord_server_id"
-        },
-        {
-          "type": "atom",
-          "value": "discord_channel_id"
-        }
-      ],
-      "name": "unique_discord",
-      "nils_distinct?": true,
-      "where": null
-    },
-    {
-      "all_tenants?": false,
-      "base_filter": null,
-      "index_name": "clients_unique_web_index",
-      "keys": [
-        {
-          "type": "atom",
-          "value": "web_public_key"
-        }
-      ],
-      "name": "unique_web",
-      "nils_distinct?": true,
-      "where": null
-    }
-  ],
+  "hash": "FD28B0654BC49759BC9B939BDBD09B20A742FF144F4149BCC2AF78A4FE72FC3F",
+  "identities": [],
   "multitenancy": {
     "attribute": null,
     "global": null,
@@ -147,5 +94,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "clients"
+  "table": "billings"
 }

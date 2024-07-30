@@ -25,6 +25,16 @@
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "email",
+      "type": "text"
+    },
+    {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
       "references": {
         "deferrable": false,
         "destination_attribute": "id",
@@ -38,15 +48,15 @@
           "global": null,
           "strategy": null
         },
-        "name": "messages_session_id_fkey",
+        "name": "account_invites_user_id_fkey",
         "on_delete": null,
         "on_update": null,
         "primary_key?": true,
         "schema": "public",
-        "table": "sessions"
+        "table": "users"
       },
       "size": null,
-      "source": "session_id",
+      "source": "user_id",
       "type": "uuid"
     },
     {
@@ -54,20 +64,29 @@
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
-      "references": null,
+      "references": {
+        "deferrable": false,
+        "destination_attribute": "id",
+        "destination_attribute_default": null,
+        "destination_attribute_generated": null,
+        "index?": false,
+        "match_type": null,
+        "match_with": null,
+        "multitenancy": {
+          "attribute": null,
+          "global": null,
+          "strategy": null
+        },
+        "name": "account_invites_account_id_fkey",
+        "on_delete": null,
+        "on_update": null,
+        "primary_key?": true,
+        "schema": "public",
+        "table": "accounts"
+      },
       "size": null,
-      "source": "role",
-      "type": "text"
-    },
-    {
-      "allow_nil?": false,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "content",
-      "type": "text"
+      "source": "account_id",
+      "type": "uuid"
     }
   ],
   "base_filter": null,
@@ -75,7 +94,7 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "20AD823A36A5AC8E887B92F5E9D53B4A818DD7773CE68226A561C658DCC77575",
+  "hash": "B05E9A7B7CA5571ACD75E443437E4074814629EB6A877C9E10EEA93846C5EDF9",
   "identities": [],
   "multitenancy": {
     "attribute": null,
@@ -84,5 +103,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "messages"
+  "table": "account_invites"
 }

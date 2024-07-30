@@ -14,7 +14,7 @@ defmodule Canary.Sources.Document do
   end
 
   identities do
-    identity :unique_url, [:url]
+    identity :unique_document, [:source_id, :url]
   end
 
   relationships do
@@ -24,18 +24,12 @@ defmodule Canary.Sources.Document do
   actions do
     defaults [:read]
 
-    read :search do
-      argument :source, :uuid, allow_nil?: false
-      argument :query, :string, allow_nil?: false
-      manual Canary.Sources.Document.Search
-    end
-
     create :create do
       primary? true
 
       argument :source, :uuid, allow_nil?: false
-      argument :title, :string, allow_nil?: false
       argument :url, :string, allow_nil?: false
+      argument :title, :string, allow_nil?: false
       argument :content, :string, allow_nil?: false
       argument :tags, {:array, :string}, default: []
 
@@ -48,38 +42,30 @@ defmodule Canary.Sources.Document do
       }
 
       change {
-        Canary.Sources.Changes.Index.Insert,
-        source_attrs: [:title, :content, :tags, :source], result_attr: :index_id
+        Canary.Sources.Changes.Typesense.Insert,
+        result_attr: :index_id,
+        source_arg: :source,
+        title_arg: :title,
+        content_arg: :content,
+        tags_arg: :tags,
+        url_arg: :url
       }
-    end
-
-    update :update do
-      primary? true
     end
 
     destroy :destroy do
       primary? true
       require_atomic? false
 
-      change {
-        Canary.Sources.Changes.Index.Destroy,
-        result_attr: :index_id
-      }
+      change {Canary.Sources.Changes.Typesense.Destroy, id_attr: :index_id}
     end
+  end
+
+  code_interface do
+    define :destroy, args: [], action: :destroy
   end
 
   postgres do
     table "documents"
     repo Canary.Repo
-  end
-end
-
-defmodule Canary.Sources.Document.Search do
-  use Ash.Resource.ManualRead
-
-  def read(ash_query, _ecto_query, _opts, _context) do
-    source = ash_query.arguments.source
-    query = ash_query.arguments.query
-    Canary.Index.Document.search(source, query)
   end
 end

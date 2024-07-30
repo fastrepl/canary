@@ -95,3 +95,5 @@ if System.get_env("OTEL_LOCAL") == "2" do
     otlp_endpoint: "http://localhost:4318",
     resource: [service: [name: "core", namespace: "canary"]]
 end
+
+config :canary, :typesense, collection: "canary_dev"

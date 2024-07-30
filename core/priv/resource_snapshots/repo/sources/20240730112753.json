@@ -21,6 +21,26 @@
       "type": "utc_datetime_usec"
     },
     {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "type",
+      "type": "text"
+    },
+    {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "web_base_url",
+      "type": "text"
+    },
+    {
       "allow_nil?": true,
       "default": "nil",
       "generated?": false,
@@ -38,7 +58,7 @@
           "global": null,
           "strategy": null
         },
-        "name": "feedbacks_account_id_fkey",
+        "name": "sources_account_id_fkey",
         "on_delete": null,
         "on_update": null,
         "primary_key?": true,
@@ -54,8 +74,8 @@
   "check_constraints": [],
   "custom_indexes": [],
   "custom_statements": [],
-  "has_create_action": false,
-  "hash": "50D6C70232DC1818C12E356AC061FBF3F64477C8B072EE92B33F512D509DB5C0",
+  "has_create_action": true,
+  "hash": "E305712DA915D4942ED1CF586A31369E678FCA18CF479EA7DB92B9A4CBA35F35",
   "identities": [],
   "multitenancy": {
     "attribute": null,
@@ -64,5 +84,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "feedbacks"
+  "table": "sources"
 }

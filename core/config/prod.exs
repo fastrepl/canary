@@ -34,3 +34,5 @@ config :canary, :github_app_url, "https://github.com/apps/getcanary/installation
 
 # Runtime production configuration, including reading
 # of environment variables, is done on config/runtime.exs.
+
+config :canary, :typesense, collection: "canary_prod"
