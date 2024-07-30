@@ -2,7 +2,7 @@ import { LitElement, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 
 import type { SearchReference } from "./types";
-import type { PagefindResult } from "./types/pagefind";
+import type { PagefindResult, PagefindSubResult } from "./types/pagefind";
 import { wrapper } from "./styles";
 
 const NAME = "canary-provider-pagefind";
@@ -82,31 +82,34 @@ export class CanaryProviderPagefind extends LitElement {
       return new Promise((resolve) => resolve(null));
     }
 
-    return Promise.all(
-      search.results.map((result: any) =>
-        result.data().then((data: PagefindResult) => {
-          const { subResult } = data.sub_results.reduce(
-            (acc, cur) => {
-              const current = cur.weighted_locations.reduce(
-                (acc, cur) => Math.max(acc, cur.balanced_score),
-                -1,
-              );
+    const results: (PagefindSubResult & { meta: PagefindResult["meta"] })[] =
+      await Promise.all(
+        search.results.map((result: any) =>
+          result.data().then((result: PagefindResult) => {
+            return result.sub_results.map((subResult) => ({
+              ...subResult,
+              meta: result.meta,
+            }));
+          }),
+        ),
+      ).then((results) => results.flat());
 
-              return current > acc.score
-                ? { subResult: cur, score: current }
-                : acc;
-            },
-            { subResult: data.sub_results[0], score: -1 },
-          );
+    const getBestScore = (subResult: PagefindSubResult) =>
+      subResult.weighted_locations.reduce(
+        (acc, cur) => Math.max(acc, cur.balanced_score),
+        -1,
+      );
 
-          return {
-            url: subResult.url,
-            title: `${subResult.title} | ${data.meta.title}`,
-            excerpt: subResult.excerpt,
-          } as SearchReference;
-        }),
-      ),
-    );
+    return results
+      .sort((a, b) => getBestScore(b) - getBestScore(a))
+      .map(
+        (result) =>
+          ({
+            url: result.url,
+            title: `${result.title} | ${result.meta.title}`,
+            excerpt: result.excerpt,
+          }) as SearchReference,
+      );
   };
 }
 
