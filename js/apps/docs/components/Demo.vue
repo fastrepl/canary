@@ -2,18 +2,21 @@
 import { onMounted, ref, watch } from "vue";
 import { useData } from "vitepress";
 
-const { localeIndex } = useData();
+const loaded = ref(false);
 
 onMounted(() => {
-  import("@getcanary/web/components/canary-root");
-  import("@getcanary/web/components/canary-provider-vitepress-minisearch");
-  import("@getcanary/web/components/canary-provider-mock");
-  import("@getcanary/web/components/canary-modal");
-  import("@getcanary/web/components/canary-trigger-searchbar");
-  import("@getcanary/web/components/canary-content");
-  import("@getcanary/web/components/canary-search");
-  import("@getcanary/web/components/canary-search-input");
-  import("@getcanary/web/components/canary-search-results");
+  Promise.all([
+    import("@getcanary/web/components/canary-root"),
+    import("@getcanary/web/components/canary-provider-vitepress-minisearch"),
+    import("@getcanary/web/components/canary-modal"),
+    import("@getcanary/web/components/canary-trigger-searchbar"),
+    import("@getcanary/web/components/canary-content"),
+    import("@getcanary/web/components/canary-search"),
+    import("@getcanary/web/components/canary-search-input"),
+    import("@getcanary/web/components/canary-search-results"),
+  ]).then(() => {
+    loaded.value = true;
+  });
 });
 
 import Slider from "./Slider.vue";
@@ -36,10 +39,12 @@ watch(
   },
   { immediate: true },
 );
+
+const { localeIndex } = useData();
 </script>
 
 <template>
-  <div class="flex flex-row gap-4 mb-6">
+  <div class="flex flex-row gap-4 mb-6" v-if="loaded">
     <Slider
       :min="0"
       :max="0.3"
@@ -64,7 +69,7 @@ watch(
           </canary-content>
         </canary-modal>
 
-        <canary-content slot="content" query="integrate">
+        <canary-content slot="content" query="what is canary">
           <canary-search slot="search">
             <canary-search-input slot="input"></canary-search-input>
             <canary-search-results slot="results"> </canary-search-results>
