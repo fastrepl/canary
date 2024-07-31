@@ -28,9 +28,9 @@ const wrapRenderer = <T>(renderer: StatusRenderer<T>) => {
 export class SearchController {
   private host: ReactiveControllerHost & HTMLElement;
 
+  private _query: ContextConsumer<{ __context__: QueryContext }, any>;
   private _operation: ContextConsumer<{ __context__: OperationContext }, any>;
   private _mode: ContextConsumer<{ __context__: ModeContext }, any>;
-  private _query: ContextConsumer<{ __context__: QueryContext }, any>;
 
   private _id = 0;
   private _debounceTimeoutMs: number;

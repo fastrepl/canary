@@ -1,6 +1,7 @@
 import { LitElement, html, css, noChange, type PropertyValues } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
+import { ref, createRef } from "lit/directives/ref.js";
 
 import { scrollContainer } from "./styles";
 import type { SearchReference } from "./types";
@@ -29,6 +30,8 @@ export class CanarySearchResultsTabs extends LitElement {
     string,
     (SearchReference & { index: number })[]
   > = {};
+
+  private _ref = createRef<HTMLElement>();
 
   private _search = new SearchController(this, 250);
   private _selection = new KeyboardSelectionController<SearchReference>(this, {
@@ -73,7 +76,7 @@ export class CanarySearchResultsTabs extends LitElement {
 
   render() {
     return html`
-      <div class="container">
+      <div ${ref(this._ref)} class="container">
         ${this._tabs()}
         ${this._search.render({
           error: () => html`<canary-error></canary-error>`,
@@ -81,6 +84,9 @@ export class CanarySearchResultsTabs extends LitElement {
           complete: (references) => {
             if (!references) {
               return noChange;
+            }
+            if (this._ref.value) {
+              this._ref.value.scrollTop = 0;
             }
 
             this.groupedReferences = this._groupReferences(

@@ -1,5 +1,6 @@
 import { LitElement, html, css, noChange } from "lit";
 import { customElement, property } from "lit/decorators.js";
+import { ref, createRef } from "lit/directives/ref.js";
 
 import type { SearchReference } from "./types";
 import { scrollContainer } from "./styles";
@@ -15,6 +16,8 @@ const NAME = "canary-search-results";
 export class CanarySearchResults extends LitElement {
   @property({ type: Boolean }) group = false;
 
+  private _ref = createRef<HTMLElement>();
+
   private _search = new SearchController(this, 250);
   private _selection = new KeyboardSelectionController<SearchReference>(this, {
     handleEnter: (item) => {
@@ -29,13 +32,16 @@ export class CanarySearchResults extends LitElement {
 
   render() {
     return html`
-      <div class="container">
+      <div ${ref(this._ref)} class="container">
         ${this._search.render({
           error: () => html`<canary-error></canary-error>`,
           pending: () => this._results(),
           complete: (references) => {
             if (!references) {
               return noChange;
+            }
+            if (this._ref.value) {
+              this._ref.value.scrollTop = 0;
             }
 
             this._selection.items = references;
