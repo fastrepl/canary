@@ -52,7 +52,7 @@ It won't work with `docusaurus start`.
 
 ### Basic
 
-You can change colors and pagefind ranking by adding the following configuration.
+You can change colors and pagefind ranking by adding the following configuration. All options are optional.
 
 ::: code-group
 
@@ -78,6 +78,7 @@ const config = {
             termSaturation: 1.5, // [!code ++]
           } // [!code ++]
         } // [!code ++]
+        indexOnly: false, // [!code ++]
         includeRoutes: ["**/*"], // [!code ++]
         excludeRoutes: ['/api*', '/api/*'], // [!code ++]
       },
