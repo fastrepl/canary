@@ -32,18 +32,25 @@ Take a look at our [LocalSearch.vue](https://github.com/fastrepl/canary/blob/mai
 ```js [.vitepress/config.mts]
 export default defineConfig({
   ...
-  vite: {
-    resolve: {
-      alias: [
+  vue: { // [!code ++]
+    template: { // [!code ++]
+      compilerOptions: { // [!code ++]
+        isCustomElement: (tag) => tag.includes("canary-"), // [!code ++]
+      }, // [!code ++]
+    }, // [!code ++]
+  }, // [!code ++]
+  vite: { // [!code ++]
+    resolve: { // [!code ++]
+      alias: [ // [!code ++]
         { // [!code ++]
           find: /^.*\/VPNavBarSearch\.vue$/, // [!code ++]
           replacement: fileURLToPath( // [!code ++]
             new URL("<RELATIVE_PATH>.vue", import.meta.url), // [!code ++]
           ), // [!code ++]
         }, // [!code ++]
-      ],
-    },
-  },
+      ], // [!code ++]
+    }, // [!code ++]
+  }, // [!code ++]
   themeConfig: {
     // Don't forget to enable local search // [!code ++]
     search: { provider: "local" } // [!code ++]
