@@ -1,7 +1,6 @@
-import { LitElement, html, css, nothing } from "lit";
+import { LitElement, html, css } from "lit";
 import { customElement, state } from "lit/decorators.js";
 
-import { SearchController } from "./controllers";
 import { consume } from "@lit/context";
 import { queryContext } from "./contexts";
 
@@ -13,20 +12,10 @@ export class CanarySearchResults extends LitElement {
   @state()
   query: string = "";
 
-  private search = new SearchController(this);
-
   render() {
     return html`
       <div class="container">
-        ${this.search.render({
-          complete: (references) => {
-            if (this.query === "" || references?.length) {
-              return nothing;
-            }
-
-            return html`<p>No results found.</p>`;
-          },
-        })}
+        <p>No results found.</p>
       </div>
     `;
   }
