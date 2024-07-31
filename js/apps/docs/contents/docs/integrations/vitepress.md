@@ -54,3 +54,14 @@ export default defineConfig({
 ```
 
 :::
+
+::: tip
+
+If you get the following error:
+
+```bash
+Internal server error: Failed to resolve import "./VPNavBarSearch.vue"
+```
+
+Please make sure `<RELATIVE_PATH>.vue` in `.vitepress/config.mts` is correct.
+:::
