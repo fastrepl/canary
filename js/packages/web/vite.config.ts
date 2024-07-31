@@ -35,7 +35,11 @@ export default defineConfig({
           "canary-search-results-tabs",
         ],
         ...["canary-ask", "canary-ask-input", "canary-ask-results"],
-        ...["canary-feedback", "canary-feedback-text", "canary-feedback-textarea"],
+        ...[
+          "canary-feedback",
+          "canary-feedback-text",
+          "canary-feedback-textarea",
+        ],
         ...["canary-reference", "canary-tooltip", "canary-footer"],
         ...[
           "contexts",

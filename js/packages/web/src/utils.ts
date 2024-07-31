@@ -53,3 +53,7 @@ export const groupSearchReferences = (
 
   return groups;
 };
+
+export const asyncSleep = async (ms: number) => {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+};

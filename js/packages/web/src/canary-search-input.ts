@@ -41,13 +41,15 @@ export class CanarySearchInput extends LitElement {
     const input = e.target as HTMLInputElement;
 
     this.query = input.value;
-    this.dispatchEvent(
-      new CustomEvent("input-change", {
-        detail: input.value,
-        bubbles: true,
-        composed: true,
-      }),
-    );
+    this.updateComplete.then(() => {
+      this.dispatchEvent(
+        new CustomEvent("input-change", {
+          detail: input.value,
+          bubbles: true,
+          composed: true,
+        }),
+      );
+    });
   }
 
   private _handleKeyDown(e: KeyboardEvent) {

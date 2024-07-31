@@ -15,7 +15,7 @@ const NAME = "canary-search-results";
 export class CanarySearchResults extends LitElement {
   @property({ type: Boolean }) group = false;
 
-  private _search = new SearchController(this);
+  private _search = new SearchController(this, 250);
   private _selection = new KeyboardSelectionController<SearchReference>(this, {
     handleEnter: (item) => {
       this.dispatchEvent(

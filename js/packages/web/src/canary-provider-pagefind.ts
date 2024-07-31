@@ -1,7 +1,11 @@
 import { LitElement, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 
-import type { SearchReference } from "./types";
+import type {
+  BeforeSearchFunction,
+  SearchFunction,
+  SearchReference,
+} from "./types";
 import type { PagefindResult, PagefindSubResult } from "./types/pagefind";
 import { wrapper } from "./styles";
 
@@ -26,7 +30,7 @@ export class CanaryProviderPagefind extends LitElement {
 
     this.dispatchEvent(
       new CustomEvent("register", {
-        detail: { search: this.search },
+        detail: { search: this.search, beforeSearch: this.beforeSearch },
         bubbles: true,
         composed: true,
       }),
@@ -60,22 +64,26 @@ export class CanaryProviderPagefind extends LitElement {
 
   static styles = wrapper;
 
-  search = async (
+  beforeSearch: BeforeSearchFunction = async (query) => {
+    this.pagefind.preload(query);
+  };
+
+  search: SearchFunction = async (
     query: string,
     _?: AbortSignal,
   ): Promise<SearchReference[] | null> => {
-    const search = await this.pagefind.debouncedSearch(
+    const pagefindRet = await this.pagefind.search(
       query,
       this.options.pagefind ?? {},
       200,
     );
-    if (!search) {
+    if (!pagefindRet) {
       return new Promise((resolve) => resolve(null));
     }
 
     const results: (PagefindSubResult & { meta: PagefindResult["meta"] })[] =
       await Promise.all(
-        search.results.map((result: any) =>
+        pagefindRet.results.map((result: any) =>
           result.data().then((result: PagefindResult) => {
             return result.sub_results.map((subResult) => ({
               ...subResult,

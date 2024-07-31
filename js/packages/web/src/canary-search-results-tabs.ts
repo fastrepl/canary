@@ -30,7 +30,7 @@ export class CanarySearchResultsTabs extends LitElement {
     (SearchReference & { index: number })[]
   > = {};
 
-  private _search = new SearchController(this);
+  private _search = new SearchController(this, 250);
   private _selection = new KeyboardSelectionController<SearchReference>(this, {
     handleEnter: (item) => {
       this.dispatchEvent(

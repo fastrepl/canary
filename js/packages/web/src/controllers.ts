@@ -13,7 +13,7 @@ import {
   AskReference,
   SearchReference,
 } from "./types";
-import { randomInteger } from "./utils";
+import { asyncSleep, randomInteger } from "./utils";
 
 const wrapRenderer = <T>(renderer: StatusRenderer<T>) => {
   return {
@@ -31,13 +31,25 @@ export class SearchController {
   private _operation: ContextConsumer<{ __context__: OperationContext }, any>;
   private _mode: ContextConsumer<{ __context__: ModeContext }, any>;
   private _query: ContextConsumer<{ __context__: QueryContext }, any>;
+
+  private _id = 0;
+  private _debounceTimeoutMs: number;
   private _task: Task<
-    [OperationContext["search"] | undefined, Mode, string],
+    [
+      OperationContext["search"] | undefined,
+      OperationContext["beforeSearch"] | undefined,
+      Mode,
+      string,
+    ],
     SearchReference[] | null
   >;
 
-  constructor(host: ReactiveControllerHost & HTMLElement) {
+  constructor(
+    host: ReactiveControllerHost & HTMLElement,
+    debounceTimeoutMs = 0,
+  ) {
     (this.host = host).addController(this as ReactiveController);
+    this._debounceTimeoutMs = debounceTimeoutMs;
 
     this._operation = new ContextConsumer(host, {
       context: operationContext,
@@ -56,18 +68,29 @@ export class SearchController {
 
     this._task = new Task(
       host,
-      async ([search, mode, query], { signal }) => {
+      async ([search, beforeSearch, mode, query], { signal }) => {
         if (!mode || mode !== Mode.Search || !query?.trim() || !search) {
-          return [];
+          return null;
+        }
+        const id = ++this._id;
+        beforeSearch?.(query);
+        await asyncSleep(this._debounceTimeoutMs);
+
+        if (id !== this._id) {
+          return null;
         }
 
         const result = await search(query, signal);
-        this._afterSearch(query, result);
+        if (id !== this._id) {
+          return null;
+        }
 
+        this._afterSearch(query, result);
         return result as SearchReference[] | null;
       },
       () => [
         this._operation.value?.search,
+        this._operation.value?.beforeSearch,
         this._mode.value?.current,
         this._query.value,
       ],

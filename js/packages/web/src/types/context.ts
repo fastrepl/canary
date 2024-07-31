@@ -1,4 +1,4 @@
-import type { SearchFunction } from "./search";
+import type { SearchFunction, BeforeSearchFunction } from "./search";
 import type { AskFunction } from "./ask";
 import type { FeedbackFunction } from "./feedback";
 
@@ -22,6 +22,7 @@ export type TriggerShortcut = "cmdk" | "slash";
 
 export type OperationContext = {
   search: SearchFunction;
+  beforeSearch?: BeforeSearchFunction;
   ask: AskFunction;
   feedback: FeedbackFunction;
 };
