@@ -2,6 +2,9 @@ import { html } from "lit";
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { http, HttpResponse } from "msw";
 
+import { userEvent } from "@storybook/test";
+import * as shadow from "shadow-dom-testing-library";
+
 import "./canary-provider-cloud";
 import "./canary-content";
 
@@ -21,7 +24,7 @@ const render = ({ type }: any) => {
   if (type === "search") {
     return html`
       <canary-provider-cloud endpoint="http://localhost:6006" key="key">
-        <canary-content query="hi">
+        <canary-content>
           <canary-search slot="search">
             <canary-search-input slot="input"></canary-search-input>
             <canary-search-results slot="results"></canary-search-results>
@@ -136,6 +139,11 @@ const render = ({ type }: any) => {
   return html`<canary-content></canary-content>`;
 };
 
+const play: StoryObj["play"] = async ({ canvasElement }) => {
+  const input = shadow.getByShadowRole(canvasElement, "textbox");
+  await userEvent.type(input, "hello");
+};
+
 export default {
   render,
   title: "Public/canary-content",
@@ -146,6 +154,7 @@ export default {
 
 export const Search: StoryObj = {
   args: { type: "search" },
+  play,
 };
 
 export const SearchWithGroup: StoryObj = {

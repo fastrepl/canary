@@ -13,6 +13,7 @@ const config: StorybookConfig = {
     getAbsolutePath("@storybook/addon-themes"),
     getAbsolutePath("@storybook/addon-a11y"),
     getAbsolutePath("@storybook/addon-viewport"),
+    getAbsolutePath("@storybook/addon-actions"),
     getAbsolutePath("@storybook/addon-interactions"),
   ],
   framework: {

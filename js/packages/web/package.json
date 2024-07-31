@@ -30,6 +30,7 @@
   "devDependencies": {
     "@ljcl/storybook-addon-cssprops": "^4.0.0",
     "@storybook/addon-a11y": "^8.2.2",
+    "@storybook/addon-actions": "^8.2.6",
     "@storybook/addon-interactions": "^8.2.2",
     "@storybook/addon-themes": "^8.2.2",
     "@storybook/addon-viewport": "^8.2.2",
@@ -43,6 +44,7 @@
     "peggy": "^4.0.3",
     "prettier": "^3.3.3",
     "prettier-plugin-pegjs": "^2.0.2",
+    "shadow-dom-testing-library": "^1.11.2",
     "storybook": "^8.2.2",
     "storybook-source-link": "^4.0.1",
     "ts-lit-plugin": "^2.0.2",

@@ -1,6 +1,8 @@
 import { html } from "lit";
 import type { Meta, StoryObj } from "@storybook/web-components";
-import { within, userEvent } from "@storybook/test";
+
+import { userEvent } from "@storybook/test";
+import * as shadow from "shadow-dom-testing-library";
 
 import "./canary-provider-cloud";
 import "./canary-modal";
@@ -14,10 +16,7 @@ const render = (_: any) => {
   return html`
     <canary-provider-cloud key="key" endpoint="http://localhost:6006">
       <canary-modal>
-        <canary-trigger-searchbar
-          slot="trigger"
-          data-testid="trigger"
-        ></canary-trigger-searchbar>
+        <canary-trigger-searchbar slot="trigger"></canary-trigger-searchbar>
         <canary-content slot="content">
           <canary-search slot="search">
             <canary-search-input slot="input"></canary-search-input>
@@ -38,8 +37,7 @@ export default {
 } satisfies Meta;
 
 const play: StoryObj["play"] = async ({ canvasElement }) => {
-  const canvas = within(canvasElement);
-  const trigger = canvas.getByTestId("trigger");
+  const trigger = shadow.getByShadowRole(canvasElement, "button");
   await userEvent.click(trigger);
 };
 
