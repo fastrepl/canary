@@ -24,6 +24,11 @@ import "./canary-ask";
 import "./canary-ask-input";
 import "./canary-ask-results";
 
+// feedback
+import "./canary-feedback";
+import "./canary-feedback-text";
+import "./canary-feedback-textarea";
+
 // others
 import "./canary-modal";
 import "./canary-content";

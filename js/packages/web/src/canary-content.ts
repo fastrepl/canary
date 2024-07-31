@@ -110,6 +110,12 @@ export class CanaryContent extends LitElement {
 
         background-color: var(--canary-color-gray-100);
       }
+
+      @media (min-width: 50rem) {
+        div.container {
+          width: 500px;
+        }
+      }
     `,
   ];
 }

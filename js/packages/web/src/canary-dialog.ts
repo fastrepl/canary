@@ -33,8 +33,6 @@ export class CanaryDialog extends LitElement {
       }
 
       dialog {
-        width: 100%;
-        max-width: 500px;
         margin: 0 auto;
         top: 60px;
         padding: 0;

@@ -1,10 +1,10 @@
 import { LitElement, html, css } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
-const NAME = "canary-feedback-text";
+const NAME = "canary-feedback-textarea";
 
 @customElement(NAME)
-export class CanaryFeedbackText extends LitElement {
+export class CanaryFeedbackTextarea extends LitElement {
   @property({ type: String }) name = "Field";
   @property({ type: String }) value = "";
   @property({ type: String }) placeholder = "";
@@ -13,12 +13,10 @@ export class CanaryFeedbackText extends LitElement {
     return html`
       <div class="container">
         <label for=${this.name}>${this.name}</label>
-        <input
-          type="text"
-          id=${this.name}
-          value=${this.value}
-          placeholder=${this.placeholder}
-        />
+        <!-- prettier-ignore -->
+        <textarea id=${this.name} placeholder=${this.placeholder}>
+          ${this.value}
+        </textarea>
       </div>
     `;
   }
@@ -38,7 +36,12 @@ export class CanaryFeedbackText extends LitElement {
       }
     `,
     css`
-      input {
+      textarea {
+        width: 100%;
+        font-size: 16px;
+        height: 160px;
+        resize: none;
+        outline: none;
         padding: 8px;
         border: 1px solid var(--canary-color-gray-90);
         border-radius: 8px;
@@ -48,11 +51,18 @@ export class CanaryFeedbackText extends LitElement {
           var(--canary-is-dark, var(--canary-color-gray-80));
       }
     `,
+    css`
+      textarea {
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+      }
+    `,
   ];
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [NAME]: CanaryFeedbackText;
+    [NAME]: CanaryFeedbackTextarea;
   }
 }
