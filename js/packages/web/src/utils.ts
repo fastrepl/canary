@@ -57,3 +57,13 @@ export const groupSearchReferences = (
 export const asyncSleep = async (ms: number) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
+
+export const cancellable = <T>(
+  p: Promise<T>,
+  signal: AbortSignal,
+): Promise<T> => {
+  return new Promise((resolve, reject) => {
+    signal.addEventListener("abort", () => reject("aborted"));
+    p.then(resolve).catch(reject);
+  });
+};

@@ -6,8 +6,9 @@ import type {
   SearchFunction,
   SearchReference,
 } from "./types";
-import type { PagefindResult, PagefindSubResult } from "./types/pagefind";
+import type { PagefindResult } from "./types/pagefind";
 import { wrapper } from "./styles";
+import { cancellable } from "./utils";
 
 const NAME = "canary-provider-pagefind";
 
@@ -21,6 +22,8 @@ type Options = {
 export class CanaryProviderPagefind extends LitElement {
   @property({ type: Object }) options: Options = {};
   @state() pagefind: any = null;
+
+  private _limit = 30;
 
   async connectedCallback() {
     super.connectedCallback();
@@ -52,6 +55,9 @@ export class CanaryProviderPagefind extends LitElement {
   private async _initPagefind(pagefind: any) {
     try {
       pagefind.init();
+      if (this.options.pagefind) {
+        await pagefind.options(this.options.pagefind);
+      }
       this.pagefind = pagefind;
     } catch (e) {
       throw new Error(`Failed to initialize pagefind': ${e}`);
@@ -70,49 +76,58 @@ export class CanaryProviderPagefind extends LitElement {
 
   search: SearchFunction = async (
     query: string,
-    _?: AbortSignal,
+    signal: AbortSignal,
   ): Promise<SearchReference[] | null> => {
-    const pagefindRet = await this.pagefind.search(
-      query,
-      this.options.pagefind ?? {},
-      200,
-    );
-    if (!pagefindRet) {
-      return new Promise((resolve) => resolve(null));
+    const op = this.pagefind
+      .search(query)
+      .then(({ results }: any) =>
+        Promise.all(
+          results.slice(0, this._limit).map((r: any) => r.data()),
+        ).then((results: PagefindResult[]) => this._transform(results)),
+      );
+
+    try {
+      signal.throwIfAborted();
+      return cancellable(op, signal);
+    } catch (e) {
+      console.error(e);
+      return null;
     }
+  };
 
-    const results: (PagefindSubResult & { meta: PagefindResult["meta"] })[] =
-      await Promise.all(
-        pagefindRet.results.map((result: any) =>
-          result.data().then((result: PagefindResult) => {
-            return result.sub_results.map((subResult) => ({
-              ...subResult,
-              meta: result.meta,
-            }));
-          }),
-        ),
-      ).then((results) => results.flat());
+  private _transform(results: PagefindResult[]): SearchReference[] | null {
+    const subResults = results.flatMap((result) => {
+      return result.sub_results.map((subResult) => ({
+        ...subResult,
+        meta: result.meta,
+      }));
+    });
 
-    const getBestScore = (subResult: PagefindSubResult) =>
+    const getBestScore = (subResult: (typeof subResults)[0]) =>
       subResult.weighted_locations.reduce(
         (acc, cur) => Math.max(acc, cur.balanced_score),
         -1,
       );
 
-    return results
+    const getTitles = (subResult: (typeof subResults)[0]) => {
+      return subResult.meta.title === subResult.title
+        ? []
+        : [subResult.meta.title];
+    };
+
+    return subResults
       .sort((a, b) => getBestScore(b) - getBestScore(a))
-      .map(
-        (result) =>
-          ({
-            url: result.url,
-            title: result.title,
-            titles:
-              result.meta.title === result.title ? [] : [result.meta.title],
-            excerpt: result.excerpt,
-          }) as SearchReference,
-      )
-      .slice(0, 30);
-  };
+      .map((result) => {
+        const ref: SearchReference = {
+          url: result.url,
+          title: result.title,
+          titles: getTitles(result),
+        };
+
+        return ref;
+      })
+      .slice(0, this._limit);
+  }
 }
 
 declare global {

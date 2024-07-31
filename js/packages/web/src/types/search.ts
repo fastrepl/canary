@@ -8,7 +8,7 @@ export interface SearchReference {
 
 export type SearchFunction = (
   query: string,
-  signal?: AbortSignal,
+  signal: AbortSignal,
 ) => Promise<SearchReference[] | null>;
 
 export type BeforeSearchFunction = (query: string) => Promise<any>;
