@@ -11,7 +11,7 @@ If you're using `Canary Cloud`, please refer to [this page](/docs/cloud/integrat
 
 [Docusaurus](https://docusaurus.io/) is static site generator using React.
 
-Since `Docusaurus` do not have default search index, we provide `@getcanary/docusaurus-pagefind` to generate [Pagefind](https://pagefind.app/) index at build time.
+Since `Docusaurus` do not have default search index, we provide `@getcanary/docusaurus-theme-search-pagefind` to generate [Pagefind](https://pagefind.app/) index at build time.
 
 ::: details Why use Pagefind?
 Main problem of local search index is that the **size of the index grows** as you add more content, and users must **load the whole index upfront** to do the search.
@@ -23,7 +23,7 @@ Main problem of local search index is that the **size of the index grows** as yo
 
 ```bash
 npm install @getcanary/web
-npm install @getcanary/docusaurus-pagefind
+npm install @getcanary/docusaurus-theme-search-pagefind
 ```
 
 ::: code-group
@@ -32,10 +32,9 @@ npm install @getcanary/docusaurus-pagefind
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   ...
-  plugins: [
-    // Remove any existing search plugin // [!code --]
-    require.resolve('docusaurus-lunr-search'), // [!code --]
-    require.resolve("@getcanary/docusaurus-pagefind"), // [!code ++]
+  themes: [
+    // Remove any existing plugins or themes that are related to search // [!code ++]
+    require.resolve("@getcanary/docusaurus-theme-search-pagefind"), // [!code ++]
   ],
 };
 ```
@@ -46,6 +45,13 @@ const config = {
 You should run `docusaurus build && docusaurus serve` to try the search locally.
 
 It won't work with `docusaurus start`.
+:::
+
+::: tip
+According to [Docusaurus docs](https://docusaurus.io/docs/using-plugins#using-themes),
+
+> ...the themes and plugins entries are interchangeable when installing and configuring a plugin.
+
 :::
 
 ## Configuration
@@ -60,9 +66,9 @@ You can change colors and pagefind ranking by adding the following configuration
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   ...
-  plugins: [
+  themes: [
     [
-      require.resolve("@getcanary/docusaurus-pagefind"),
+      require.resolve("@getcanary/docusaurus-theme-search-pagefind"),
       { // [!code ++]
         // https://getcanary.dev/docs/customization/styling.html#css-variables // [!code ++]
         styles: { // [!code ++]
@@ -91,10 +97,10 @@ const config = {
 
 ### Advanced
 
-When you add `@getcanary/docusaurus-pagefind` to the `plugins` list, it will override the default search component to use Canary's. To customize this search-bar further, you can [eject](https://docusaurus.io/docs/swizzling#ejecting) it and modify the code.
+When you add `@getcanary/docusaurus-theme-search-pagefind` to the `themes` list, it will override the default search component to use Canary's. To customize this search-bar further, you can [eject](https://docusaurus.io/docs/swizzling#ejecting) it and modify the code.
 
 ```bash
-npm run swizzle @getcanary/docusaurus-pagefind SearchBar -- --eject --javascript
+npm run swizzle @getcanary/docusaurus-theme-search-pagefind SearchBar -- --eject --javascript
 ```
 
 ::: code-group
