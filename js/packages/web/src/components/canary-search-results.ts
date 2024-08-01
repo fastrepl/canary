@@ -1,4 +1,4 @@
-import { LitElement, html, css, noChange } from "lit";
+import { LitElement, html, css, noChange, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { ref, createRef } from "lit/directives/ref.js";
 
@@ -56,7 +56,7 @@ export class CanarySearchResults extends LitElement {
 
   private _results() {
     if (!this._references) {
-      return this._skeletons(5);
+      return this._search.query ? this._skeletons(5) : nothing;
     }
 
     return html`<canary-search-references

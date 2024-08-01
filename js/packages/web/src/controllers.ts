@@ -114,6 +114,10 @@ export class SearchController {
     );
   }
 
+  get query() {
+    return this._query.value;
+  }
+
   render(renderFunctions: StatusRenderer<SearchReference[] | null>) {
     return this._task.render(wrapRenderer(renderFunctions));
   }
