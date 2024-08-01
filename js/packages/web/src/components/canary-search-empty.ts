@@ -2,7 +2,7 @@ import { LitElement, html, css } from "lit";
 import { customElement, state } from "lit/decorators.js";
 
 import { consume } from "@lit/context";
-import { queryContext } from "./contexts";
+import { queryContext } from "../contexts";
 
 const NAME = "canary-search-empty";
 

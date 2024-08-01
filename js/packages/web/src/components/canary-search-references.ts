@@ -2,8 +2,8 @@ import { LitElement, html, css, type PropertyValues } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 
-import { groupSearchReferences } from "./utils";
-import type { SearchReference } from "./types";
+import { groupSearchReferences } from "../utils";
+import type { SearchReference } from "../types";
 
 const NAME = "canary-search-references";
 

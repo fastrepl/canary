@@ -7,10 +7,10 @@ import {
   themeContext,
   operationContext,
   defaultOperationContext,
-} from "./contexts";
+} from "../contexts";
 
-import type { Framework, ThemeContext, OperationContext } from "./types";
-import { wrapper } from "./styles";
+import type { Framework, ThemeContext, OperationContext } from "../types";
+import { wrapper } from "../styles";
 
 const NAME = "canary-root";
 

@@ -3,18 +3,18 @@ import { customElement, property, state } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 import { ref, createRef } from "lit/directives/ref.js";
 
-import { scrollContainer } from "./styles";
-import type { SearchReference } from "./types";
+import { scrollContainer } from "../styles";
+import type { SearchReference } from "../types";
 
-import { KeyboardSelectionController, SearchController } from "./controllers";
+import { KeyboardSelectionController, SearchController } from "../controllers";
 
 import "./canary-search-references";
 import "./canary-reference-skeleton";
 import "./canary-error";
 
 // @ts-ignore
-import { parse } from "./grammers/groups";
-type GroupDefinition = { name: string; pattern: RegExp | null };
+import { parse } from "../grammers/tabs";
+type TabDefinition = { name: string; pattern: RegExp | null };
 
 const NAME = "canary-search-results-tabs";
 
@@ -23,9 +23,9 @@ export class CanarySearchResultsTabs extends LitElement {
   @property({ type: Boolean }) group = false;
 
   @property({ converter: { fromAttribute: parse } })
-  tabs: GroupDefinition[] = [];
+  tabs: TabDefinition[] = [];
 
-  @state() selectedGroup = "";
+  @state() selectedTab = "";
   @state() groupedReferences: Record<
     string,
     (SearchReference & { index: number })[]
@@ -52,11 +52,11 @@ export class CanarySearchResultsTabs extends LitElement {
   }
 
   updated(changed: PropertyValues<this>) {
-    if (!this.selectedGroup && this.tabs.length > 0) {
-      this.selectedGroup = this.tabs[0].name;
+    if (!this.selectedTab && this.tabs.length > 0) {
+      this.selectedTab = this.tabs[0].name;
     }
 
-    if (changed.has("groupedReferences") && !changed.has("selectedGroup")) {
+    if (changed.has("groupedReferences") && !changed.has("selectedTab")) {
       const relevantGroup = Object.entries(this.groupedReferences).reduce(
         (acc, [group, references]) => {
           if (!references?.length || !this.groupedReferences?.[acc]?.length) {
@@ -67,10 +67,10 @@ export class CanarySearchResultsTabs extends LitElement {
             ? group
             : acc;
         },
-        this.selectedGroup,
+        this.selectedTab,
       );
 
-      this.selectedGroup = relevantGroup;
+      this.selectedTab = relevantGroup;
     }
   }
 
@@ -111,7 +111,7 @@ export class CanarySearchResultsTabs extends LitElement {
     return html`
       <div class="tabs">
         ${this.tabs.map(({ name }) => {
-          const selected = name === this.selectedGroup;
+          const selected = name === this.selectedTab;
           const selectable = counts[name] > 0;
 
           return html`<div
@@ -122,7 +122,7 @@ export class CanarySearchResultsTabs extends LitElement {
               name="mode"
               .id=${name}
               .value=${name}
-              ?checked=${name === this.selectedGroup}
+              ?checked=${name === this.selectedTab}
             />
             <label class=${classMap({ tab: true, selectable, selected })}>
               ${name}
@@ -138,7 +138,7 @@ export class CanarySearchResultsTabs extends LitElement {
       return this._skeletons(5);
     }
 
-    const current = this.groupedReferences[this.selectedGroup] ?? [];
+    const current = this.groupedReferences[this.selectedTab] ?? [];
     this._selection.items = current;
 
     return html`<canary-search-references
@@ -157,12 +157,12 @@ export class CanarySearchResultsTabs extends LitElement {
   }
 
   private _handleTabClick(name: string): void {
-    this.selectedGroup = name;
+    this.selectedTab = name;
   }
 
   private _groupReferences(
     references: SearchReference[],
-    definitions: GroupDefinition[],
+    definitions: TabDefinition[],
   ) {
     const grouped = definitions.reduce(
       (acc, group) => ({ ...acc, [group.name]: [] }),

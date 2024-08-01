@@ -1,28 +1,29 @@
 import { LitElement, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
-import { CalloutMixin } from "./mixins";
-import { callout } from "./styles";
+import { CalloutMixin } from "../mixins";
+import { callout } from "../styles";
 
-import "./canary-logo-slack";
+import "./canary-logo-cal";
 import "./canary-hero-icon";
-import { StringArray } from "./converters";
+import { StringArray } from "../converters";
 
-const NAME = "canary-callout-slack";
+const NAME = "canary-callout-cal";
 
 @customElement(NAME)
-export class CanaryCalloutSlack extends CalloutMixin(LitElement) {
-  @property() message = "👋 Looking for help?";
+export class CanaryCalloutCal extends CalloutMixin(LitElement) {
+  @property({ type: String }) url = "/";
+  @property() message = "👋 Wanna schedule a call?";
 
   @property({ reflect: true, converter: StringArray })
-  keywords: string[] = ["slack", "help", "support", "community"];
+  keywords: string[] = ["meeting", "schedule", "cal.com", "calend"];
 
   renderCallout() {
     return html`
       <button @click=${this._handleClick}>
-        <span> ${this.message}</span>
+        <span>${this.message}</span>
         <div>
-          <canary-logo-slack></canary-logo-slack>
+          <canary-logo-cal></canary-logo-cal>
           <canary-hero-icon name="arrow-up-right"></canary-hero-icon>
         </div>
       </button>
@@ -38,6 +39,6 @@ export class CanaryCalloutSlack extends CalloutMixin(LitElement) {
 
 declare global {
   interface HTMLElementTagNameMap {
-    [NAME]: CanaryCalloutSlack;
+    [NAME]: CanaryCalloutCal;
   }
 }

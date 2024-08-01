@@ -2,9 +2,9 @@ import { LitElement, html, css, noChange } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { ref, createRef } from "lit/directives/ref.js";
 
-import type { SearchReference } from "./types";
-import { scrollContainer } from "./styles";
-import { SearchController, KeyboardSelectionController } from "./controllers";
+import type { SearchReference } from "../types";
+import { scrollContainer } from "../styles";
+import { SearchController, KeyboardSelectionController } from "../controllers";
 
 import "./canary-error";
 import "./canary-search-references";

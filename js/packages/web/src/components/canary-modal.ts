@@ -2,7 +2,7 @@ import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { createRef } from "lit/directives/ref.js";
 
-import { wrapper } from "./styles";
+import { wrapper } from "../styles";
 import "./canary-dialog";
 
 const NAME = "canary-modal";

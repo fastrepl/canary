@@ -1,11 +1,15 @@
 {
   "name": "@getcanary/web",
-  "version": "0.0.65",
+  "version": "0.0.66",
   "type": "module",
-  "main": "components/index.js",
+  "main": "dist/index.js",
   "files": [
-    "components"
+    "dist"
   ],
+  "exports": {
+    "./components/*": "./dist/components/*",
+    ".": "./dist/*"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
@@ -16,7 +20,9 @@
     "chromatic": "chromatic --exit-zero-on-changes",
     "format": "prettier --plugin=prettier-plugin-pegjs . --write",
     "peggy": "peggy src/grammers/groups.peggy --format es",
-    "test": "vitest run"
+    "test": "npm run test-utils && npm run test-storybook",
+    "test-utils": "vitest run",
+    "test-storybook": "test-storybook"
   },
   "dependencies": {
     "@floating-ui/dom": "^1.6.8",
@@ -36,7 +42,7 @@
     "@storybook/addon-viewport": "^8.2.2",
     "@storybook/blocks": "^8.2.2",
     "@storybook/test": "^8.2.2",
-    "@storybook/test-runner": "^0.19.0",
+    "@storybook/test-runner": "^0.19.1",
     "@storybook/web-components": "^8.2.2",
     "@storybook/web-components-vite": "^8.2.2",
     "chromatic": "^11.5.5",
@@ -50,6 +56,7 @@
     "ts-lit-plugin": "^2.0.2",
     "typescript": "^5.2.2",
     "vite": "^5.3.1",
+    "vite-plugin-dts": "^4.0.0-beta.2",
     "vitest": "^2.0.4"
   },
   "msw": {

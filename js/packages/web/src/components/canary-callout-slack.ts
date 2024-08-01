@@ -1,28 +1,29 @@
 import { LitElement, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
-import { CalloutMixin } from "./mixins";
-import { callout } from "./styles";
+import { CalloutMixin } from "../mixins";
+import { callout } from "../styles";
 
-import "./canary-logo-discord";
+import "./canary-logo-slack";
 import "./canary-hero-icon";
-import { StringArray } from "./converters";
+import { StringArray } from "../converters";
 
-const NAME = "canary-callout-discord";
+const NAME = "canary-callout-slack";
 
 @customElement(NAME)
-export class CanaryCalloutDiscord extends CalloutMixin(LitElement) {
+export class CanaryCalloutSlack extends CalloutMixin(LitElement) {
+  @property({ type: String }) url = "/";
   @property() message = "👋 Looking for help?";
 
   @property({ reflect: true, converter: StringArray })
-  keywords: string[] = ["discord", "help", "support", "community"];
+  keywords: string[] = ["slack", "help", "support", "community"];
 
   renderCallout() {
     return html`
       <button @click=${this._handleClick}>
-        <span>${this.message}</span>
+        <span> ${this.message}</span>
         <div>
-          <canary-logo-discord></canary-logo-discord>
+          <canary-logo-slack></canary-logo-slack>
           <canary-hero-icon name="arrow-up-right"></canary-hero-icon>
         </div>
       </button>
@@ -38,6 +39,6 @@ export class CanaryCalloutDiscord extends CalloutMixin(LitElement) {
 
 declare global {
   interface HTMLElementTagNameMap {
-    [NAME]: CanaryCalloutDiscord;
+    [NAME]: CanaryCalloutSlack;
   }
 }

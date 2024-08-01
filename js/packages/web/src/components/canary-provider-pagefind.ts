@@ -5,10 +5,10 @@ import type {
   BeforeSearchFunction,
   SearchFunction,
   SearchReference,
-} from "./types";
-import type { PagefindResult } from "./types/pagefind";
-import { wrapper } from "./styles";
-import { cancellable } from "./utils";
+} from "../types";
+import type { PagefindResult } from "../types/pagefind";
+import { wrapper } from "../styles";
+import { cancellable } from "../utils";
 
 const NAME = "canary-provider-pagefind";
 

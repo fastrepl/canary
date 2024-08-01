@@ -15,16 +15,12 @@ export const themeContext = ctx<ThemeContext>("theme");
 export const operationContext = ctx<OperationContext>("operation");
 
 export const defaultOperationContext: OperationContext = {
-  search: (..._) => {
-    console.error("'search' is not implemented");
-    return Promise.resolve(null);
-  },
-  ask: (..._) => {
-    console.error("'ask' is not implemented");
-    return Promise.resolve(null);
-  },
-  feedback: (..._) => {
-    console.error("'feedback' is not implemented");
-    return Promise.resolve(null);
-  },
+  search: (..._) => notImplemented("search"),
+  ask: (..._) => notImplemented("ask"),
+  feedback: (..._) => notImplemented("feedback"),
+};
+
+const notImplemented = (name: string) => {
+  console.error(`'${name}' is not implemented`);
+  return Promise.resolve(null);
 };

@@ -2,10 +2,10 @@ import { LitElement, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
 import { consume } from "@lit/context";
-import { queryContext } from "./contexts";
-import type { QueryContext } from "./types";
+import { queryContext } from "../contexts";
+import type { QueryContext } from "../types";
 
-import { input } from "./styles";
+import { input } from "../styles";
 import "./canary-hero-icon";
 
 const NAME = "canary-search-input";

@@ -8,7 +8,6 @@ type Constructor<T = {}> = new (...args: any[]) => T;
 
 export function CalloutMixin<T extends Constructor<LitElement>>(superClass: T) {
   class Mixin extends superClass {
-    @property() url = "";
     @property({ type: Array }) keywords: string[] = [];
     @property({ type: Boolean }) forceShow = false;
 
@@ -35,5 +34,5 @@ export function CalloutMixin<T extends Constructor<LitElement>>(superClass: T) {
     }
   }
 
-  return Mixin;
+  return Mixin as T;
 }

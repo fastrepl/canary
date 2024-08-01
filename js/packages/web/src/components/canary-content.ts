@@ -5,11 +5,11 @@ import {
   queryAssignedElements,
 } from "lit/decorators.js";
 
-import { Mode, type ModeContext } from "./types";
-import { wrapper } from "./styles";
+import { Mode, type ModeContext } from "../types";
+import { wrapper } from "../styles";
 
 import { provide } from "@lit/context";
-import { modeContext, queryContext } from "./contexts";
+import { modeContext, queryContext } from "../contexts";
 
 const NAME = "canary-content";
 

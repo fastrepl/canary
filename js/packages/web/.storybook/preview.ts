@@ -3,7 +3,7 @@ import { withThemeByDataAttribute } from "@storybook/addon-themes";
 import { MINIMAL_VIEWPORTS } from "@storybook/addon-viewport";
 
 import { html } from "lit";
-import "../src/canary-root";
+import "../src/components/canary-root";
 
 import { http, HttpResponse, delay } from "msw";
 import { initialize, mswLoader } from "msw-storybook-addon";

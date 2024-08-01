@@ -1,11 +1,11 @@
 import { LitElement, html, css } from "lit";
 import { customElement, state } from "lit/decorators.js";
 
-import { AskController } from "./controllers";
+import { AskController } from "../controllers";
 
 import { consume } from "@lit/context";
-import { themeContext } from "./contexts";
-import { ThemeContext } from "./types";
+import { themeContext } from "../contexts";
+import { ThemeContext } from "../types";
 
 import "./canary-markdown";
 import "./canary-reference";

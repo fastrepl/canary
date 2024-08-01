@@ -1,7 +1,7 @@
 import { test, expect } from "vitest";
 
 // @ts-ignore
-import { parse } from "./groups";
+import { parse } from "./tabs";
 
 test("parse", () => {
   expect(() => parse("Docs:*;API:*")).toThrowError();

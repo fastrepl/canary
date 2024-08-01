@@ -1,8 +1,8 @@
 import { LitElement, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 
-import { wrapper } from "./styles";
-import type { SearchReference } from "./types";
+import { wrapper } from "../styles";
+import type { SearchReference } from "../types";
 
 const NAME = "canary-provider-vitepress-minisearch";
 

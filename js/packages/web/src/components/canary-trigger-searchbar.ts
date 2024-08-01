@@ -2,9 +2,9 @@ import { LitElement, html, css } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
 import "./canary-hero-icon";
-import { KeyboardTriggerController } from "./controllers";
+import { KeyboardTriggerController } from "../controllers";
 
-import type { TriggerShortcut } from "./types";
+import type { TriggerShortcut } from "../types";
 
 const NAME = "canary-trigger-searchbar";
 

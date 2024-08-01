@@ -3,8 +3,8 @@ import { customElement, property } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 
 import { consume } from "@lit/context";
-import { modeContext } from "./contexts";
-import type { ModeContext } from "./types";
+import { modeContext } from "../contexts";
+import type { ModeContext } from "../types";
 
 const NAME = "canary-mode-tabs";
 

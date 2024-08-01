@@ -1,8 +1,8 @@
 import { LitElement, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
-import type { Delta } from "./types";
-import { wrapper } from "./styles";
+import type { Delta } from "../types";
+import { wrapper } from "../styles";
 
 const NAME = "canary-provider-cloud";
 
