@@ -27,7 +27,6 @@ export class CanarySearchInput extends LitElement {
           spellcheck="false"
           placeholder="Search for anything..."
           @input=${this._handleInput}
-          @keydown=${this._handleKeyDown}
           autofocus
           onfocus="this.setSelectionRange(this.value.length,this.value.length);"
         />
@@ -50,21 +49,6 @@ export class CanarySearchInput extends LitElement {
         }),
       );
     });
-  }
-
-  private _handleKeyDown(e: KeyboardEvent) {
-    const opts = { bubbles: true, composed: true };
-
-    switch (e.key) {
-      case "Enter":
-        e.preventDefault();
-        this.dispatchEvent(new CustomEvent("input-enter", opts));
-        break;
-      case "Tab":
-        e.preventDefault();
-        this.dispatchEvent(new CustomEvent("input-tab", opts));
-        break;
-    }
   }
 }
 

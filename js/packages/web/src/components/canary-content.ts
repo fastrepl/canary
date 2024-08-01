@@ -1,11 +1,7 @@
 import { LitElement, css, html, nothing } from "lit";
-import {
-  customElement,
-  property,
-  queryAssignedElements,
-} from "lit/decorators.js";
+import { customElement, state, property } from "lit/decorators.js";
 
-import { Mode, type ModeContext } from "../types";
+import { type ModeContext } from "../types";
 import { wrapper } from "../styles";
 
 import { provide } from "@lit/context";
@@ -15,46 +11,21 @@ const NAME = "canary-content";
 
 @customElement(NAME)
 export class CanaryContent extends LitElement {
-  @provide({ context: modeContext })
-  @property({ attribute: false })
-  mode: ModeContext = {
-    options: new Set([Mode.Search, Mode.Ask]),
-    current: Mode.Search,
-  };
-
   @provide({ context: queryContext })
   @property()
   query = "";
 
-  @queryAssignedElements({ slot: "search" })
-  searchElements!: Array<HTMLElement>;
+  @provide({ context: modeContext })
+  @state()
+  mode: ModeContext = { options: new Set(), current: null };
 
-  @queryAssignedElements({ slot: "ask" })
-  askElements!: Array<HTMLElement>;
+  connectedCallback() {
+    super.connectedCallback();
+    this.addEventListener("register-mode", this._handleRegister);
+  }
 
-  firstUpdated() {
-    let current = this.mode.current;
-    let options = this.mode.options;
-
-    if (this.searchElements.length > 0) {
-      options.add(Mode.Search);
-    } else {
-      options.delete(Mode.Search);
-    }
-
-    if (this.askElements.length > 0) {
-      options.add(Mode.Ask);
-    } else {
-      options.delete(Mode.Ask);
-    }
-
-    if (this.searchElements.length > 0) {
-      current = Mode.Search;
-    } else {
-      current = Mode.Ask;
-    }
-
-    this.mode = { current, options };
+  disconnectedCallback() {
+    this.removeEventListener("register-mode", this._handleRegister);
   }
 
   render() {
@@ -62,11 +33,9 @@ export class CanaryContent extends LitElement {
       <div
         class="container"
         @mode-set=${this._handleModeSet}
-        @input-tab=${this._handleTab}
         @input-change=${this._handleChange}
       >
-        <slot name="search"></slot>
-        <slot name="ask"></slot>
+        <slot name="mode"></slot>
         ${this.query ? html`<slot name="footer"></slot>` : nothing}
       </div>
     `;
@@ -76,16 +45,12 @@ export class CanaryContent extends LitElement {
     this.query = e.detail;
   }
 
-  private _handleTab(_: CustomEvent) {
-    if (this.mode.options.size < 2) {
-      return;
-    }
+  private _handleRegister(e: Event) {
+    const mode = (e as CustomEvent).detail as string;
 
-    if (this.mode?.current === "Search") {
-      this.mode = { ...this.mode, current: Mode.Ask };
-    } else {
-      this.mode = { ...this.mode, current: Mode.Search };
-    }
+    const options = this.mode.options.add(mode);
+    const current = this.mode.current ?? mode;
+    this.mode = { current, options };
   }
 
   private _handleModeSet(e: CustomEvent) {

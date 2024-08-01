@@ -10,9 +10,9 @@ import { customElement, property, state } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 import { ref, createRef } from "lit/directives/ref.js";
 
-import { scrollContainer } from "../styles";
 import type { SearchReference } from "../types";
-
+import { scrollContainer } from "../styles";
+import { DEBOUNCE_MS, MODE_SEARCH } from "../constants";
 import { KeyboardSelectionController, SearchController } from "../controllers";
 
 import "./canary-search-references";
@@ -27,6 +27,8 @@ const NAME = "canary-search-results-tabs";
 
 @customElement(NAME)
 export class CanarySearchResultsTabs extends LitElement {
+  readonly MODE = MODE_SEARCH;
+
   @property({ type: Boolean }) group = false;
 
   @property({ converter: { fromAttribute: parse } })
@@ -40,7 +42,11 @@ export class CanarySearchResultsTabs extends LitElement {
 
   private _ref = createRef<HTMLElement>();
 
-  private _search = new SearchController(this, 250);
+  private _search = new SearchController(this, {
+    mode: this.MODE,
+    debounceTimeoutMs: DEBOUNCE_MS,
+  });
+
   private _selection = new KeyboardSelectionController<SearchReference>(this, {
     handleEnter: (item) => {
       this.dispatchEvent(

@@ -32,7 +32,7 @@ export class CanaryProviderPagefind extends LitElement {
     this._initPagefind(pagefind);
 
     this.dispatchEvent(
-      new CustomEvent("register", {
+      new CustomEvent("register-operations", {
         detail: { search: this.search, beforeSearch: this.beforeSearch },
         bubbles: true,
         composed: true,

@@ -56,16 +56,6 @@ export class CanaryAskInput extends LitElement {
       });
       this.dispatchEvent(event);
     }
-
-    if (e.key === "Tab") {
-      e.preventDefault();
-
-      const event = new CustomEvent("input-tab", {
-        bubbles: true,
-        composed: true,
-      });
-      this.dispatchEvent(event);
-    }
   }
 }
 

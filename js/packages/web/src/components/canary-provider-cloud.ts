@@ -19,7 +19,7 @@ export class CanaryProviderCloud extends LitElement {
     }
 
     this.dispatchEvent(
-      new CustomEvent("register", {
+      new CustomEvent("register-operations", {
         detail: { search: this.search, ask: this.ask },
         bubbles: true,
         composed: true,

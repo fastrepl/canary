@@ -4,6 +4,7 @@ import { customElement, state } from "lit/decorators.js";
 
 import { modeContext } from "../contexts";
 import type { ModeContext } from "../types";
+import { MODE_SEARCH } from "../constants";
 
 import "./canary-mode-tabs";
 import "./canary-search-empty";
@@ -12,15 +13,30 @@ const NAME = "canary-search";
 
 @customElement(NAME)
 export class CanarySearch extends LitElement {
+  readonly MODE = MODE_SEARCH;
+
   @consume({ context: modeContext, subscribe: true })
   @state()
   mode!: ModeContext;
 
   @state() empty = false;
 
+  connectedCallback() {
+    super.connectedCallback();
+
+    this.dispatchEvent(
+      new CustomEvent("register-mode", {
+        bubbles: true,
+        composed: true,
+        detail: this.MODE,
+      }),
+    );
+  }
+
   render() {
-    return this.mode?.current === "Search"
-      ? html`
+    return this.mode.current !== this.MODE
+      ? nothing
+      : html`
           <div class="container">
             <div class="input-wrapper">
               <slot name="input"></slot>
@@ -40,8 +56,7 @@ export class CanarySearch extends LitElement {
                 : nothing}
             </div>
           </div>
-        `
-      : nothing;
+        `;
   }
 
   private _handleEmpty(e: CustomEvent) {

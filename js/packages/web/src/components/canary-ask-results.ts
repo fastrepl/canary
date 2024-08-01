@@ -1,11 +1,12 @@
 import { LitElement, html, css } from "lit";
 import { customElement, state } from "lit/decorators.js";
 
-import { AskController } from "../controllers";
-
 import { consume } from "@lit/context";
+import type { ThemeContext } from "../types";
 import { themeContext } from "../contexts";
-import { ThemeContext } from "../types";
+
+import { MODE_ASK } from "../constants";
+import { AskController } from "../controllers";
 
 import "./canary-markdown";
 import "./canary-reference";
@@ -15,11 +16,13 @@ const NAME = "canary-ask-results";
 
 @customElement(NAME)
 export class CanaryAskResults extends LitElement {
+  readonly MODE = MODE_ASK;
+
   @consume({ context: themeContext, subscribe: true })
   @state()
   theme!: ThemeContext;
 
-  private ask = new AskController(this);
+  private ask = new AskController(this, { mode: this.MODE });
 
   render() {
     return html` <div class="container">

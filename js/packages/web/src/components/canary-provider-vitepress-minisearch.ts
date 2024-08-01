@@ -35,7 +35,7 @@ export class CanaryProviderVitepressMinisearch extends LitElement {
     };
 
     this.dispatchEvent(
-      new CustomEvent("register", {
+      new CustomEvent("register-operations", {
         detail: { search: this.search },
         bubbles: true,
         composed: true,

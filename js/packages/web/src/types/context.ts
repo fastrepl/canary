@@ -5,14 +5,9 @@ import type { FeedbackFunction } from "./feedback";
 export type QueryContext = string;
 
 export type ModeContext = {
-  options: Set<Mode>;
-  current: Mode;
+  options: Set<string>;
+  current: string | null;
 };
-
-export enum Mode {
-  Search = "Search",
-  Ask = "Ask",
-}
 
 export type ThemeContext = "light" | "dark";
 

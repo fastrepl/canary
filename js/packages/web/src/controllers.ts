@@ -10,7 +10,6 @@ import { ContextConsumer } from "@lit/context";
 import { operationContext, modeContext, queryContext } from "./contexts";
 
 import {
-  Mode,
   ModeContext,
   QueryContext,
   TriggerShortcut,
@@ -38,23 +37,21 @@ export class SearchController {
   private _mode: ContextConsumer<{ __context__: ModeContext }, any>;
 
   private _id = 0;
-  private _debounceTimeoutMs: number;
   private _task: Task<
     [
       OperationContext["search"] | undefined,
       OperationContext["beforeSearch"] | undefined,
-      Mode,
+      string,
       string,
     ],
     SearchReference[] | null
   >;
 
-  constructor(
-    host: ReactiveControllerHost & HTMLElement,
-    debounceTimeoutMs = 0,
-  ) {
+  private _options: { mode: string; debounceTimeoutMs: number };
+
+  constructor(host: typeof this.host, options: typeof this._options) {
     (this.host = host).addController(this as ReactiveController);
-    this._debounceTimeoutMs = debounceTimeoutMs;
+    this._options = options;
 
     this._operation = new ContextConsumer(host, {
       context: operationContext,
@@ -74,12 +71,13 @@ export class SearchController {
     this._task = new Task(
       host,
       async ([search, beforeSearch, mode, query], { signal }) => {
-        if (!mode || mode !== Mode.Search || !query?.trim() || !search) {
+        if (!mode || mode !== this._options.mode || !query?.trim() || !search) {
           return null;
         }
+
         const id = ++this._id;
         beforeSearch?.(query);
-        await asyncSleep(this._debounceTimeoutMs);
+        await asyncSleep(this._options.debounceTimeoutMs);
 
         if (id !== this._id) {
           return null;
@@ -124,19 +122,22 @@ export class SearchController {
 }
 
 export class AskController {
-  private host: ReactiveControllerHost;
+  private host: ReactiveControllerHost & HTMLElement;
 
   private _operation: ContextConsumer<{ __context__: OperationContext }, any>;
   private _mode: ContextConsumer<{ __context__: ModeContext }, any>;
   private _query: ContextConsumer<{ __context__: QueryContext }, any>;
-  private _task: Task<[Mode, string], null>;
+  private _task: Task<[string, string], null>;
+
+  private _options: { mode: string };
 
   loading = false;
   response: string = "";
   references: AskReference[] = [];
 
-  constructor(host: ReactiveControllerHost & HTMLElement) {
+  constructor(host: typeof this.host, options: typeof this._options) {
     (this.host = host).addController(this as ReactiveController);
+    this._options = options;
 
     this._operation = new ContextConsumer(host, {
       context: operationContext,
@@ -158,7 +159,7 @@ export class AskController {
       async ([mode, query], { signal }) => {
         const ask = this._operation.value?.ask;
 
-        if (!mode || mode !== Mode.Ask || !query?.trim() || !ask) {
+        if (!mode || mode !== this._options.mode || !query?.trim() || !ask) {
           return null;
         }
 

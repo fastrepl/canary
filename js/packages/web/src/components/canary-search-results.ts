@@ -4,6 +4,7 @@ import { ref, createRef } from "lit/directives/ref.js";
 
 import type { SearchReference } from "../types";
 import { scrollContainer } from "../styles";
+import { DEBOUNCE_MS, MODE_SEARCH } from "../constants";
 import { SearchController, KeyboardSelectionController } from "../controllers";
 
 import "./canary-error";
@@ -14,11 +15,17 @@ const NAME = "canary-search-results";
 
 @customElement(NAME)
 export class CanarySearchResults extends LitElement {
+  readonly MODE = MODE_SEARCH;
+
   @property({ type: Boolean }) group = false;
 
   private _ref = createRef<HTMLElement>();
 
-  private _search = new SearchController(this, 250);
+  private _search = new SearchController(this, {
+    mode: this.MODE,
+    debounceTimeoutMs: DEBOUNCE_MS,
+  });
+
   private _selection = new KeyboardSelectionController<SearchReference>(this, {
     handleEnter: (item) => {
       this.dispatchEvent(

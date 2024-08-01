@@ -30,11 +30,11 @@ export class CanaryRoot extends LitElement {
     super.connectedCallback();
     this._handleThemeChange();
 
-    this.addEventListener("register", this._handleRegister);
+    this.addEventListener("register-operations", this._handleRegister);
   }
 
   disconnectedCallback() {
-    this.removeEventListener("register", this._handleRegister);
+    this.removeEventListener("register-operations", this._handleRegister);
   }
 
   render() {

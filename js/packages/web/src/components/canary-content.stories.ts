@@ -17,6 +17,10 @@ import "./canary-search-input";
 import "./canary-search-results";
 import "./canary-search-results-tabs";
 
+import "./canary-ask";
+import "./canary-ask-input";
+import "./canary-ask-results";
+
 import "./canary-callout-cal";
 import "./canary-callout-discord";
 
@@ -28,6 +32,7 @@ enum Kind {
   SearchError,
   SearchCallout,
   SearchMobile,
+  SearchAndAsk,
 }
 
 const type = (text: string): StoryObj["play"] => {
@@ -49,7 +54,7 @@ export default {
 
     if (kind === Kind.Search) {
       return wrapper(html`
-        <canary-search slot="search">
+        <canary-search slot="mode">
           <canary-search-input slot="input"></canary-search-input>
           <canary-search-results slot="results"></canary-search-results>
         </canary-search>
@@ -58,7 +63,7 @@ export default {
 
     if (kind === Kind.SearchEmpty) {
       return wrapper(html`
-        <canary-search slot="search">
+        <canary-search slot="mode">
           <canary-search-input slot="input"></canary-search-input>
           <canary-search-results slot="results"></canary-search-results>
         </canary-search>
@@ -67,7 +72,7 @@ export default {
 
     if (kind === Kind.SearchGroup) {
       return wrapper(html`
-        <canary-search slot="search">
+        <canary-search slot="mode">
           <canary-search-input slot="input"></canary-search-input>
           <canary-search-results slot="results" group></canary-search-results>
         </canary-search>
@@ -76,7 +81,7 @@ export default {
 
     if (kind === Kind.SearchTabs) {
       return wrapper(html`
-        <canary-search slot="search">
+        <canary-search slot="mode">
           <canary-search-input slot="input"></canary-search-input>
           <canary-search-results-tabs
             slot="results"
@@ -90,7 +95,7 @@ export default {
 
     if (kind === Kind.SearchCallout) {
       return wrapper(html`
-        <canary-search slot="search">
+        <canary-search slot="mode">
           <canary-search-input slot="input"></canary-search-input>
           <canary-search-results slot="results"></canary-search-results>
           <canary-callout-discord slot="callout"></canary-callout-discord>
@@ -100,7 +105,7 @@ export default {
 
     if (kind === Kind.SearchError) {
       return wrapper(html`
-        <canary-search slot="search">
+        <canary-search slot="mode">
           <canary-search-input slot="input"></canary-search-input>
           <canary-search-results slot="results"></canary-search-results>
         </canary-search>
@@ -109,10 +114,23 @@ export default {
 
     if (kind === Kind.SearchMobile) {
       return wrapper(html`
-        <canary-search slot="search">
+        <canary-search slot="mode">
           <canary-search-input slot="input"></canary-search-input>
           <canary-search-results slot="results"></canary-search-results>
         </canary-search>
+      `);
+    }
+
+    if (kind === Kind.SearchAndAsk) {
+      return wrapper(html`
+        <canary-search slot="mode">
+          <canary-search-input slot="input"></canary-search-input>
+          <canary-search-results slot="results"></canary-search-results>
+        </canary-search>
+        <canary-ask slot="mode">
+          <canary-ask-input slot="input"></canary-ask-input>
+          <canary-ask-results slot="results"></canary-ask-results>
+        </canary-ask>
       `);
     }
 
@@ -162,4 +180,8 @@ export const SearchMobile: StoryObj = {
   args: { kind: Kind.SearchMobile },
   play: type("hi"),
   parameters: { viewport: { defaultViewport: "mobile1", disable: false } },
+};
+
+export const SearchAndAsk: StoryObj = {
+  args: { kind: Kind.SearchAndAsk },
 };
