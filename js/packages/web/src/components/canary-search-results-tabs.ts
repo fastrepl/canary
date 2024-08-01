@@ -1,4 +1,11 @@
-import { LitElement, html, css, noChange, type PropertyValues } from "lit";
+import {
+  LitElement,
+  html,
+  css,
+  noChange,
+  nothing,
+  type PropertyValues,
+} from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 import { ref, createRef } from "lit/directives/ref.js";
@@ -135,7 +142,7 @@ export class CanarySearchResultsTabs extends LitElement {
 
   private _currentResults() {
     if (Object.keys(this.groupedReferences).length === 0) {
-      return this._skeletons(5);
+      return this._search.query ? this._skeletons(5) : nothing;
     }
 
     const current = this.groupedReferences[this.selectedTab] ?? [];
