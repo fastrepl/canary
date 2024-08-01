@@ -43,6 +43,7 @@ export default defineConfig({
           "canary-reference",
           "canary-tooltip",
           "canary-footer",
+          "canary-media-query",
         ].map((name) => `components/${name}`),
         ...["contexts", "controllers", "mixins", "types/index", "utils"],
       ].reduce(
