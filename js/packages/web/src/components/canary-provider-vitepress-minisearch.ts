@@ -60,7 +60,12 @@ export class CanaryProviderVitepressMinisearch extends LitElement {
 
   private async _buildIndex(data: any) {
     try {
-      const { default: MiniSearch } = await import("minisearch");
+      const { default: MiniSearch } = await import(
+        /* @vite-ignore */
+        // @ts-ignore
+        "minisearch"
+      );
+
       // https://github.com/vuejs/vitepress/blob/8f31a4c/src/client/theme-default/components/VPLocalSearchBox.vue#L72-L87
       const index = MiniSearch.loadJSON(data, {
         fields: ["title", "titles", "text"],

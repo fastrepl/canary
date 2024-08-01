@@ -5,17 +5,17 @@ const loaded = ref(false);
 
 onMounted(() => {
   Promise.all([
-    import("@getcanary/web/components/canary-root"),
-    import("@getcanary/web/components/canary-provider-mock"),
-    import("@getcanary/web/components/canary-modal"),
-    import("@getcanary/web/components/canary-trigger-searchbar"),
-    import("@getcanary/web/components/canary-content"),
-    import("@getcanary/web/components/canary-search"),
-    import("@getcanary/web/components/canary-search-input"),
-    import("@getcanary/web/components/canary-search-results"),
-    import("@getcanary/web/components/canary-ask"),
-    import("@getcanary/web/components/canary-ask-input"),
-    import("@getcanary/web/components/canary-ask-results"),
+    import("@getcanary/web/components/canary-root.js"),
+    import("@getcanary/web/components/canary-provider-mock.js"),
+    import("@getcanary/web/components/canary-modal.js"),
+    import("@getcanary/web/components/canary-trigger-searchbar.js"),
+    import("@getcanary/web/components/canary-content.js"),
+    import("@getcanary/web/components/canary-search.js"),
+    import("@getcanary/web/components/canary-search-input.js"),
+    import("@getcanary/web/components/canary-search-results.js"),
+    import("@getcanary/web/components/canary-ask.js"),
+    import("@getcanary/web/components/canary-ask-input.js"),
+    import("@getcanary/web/components/canary-ask-results.js"),
   ]).then(() => {
     loaded.value = true;
   });

@@ -1,4 +1,9 @@
-import { ReactiveController, ReactiveControllerHost } from "lit";
+import {
+  nothing,
+  ReactiveController,
+  ReactiveControllerHost,
+  type TemplateResult,
+} from "lit";
 import { Task, StatusRenderer } from "@lit/task";
 
 import { ContextConsumer } from "@lit/context";
@@ -274,7 +279,7 @@ export class KeyboardSelectionController<T> {
   }
 }
 
-export class KeyboardTriggerController implements ReactiveController {
+export class KeyboardTriggerController {
   private host: ReactiveControllerHost & HTMLElement;
   private _key: TriggerShortcut;
 
@@ -316,4 +321,30 @@ export class KeyboardTriggerController implements ReactiveController {
       );
     }
   };
+}
+
+export class CalloutController {
+  private _query: ContextConsumer<{ __context__: QueryContext }, any>;
+
+  constructor(host: ReactiveControllerHost & HTMLElement) {
+    host.addController(this as ReactiveController);
+
+    this._query = new ContextConsumer(host, {
+      context: queryContext,
+      subscribe: true,
+    });
+  }
+
+  render(
+    fn: () => TemplateResult,
+    options?: { forceShow?: boolean; keywords?: string[] },
+  ) {
+    const show =
+      options?.forceShow ||
+      (options?.keywords ?? []).some((keyword) =>
+        (this._query.value ?? "").includes(keyword),
+      );
+
+    return show ? fn() : nothing;
+  }
 }

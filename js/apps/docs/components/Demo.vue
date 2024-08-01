@@ -2,45 +2,44 @@
 import { onMounted, ref, watch } from "vue";
 import { useData } from "vitepress";
 
+import Slider from "./Slider.vue";
+import ThemeSwitch from "vitepress/dist/client/theme-default/components/VPSwitchAppearance.vue";
+
+const { localeIndex } = useData();
+
+const chroma = ref(0.1);
+const hue = ref(250);
 const loaded = ref(false);
 
 onMounted(() => {
   Promise.all([
-    import("@getcanary/web/components/canary-root"),
-    import("@getcanary/web/components/canary-provider-vitepress-minisearch"),
-    import("@getcanary/web/components/canary-modal"),
-    import("@getcanary/web/components/canary-trigger-searchbar"),
-    import("@getcanary/web/components/canary-content"),
-    import("@getcanary/web/components/canary-search"),
-    import("@getcanary/web/components/canary-search-input"),
-    import("@getcanary/web/components/canary-search-results"),
+    import("@getcanary/web/components/canary-root.js"),
+    import("@getcanary/web/components/canary-provider-vitepress-minisearch.js"),
+    import("@getcanary/web/components/canary-modal.js"),
+    import("@getcanary/web/components/canary-trigger-searchbar.js"),
+    import("@getcanary/web/components/canary-content.js"),
+    import("@getcanary/web/components/canary-search.js"),
+    import("@getcanary/web/components/canary-search-input.js"),
+    import("@getcanary/web/components/canary-search-results.js"),
   ]).then(() => {
     loaded.value = true;
   });
+
+  watch(
+    [chroma, hue],
+    ([c, h]) => {
+      document.documentElement.style.setProperty(
+        "--canary-color-primary-c",
+        c.toString(),
+      );
+      document.documentElement.style.setProperty(
+        "--canary-color-primary-h",
+        h.toString(),
+      );
+    },
+    { immediate: true },
+  );
 });
-
-import Slider from "./Slider.vue";
-import ThemeSwitch from "vitepress/dist/client/theme-default/components/VPSwitchAppearance.vue";
-
-const chroma = ref(0.1);
-const hue = ref(250);
-
-watch(
-  [chroma, hue],
-  ([c, h]) => {
-    document.documentElement.style.setProperty(
-      "--canary-color-primary-c",
-      c.toString(),
-    );
-    document.documentElement.style.setProperty(
-      "--canary-color-primary-h",
-      h.toString(),
-    );
-  },
-  { immediate: true },
-);
-
-const { localeIndex } = useData();
 </script>
 
 <template>

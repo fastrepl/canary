@@ -8,6 +8,7 @@ const NAME = "canary-trigger-logo";
 @customElement(NAME)
 export class CanaryTriggerLogo extends LitElement {
   @property({ type: String }) text = "Search";
+
   render() {
     return html`
       <canary-tooltip text=${this.text}>

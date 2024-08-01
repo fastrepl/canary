@@ -1,4 +1,4 @@
-import { LitElement } from "lit";
+import { LitElement, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import { unsafeSVG } from "lit/directives/unsafe-svg.js";
 
@@ -20,7 +20,7 @@ export class CanaryLogoDiscord extends LitElement {
   theme!: ThemeContext;
 
   render() {
-    return unsafeSVG(this.theme === "light" ? LIGHT : DARK);
+    return html`${unsafeSVG(this.theme === "light" ? LIGHT : DARK)}`;
   }
 
   static styles = logo;

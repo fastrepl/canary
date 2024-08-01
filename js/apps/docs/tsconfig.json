@@ -1,0 +1,9 @@
+{
+  "include": [".vitepress", "./components", "shims.d.ts"],
+  "compilerOptions": {
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext"
+  }
+}
