@@ -4,10 +4,10 @@
 <br/>
 
 <h4 align="center">
-  <a href="https://discord.gg/Y8bJkzuQZU" target="_blank">
+  <a href="https://storybook.getcanary.dev" target="_blank">
     <img src="https://raw.githubusercontent.com/storybooks/brand/master/badge/badge-storybook.svg" alt="Storybook">
   </a>
-  <a href="https://discord.gg/Y8bJkzuQZU" target="_blank">
+  <a href="https://stackblitz.com/edit/canary?file=index.html" target="_blank">
     <img src="https://developer.stackblitz.com/img/open_in_stackblitz_small.svg" alt="Stackblitz">
   </a>
   <a href="https://discord.gg/Y8bJkzuQZU" target="_blank">
