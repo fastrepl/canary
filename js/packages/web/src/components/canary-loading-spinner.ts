@@ -13,7 +13,7 @@ export class CanaryLoadingSpinner extends LitElement {
     .loader {
       width: 16px;
       height: 16px;
-      border: 2px solid var(--canary-color-gray-30);
+      border: 2px solid var(--canary-color-gray-20);
       border-bottom-color: transparent;
       border-radius: 50%;
       display: inline-block;

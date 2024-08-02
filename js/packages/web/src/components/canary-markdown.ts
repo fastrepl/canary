@@ -44,9 +44,8 @@ export class CanaryMarkdown extends LitElement {
 
   static styles = css`
     .container {
-      color: var(--canary-color-gray-10);
+      color: var(--canary-color-gray-20);
       background-color: var(--canary-color-black);
-      font-size: 14px;
     }
 
     h1,
@@ -55,7 +54,7 @@ export class CanaryMarkdown extends LitElement {
     h4,
     h5,
     h6 {
-      font-size: 1.25em;
+      font-size: 14px;
     }
 
     pre,

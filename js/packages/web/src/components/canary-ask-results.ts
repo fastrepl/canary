@@ -22,18 +22,20 @@ export class CanaryAskResults extends LitElement {
   @state()
   theme!: ThemeContext;
 
-  private ask = new AskController(this, { mode: this.MODE });
+  private _ask = new AskController(this, { mode: this.MODE });
 
   render() {
     return html` <div class="container">
-      ${this.ask.render({
+      <h2>${this._ask.query}</h2>
+
+      ${this._ask.render({
         initial: () => html`<canary-loading-dots></canary-loading-dots>`,
         pending: () =>
-          html`${this.ask.loading
+          html`${this._ask.loading
             ? html`<canary-loading-dots></canary-loading-dots>`
             : this._content()}`,
         complete: () =>
-          html`${this.ask.loading
+          html`${this._ask.loading
             ? html`<canary-loading-dots></canary-loading-dots>`
             : this._content()}`,
       })}
@@ -44,11 +46,11 @@ export class CanaryAskResults extends LitElement {
     return html`
       <canary-markdown
         .hljs=${this.theme === "dark" ? "github-dark" : "github"}
-        .content=${this.ask.response}
+        .content=${this._ask.response}
       ></canary-markdown>
 
       <div class="references">
-        ${this.ask.references.map(
+        ${this._ask.references.map(
           (reference) =>
             html` <canary-reference
               title=${reference.title}
@@ -71,6 +73,12 @@ export class CanaryAskResults extends LitElement {
       flex-direction: column;
       gap: 6px;
       padding-bottom: 8px;
+    }
+
+    h2 {
+      font-size: 20px;
+      margin: 10px 0px 20px 0px;
+      color: var(--canary-color-gray-0);
     }
   `;
 }

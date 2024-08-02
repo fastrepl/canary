@@ -213,6 +213,10 @@ export class AskController {
   render(renderFunctions: StatusRenderer<null>) {
     return this._task.render(wrapRenderer(renderFunctions));
   }
+
+  get query() {
+    return this._query.value;
+  }
 }
 
 export class KeyboardSelectionController<T> {
