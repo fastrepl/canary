@@ -18,7 +18,6 @@ export class CanaryLoadingDots extends LitElement {
   static styles = css`
     svg {
       width: 24px;
-      padding-top: 8px;
       color: var(--canary-color-gray-20);
     }
 

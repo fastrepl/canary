@@ -1,10 +1,10 @@
 import { LitElement, html, css } from "lit";
 import { customElement } from "lit/decorators.js";
 
-const NAME = "canary-spinner";
+const NAME = "canary-loading-spinner";
 
 @customElement(NAME)
-export class CanarySpinner extends LitElement {
+export class CanaryLoadingSpinner extends LitElement {
   render() {
     return html` <span class="loader"></span> `;
   }
@@ -34,6 +34,6 @@ export class CanarySpinner extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    [NAME]: CanarySpinner;
+    [NAME]: CanaryLoadingSpinner;
   }
 }
