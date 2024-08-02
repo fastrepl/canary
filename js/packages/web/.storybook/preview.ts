@@ -41,7 +41,7 @@ const preview: Preview = {
             const data = (await request.json()) as Record<string, string>;
             const items = mockSearchReferences(data["query"]);
 
-            await delay(Math.random() * 300 + 200);
+            await delay(Math.random() * 200 + 200);
             return HttpResponse.json(items);
           }),
         ],
