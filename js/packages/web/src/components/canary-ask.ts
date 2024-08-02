@@ -7,6 +7,7 @@ import type { ModeContext } from "../types";
 import { MODE_ASK } from "../constants";
 
 import "./canary-mode-tabs";
+import "./canary-hero-icon";
 
 const NAME = "canary-ask";
 
@@ -36,10 +37,11 @@ export class CanaryAsk extends LitElement {
       : html`
           <div class="container">
             <div class="input-wrapper">
-              <slot name="input"></slot>
-              <slot name="mode-tabs">
-                <canary-mode-tabs></canary-mode-tabs>
+              <slot name="input-before">
+                <canary-hero-icon name="chat-bubble-left"></canary-hero-icon>
               </slot>
+              <slot name="input"></slot>
+              <slot name="input-after"></slot>
             </div>
             <slot name="results"></slot>
           </div>

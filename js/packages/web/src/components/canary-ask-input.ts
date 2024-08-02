@@ -12,21 +12,17 @@ export class CanaryAskInput extends LitElement {
 
   render() {
     return html`
-      <div class="container">
-        <canary-hero-icon name="question-mark-circle"></canary-hero-icon>
-        <input
-          type="text"
-          value=${this.query}
-          autocomplete="off"
-          spellcheck="false"
-          placeholder="Ask anything..."
-          @input=${this._handleInput}
-          @keydown=${this._handleKeyDown}
-          autofocus
-          onfocus="this.setSelectionRange(this.value.length,this.value.length);"
-        />
-        <span>⏎</span>
-      </div>
+      <input
+        type="text"
+        value=${this.query}
+        autocomplete="off"
+        spellcheck="false"
+        placeholder="Ask anything..."
+        @input=${this._handleInput}
+        @keydown=${this._handleKeyDown}
+        autofocus
+        onfocus="this.setSelectionRange(this.value.length,this.value.length);"
+      />
     `;
   }
 

@@ -3,10 +3,13 @@ import type { Meta, StoryObj } from "@storybook/web-components";
 import { http, HttpResponse } from "msw";
 
 import { userEvent } from "@storybook/test";
-import { getByShadowRole } from "shadow-dom-testing-library";
+import { getAllByShadowRole } from "shadow-dom-testing-library";
 
 import "./canary-provider-cloud";
 import "./canary-content";
+import "./canary-mode-tabs";
+import "./canary-mode-breadcrumb";
+import "./canary-button-mode";
 
 import "./canary-ask";
 import "./canary-ask-input";
@@ -32,12 +35,13 @@ enum Kind {
   SearchError,
   SearchCallout,
   SearchMobile,
-  SearchAndAsk,
+  SearchAndAskWithModeTabs,
+  SearchAndAskWithModeButton,
 }
 
 const type = (text: string): StoryObj["play"] => {
   return async ({ canvasElement }) => {
-    const input = getByShadowRole(canvasElement, "textbox");
+    const [input] = getAllByShadowRole(canvasElement, "textbox");
     await userEvent.type(input, text);
   };
 };
@@ -66,6 +70,9 @@ export default {
         <canary-search slot="mode">
           <canary-search-input slot="input"></canary-search-input>
           <canary-search-results slot="results"></canary-search-results>
+          <div slot="empty">
+            <canary-mode-button> </canary-mode-button>
+          </div>
         </canary-search>
       `);
     }
@@ -121,13 +128,44 @@ export default {
       `);
     }
 
-    if (kind === Kind.SearchAndAsk) {
+    if (kind === Kind.SearchAndAskWithModeTabs) {
+      return wrapper(html`
+        <canary-search slot="mode">
+          <canary-search-input slot="input"></canary-search-input>
+          <canary-mode-tabs slot="input-after"></canary-mode-tabs>
+          <canary-search-results slot="results"></canary-search-results>
+        </canary-search>
+        <canary-ask slot="mode">
+          <canary-ask-input slot="input"></canary-ask-input>
+          <canary-mode-tabs slot="input-after"></canary-mode-tabs>
+          <canary-ask-results slot="results"></canary-ask-results>
+        </canary-ask>
+      `);
+    }
+
+    if (kind === Kind.SearchAndAskWithModeButton) {
       return wrapper(html`
         <canary-search slot="mode">
           <canary-search-input slot="input"></canary-search-input>
           <canary-search-results slot="results"></canary-search-results>
+          <div slot="empty">
+            <canary-button-mode mode="Ask" text="Ask AI Assistant">
+              <canary-hero-icon
+                slot="icon"
+                name="chat-bubble-left"
+              ></canary-hero-icon>
+            </canary-button-mode->
+          </div>
+          <canary-mode-button-ask></canary-mode-button-ask>
         </canary-search>
         <canary-ask slot="mode">
+          <canary-mode-breadcrumb
+            slot="input-before"
+            previous="Search"
+            text="Ask AI Assistant"
+          >
+            <canary-hero-icon slot="icon" name="chat-bubble-left"></canary-hero-icon>
+        </canary-mode-breadcrumb>
           <canary-ask-input slot="input"></canary-ask-input>
           <canary-ask-results slot="results"></canary-ask-results>
         </canary-ask>
@@ -140,31 +178,32 @@ export default {
 
 export const Search: StoryObj = {
   args: { kind: Kind.Search },
-  play: type("hi"),
+  play: type("20hi"),
 };
 
 export const SearchEmpty: StoryObj = {
   args: { kind: Kind.SearchEmpty },
+  play: type("0hi"),
 };
 
 export const SearchWithGroup: StoryObj = {
   args: { kind: Kind.SearchGroup },
-  play: type("hi"),
+  play: type("20hi"),
 };
 
 export const SearchWithTabs: StoryObj = {
   args: { kind: Kind.SearchTabs },
-  play: type("hi"),
+  play: type("20hi"),
 };
 
 export const SearchCallout: StoryObj = {
   args: { kind: Kind.SearchCallout },
-  play: type("discord"),
+  play: type("20discord"),
 };
 
 export const SearchError: StoryObj = {
   args: { kind: Kind.SearchError },
-  play: type("hi"),
+  play: type("20hi"),
   parameters: {
     msw: {
       handlers: {
@@ -178,10 +217,16 @@ export const SearchError: StoryObj = {
 
 export const SearchMobile: StoryObj = {
   args: { kind: Kind.SearchMobile },
-  play: type("hi"),
+  play: type("20hi"),
   parameters: { viewport: { defaultViewport: "mobile1", disable: false } },
 };
 
-export const SearchAndAsk: StoryObj = {
-  args: { kind: Kind.SearchAndAsk },
+export const SearchAsk1: StoryObj = {
+  args: { kind: Kind.SearchAndAskWithModeTabs },
+  play: type("20hi"),
+};
+
+export const SearchAsk2: StoryObj = {
+  args: { kind: Kind.SearchAndAskWithModeButton },
+  play: type("0hi"),
 };

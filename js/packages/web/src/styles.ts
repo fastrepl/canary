@@ -33,16 +33,7 @@ export const callout = css`
 
 export const input = css`
   :host {
-    flex-grow: 1;
-  }
-
-  .container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 4px;
-    border-radius: 8px;
-    background-color: var(--canary-color-gray-100);
+    display: contents;
   }
 
   input {

@@ -6,7 +6,6 @@ import { queryContext } from "../contexts";
 import type { QueryContext } from "../types";
 
 import { input } from "../styles";
-import "./canary-hero-icon";
 
 const NAME = "canary-search-input";
 
@@ -18,19 +17,16 @@ export class CanarySearchInput extends LitElement {
 
   render() {
     return html`
-      <div class="container">
-        <canary-hero-icon name="magnifying-glass"></canary-hero-icon>
-        <input
-          type="text"
-          value=${this.query}
-          autocomplete="off"
-          spellcheck="false"
-          placeholder="Search for anything..."
-          @input=${this._handleInput}
-          autofocus
-          onfocus="this.setSelectionRange(this.value.length,this.value.length);"
-        />
-      </div>
+      <input
+        type="text"
+        value=${this.query}
+        autocomplete="off"
+        spellcheck="false"
+        placeholder="Search for anything..."
+        @input=${this._handleInput}
+        autofocus
+        onfocus="this.setSelectionRange(this.value.length,this.value.length);"
+      />
     `;
   }
 

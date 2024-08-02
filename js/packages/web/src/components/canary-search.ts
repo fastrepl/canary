@@ -8,6 +8,7 @@ import { MODE_SEARCH } from "../constants";
 
 import "./canary-mode-tabs";
 import "./canary-search-empty";
+import "./canary-hero-icon";
 
 const NAME = "canary-search";
 
@@ -39,10 +40,11 @@ export class CanarySearch extends LitElement {
       : html`
           <div class="container">
             <div class="input-wrapper">
-              <slot name="input"></slot>
-              <slot name="mode-tabs">
-                <canary-mode-tabs></canary-mode-tabs>
+              <slot name="input-before">
+                <canary-hero-icon name="magnifying-glass"></canary-hero-icon>
               </slot>
+              <slot name="input"></slot>
+              <slot name="input-after"></slot>
             </div>
             <div class="body">
               <div class="callouts">
@@ -72,7 +74,7 @@ export class CanarySearch extends LitElement {
     .input-wrapper {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 4px;
       margin-bottom: 4px;
       padding: 1px 6px;
     }
