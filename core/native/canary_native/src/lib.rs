@@ -1,6 +1,7 @@
 mod chunk;
 mod git;
 mod html;
+mod keywords;
 
 #[cfg(test)]
 mod tests;
@@ -12,7 +13,8 @@ rustler::init!(
         chunk_markdown,
         html_to_md,
         html_to_md_with_marker,
-        clone_depth
+        clone_depth,
+        extract_keywords
     ]
 );
 
@@ -42,4 +44,10 @@ fn clone_depth<'a>(repo_url: &'a str, dest_path: &'a str, depth: i32) -> bool {
         Ok(_) => true,
         Err(_) => false,
     }
+}
+
+
+#[rustler::nif]
+fn extract_keywords<'a>(content: &'a str, n: usize) -> Vec<String> {
+    keywords::extract(content, n).unwrap()
 }

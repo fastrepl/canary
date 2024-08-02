@@ -16,5 +16,8 @@ defmodule Canary.Native do
   @spec clone_depth(String.t(), String.t(), pos_integer()) :: boolean()
   def clone_depth(_repo_url, _dest_path, _depth), do: error()
 
+  @spec extract_keywords(String.t(), non_neg_integer()) :: list(String.t())
+  def extract_keywords(_content, _n), do: error()
+
   defp error(), do: :erlang.nif_error(:nif_not_loaded)
 end

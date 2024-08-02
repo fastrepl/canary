@@ -16,6 +16,8 @@ text-splitter = { version = "0.14.1", features = ["tiktoken-rs", "markdown"] }
 tiktoken-rs = "0.5.9"
 htmd = "0.1.6"
 git2 = "0.18.3"
+stop-words = "0.8.0"
+keyword_extraction = { version = "1.4.3", features = ["yake"] }
 
 [dev-dependencies]
 insta = "1.38.0"
