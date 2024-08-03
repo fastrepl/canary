@@ -39,7 +39,7 @@ export class CanarySearchResults extends LitElement {
 
   render() {
     return html`
-      <div ${ref(this._ref)} class="container">
+      <div ${ref(this._ref)} class="scroll-container">
         ${this._search.render({
           error: () => html`<canary-error></canary-error>`,
           pending: () => this._results(),
@@ -84,9 +84,8 @@ export class CanarySearchResults extends LitElement {
   static styles = [
     scrollContainer,
     css`
-      .container {
-        display: flex;
-        flex-direction: column;
+      .scroll-container {
+        padding: 0px 12px;
         max-height: 425px;
       }
       .skeleton-container {

@@ -74,14 +74,26 @@ export const wrapper = css`
 `;
 
 export const scrollContainer = css`
-  .container {
-    overflow-y: scroll;
+  .scroll-container {
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: var(--canary-color-gray-100);
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: var(--canary-is-light, var(--canary-color-gray-90));
+      background-color: var(--canary-is-dark, var(--canary-color-gray-60));
+      border-radius: 4px;
+    }
+
     scrollbar-width: thin;
     scrollbar-color: var(--canary-is-light, var(--canary-color-gray-90))
       var(--canary-is-dark, var(--canary-color-gray-60))
       var(--canary-color-gray-100);
-
-    padding-left: 12px;
-    padding-right: 12px;
   }
 `;

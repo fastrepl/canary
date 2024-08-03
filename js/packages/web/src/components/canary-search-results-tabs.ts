@@ -89,26 +89,28 @@ export class CanarySearchResultsTabs extends LitElement {
 
   render() {
     return html`
-      <div ${ref(this._ref)} class="container">
+      <div class="container">
         ${this._tabs()}
-        ${this._search.render({
-          error: () => html`<canary-error></canary-error>`,
-          pending: () => this._currentResults(),
-          complete: (references) => {
-            if (!references) {
-              return noChange;
-            }
-            if (this._ref.value) {
-              this._ref.value.scrollTop = 0;
-            }
+        <div ${ref(this._ref)} class="scroll-container">
+          ${this._search.render({
+            error: () => html`<canary-error></canary-error>`,
+            pending: () => this._currentResults(),
+            complete: (references) => {
+              if (!references) {
+                return noChange;
+              }
+              if (this._ref.value) {
+                this._ref.value.scrollTop = 0;
+              }
 
-            this.groupedReferences = this._groupReferences(
-              references,
-              this.tabs,
-            );
-            return this._currentResults();
-          },
-        })}
+              this.groupedReferences = this._groupReferences(
+                references,
+                this.tabs,
+              );
+              return this._currentResults();
+            },
+          })}
+        </div>
       </div>
     `;
   }
@@ -202,11 +204,15 @@ export class CanarySearchResultsTabs extends LitElement {
   static styles = [
     scrollContainer,
     css`
+      .scroll-container {
+        max-height: 425px;
+        padding: 0px 12px;
+      }
+
       .container {
         display: flex;
         flex-direction: column;
-        gap: 10px;
-        max-height: 425px;
+        gap: 8px;
       }
 
       .skeleton-container {
@@ -223,7 +229,8 @@ export class CanarySearchResultsTabs extends LitElement {
         align-items: center;
 
         gap: 8px;
-        padding-left: 4px;
+        padding-left: 16px;
+        padding-right: 12px;
 
         color: var(--canary-color-gray-50);
         text-decoration-color: var(--canary-color-gray-50);
