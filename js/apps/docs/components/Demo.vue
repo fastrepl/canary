@@ -63,7 +63,7 @@ onMounted(() => {
           <canary-content slot="content">
             <canary-search slot="mode">
               <canary-search-input slot="input"></canary-search-input>
-              <canary-search-results slot="results"> </canary-search-results>
+              <canary-search-results slot="result"> </canary-search-results>
             </canary-search>
           </canary-content>
         </canary-modal>
@@ -71,7 +71,7 @@ onMounted(() => {
         <canary-content slot="content" query="what is canary">
           <canary-search slot="mode">
             <canary-search-input slot="input"></canary-search-input>
-            <canary-search-results slot="results"> </canary-search-results>
+            <canary-search-results slot="result"> </canary-search-results>
           </canary-search>
         </canary-content>
       </div>
