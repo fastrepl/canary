@@ -101,8 +101,9 @@ defmodule Canary.AI.OpenAI do
   end
 
   defp parse_tool_calls(message) do
-    message
-    |> get_in([Access.key("tool_calls", [])])
+    tool_calls = get_in(message, [Access.key("tool_calls", [])]) || []
+
+    tool_calls
     |> Enum.map(fn %{"function" => f} ->
       %{
         name: f["name"],

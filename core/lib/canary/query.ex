@@ -1,21 +1,15 @@
-defmodule Canary.Query do
-  defstruct [:text, :embedding]
-  @type t :: %__MODULE__{text: String.t(), embedding: list(float())}
-end
-
 defmodule Canary.Query.Understander do
-  @callback run(String.t()) :: {:ok, list(Canary.Query.t())} | {:error, any()}
+  @callback run(String.t()) :: {:ok, list(String.t())} | {:error, any()}
 
   def run(query), do: impl().run(query)
-  defp impl(), do: Canary.Query.Understander.FunctionCall
+  defp impl(), do: Canary.Query.Understander.LLM
 end
 
-defmodule Canary.Query.Understander.FunctionCall do
+defmodule Canary.Query.Understander.LLM do
   @behaviour Canary.Query.Understander
 
   def run(query) do
     chat_model = Application.fetch_env!(:canary, :chat_completion_model)
-    embedding_model = Application.fetch_env!(:canary, :text_embedding_model)
 
     messages = [
       system_message(),
@@ -23,21 +17,8 @@ defmodule Canary.Query.Understander.FunctionCall do
     ]
 
     case Canary.AI.chat(%{model: chat_model, messages: messages}) do
-      {:ok, result} ->
-        texts = result |> parse() |> Enum.map(& &1.phrase)
-        docs = result |> parse() |> Enum.map(& &1.document)
-        {:ok, embeddings} = Canary.AI.embedding(%{model: embedding_model, input: docs})
-
-        quries =
-          Enum.zip(texts, embeddings)
-          |> Enum.map(fn {text, embedding} ->
-            %Canary.Query{text: text, embedding: embedding}
-          end)
-
-        {:ok, quries}
-
-      error ->
-        error
+      {:ok, result} -> {:ok, parse(result)}
+      error -> error
     end
   end
 
@@ -47,35 +28,31 @@ defmodule Canary.Query.Understander.FunctionCall do
       content: """
       You are a techincal support engineer. Based on the user's inquiry, write a structured query to find relevant resources from the internal knowledge base.
 
-      Your output should strictly follow this XML-like format:
+      Your output should strictly follow this format:
 
       <queries>
-      <query>
-      <phrase>
-      PHRASE
-      </phrase>
-      <document>
-      DOCUMENT
-      </document>
-      </query>
+      <query><FIRST_QUERY></query>
+      <query><SECOND_QUERY></query>
+      <query><THIRD_QUERY></query>
       </queries>
 
-      Some notes:
-      - There can be multiple "<query>" within the "<queries>". Most of the time, single query is enough. Max 3 queries are allowed.
-      - "<phrase>" is one or two words that will be used to run keyword based search. Be specific as possible. Avoid single word if possible.
-      - "<document>" is few plausible sentences that might exist in the knowledge base, and useful to answer the user's question.
-        I know you don't have enough context to answer the question, but this guess is useful to narrow down the search space.
+      IMPORTANT NOTES:
+      - There can be multiple "<query>" within the "<queries>". Max 3 queries are allowed.
+      - Inside each "<query>", you should only include query that consists of 1~3 words that will be used to run keyword based search.
+      - Keywords in the user's query might be better rephrased for better search results.
+
+      I know you don't have enough context to answer the question, but this guess is useful to narrow down the search space.
+
+      Do not include any other text, just respond with the XML-like format that I provided.
       """
     }
   end
 
   defp parse(text) do
-    pattern = ~r/<query>\s*<phrase>(.*?)<\/phrase>\s*<document>(.*?)<\/document>\s*<\/query>/s
+    pattern = ~r/<query>(.*?)<\/query>/s
 
     pattern
     |> Regex.scan(text, capture: :all_but_first)
-    |> Enum.map(fn [phrase, document] ->
-      %{phrase: String.trim(phrase), document: String.trim(document)}
-    end)
+    |> Enum.map(fn [query] -> String.trim(query) end)
   end
 end
