@@ -33,7 +33,7 @@ export default {
   render,
   title: "Public/canary-callout",
   parameters: {
-    sourceLink: "canary-callout.stories.ts",
+    sourceLink: "components/canary-callout.stories.ts",
   },
 } satisfies Meta;
 

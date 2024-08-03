@@ -14,9 +14,7 @@ const render = ({ text }: any) => {
 export default {
   render,
   title: "Public/canary-snippet",
-  parameters: {
-    sourceLink: "canary-snippet.stories.ts",
-  },
+  parameters: { sourceLink: "components/canary-snippet.stories.ts" },
 } satisfies Meta;
 
 export const Short: StoryObj = { args: { text: "<mark>123</mark> 123" } };

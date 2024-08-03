@@ -17,9 +17,7 @@ const render = (_: any) => {
 export default {
   render,
   title: "Public/canary-tooltip",
-  parameters: {
-    sourceLink: "canary-tooltip.stories.ts",
-  },
+  parameters: { sourceLink: "components/canary-tooltip.stories.ts" },
 } satisfies Meta;
 
 export const Default: StoryObj = { args: {} };

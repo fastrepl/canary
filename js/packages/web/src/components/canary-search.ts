@@ -25,7 +25,10 @@ export class CanarySearch extends LitElement {
 
   @provide({ context: searchContext })
   @state()
-  private _search: SearchContext = { status: TaskStatus.INITIAL, references: [] };
+  private _search: SearchContext = {
+    status: TaskStatus.INITIAL,
+    references: [],
+  };
 
   private _searchTask = new SearchController(this, {
     mode: this.MODE,

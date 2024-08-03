@@ -14,7 +14,7 @@ export class CanarySearchReferences extends LitElement {
   @property({ type: Boolean }) group = false;
   @property({ type: Number }) selected = 0;
   @property({ type: Array }) references: SearchReference[] = [];
-  
+
   @state() _selectedRef: SearchReference | null = null;
 
   connectedCallback(): void {

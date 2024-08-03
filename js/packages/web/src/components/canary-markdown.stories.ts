@@ -10,9 +10,7 @@ const render = ({ content }: any) => {
 export default {
   render,
   title: "Public/canary-markdown",
-  parameters: {
-    sourceLink: "canary-markdown.stories.ts",
-  },
+  parameters: { sourceLink: "components/canary-markdown.stories.ts" },
 } satisfies Meta;
 
 export const Headers: StoryObj = {

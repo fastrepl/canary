@@ -48,7 +48,7 @@ const type = (text: string): StoryObj["play"] => {
 
 export default {
   title: "Public/canary-content",
-  parameters: { sourceLink: "canary-content.stories.ts" },
+  parameters: { sourceLink: "components/canary-content.stories.ts" },
   render: ({ kind }: { kind: Kind }) => {
     const wrapper = (child: any) => html`
       <canary-provider-cloud endpoint="http://localhost:6006" key="key">

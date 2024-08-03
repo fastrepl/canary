@@ -14,7 +14,7 @@ import "./canary-search-results";
 
 export default {
   title: "Public/canary-modal",
-  parameters: { sourceLink: "canary-modal.stories.ts" },
+  parameters: { sourceLink: "components/canary-modal.stories.ts" },
   render: () => {
     return html`
       <canary-provider-cloud key="key" endpoint="http://localhost:6006">

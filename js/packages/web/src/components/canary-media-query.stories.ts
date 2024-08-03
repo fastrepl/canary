@@ -5,7 +5,7 @@ import "./canary-media-query";
 
 export default {
   title: "Public/canary-media-query",
-  parameters: { sourceLink: "canary-media-query.stories.ts" },
+  parameters: { sourceLink: "components/canary-media-query.stories.ts" },
   render: () => {
     return html`
       <canary-media-query query="(min-width: 50rem)">

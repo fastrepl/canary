@@ -35,7 +35,7 @@ export default {
   render,
   title: "Public/canary-feedback",
   parameters: {
-    sourceLink: "canary-feedback.stories.ts",
+    sourceLink: "components/canary-feedback.stories.ts",
   },
 } satisfies Meta;
 

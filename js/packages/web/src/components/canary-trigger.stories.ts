@@ -15,7 +15,7 @@ enum Kind {
 
 export default {
   title: "Public/canary-trigger",
-  parameters: { sourceLink: "canary-trigger.stories.ts" },
+  parameters: { sourceLink: "components/canary-trigger.stories.ts" },
   render: ({ kind }: { kind: Kind }) => {
     if (kind === Kind.Icon) {
       return html` <canary-trigger-icon></canary-trigger-icon> `;
