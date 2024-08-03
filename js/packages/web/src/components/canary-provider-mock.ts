@@ -3,6 +3,7 @@ import { customElement } from "lit/decorators.js";
 
 import type { Delta } from "../types";
 import { wrapper } from "../styles";
+import { customEvent } from "../events";
 
 const NAME = "canary-provider-mock";
 
@@ -12,10 +13,9 @@ export class CanaryProviderMock extends LitElement {
     super.connectedCallback();
 
     this.dispatchEvent(
-      new CustomEvent("register-operations", {
-        detail: { search: this.search, ask: this.ask },
-        bubbles: true,
-        composed: true,
+      customEvent({
+        name: "register-operations",
+        data: { search: this.search, ask: this.ask },
       }),
     );
   }

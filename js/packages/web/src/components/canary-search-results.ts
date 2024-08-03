@@ -3,9 +3,11 @@ import { customElement, property } from "lit/decorators.js";
 import { ref, createRef } from "lit/directives/ref.js";
 
 import type { SearchReference } from "../types";
-import { scrollContainer } from "../styles";
 import { DEBOUNCE_MS, MODE_SEARCH } from "../constants";
+
+import { customEvent } from "../events";
 import { SearchController, KeyboardSelectionController } from "../controllers";
+import { scrollContainer } from "../styles";
 
 import "./canary-error";
 import "./canary-search-references";
@@ -28,9 +30,7 @@ export class CanarySearchResults extends LitElement {
 
   private _selection = new KeyboardSelectionController<SearchReference>(this, {
     handleEnter: (item) => {
-      this.dispatchEvent(
-        new CustomEvent("close", { bubbles: true, composed: true }),
-      );
+      this.dispatchEvent(customEvent({ name: "modal-close" }));
       window.location.href = item.url;
     },
   });

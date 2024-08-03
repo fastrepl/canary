@@ -5,6 +5,7 @@ import { consume } from "@lit/context";
 import { queryContext } from "../contexts";
 import type { QueryContext } from "../types";
 
+import { customEvent } from "../events";
 import { input } from "../styles";
 
 const NAME = "canary-search-input";
@@ -38,11 +39,7 @@ export class CanarySearchInput extends LitElement {
     this.query = input.value;
     this.updateComplete.then(() => {
       this.dispatchEvent(
-        new CustomEvent("input-change", {
-          detail: input.value,
-          bubbles: true,
-          composed: true,
-        }),
+        customEvent({ name: "input-change", data: input.value }),
       );
     });
   }

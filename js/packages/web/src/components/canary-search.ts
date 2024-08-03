@@ -2,9 +2,10 @@ import { consume } from "@lit/context";
 import { LitElement, html, css, nothing } from "lit";
 import { customElement, state } from "lit/decorators.js";
 
-import { modeContext } from "../contexts";
 import type { ModeContext } from "../types";
 import { MODE_SEARCH } from "../constants";
+import { modeContext } from "../contexts";
+import { customEvent } from "../events";
 
 import "./canary-mode-tabs";
 import "./canary-search-empty";
@@ -25,13 +26,7 @@ export class CanarySearch extends LitElement {
   connectedCallback() {
     super.connectedCallback();
 
-    this.dispatchEvent(
-      new CustomEvent("register-mode", {
-        bubbles: true,
-        composed: true,
-        detail: this.MODE,
-      }),
-    );
+    this.dispatchEvent(customEvent({ name: "register-mode", data: this.MODE }));
   }
 
   render() {

@@ -45,7 +45,14 @@ export default defineConfig({
           "canary-footer",
           "canary-media-query",
         ].map((name) => `components/${name}`),
-        ...["contexts", "controllers", "mixins", "types/index", "utils"],
+        ...[
+          "contexts",
+          "controllers",
+          "mixins",
+          "types/index",
+          "utils",
+          "events",
+        ],
       ].reduce(
         (acc, cur) => ({ ...acc, [cur]: resolve(__dirname, `src/${cur}.ts`) }),
         {} as Record<string, string>,

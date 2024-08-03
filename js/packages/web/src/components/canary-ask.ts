@@ -8,6 +8,7 @@ import { MODE_ASK } from "../constants";
 
 import "./canary-mode-tabs";
 import "./canary-hero-icon";
+import { customEvent } from "../events";
 
 const NAME = "canary-ask";
 
@@ -22,13 +23,7 @@ export class CanaryAsk extends LitElement {
   connectedCallback() {
     super.connectedCallback();
 
-    this.dispatchEvent(
-      new CustomEvent("register-mode", {
-        bubbles: true,
-        composed: true,
-        detail: this.MODE,
-      }),
-    );
+    this.dispatchEvent(customEvent({ name: "register-mode", data: this.MODE }));
   }
 
   render() {

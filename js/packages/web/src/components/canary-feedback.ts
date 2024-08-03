@@ -1,6 +1,8 @@
 import { LitElement, html, css } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
+import { customEvent } from "../events";
+
 const NAME = "canary-feedback";
 
 @customElement(NAME)
@@ -24,15 +26,9 @@ export class CanaryFeedback extends LitElement {
     `;
   }
   private _handleCancel() {
-    this.dispatchEvent(
-      new CustomEvent("close", { bubbles: true, composed: true }),
-    );
+    this.dispatchEvent(customEvent({ name: "modal-close" }));
   }
-  private _handleSend() {
-    this.dispatchEvent(
-      new CustomEvent("send", { bubbles: true, composed: true }),
-    );
-  }
+  private _handleSend() {}
 
   static styles = [
     css`

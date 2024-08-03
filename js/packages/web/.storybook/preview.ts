@@ -36,15 +36,26 @@ const preview: Preview = {
     },
     msw: {
       handlers: {
+        // create seperate endpoint for hybrid search?
         search: [
-          http.post(/.*\/api\/v1\/search/, async ({ request }) => {
+          http.post(/.*\/api\/v1\/search\/normal/, async ({ request }) => {
             const data = (await request.json()) as Record<string, string>;
-            const items = mockSearchReferences(data["query"]);
+            const items = mockSearchReferences("search", data["query"]);
 
             await delay(Math.random() * 200 + 200);
             return HttpResponse.json(items);
           }),
         ],
+        ai_search: [
+          http.post(/.*\/api\/v1\/search\/ai/, async ({ request }) => {
+            const data = (await request.json()) as Record<string, string>;
+            const items = mockSearchReferences("ai_search", data["query"]);
+
+            await delay(Math.random() * 800 + 200);
+            return HttpResponse.json(items);
+          }),
+        ],
+        // TODO: if we support hybrid search, retrived docs already exists both in the server and the client
         ask: [
           http.post(/.*\/api\/v1\/ask/, async () => {
             await delay(Math.random() * 2000);

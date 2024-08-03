@@ -4,7 +4,9 @@ import { classMap } from "lit/directives/class-map.js";
 
 import { consume } from "@lit/context";
 import { modeContext } from "../contexts";
+
 import type { ModeContext } from "../types";
+import { customEvent } from "../events";
 
 const NAME = "canary-mode-tabs";
 
@@ -45,12 +47,7 @@ export class CanaryModeTabs extends LitElement {
   }
 
   private _handleClick(option: string) {
-    const event = new CustomEvent("mode-set", {
-      detail: option,
-      bubbles: true,
-      composed: true,
-    });
-    this.dispatchEvent(event);
+    this.dispatchEvent(customEvent({ name: "mode-set", data: option }));
   }
 
   static styles = [

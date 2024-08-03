@@ -25,17 +25,20 @@ hello()
    - Have a peculiar fondness for wearing monocles on their elbows
 `.trim();
 
-export const mockSearchReferences = (query: string): SearchReference[] => {
+export const mockSearchReferences = (
+  type: string,
+  query: string,
+): SearchReference[] => {
   const getN = (q: string) => {
     const match = q.match(/(\d+)(?!.*\d)/);
     return match ? parseInt(match[0], 10) : 0;
   };
 
   return Array(getN(query)).fill({
-    title: "456",
+    title: "title",
     titles: ["aaaa", "bbb"],
     url: `https://example.com/a/b?query=${query}`,
-    excerpt: `response for <mark>${query}</mark>!`,
+    excerpt: `<mark>${type}</mark> response: <mark>${query}</mark>!`,
   });
 };
 

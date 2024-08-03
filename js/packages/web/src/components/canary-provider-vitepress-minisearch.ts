@@ -3,6 +3,7 @@ import { customElement, property, state } from "lit/decorators.js";
 
 import { wrapper } from "../styles";
 import type { SearchReference } from "../types";
+import { customEvent } from "../events";
 
 const NAME = "canary-provider-vitepress-minisearch";
 
@@ -35,10 +36,9 @@ export class CanaryProviderVitepressMinisearch extends LitElement {
     };
 
     this.dispatchEvent(
-      new CustomEvent("register-operations", {
-        detail: { search: this.search },
-        bubbles: true,
-        composed: true,
+      customEvent({
+        name: "register-operations",
+        data: { search: this.search },
       }),
     );
   }

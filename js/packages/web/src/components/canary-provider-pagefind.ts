@@ -7,8 +7,10 @@ import type {
   SearchReference,
 } from "../types";
 import type { PagefindResult } from "../types/pagefind";
-import { wrapper } from "../styles";
+
 import { cancellable } from "../utils";
+import { customEvent } from "../events";
+import { wrapper } from "../styles";
 
 const NAME = "canary-provider-pagefind";
 
@@ -32,10 +34,9 @@ export class CanaryProviderPagefind extends LitElement {
     this._initPagefind(pagefind);
 
     this.dispatchEvent(
-      new CustomEvent("register-operations", {
-        detail: { search: this.search, beforeSearch: this.beforeSearch },
-        bubbles: true,
-        composed: true,
+      customEvent({
+        name: "register-operations",
+        data: { search: this.search, beforeSearch: this.beforeSearch },
       }),
     );
   }

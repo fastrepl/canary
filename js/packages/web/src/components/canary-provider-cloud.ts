@@ -3,6 +3,7 @@ import { customElement, property } from "lit/decorators.js";
 
 import type { Delta } from "../types";
 import { wrapper } from "../styles";
+import { customEvent } from "../events";
 
 const NAME = "canary-provider-cloud";
 
@@ -19,10 +20,9 @@ export class CanaryProviderCloud extends LitElement {
     }
 
     this.dispatchEvent(
-      new CustomEvent("register-operations", {
-        detail: { search: this.search, ask: this.ask },
-        bubbles: true,
-        composed: true,
+      customEvent({
+        name: "register-operations",
+        data: { search: this.search, ask: this.ask },
       }),
     );
   }
@@ -34,7 +34,7 @@ export class CanaryProviderCloud extends LitElement {
   static styles = wrapper;
 
   search = async (query: string, signal?: AbortSignal) => {
-    const url = `${this.endpoint}/api/v1/search`;
+    const url = `${this.endpoint}/api/v1/search/normal`;
 
     const params = {
       method: "POST",

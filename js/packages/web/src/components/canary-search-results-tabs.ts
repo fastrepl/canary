@@ -11,9 +11,11 @@ import { classMap } from "lit/directives/class-map.js";
 import { ref, createRef } from "lit/directives/ref.js";
 
 import type { SearchReference } from "../types";
-import { scrollContainer } from "../styles";
 import { DEBOUNCE_MS, MODE_SEARCH } from "../constants";
+
+import { customEvent } from "../events";
 import { KeyboardSelectionController, SearchController } from "../controllers";
+import { scrollContainer } from "../styles";
 
 import "./canary-search-references";
 import "./canary-reference-skeleton";
@@ -49,9 +51,7 @@ export class CanarySearchResultsTabs extends LitElement {
 
   private _selection = new KeyboardSelectionController<SearchReference>(this, {
     handleEnter: (item) => {
-      this.dispatchEvent(
-        new CustomEvent("close", { bubbles: true, composed: true }),
-      );
+      this.dispatchEvent(customEvent({ name: "modal-close" }));
       window.location.href = item.url;
     },
   });

@@ -3,6 +3,7 @@ import { customElement, property } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 
 import { urlToParts } from "../utils";
+import { customEvent } from "../events";
 
 import "./canary-hero-icon";
 import "./canary-snippet";
@@ -44,9 +45,7 @@ export class CanaryReference extends LitElement {
   }
 
   private _handleClick() {
-    this.dispatchEvent(
-      new CustomEvent("close", { bubbles: true, composed: true }),
-    );
+    this.dispatchEvent(customEvent({ name: "modal-close" }));
     window.location.href = this.url;
   }
 

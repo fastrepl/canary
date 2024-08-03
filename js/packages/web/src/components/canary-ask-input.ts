@@ -1,7 +1,9 @@
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
+import { customEvent } from "../events";
 import { input } from "../styles";
+
 import "./canary-hero-icon";
 
 const NAME = "canary-ask-input";
@@ -44,13 +46,9 @@ export class CanaryAskInput extends LitElement {
   private _handleKeyDown(e: KeyboardEvent) {
     if (e.key === "Enter") {
       e.preventDefault();
-
-      const event = new CustomEvent("input-change", {
-        detail: this.query,
-        bubbles: true,
-        composed: true,
-      });
-      this.dispatchEvent(event);
+      this.dispatchEvent(
+        customEvent({ name: "input-change", data: this.query }),
+      );
     }
   }
 }

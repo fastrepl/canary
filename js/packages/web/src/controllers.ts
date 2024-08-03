@@ -9,7 +9,7 @@ import { Task, StatusRenderer } from "@lit/task";
 import { ContextConsumer } from "@lit/context";
 import { operationContext, modeContext, queryContext } from "./contexts";
 
-import {
+import type {
   ModeContext,
   QueryContext,
   TriggerShortcut,
@@ -17,7 +17,9 @@ import {
   AskReference,
   SearchReference,
 } from "./types";
+
 import { asyncSleep, randomInteger } from "./utils";
+import { customEvent } from "./events";
 
 const wrapRenderer = <T>(renderer: StatusRenderer<T>) => {
   return {
@@ -103,13 +105,7 @@ export class SearchController {
   private _afterSearch(query: string, result: SearchReference[] | null) {
     const empty = query !== "" && result !== null && result.length === 0;
 
-    this.host.dispatchEvent(
-      new CustomEvent("empty", {
-        bubbles: true,
-        composed: true,
-        detail: empty,
-      }),
-    );
+    this.host.dispatchEvent(customEvent({ name: "empty", data: empty }));
   }
 
   get query() {

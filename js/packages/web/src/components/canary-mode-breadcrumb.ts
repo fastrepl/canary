@@ -1,9 +1,11 @@
 import { LitElement, html, css } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
-const NAME = "canary-mode-breadcrumb";
+import { customEvent } from "../events";
 
 import "./canary-hero-icon";
+
+const NAME = "canary-mode-breadcrumb";
 
 @customElement(NAME)
 export class CanaryModeBreadcrumb extends LitElement {
@@ -31,13 +33,7 @@ export class CanaryModeBreadcrumb extends LitElement {
   }
 
   private _handleClick() {
-    this.dispatchEvent(
-      new CustomEvent("mode-set", {
-        bubbles: true,
-        composed: true,
-        detail: this.previous,
-      }),
-    );
+    this.dispatchEvent(customEvent({ name: "mode-set", data: this.previous }));
   }
 
   static styles = css`

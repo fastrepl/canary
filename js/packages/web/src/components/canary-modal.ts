@@ -17,7 +17,7 @@ export class CanaryModal extends LitElement {
     return html`
       <slot name="trigger" @click=${this._handleOpen}></slot>
       <canary-dialog .ref=${this._ref}>
-        <slot name="content" @close=${this._handleClose}></slot>
+        <slot name="content" @modal-close=${this._handleModalClose}></slot>
       </canary-dialog>
     `;
   }
@@ -26,7 +26,7 @@ export class CanaryModal extends LitElement {
     this._ref.value?.showModal();
   }
 
-  private _handleClose() {
+  private _handleModalClose() {
     this._ref.value?.close();
   }
 
