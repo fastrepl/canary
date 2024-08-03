@@ -3,14 +3,12 @@ import type { Meta, StoryObj } from "@storybook/web-components";
 
 import "./canary-markdown";
 
-const render = ({ content }: any) => {
-  return html` <canary-markdown .content=${content}></canary-markdown> `;
-};
-
 export default {
-  render,
   title: "Public/canary-markdown",
   parameters: { sourceLink: "components/canary-markdown.stories.ts" },
+  render: ({ content }: any) => {
+    return html` <canary-markdown .content=${content}></canary-markdown> `;
+  },
 } satisfies Meta;
 
 export const Headers: StoryObj = {
