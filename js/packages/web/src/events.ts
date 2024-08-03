@@ -5,7 +5,6 @@ type Event =
   | { name: "register-mode"; data: ModeContext["current"] }
   | { name: "mode-set"; data: ModeContext["current"] }
   | { name: "input-change"; data: string }
-  | { name: "empty"; data: boolean }
   | { name: "modal-close"; data?: null };
 
 export const customEvent = (event: Event, opts?: Record<string, any>) => {

@@ -1,10 +1,12 @@
-import { consume } from "@lit/context";
 import { LitElement, html, css, nothing } from "lit";
 import { customElement, state } from "lit/decorators.js";
 
-import type { ModeContext } from "../types";
-import { MODE_SEARCH } from "../constants";
-import { modeContext } from "../contexts";
+import { consume, provide } from "@lit/context";
+import { modeContext, searchContext } from "../contexts";
+import { SearchController } from "../controllers";
+
+import type { ModeContext, SearchContext } from "../types";
+import { DEBOUNCE_MS, MODE_SEARCH, TaskStatus } from "../constants";
 import { customEvent } from "../events";
 
 import "./canary-mode-tabs";
@@ -19,18 +21,33 @@ export class CanarySearch extends LitElement {
 
   @consume({ context: modeContext, subscribe: true })
   @state()
-  mode!: ModeContext;
+  private _mode!: ModeContext;
 
-  @state() empty = false;
+  @provide({ context: searchContext })
+  @state()
+  private _search: SearchContext = { status: TaskStatus.INITIAL, references: [] };
+
+  private _searchTask = new SearchController(this, {
+    mode: this.MODE,
+    debounceTimeoutMs: DEBOUNCE_MS,
+  });
 
   connectedCallback() {
     super.connectedCallback();
-
     this.dispatchEvent(customEvent({ name: "register-mode", data: this.MODE }));
   }
 
+  updated() {
+    if (this._search.status !== this._searchTask.status) {
+      this._search = {
+        status: this._searchTask.status,
+        references: this._searchTask.references ?? this._search.references,
+      };
+    }
+  }
+
   render() {
-    return this.mode.current !== this.MODE
+    return this._mode.current !== this.MODE
       ? nothing
       : html`
           <div class="container">
@@ -46,20 +63,28 @@ export class CanarySearch extends LitElement {
                 <slot name="callout"></slot>
               </div>
               <div class="results">
-                <slot name="result" @empty=${this._handleEmpty}></slot>
+                <slot name="result"></slot>
+                ${this.renderEmpty()}
               </div>
-              ${this.empty
-                ? html`<slot name="empty">
-                    <canary-search-empty></canary-search-empty>
-                  </slot>`
-                : nothing}
             </div>
           </div>
         `;
   }
 
-  private _handleEmpty(e: CustomEvent) {
-    this.empty = e.detail;
+  renderEmpty() {
+    if (
+      this._searchTask.status === TaskStatus.COMPLETE &&
+      this._searchTask.query &&
+      !this._searchTask.references?.length
+    ) {
+      return html`
+        <slot name="empty">
+          <canary-search-empty></canary-search-empty>
+        </slot>
+      `;
+    }
+
+    return nothing;
   }
 
   static styles = css`
@@ -71,7 +96,7 @@ export class CanarySearch extends LitElement {
     .input-wrapper {
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 8px;
       margin-bottom: 4px;
       padding: 1px 12px;
     }

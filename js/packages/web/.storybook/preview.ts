@@ -50,7 +50,7 @@ const preview: Preview = {
             const data = (await request.json()) as Record<string, string>;
             const items = mockSearchReferences("ai_search", data["query"]);
 
-            await delay(Math.random() * 800 + 200);
+            await delay(Math.random() * 500 + 1400);
             return HttpResponse.json(items);
           }),
         ],

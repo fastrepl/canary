@@ -1,24 +1,18 @@
-import {
-  LitElement,
-  html,
-  css,
-  noChange,
-  nothing,
-  type PropertyValues,
-} from "lit";
+import { LitElement, html, css, type PropertyValues } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 import { ref, createRef } from "lit/directives/ref.js";
 
-import type { SearchReference } from "../types";
-import { DEBOUNCE_MS, MODE_SEARCH } from "../constants";
+import { consume } from "@lit/context";
+import { searchContext } from "../contexts";
+import { KeyboardSelectionController } from "../controllers";
 
+import type { SearchContext, SearchReference } from "../types";
+import { TaskStatus } from "../constants";
 import { customEvent } from "../events";
-import { KeyboardSelectionController, SearchController } from "../controllers";
 import { scrollContainer } from "../styles";
 
 import "./canary-search-references";
-import "./canary-reference-skeleton";
 import "./canary-error";
 
 // @ts-ignore
@@ -29,25 +23,23 @@ const NAME = "canary-search-results-tabs";
 
 @customElement(NAME)
 export class CanarySearchResultsTabs extends LitElement {
-  readonly MODE = MODE_SEARCH;
-
-  @property({ type: Boolean }) group = false;
+  @property({ type: Boolean })
+  group = false;
 
   @property({ converter: { fromAttribute: parse } })
   tabs: TabDefinition[] = [];
 
-  @state() selectedTab = "";
-  @state() groupedReferences: Record<
+  @consume({ context: searchContext, subscribe: true })
+  @state()
+  private _search!: SearchContext;
+
+  @state() _selectedTab = "";
+  @state() _groupedReferences: Record<
     string,
     (SearchReference & { index: number })[]
   > = {};
 
   private _ref = createRef<HTMLElement>();
-
-  private _search = new SearchController(this, {
-    mode: this.MODE,
-    debounceTimeoutMs: DEBOUNCE_MS,
-  });
 
   private _selection = new KeyboardSelectionController<SearchReference>(this, {
     handleEnter: (item) => {
@@ -65,51 +57,48 @@ export class CanarySearchResultsTabs extends LitElement {
   }
 
   updated(changed: PropertyValues<this>) {
-    if (!this.selectedTab && this.tabs.length > 0) {
-      this.selectedTab = this.tabs[0].name;
+    if (!this._selectedTab && this.tabs.length > 0) {
+      this._selectedTab = this.tabs[0].name;
     }
 
-    if (changed.has("groupedReferences") && !changed.has("selectedTab")) {
-      const relevantGroup = Object.entries(this.groupedReferences).reduce(
+    if (changed.has("_groupedReferences") && !changed.has("_selectedTab")) {
+      const relevantGroup = Object.entries(this._groupedReferences).reduce(
         (acc, [group, references]) => {
-          if (!references?.length || !this.groupedReferences?.[acc]?.length) {
+          if (!references?.length) {
             return acc;
           }
 
-          return references[0].index < this.groupedReferences[acc][0].index
+          return references[0].index <
+            (this._groupedReferences[acc]?.[0]?.index ?? 999)
             ? group
             : acc;
         },
-        this.selectedTab,
+        this._selectedTab,
       );
 
-      this.selectedTab = relevantGroup;
+      this._selectedTab = relevantGroup;
     }
   }
 
   render() {
+    if (this._search.status === TaskStatus.COMPLETE) {
+      this._groupedReferences = this._groupReferences(
+        this._search.references,
+        this.tabs,
+      );
+
+      if (this._ref.value) {
+        this._ref.value.scrollTop = 0;
+      }
+    }
+
     return html`
       <div class="container">
         ${this._tabs()}
         <div ${ref(this._ref)} class="scroll-container">
-          ${this._search.render({
-            error: () => html`<canary-error></canary-error>`,
-            pending: () => this._currentResults(),
-            complete: (references) => {
-              if (!references) {
-                return noChange;
-              }
-              if (this._ref.value) {
-                this._ref.value.scrollTop = 0;
-              }
-
-              this.groupedReferences = this._groupReferences(
-                references,
-                this.tabs,
-              );
-              return this._currentResults();
-            },
-          })}
+          ${this._search.status === TaskStatus.ERROR
+            ? html`<canary-error></canary-error>`
+            : this._currentResults()}
         </div>
       </div>
     `;
@@ -117,7 +106,7 @@ export class CanarySearchResultsTabs extends LitElement {
 
   private _tabs() {
     const counts = Object.fromEntries(
-      Object.entries(this.groupedReferences).map(([group, references]) => [
+      Object.entries(this._groupedReferences).map(([group, references]) => [
         group,
         references.length,
       ]),
@@ -126,7 +115,7 @@ export class CanarySearchResultsTabs extends LitElement {
     return html`
       <div class="tabs">
         ${this.tabs.map(({ name }) => {
-          const selected = name === this.selectedTab;
+          const selected = name === this._selectedTab;
           const selectable = counts[name] > 0;
 
           return html`<div
@@ -137,7 +126,7 @@ export class CanarySearchResultsTabs extends LitElement {
               name="mode"
               .id=${name}
               .value=${name}
-              ?checked=${name === this.selectedTab}
+              ?checked=${name === this._selectedTab}
             />
             <label class=${classMap({ tab: true, selectable, selected })}>
               ${name}
@@ -149,11 +138,7 @@ export class CanarySearchResultsTabs extends LitElement {
   }
 
   private _currentResults() {
-    if (Object.keys(this.groupedReferences).length === 0) {
-      return this._search.query ? this._skeletons(5) : nothing;
-    }
-
-    const current = this.groupedReferences[this.selectedTab] ?? [];
+    const current = this._groupedReferences[this._selectedTab] ?? [];
     this._selection.items = current;
 
     return html`<canary-search-references
@@ -163,16 +148,8 @@ export class CanarySearchResultsTabs extends LitElement {
     ></canary-search-references>`;
   }
 
-  private _skeletons(n: number) {
-    return html` <div class="skeleton-container">
-      ${Array(n).fill(
-        html`<canary-reference-skeleton></canary-reference-skeleton>`,
-      )}
-    </div>`;
-  }
-
   private _handleTabClick(name: string): void {
-    this.selectedTab = name;
+    this._selectedTab = name;
   }
 
   private _groupReferences(
@@ -236,7 +213,7 @@ export class CanarySearchResultsTabs extends LitElement {
         text-decoration-color: var(--canary-color-gray-50);
       }
 
-      .tab {
+      .selectable.tab {
         cursor: pointer;
       }
 

@@ -1,32 +1,29 @@
-import { LitElement, html, css, noChange, nothing } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { LitElement, html, css } from "lit";
+import { customElement, property, state } from "lit/decorators.js";
 import { ref, createRef } from "lit/directives/ref.js";
 
-import type { SearchReference } from "../types";
-import { DEBOUNCE_MS, MODE_SEARCH } from "../constants";
+import { consume } from "@lit/context";
+import { searchContext } from "../contexts";
+import { KeyboardSelectionController } from "../controllers";
 
+import type { SearchContext, SearchReference } from "../types";
 import { customEvent } from "../events";
-import { SearchController, KeyboardSelectionController } from "../controllers";
+import { TaskStatus } from "../constants";
 import { scrollContainer } from "../styles";
 
 import "./canary-error";
 import "./canary-search-references";
-import "./canary-reference-skeleton";
 
 const NAME = "canary-search-results";
 
 @customElement(NAME)
 export class CanarySearchResults extends LitElement {
-  readonly MODE = MODE_SEARCH;
+  @property({ type: Boolean })
+  group = false;
 
-  @property({ type: Boolean }) group = false;
-
-  private _ref = createRef<HTMLElement>();
-
-  private _search = new SearchController(this, {
-    mode: this.MODE,
-    debounceTimeoutMs: DEBOUNCE_MS,
-  });
+  @consume({ context: searchContext, subscribe: true })
+  @state()
+  private _search!: SearchContext;
 
   private _selection = new KeyboardSelectionController<SearchReference>(this, {
     handleEnter: (item) => {
@@ -35,50 +32,28 @@ export class CanarySearchResults extends LitElement {
     },
   });
 
-  private _references: SearchReference[] | null = null;
+  private _containerRef = createRef<HTMLElement>();
 
   render() {
-    return html`
-      <div ${ref(this._ref)} class="scroll-container">
-        ${this._search.render({
-          error: () => html`<canary-error></canary-error>`,
-          pending: () => this._results(),
-          complete: (references) => {
-            if (!references) {
-              return noChange;
-            }
-            if (this._ref.value) {
-              this._ref.value.scrollTop = 0;
-            }
+    if (this._search.status === TaskStatus.COMPLETE) {
+      this._selection.items = this._search.references;
 
-            this._selection.items = references;
-            this._references = references;
-
-            return this._results();
-          },
-        })}
-      </div>
-    `;
-  }
-
-  private _results() {
-    if (!this._references) {
-      return this._search.query ? this._skeletons(5) : nothing;
+      if (this._containerRef.value) {
+        this._containerRef.value.scrollTop = 0;
+      }
     }
 
-    return html`<canary-search-references
-      .group=${this.group}
-      .selected=${this._selection.index}
-      .references=${this._references}
-    ></canary-search-references>`;
-  }
-
-  private _skeletons(n: number) {
-    return html` <div class="skeleton-container">
-      ${Array(n).fill(
-        html`<canary-reference-skeleton></canary-reference-skeleton>`,
-      )}
-    </div>`;
+    return html`
+      <div ${ref(this._containerRef)} class="scroll-container">
+        ${this._search.status === TaskStatus.ERROR
+          ? html`<canary-error></canary-error>`
+          : html`<canary-search-references
+              .group=${this.group}
+              .selected=${this._selection.index}
+              .references=${this._search.references}
+            ></canary-search-references>`}
+      </div>
+    `;
   }
 
   static styles = [

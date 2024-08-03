@@ -11,9 +11,9 @@ export class CanaryLoadingSpinner extends LitElement {
 
   static styles = css`
     .loader {
-      width: 16px;
-      height: 16px;
-      border: 2px solid var(--canary-color-gray-20);
+      width: 12px;
+      height: 12px;
+      border: 1px solid var(--canary-color-gray-40);
       border-bottom-color: transparent;
       border-radius: 50%;
       display: inline-block;

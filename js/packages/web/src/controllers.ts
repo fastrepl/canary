@@ -19,7 +19,6 @@ import type {
 } from "./types";
 
 import { asyncSleep, randomInteger } from "./utils";
-import { customEvent } from "./events";
 
 const wrapRenderer = <T>(renderer: StatusRenderer<T>) => {
   return {
@@ -66,13 +65,14 @@ export class SearchController {
     this._task = new Task(
       host,
       async ([mode, query], { signal }) => {
-        if (!mode || mode !== this._options.mode || !query?.trim()) {
-          return null;
-        }
-
         const ops = this._operation.value;
 
-        if (!ops?.search) {
+        if (
+          !mode ||
+          mode !== this._options.mode ||
+          !query?.trim() ||
+          !ops?.search
+        ) {
           return null;
         }
 
@@ -94,21 +94,22 @@ export class SearchController {
           return null;
         }
 
-        this._afterSearch(query, result);
         return (this._references = result);
       },
       () => [this._mode.value?.current, this._query.value],
     );
   }
 
-  private _afterSearch(query: string, result: SearchReference[] | null) {
-    const empty = query !== "" && result !== null && result.length === 0;
-
-    this.host.dispatchEvent(customEvent({ name: "empty", data: empty }));
+  get status() {
+    return this._task.status;
   }
 
   get query() {
     return this._query.value;
+  }
+
+  get references() {
+    return this._references;
   }
 
   render(renderFunctions: StatusRenderer<SearchReference[] | null>) {

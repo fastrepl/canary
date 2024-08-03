@@ -34,12 +34,21 @@ export const mockSearchReferences = (
     return match ? parseInt(match[0], 10) : 0;
   };
 
-  return Array(getN(query)).fill({
-    title: "title",
-    titles: ["aaaa", "bbb"],
-    url: `https://example.com/a/b?query=${query}`,
-    excerpt: `<mark>${type}</mark> response: <mark>${query}</mark>!`,
-  });
+  return Array(getN(query))
+    .fill(null)
+    .map(() => {
+      const url =
+        Math.random() > 0.5
+          ? `https://example.com/a/b?query=${query}`
+          : `https://example.com/api/b?query=${query}`;
+
+      return {
+        title: "title",
+        titles: ["aaaa", "bbb"],
+        url,
+        excerpt: `<mark>${type}</mark> response: <mark>${query}</mark>!`,
+      };
+    });
 };
 
 export const mockAskReference = (): AskReference => {

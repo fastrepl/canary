@@ -11,14 +11,15 @@ import "./canary-reference";
 
 @customElement(NAME)
 export class CanarySearchReferences extends LitElement {
-  @property({ type: Array }) references: SearchReference[] = [];
   @property({ type: Boolean }) group = false;
   @property({ type: Number }) selected = 0;
-  @state() selectedRef: SearchReference | null = null;
+  @property({ type: Array }) references: SearchReference[] = [];
+  
+  @state() _selectedRef: SearchReference | null = null;
 
   connectedCallback(): void {
     super.connectedCallback();
-    this.selectedRef = this.references[this.selected];
+    this._selectedRef = this.references[this.selected];
   }
 
   render() {
@@ -30,7 +31,7 @@ export class CanarySearchReferences extends LitElement {
   updated(changed: PropertyValues<this>) {
     const selected = changed.get("selected");
     if (selected !== undefined) {
-      this.selectedRef = this.references[selected];
+      this._selectedRef = this.references[selected];
     }
   }
 

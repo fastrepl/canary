@@ -1,26 +1,33 @@
-import { LitElement, html } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { LitElement, html, nothing } from "lit";
+import { customElement, state } from "lit/decorators.js";
 
 import { consume } from "@lit/context";
-import { queryContext } from "../contexts";
-import type { QueryContext } from "../types";
+import { queryContext, searchContext } from "../contexts";
+import type { QueryContext, SearchContext } from "../types";
 
-import { customEvent } from "../events";
 import { input } from "../styles";
+import { TaskStatus } from "../constants";
+import { customEvent } from "../events";
+
+import "./canary-loading-spinner";
 
 const NAME = "canary-search-input";
 
 @customElement(NAME)
 export class CanarySearchInput extends LitElement {
   @consume({ context: queryContext, subscribe: false })
-  @property({ reflect: true })
-  query: QueryContext = "";
+  @state()
+  private _query!: QueryContext;
+
+  @consume({ context: searchContext, subscribe: true })
+  @state()
+  private _search!: SearchContext;
 
   render() {
     return html`
       <input
         type="text"
-        value=${this.query}
+        value=${this._query}
         autocomplete="off"
         spellcheck="false"
         placeholder="Search for anything..."
@@ -28,6 +35,9 @@ export class CanarySearchInput extends LitElement {
         autofocus
         onfocus="this.setSelectionRange(this.value.length,this.value.length);"
       />
+      ${this._search.status === TaskStatus.PENDING
+        ? html`<canary-loading-spinner></canary-loading-spinner>`
+        : nothing}
     `;
   }
 
@@ -36,7 +46,7 @@ export class CanarySearchInput extends LitElement {
   private _handleInput(e: KeyboardEvent) {
     const input = e.target as HTMLInputElement;
 
-    this.query = input.value;
+    this._query = input.value;
     this.updateComplete.then(() => {
       this.dispatchEvent(
         customEvent({ name: "input-change", data: input.value }),
