@@ -78,7 +78,7 @@ export class CanaryProviderPagefind extends LitElement {
   search: SearchFunction = async (
     query: string,
     signal: AbortSignal,
-  ): Promise<SearchReference[] | null> => {
+  ): Promise<SearchReference[]> => {
     const op = this.pagefind
       .search(query)
       .then(({ results }: any) =>
@@ -92,7 +92,7 @@ export class CanaryProviderPagefind extends LitElement {
       return cancellable(op, signal);
     } catch (e) {
       console.error(e);
-      return null;
+      return [];
     }
   };
 

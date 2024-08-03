@@ -39,15 +39,8 @@ export class SearchController {
   private _mode: ContextConsumer<{ __context__: ModeContext }, any>;
 
   private _id = 0;
-  private _task: Task<
-    [
-      OperationContext["search"] | undefined,
-      OperationContext["beforeSearch"] | undefined,
-      string,
-      string,
-    ],
-    SearchReference[] | null
-  >;
+  private _task: Task<[string, string], SearchReference[] | null>;
+  private _references: SearchReference[] | null = null;
 
   private _options: { mode: string; debounceTimeoutMs: number };
 
@@ -72,13 +65,24 @@ export class SearchController {
 
     this._task = new Task(
       host,
-      async ([search, beforeSearch, mode, query], { signal }) => {
-        if (!mode || mode !== this._options.mode || !query?.trim() || !search) {
+      async ([mode, query], { signal }) => {
+        if (!mode || mode !== this._options.mode || !query?.trim()) {
           return null;
         }
 
+        const ops = this._operation.value;
+
+        if (!ops?.search) {
+          return null;
+        }
+
+        const search =
+          this._query.value && this._references && this._references.length < 3
+            ? (ops.ai_search ?? ops.search)
+            : ops.search;
+
         const id = ++this._id;
-        beforeSearch?.(query);
+        ops.beforeSearch?.(query);
         await asyncSleep(this._options.debounceTimeoutMs);
 
         if (id !== this._id) {
@@ -91,14 +95,9 @@ export class SearchController {
         }
 
         this._afterSearch(query, result);
-        return result as SearchReference[] | null;
+        return (this._references = result);
       },
-      () => [
-        this._operation.value?.search,
-        this._operation.value?.beforeSearch,
-        this._mode.value?.current,
-        this._query.value,
-      ],
+      () => [this._mode.value?.current, this._query.value],
     );
   }
 

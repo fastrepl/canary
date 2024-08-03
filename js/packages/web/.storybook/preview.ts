@@ -36,9 +36,8 @@ const preview: Preview = {
     },
     msw: {
       handlers: {
-        // create seperate endpoint for hybrid search?
         search: [
-          http.post(/.*\/api\/v1\/search\/normal/, async ({ request }) => {
+          http.post("/api/v1/search/normal", async ({ request }) => {
             const data = (await request.json()) as Record<string, string>;
             const items = mockSearchReferences("search", data["query"]);
 
@@ -47,7 +46,7 @@ const preview: Preview = {
           }),
         ],
         ai_search: [
-          http.post(/.*\/api\/v1\/search\/ai/, async ({ request }) => {
+          http.post("/api/v1/search/ai", async ({ request }) => {
             const data = (await request.json()) as Record<string, string>;
             const items = mockSearchReferences("ai_search", data["query"]);
 

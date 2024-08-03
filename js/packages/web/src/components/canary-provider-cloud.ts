@@ -22,7 +22,11 @@ export class CanaryProviderCloud extends LitElement {
     this.dispatchEvent(
       customEvent({
         name: "register-operations",
-        data: { search: this.search, ask: this.ask },
+        data: {
+          search: this.search,
+          ai_search: this.ai_search,
+          ask: this.ask,
+        },
       }),
     );
   }
@@ -35,7 +39,19 @@ export class CanaryProviderCloud extends LitElement {
 
   search = async (query: string, signal?: AbortSignal) => {
     const url = `${this.endpoint}/api/v1/search/normal`;
+    return this._search(url, query, signal);
+  };
 
+  ai_search = async (query: string, signal?: AbortSignal) => {
+    const url = `${this.endpoint}/api/v1/search/ai`;
+    return this._search(url, query, signal);
+  };
+
+  private _search = async (
+    url: string,
+    query: string,
+    signal?: AbortSignal,
+  ) => {
     const params = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -43,12 +59,12 @@ export class CanaryProviderCloud extends LitElement {
       signal,
     };
 
-    const response = await fetch(url, params);
-    if (!response.ok) {
-      throw new Error();
+    const res = await fetch(url, params);
+    if (!res.ok) {
+      throw new Error(res.statusText);
     }
 
-    return response.json();
+    return res.json();
   };
 
   ask = async (
@@ -65,14 +81,12 @@ export class CanaryProviderCloud extends LitElement {
       signal,
     };
 
-    const response = await fetch(url, params);
-    if (!response.ok) {
-      throw new Error();
+    const res = await fetch(url, params);
+    if (!res.ok) {
+      throw new Error(res.statusText);
     }
 
-    const reader = response.body
-      ?.pipeThrough(new TextDecoderStream())
-      .getReader();
+    const reader = res.body?.pipeThrough(new TextDecoderStream()).getReader();
 
     if (!reader) {
       throw new Error();

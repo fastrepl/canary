@@ -25,13 +25,13 @@
     "test-storybook": "test-storybook"
   },
   "dependencies": {
-    "lit": "^3.1.4",
+    "@floating-ui/dom": "^1.6.8",
+    "@lit-labs/observers": "^2.0.2",
     "@lit/context": "^1.1.2",
     "@lit/task": "^1.0.1",
-    "@lit-labs/observers": "^2.0.2",
-    "marked": "^13.0.2",
     "highlight.js": "^11.10.0",
-    "@floating-ui/dom": "^1.6.8"
+    "lit": "^3.1.4",
+    "marked": "^13.0.2"
   },
   "devDependencies": {
     "@ljcl/storybook-addon-cssprops": "^4.0.0",

@@ -207,7 +207,7 @@ export const SearchError: StoryObj = {
   parameters: {
     msw: {
       handlers: {
-        search: http.post("/api/v1/search", async () => {
+        search: http.post(/\/api\/v1\/search\/*/, async () => {
           return HttpResponse.json([], { status: 429 });
         }),
       },

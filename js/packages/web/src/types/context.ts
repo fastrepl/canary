@@ -15,9 +15,10 @@ export type Framework = "starlight" | "docusaurus" | "vitepress";
 
 export type TriggerShortcut = "cmdk" | "slash";
 
-export type OperationContext = {
+export type OperationContext = Partial<{
   search: SearchFunction;
-  beforeSearch?: BeforeSearchFunction;
+  beforeSearch: BeforeSearchFunction;
+  ai_search: SearchFunction;
   ask: AskFunction;
   feedback: FeedbackFunction;
-};
+}>;
