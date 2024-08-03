@@ -21,6 +21,10 @@ export class CanarySearchResults extends LitElement {
   }
 
   static styles = css`
+    .container {
+      padding: 0px 12px;
+    }
+
     p {
       cursor: default;
       margin-inline-start: 4px;

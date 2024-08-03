@@ -49,6 +49,7 @@ export class CanaryAsk extends LitElement {
     .container {
       display: flex;
       flex-direction: column;
+      padding: 0px 12px;
     }
 
     .input-wrapper {
@@ -56,7 +57,6 @@ export class CanaryAsk extends LitElement {
       align-items: center;
       gap: 8px;
       margin-bottom: 4px;
-      padding: 1px 6px;
     }
   `;
 }

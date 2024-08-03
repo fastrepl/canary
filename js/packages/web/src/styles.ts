@@ -80,5 +80,8 @@ export const scrollContainer = css`
     scrollbar-color: var(--canary-is-light, var(--canary-color-gray-90))
       var(--canary-is-dark, var(--canary-color-gray-60))
       var(--canary-color-gray-100);
+
+    padding-left: 12px;
+    padding-right: 12px;
   }
 `;

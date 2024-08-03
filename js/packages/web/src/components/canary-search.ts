@@ -73,21 +73,18 @@ export class CanarySearch extends LitElement {
       align-items: center;
       gap: 4px;
       margin-bottom: 4px;
-      padding: 1px 6px;
+      padding: 1px 12px;
     }
 
     .callouts {
       display: flex;
       flex-direction: column;
+      padding: 0px 12px;
     }
 
     .results {
       display: flex;
       flex-direction: column;
-    }
-
-    .body {
-      padding-left: 4px;
     }
   `;
 }

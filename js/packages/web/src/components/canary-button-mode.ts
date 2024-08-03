@@ -31,8 +31,12 @@ export class CanaryModeButton extends LitElement {
       align-items: center;
       gap: 8px;
 
-      width: 100%;
+      width: calc(100% - 24px);
+      align-self: center;
+      margin-right: 12px;
+      margin-left: 12px;
       padding: 8px 12px;
+
       border-radius: 8px;
 
       border: 1px solid var(--canary-is-light, var(--canary-color-gray-95))
