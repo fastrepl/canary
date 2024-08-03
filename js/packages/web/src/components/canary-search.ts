@@ -50,7 +50,9 @@ export class CanarySearch extends LitElement {
               <div class="callouts">
                 <slot name="callout"></slot>
               </div>
-              <slot name="results" @empty=${this._handleEmpty}></slot>
+              <div class="results">
+                <slot name="result" @empty=${this._handleEmpty}></slot>
+              </div>
               ${this.empty
                 ? html`<slot name="empty">
                     <canary-search-empty></canary-search-empty>
@@ -80,6 +82,11 @@ export class CanarySearch extends LitElement {
     }
 
     .callouts {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .results {
       display: flex;
       flex-direction: column;
     }

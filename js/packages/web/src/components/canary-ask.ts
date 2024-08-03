@@ -43,7 +43,9 @@ export class CanaryAsk extends LitElement {
               <slot name="input"></slot>
               <slot name="input-after"></slot>
             </div>
-            <slot name="results"></slot>
+            <div class="results">
+              <slot name="result"></slot>
+            </div>
           </div>
         `;
   }

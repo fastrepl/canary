@@ -60,7 +60,7 @@ export default {
       return wrapper(html`
         <canary-search slot="mode">
           <canary-search-input slot="input"></canary-search-input>
-          <canary-search-results slot="results"></canary-search-results>
+          <canary-search-results slot="result"></canary-search-results>
         </canary-search>
       `);
     }
@@ -69,7 +69,7 @@ export default {
       return wrapper(html`
         <canary-search slot="mode">
           <canary-search-input slot="input"></canary-search-input>
-          <canary-search-results slot="results"></canary-search-results>
+          <canary-search-results slot="result"></canary-search-results>
           <div slot="empty">
             <canary-mode-button> </canary-mode-button>
           </div>
@@ -81,7 +81,7 @@ export default {
       return wrapper(html`
         <canary-search slot="mode">
           <canary-search-input slot="input"></canary-search-input>
-          <canary-search-results slot="results" group></canary-search-results>
+          <canary-search-results slot="result" group></canary-search-results>
         </canary-search>
       `);
     }
@@ -91,7 +91,7 @@ export default {
         <canary-search slot="mode">
           <canary-search-input slot="input"></canary-search-input>
           <canary-search-results-tabs
-            slot="results"
+            slot="result"
             group
             tabs="Docs:*;API:/api/.+$"
           ></canary-search-results-tabs>
@@ -104,7 +104,7 @@ export default {
       return wrapper(html`
         <canary-search slot="mode">
           <canary-search-input slot="input"></canary-search-input>
-          <canary-search-results slot="results"></canary-search-results>
+          <canary-search-results slot="result"></canary-search-results>
           <canary-callout-discord slot="callout"></canary-callout-discord>
         </canary-search>
       `);
@@ -114,7 +114,7 @@ export default {
       return wrapper(html`
         <canary-search slot="mode">
           <canary-search-input slot="input"></canary-search-input>
-          <canary-search-results slot="results"></canary-search-results>
+          <canary-search-results slot="result"></canary-search-results>
         </canary-search>
       `);
     }
@@ -123,7 +123,7 @@ export default {
       return wrapper(html`
         <canary-search slot="mode">
           <canary-search-input slot="input"></canary-search-input>
-          <canary-search-results slot="results"></canary-search-results>
+          <canary-search-results slot="result"></canary-search-results>
         </canary-search>
       `);
     }
@@ -133,12 +133,12 @@ export default {
         <canary-search slot="mode">
           <canary-search-input slot="input"></canary-search-input>
           <canary-mode-tabs slot="input-after"></canary-mode-tabs>
-          <canary-search-results slot="results"></canary-search-results>
+          <canary-search-results slot="result"></canary-search-results>
         </canary-search>
         <canary-ask slot="mode">
           <canary-ask-input slot="input"></canary-ask-input>
           <canary-mode-tabs slot="input-after"></canary-mode-tabs>
-          <canary-ask-results slot="results"></canary-ask-results>
+          <canary-ask-results slot="result"></canary-ask-results>
         </canary-ask>
       `);
     }
@@ -147,7 +147,7 @@ export default {
       return wrapper(html`
         <canary-search slot="mode">
           <canary-search-input slot="input"></canary-search-input>
-          <canary-search-results slot="results"></canary-search-results>
+          <canary-search-results slot="result"></canary-search-results>
           <div slot="empty">
             <canary-button-mode mode="Ask" text="Ask AI Assistant">
               <canary-hero-icon
@@ -167,7 +167,7 @@ export default {
             <canary-hero-icon slot="icon" name="chat-bubble-left"></canary-hero-icon>
         </canary-mode-breadcrumb>
           <canary-ask-input slot="input"></canary-ask-input>
-          <canary-ask-results slot="results"></canary-ask-results>
+          <canary-ask-results slot="result"></canary-ask-results>
         </canary-ask>
       `);
     }

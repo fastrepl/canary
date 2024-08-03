@@ -26,10 +26,12 @@ Outermost wrapper component. Required for all other components.
 
 Register `operation` to `canary-root`.
 
-- `canary-provider-mock`
-- `canary-provider-pagefind`
-- `canary-provider-vitepress-minisearch`
-- `canary-provider-cloud`
+| Provider                               | Search | Ask |
+| -------------------------------------- | :----: | :-: |
+| `canary-provider-mock`                 |  `O`   | `O` |
+| `canary-provider-pagefind`             |  `O`   | `X` |
+| `canary-provider-vitepress-minisearch` |  `O`   | `X` |
+| `canary-provider-cloud`                |  `O`   | `O` |
 
 ## `canary-modal`, `canary-trigger-*`, `canary-content`
 
@@ -44,21 +46,23 @@ For most cases, you'll want the panel to be shown when user clicks on the search
 </canary-modal>
 ```
 
-But if you don't want modal, just can just use the `canary-content` component directly.
+But if you don't want modal, you can just use the `canary-content` directly. `canary-dropdown` is planned, but not implemented yet.
 
-## `canary-search`, `canary-search-input`, `canary-search-results-*`
+## `canary-search` and `canary-ask`
 
-- `canary-search-results` is the default, but you can replace it with `canary-search-results-tabs`.
-- For both `canary-search-results` and `canary-search-results-tabs`, you can use `group` attribute to group search results.
+Must be placed in `mode` slot of `canary-content`.
 
-## `canary-ask`, `canary-ask-input`, `canary-ask-results`
+### `canary-search-input`, `canary-search-results-*`
 
-## `canary-callout-*`
+Inside `canary-search`, these slots are available:
 
-## `canary-footer`
+| Slot           | Possible Components                                   |
+| -------------- | :---------------------------------------------------- |
+| `input`        | `canary-search-input`                                 |
+| `input-before` | `canary-mode-breadcrumb`                              |
+| `input-after`  | `canary-mode-tabs`                                    |
+| `callout`      | `canary-callout-*`                                    |
+| `result`       | `canary-search-results`, `canary-search-results-tabs` |
+| `empty`        | `canary-search-empty`                                 |
 
-## `canary-mode-tabs`
-
-Note that if you use only one of `search` or `ask`, mode switching will be disabled.
-
-If nothing is provided in `mode-tabs` slot for `canary-search` or `canary-ask`, [`canary-mode-tabs`](https://github.com/fastrepl/canary/blob/main/js/packages/web/src/canary-ask.ts) will be used as a fallback.
+### `canary-ask-input`, `canary-ask-results`
