@@ -30,10 +30,10 @@ export default function Canary({ options }) {
         <canary-modal>
           <canary-trigger-searchbar slot="trigger"></canary-trigger-searchbar>
           <canary-content slot="content">
-            <canary-search slot="search">
+            <canary-search slot="mode">
               <canary-search-input slot="input"></canary-search-input>
               <canary-search-results
-                slot="results"
+                slot="result"
                 group
               ></canary-search-results>
             </canary-search>

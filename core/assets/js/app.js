@@ -27,14 +27,14 @@ import * as Components from "../svelte/**/*.svelte";
 import { format } from "timeago.js";
 import ClipboardJS from "clipboard";
 
-import "@getcanary/web/components/canary-root";
-import "@getcanary/web/components/canary-provider-cloud";
-import "@getcanary/web/components/canary-modal";
-import "@getcanary/web/components/canary-trigger-searchbar";
-import "@getcanary/web/components/canary-content";
-import "@getcanary/web/components/canary-search";
-import "@getcanary/web/components/canary-search-input";
-import "@getcanary/web/components/canary-search-results";
+import "@getcanary/web/components/canary-root.js";
+import "@getcanary/web/components/canary-provider-cloud.js";
+import "@getcanary/web/components/canary-modal.js";
+import "@getcanary/web/components/canary-trigger-searchbar.js";
+import "@getcanary/web/components/canary-content.js";
+import "@getcanary/web/components/canary-search.js";
+import "@getcanary/web/components/canary-search-input.js";
+import "@getcanary/web/components/canary-search-results.js";
 
 let csrfToken = document
   .querySelector("meta[name='csrf-token']")
