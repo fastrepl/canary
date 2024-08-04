@@ -43,10 +43,12 @@ fn handle_internal_link(element: htmd::Element) -> Option<String> {
     {
         if href.value.starts_with("#") {
             return Some(String::new());
+        } else {
+            return format!("[{}]({})", element.content, href.value).into();
         }
     }
 
-    Some(String::new())
+    Some(element.content.to_string())
 }
 
 fn handle_h2(element: htmd::Element) -> Option<String> {

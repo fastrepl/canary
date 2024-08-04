@@ -14,18 +14,18 @@ fn exstract() {
         "calling llm apis",
         "llm apis",
         "litellm import budgetmanager",
+        "litellm proxy server",
         "import budgetmanager",
+        "litellm proxy",
         "budget manager",
         "calling llm",
+        "proxy server",
         "budgetmanager completion",
         "messages",
         "api",
+        "litellm import",
         "response",
         "hey",
-        "str",
-        "litellm import",
-        "project_name",
-        "hosted",
     ]
     "###);
 }

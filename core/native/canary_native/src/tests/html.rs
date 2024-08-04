@@ -12,14 +12,18 @@ fn to_md() {
 
     # LiteLLM - Getting Started
 
+    [https://github.com/BerriAI/litellm](https://github.com/BerriAI/litellm)
+
     ## **Call 100+ LLMs using the same Input/Output Format**
 
     *   Translate inputs to provider's `completion`, `embedding`, and `image_generation` endpoints
-    *   , text responses will always be available at `['choices'][0]['message']['content']`
-    *   Retry/fallback logic across multiple deployments (e.g. Azure/OpenAI) -
-    *   Track spend & set budgets per project
+    *   [Consistent output](https://docs.litellm.ai/docs/completion/output), text responses will always be available at `['choices'][0]['message']['content']`
+    *   Retry/fallback logic across multiple deployments (e.g. Azure/OpenAI) - [Router](https://docs.litellm.ai/docs/routing)
+    *   Track spend & set budgets per project [LiteLLM Proxy Server](https://docs.litellm.ai/docs/simple_proxy)
 
     ## Basic usage
+
+    [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/BerriAI/litellm/blob/main/cookbook/liteLLM_Getting_Started.ipynb)
 
     ```shell
     pip install litellm  
@@ -258,7 +262,7 @@ fn to_md() {
         print(e)  
     ```
 
-    ## Logging Observability - Log LLM Input/Output ()
+    ## Logging Observability - Log LLM Input/Output ([Docs](https://docs.litellm.ai/docs/observability/callbacks))
 
     LiteLLM exposes pre defined callbacks to send data to Lunary, Langfuse, Helicone, Promptlayer, Traceloop, Slack
 
@@ -282,7 +286,7 @@ fn to_md() {
 
     ## Track Costs, Usage, Latency for streaming
 
-    Use a callback function for this - more info on custom callbacks: 
+    Use a callback function for this - more info on custom callbacks: [https://docs.litellm.ai/docs/observability/custom\_callback](https://docs.litellm.ai/docs/observability/custom_callback)
 
     ```python
     import litellm  
@@ -322,12 +326,12 @@ fn to_md() {
 
     The proxy provides:
 
-    1.  
-    2.  
-    3.  
-    4.  
+    1.  [Hooks for auth](https://docs.litellm.ai/docs/proxy/virtual_keys#custom-auth)
+    2.  [Hooks for logging](https://docs.litellm.ai/docs/proxy/logging#step-1---create-your-custom-litellm-callback-class)
+    3.  [Cost tracking](https://docs.litellm.ai/docs/proxy/virtual_keys#tracking-spend)
+    4.  [Rate Limiting](https://docs.litellm.ai/docs/proxy/users#set-rate-limits)
 
-    ### 📖 Proxy Endpoints -
+    ### 📖 Proxy Endpoints - [Swagger Docs](https://litellm-api.up.railway.app/)
 
     ### Quick Start Proxy - CLI
 
@@ -361,9 +365,9 @@ fn to_md() {
 
     ## More details
 
-    *   
-    *   
-    *   
+    *   [exception mapping](/exception_mapping.md)
+    *   [retries + model fallbacks for completion()](/completion/reliable_completions.md)
+    *   [proxy virtual keys & spend management](/tutorials/fallbacks.md)
 
     *   
     *   
@@ -386,14 +390,16 @@ fn to_md_with_marker() {
 
     # LiteLLM - Getting Started
 
+    [https://github.com/BerriAI/litellm](https://github.com/BerriAI/litellm)
+
     __CANARY__(call-100-llms-using-the-same-inputoutput-format)## **Call 100+ LLMs using the same Input/Output Format**
 
     *   Translate inputs to provider's `completion`, `embedding`, and `image_generation` endpoints
-    *   , text responses will always be available at `['choices'][0]['message']['content']`
-    *   Retry/fallback logic across multiple deployments (e.g. Azure/OpenAI) -
-    *   Track spend & set budgets per project
+    *   [Consistent output](https://docs.litellm.ai/docs/completion/output), text responses will always be available at `['choices'][0]['message']['content']`
+    *   Retry/fallback logic across multiple deployments (e.g. Azure/OpenAI) - [Router](https://docs.litellm.ai/docs/routing)
+    *   Track spend & set budgets per project [LiteLLM Proxy Server](https://docs.litellm.ai/docs/simple_proxy)
 
-    __CANARY__(basic-usage)## Basic usage
+    __CANARY__(basic-usage)## Basic usage[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/BerriAI/litellm/blob/main/cookbook/liteLLM_Getting_Started.ipynb)
 
     ```shell
     pip install litellm  
@@ -632,7 +638,7 @@ fn to_md_with_marker() {
         print(e)  
     ```
 
-    __CANARY__(logging-observability---log-llm-inputoutput-docs)## Logging Observability - Log LLM Input/Output ()
+    __CANARY__(logging-observability---log-llm-inputoutput-docs)## Logging Observability - Log LLM Input/Output ([Docs](https://docs.litellm.ai/docs/observability/callbacks))
 
     LiteLLM exposes pre defined callbacks to send data to Lunary, Langfuse, Helicone, Promptlayer, Traceloop, Slack
 
@@ -656,7 +662,7 @@ fn to_md_with_marker() {
 
     __CANARY__(track-costs-usage-latency-for-streaming)## Track Costs, Usage, Latency for streaming
 
-    Use a callback function for this - more info on custom callbacks: 
+    Use a callback function for this - more info on custom callbacks: [https://docs.litellm.ai/docs/observability/custom\_callback](https://docs.litellm.ai/docs/observability/custom_callback)
 
     ```python
     import litellm  
@@ -696,12 +702,12 @@ fn to_md_with_marker() {
 
     The proxy provides:
 
-    1.  
-    2.  
-    3.  
-    4.  
+    1.  [Hooks for auth](https://docs.litellm.ai/docs/proxy/virtual_keys#custom-auth)
+    2.  [Hooks for logging](https://docs.litellm.ai/docs/proxy/logging#step-1---create-your-custom-litellm-callback-class)
+    3.  [Cost tracking](https://docs.litellm.ai/docs/proxy/virtual_keys#tracking-spend)
+    4.  [Rate Limiting](https://docs.litellm.ai/docs/proxy/users#set-rate-limits)
 
-    ### 📖 Proxy Endpoints -
+    ### 📖 Proxy Endpoints - [Swagger Docs](https://litellm-api.up.railway.app/)
 
     ### Quick Start Proxy - CLI
 
@@ -735,9 +741,9 @@ fn to_md_with_marker() {
 
     __CANARY__(more-details)## More details
 
-    *   
-    *   
-    *   
+    *   [exception mapping](/exception_mapping.md)
+    *   [retries + model fallbacks for completion()](/completion/reliable_completions.md)
+    *   [proxy virtual keys & spend management](/tutorials/fallbacks.md)
 
     *   
     *   

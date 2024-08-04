@@ -46,7 +46,6 @@ fn clone_depth<'a>(repo_url: &'a str, dest_path: &'a str, depth: i32) -> bool {
     }
 }
 
-
 #[rustler::nif]
 fn extract_keywords<'a>(content: &'a str, n: usize) -> Vec<String> {
     keywords::extract(content, n).unwrap()
