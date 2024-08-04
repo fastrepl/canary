@@ -66,9 +66,8 @@ defmodule CanaryWeb.Router do
   scope "/api/v1" do
     pipe_through :api
 
-    post "/ask", CanaryWeb.PublicApiController, :ask
-    post "/search", CanaryWeb.PublicApiController, :search
-    post "/analytics", CanaryWeb.PublicApiController, :analytics
+    post "/search/:mode", CanaryWeb.OperationsController, :search
+    post "/ask", CanaryWeb.OperationsController, :ask
 
     forward "/", CanaryWeb.AshRouter
   end

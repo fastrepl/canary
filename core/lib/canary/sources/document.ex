@@ -24,12 +24,6 @@ defmodule Canary.Sources.Document do
   actions do
     defaults [:read]
 
-    read :search do
-      argument :source, :uuid, allow_nil?: false
-      argument :query, :string, allow_nil?: false
-      manual Canary.Sources.Document.Search
-    end
-
     create :create do
       primary? true
 
@@ -53,10 +47,6 @@ defmodule Canary.Sources.Document do
       }
     end
 
-    update :update do
-      primary? true
-    end
-
     destroy :destroy do
       primary? true
       require_atomic? false
@@ -71,15 +61,5 @@ defmodule Canary.Sources.Document do
   postgres do
     table "documents"
     repo Canary.Repo
-  end
-end
-
-defmodule Canary.Sources.Document.Search do
-  use Ash.Resource.ManualRead
-
-  def read(ash_query, _ecto_query, _opts, _context) do
-    source = ash_query.arguments.source
-    query = ash_query.arguments.query
-    Canary.Index.Document.search(source, query)
   end
 end
