@@ -65,6 +65,16 @@
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "summary",
+      "type": "text"
+    },
+    {
+      "allow_nil?": true,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
       "references": {
         "deferrable": false,
         "destination_attribute": "id",
@@ -95,19 +105,23 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "8E7F6732EAE0F98D596671EDD9466ED5C3C2F0DDB23E55E3DA288EAD7D4ABEEA",
+  "hash": "BA6DE6851E4C9A82439AAEFF6159E66AA5D40B987846D2354C9347E206597E78",
   "identities": [
     {
       "all_tenants?": false,
       "base_filter": null,
-      "index_name": "documents_unique_url_index",
+      "index_name": "documents_unique_document_index",
       "keys": [
+        {
+          "type": "atom",
+          "value": "source_id"
+        },
         {
           "type": "atom",
           "value": "url"
         }
       ],
-      "name": "unique_url",
+      "name": "unique_document",
       "nils_distinct?": true,
       "where": null
     }

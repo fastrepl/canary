@@ -1,26 +1,22 @@
 defmodule Canary.Sources.Changes.Index.Destroy do
   use Ash.Resource.Change
 
-  @error_msg "failed to delete document from index"
+  @impl true
+  def atomic(changeset, opts, context) do
+    changeset = change(changeset, opts, context)
+    {:ok, changeset}
+  end
 
   @impl true
   def change(changeset, opts, _context) do
-    doc = doc_from_changeset(changeset, opts)
+    changeset
+    |> Ash.Changeset.after_action(fn _changeset, doc ->
+      id = doc |> Map.get(opts[:index_id_attr])
 
-    case Canary.Index.Document.delete(doc.id) do
-      {:ok, _} ->
-        changeset
-
-      {:error, _} ->
-        changeset |> Ash.Changeset.add_error(field: opts[:result_attr], error: @error_msg)
-    end
-  end
-
-  defp doc_from_changeset(changeset, opts) do
-    opts[:source_attrs]
-    |> Enum.reduce(%{}, fn key, acc ->
-      value = Ash.Changeset.get_argument(changeset, key)
-      acc |> Map.put(key, value)
+      case Canary.Index.delete_document(id) do
+        {:ok, _} -> {:ok, doc}
+        {:error, error} -> {:error, error}
+      end
     end)
   end
 end

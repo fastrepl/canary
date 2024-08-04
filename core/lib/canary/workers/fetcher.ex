@@ -18,30 +18,19 @@ defmodule Canary.Workers.Fetcher do
     inputs =
       pairs
       |> Enum.map(fn {url, html} ->
-        title = html |> Canary.Reader.title_from_html()
-        content = html |> Canary.Reader.markdown_from_html()
-        %{source: src, url: url, title: title, content: content}
+        title = Canary.Reader.title_from_html(html) || ""
+        content = Canary.Reader.markdown_from_html(html)
+        %{source: src.id, url: url, title: title, content: content}
       end)
 
-    to_delete =
-      documents
-      |> Enum.filter(fn doc ->
-        found = Enum.find(inputs, &(&1.url == doc.url))
-        is_nil(found) or doc.content_hash != :crypto.hash(:sha256, found.content)
-      end)
+    opts = [return_records?: false, return_errors?: true]
 
-    case Ash.bulk_destroy(to_delete, :destroy, %{}) do
+    case Ash.bulk_destroy(documents, :destroy, %{}, opts) do
       %Ash.BulkResult{status: :error, errors: errors} -> {:error, errors}
       _ -> {:ok, src}
     end
 
-    to_create =
-      inputs
-      |> Enum.reject(fn input -> Enum.any?(documents, &(&1.url == input.url)) end)
-
-    opts = [return_records?: false, return_errors?: true]
-
-    case Ash.bulk_create(to_create, Document, :ingest_text, opts) do
+    case Ash.bulk_create(inputs, Document, :create, opts) do
       %Ash.BulkResult{status: :error, errors: errors} -> {:error, errors}
       _ -> {:ok, src}
     end

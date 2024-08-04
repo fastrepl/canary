@@ -146,6 +146,7 @@ defmodule Canary.Repo.Migrations.InitResources do
       add :index_id, :bigint
       add :url, :text, null: false
       add :hash, :binary, null: false
+      add :summary, :text
 
       add :source_id,
           references(:sources,
@@ -156,7 +157,7 @@ defmodule Canary.Repo.Migrations.InitResources do
           )
     end
 
-    create unique_index(:documents, [:url], name: "documents_unique_url_index")
+    create unique_index(:documents, [:source_id, :url], name: "documents_unique_document_index")
 
     create table(:clients, primary_key: false) do
       add :id, :uuid, null: false, default: fragment("gen_random_uuid()"), primary_key: true
@@ -412,7 +413,9 @@ defmodule Canary.Repo.Migrations.InitResources do
 
     drop table(:clients)
 
-    drop_if_exists unique_index(:documents, [:url], name: "documents_unique_url_index")
+    drop_if_exists unique_index(:documents, [:source_id, :url],
+                     name: "documents_unique_document_index"
+                   )
 
     drop constraint(:documents, "documents_source_id_fkey")
 

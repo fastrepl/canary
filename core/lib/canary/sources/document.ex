@@ -11,10 +11,11 @@ defmodule Canary.Sources.Document do
     attribute :index_id, :integer, allow_nil?: true
     attribute :url, :string, allow_nil?: false
     attribute :hash, :binary, allow_nil?: false
+    attribute :summary, :string, allow_nil?: true
   end
 
   identities do
-    identity :unique_url, [:url]
+    identity :unique_document, [:source_id, :url]
   end
 
   relationships do
@@ -29,33 +30,45 @@ defmodule Canary.Sources.Document do
 
       argument :source, :uuid, allow_nil?: false
       argument :title, :string, allow_nil?: false
+      argument :titles, {:array, :string}, default: []
       argument :url, :string, allow_nil?: false
       argument :content, :string, allow_nil?: false
       argument :tags, {:array, :string}, default: []
+      argument :summary, :string, allow_nil?: true
 
       change manage_relationship(:source, :source, type: :append)
       change set_attribute(:url, expr(^arg(:url)))
+      change set_attribute(:summary, expr(^arg(:summary)))
 
       change {
         Canary.Sources.Changes.Hash,
-        source_attrs: [:title, :content, :tags], hash_attr: :hash
+        source_attrs: [:title, :titles, :content, :tags], hash_attr: :hash
       }
 
       change {
         Canary.Sources.Changes.Index.Insert,
-        source_attrs: [:title, :content, :tags, :source], result_attr: :index_id
+        index_id_attr: :index_id,
+        source_arg: :source,
+        title_arg: :title,
+        titles_arg: :titles,
+        content_arg: :content,
+        tags_arg: :tags,
+        url_arg: :url
       }
     end
 
     destroy :destroy do
       primary? true
-      require_atomic? false
 
       change {
         Canary.Sources.Changes.Index.Destroy,
-        result_attr: :index_id
+        index_id_attr: :index_id
       }
     end
+  end
+
+  code_interface do
+    define :destroy, args: [], action: :destroy
   end
 
   postgres do

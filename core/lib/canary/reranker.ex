@@ -16,12 +16,12 @@ defmodule Canary.Reranker.Cohere do
 
   use Retry
 
-  def run(query, docs, opts) do
-    threshold = opts[:threshold] || 0.3
+  def run(query, docs, renderer \\ fn doc -> doc end) do
+    threshold = 0.3
 
     result =
       retry with: exponential_backoff() |> randomize |> cap(1_000) |> expiry(4_000) do
-        request(query, docs, opts)
+        request(query, docs, renderer)
       end
 
     case result do
@@ -43,9 +43,7 @@ defmodule Canary.Reranker.Cohere do
     end
   end
 
-  defp request(query, docs, opts) do
-    top_n = opts[:top_n] || 5
-
+  defp request(query, docs, renderer) do
     Canary.rest_client()
     |> Req.post(
       base_url: "https://api.cohere.com/v1",
@@ -54,8 +52,7 @@ defmodule Canary.Reranker.Cohere do
       json: %{
         model: @model,
         query: query,
-        top_n: top_n,
-        documents: Enum.map(docs, &Canary.Renderable.render/1),
+        documents: Enum.map(docs, &renderer.(&1)),
         return_documents: false
       }
     )

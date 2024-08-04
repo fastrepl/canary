@@ -34,5 +34,7 @@ config :phoenix, :plug_init_mode, :runtime
 
 config :canary, Oban, testing: :inline
 
+config :canary, :typesense, collection: "canary_test"
+
 config :ash, :disable_async?, true
 config :ash, :missed_notifications, :ignore

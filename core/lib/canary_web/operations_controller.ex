@@ -30,7 +30,14 @@ defmodule CanaryWeb.OperationsController do
   end
 
   def search(conn, %{"mode" => mode, "query" => query}) do
-    results = if mode == "normal", do: noraml_search(query), else: ai_search(query)
+    source_id = conn.assigns.client.sources |> Enum.at(0) |> Map.get(:id)
+
+    results =
+      if mode == "normal" do
+        normal_search(source_id, query)
+      else
+        ai_search(source_id, query)
+      end
 
     conn
     |> put_resp_content_type("application/json")
@@ -38,12 +45,16 @@ defmodule CanaryWeb.OperationsController do
     |> halt()
   end
 
-  defp noraml_search(query) do
-    [query]
+  defp normal_search(source_id, query) do
+    {:ok, results} = Canary.Index.search_documents(source_id, query)
+    results
   end
 
-  defp ai_search(query) do
-    [query]
+  defp ai_search(source_id, query) do
+    {:ok, queries} = Canary.Query.Understander.run(query)
+    {:ok, docs} = Canary.Index.batch_search_documents(source_id, queries)
+    {:ok, reranked} = Canary.Reranker.run(query, docs, fn doc -> doc.excerpt end)
+    reranked
   end
 
   def ask(conn, %{"id" => id, "query" => query}) do

@@ -1,7 +1,103 @@
-defmodule Canary.Index do
-  @collection "default"
+defmodule Canary.Index.Document do
+  @derive Jason.Encoder
+  defstruct [:source, :title, :content, :tags, :meta]
+end
 
-  def create() do
+defmodule Canary.Index.DocumentMetadata do
+  @derive Jason.Encoder
+  defstruct [:url, :titles]
+end
+
+defmodule Canary.Index do
+  @collection Application.compile_env!(:canary, [:typesense, :collection])
+
+  def search_documents(source, query, tags \\ []) do
+    opts = build_search_opts(source, query, tags)
+
+    case Typesense.Documents.search_collection(@collection, opts) do
+      {:ok, result} ->
+        hits = Map.get(result, :hits, nil) || result["hits"]
+        hits = hits |> Enum.map(&transform_hit/1)
+        {:ok, hits}
+
+      {:error, error} ->
+        {:error, error}
+    end
+  end
+
+  def batch_search_documents(_, _, _ \\ [])
+
+  def batch_search_documents(_, [], _), do: {:ok, []}
+
+  def batch_search_documents(source, queries, tags) do
+    result =
+      Typesense.Documents.multi_search(%Typesense.MultiSearchSearchesParameter{
+        searches:
+          Enum.map(queries, fn query ->
+            struct(
+              Typesense.MultiSearchCollectionParameters,
+              build_search_opts(source, query, tags) ++ [collection: @collection]
+            )
+          end)
+      })
+
+    case result do
+      {:ok, result} ->
+        results = Map.get(result, :results, nil) || result["results"]
+
+        hits =
+          results
+          |> Enum.flat_map(fn %{"hits" => hits} ->
+            hits |> Enum.map(&transform_hit/1)
+          end)
+          |> Enum.dedup_by(& &1.url)
+
+        {:ok, hits}
+
+      error ->
+        error
+    end
+  end
+
+  defp transform_hit(hit) do
+    %{
+      title: hit["highlight"]["title"]["snippet"] || hit["document"]["title"],
+      titles: hit["document"]["meta"]["titles"],
+      url: hit["document"]["meta"]["url"],
+      excerpt: hit["highlight"]["content"]["snippet"] || hit["document"]["content"],
+      tags: hit["document"]["tags"]
+    }
+  end
+
+  defp build_search_opts(source, query, tags) do
+    filter_by =
+      [
+        "source:=#{source}",
+        if(tags != []) do
+          "tags:=[#{Enum.join(tags, ",")}]"
+        end
+      ]
+      |> Enum.reject(&is_nil/1)
+      |> Enum.join(" && ")
+
+    [
+      q: query,
+      query_by: "title,content",
+      filter_by: filter_by,
+      exclude_fields: "id,source"
+    ]
+  end
+
+  def ensure_collection() do
+    with {:error, _} <- Typesense.Collections.get_collection(@collection),
+         {:error, _} <- create_collection() do
+      :error
+    else
+      _ -> :ok
+    end
+  end
+
+  def create_collection() do
     Typesense.Collections.create_collection(%Typesense.CollectionSchema{
       name: @collection,
       fields: [
@@ -16,19 +112,24 @@ defmodule Canary.Index do
     })
   end
 
-  def delete() do
+  def delete_collection() do
     Typesense.Collections.delete_collection(@collection)
   end
-end
 
-defmodule Canary.Index.Document do
-  @collection "default"
+  def delete_document(id) do
+    Typesense.Documents.delete_document(@collection, id)
+  end
 
-  def insert(doc) do
+  def batch_delete_documents(ids) do
+    opts = [filter_by: "id: [#{Enum.join(ids, ",")}]"]
+    Typesense.Documents.delete_documents(@collection, opts)
+  end
+
+  def insert_document(%Canary.Index.Document{} = doc) do
     Typesense.Documents.index_document(@collection, doc)
   end
 
-  def batch_insert(docs) do
+  def batch_insert_documents(docs) do
     result =
       docs
       |> Enum.map(&Jason.encode_to_iodata!/1)
@@ -43,26 +144,26 @@ defmodule Canary.Index.Document do
       )
 
     case result do
-      {:ok, result} -> {:ok, parse_import_result(result)}
+      {:ok, result} -> {:ok, parse_jsonl(result)}
       error -> error
     end
   end
 
-  def delete(id) do
-    Typesense.Documents.delete_document(@collection, id)
-  end
-
-  def batch_delete(ids) do
-    opts = [filter_by: "id: [#{Enum.join(ids, ",")}]"]
-    Typesense.Documents.delete_documents(@collection, opts)
-  end
-
-  def update(doc) do
+  def update_document(%Canary.Index.Document{} = doc) do
     {id, doc} = Map.pop!(doc, :id)
     Typesense.Documents.update_document(@collection, id, doc)
   end
 
-  def batch_update(docs) do
+  def list_documents(source_id) do
+    opts = [filter_by: "source:#{source_id}"]
+
+    case Typesense.Documents.export_documents(@collection, opts) do
+      {:ok, result} -> {:ok, parse_jsonl(result)}
+      error -> error
+    end
+  end
+
+  def batch_update_documents(docs) do
     result =
       docs
       |> Enum.map(&Jason.encode_to_iodata!/1)
@@ -77,32 +178,12 @@ defmodule Canary.Index.Document do
       )
 
     case result do
-      {:ok, result} -> {:ok, parse_import_result(result)}
+      {:ok, result} -> {:ok, parse_jsonl(result)}
       error -> error
     end
   end
 
-  def search(source, query, tags \\ []) do
-    filter_by =
-      [
-        "source:=#{source}",
-        if(tags != []) do
-          "tags:=[#{Enum.join(tags, ",")}]"
-        end
-      ]
-      |> Enum.reject(&is_nil/1)
-      |> Enum.join(" && ")
-
-    opts = [
-      q: query,
-      query_by: "title,content",
-      filter_by: filter_by
-    ]
-
-    Typesense.Documents.search_collection(@collection, opts)
-  end
-
-  defp parse_import_result(result) when is_binary(result) do
+  defp parse_jsonl(result) when is_binary(result) do
     result
     |> String.split("\n")
     |> Enum.map(&Jason.decode!/1)

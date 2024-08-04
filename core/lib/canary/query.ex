@@ -26,7 +26,7 @@ defmodule Canary.Query.Understander.LLM do
     %{
       role: "system",
       content: """
-      You are a techincal support engineer. Based on the user's inquiry, write a structured query to find relevant resources from the internal knowledge base.
+      You are a techincal support engineer. Based on the user's query, write a structured query to find relevant resources from the internal knowledge base.
 
       Your output should strictly follow this format:
 
@@ -44,6 +44,7 @@ defmodule Canary.Query.Understander.LLM do
       I know you don't have enough context to answer the question, but this guess is useful to narrow down the search space.
 
       Do not include any other text, just respond with the XML-like format that I provided.
+      If user's query is totally nonsense, just return <queries></queries>.
       """
     }
   end

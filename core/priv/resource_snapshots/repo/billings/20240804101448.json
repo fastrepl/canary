@@ -11,23 +11,43 @@
       "type": "uuid"
     },
     {
-      "allow_nil?": false,
+      "allow_nil?": true,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "type",
-      "type": "text"
+      "source": "stripe_customer",
+      "type": "map"
+    },
+    {
+      "allow_nil?": true,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "stripe_subscription",
+      "type": "map"
     },
     {
       "allow_nil?": false,
-      "default": "nil",
+      "default": "0",
       "generated?": false,
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "client_session_id",
+      "source": "count_ask",
+      "type": "bigint"
+    },
+    {
+      "allow_nil?": false,
+      "default": "0",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "count_search",
       "type": "bigint"
     },
     {
@@ -48,8 +68,8 @@
           "global": null,
           "strategy": null
         },
-        "name": "sessions_account_id_fkey",
-        "on_delete": null,
+        "name": "billings_account_id_fkey",
+        "on_delete": "nothing",
         "on_update": null,
         "primary_key?": true,
         "schema": "public",
@@ -65,31 +85,8 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "6D8768E4B65C57B3A2557A4C851DAE8ABECED2C39EF7406A75483746EFCC83FB",
-  "identities": [
-    {
-      "all_tenants?": false,
-      "base_filter": null,
-      "index_name": "sessions_unique_session_index",
-      "keys": [
-        {
-          "type": "atom",
-          "value": "account_id"
-        },
-        {
-          "type": "atom",
-          "value": "type"
-        },
-        {
-          "type": "atom",
-          "value": "client_session_id"
-        }
-      ],
-      "name": "unique_session",
-      "nils_distinct?": true,
-      "where": null
-    }
-  ],
+  "hash": "FD28B0654BC49759BC9B939BDBD09B20A742FF144F4149BCC2AF78A4FE72FC3F",
+  "identities": [],
   "multitenancy": {
     "attribute": null,
     "global": null,
@@ -97,5 +94,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "sessions"
+  "table": "billings"
 }

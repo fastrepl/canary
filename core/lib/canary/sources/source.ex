@@ -20,6 +20,7 @@ defmodule Canary.Sources.Source do
   aggregates do
     count :num_documents, :documents
     max :last_updated, :documents, :created_at
+    list :summaries, :documents, :summary
   end
 
   actions do

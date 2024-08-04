@@ -32,5 +32,7 @@ config :opentelemetry,
 
 config :canary, :github_app_url, "https://github.com/apps/getcanary/installations/new"
 
+config :canary, :typesense, collection: "canary_prod"
+
 # Runtime production configuration, including reading
 # of environment variables, is done on config/runtime.exs.
