@@ -15,9 +15,14 @@ export default {
   },
 } satisfies Meta;
 
-export const Short: StoryObj = { args: { text: "<mark>123</mark> 123" } };
+export const Short: StoryObj = {
+  args: {
+    text: "<canary-snippet>123</canary-snippet> 123 <mark>123</mark>",
+  },
+};
+
 export const Long: StoryObj = {
   args: {
-    text: "123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 <mark>123</mark> 123 123",
+    text: "123 <h2>123</h2> 123 123 123 123 123 123 123 123 123 123 123 123 123 123 <mark>123</mark> 123 123",
   },
 };

@@ -11,7 +11,7 @@ export class CanarySnippet extends LitElement {
   private _maxLength = 110;
 
   render() {
-    const content = this._strip(this.value, this._maxLength);
+    const content = this._strip(this._sanitize(this.value), this._maxLength);
     return html` <span class="excerpt">${unsafeHTML(content)}</span> `;
   }
 
@@ -31,12 +31,22 @@ export class CanarySnippet extends LitElement {
     }
   `;
 
-  private _strip(excerpt: string, maxLength: number) {
+  private _sanitize(html: string) {
+    return html
+      .replace(/<mark>/g, "__MARK_START__")
+      .replace(/<\/mark>/g, "__MARK_END__")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/__MARK_START__/g, "<mark>")
+      .replace(/__MARK_END__/g, "</mark>");
+  }
+
+  private _strip(html: string, maxLength: number) {
     const markRegex = /<mark>(.*?)<\/mark>/;
-    const match = excerpt.match(markRegex);
+    const match = html.match(markRegex);
 
     if (!match) {
-      return excerpt.slice(0, maxLength);
+      return html.slice(0, maxLength);
     }
 
     const markIndex = match.index!;
@@ -46,9 +56,9 @@ export class CanarySnippet extends LitElement {
       0,
       markIndex - Math.floor((maxLength - markLength) / 2),
     );
-    const end = Math.min(excerpt.length, start + maxLength);
+    const end = Math.min(html.length, start + maxLength);
 
-    return excerpt.slice(start, end);
+    return html.slice(start, end);
   }
 }
 
