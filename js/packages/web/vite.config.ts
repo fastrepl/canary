@@ -1,10 +1,14 @@
-import { defineConfig } from "vite";
 import { resolve } from "path";
 
+import { defineConfig } from "vite";
+import unocss from "unocss/vite";
 import dts from "vite-plugin-dts";
 
 export default defineConfig({
-  plugins: [dts({ exclude: ["**/*.stories.*"] })],
+  plugins: [
+    unocss({ mode: "shadow-dom" }),
+    dts({ exclude: ["**/*.stories.*"] }),
+  ],
   build: {
     minify: "terser",
     terserOptions: {

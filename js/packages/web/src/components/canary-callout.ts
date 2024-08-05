@@ -1,11 +1,10 @@
-import { LitElement, html } from "lit";
+import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
 import { StringArray } from "../converters";
 import { CalloutController } from "../controllers";
 
 import { callout } from "../styles";
-import "./canary-hero-icon";
 
 const NAME = "canary-callout";
 
@@ -24,14 +23,14 @@ export class CanaryCallout extends LitElement {
 
   private _callout = new CalloutController(this);
 
-  renderCallout() {
+  render() {
     return this._callout.render(
       () => html`
         <button @click=${this._handleClick}>
-          <span> 👋 ${this.message} </span>
+          <span>${this.message}</span>
           <div>
             <slot name="logo"></slot>
-            <canary-hero-icon name="arrow-up-right"></canary-hero-icon>
+            <div class="icon i-heroicons-arrow-up-right"></div>
           </div>
         </button>
       `,
@@ -43,7 +42,16 @@ export class CanaryCallout extends LitElement {
     window.open(this.url, "_blank");
   }
 
-  static styles = callout;
+  static styles = [
+    css`
+      @unocss-placeholder;
+
+      .icon {
+        color: var(--canary-color-gray-20);
+      }
+    `,
+    callout,
+  ];
 }
 
 declare global {

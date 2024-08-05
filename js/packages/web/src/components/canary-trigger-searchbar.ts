@@ -5,8 +5,6 @@ import { KeyboardTriggerController } from "../controllers";
 import type { TriggerShortcut } from "../types";
 import { wrapper } from "../styles";
 
-import "./canary-hero-icon";
-
 const NAME = "canary-trigger-searchbar";
 
 @customElement(NAME)
@@ -16,7 +14,7 @@ export class CanaryTriggerSearchbar extends LitElement {
   render() {
     return html`
       <button aria-label="Search">
-        <canary-hero-icon name="magnifying-glass"></canary-hero-icon>
+        <div class="icon i-heroicons-magnifying-glass"></div>
         <span>Search</span>
 
         ${this.shortcut === "cmdk"
@@ -42,6 +40,13 @@ export class CanaryTriggerSearchbar extends LitElement {
 
   static styles = [
     wrapper,
+    css`
+      @unocss-placeholder;
+
+      .icon {
+        color: var(--canary-color-gray-20);
+      }
+    `,
     css`
       :host {
         display: contents;

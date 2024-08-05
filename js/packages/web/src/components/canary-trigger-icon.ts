@@ -5,8 +5,6 @@ import type { TriggerShortcut } from "../types";
 import { KeyboardTriggerController } from "../controllers";
 import { wrapper } from "../styles";
 
-import "./canary-hero-icon";
-
 const NAME = "canary-trigger-icon";
 
 @customElement(NAME)
@@ -15,9 +13,10 @@ export class CanaryTriggerIcon extends LitElement {
 
   render() {
     return html`
-      <button aria-label="Search">
-        <canary-hero-icon name="magnifying-glass"></canary-hero-icon>
-      </button>
+      <button
+        aria-label="Search"
+        class="icon i-heroicons-magnifying-glass"
+      ></button>
     `;
   }
 
@@ -28,6 +27,13 @@ export class CanaryTriggerIcon extends LitElement {
 
   static styles = [
     wrapper,
+    css`
+      @unocss-placeholder;
+
+      .icon {
+        color: var(--canary-color-gray-20);
+      }
+    `,
     css`
       button {
         cursor: pointer;

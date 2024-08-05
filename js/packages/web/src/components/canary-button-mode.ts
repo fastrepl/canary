@@ -3,8 +3,6 @@ import { customElement, property } from "lit/decorators.js";
 
 import { customEvent } from "../events";
 
-import "./canary-hero-icon";
-
 const NAME = "canary-button-mode";
 
 @customElement(NAME)

@@ -10,6 +10,7 @@ import "./canary-content";
 import "./canary-mode-tabs";
 import "./canary-mode-breadcrumb";
 import "./canary-button-mode";
+import "./canary-hero-icon";
 
 import "./canary-ask";
 import "./canary-ask-input";

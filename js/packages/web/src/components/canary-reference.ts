@@ -5,7 +5,6 @@ import { classMap } from "lit/directives/class-map.js";
 import { urlToParts } from "../utils";
 import { customEvent } from "../events";
 
-import "./canary-hero-icon";
 import "./canary-snippet";
 
 const NAME = "canary-reference";
@@ -38,7 +37,7 @@ export class CanaryReference extends LitElement {
             : nothing}
         </div>
         <div class=${classMap({ arrow: true, selected: this.selected })}>
-          <canary-hero-icon name="chevron-right"></canary-hero-icon>
+          <div class="icon i-heroicons-chevron-right"></div>
         </div>
       </button>
     `;
@@ -60,7 +59,7 @@ export class CanaryReference extends LitElement {
               i < parts.length - 1
                 ? html`
                     <span class="path">${part}</span>
-                    <canary-hero-icon name="chevron-right"></canary-hero-icon>
+                    <div class="icon i-heroicons-chevron-right"></div>
                   `
                 : html`<span class="path">${part}</span>`,
             )}
@@ -68,88 +67,97 @@ export class CanaryReference extends LitElement {
     `;
   }
 
-  static styles = css`
-    .container {
-      position: relative;
-      cursor: pointer;
-      overflow: hidden;
+  static styles = [
+    css`
+      @unocss-placeholder;
 
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: space-between;
+      .icon {
+        color: var(--canary-color-gray-20);
+      }
+    `,
+    css`
+      .container {
+        position: relative;
+        cursor: pointer;
+        overflow: hidden;
 
-      padding: 8px 12px;
-      border: 1px solid var(--canary-color-gray-90);
-      border-radius: 8px;
-      background-color: var(--canary-is-light, var(--canary-color-gray-95))
-        var(--canary-is-dark, var(--canary-color-gray-80));
-    }
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
 
-    .container:hover,
-    .selected {
-      background-color: var(--canary-is-light, var(--canary-color-primary-95))
-        var(--canary-is-dark, var(--canary-color-primary-70));
-    }
+        padding: 8px 12px;
+        border: 1px solid var(--canary-color-gray-90);
+        border-radius: 8px;
+        background-color: var(--canary-is-light, var(--canary-color-gray-95))
+          var(--canary-is-dark, var(--canary-color-gray-80));
+      }
 
-    .selected .arrow,
-    .container:hover .arrow {
-      opacity: 0.5;
-    }
+      .container:hover,
+      .selected {
+        background-color: var(--canary-is-light, var(--canary-color-primary-95))
+          var(--canary-is-dark, var(--canary-color-primary-70));
+      }
 
-    .arrow {
-      position: absolute;
-      top: 45%;
-      right: 8px;
-      opacity: 0;
-    }
+      .selected .arrow,
+      .container:hover .arrow {
+        opacity: 0.5;
+      }
 
-    .content {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 3px;
+      .arrow {
+        position: absolute;
+        top: 45%;
+        right: 8px;
+        opacity: 0;
+      }
 
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: calc(100% - 20px);
-    }
+      .content {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 3px;
 
-    .paths {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      gap: 2px;
-      margin-bottom: 2px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: calc(100% - 20px);
+      }
 
-      color: var(--canary-color-gray-30);
-      font-size: 13px;
-    }
+      .paths {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 2px;
+        margin-bottom: 2px;
 
-    .path {
-      max-width: 120px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
+        color: var(--canary-color-gray-30);
+        font-size: 13px;
+      }
 
-    button {
-      cursor: pointer;
-      width: 100%;
-    }
+      .path {
+        max-width: 120px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
 
-    .title {
-      --canary-snippet-color: var(--canary-color-gray-10);
-      --canary-snippet-font-size: 16px;
-      --canary-snippet-font-weight: 500;
-    }
+      button {
+        cursor: pointer;
+        width: 100%;
+      }
 
-    .excerpt {
-      --canary-snippet-color: var(--canary-color-gray-20);
-      --canary-snippet-font-size: 14px;
-      --canary-snippet-font-weight: 400;
-    }
-  `;
+      .title {
+        --canary-snippet-color: var(--canary-color-gray-10);
+        --canary-snippet-font-size: 16px;
+        --canary-snippet-font-weight: 500;
+      }
+
+      .excerpt {
+        --canary-snippet-color: var(--canary-color-gray-20);
+        --canary-snippet-font-size: 14px;
+        --canary-snippet-font-weight: 400;
+      }
+    `,
+  ];
 }
 
 declare global {

@@ -4,8 +4,6 @@ import { customElement, property } from "lit/decorators.js";
 import { customEvent } from "../events";
 import { input } from "../styles";
 
-import "./canary-hero-icon";
-
 const NAME = "canary-ask-input";
 
 @customElement(NAME)

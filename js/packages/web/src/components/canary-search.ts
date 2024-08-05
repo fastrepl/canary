@@ -11,7 +11,6 @@ import { customEvent } from "../events";
 
 import "./canary-mode-tabs";
 import "./canary-search-empty";
-import "./canary-hero-icon";
 
 const NAME = "canary-search";
 
@@ -56,7 +55,7 @@ export class CanarySearch extends LitElement {
           <div class="container">
             <div class="input-wrapper">
               <slot name="input-before">
-                <canary-hero-icon name="magnifying-glass"></canary-hero-icon>
+                <div class="icon i-heroicons-magnifying-glass"></div>
               </slot>
               <slot name="input"></slot>
               <slot name="input-after"></slot>
@@ -90,31 +89,40 @@ export class CanarySearch extends LitElement {
     return nothing;
   }
 
-  static styles = css`
-    .container {
-      display: flex;
-      flex-direction: column;
-    }
+  static styles = [
+    css`
+      @unocss-placeholder;
 
-    .input-wrapper {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 4px;
-      padding: 1px 12px;
-    }
+      .icon {
+        color: var(--canary-color-gray-20);
+      }
+    `,
+    css`
+      .container {
+        display: flex;
+        flex-direction: column;
+      }
 
-    .callouts {
-      display: flex;
-      flex-direction: column;
-      padding: 0px 12px;
-    }
+      .input-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 4px;
+        padding: 1px 12px;
+      }
 
-    .results {
-      display: flex;
-      flex-direction: column;
-    }
-  `;
+      .callouts {
+        display: flex;
+        flex-direction: column;
+        padding: 0px 12px;
+      }
+
+      .results {
+        display: flex;
+        flex-direction: column;
+      }
+    `,
+  ];
 }
 
 declare global {
