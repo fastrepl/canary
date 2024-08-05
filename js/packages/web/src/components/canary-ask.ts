@@ -1,14 +1,14 @@
-import { consume } from "@lit/context";
 import { LitElement, html, css, nothing } from "lit";
 import { customElement, state } from "lit/decorators.js";
 
+import { consume } from "@lit/context";
 import { modeContext } from "../contexts";
+
 import type { ModeContext } from "../types";
 import { MODE_ASK } from "../constants";
+import { customEvent } from "../events";
 
 import "./canary-mode-tabs";
-import "./canary-hero-icon";
-import { customEvent } from "../events";
 
 const NAME = "canary-ask";
 
@@ -33,7 +33,7 @@ export class CanaryAsk extends LitElement {
           <div class="container">
             <div class="input-wrapper">
               <slot name="input-before">
-                <canary-hero-icon name="chat-bubble-left"></canary-hero-icon>
+                <div class="icon i-heroicons-chat-bubble-left"></div>
               </slot>
               <slot name="input"></slot>
               <slot name="input-after"></slot>
@@ -45,20 +45,29 @@ export class CanaryAsk extends LitElement {
         `;
   }
 
-  static styles = css`
-    .container {
-      display: flex;
-      flex-direction: column;
-      padding: 0px 12px;
-    }
+  static styles = [
+    css`
+      @unocss-placeholder;
 
-    .input-wrapper {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 4px;
-    }
-  `;
+      .icon {
+        color: var(--canary-color-gray-20);
+      }
+    `,
+    css`
+      .container {
+        display: flex;
+        flex-direction: column;
+        padding: 0px 12px;
+      }
+
+      .input-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 4px;
+      }
+    `,
+  ];
 }
 
 declare global {

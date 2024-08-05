@@ -3,8 +3,6 @@ import { customElement, property } from "lit/decorators.js";
 
 import { customEvent } from "../events";
 
-import "./canary-hero-icon";
-
 const NAME = "canary-mode-breadcrumb";
 
 @customElement(NAME)
@@ -15,18 +13,18 @@ export class CanaryModeBreadcrumb extends LitElement {
   render() {
     return html`
       <div class="container">
-        <canary-hero-icon
-          name="chevron-left"
+        <button
+          class="icon i-heroicons-chevron-left"
           @click=${this._handleClick}
-        ></canary-hero-icon>
+        ></button>
 
         <div class="mode">
-          <slot name="icon"></slot>
+          <slot name="icon"> </slot>
           <span>${this.text}</span>
-          <canary-hero-icon
-            name="x-mark"
+          <button
+            class="icon i-heroicons-x-mark"
             @click=${this._handleClick}
-          ></canary-hero-icon>
+          ></button>
         </div>
       </div>
     `;
@@ -36,38 +34,47 @@ export class CanaryModeBreadcrumb extends LitElement {
     this.dispatchEvent(customEvent({ name: "mode-set", data: this.previous }));
   }
 
-  static styles = css`
-    div.container {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
+  static styles = [
+    css`
+      @unocss-placeholder;
 
-    canary-hero-icon {
-      cursor: pointer;
-    }
+      .icon {
+        color: var(--canary-color-gray-20);
+      }
+    `,
+    css`
+      div.container {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
 
-    div.mode {
-      display: flex;
-      align-items: center;
-      gap: 4px;
+      button {
+        cursor: pointer;
+      }
 
-      margin-left: 2px;
-      font-size: 12px;
+      div.mode {
+        display: flex;
+        align-items: center;
+        gap: 4px;
 
-      padding: 4px 8px;
-      border-radius: 8px;
-      border: 1px solid var(--canary-is-light, var(--canary-color-gray-90))
-        var(--canary-is-dark, var(--canary-color-gray-60));
+        margin-left: 2px;
+        font-size: 12px;
 
-      color: var(--canary-color-gray-20);
-      background-color: var(--canary-color-gray-100);
-    }
+        padding: 4px 8px;
+        border-radius: 8px;
+        border: 1px solid var(--canary-is-light, var(--canary-color-gray-90))
+          var(--canary-is-dark, var(--canary-color-gray-60));
 
-    span {
-      white-space: nowrap;
-    }
-  `;
+        color: var(--canary-color-gray-20);
+        background-color: var(--canary-color-gray-100);
+      }
+
+      span {
+        white-space: nowrap;
+      }
+    `,
+  ];
 }
 
 declare global {
