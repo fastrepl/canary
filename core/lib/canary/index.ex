@@ -10,6 +10,7 @@ end
 
 defmodule Canary.Index do
   @collection Application.compile_env!(:canary, [:typesense, :collection])
+  @stopwords "default_stopwords"
 
   def search_documents(source, query, tags \\ []) do
     opts = build_search_opts(source, query, tags)
@@ -83,8 +84,15 @@ defmodule Canary.Index do
     [
       q: query,
       query_by: "title,content",
+      query_by_weights: "3,2",
       filter_by: filter_by,
-      exclude_fields: "id,source"
+      sort_by: "_text_match:desc",
+      exclude_fields: "id,source",
+      prefix: true,
+      prioritize_exact_match: false,
+      prioritize_token_position: false,
+      prioritize_num_matching_fields: true,
+      stopwords: @stopwords
     ]
   end
 
@@ -95,6 +103,13 @@ defmodule Canary.Index do
     else
       _ -> :ok
     end
+  end
+
+  def ensure_stopwords() do
+    Typesense.Stopwords.upsert_stopwords_set(@stopwords, %Typesense.StopwordsSetUpsertSchema{
+      locale: "en",
+      stopwords: Canary.Native.stopwords()
+    })
   end
 
   def create_collection() do

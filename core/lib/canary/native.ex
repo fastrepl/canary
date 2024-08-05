@@ -19,5 +19,8 @@ defmodule Canary.Native do
   @spec extract_keywords(String.t(), non_neg_integer()) :: list(String.t())
   def extract_keywords(_content, _n), do: error()
 
+  @spec stopwords() :: list(String.t())
+  def stopwords(), do: error()
+
   defp error(), do: :erlang.nif_error(:nif_not_loaded)
 end
