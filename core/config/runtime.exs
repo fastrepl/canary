@@ -132,6 +132,11 @@ if config_env() != :test do
     config :oapi_github, app_name: "getcanary.dev"
   end
 
+  if System.get_env("JINA_API_KEY") do
+    config :canary, :jina_api_key, System.fetch_env!("JINA_API_KEY")
+    config :canary, :reranker, Canary.Reranker.Jina
+  end
+
   if System.get_env("COHERE_API_KEY") do
     config :canary, :cohere_api_key, System.fetch_env!("COHERE_API_KEY")
     config :canary, :reranker, Canary.Reranker.Cohere

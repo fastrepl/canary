@@ -51,9 +51,9 @@ defmodule CanaryWeb.OperationsController do
   end
 
   defp ai_search(source_id, query) do
-    {:ok, queries} = Canary.Query.Understander.run(query)
-    {:ok, docs} = Canary.Index.batch_search_documents(source_id, queries)
-    {:ok, reranked} = Canary.Reranker.run(query, docs, fn doc -> doc.excerpt end)
+    {:ok, analysis} = Canary.Query.Understander.run(query)
+    {:ok, docs} = Canary.Index.batch_search_documents(source_id, analysis.keywords)
+    {:ok, reranked} = Canary.Reranker.run(analysis.query, docs, fn doc -> doc.content end)
     reranked
   end
 

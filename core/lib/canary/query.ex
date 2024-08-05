@@ -1,5 +1,10 @@
+defmodule Canary.Query.UnderstanderResult do
+  defstruct [:query, :keywords]
+  @type t :: %__MODULE__{query: String.t(), keywords: list(String.t())}
+end
+
 defmodule Canary.Query.Understander do
-  @callback run(String.t()) :: {:ok, list(String.t())} | {:error, any()}
+  @callback run(String.t()) :: {:ok, Canary.Query.UnderstanderResult.t()} | {:error, any()}
 
   def run(query), do: impl().run(query)
   defp impl(), do: Canary.Query.Understander.LLM
@@ -17,7 +22,7 @@ defmodule Canary.Query.Understander.LLM do
     ]
 
     case Canary.AI.chat(%{model: chat_model, messages: messages}) do
-      {:ok, result} -> {:ok, parse(result)}
+      {:ok, analysis} -> {:ok, parse(query, analysis)}
       error -> error
     end
   end
@@ -26,34 +31,41 @@ defmodule Canary.Query.Understander.LLM do
     %{
       role: "system",
       content: """
-      You are a techincal support engineer. Based on the user's query, write a structured query to find relevant resources from the internal knowledge base.
+      You are a world class techincal support engineer.
+      Your job is to analyze the user's query and return a structured response like below:
 
-      Your output should strictly follow this format:
-
-      <queries>
-      <query><FIRST_QUERY></query>
-      <query><SECOND_QUERY></query>
-      <query><THIRD_QUERY></query>
-      </queries>
+      <analysis>
+      <query>QUERY</query>
+      <keywords>KEYWORD_1,KEYWORD_2,KEYWORD_3</keywords>
+      </analysis>
 
       IMPORTANT NOTES:
-      - There can be multiple "<query>" within the "<queries>". Max 3 queries are allowed.
-      - Inside each "<query>", you should only include query that consists of 1~3 words that will be used to run keyword based search.
-      - Keywords in the user's query might be better rephrased for better search results.
-
-      I know you don't have enough context to answer the question, but this guess is useful to narrow down the search space.
+      - <keywords></keywords> should contain comma separated list of keywords. MAX 3 keywords are allowed.
+      - Each "keyword" should be one or two words. It will be used to run keyword based search.
+      - You might need to guess better keywords, correct typos, or rephrase the user's query.
+      - There should be only one "<query>" within the "<analysis>".
+      - The "query" is simply rephrased version of the user's query for better search results. Should end with a question mark, single sentence, and less than 12 words.
 
       Do not include any other text, just respond with the XML-like format that I provided.
-      If user's query is totally nonsense, just return <queries></queries>.
+      If user's query is totally nonsense, just return <analysis></analysis>.
       """
     }
   end
 
-  defp parse(text) do
-    pattern = ~r/<query>(.*?)<\/query>/s
+  defp parse(original_query, completion) do
+    keywords =
+      ~r/<keywords>(.*?)<\/keywords>/s
+      |> Regex.scan(completion, capture: :all_but_first)
+      |> Enum.flat_map(fn [keywords] ->
+        keywords |> String.split(",") |> Enum.map(&String.trim/1)
+      end)
 
-    pattern
-    |> Regex.scan(text, capture: :all_but_first)
-    |> Enum.map(fn [query] -> String.trim(query) end)
+    query =
+      ~r/<query>(.*?)<\/query>/s
+      |> Regex.scan(completion, capture: :all_but_first)
+      |> Enum.map(fn [query] -> String.trim(query) end)
+      |> Enum.at(0, nil)
+
+    %Canary.Query.UnderstanderResult{keywords: keywords, query: query || original_query}
   end
 end
