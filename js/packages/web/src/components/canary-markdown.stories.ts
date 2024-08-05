@@ -7,36 +7,77 @@ export default {
   title: "Public/canary-markdown",
   parameters: { sourceLink: "components/canary-markdown.stories.ts" },
   render: ({ content }: any) => {
-    return html` <canary-markdown .content=${content}></canary-markdown> `;
+    return html`
+      <div
+        style="width: 500px; padding: 12px; border: 1px solid black; border-radius: 8px;"
+      >
+        <canary-markdown .content=${content}></canary-markdown>
+      </div>
+    `;
   },
 } satisfies Meta;
 
-export const Headers: StoryObj = {
+export const Example: StoryObj = {
   args: {
     content: `
-# Hello World
-123
+# Heading 1
 
-## Hello World
-234
+Lorem ipsum odor amet, consectetuer adipiscing elit. Sapien himenaeos habitasse iaculis massa facilisi sit; neque in. Sem sollicitudin dolor aliquam at lectus.
 
-### Hello World
-345`,
-  },
-};
+## Heading 2
 
-export const Code: StoryObj = {
-  args: {
-    content: `
+Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.
+
+### Heading 3
+
+- Unordered list item 1
+- Unordered list item 2
+  - Nested list item 1
+  - Nested list item 2
+    - Nested nested item
+
+1. Ordered list item 1
+2. Ordered list item 2
+   1. Nested ordered item 1
+   2. Nested ordered item 2
+
+### Blockquote
+
+> This is a blockquote.
+> 
+> Multiline blockquote with **bold text** and *italic text*.
+
+### Inline Code
+
+This is an example of \`inline code\` inside a sentence.
+
+### Code Block
+
 \`\`\`python
-def hello():
-  print("hello")
+def hello_world():
+    print("Hello, World!")
+
+hello_world()
 \`\`\`
 
-\`\`\`
-const hello = () => {
-  console.log("hello");
-};
-\`\`\``,
+### Horizontal Rule
+
+---
+
+### Bold and Italic Text
+
+This text is **bold**, this is *italic*, and this is ***both bold and italic***.
+
+### Superscript
+
+This text contains a superscript<sup><a href="https://getcanary.dev">1</a></sup>.
+
+### Links
+
+Here is a [link to Google](https://www.google.com).
+
+### Images
+
+![Alt text for the image](https://via.placeholder.com/150)`,
   },
 };

@@ -1,5 +1,9 @@
 import { css } from "lit";
 
+// @ts-expect-error
+import { minireset as reset } from "minireset.css/minireset.css.lit.js";
+export { reset };
+
 export const callout = css`
   button {
     cursor: pointer;
@@ -49,10 +53,6 @@ export const input = css`
   input::placeholder {
     color: var(--canary-color-gray-40);
     font-size: 14px;
-  }
-
-  canary-hero-icon {
-    width: 24px;
   }
 `;
 

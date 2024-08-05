@@ -15,7 +15,8 @@ import { MOCK_RESPONSE, mockAskReference, mockSearchReferences } from "./mock";
 const preview: Preview = {
   loaders: [mswLoader],
   decorators: [
-    (story) => html`<canary-root>${story()}</canary-root>`,
+    (story) =>
+      html`<canary-root framework="starlight">${story()}</canary-root>`,
     withThemeByDataAttribute({
       themes: { light: "light", dark: "dark" },
       parentSelector: "html",
