@@ -30,13 +30,13 @@ defmodule CanaryWeb.OperationsController do
   end
 
   def search(conn, %{"mode" => mode, "query" => query}) do
-    source_id = conn.assigns.client.sources |> Enum.at(0) |> Map.get(:id)
+    source = conn.assigns.client.sources |> Enum.at(0)
 
     results =
       if mode == "normal" do
-        normal_search(source_id, query)
+        normal_search(source, query)
       else
-        ai_search(source_id, query)
+        ai_search(source, query)
       end
 
     conn
@@ -45,14 +45,16 @@ defmodule CanaryWeb.OperationsController do
     |> halt()
   end
 
-  defp normal_search(source_id, query) do
-    {:ok, results} = Canary.Index.search_documents(source_id, query)
+  defp normal_search(source, query) do
+    {:ok, results} = Canary.Index.search_documents(source.id, query)
     results
   end
 
-  defp ai_search(source_id, query) do
-    {:ok, analysis} = Canary.Query.Understander.run(query)
-    {:ok, docs} = Canary.Index.batch_search_documents(source_id, analysis.keywords)
+  defp ai_search(source, query) do
+    source = source |> Ash.load!(:summaries)
+
+    {:ok, analysis} = Canary.Query.Understander.run(query, Enum.join(source.summaries, "\n"))
+    {:ok, docs} = Canary.Index.batch_search_documents(source.id, analysis.keywords)
     {:ok, reranked} = Canary.Reranker.run(analysis.query, docs, fn doc -> doc.content end)
     reranked
   end

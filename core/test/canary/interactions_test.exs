@@ -2,10 +2,6 @@ defmodule Canary.Test.Interactions do
   use Canary.DataCase
   import Canary.AccountsFixtures
 
-  import Mox
-  setup :set_mox_from_context
-  setup :verify_on_exit!
-
   alias Canary.Sources.Source
   alias Canary.Interactions.Session
   alias Canary.Interactions.Client

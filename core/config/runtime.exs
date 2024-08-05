@@ -118,12 +118,12 @@ end
 
 config :nostrum, :token, System.get_env("DISCORD_BOT_TOKEN")
 
-if config_env() != :test do
-  config :canary, :openai_api_base, System.get_env("OPENAI_API_BASE")
-  config :canary, :openai_api_key, System.get_env("OPENAI_API_KEY")
-  config :canary, :chat_completion_model, System.get_env("CHAT_COMPLETION_MODEL")
-  config :canary, :text_embedding_model, System.get_env("TEXT_EMBEDDING_MODEL")
+config :canary, :openai_api_base, System.get_env("OPENAI_API_BASE")
+config :canary, :openai_api_key, System.get_env("OPENAI_API_KEY")
+config :canary, :chat_completion_model, System.get_env("CHAT_COMPLETION_MODEL")
+config :canary, :text_embedding_model, System.get_env("TEXT_EMBEDDING_MODEL")
 
+if config_env() != :test do
   if System.get_env("GITHUB_CLIENT_ID") && System.get_env("GITHUB_CLIENT_SECRET") do
     config :oapi_github,
       app_name: "getcanary.dev",

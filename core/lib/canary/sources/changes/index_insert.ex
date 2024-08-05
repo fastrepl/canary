@@ -1,19 +1,33 @@
 defmodule Canary.Sources.Changes.Index.Insert do
   use Ash.Resource.Change
 
+  @error_msg "failed to index"
+
   @impl true
   def change(changeset, opts, _context) do
     doc = doc_from_changeset(changeset, opts)
 
-    case Canary.Index.insert_document(doc) do
-      {:ok, result} ->
-        changeset
-        |> Ash.Changeset.force_change_attribute(opts[:index_id_attr], result["id"])
+    changeset
+    |> Ash.Changeset.before_action(fn changeset ->
+      case Canary.Index.insert_document(doc) do
+        {:ok, result} ->
+          changeset
+          |> Ash.Changeset.force_change_attribute(opts[:index_id_attr], result["id"])
 
-      {:error, e} ->
-        changeset
-        |> Ash.Changeset.add_error(field: opts[:index_id_attr], error: e.message)
-    end
+        {:error, _} ->
+          changeset
+          |> Ash.Changeset.add_error(field: opts[:index_id_attr], error: @error_msg)
+      end
+    end)
+    |> Ash.Changeset.after_action(fn changeset, record ->
+      content = changeset |> Ash.Changeset.get_argument(:content)
+
+      %{document_id: record.id, content: content}
+      |> Canary.Workers.Summary.new()
+      |> Oban.insert()
+
+      {:ok, record}
+    end)
   end
 
   defp doc_from_changeset(changeset, opts) do

@@ -65,10 +65,16 @@ defmodule Canary.Sources.Document do
         index_id_attr: :index_id
       }
     end
+
+    update :update_summary do
+      argument :summary, :string, allow_nil?: false
+      change set_attribute(:summary, expr(^arg(:summary)))
+    end
   end
 
   code_interface do
     define :destroy, args: [], action: :destroy
+    define :update_summary, args: [:summary], action: :update_summary
   end
 
   postgres do

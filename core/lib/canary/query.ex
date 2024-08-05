@@ -4,21 +4,25 @@ defmodule Canary.Query.UnderstanderResult do
 end
 
 defmodule Canary.Query.Understander do
-  @callback run(String.t()) :: {:ok, Canary.Query.UnderstanderResult.t()} | {:error, any()}
+  @callback run(String.t(), String.t()) ::
+              {:ok, Canary.Query.UnderstanderResult.t()} | {:error, any()}
 
-  def run(query), do: impl().run(query)
+  def run(query, summary), do: impl().run(query, summary)
   defp impl(), do: Canary.Query.Understander.LLM
 end
 
 defmodule Canary.Query.Understander.LLM do
   @behaviour Canary.Query.Understander
 
-  def run(query) do
+  def run(query, summary) do
     chat_model = Application.fetch_env!(:canary, :chat_completion_model)
 
     messages = [
       system_message(),
-      %{role: "user", content: "User: #{query}"}
+      %{
+        role: "user",
+        content: "These are summaries of documents: #{summary}\n\nUser query: #{query}"
+      }
     ]
 
     case Canary.AI.chat(%{model: chat_model, messages: messages}) do

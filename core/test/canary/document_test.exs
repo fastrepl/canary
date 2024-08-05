@@ -2,6 +2,9 @@ defmodule Canary.Test.Document do
   use Canary.DataCase, async: false
   import Canary.AccountsFixtures
 
+  import Mox
+  setup :verify_on_exit!
+
   setup do
     account = account_fixture()
     source = Canary.Sources.Source.create_web!(account, "https://example.com")
@@ -12,8 +15,11 @@ defmodule Canary.Test.Document do
   end
 
   test "create", %{source: source} do
-    {:ok, docs} = Canary.Index.search_documents(source.id, "hello")
+    {:ok, docs} = Canary.Index.list_documents(source.id)
     assert length(docs) == 0
+
+    Canary.AI.Mock
+    |> expect(:chat, 2, fn _, _ -> {:ok, "completion"} end)
 
     create_result =
       Ash.bulk_create(
@@ -40,7 +46,8 @@ defmodule Canary.Test.Document do
     assert create_result.status == :success
 
     assert Canary.Repo.all(Canary.Sources.Document) |> length() == 0 + 2
-    {:ok, docs} = Canary.Index.search_documents(source.id, "hello")
+
+    {:ok, docs} = Canary.Index.list_documents(source.id)
     assert length(docs) == 0 + 2
 
     target = create_result.records |> Enum.at(1)
@@ -48,7 +55,7 @@ defmodule Canary.Test.Document do
     assert delete_result.status == :success
 
     assert Canary.Repo.all(Canary.Sources.Document) |> length() == 2 - 1
-    {:ok, docs} = Canary.Index.search_documents(source.id, "hello")
+    {:ok, docs} = Canary.Index.list_documents(source.id)
     assert length(docs) == 0 + 2 - 1
   end
 end

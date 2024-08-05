@@ -78,7 +78,8 @@ defmodule Canary.Crawler.Fallback do
     @behaviour Crawler.Fetcher.UrlFilter.Spec
 
     def filter(url, opts) do
-      {:ok, URI.new!(url).host == opts.host}
+      boolean = URI.new!(url).host == opts.host && not String.ends_with?(url, ".json")
+      {:ok, boolean}
     end
   end
 

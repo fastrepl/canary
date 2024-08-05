@@ -18,7 +18,7 @@ defmodule Canary.Workers.Fetcher do
     inputs =
       pairs
       |> Enum.map(fn {url, html} ->
-        title = Canary.Reader.title_from_html(html) || ""
+        title = Canary.Reader.title_from_html(html)
         content = Canary.Reader.markdown_from_html(html)
         %{source: src.id, url: url, title: title, content: content}
       end)
