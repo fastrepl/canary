@@ -39,7 +39,7 @@ export class CanarySearchResultsTabs extends LitElement {
     (SearchReference & { index: number })[]
   > = {};
 
-  private _ref = createRef<HTMLElement>();
+  private _containerRef = createRef<HTMLElement>();
 
   private _selection = new KeyboardSelectionController<SearchReference>(this, {
     handleEnter: (item) => {
@@ -87,15 +87,16 @@ export class CanarySearchResultsTabs extends LitElement {
         this.tabs,
       );
 
-      if (this._ref.value) {
-        this._ref.value.scrollTop = 0;
+      if (this._containerRef.value) {
+        this._containerRef.value.scrollTop = 0;
+        this._selection.index = 0;
       }
     }
 
     return html`
       <div class="container">
         ${this._tabs()}
-        <div ${ref(this._ref)} class="scroll-container">
+        <div ${ref(this._containerRef)} class="scroll-container">
           ${this._search.status === TaskStatus.ERROR
             ? html`<canary-error></canary-error>`
             : this._currentResults()}
@@ -181,11 +182,6 @@ export class CanarySearchResultsTabs extends LitElement {
   static styles = [
     scrollContainer,
     css`
-      .scroll-container {
-        max-height: 425px;
-        padding: 0px 12px;
-      }
-
       .container {
         display: flex;
         flex-direction: column;

@@ -76,7 +76,13 @@ export const wrapper = css`
 export const scrollContainer = css`
   .scroll-container {
     overflow-y: auto;
+    max-height: 425px;
 
+    scrollbar-gutter: stable;
+    padding-left: 12px;
+    padding-right: 2px;
+
+    scrollbar-width: thin;
     &::-webkit-scrollbar {
       width: 8px;
     }
@@ -91,7 +97,6 @@ export const scrollContainer = css`
       border-radius: 4px;
     }
 
-    scrollbar-width: thin;
     scrollbar-color: var(--canary-is-light, var(--canary-color-gray-90))
       var(--canary-is-dark, var(--canary-color-gray-60))
       var(--canary-color-gray-100);

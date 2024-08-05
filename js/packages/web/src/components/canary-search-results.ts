@@ -1,4 +1,4 @@
-import { LitElement, html, css } from "lit";
+import { LitElement, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { ref, createRef } from "lit/directives/ref.js";
 
@@ -40,6 +40,7 @@ export class CanarySearchResults extends LitElement {
 
       if (this._containerRef.value) {
         this._containerRef.value.scrollTop = 0;
+        this._selection.index = 0;
       }
     }
 
@@ -56,21 +57,7 @@ export class CanarySearchResults extends LitElement {
     `;
   }
 
-  static styles = [
-    scrollContainer,
-    css`
-      .scroll-container {
-        padding: 0px 12px;
-        max-height: 425px;
-      }
-      .skeleton-container {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        height: 425px;
-      }
-    `,
-  ];
+  static styles = scrollContainer;
 }
 
 declare global {

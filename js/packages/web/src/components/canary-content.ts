@@ -60,12 +60,12 @@ export class CanaryContent extends LitElement {
   static styles = [
     wrapper,
     css`
-      div.container {
-        width: calc(100% - 16px);
+      .container {
+        width: 100%;
         max-width: 500px;
 
         outline: none;
-        padding: 4px 0px 12px;
+        padding: 4px 0 12px;
 
         border: none;
         border-radius: 8px;
@@ -77,7 +77,7 @@ export class CanaryContent extends LitElement {
       }
 
       @media (min-width: 50rem) {
-        div.container {
+        .container {
           width: 500px;
         }
       }

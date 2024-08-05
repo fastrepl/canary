@@ -79,7 +79,6 @@ export class CanaryReference extends LitElement {
       .container {
         position: relative;
         cursor: pointer;
-        overflow: hidden;
 
         display: flex;
         flex-direction: row;
@@ -119,7 +118,6 @@ export class CanaryReference extends LitElement {
 
         overflow: hidden;
         text-overflow: ellipsis;
-        max-width: calc(100% - 20px);
       }
 
       .paths {

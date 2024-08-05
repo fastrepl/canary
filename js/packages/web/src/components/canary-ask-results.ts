@@ -7,6 +7,7 @@ import { themeContext } from "../contexts";
 
 import { MODE_ASK } from "../constants";
 import { AskController } from "../controllers";
+import { scrollContainer } from "../styles";
 
 import "./canary-markdown";
 import "./canary-reference";
@@ -25,7 +26,7 @@ export class CanaryAskResults extends LitElement {
   private _ask = new AskController(this, { mode: this.MODE });
 
   render() {
-    return html` <div class="container">
+    return html` <div class="scroll-container">
       <h2>${this._ask.query}</h2>
 
       ${this._ask.render({
@@ -61,26 +62,28 @@ export class CanaryAskResults extends LitElement {
     `;
   }
 
-  static styles = css`
-    .container {
-      border: 1px solid var(--canary-color-gray-95);
-      border-radius: 8px;
-      padding: 2px 12px;
-    }
+  static styles = [
+    scrollContainer,
+    css`
+      .scroll-container {
+        border: 1px solid var(--canary-color-gray-95);
+        border-radius: 8px;
+      }
 
-    .references {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      padding-bottom: 8px;
-    }
+      .references {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        padding-bottom: 8px;
+      }
 
-    h2 {
-      font-size: 20px;
-      margin: 10px 0px 20px 0px;
-      color: var(--canary-color-gray-0);
-    }
-  `;
+      h2 {
+        font-size: 20px;
+        margin: 10px 0px 20px 0px;
+        color: var(--canary-color-gray-0);
+      }
+    `,
+  ];
 }
 
 declare global {
