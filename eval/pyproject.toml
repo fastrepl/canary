@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "eval"
+version = "0.0.1"
+description = ""
+authors = ["yujonglee <yujonglee@fastrepl.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+ragas = "^0.1.13"
+fastapi = "^0.112.0"
+modal = "^0.64.8"
+langchain-openai = "^0.1.20"
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.8.0"
+python-dotenv = "^1.0.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

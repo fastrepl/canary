@@ -1,0 +1,10 @@
+---
+version: "3"
+tasks:
+  install: POETRY_VIRTUALENVS_IN_PROJECT=true poetry install --no-cache --no-interaction
+  run: poetry run python3 {{.CLI_ARGS}}
+  fmt: poetry run black eval
+  add: poetry add {{.CLI_ARGS}}
+  add:dev: poetry add {{.CLI_ARGS}} --group dev
+  serve: poetry run modal serve eval/server.py::shared.app
+  deploy: poetry run modal deploy eval/server.py::shared.app
