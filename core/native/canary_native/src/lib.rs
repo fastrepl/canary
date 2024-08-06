@@ -1,3 +1,5 @@
+use ::glob_match as glob;
+
 mod chunk;
 mod git;
 mod html;
@@ -15,7 +17,8 @@ rustler::init!(
         html_to_md_with_marker,
         clone_depth,
         extract_keywords,
-        stopwords
+        stopwords,
+        glob_match,
     ]
 );
 
@@ -55,4 +58,9 @@ fn extract_keywords<'a>(content: &'a str, n: usize) -> Vec<String> {
 #[rustler::nif]
 fn stopwords() -> Vec<String> {
     stop_words::get(stop_words::LANGUAGE::English)
+}
+
+#[rustler::nif]
+fn glob_match<'a>(pattern: &'a str, path: &'a str) -> bool {
+    glob::glob_match(pattern, path)
 }

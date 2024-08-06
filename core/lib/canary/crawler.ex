@@ -1,11 +1,10 @@
 defmodule Canary.Crawler do
-  @callback run(String.t()) :: {:ok, list(tuple())} | {:error, any()}
+  @callback run(String.t(), opts :: keyword()) :: {:ok, map()} | {:error, any()}
   @modules [Canary.Crawler.Sitemap, Canary.Crawler.Fallback]
-
-  def run(url) do
+  def run(url, config \\ []) do
     @modules
     |> Enum.reduce_while({:error, :failed}, fn module, _acc ->
-      case module.run(url) do
+      case module.run(url, config) do
         {:ok, result} -> {:halt, {:ok, result}}
         _ -> {:cont, {:error, :failed}}
       end
@@ -16,33 +15,42 @@ defmodule Canary.Crawler do
     {:ok, result} = run(url)
     result
   end
+
+  def include?(url, config \\ []) do
+    base = url |> URI.parse() |> Map.put(:path, "") |> to_string()
+    include_patterns = Keyword.get(config, :include_patterns, ["#{base}/**"])
+    exclude_patterns = Keyword.get(config, :exclude_patterns, ["#{base}/**/*.json"])
+
+    if Enum.any?(exclude_patterns, &Canary.Native.glob_match(&1, url)) do
+      false
+    else
+      Enum.any?(include_patterns, &Canary.Native.glob_match(&1, url))
+    end
+  end
 end
 
 defmodule Canary.Crawler.Sitemap do
-  def run(given_url) do
+  def run(given_url, config) do
     urls =
       given_url
       |> list_sitemaps()
       |> Enum.flat_map(&parse_sitemap/1)
+      |> Enum.filter(&Canary.Crawler.include?(&1, config))
 
     if urls == [] do
       {:error, :not_found}
     else
-      pairs =
-        urls
-        |> Enum.map(&fetch_url/1)
-        |> Enum.reject(&is_nil/1)
-
-      {:ok, pairs}
+      map = urls |> Enum.reduce(%{}, &Map.put(&2, &1, fetch_url(&1)))
+      {:ok, map}
     end
   end
 
-  defp list_sitemaps(url) do
+  def list_sitemaps(url) do
     robots_url = URI.new!(url) |> Map.put(:path, "/robots.txt") |> URI.to_string()
     maybe_sitemap = URI.new!(url) |> Map.put(:path, "/sitemap.xml") |> URI.to_string()
 
     case Req.new() |> ReqCrawl.Robots.attach() |> Req.get(url: robots_url) do
-      {:ok, %{private: %{crawl_robots: %{sitemaps: urls}}}} -> urls
+      {:ok, %{private: %{crawl_robots: %{sitemaps: urls}}}} -> [maybe_sitemap | urls]
       _ -> [maybe_sitemap]
     end
   end
@@ -67,7 +75,7 @@ defmodule Canary.Crawler.Sitemap do
 
   defp fetch_url(url) do
     case Req.get(url: url) do
-      {:ok, %{status: 200, body: body}} -> {url, body}
+      {:ok, %{status: 200, body: body}} -> body
       _ -> nil
     end
   end
@@ -78,7 +86,7 @@ defmodule Canary.Crawler.Fallback do
     @behaviour Crawler.Fetcher.UrlFilter.Spec
 
     def filter(url, opts) do
-      boolean = URI.new!(url).host == opts.host && not String.ends_with?(url, ".json")
+      boolean = URI.new!(url).host == opts.host && Canary.Crawler.include?(url, opts.config)
       {:ok, boolean}
     end
   end
@@ -101,7 +109,7 @@ defmodule Canary.Crawler.Fallback do
     end
   end
 
-  def run(url) do
+  def run(url, config) do
     {:ok, store_pid} = Agent.start_link(fn -> %{} end)
 
     crawler =
@@ -115,7 +123,8 @@ defmodule Canary.Crawler.Fallback do
         url_filter: Filter,
         scraper: Scraper,
         store_pid: store_pid,
-        user_agent: "Canary (github.com/fastrepl/canary)"
+        user_agent: "Canary (github.com/fastrepl/canary)",
+        config: config
       )
 
     case crawler do

@@ -22,5 +22,8 @@ defmodule Canary.Native do
   @spec stopwords() :: list(String.t())
   def stopwords(), do: error()
 
+  @spec glob_match(String.t(), String.t()) :: boolean()
+  def glob_match(_pattern, _text), do: error()
+
   defp error(), do: :erlang.nif_error(:nif_not_loaded)
 end
