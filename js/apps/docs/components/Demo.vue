@@ -68,7 +68,7 @@ onMounted(() => {
           </canary-content>
         </canary-modal>
 
-        <canary-content slot="content" query="what is canary">
+        <canary-content slot="content">
           <canary-search slot="mode">
             <canary-search-input slot="input"></canary-search-input>
             <canary-search-results slot="result"> </canary-search-results>

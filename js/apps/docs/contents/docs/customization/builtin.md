@@ -26,12 +26,12 @@ Outermost wrapper component. Required for all other components.
 
 Register `operation` to `canary-root`.
 
-| Provider                               | Search | Ask |
-| -------------------------------------- | :----: | :-: |
-| `canary-provider-mock`                 |  `O`   | `O` |
-| `canary-provider-pagefind`             |  `O`   | `X` |
-| `canary-provider-vitepress-minisearch` |  `O`   | `X` |
-| `canary-provider-cloud`                |  `O`   | `O` |
+| Provider                               | Search | AI Search | Ask |
+| -------------------------------------- | :----: | :-------: | :-: |
+| `canary-provider-mock`                 |  `O`   |    `O`    | `O` |
+| `canary-provider-pagefind`             |  `O`   |    `X`    | `X` |
+| `canary-provider-vitepress-minisearch` |  `O`   |    `X`    | `X` |
+| `canary-provider-cloud`                |  `O`   |    `O`    | `O` |
 
 ## `canary-modal`, `canary-trigger-*`, `canary-content`
 

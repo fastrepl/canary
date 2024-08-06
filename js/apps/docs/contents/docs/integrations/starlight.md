@@ -1,8 +1,3 @@
-<script setup>
-import { data } from '../../../shared.data.js'
-const v = data["@getcanary/web"];
-</script>
-
 # Starlight
 
 ::: tip
@@ -43,14 +38,14 @@ const options = {
 ---
 
 <script>
-  import "@getcanary/web/components/canary-root";
-  import "@getcanary/web/components/canary-provider-pagefind";
-  import "@getcanary/web/components/canary-trigger-searchbar";
-  import "@getcanary/web/components/canary-modal";
-  import "@getcanary/web/components/canary-content";
-  import "@getcanary/web/components/canary-search";
-  import "@getcanary/web/components/canary-search-input";
-  import "@getcanary/web/components/canary-search-results";
+  import "@getcanary/web/components/canary-root.js";
+  import "@getcanary/web/components/canary-provider-pagefind.js";
+  import "@getcanary/web/components/canary-trigger-searchbar.js";
+  import "@getcanary/web/components/canary-modal.js";
+  import "@getcanary/web/components/canary-content.js";
+  import "@getcanary/web/components/canary-search.js";
+  import "@getcanary/web/components/canary-search-input.js";
+  import "@getcanary/web/components/canary-search-results.js";
 </script>
 
 <canary-root framework="starlight">
@@ -67,7 +62,7 @@ const options = {
   </canary-provider-pagefind>
 </canary-root>
 
-<!-- https://getcanary.dev/docs/customization/styling.html#css-variables -->
+<!-- https://getcanary.dev/docs/customization/styling#css-variables -->
 <style>
   canary-root {
     --canary-color-primary-c: 0.1;

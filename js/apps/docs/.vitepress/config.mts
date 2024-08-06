@@ -1,7 +1,61 @@
 import { fileURLToPath, URL } from "node:url";
 import { defineConfig } from "vitepress";
 
-import { COMPONENTS_VERSION } from "../shared.data";
+const sidebar = [
+  {
+    text: "Integrations",
+    items: [
+      { text: "Docusaurus", link: "/docs/integrations/docusaurus" },
+      { text: "VitePress", link: "/docs/integrations/vitepress" },
+      { text: "Starlight", link: "/docs/integrations/starlight" },
+    ],
+  },
+  {
+    text: "Customization",
+    items: [
+      { text: "Styling", link: "/docs/customization/styling" },
+      {
+        text: "Built-in components",
+        link: "/docs/customization/builtin",
+      },
+      { text: "Custom components", link: "/docs/customization/custom" },
+    ],
+  },
+  {
+    text: "Canary Cloud",
+    items: [
+      {
+        text: "Introduction",
+        link: "/docs/cloud/intro",
+      },
+      {
+        text: "Integrations",
+        items: [
+          {
+            text: "Docusaurus",
+            link: "/docs/cloud/integrations/docusaurus",
+          },
+          {
+            text: "VitePress",
+            link: "/docs/cloud/integrations/vitepress",
+          },
+          {
+            text: "Starlight",
+            link: "/docs/cloud/integrations/starlight",
+          },
+        ],
+      },
+      {
+        text: "Analytics",
+        link: "/docs/cloud/analytics",
+      },
+      {
+        text: "Miscellaneous",
+        link: "/docs/cloud/miscellaneous",
+      },
+    ],
+  },
+];
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -25,12 +79,12 @@ export default defineConfig({
   vite: {
     resolve: {
       alias: [
-        {
-          find: /^.*\/VPHome\.vue$/,
-          replacement: fileURLToPath(
-            new URL("../components/Home.vue", import.meta.url),
-          ),
-        },
+        // {
+        //   find: /^.*\/VPHome\.vue$/,
+        //   replacement: fileURLToPath(
+        //     new URL("../components/Home.vue", import.meta.url),
+        //   ),
+        // },
         {
           find: /^.*\/VPNavBarSearch\.vue$/,
           replacement: fileURLToPath(
@@ -45,8 +99,6 @@ export default defineConfig({
     // https://vitepress.dev/reference/default-theme-config
     siteTitle: "🐤 Canary",
     nav: [
-      { text: "Docs", link: "/docs" },
-      { text: "Blog", link: "/blog" },
       {
         text: "📚 Storybook",
         link: "https://storybook.getcanary.dev",
@@ -57,61 +109,8 @@ export default defineConfig({
       },
     ],
     sidebar: {
-      "/docs/": [
-        {
-          text: "Integrations",
-          items: [
-            { text: "Docusaurus", link: "/docs/integrations/docusaurus" },
-            { text: "VitePress", link: "/docs/integrations/vitepress" },
-            { text: "Starlight", link: "/docs/integrations/starlight" },
-          ],
-        },
-        {
-          text: "Customization",
-          items: [
-            { text: "Styling", link: "/docs/customization/styling" },
-            {
-              text: "Built-in components",
-              link: "/docs/customization/builtin",
-            },
-            { text: "Custom components", link: "/docs/customization/custom" },
-          ],
-        },
-        {
-          text: "Canary Cloud",
-          items: [
-            {
-              text: "Introduction",
-              link: "/docs/cloud/intro",
-            },
-            {
-              text: "Analytics",
-              link: "/docs/cloud/analytics",
-            },
-            {
-              text: "Integrations",
-              items: [
-                {
-                  text: "Docusaurus",
-                  link: "/docs/cloud/integrations/docusaurus",
-                },
-                {
-                  text: "VitePress",
-                  link: "/docs/cloud/integrations/vitepress",
-                },
-                {
-                  text: "Starlight",
-                  link: "/docs/cloud/integrations/starlight",
-                },
-              ],
-            },
-            {
-              text: "Miscellaneous",
-              link: "/docs/cloud/miscellaneous",
-            },
-          ],
-        },
-      ],
+      "/": sidebar,
+      "/docs/": sidebar,
     },
     outline: { level: [2, 3] },
     socialLinks: [

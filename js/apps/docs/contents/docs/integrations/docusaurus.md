@@ -1,8 +1,3 @@
-<script setup>
-import { data } from '../../../shared.data.js'
-const v = data["@getcanary/web"];
-</script>
-
 # Docusaurus
 
 ::: tip
@@ -70,7 +65,7 @@ const config = {
     [
       require.resolve("@getcanary/docusaurus-theme-search-pagefind"),
       { // [!code ++]
-        // https://getcanary.dev/docs/customization/styling.html#css-variables // [!code ++]
+        // https://getcanary.dev/docs/customization/styling#css-variables // [!code ++]
         styles: { // [!code ++]
           "--canary-color-primary-c": 0.1, // [!code ++]
           "--canary-color-primary-h": 270, // [!code ++]
