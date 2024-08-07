@@ -3,7 +3,7 @@ import { customElement, property } from "lit/decorators.js";
 
 import type { Delta } from "../types";
 import { wrapper } from "../styles";
-import { customEvent } from "../events";
+import { createEvent } from "../store";
 
 const NAME = "canary-provider-cloud";
 
@@ -20,8 +20,8 @@ export class CanaryProviderCloud extends LitElement {
     }
 
     this.dispatchEvent(
-      customEvent({
-        name: "register-operations",
+      createEvent({
+        type: "register_operations",
         data: {
           search: this.search,
           ai_search: this.ai_search,

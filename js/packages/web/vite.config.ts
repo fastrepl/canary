@@ -55,7 +55,7 @@ export default defineConfig({
           "mixins",
           "types/index",
           "utils",
-          "events",
+          "store",
         ],
       ].reduce(
         (acc, cur) => ({ ...acc, [cur]: resolve(__dirname, `src/${cur}.ts`) }),

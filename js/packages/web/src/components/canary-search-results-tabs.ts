@@ -9,8 +9,8 @@ import { KeyboardSelectionController } from "../controllers";
 
 import type { SearchContext, SearchReference } from "../types";
 import { TaskStatus } from "../constants";
-import { customEvent } from "../events";
 import { scrollContainer } from "../styles";
+import { MODAL_CLOSE_EVENT } from "./canary-modal";
 
 import "./canary-search-references";
 import "./canary-error";
@@ -43,7 +43,9 @@ export class CanarySearchResultsTabs extends LitElement {
 
   private _selection = new KeyboardSelectionController<SearchReference>(this, {
     handleEnter: (item) => {
-      this.dispatchEvent(customEvent({ name: "modal-close" }));
+      this.dispatchEvent(
+        new CustomEvent(MODAL_CLOSE_EVENT, { bubbles: true, composed: true }),
+      );
       window.location.href = item.url;
     },
   });

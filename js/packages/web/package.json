@@ -29,6 +29,7 @@
     "@lit-labs/observers": "^2.0.2",
     "@lit/context": "^1.1.2",
     "@lit/task": "^1.0.1",
+    "@xstate/store": "^2.1.0",
     "highlight.js": "^11.10.0",
     "lit": "^3.1.4",
     "marked": "^13.0.2",

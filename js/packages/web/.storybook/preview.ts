@@ -55,7 +55,6 @@ const preview: Preview = {
             return HttpResponse.json(items);
           }),
         ],
-        // TODO: if we support hybrid search, retrived docs already exists both in the server and the client
         ask: [
           http.post(/.*\/api\/v1\/ask/, async () => {
             await delay(Math.random() * 2000);

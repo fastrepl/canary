@@ -6,7 +6,7 @@ import { consume } from "@lit/context";
 import { modeContext } from "../contexts";
 
 import type { ModeContext } from "../types";
-import { customEvent } from "../events";
+import { createEvent } from "../store";
 
 const NAME = "canary-mode-tabs";
 
@@ -47,7 +47,7 @@ export class CanaryModeTabs extends LitElement {
   }
 
   private _handleClick(option: string) {
-    this.dispatchEvent(customEvent({ name: "mode-set", data: option }));
+    this.dispatchEvent(createEvent({ type: "set_mode", data: option }));
   }
 
   static styles = [

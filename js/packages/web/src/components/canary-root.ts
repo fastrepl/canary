@@ -1,11 +1,12 @@
 import { LitElement, html, css } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
+import { customElement, property } from "lit/decorators.js";
 import { MutationController } from "@lit-labs/observers/mutation-controller.js";
 
 import { provide } from "@lit/context";
-import { themeContext, operationContext } from "../contexts";
+import { themeContext } from "../contexts";
+import { createStore, EVENT_NAME } from "../store";
 
-import type { Framework, ThemeContext, OperationContext } from "../types";
+import type { Framework, ThemeContext } from "../types";
 import { wrapper } from "../styles";
 
 const NAME = "canary-root";
@@ -18,19 +19,16 @@ export class CanaryRoot extends LitElement {
   @property({ type: String, reflect: true })
   theme: ThemeContext = "light";
 
-  @provide({ context: operationContext })
-  @state()
-  operation: OperationContext = {};
+  private _store = createStore(this);
 
   connectedCallback() {
     super.connectedCallback();
+
     this._handleThemeChange();
 
-    this.addEventListener("register-operations", this._handleRegister);
-  }
-
-  disconnectedCallback() {
-    this.removeEventListener("register-operations", this._handleRegister);
+    this.addEventListener(EVENT_NAME, (e) => {
+      this._store.send(e.detail);
+    });
   }
 
   render() {
@@ -60,14 +58,9 @@ export class CanaryRoot extends LitElement {
           return this.theme;
         }
 
-        return (this.theme = extractTheme(target));
+        this.theme = extractTheme(target);
       },
     });
-  }
-
-  private _handleRegister(e: Event) {
-    const ctx: OperationContext = (e as CustomEvent).detail;
-    this.operation = { ...this.operation, ...ctx };
   }
 
   static styles = [

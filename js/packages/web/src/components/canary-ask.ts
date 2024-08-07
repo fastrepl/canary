@@ -6,7 +6,7 @@ import { modeContext } from "../contexts";
 
 import type { ModeContext } from "../types";
 import { MODE_ASK } from "../constants";
-import { customEvent } from "../events";
+import { createEvent } from "../store";
 
 import "./canary-mode-tabs";
 
@@ -23,7 +23,7 @@ export class CanaryAsk extends LitElement {
   connectedCallback() {
     super.connectedCallback();
 
-    this.dispatchEvent(customEvent({ name: "register-mode", data: this.MODE }));
+    this.dispatchEvent(createEvent({ type: "register_mode", data: this.MODE }));
   }
 
   render() {

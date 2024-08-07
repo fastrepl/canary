@@ -7,9 +7,9 @@ import type { QueryContext, SearchContext } from "../types";
 
 import { input } from "../styles";
 import { TaskStatus } from "../constants";
-import { customEvent } from "../events";
 
 import "./canary-loading-spinner";
+import { createEvent } from "../store";
 
 const NAME = "canary-search-input";
 
@@ -49,7 +49,7 @@ export class CanarySearchInput extends LitElement {
     this._query = input.value;
     this.updateComplete.then(() => {
       this.dispatchEvent(
-        customEvent({ name: "input-change", data: input.value }),
+        createEvent({ type: "set_query", data: input.value }),
       );
     });
   }

@@ -1,7 +1,7 @@
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
-import { customEvent } from "../events";
+import { createEvent } from "../store";
 import { input } from "../styles";
 
 const NAME = "canary-ask-input";
@@ -45,7 +45,7 @@ export class CanaryAskInput extends LitElement {
     if (e.key === "Enter") {
       e.preventDefault();
       this.dispatchEvent(
-        customEvent({ name: "input-change", data: this.query }),
+        createEvent({ type: "set_query", data: this.query }),
       );
     }
   }

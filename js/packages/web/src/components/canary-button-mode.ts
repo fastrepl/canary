@@ -1,7 +1,6 @@
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
-
-import { customEvent } from "../events";
+import { createEvent } from "../store";
 
 const NAME = "canary-button-mode";
 
@@ -20,7 +19,7 @@ export class CanaryModeButton extends LitElement {
   }
 
   private _handleClick() {
-    this.dispatchEvent(customEvent({ name: "mode-set", data: this.mode }));
+    this.dispatchEvent(createEvent({ type: "set_mode", data: this.mode }));
   }
 
   static styles = css`

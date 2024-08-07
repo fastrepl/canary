@@ -9,7 +9,7 @@ import type {
 import type { PagefindResult } from "../types/pagefind";
 
 import { cancellable } from "../utils";
-import { customEvent } from "../events";
+import { createEvent } from "../store";
 import { wrapper } from "../styles";
 
 const NAME = "canary-provider-pagefind";
@@ -34,8 +34,8 @@ export class CanaryProviderPagefind extends LitElement {
     this._initPagefind(pagefind);
 
     this.dispatchEvent(
-      customEvent({
-        name: "register-operations",
+      createEvent({
+        type: "register_operations",
         data: { search: this.search, beforeSearch: this.beforeSearch },
       }),
     );

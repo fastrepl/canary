@@ -7,7 +7,7 @@ import { SearchController } from "../controllers";
 
 import type { ModeContext, SearchContext } from "../types";
 import { DEBOUNCE_MS, MODE_SEARCH, TaskStatus } from "../constants";
-import { customEvent } from "../events";
+import { createEvent } from "../store";
 
 import "./canary-mode-tabs";
 import "./canary-search-empty";
@@ -36,7 +36,7 @@ export class CanarySearch extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-    this.dispatchEvent(customEvent({ name: "register-mode", data: this.MODE }));
+    this.dispatchEvent(createEvent({ type: "register_mode", data: this.MODE }));
   }
 
   updated() {

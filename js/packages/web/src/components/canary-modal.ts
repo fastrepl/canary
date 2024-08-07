@@ -7,6 +7,8 @@ import "./canary-dialog";
 
 const NAME = "canary-modal";
 
+export const MODAL_CLOSE_EVENT = "modal-close";
+
 @customElement(NAME)
 export class CanaryModal extends LitElement {
   @property({ type: Boolean }) open = false;

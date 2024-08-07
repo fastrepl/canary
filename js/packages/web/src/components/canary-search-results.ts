@@ -7,9 +7,9 @@ import { searchContext } from "../contexts";
 import { KeyboardSelectionController } from "../controllers";
 
 import type { SearchContext, SearchReference } from "../types";
-import { customEvent } from "../events";
 import { TaskStatus } from "../constants";
 import { scrollContainer } from "../styles";
+import { MODAL_CLOSE_EVENT } from "./canary-modal";
 
 import "./canary-error";
 import "./canary-search-references";
@@ -25,9 +25,15 @@ export class CanarySearchResults extends LitElement {
   @state()
   private _search!: SearchContext;
 
+  connectedCallback(): void {
+    super.connectedCallback();
+  }
+
   private _selection = new KeyboardSelectionController<SearchReference>(this, {
     handleEnter: (item) => {
-      this.dispatchEvent(customEvent({ name: "modal-close" }));
+      this.dispatchEvent(
+        new CustomEvent(MODAL_CLOSE_EVENT, { bubbles: true, composed: true }),
+      );
       window.location.href = item.url;
     },
   });

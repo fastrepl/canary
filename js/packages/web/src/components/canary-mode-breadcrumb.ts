@@ -1,7 +1,7 @@
 import { LitElement, html, css } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
-import { customEvent } from "../events";
+import { createEvent } from "../store";
 
 const NAME = "canary-mode-breadcrumb";
 
@@ -31,7 +31,7 @@ export class CanaryModeBreadcrumb extends LitElement {
   }
 
   private _handleClick() {
-    this.dispatchEvent(customEvent({ name: "mode-set", data: this.previous }));
+    this.dispatchEvent(createEvent({ type: "set_mode", data: this.previous }));
   }
 
   static styles = [
