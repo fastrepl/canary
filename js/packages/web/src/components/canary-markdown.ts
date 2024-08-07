@@ -1,6 +1,6 @@
 import { LitElement, html, css } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
-import { unsafeHTML } from "lit/directives/unsafe-html.js";
+import { ref, createRef } from "lit/directives/ref.js";
+import { customElement, property } from "lit/decorators.js";
 
 import { marked, type Tokens } from "marked";
 marked.use({
@@ -29,7 +29,8 @@ const NAME = "canary-markdown";
 export class CanaryMarkdown extends LitElement {
   @property({ type: String }) hljs = "github-dark";
   @property({ attribute: false }) content = "";
-  @state() html = "";
+
+  private _containerRef = createRef<HTMLDivElement>();
 
   render() {
     return html`
@@ -37,23 +38,23 @@ export class CanaryMarkdown extends LitElement {
         rel="stylesheet"
         href="https://unpkg.com/highlight.js@11.9.0/styles/${this.hljs}.css"
       />
-      <div class="container">${unsafeHTML(this.html)}</div>
+      <div class="container" ${ref(this._containerRef)}></div>
     `;
   }
 
   updated(changedProperties: Map<string, any>) {
     if (changedProperties.has("content")) {
       marked(this.content, { async: true }).then((html) => {
-        const span = document.createElement("span");
-        span.innerHTML = html;
+        const container = this._containerRef.value;
+        if (!container) {
+          return;
+        }
 
-        span.querySelectorAll("pre code").forEach((code) => {
+        container.innerHTML = html;
+        container.querySelectorAll("pre code").forEach((code) => {
           code.className = "language-javascript";
           hljs.highlightElement(code as HTMLElement);
         });
-
-        this.html = span.innerHTML;
-        span.remove();
       });
     }
   }
