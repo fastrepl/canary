@@ -21,7 +21,7 @@ const packages = {
 
 # What is Canary?
 
-`Canary` provides UI primitives and self-hostable infrastructure  for building **modern search-bar** for techincal documentation.
+`Canary` provides UI primitives and self-hostable infrastructure for building **modern search-bar** for techincal documentation.
 
 ## Search-as-you-type, augmented with AI
 
@@ -33,9 +33,11 @@ Also, for large documentations, users often need to go though multiple pages and
 
 `<SOME_EXAMPLES_HERE>`
 
+`Canary` use keyword based search by default to provide fast search results, but falls back to AI-powered search if it can not find any results or user is asking rather than searching.
+
 ## Tiny components that works anywhere
 
-Canary use [Web components](https://developer.mozilla.org/en-US/docs/Web/Web_Components), so browsers know how to render it. No need to bundle entire React or something. It just works anywhere.
+Canary use [Web components](https://developer.mozilla.org/en-US/docs/Web/Web_Components), so browsers know how to render it.
 
 <sub><a href="https://github.com/fastrepl/canary/tree/main/js/apps/docs/data">source</a></sub>
 

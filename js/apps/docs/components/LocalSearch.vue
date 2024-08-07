@@ -33,7 +33,6 @@ const { localeIndex } = useData();
               <canary-search-input slot="input"></canary-search-input>
               <canary-search-results-tabs
                 slot="result"
-                group
                 tabs="Docs:*;Cloud:/cloud/.+$"
               >
               </canary-search-results-tabs>
