@@ -4,6 +4,7 @@ import { customElement, property } from "lit/decorators.js";
 import type { Delta } from "../types";
 import { wrapper } from "../styles";
 import { createEvent } from "../store";
+import { cache } from "../decorators";
 
 const NAME = "canary-provider-cloud";
 
@@ -23,8 +24,8 @@ export class CanaryProviderCloud extends LitElement {
       createEvent({
         type: "register_operations",
         data: {
-          search: this.search,
-          ai_search: this.ai_search,
+          search: cache(this.search),
+          ai_search: cache(this.ai_search),
           ask: this.ask,
         },
       }),
