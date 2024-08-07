@@ -1,18 +1,26 @@
+import os
+
 import modal
-from fastapi import FastAPI, Request, Response, status
+from fastapi import FastAPI, Request, Response, status, Depends, HTTPException
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
 from eval import shared
 from eval.operation import evaluate
 
 web_app = FastAPI()
+security = HTTPBearer()
+
+
+def verify_token(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    if credentials.credentials != os.environ["AUTH_TOKEN"]:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+    return credentials.credentials
 
 
 @web_app.post("/eval/new")
-async def eval_new(request: Request):
+async def eval_new(request: Request, token=Depends(verify_token)):
     data = await request.json()
-    print(data)
     call = evaluate.spawn(data)
-    print(call)
     return {"id": call.object_id}
 
 
@@ -34,7 +42,7 @@ async def health():
     return Response(status_code=status.HTTP_200_OK)
 
 
-@shared.app.function(image=shared.image)
+@shared.app.function(image=shared.image, secrets=[modal.Secret.from_name("AUTH_TOKEN")])
 @modal.asgi_app()
 def fastapi_app():
     return web_app
