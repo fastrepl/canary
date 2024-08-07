@@ -28,7 +28,9 @@ export class CanaryError extends LitElement {
         gap: 8px;
         align-items: center;
 
+        width: calc(100% - 32px);
         padding: 8px 16px;
+        
         border-radius: 8px;
         border: 1px solid var(--canary-color-gray-95);
 

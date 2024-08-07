@@ -1,17 +1,10 @@
 import { LitElement, html, css } from "lit";
-import { customElement, state } from "lit/decorators.js";
-
-import { consume } from "@lit/context";
-import { queryContext } from "../contexts";
+import { customElement } from "lit/decorators.js";
 
 const NAME = "canary-search-empty";
 
 @customElement(NAME)
 export class CanarySearchResults extends LitElement {
-  @consume({ context: queryContext, subscribe: true })
-  @state()
-  query: string = "";
-
   render() {
     return html`
       <div class="container">

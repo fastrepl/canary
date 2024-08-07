@@ -71,9 +71,6 @@ export default {
         <canary-search slot="mode">
           <canary-search-input slot="input"></canary-search-input>
           <canary-search-results slot="result"></canary-search-results>
-          <div slot="empty">
-            <canary-mode-button> </canary-mode-button>
-          </div>
         </canary-search>
       `);
     }

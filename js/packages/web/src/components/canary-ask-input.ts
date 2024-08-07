@@ -44,9 +44,7 @@ export class CanaryAskInput extends LitElement {
   private _handleKeyDown(e: KeyboardEvent) {
     if (e.key === "Enter") {
       e.preventDefault();
-      this.dispatchEvent(
-        createEvent({ type: "set_query", data: this.query }),
-      );
+      this.dispatchEvent(createEvent({ type: "set_query", data: this.query }));
     }
   }
 }

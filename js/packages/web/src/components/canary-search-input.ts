@@ -48,9 +48,7 @@ export class CanarySearchInput extends LitElement {
 
     this._query = input.value;
     this.updateComplete.then(() => {
-      this.dispatchEvent(
-        createEvent({ type: "set_query", data: input.value }),
-      );
+      this.dispatchEvent(createEvent({ type: "set_query", data: input.value }));
     });
   }
 }
