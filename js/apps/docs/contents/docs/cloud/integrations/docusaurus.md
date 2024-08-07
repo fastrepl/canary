@@ -4,6 +4,18 @@
 `Canary Cloud` is in active development. Not ready for production use yet.
 :::
 
+## Installation
+
+::: tip
+If you were using `@getcanary/docusaurus-theme-search-pagefind` before, please remove it.
+:::
+
+```bash
+npm install @getcanary/web
+```
+
+## Configuration
+
 ```bash
 npm run swizzle @docusaurus/theme-classic SearchBar -- --eject --javascript
 ```

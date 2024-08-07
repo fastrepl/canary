@@ -12,7 +12,7 @@ import { data as mendable } from '../data/size_mendable.data.js'
 const packages = {
     "@docsearch/js": docsearch.size,
     '🐤@getcanary/web (Search)': canarySearch.size,
-    '🐤@getcanary/web (All)': canaryAll.size,
+    '🐤@getcanary/web (Search + Ask)': canaryAll.size,
     "kapa-widget.bundle.js": kapa.size,
     "@mendable/search": mendable.size,
     "@inkeep/uikit-js": inkeep.size,
@@ -21,13 +21,23 @@ const packages = {
 
 # What is Canary?
 
-`Canary` is modern search-bar for techincal documentation.
+`Canary` provides UI primitives and self-hostable infrastructure  for building **modern search-bar** for techincal documentation.
 
 ## Search-as-you-type, augmented with AI
 
+It's been a while since we started seeing blazing fast search results. But still, it's hard to find the exact information **unless you know the exact keyword.**
+
+`<SOME_EXAMPLES_HERE>`
+
+Also, for large documentations, users often need to go though multiple pages and sections to get questions answered.
+
+`<SOME_EXAMPLES_HERE>`
+
 ## Tiny components that works anywhere
 
-<sub><a href="https://github.com/fastrepl/canary/tree/main/js/apps/docs/data">Source</a></sub>
+Canary use [Web components](https://developer.mozilla.org/en-US/docs/Web/Web_Components), so browsers know how to render it. No need to bundle entire React or something. It just works anywhere.
+
+<sub><a href="https://github.com/fastrepl/canary/tree/main/js/apps/docs/data">source</a></sub>
 
 <SizeChart 
 title="Bundle size (Uncompressed)"
