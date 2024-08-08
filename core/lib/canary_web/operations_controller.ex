@@ -31,32 +31,12 @@ defmodule CanaryWeb.OperationsController do
 
   def search(conn, %{"mode" => mode, "query" => query}) do
     source = conn.assigns.client.sources |> Enum.at(0)
-
-    results =
-      if mode == "normal" do
-        normal_search(source, query)
-      else
-        ai_search(source, query)
-      end
+    {:ok, results} = Canary.Searcher.run(source, query)
 
     conn
     |> put_resp_content_type("application/json")
     |> send_resp(200, Jason.encode!(results))
     |> halt()
-  end
-
-  defp normal_search(source, query) do
-    {:ok, results} = Canary.Index.search_documents(source.id, query)
-    results
-  end
-
-  defp ai_search(source, query) do
-    source = source |> Ash.load!(:summaries)
-
-    {:ok, analysis} = Canary.Query.Understander.run(query, Enum.join(source.summaries, "\n"))
-    {:ok, docs} = Canary.Index.batch_search_documents(source.id, analysis.keywords)
-    {:ok, reranked} = Canary.Reranker.run(analysis.query, docs, fn doc -> doc.content end)
-    reranked
   end
 
   def ask(conn, %{"id" => id, "query" => query}) do

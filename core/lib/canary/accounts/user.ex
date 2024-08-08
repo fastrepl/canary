@@ -14,7 +14,7 @@ defmodule Canary.Accounts.User do
   actions do
     defaults [:read]
 
-    if Application.compile_env(:canary, :env) == :test do
+    if Application.compile_env(:canary, :env) != :prod do
       create :mock, accept: [:email, :hashed_password]
     end
 

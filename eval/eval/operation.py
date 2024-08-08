@@ -15,20 +15,21 @@ from ragas.metrics import (
 
 from eval import shared
 
+metric_map = {
+    shared.Metric.RAGAS_CONTEXT_PRECISION: context_precision,
+    shared.Metric.RAGAS_CONTEXT_RECALL: context_recall,
+    shared.Metric.RAGAS_ANSWER_RELEVANCE: answer_relevancy,
+    shared.Metric.RAGAS_FAITHFULNESS: faithfulness,
+}
+
 
 @shared.app.function(
     image=shared.image,
     secrets=[modal.Secret.from_name("LITELLM_PROXY")],
 )
-def evaluate(dict):
-    ds = Dataset.from_dict(dict)
-
-    metrics = [
-        faithfulness,
-        answer_relevancy,
-        context_recall,
-        context_precision,
-    ]
+def evaluate(input: shared.EvaluationInput):
+    ds = Dataset.from_list(input.dataset)
+    metrics = [metric_map[metric] for metric in input.metrics]
 
     llm = ChatOpenAI(
         model_name=shared.LANGUAGE_MODEL,
@@ -51,7 +52,7 @@ def evaluate(dict):
             in_ci=True,
         )
         .to_pandas()
-        .drop(columns=list(dict.keys()))
+        .drop(columns=list(input.dataset[0].keys()))
         .mean()
         .to_dict()
     )

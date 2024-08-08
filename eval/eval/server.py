@@ -1,7 +1,7 @@
 import os
 
 import modal
-from fastapi import FastAPI, Request, Response, status, Depends, HTTPException
+from fastapi import FastAPI, Response, status, Depends, HTTPException
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
 from eval import shared
@@ -18,9 +18,8 @@ def verify_token(credentials: HTTPAuthorizationCredentials = Depends(security)):
 
 
 @web_app.post("/eval/new")
-async def eval_new(request: Request, token=Depends(verify_token)):
-    data = await request.json()
-    call = evaluate.spawn(data)
+async def eval_new(input: shared.EvaluationInput, token=Depends(verify_token)):
+    call = evaluate.spawn(input)
     return {"id": call.object_id}
 
 
