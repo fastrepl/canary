@@ -27,6 +27,7 @@ metric_map = {
 @shared.app.function(
     image=shared.image,
     secrets=[modal.Secret.from_name("LITELLM_PROXY")],
+    timeout=60 * 15,
 )
 def evaluate(input: shared.EvaluationInput):
     ds = Dataset.from_list(input.dataset)
@@ -64,6 +65,7 @@ def evaluate(input: shared.EvaluationInput):
 @shared.app.function(
     image=shared.image,
     secrets=[modal.Secret.from_name("LITELLM_PROXY")],
+    timeout=60 * 15,
 )
 def synthesize(input: shared.SynthesizerInput):
     with tempfile.TemporaryDirectory() as td:
