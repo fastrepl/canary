@@ -1,4 +1,5 @@
 import os
+import datetime
 
 import modal
 from datasets import Dataset
@@ -30,18 +31,18 @@ def evaluate(dict):
     ]
 
     llm = ChatOpenAI(
-        model_name="gpt-4o",
+        model_name=shared.LANGUAGE_MODEL,
         base_url=os.environ["OPENAI_API_BASE"],
         api_key=os.environ["OPENAI_API_KEY"],
     )
 
     embeddings = OpenAIEmbeddings(
-        model="text-embedding-3-small",
+        model=shared.EMBEDDING_MODEL,
         base_url=os.environ["OPENAI_API_BASE"],
         api_key=os.environ["OPENAI_API_KEY"],
     )
 
-    return (
+    scores = (
         ragas.evaluate(
             dataset=ds,
             metrics=metrics,
@@ -52,5 +53,18 @@ def evaluate(dict):
         .to_pandas()
         .drop(columns=list(dict.keys()))
         .mean()
-        .to_json()
+        .to_dict()
     )
+
+    return with_metadata({"scores": scores})
+
+
+def with_metadata(data):
+    return {
+        "language_model": shared.LANGUAGE_MODEL,
+        "embedding_model": shared.EMBEDDING_MODEL,
+        "ragas_version": shared.RAGAS_VERSION,
+        "deepeval_version": shared.DEEPEVAL_VERSION,
+        "timestamp": datetime.datetime.now().isoformat(),
+        **data,
+    }
