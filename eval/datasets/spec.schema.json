@@ -21,18 +21,19 @@
         "type": "object",
         "properties": {
           "question": { "type": "string" },
-          "answer": { "type": "string", "maxLength": 0 },
-          "contexts": {
-            "type": "array",
-            "items": { "type": "string" },
-            "maxItems": 0
-          },
           "ground_truth": { "type": "string" }
         }
       }
+    },
+    "outputs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["answer", "contexts"]
+      }
     }
   },
-  "required": ["metrics", "dataset"],
+  "required": ["metrics", "dataset", "outputs"],
   "allOf": [
     {
       "if": {
@@ -43,8 +44,9 @@
       "then": {
         "properties": {
           "dataset": {
-            "items": { "required": ["question", "ground_truth", "contexts"] }
-          }
+            "items": { "required": ["question", "ground_truth"] }
+          },
+          "outputs": { "contains": { "const": "contexts" } }
         }
       }
     },
@@ -56,7 +58,8 @@
       },
       "then": {
         "properties": {
-          "dataset": { "items": { "required": ["ground_truth", "contexts"] } }
+          "dataset": { "items": { "required": ["ground_truth"] } },
+          "outputs": { "contains": { "const": "contexts" } }
         }
       }
     },
@@ -68,8 +71,12 @@
       },
       "then": {
         "properties": {
-          "dataset": {
-            "items": { "required": ["question", "contexts", "answer"] }
+          "dataset": { "items": { "required": ["question"] } },
+          "outputs": {
+            "allOf": [
+              { "contains": { "const": "answer" } },
+              { "contains": { "const": "contexts" } }
+            ]
           }
         }
       }
@@ -82,7 +89,12 @@
       },
       "then": {
         "properties": {
-          "dataset": { "items": { "required": ["answer", "contexts"] } }
+          "outputs": {
+            "allOf": [
+              { "contains": { "const": "answer" } },
+              { "contains": { "const": "contexts" } }
+            ]
+          }
         }
       }
     }

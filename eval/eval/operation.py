@@ -1,10 +1,11 @@
 import os
 import datetime
+import tempfile
 
 import modal
 from datasets import Dataset
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
-
+from deepeval.synthesizer import Synthesizer
 import ragas
 from ragas.metrics import (
     context_precision,
@@ -58,6 +59,27 @@ def evaluate(input: shared.EvaluationInput):
     )
 
     return with_metadata({"scores": scores})
+
+
+@shared.app.function(
+    image=shared.image,
+    secrets=[modal.Secret.from_name("LITELLM_PROXY")],
+)
+def synthesize(input: shared.SynthesizerInput):
+    with tempfile.TemporaryDirectory() as td:
+        paths = []
+
+        for index, doc in enumerate(input.documents):
+            path = os.path.join(td, f"doc-{index}.txt")
+            with open(path, "w") as f:
+                f.write(doc)
+            paths.append(path)
+
+        return Synthesizer().generate_goldens_from_docs(
+            document_paths=paths,
+            max_goldens_per_document=input.max_goldens_per_document,
+            include_expected_output=True,
+        )
 
 
 def with_metadata(data):

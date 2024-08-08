@@ -28,3 +28,8 @@ class Metric(str, Enum):
 class EvaluationInput(BaseModel):
     metrics: list[Metric] = Field(default_factory=list)
     dataset: list[dict] = Field(default_factory=list)
+
+
+class SynthesizerInput(BaseModel):
+    documents: list[str] = Field(default_factory=list)
+    max_goldens_per_document: int = Field(default=2)
