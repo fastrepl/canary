@@ -1,4 +1,5 @@
 <script setup>
+import Headline from '../components/Headline.vue'
 import SizeChart from '../components/SizeChart.vue'
 import Demo from '../components/Demo.vue'
 
@@ -19,9 +20,7 @@ const packages = {
 }
 </script>
 
-# What is Canary?
-
-`Canary` provides UI primitives and self-hostable infrastructure for building **modern search-bar** for techincal documentation.
+<Headline />
 
 ## Search-as-you-type, augmented with AI
 
