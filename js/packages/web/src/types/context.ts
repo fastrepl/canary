@@ -28,7 +28,6 @@ export type TriggerShortcut = "cmdk" | "slash";
 export type OperationContext = Partial<{
   search: SearchFunction;
   beforeSearch: BeforeSearchFunction;
-  ai_search: SearchFunction;
   ask: AskFunction;
   feedback: FeedbackFunction;
 }>;

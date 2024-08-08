@@ -29,7 +29,7 @@ defmodule CanaryWeb.OperationsController do
     end
   end
 
-  def search(conn, %{"mode" => mode, "query" => query}) do
+  def search(conn, %{"query" => query}) do
     source = conn.assigns.client.sources |> Enum.at(0)
     {:ok, results} = Canary.Searcher.run(source, query)
 

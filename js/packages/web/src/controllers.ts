@@ -76,11 +76,6 @@ export class SearchController {
           return null;
         }
 
-        const search =
-          this._query.value && this._references && this._references.length < 3
-            ? (ops.ai_search ?? ops.search)
-            : ops.search;
-
         const id = ++this._id;
         ops.beforeSearch?.(query);
         await asyncSleep(this._options.debounceTimeoutMs);
@@ -89,7 +84,7 @@ export class SearchController {
           return null;
         }
 
-        const result = await search(query, signal);
+        const result = await ops.search(query, signal);
         if (id !== this._id) {
           return null;
         }

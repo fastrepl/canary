@@ -38,20 +38,11 @@ const preview: Preview = {
     msw: {
       handlers: {
         search: [
-          http.post(/.*\/api\/v1\/search\/normal/, async ({ request }) => {
+          http.post(/.*\/api\/v1\/search/, async ({ request }) => {
             const data = (await request.json()) as Record<string, string>;
             const items = mockSearchReferences("search", data["query"]);
 
-            await delay(Math.random() * 200 + 200);
-            return HttpResponse.json(items);
-          }),
-        ],
-        ai_search: [
-          http.post(/.*\/api\/v1\/search\/ai/, async ({ request }) => {
-            const data = (await request.json()) as Record<string, string>;
-            const items = mockSearchReferences("ai_search", data["query"]);
-
-            await delay(Math.random() * 500 + 1400);
+            await delay(Math.random() * 1000 + 200);
             return HttpResponse.json(items);
           }),
         ],
