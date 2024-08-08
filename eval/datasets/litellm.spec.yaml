@@ -1,0 +1,11 @@
+# yaml-language-server: $schema=./spec.schema.json
+outputs:
+  - contexts
+metrics:
+  - ragas_context_precision
+  - ragas_context_recall
+dataset:
+  - question: what is litellm?
+    ground_truth: |
+      LiteLLM is an open source LLM API that allows you to easily call any LLM from your application.
+      It provides both SDK and proxy.

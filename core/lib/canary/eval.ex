@@ -4,10 +4,10 @@ if Application.get_env(:canary, :env) != :prod do
 
     @root Application.compile_env!(:canary, :root)
 
-    defp spec_file_path(name), do: @root |> Path.join("../eval/datasets/#{name}.spec.json")
+    defp spec_file_path(name), do: @root |> Path.join("../eval/datasets/#{name}.spec.yaml")
     defp data_dir_path(name), do: @root |> Path.join("../eval/datasets/#{name}")
 
-    def eval_dataset(name) do
+    defp create_source(name) do
       account = Canary.Mock.account()
       source = Canary.Sources.Source.create_web!(account, "https://example.com")
 
@@ -27,15 +27,23 @@ if Application.get_env(:canary, :env) != :prod do
         _ -> :ok
       end
 
-      ProgressBar.render_indeterminate(fn ->
+      ProgressBar.render_spinner([text: "Ingesting...", done: "Done!"], fn ->
         wait_for_oban()
       end)
+
+      source
+    end
+
+    def eval_dataset(name, source_id \\ nil) do
+      source =
+        if source_id, do: Ash.get!(Canary.Sources.Source, source_id), else: create_source(name)
+
+      IO.puts("\nUsing '#{source.id}' as source\n")
 
       spec =
         name
         |> spec_file_path()
-        |> File.read!()
-        |> Jason.decode!()
+        |> YamlElixir.read_from_file!()
 
       metcics = spec |> Map.get("metrics")
 
@@ -85,17 +93,13 @@ if Application.get_env(:canary, :env) != :prod do
         |> Path.join(filename)
         |> File.write!(content)
 
-        spec_file_path(name)
-        |> File.write!(
-          Jason.encode!(
-            %{
-              "$schema" => "./spec.schema.json",
-              "metrics" => [],
-              "outputs" => [],
-              "dataset" => []
-            },
-            pretty: true
-          )
+        File.write!(
+          spec_file_path(name),
+          encode_yaml(%{
+            "metrics" => [],
+            "outputs" => [],
+            "dataset" => []
+          })
         )
       end)
 
@@ -125,12 +129,12 @@ if Application.get_env(:canary, :env) != :prod do
           %{question: question, ground_truth: ground_truth}
         end)
 
-      spec_file_path(name)
-      |> File.read!()
-      |> Jason.decode!()
+      name
+      |> spec_file_path()
+      |> YamlElixir.read_from_file!()
       |> Map.update!("dataset", fn dataset -> dataset ++ items end)
-      |> Jason.encode!()
-      |> then(fn spec -> File.write!(spec_file_path(name), spec, pretty: true) end)
+      |> encode_yaml()
+      |> then(fn spec -> File.write!(spec_file_path(name), spec) end)
     end
 
     defp synthesize_request(data) do
@@ -171,6 +175,11 @@ if Application.get_env(:canary, :env) != :prod do
       end
 
       %{api_base: api_base, api_key: api_key}
+    end
+
+    defp encode_yaml(data) do
+      schema = "# yaml-language-server: $schema=./spec.schema.json\n"
+      schema <> Ymlr.document!(data)
     end
   end
 

@@ -1,4 +1,3 @@
----
 version: "3"
 tasks:
   install: POETRY_VIRTUALENVS_IN_PROJECT=true poetry install --no-cache --no-interaction
@@ -6,7 +5,8 @@ tasks:
   fmt:
     cmds:
       - poetry run black eval
-      - pnpm dlx prettier datasets/spec.schema.json datasets/*.spec.json --write
+      - pnpm dlx prettier datasets/spec.schema.json --write
+      - yamlfmt datasets/*.spec.yaml
   add: poetry add {{.CLI_ARGS}}
   add:dev: poetry add {{.CLI_ARGS}} --group dev
   serve: poetry run modal serve eval/server.py::shared.app

@@ -1,6 +1,0 @@
-{
-  "$schema": "./spec.schema.json",
-  "outputs": ["contexts"],
-  "metrics": ["ragas_context_precision", "ragas_context_recall"],
-  "dataset": []
-}
