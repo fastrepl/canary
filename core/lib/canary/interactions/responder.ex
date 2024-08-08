@@ -27,10 +27,9 @@ defmodule Canary.Interactions.Responder.Default do
     end)
 
     model = Application.fetch_env!(:canary, :chat_completion_model)
-    {:ok, queries} = Canary.Query.Understander.run(request)
 
     docs =
-      queries
+      [request]
       |> Enum.map(fn query ->
         Task.Supervisor.async_nolink(Canary.TaskSupervisor, fn ->
           Canary.Sources.Chunk

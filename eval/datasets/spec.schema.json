@@ -1,0 +1,102 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "metrics": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "enum": [
+          "ragas_context_precision",
+          "ragas_context_recall",
+          "ragas_answer_relevance",
+          "ragas_faithfulness"
+        ]
+      }
+    },
+    "dataset": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "question": { "type": "string" },
+          "ground_truth": { "type": "string" }
+        }
+      }
+    },
+    "outputs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["answer", "contexts"]
+      }
+    }
+  },
+  "required": ["metrics", "dataset", "outputs"],
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "metrics": { "contains": { "const": "ragas_context_precision" } }
+        }
+      },
+      "then": {
+        "properties": {
+          "dataset": {
+            "items": { "required": ["question", "ground_truth"] }
+          },
+          "outputs": { "contains": { "const": "contexts" } }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "metrics": { "contains": { "const": "ragas_context_recall" } }
+        }
+      },
+      "then": {
+        "properties": {
+          "dataset": { "items": { "required": ["ground_truth"] } },
+          "outputs": { "contains": { "const": "contexts" } }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "metrics": { "contains": { "const": "ragas_answer_relevance" } }
+        }
+      },
+      "then": {
+        "properties": {
+          "dataset": { "items": { "required": ["question"] } },
+          "outputs": {
+            "allOf": [
+              { "contains": { "const": "answer" } },
+              { "contains": { "const": "contexts" } }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "metrics": { "contains": { "const": "ragas_faithfulness" } }
+        }
+      },
+      "then": {
+        "properties": {
+          "outputs": {
+            "allOf": [
+              { "contains": { "const": "answer" } },
+              { "contains": { "const": "contexts" } }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

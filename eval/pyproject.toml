@@ -11,6 +11,7 @@ ragas = "^0.1.13"
 fastapi = "^0.112.0"
 modal = "^0.64.8"
 langchain-openai = "^0.1.20"
+deepeval = "^0.21.74"
 
 [tool.poetry.group.dev.dependencies]
 black = "^24.8.0"
