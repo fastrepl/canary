@@ -5,7 +5,14 @@ metrics:
   - ragas_context_precision
   - ragas_context_recall
 dataset:
-  - question: what is litellm?
-    ground_truth: |
-      LiteLLM is an open source LLM API that allows you to easily call any LLM from your application.
-      It provides both SDK and proxy.
+  - question: what are paid features
+    ground_truth: |-
+      Enterprise features include: SSO, audit logs, JWT auth, custom routing, IP access control, team-based logging, spend tracking, prometheus metrics, content moderation, and custom branding.
+  - question: How to track custom metadata spend
+    ground_truth: |-
+      Use extra_body={"metadata": {"spend_logs_metadata": {...}}} in your API requests, then query /spend/logs endpoint.
+      This is an enterprise feature.
+  - question: can I track costs for different users
+    ground_truth: |-
+      Yes, If you are using SDK, use the BudgetManager class to create and manage spending limits for individual users.
+      If you are using proxy, In your config.yaml, under litellm_settings, add max_budget: 0 (float) to set a maximum budget, and budget_duration: "30d" to specify how often it resets.

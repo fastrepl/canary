@@ -9,11 +9,8 @@ defmodule Canary.Searcher.Default do
   @behaviour Canary.Searcher
 
   def run(source, query) do
-    if String.starts_with?(query, "how") do
-      ai_search(source, query)
-    else
-      normal_search(source, query)
-    end
+    ai = query |> String.split(" ", trim: true) |> Enum.count() > 3
+    if ai, do: ai_search(source, query), else: normal_search(source, query)
   end
 
   defp ai_search(source, query) do
