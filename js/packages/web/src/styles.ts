@@ -79,7 +79,6 @@ export const scrollContainer = css`
     max-height: 425px;
 
     padding-left: 12px;
-    padding-right: 12px;
 
     scrollbar-gutter: stable;
     scrollbar-width: thin;

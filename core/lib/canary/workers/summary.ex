@@ -10,7 +10,7 @@ defmodule Canary.Workers.Summary do
   end
 
   def run(doc, content) do
-    chat_model = Application.fetch_env!(:canary, :chat_completion_model)
+    chat_model = Application.fetch_env!(:canary, :chat_completion_model_background)
 
     messages = [
       system_message(),

@@ -9,7 +9,10 @@ export function cache<T extends (...args: any[]) => any>(fn: T): T {
     }
 
     const result = fn(...args);
-    _cache.set(key, result);
+    if (result) {
+      _cache.set(key, result);
+    }
+
     return result;
   }) as T;
 }

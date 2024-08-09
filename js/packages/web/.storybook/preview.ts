@@ -40,9 +40,12 @@ const preview: Preview = {
         search: [
           http.post(/.*\/api\/v1\/search/, async ({ request }) => {
             const data = (await request.json()) as Record<string, string>;
-            const items = mockSearchReferences("search", data["query"]);
+            const query = data["query"];
+            const items = mockSearchReferences("search", query);
 
-            await delay(Math.random() * 1000 + 200);
+            const isQuestion = query.trim().split(" ").length > 2;
+
+            await delay(Math.random() * (isQuestion ? 1000 : 200) + 100);
             return HttpResponse.json(items);
           }),
         ],

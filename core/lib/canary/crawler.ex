@@ -11,8 +11,8 @@ defmodule Canary.Crawler do
     end)
   end
 
-  def run!(url) do
-    {:ok, result} = run(url)
+  def run!(url, config \\ []) do
+    {:ok, result} = run(url, config)
     result
   end
 
