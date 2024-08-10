@@ -392,14 +392,16 @@ fn to_md_with_marker() {
 
     [https://github.com/BerriAI/litellm](https://github.com/BerriAI/litellm)
 
-    __CANARY__(call-100-llms-using-the-same-inputoutput-format)## **Call 100+ LLMs using the same Input/Output Format**
+    __CANARY__(tag=h2,id=call-100-llms-using-the-same-inputoutput-format,text=**Call 100+ LLMs using the same Input/Output Format**)## **Call 100+ LLMs using the same Input/Output Format**
 
     *   Translate inputs to provider's `completion`, `embedding`, and `image_generation` endpoints
     *   [Consistent output](https://docs.litellm.ai/docs/completion/output), text responses will always be available at `['choices'][0]['message']['content']`
     *   Retry/fallback logic across multiple deployments (e.g. Azure/OpenAI) - [Router](https://docs.litellm.ai/docs/routing)
     *   Track spend & set budgets per project [LiteLLM Proxy Server](https://docs.litellm.ai/docs/simple_proxy)
 
-    __CANARY__(basic-usage)## Basic usage[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/BerriAI/litellm/blob/main/cookbook/liteLLM_Getting_Started.ipynb)
+    __CANARY__(tag=h2,id=basic-usage,text=Basic usage)## Basic usage
+
+    [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/BerriAI/litellm/blob/main/cookbook/liteLLM_Getting_Started.ipynb)
 
     ```shell
     pip install litellm  
@@ -508,7 +510,7 @@ fn to_md_with_marker() {
     )  
     ```
 
-    __CANARY__(streaming)## Streaming
+    __CANARY__(tag=h2,id=streaming,text=Streaming)## Streaming
 
     Set `stream=True` in the `completion` args.
 
@@ -622,7 +624,7 @@ fn to_md_with_marker() {
     )  
     ```
 
-    __CANARY__(exception-handling)## Exception handling
+    __CANARY__(tag=h2,id=exception-handling,text=Exception handling)## Exception handling
 
     LiteLLM maps exceptions across all supported providers to the OpenAI exceptions. All our exceptions inherit from OpenAI's exception types, so any error-handling you have for that, should work out of the box with LiteLLM.
 
@@ -638,7 +640,7 @@ fn to_md_with_marker() {
         print(e)  
     ```
 
-    __CANARY__(logging-observability---log-llm-inputoutput-docs)## Logging Observability - Log LLM Input/Output ([Docs](https://docs.litellm.ai/docs/observability/callbacks))
+    __CANARY__(tag=h2,id=logging-observability---log-llm-inputoutput-docs,text=Logging Observability - Log LLM Input/Output ([Docs](https://docs.litellm.ai/docs/observability/callbacks)))## Logging Observability - Log LLM Input/Output ([Docs](https://docs.litellm.ai/docs/observability/callbacks))
 
     LiteLLM exposes pre defined callbacks to send data to Lunary, Langfuse, Helicone, Promptlayer, Traceloop, Slack
 
@@ -660,7 +662,7 @@ fn to_md_with_marker() {
     response = completion(model="gpt-3.5-turbo", messages=[{"role": "user", "content": "Hi 👋 - i'm openai"}])  
     ```
 
-    __CANARY__(track-costs-usage-latency-for-streaming)## Track Costs, Usage, Latency for streaming
+    __CANARY__(tag=h2,id=track-costs-usage-latency-for-streaming,text=Track Costs, Usage, Latency for streaming)## Track Costs, Usage, Latency for streaming
 
     Use a callback function for this - more info on custom callbacks: [https://docs.litellm.ai/docs/observability/custom\_callback](https://docs.litellm.ai/docs/observability/custom_callback)
 
@@ -694,7 +696,7 @@ fn to_md_with_marker() {
     )  
     ```
 
-    __CANARY__(openai-proxy)## OpenAI Proxy
+    __CANARY__(tag=h2,id=openai-proxy,text=OpenAI Proxy)## OpenAI Proxy
 
     Track spend across multiple projects/people
 
@@ -707,15 +709,15 @@ fn to_md_with_marker() {
     3.  [Cost tracking](https://docs.litellm.ai/docs/proxy/virtual_keys#tracking-spend)
     4.  [Rate Limiting](https://docs.litellm.ai/docs/proxy/users#set-rate-limits)
 
-    ### 📖 Proxy Endpoints - [Swagger Docs](https://litellm-api.up.railway.app/)
+    __CANARY__(tag=h3,id=-proxy-endpoints---swagger-docs,text=📖 Proxy Endpoints - [Swagger Docs](https://litellm-api.up.railway.app/))### 📖 Proxy Endpoints - [Swagger Docs](https://litellm-api.up.railway.app/)
 
-    ### Quick Start Proxy - CLI
+    __CANARY__(tag=h3,id=quick-start-proxy---cli,text=Quick Start Proxy - CLI)### Quick Start Proxy - CLI
 
     ```shell
     pip install 'litellm[proxy]'  
     ```
 
-    #### Step 1: Start litellm proxy
+    __CANARY__(tag=h4,id=step-1-start-litellm-proxy,text=Step 1: Start litellm proxy)#### Step 1: Start litellm proxy
 
     ```shell
     $ litellm --model huggingface/bigcode/starcoder  
@@ -723,7 +725,7 @@ fn to_md_with_marker() {
     #INFO: Proxy running on http://0.0.0.0:8000  
     ```
 
-    #### Step 2: Make ChatCompletions Request to Proxy
+    __CANARY__(tag=h4,id=step-2-make-chatcompletions-request-to-proxy,text=Step 2: Make ChatCompletions Request to Proxy)#### Step 2: Make ChatCompletions Request to Proxy
 
     ```python
     import openai # openai v1.0.0+  
@@ -739,7 +741,7 @@ fn to_md_with_marker() {
     print(response)  
     ```
 
-    __CANARY__(more-details)## More details
+    __CANARY__(tag=h2,id=more-details,text=More details)## More details
 
     *   [exception mapping](/exception_mapping.md)
     *   [retries + model fallbacks for completion()](/completion/reliable_completions.md)

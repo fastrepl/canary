@@ -15,7 +15,7 @@ pub fn to_md_with_marker<'a>(content: &'a str) -> anyhow::Result<String> {
         .skip_tags(vec!["script", "style", "nav", "header", "footer"])
         .add_handler(vec!["div"], handle_div_aria_label)
         .add_handler(vec!["a"], handle_internal_link)
-        .add_handler(vec!["h2"], handle_h2)
+        .add_handler(vec!["h1", "h2", "h3", "h4", "h5", "h6"], handle_heading)
         .build();
 
     converter.convert(content).map_err(anyhow::Error::from)
@@ -51,18 +51,28 @@ fn handle_internal_link(element: htmd::Element) -> Option<String> {
     Some(element.content.to_string())
 }
 
-fn handle_h2(element: htmd::Element) -> Option<String> {
+fn handle_heading(element: htmd::Element) -> Option<String> {
+    let level = element.tag.chars().nth(1).unwrap() as u32 - '0' as u32;
+    let content = element
+        .content
+        .trim_matches(|ch: char| ch.is_ascii_whitespace());
+
+    let mut result = String::from("\n\n");
+
     if let Some(id) = element
         .attrs
         .iter()
         .find(|attr| attr.name.local.as_ref() == "id")
     {
-        return Some(format!(
-            "__CANARY__({})## {}",
-            id.value.to_string(),
-            element.content.to_string()
+        result.push_str(&format!(
+            "__CANARY__(tag={},id={},text={})",
+            element.tag, id.value, content
         ));
     }
 
-    Some(format!("## {}", element.content.to_string()))
+    result.push_str(&"#".repeat(level as usize));
+    result.push(' ');
+    result.push_str(content);
+    result.push_str("\n\n");
+    Some(result)
 }

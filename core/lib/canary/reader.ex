@@ -17,28 +17,32 @@ defmodule Canary.Reader do
     |> String.trim()
   end
 
-  def chunks_from_html(html) do
-    pattern = ~r/__CANARY__\(([^)]+)\)/
-    text = html |> Canary.Native.html_to_md_with_marker()
+  def markdown_sections_from_html(html) do
+    pattern = ~r/__CANARY__\(tag=([^,]+),id=([^,]+),text=([^)]+)\)/
 
-    case Regex.scan(pattern, text) do
-      [] ->
-        [%{anchor: nil, content: text}]
+    html
+    |> Canary.Native.html_to_md_with_marker()
+    |> String.split(pattern, include_captures: true)
+    |> Enum.reduce({[], []}, fn item, {current_group, result} ->
+      if Regex.match?(pattern, item) do
+        {[item], result ++ [current_group]}
+      else
+        {current_group ++ [item], result}
+      end
+    end)
+    |> then(fn {last_group, result} -> result ++ [last_group] end)
+    |> Enum.reject(&(&1 == []))
+    |> Enum.map(fn group ->
+      case group do
+        [content] ->
+          %{content: String.trim(content)}
 
-      _ ->
-        splits = Regex.split(pattern, text, include_captures: true)
-        [first | rest] = splits
-
-        chunks =
-          Enum.chunk_every(rest, 2)
-          |> Enum.map(fn [canary, content] ->
-            [_, anchor] = Regex.run(pattern, canary)
-            %{anchor: anchor, content: String.trim(content)}
-          end)
-
-        first_content = [first, Enum.at(chunks, 0).content] |> Enum.join("\n\n")
-        [%{anchor: nil, content: first_content} | chunks]
-    end
+        [marker, content] ->
+          [_, _tag, id, _title] = Regex.run(pattern, marker)
+          %{content: String.trim(content), id: id}
+      end
+    end)
+    |> Enum.reject(&(&1.content == ""))
   end
 
   def chunk_markdown(content) do
