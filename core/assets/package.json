@@ -15,15 +15,9 @@
     "typescript": "^5.4.5"
   },
   "dependencies": {
-    "@codemirror/lang-javascript": "^6.2.2",
-    "@codemirror/lang-markdown": "^6.2.5",
-    "@codemirror/lang-python": "^6.1.6",
     "@getcanary/web": "^0.0.71",
     "clipboard": "^2.0.11",
     "clsx": "^2.1.1",
-    "cm6-theme-basic-dark": "^0.2.0",
-    "cm6-theme-basic-light": "^0.2.0",
-    "codemirror": "^6.0.1",
     "live_svelte": "file:../deps/live_svelte",
     "phoenix": "file:../deps/phoenix",
     "phoenix_html": "file:../deps/phoenix_html",

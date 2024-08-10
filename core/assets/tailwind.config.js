@@ -11,13 +11,13 @@ module.exports = {
     "../lib/canary_web.ex",
     "../lib/canary_web/**/*.*ex",
     "./svelte/**/*.svelte",
-    "../deps/ash_authentication_phoenix/**/*.*ex",
   ],
   daisyui: {
     themes: ["cmyk"],
   },
   plugins: [
     require("daisyui"),
+    // require("@tailwindcss/forms"),
     // Allows prefixing tailwind classes with LiveView classes to add rules
     // only when LiveView classes are applied, for example:
     //
