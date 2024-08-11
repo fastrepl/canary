@@ -1,8 +1,38 @@
 import { css } from "lit";
 
-// @ts-expect-error
-import { minireset as reset } from "minireset.css/minireset.css.lit.js";
-export { reset };
+export const global = css`
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  * {
+    margin: 0;
+  }
+
+  :host {
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  input,
+  button,
+  textarea,
+  select {
+    font: inherit;
+  }
+
+  p,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    overflow-wrap: break-word;
+  }
+`;
 
 export const callout = css`
   button {

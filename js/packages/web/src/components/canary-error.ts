@@ -1,6 +1,8 @@
 import { LitElement, html, css } from "lit";
 import { customElement } from "lit/decorators.js";
 
+import { global } from "../styles";
+
 const NAME = "canary-error";
 
 @customElement(NAME)
@@ -15,6 +17,7 @@ export class CanaryError extends LitElement {
   }
 
   static styles = [
+    global,
     css`
       @unocss-placeholder;
 
@@ -28,7 +31,6 @@ export class CanaryError extends LitElement {
         gap: 8px;
         align-items: center;
 
-        width: calc(100% - 32px);
         padding: 8px 16px;
 
         border-radius: 8px;

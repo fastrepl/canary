@@ -1,9 +1,10 @@
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, state } from "lit/decorators.js";
 
-import { wrapper } from "../styles";
 import { consume } from "@lit/context";
 import { queryContext } from "../contexts";
+
+import { global, wrapper } from "../styles";
 
 const NAME = "canary-content";
 
@@ -23,6 +24,7 @@ export class CanaryContent extends LitElement {
   }
 
   static styles = [
+    global,
     wrapper,
     css`
       .container {

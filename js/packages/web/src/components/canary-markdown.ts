@@ -21,7 +21,7 @@ import hljs from "highlight.js/lib/core";
 import javascript from "highlight.js/lib/languages/javascript";
 hljs.registerLanguage("javascript", javascript);
 
-import { reset } from "../styles";
+import { global } from "../styles";
 
 const NAME = "canary-markdown";
 
@@ -61,7 +61,7 @@ export class CanaryMarkdown extends LitElement {
 
   // https://github.com/unocss/unocss/blob/main/packages/preset-typography/src/preflights/default.ts
   static styles = [
-    reset,
+    global,
     css`
       .container {
         font-size: 14px;

@@ -66,7 +66,6 @@ export class CanaryAskResults extends LitElement {
     scrollContainer,
     css`
       .scroll-container {
-        width: calc(100% - 32px);
         border: 1px solid var(--canary-color-gray-95);
         border-radius: 8px;
       }
