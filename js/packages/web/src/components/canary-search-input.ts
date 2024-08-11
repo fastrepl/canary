@@ -1,9 +1,9 @@
 import { LitElement, html, nothing } from "lit";
-import { customElement, state } from "lit/decorators.js";
+import { customElement, property, state } from "lit/decorators.js";
 
 import { consume } from "@lit/context";
-import { queryContext, searchContext } from "../contexts";
-import type { QueryContext, SearchContext } from "../types";
+import { searchContext } from "../contexts";
+import type { SearchContext } from "../types";
 
 import { input } from "../styles";
 import { TaskStatus } from "../constants";
@@ -15,19 +15,23 @@ const NAME = "canary-search-input";
 
 @customElement(NAME)
 export class CanarySearchInput extends LitElement {
-  @consume({ context: queryContext, subscribe: false })
-  @state()
-  private _query!: QueryContext;
+  @property({ type: String })
+  query = "";
 
   @consume({ context: searchContext, subscribe: true })
   @state()
   private _search!: SearchContext;
 
+  connectedCallback(): void {
+    super.connectedCallback();
+    this.dispatchEvent(createEvent({ type: "set_query", data: this.query }));
+  }
+
   render() {
     return html`
       <input
         type="text"
-        value=${this._query}
+        value=${this.query}
         autocomplete="off"
         spellcheck="false"
         placeholder="Search for anything..."
@@ -46,7 +50,7 @@ export class CanarySearchInput extends LitElement {
   private _handleInput(e: KeyboardEvent) {
     const input = e.target as HTMLInputElement;
 
-    this._query = input.value;
+    this.query = input.value;
     this.updateComplete.then(() => {
       this.dispatchEvent(createEvent({ type: "set_query", data: input.value }));
     });

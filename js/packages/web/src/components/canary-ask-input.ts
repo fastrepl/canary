@@ -8,7 +8,8 @@ const NAME = "canary-ask-input";
 
 @customElement(NAME)
 export class CanaryAskInput extends LitElement {
-  @property({ reflect: true }) query = "";
+  @property({ type: String })
+  query = "";
 
   render() {
     return html`
