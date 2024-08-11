@@ -1,6 +1,7 @@
 defmodule Canary.Crawler do
   @callback run(String.t(), opts :: keyword()) :: {:ok, map()} | {:error, any()}
   @modules [Canary.Crawler.Sitemap, Canary.Crawler.Fallback]
+
   def run(url, config \\ []) do
     @modules
     |> Enum.reduce_while({:error, :failed}, fn module, _acc ->
@@ -21,10 +22,15 @@ defmodule Canary.Crawler do
     include_patterns = Keyword.get(config, :include_patterns, ["#{base}/**"])
     exclude_patterns = Keyword.get(config, :exclude_patterns, ["#{base}/**/*.json"])
 
-    if Enum.any?(exclude_patterns, &Canary.Native.glob_match(&1, url)) do
-      false
-    else
-      Enum.any?(include_patterns, &Canary.Native.glob_match(&1, url))
+    cond do
+      Enum.any?(exclude_patterns, &Canary.Native.glob_match(&1, url)) ->
+        false
+
+      Enum.empty?(include_patterns) ->
+        true
+
+      true ->
+        Enum.any?(include_patterns, &Canary.Native.glob_match(&1, url))
     end
   end
 end
