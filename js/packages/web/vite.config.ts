@@ -1,3 +1,5 @@
+/// <reference types="vitest" />
+
 import { resolve } from "path";
 
 import { defineConfig } from "vite";
@@ -5,6 +7,9 @@ import unocss from "unocss/vite";
 import dts from "vite-plugin-dts";
 
 export default defineConfig({
+  test: {
+    environmentMatchGlobs: [["./src/store.test.ts", "happy-dom"]],
+  },
   plugins: [
     unocss({ mode: "shadow-dom" }),
     dts({ exclude: ["**/*.stories.*"] }),

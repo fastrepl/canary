@@ -1,7 +1,8 @@
 import { LitElement, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
-import type { Delta } from "../types";
+import type { AskFunction, Delta, SearchFunction } from "../types";
+
 import { wrapper } from "../styles";
 import { createEvent } from "../store";
 import { cache } from "../decorators";
@@ -37,7 +38,7 @@ export class CanaryProviderCloud extends LitElement {
 
   static styles = wrapper;
 
-  search = async (query: string, signal?: AbortSignal) => {
+  search: SearchFunction = async (query: string, signal?: AbortSignal) => {
     const params = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -53,7 +54,7 @@ export class CanaryProviderCloud extends LitElement {
     return res.json();
   };
 
-  ask = async (
+  ask: AskFunction = async (
     id: number,
     query: string,
     handleDelta: (delta: Delta) => void = () => {},

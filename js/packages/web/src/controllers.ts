@@ -165,9 +165,6 @@ export class AskController {
             if (delta.type === "progress") {
               this.appendResponse(delta.content);
             }
-            if (delta.type === "references") {
-              this.appendReferences(delta.items);
-            }
           },
           signal,
         );
@@ -189,11 +186,6 @@ export class AskController {
       this.loading = false;
       this.host.requestUpdate();
     }
-  }
-
-  appendReferences(references: AskReference[]) {
-    this.references = [...this.references, ...references];
-    this.host.requestUpdate();
   }
 
   appendResponse(response: string) {

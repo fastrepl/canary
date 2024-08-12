@@ -5,12 +5,11 @@ import { MINIMAL_VIEWPORTS } from "@storybook/addon-viewport";
 import { html } from "lit";
 import "../src/components/canary-root";
 
-import { http, HttpResponse, delay } from "msw";
 import { initialize, mswLoader } from "msw-storybook-addon";
 initialize();
 
+import { searchHandler, askHandler, suggestHandler } from "../src/msw";
 import "../src/stories.css";
-import { MOCK_RESPONSE, mockAskReference, mockSearchReferences } from "./mock";
 
 const preview: Preview = {
   loaders: [mswLoader],
@@ -37,53 +36,9 @@ const preview: Preview = {
     },
     msw: {
       handlers: {
-        search: [
-          http.post(/.*\/api\/v1\/search/, async ({ request }) => {
-            const data = (await request.json()) as Record<string, string>;
-            const query = data["query"];
-            const items = mockSearchReferences("search", query);
-
-            const isQuestion = query.trim().split(" ").length > 2;
-
-            await delay(Math.random() * (isQuestion ? 1000 : 200) + 100);
-            return HttpResponse.json(items);
-          }),
-        ],
-        ask: [
-          http.post(/.*\/api\/v1\/ask/, async () => {
-            await delay(Math.random() * 2000);
-
-            const encoder = new TextEncoder();
-            const stream = new ReadableStream({
-              async start(controller) {
-                const chunkSize = Math.floor(Math.random() * 3) + 3; // 3-5 characters
-                let index = 0;
-
-                while (index < MOCK_RESPONSE.length) {
-                  const chunk = MOCK_RESPONSE.slice(index, index + chunkSize);
-                  const data = `data: ${JSON.stringify({ type: "progress", content: chunk })}\n\n`;
-
-                  controller.enqueue(encoder.encode(data));
-                  index += chunkSize;
-
-                  await delay(Math.random() * 50 + 20);
-                }
-
-                const references = `data: ${JSON.stringify({ type: "references", items: [mockAskReference()] })}\n\n`;
-                controller.enqueue(encoder.encode(references));
-                controller.close();
-              },
-            });
-
-            return new HttpResponse(stream, {
-              headers: {
-                "Content-Type": "text/event-stream",
-                "Cache-Control": "no-cache",
-                Connection: "keep-alive",
-              },
-            });
-          }),
-        ],
+        search: searchHandler,
+        ask: askHandler,
+        suggest: suggestHandler,
       },
     },
   },
