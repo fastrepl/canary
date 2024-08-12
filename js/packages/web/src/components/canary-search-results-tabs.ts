@@ -1,7 +1,6 @@
 import { LitElement, html, css, type PropertyValues } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
-import { ref, createRef } from "lit/directives/ref.js";
 
 import { consume } from "@lit/context";
 import { searchContext } from "../contexts";
@@ -9,7 +8,6 @@ import { KeyboardSelectionController } from "../controllers";
 
 import type { SearchContext, SearchReference } from "../types";
 import { TaskStatus } from "../constants";
-import { scrollContainer } from "../styles";
 import { MODAL_CLOSE_EVENT } from "./canary-modal";
 
 import "./canary-search-references";
@@ -38,8 +36,6 @@ export class CanarySearchResultsTabs extends LitElement {
     string,
     (SearchReference & { index: number })[]
   > = {};
-
-  private _containerRef = createRef<HTMLElement>();
 
   private _selection = new KeyboardSelectionController<SearchReference>(this, {
     handleEnter: (item) => {
@@ -88,17 +84,12 @@ export class CanarySearchResultsTabs extends LitElement {
         this._search.references,
         this.tabs,
       );
-
-      if (this._containerRef.value) {
-        this._containerRef.value.scrollTop = 0;
-        this._selection.index = 0;
-      }
     }
 
     return html`
       <div class="container">
         ${this._tabs()}
-        <div ${ref(this._containerRef)} class="scroll-container">
+        <div>
           ${this._search.status === TaskStatus.ERROR
             ? html`<canary-error></canary-error>`
             : this._currentResults()}
@@ -182,12 +173,11 @@ export class CanarySearchResultsTabs extends LitElement {
   }
 
   static styles = [
-    scrollContainer,
     css`
       .container {
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: 4px;
       }
 
       .skeleton-container {
@@ -203,9 +193,8 @@ export class CanarySearchResultsTabs extends LitElement {
         flex-direction: row;
         align-items: center;
 
+        padding-left: 2px;
         gap: 8px;
-        padding-left: 16px;
-        padding-right: 12px;
 
         color: var(--canary-color-gray-50);
         text-decoration-color: var(--canary-color-gray-50);

@@ -1,5 +1,6 @@
 import { LitElement, html, css, nothing } from "lit";
 import { customElement, state } from "lit/decorators.js";
+import { ref, createRef } from "lit/directives/ref.js";
 
 import { consume, provide } from "@lit/context";
 import { modeContext, searchContext } from "../contexts";
@@ -7,6 +8,7 @@ import { SearchController } from "../controllers";
 
 import type { ModeContext, SearchContext } from "../types";
 import { DEBOUNCE_MS, MODE_SEARCH, TaskStatus } from "../constants";
+import { scrollContainer } from "../styles";
 import { createEvent } from "../store";
 
 import "./canary-mode-tabs";
@@ -29,6 +31,8 @@ export class CanarySearch extends LitElement {
     references: [],
   };
 
+  private _containerRef = createRef<HTMLElement>();
+
   private _searchTask = new SearchController(this, {
     mode: this.MODE,
     debounceTimeoutMs: DEBOUNCE_MS,
@@ -46,6 +50,12 @@ export class CanarySearch extends LitElement {
         references: this._searchTask.references ?? this._search.references,
       };
     }
+
+    if (this._search.status === TaskStatus.COMPLETE) {
+      if (this._containerRef.value) {
+        this._containerRef.value.scrollTop = 0;
+      }
+    }
   }
 
   render() {
@@ -60,7 +70,7 @@ export class CanarySearch extends LitElement {
               <slot name="input"></slot>
               <slot name="input-after"></slot>
             </div>
-            <div class="body">
+            <div class="scroll-container" ${ref(this._containerRef)}>
               <div class="callouts">
                 <slot name="callout"></slot>
               </div>
@@ -90,6 +100,7 @@ export class CanarySearch extends LitElement {
   }
 
   static styles = [
+    scrollContainer,
     css`
       @unocss-placeholder;
 

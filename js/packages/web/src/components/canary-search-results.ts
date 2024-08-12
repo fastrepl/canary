@@ -1,6 +1,5 @@
 import { LitElement, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
-import { ref, createRef } from "lit/directives/ref.js";
 
 import { consume } from "@lit/context";
 import { searchContext } from "../contexts";
@@ -8,7 +7,6 @@ import { KeyboardSelectionController } from "../controllers";
 
 import type { SearchContext, SearchReference } from "../types";
 import { TaskStatus } from "../constants";
-import { scrollContainer } from "../styles";
 import { MODAL_CLOSE_EVENT } from "./canary-modal";
 
 import "./canary-error";
@@ -38,32 +36,21 @@ export class CanarySearchResults extends LitElement {
     },
   });
 
-  private _containerRef = createRef<HTMLElement>();
-
   render() {
     if (this._search.status === TaskStatus.COMPLETE) {
       this._selection.items = this._search.references;
-
-      if (this._containerRef.value) {
-        this._containerRef.value.scrollTop = 0;
-        this._selection.index = 0;
-      }
     }
 
     return html`
-      <div ${ref(this._containerRef)} class="scroll-container">
-        ${this._search.status === TaskStatus.ERROR
-          ? html`<canary-error></canary-error>`
-          : html`<canary-search-references
-              .group=${this.group}
-              .selected=${this._selection.index}
-              .references=${this._search.references}
-            ></canary-search-references>`}
-      </div>
+      ${this._search.status === TaskStatus.ERROR
+        ? html`<canary-error></canary-error>`
+        : html`<canary-search-references
+            .group=${this.group}
+            .selected=${this._selection.index}
+            .references=${this._search.references}
+          ></canary-search-references>`}
     `;
   }
-
-  static styles = scrollContainer;
 }
 
 declare global {
