@@ -38,7 +38,7 @@ export class CanaryProviderCloud extends LitElement {
 
   static styles = wrapper;
 
-  search: SearchFunction = async (query: string, signal?: AbortSignal) => {
+  search: SearchFunction = async (query, signal) => {
     const params = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -54,12 +54,7 @@ export class CanaryProviderCloud extends LitElement {
     return res.json();
   };
 
-  ask: AskFunction = async (
-    id: number,
-    query: string,
-    handleDelta: (delta: Delta) => void = () => {},
-    signal?: AbortSignal,
-  ) => {
+  ask: AskFunction = async (id, query, handleDelta, signal) => {
     const url = `${this.endpoint}/api/v1/ask`;
     const params = {
       method: "POST",

@@ -61,7 +61,7 @@ export class CanaryReference extends LitElement {
               i < parts.length - 1
                 ? html`
                     <span class="path">${part}</span>
-                    <div class="icon i-heroicons-chevron-right"></div>
+                    <span class="icon i-heroicons-chevron-right"></span>
                   `
                 : html`<span class="path">${part}</span>`,
             )}
