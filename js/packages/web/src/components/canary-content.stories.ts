@@ -20,6 +20,7 @@ import "./canary-search";
 import "./canary-search-input";
 import "./canary-search-results";
 import "./canary-search-results-tabs";
+import "./canary-search-suggestions";
 
 import "./canary-ask";
 import "./canary-ask-input";
@@ -29,8 +30,11 @@ import "./canary-callout-cal";
 import "./canary-callout-discord";
 
 enum Kind {
+  Ask,
   Search,
+  SearchInitial,
   SearchEmpty,
+  SearchSection,
   SearchGroup,
   SearchTabs,
   SearchError,
@@ -66,11 +70,33 @@ export default {
       `);
     }
 
+    if (kind === Kind.SearchInitial) {
+      return wrapper(html`
+        <canary-search slot="mode">
+          <canary-search-input
+            slot="input"
+            query="initial query 2"
+          ></canary-search-input>
+          <canary-search-results slot="result"></canary-search-results>
+        </canary-search>
+      `);
+    }
+
     if (kind === Kind.SearchEmpty) {
       return wrapper(html`
         <canary-search slot="mode">
           <canary-search-input slot="input"></canary-search-input>
           <canary-search-results slot="result"></canary-search-results>
+        </canary-search>
+      `);
+    }
+
+    if (kind === Kind.SearchSection) {
+      return wrapper(html`
+        <canary-search slot="mode">
+          <canary-search-input slot="input"></canary-search-input>
+          <canary-search-suggestions slot="result"></canary-search-suggestions>
+          <canary-search-results slot="result" group></canary-search-results>
         </canary-search>
       `);
     }
@@ -123,6 +149,15 @@ export default {
           <canary-search-input slot="input"></canary-search-input>
           <canary-search-results slot="result"></canary-search-results>
         </canary-search>
+      `);
+    }
+
+    if (kind === Kind.Ask) {
+      return wrapper(html`
+        <canary-ask slot="mode">
+          <canary-ask-input slot="input"></canary-ask-input>
+          <canary-ask-results slot="result"></canary-ask-results>
+        </canary-ask>
       `);
     }
 
@@ -179,9 +214,18 @@ export const Search: StoryObj = {
   play: type("20hi"),
 };
 
+export const SearchWithInitialQuery: StoryObj = {
+  args: { kind: Kind.SearchInitial },
+};
+
 export const SearchEmpty: StoryObj = {
   args: { kind: Kind.SearchEmpty },
   play: type("0hi"),
+};
+
+export const SearchWithSection: StoryObj = {
+  args: { kind: Kind.SearchSection },
+  play: type("20hi"),
 };
 
 export const SearchWithGroup: StoryObj = {
@@ -217,6 +261,10 @@ export const SearchMobile: StoryObj = {
   args: { kind: Kind.SearchMobile },
   play: type("20hi"),
   parameters: { viewport: { defaultViewport: "mobile1", disable: false } },
+};
+
+export const Ask: StoryObj = {
+  args: { kind: Kind.Ask },
 };
 
 export const SearchAsk1: StoryObj = {

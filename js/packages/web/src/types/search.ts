@@ -13,14 +13,9 @@ export type SearchFunctionResult = {
   };
 };
 
-export type SearchFunctionOptions = {
-  includeSuggestion?: boolean;
-};
-
 export type SearchFunction = (
   query: string,
   signal: AbortSignal,
-  options?: SearchFunctionOptions,
 ) => Promise<SearchFunctionResult>;
 
 export type BeforeSearchFunction = (query: string) => Promise<any>;

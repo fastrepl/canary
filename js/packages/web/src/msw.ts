@@ -1,6 +1,10 @@
 import { http, HttpResponse, delay } from "msw";
 
-import type { SearchReference, AskReference } from "./types";
+import type {
+  AskReference,
+  SearchReference,
+  SearchFunctionResult,
+} from "./types";
 
 const MOCK_RESPONSE = `
 # The Whimsical World of Flibbertigibbets
@@ -65,12 +69,15 @@ export const searchHandler = http.post(
   async ({ request }) => {
     const data = (await request.json()) as Record<string, string>;
     const query = data["query"];
-    const items = mockSearchReferences("search", query);
 
     const isQuestion = query.trim().split(" ").length > 2;
-
     await delay(Math.random() * (isQuestion ? 1000 : 200) + 100);
-    return HttpResponse.json({ search: items });
+
+    const result: SearchFunctionResult = {
+      search: mockSearchReferences("search", query),
+      suggestion: { questions: [`Can you tell me about ${query}`] },
+    };
+    return HttpResponse.json(result);
   },
 );
 
