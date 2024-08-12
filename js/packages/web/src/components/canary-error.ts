@@ -20,10 +20,6 @@ export class CanaryError extends LitElement {
     global,
     css`
       @unocss-placeholder;
-
-      .icon {
-        color: var(--canary-color-gray-20);
-      }
     `,
     css`
       div.container {

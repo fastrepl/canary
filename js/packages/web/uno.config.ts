@@ -6,6 +6,9 @@ export default defineConfig({
   presets: [
     presetUno(),
     presetIcons({
+      extraProperties: {
+        color: "var(--canary-color-gray-20)",
+      },
       collections: {
         heroicons: () =>
           import("@iconify-json/heroicons/icons.json").then((i) => i.default),

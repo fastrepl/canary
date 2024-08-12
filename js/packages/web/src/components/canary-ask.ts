@@ -7,6 +7,7 @@ import { modeContext } from "../contexts";
 import type { ModeContext } from "../types";
 import { MODE_ASK } from "../constants";
 import { createEvent } from "../store";
+import { global } from "../styles";
 
 import "./canary-mode-tabs";
 
@@ -45,12 +46,9 @@ export class CanaryAsk extends LitElement {
   }
 
   static styles = [
+    global,
     css`
       @unocss-placeholder;
-
-      .icon {
-        color: var(--canary-color-gray-20);
-      }
     `,
     css`
       .container {

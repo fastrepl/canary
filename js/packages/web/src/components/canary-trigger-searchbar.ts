@@ -42,10 +42,6 @@ export class CanaryTriggerSearchbar extends LitElement {
     wrapper,
     css`
       @unocss-placeholder;
-
-      .icon {
-        color: var(--canary-color-gray-20);
-      }
     `,
     css`
       :host {

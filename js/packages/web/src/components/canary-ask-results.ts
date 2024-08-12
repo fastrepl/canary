@@ -6,7 +6,6 @@ import type { AskContext, AskReference, ThemeContext } from "../types";
 import { askContext, themeContext } from "../contexts";
 
 import { MODE_ASK } from "../constants";
-import { scrollContainer } from "../styles";
 
 import "./canary-markdown";
 import "./canary-reference";
@@ -32,7 +31,7 @@ export class CanaryAskResults extends LitElement {
     }
 
     return html`
-      <div class="scroll-container">
+      <div class="container">
         ${this._content(this._ask.response, this._ask.references)}
       </div>
     `;
@@ -58,11 +57,11 @@ export class CanaryAskResults extends LitElement {
   }
 
   static styles = [
-    scrollContainer,
     css`
-      .scroll-container {
+      .container {
         border: 1px solid var(--canary-color-gray-95);
         border-radius: 8px;
+        padding: 8px 12px;
       }
 
       .references {

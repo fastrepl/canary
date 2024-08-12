@@ -37,10 +37,6 @@ export class CanaryModeBreadcrumb extends LitElement {
   static styles = [
     css`
       @unocss-placeholder;
-
-      .icon {
-        color: var(--canary-color-gray-20);
-      }
     `,
     css`
       div.container {

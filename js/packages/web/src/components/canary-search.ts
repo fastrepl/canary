@@ -58,10 +58,6 @@ export class CanarySearch extends LitElement {
     scrollContainer,
     css`
       @unocss-placeholder;
-
-      .icon {
-        color: var(--canary-color-gray-20);
-      }
     `,
     css`
       .container {
