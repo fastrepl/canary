@@ -30,7 +30,8 @@ export class CanaryProviderMock extends LitElement {
     await new Promise((resolve) =>
       setTimeout(resolve, Math.random() * 300 + 200),
     );
-    return [
+
+    const search = [
       {
         title: "title 1",
         url: "https://example.com/docs/a/b",
@@ -72,6 +73,8 @@ export class CanaryProviderMock extends LitElement {
         excerpt: "this is <mark>a match</mark>.",
       },
     ];
+
+    return { search: search };
   };
 
   ask: AskFunction = async (_id, _query, handleDelta, _signal) => {

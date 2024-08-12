@@ -34,7 +34,7 @@ test("store", async () => {
         _query: string,
         _signal: AbortSignal,
       ): ReturnType<SearchFunction> => {
-        return data;
+        return { search: data };
       },
     );
 
@@ -58,5 +58,5 @@ test("store", async () => {
   const snapshot = store.getSnapshot().context.searchManager.ctx.value;
   expect(search).toHaveBeenCalledTimes(1);
   expect(snapshot.status).toBe(TaskStatus.COMPLETE);
-  expect(snapshot.references).toEqual(data);
+  expect(snapshot.result.search).toEqual(data);
 });

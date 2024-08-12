@@ -38,7 +38,7 @@ export class CanarySearchResults extends LitElement {
     }
 
     if (this._search.status === TaskStatus.COMPLETE) {
-      this._selection.items = this._search.references;
+      this._selection.items = this._search.result.search;
     }
 
     return html`
@@ -47,7 +47,7 @@ export class CanarySearchResults extends LitElement {
         : html`<canary-search-references
             .group=${this.group}
             .selected=${this._selection.index}
-            .references=${this._search.references}
+            .references=${this._search.result.search}
           ></canary-search-references>`}
     `;
   }

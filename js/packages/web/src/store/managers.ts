@@ -3,9 +3,7 @@ import { ContextProvider } from "@lit/context";
 import type {
   OperationContext,
   SearchContext,
-  SearchFunction,
   AskContext,
-  AskReference,
   Delta,
 } from "../types";
 import { asyncSleep } from "../utils";
@@ -37,7 +35,7 @@ export class SearchManager {
     this._options = options;
     this.ctx = new ContextProvider(host, {
       context: searchContext,
-      initialValue: { status: TaskStatus.INITIAL, references: [] },
+      initialValue: { status: TaskStatus.INITIAL, result: { search: [] } },
     });
   }
 
@@ -55,7 +53,7 @@ export class SearchManager {
     if (this.ctx.value.status === TaskStatus.PENDING) {
       this._abortController.abort(ABORT_REASON_MANAGER);
     }
-    this.transition(TaskStatus.PENDING);
+    this.transition({ status: TaskStatus.PENDING });
 
     const callId = ++this._callId;
     operations.beforeSearch?.(query);
@@ -71,28 +69,19 @@ export class SearchManager {
         query,
         this._abortController.signal,
       );
-      this.transition(TaskStatus.COMPLETE, result);
+      this.transition({ status: TaskStatus.COMPLETE, result });
     } catch (e) {
       if (e === ABORT_REASON_MANAGER) {
         return;
       }
 
       console.error(e);
-      this.transition(TaskStatus.ERROR);
+      this.transition({ status: TaskStatus.ERROR });
     }
   }
 
-  private transition(
-    status: TaskStatus,
-    result?: Awaited<ReturnType<SearchFunction>>,
-  ) {
-    const next = {
-      ...this.ctx.value,
-      status,
-      ...(result && { references: result }),
-    };
-
-    this.ctx.setValue(next);
+  private transition(diff: Partial<SearchContext>) {
+    this.ctx.setValue({ ...this.ctx.value, ...diff });
   }
 }
 
@@ -132,11 +121,11 @@ export class AskManager {
 
     this._abortController = new AbortController();
 
-    const references = await operations.search(
+    const { search } = await operations.search(
       query,
       this._abortController.signal,
     );
-    this.transition({ status: TaskStatus.PENDING, references });
+    this.transition({ status: TaskStatus.PENDING, references: search });
 
     await operations.ask(
       crypto.randomUUID(),
@@ -155,11 +144,6 @@ export class AskManager {
   }
 
   private transition(diff: Partial<AskContext>) {
-    const next = {
-      ...this.ctx.value,
-      ...diff,
-    };
-
-    this.ctx.setValue(next);
+    this.ctx.setValue({ ...this.ctx.value, ...diff });
   }
 }

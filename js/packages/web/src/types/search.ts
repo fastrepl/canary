@@ -6,9 +6,21 @@ export interface SearchReference {
   excerpt?: string;
 }
 
+export type SearchFunctionResult = {
+  search: SearchReference[];
+  suggestion?: {
+    questions: string[];
+  };
+};
+
+export type SearchFunctionOptions = {
+  includeSuggestion?: boolean;
+};
+
 export type SearchFunction = (
   query: string,
   signal: AbortSignal,
-) => Promise<SearchReference[]>;
+  options?: SearchFunctionOptions,
+) => Promise<SearchFunctionResult>;
 
 export type BeforeSearchFunction = (query: string) => Promise<any>;

@@ -1,7 +1,7 @@
 import type {
   SearchFunction,
   BeforeSearchFunction,
-  SearchReference,
+  SearchFunctionResult,
 } from "./search";
 import type { AskFunction, AskReference } from "./ask";
 import type { FeedbackFunction } from "./feedback";
@@ -16,7 +16,7 @@ export type ModeContext = {
 
 export type SearchContext = {
   status: TaskStatus;
-  references: SearchReference[];
+  result: SearchFunctionResult;
 };
 
 export type AskContext = {

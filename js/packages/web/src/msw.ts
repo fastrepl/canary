@@ -70,7 +70,7 @@ export const searchHandler = http.post(
     const isQuestion = query.trim().split(" ").length > 2;
 
     await delay(Math.random() * (isQuestion ? 1000 : 200) + 100);
-    return HttpResponse.json(items);
+    return HttpResponse.json({ search: items });
   },
 );
 

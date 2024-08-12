@@ -85,7 +85,7 @@ export class CanarySearchResultsTabs extends LitElement {
 
     if (this._search.status === TaskStatus.COMPLETE) {
       this._groupedReferences = this._groupReferences(
-        this._search.references,
+        this._search.result.search,
         this.tabs,
       );
     }

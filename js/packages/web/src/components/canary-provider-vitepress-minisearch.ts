@@ -90,18 +90,19 @@ export class CanaryProviderVitepressMinisearch extends LitElement {
   search: SearchFunction = async (query, _signal) => {
     return new Promise((resolve) => {
       if (!this.minisearch) {
-        resolve([]);
+        resolve({ search: [] });
         return;
       }
 
-      const results = this.minisearch.search(query);
-      const hits: SearchReference[] = results.map((result) => ({
-        url: new URL(result.id, window.location.origin).toString(),
-        title: result.title,
-        titles: result.titles,
-      }));
+      const refs: SearchReference[] = this.minisearch
+        .search(query)
+        .map((result) => ({
+          url: new URL(result.id, window.location.origin).toString(),
+          title: result.title,
+          titles: result.titles,
+        }));
 
-      resolve(hits);
+      resolve({ search: refs });
     });
   };
 }

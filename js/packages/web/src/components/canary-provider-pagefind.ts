@@ -76,7 +76,7 @@ export class CanaryProviderPagefind extends LitElement {
   };
 
   search: SearchFunction = async (query, signal) => {
-    const op = this.pagefind
+    const op: Promise<SearchReference[]> = this.pagefind
       .search(query)
       .then(({ results }: any) =>
         Promise.all(
@@ -86,14 +86,15 @@ export class CanaryProviderPagefind extends LitElement {
 
     try {
       signal.throwIfAborted();
-      return cancellable(op, signal);
+      const search = await cancellable(op, signal);
+      return { search: search };
     } catch (e) {
       console.error(e);
-      return [];
+      return { search: [] };
     }
   };
 
-  private _transform(results: PagefindResult[]): SearchReference[] | null {
+  private _transform(results: PagefindResult[]): SearchReference[] {
     const subResults = results.flatMap((result) => {
       return result.sub_results.map((subResult) => ({
         ...subResult,
