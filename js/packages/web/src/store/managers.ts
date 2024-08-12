@@ -25,22 +25,30 @@ type SearchManagerOptions = {
 const ABORT_REASON_MANAGER = "manager";
 
 export class SearchManager {
-  ctx: ContextProvider<{ __context__: SearchContext }, any>;
+  private _ctx: ContextProvider<{ __context__: SearchContext }, any>;
+  private _abortController = new AbortController();
 
   private _options: SearchManagerOptions;
   private _callId = 0;
-  private _abortController = new AbortController();
 
   constructor(host: HTMLElement, options: SearchManagerOptions) {
     this._options = options;
-    this.ctx = new ContextProvider(host, {
+    this._ctx = new ContextProvider(host, {
       context: searchContext,
       initialValue: { status: TaskStatus.INITIAL, result: { search: [] } },
     });
   }
 
+  get ctx() {
+    return this._ctx.value;
+  }
+
+  set ctx(ctx: SearchContext) {
+    this._ctx.setValue(ctx);
+  }
+
   abort() {
-    if (this.ctx.value.status === TaskStatus.PENDING) {
+    if (this.ctx.status === TaskStatus.PENDING) {
       this._abortController?.abort(ABORT_REASON_MANAGER);
     }
   }
@@ -50,7 +58,7 @@ export class SearchManager {
       return;
     }
 
-    if (this.ctx.value.status === TaskStatus.PENDING) {
+    if (this.ctx.status === TaskStatus.PENDING) {
       this._abortController.abort(ABORT_REASON_MANAGER);
     }
     this.transition({ status: TaskStatus.PENDING });
@@ -81,17 +89,16 @@ export class SearchManager {
   }
 
   private transition(diff: Partial<SearchContext>) {
-    this.ctx.setValue({ ...this.ctx.value, ...diff });
+    this.ctx = { ...this.ctx, ...diff };
   }
 }
 
 export class AskManager {
-  ctx: ContextProvider<{ __context__: AskContext }, any>;
-
+  private _ctx: ContextProvider<{ __context__: AskContext }, any>;
   private _abortController = new AbortController();
 
   constructor(host: HTMLElement) {
-    this.ctx = new ContextProvider(host, {
+    this._ctx = new ContextProvider(host, {
       context: askContext,
       initialValue: {
         status: TaskStatus.INITIAL,
@@ -104,9 +111,17 @@ export class AskManager {
   }
 
   abort() {
-    if (this.ctx.value.status === TaskStatus.PENDING) {
+    if (this.ctx.status === TaskStatus.PENDING) {
       this._abortController?.abort(ABORT_REASON_MANAGER);
     }
+  }
+
+  get ctx() {
+    return this._ctx.value;
+  }
+
+  set ctx(ctx: AskContext) {
+    this._ctx.setValue(ctx);
   }
 
   async run(query: string, operations: OperationContext) {
@@ -114,7 +129,7 @@ export class AskManager {
       return;
     }
 
-    if (this.ctx.value.status === TaskStatus.PENDING) {
+    if (this.ctx.status === TaskStatus.PENDING) {
       this._abortController.abort(ABORT_REASON_MANAGER);
     }
     this.transition({ status: TaskStatus.PENDING, query });
@@ -125,7 +140,11 @@ export class AskManager {
       query,
       this._abortController.signal,
     );
-    this.transition({ status: TaskStatus.PENDING, references: search });
+    this.transition({
+      status: TaskStatus.PENDING,
+      references: search,
+      response: "",
+    });
 
     await operations.ask(
       crypto.randomUUID(),
@@ -138,12 +157,12 @@ export class AskManager {
 
   private _handleDelta(delta: Delta) {
     if (delta.type === "progress") {
-      const response = this.ctx.value.response + delta.content;
+      const response = this.ctx.response + delta.content;
       this.transition({ response, progress: true });
     }
   }
 
   private transition(diff: Partial<AskContext>) {
-    this.ctx.setValue({ ...this.ctx.value, ...diff });
+    this.ctx = { ...this.ctx, ...diff };
   }
 }

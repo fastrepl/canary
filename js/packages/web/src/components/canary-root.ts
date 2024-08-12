@@ -13,7 +13,8 @@ const NAME = "canary-root";
 
 @customElement(NAME)
 export class CanaryRoot extends LitElement {
-  @property({ type: String }) framework: Framework = "starlight";
+  @property({ type: String })
+  framework: Framework = "starlight";
 
   @provide({ context: themeContext })
   @property({ type: String, reflect: true })

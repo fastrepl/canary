@@ -4,10 +4,10 @@ import { setupServer } from "msw/node";
 import { searchHandler, askHandler } from "../msw";
 
 import { asyncSleep } from "../utils";
-import { SearchFunction } from "../types";
-import { MODE_SEARCH } from "../constants";
+import { SearchFunction, AskFunction } from "../types";
+import { MODE_SEARCH, MODE_ASK } from "../constants";
 
-import { createStore } from "./index";
+import { createStore } from "./store";
 import { TaskStatus } from "./managers";
 
 const handlers = [searchHandler, askHandler];
@@ -17,8 +17,7 @@ beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
-test("store", async () => {
-  expect(true).toBe(true);
+test("debounced search", async () => {
   const store = createStore(document.createElement("div"));
 
   const data = [
@@ -47,7 +46,7 @@ test("store", async () => {
 
   await vi.waitFor(
     () => {
-      const ctx = store.getSnapshot().context.searchManager.ctx.value;
+      const ctx = store.getSnapshot().context.searchManager.ctx;
       if (ctx.status !== TaskStatus.COMPLETE) {
         throw new Error();
       }
@@ -55,8 +54,24 @@ test("store", async () => {
     { timeout: 2000, interval: 50 },
   );
 
-  const snapshot = store.getSnapshot().context.searchManager.ctx.value;
+  const snapshot = store.getSnapshot().context.searchManager.ctx;
   expect(search).toHaveBeenCalledTimes(1);
   expect(snapshot.status).toBe(TaskStatus.COMPLETE);
   expect(snapshot.result.search).toEqual(data);
+});
+
+test("ask", async () => {
+  const store = createStore(document.createElement("div"));
+
+  const ask = vi
+    .fn()
+    .mockImplementationOnce(
+      async (_query: string, _signal: AbortSignal): ReturnType<AskFunction> => {
+        return null;
+      },
+    );
+
+  store.send({ type: "register_operations", data: { ask } });
+  store.send({ type: "register_mode", data: MODE_SEARCH });
+  store.send({ type: "register_mode", data: MODE_ASK });
 });

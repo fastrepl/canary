@@ -5,6 +5,8 @@ import { http, HttpResponse } from "msw";
 import { userEvent } from "@storybook/test";
 import { getAllByShadowRole } from "shadow-dom-testing-library";
 
+import { createEvent, TaskStatus } from "../store";
+
 import "./canary-provider-cloud";
 import "./canary-content";
 import "./canary-mode-tabs";
@@ -48,6 +50,24 @@ const type = (text: string): StoryObj["play"] => {
   return async ({ canvasElement }) => {
     const [input] = getAllByShadowRole(canvasElement, "textbox");
     await userEvent.type(input, text);
+  };
+};
+
+const init_ask = (): StoryObj["play"] => {
+  return async ({ canvasElement }) => {
+    const [input] = getAllByShadowRole(canvasElement, "textbox");
+    input.dispatchEvent(
+      createEvent({
+        type: "_unsafe_set_ask_ctx",
+        data: {
+          status: TaskStatus.COMPLETE,
+          response: "# Title\n\nHello World",
+          query: "hello",
+          progress: false,
+          references: [{ url: "https://example.com", title: "title" }],
+        },
+      }),
+    );
   };
 };
 
@@ -265,6 +285,7 @@ export const SearchMobile: StoryObj = {
 
 export const Ask: StoryObj = {
   args: { kind: Kind.Ask },
+  play: init_ask(),
 };
 
 export const SearchAsk1: StoryObj = {
