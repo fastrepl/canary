@@ -18,7 +18,7 @@ import type {
   SearchReference,
 } from "./types";
 
-import { asyncSleep, randomInteger } from "./utils";
+import { asyncSleep } from "./utils";
 
 const wrapRenderer = <T>(renderer: StatusRenderer<T>) => {
   return {
@@ -157,7 +157,7 @@ export class AskController {
         this.setLoading();
 
         await ask(
-          randomInteger(),
+          crypto.randomUUID(),
           query,
           (delta) => {
             this.setNotLoading();

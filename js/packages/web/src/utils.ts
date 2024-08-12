@@ -1,9 +1,5 @@
 import type { SearchReference } from "./types";
 
-export const randomInteger = () => {
-  return Math.floor(Math.random() * 1000000000000000);
-};
-
 export const urlToParts = (url: string) => {
   let paths: string[] = [];
   try {
