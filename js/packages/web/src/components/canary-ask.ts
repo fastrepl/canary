@@ -22,7 +22,6 @@ export class CanaryAsk extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-
     this.dispatchEvent(createEvent({ type: "register_mode", data: this.MODE }));
   }
 

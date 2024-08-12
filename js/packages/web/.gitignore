@@ -25,3 +25,5 @@ dist-ssr
 
 *storybook.log
 storybook-static
+
+vite.config.ts.timestamp-*

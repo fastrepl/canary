@@ -8,7 +8,7 @@ import "../src/components/canary-root";
 import { initialize, mswLoader } from "msw-storybook-addon";
 initialize();
 
-import { searchHandler, askHandler, suggestHandler } from "../src/msw";
+import { searchHandler, askHandler } from "../src/msw";
 import "../src/stories.css";
 
 const preview: Preview = {
@@ -38,7 +38,6 @@ const preview: Preview = {
       handlers: {
         search: searchHandler,
         ask: askHandler,
-        suggest: suggestHandler,
       },
     },
   },

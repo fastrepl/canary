@@ -1,4 +1,4 @@
-import { LitElement, html, css, type PropertyValues } from "lit";
+import { LitElement, html, css, nothing, type PropertyValues } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 
@@ -7,7 +7,7 @@ import { searchContext } from "../contexts";
 import { KeyboardSelectionController } from "../controllers";
 
 import type { SearchContext, SearchReference } from "../types";
-import { TaskStatus } from "../constants";
+import { TaskStatus } from "../store/managers";
 import { MODAL_CLOSE_EVENT } from "./canary-modal";
 
 import "./canary-search-references";
@@ -29,7 +29,7 @@ export class CanarySearchResultsTabs extends LitElement {
 
   @consume({ context: searchContext, subscribe: true })
   @state()
-  private _search!: SearchContext;
+  private _search?: SearchContext;
 
   @state() _selectedTab = "";
   @state() _groupedReferences: Record<
@@ -79,6 +79,10 @@ export class CanarySearchResultsTabs extends LitElement {
   }
 
   render() {
+    if (!this._search) {
+      return nothing;
+    }
+
     if (this._search.status === TaskStatus.COMPLETE) {
       this._groupedReferences = this._groupReferences(
         this._search.references,

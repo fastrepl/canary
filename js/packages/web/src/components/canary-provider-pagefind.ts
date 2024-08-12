@@ -75,10 +75,7 @@ export class CanaryProviderPagefind extends LitElement {
     this.pagefind.preload(query);
   };
 
-  search: SearchFunction = async (
-    query: string,
-    signal: AbortSignal,
-  ): Promise<SearchReference[]> => {
+  search: SearchFunction = async (query, signal) => {
     const op = this.pagefind
       .search(query)
       .then(({ results }: any) =>

@@ -2,8 +2,10 @@ import { ContextProvider } from "@lit/context";
 
 import { createStore as store } from "@xstate/store";
 
-import { type OperationContext } from "./types";
-import { operationContext, modeContext, queryContext } from "./contexts";
+import { type OperationContext } from "../types";
+import { operationContext, modeContext, queryContext } from "../contexts";
+import { SearchManager, AskManager } from "./managers";
+import { MODE_ASK, MODE_SEARCH } from "../constants";
 
 export const createStore = (host: HTMLElement) =>
   store(
@@ -23,6 +25,10 @@ export const createStore = (host: HTMLElement) =>
         context: queryContext,
         initialValue: "",
       }),
+      searchManager: new SearchManager(host, {
+        debounceMs: 140,
+      }),
+      askManager: new AskManager(host),
     },
     {
       register_operations: {
@@ -42,12 +48,36 @@ export const createStore = (host: HTMLElement) =>
       set_mode: {
         mode: (context, { data }: { data: string }) => {
           context.mode.setValue({ ...context.mode.value, current: data });
+
+          if (data === MODE_SEARCH) {
+            context.askManager.abort();
+            context.searchManager.run(
+              context.query.value,
+              context.operation.value,
+            );
+          }
+          if (data === MODE_ASK) {
+            context.searchManager.abort();
+            context.askManager.run(
+              context.query.value,
+              context.operation.value,
+            );
+          }
+
           return context.mode;
         },
       },
       set_query: {
         query: (context, { data }: { data: string }) => {
           context.query.setValue(data);
+
+          if (context.mode.value.current === MODE_SEARCH) {
+            context.searchManager.run(data, context.operation.value);
+          }
+          if (context.mode.value.current === MODE_ASK) {
+            context.askManager.run(data, context.operation.value);
+          }
+
           return context.query;
         },
       },

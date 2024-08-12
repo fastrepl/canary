@@ -1,6 +1,6 @@
 import { http, HttpResponse, delay } from "msw";
 
-import type { SearchReference, AskReference, Suggestion } from "./types";
+import type { SearchReference, AskReference } from "./types";
 
 const MOCK_RESPONSE = `
 # The Whimsical World of Flibbertigibbets
@@ -73,15 +73,6 @@ export const searchHandler = http.post(
     return HttpResponse.json(items);
   },
 );
-
-export const suggestHandler = http.post(/.*\/api\/v1\/suggest/, async () => {
-  const result: Suggestion = {
-    questions: [],
-  };
-
-  await delay(Math.random() * 50 + 50);
-  return HttpResponse.json(result);
-});
 
 export const askHandler = http.post(/.*\/api\/v1\/ask/, async () => {
   await delay(Math.random() * 2000);

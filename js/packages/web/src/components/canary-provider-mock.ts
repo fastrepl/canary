@@ -1,7 +1,7 @@
 import { LitElement, html } from "lit";
 import { customElement } from "lit/decorators.js";
 
-import type { Delta } from "../types";
+import type { AskFunction, SearchFunction } from "../types";
 import { wrapper } from "../styles";
 import { createEvent } from "../store";
 
@@ -26,7 +26,7 @@ export class CanaryProviderMock extends LitElement {
 
   static styles = wrapper;
 
-  search = async (_query: string, _signal?: AbortSignal) => {
+  search: SearchFunction = async (_query, _signal) => {
     await new Promise((resolve) =>
       setTimeout(resolve, Math.random() * 300 + 200),
     );
@@ -74,12 +74,7 @@ export class CanaryProviderMock extends LitElement {
     ];
   };
 
-  ask = async (
-    _id: number,
-    _query: string,
-    handleDelta: (delta: Delta) => void = () => {},
-    _signal?: AbortSignal,
-  ) => {
+  ask: AskFunction = async (_id, _query, handleDelta, _signal) => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
     handleDelta({ type: "progress", content: "hello" });
     await new Promise((resolve) => setTimeout(resolve, 100));

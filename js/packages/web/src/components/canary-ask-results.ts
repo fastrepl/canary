@@ -1,12 +1,11 @@
-import { LitElement, html, css } from "lit";
+import { LitElement, html, css, nothing } from "lit";
 import { customElement, state } from "lit/decorators.js";
 
 import { consume } from "@lit/context";
-import type { ThemeContext } from "../types";
-import { themeContext } from "../contexts";
+import type { AskContext, AskReference, ThemeContext } from "../types";
+import { askContext, themeContext } from "../contexts";
 
 import { MODE_ASK } from "../constants";
-import { AskController } from "../controllers";
 import { scrollContainer } from "../styles";
 
 import "./canary-markdown";
@@ -23,35 +22,31 @@ export class CanaryAskResults extends LitElement {
   @state()
   theme!: ThemeContext;
 
-  private _ask = new AskController(this, { mode: this.MODE });
+  @consume({ context: askContext, subscribe: true })
+  @state()
+  private _ask?: AskContext;
 
   render() {
-    return html` <div class="scroll-container">
-      <h2>${this._ask.query}</h2>
+    if (!this._ask) {
+      return nothing;
+    }
 
-      ${this._ask.render({
-        initial: () => html`<canary-loading-dots></canary-loading-dots>`,
-        pending: () =>
-          html`${this._ask.loading
-            ? html`<canary-loading-dots></canary-loading-dots>`
-            : this._content()}`,
-        complete: () =>
-          html`${this._ask.loading
-            ? html`<canary-loading-dots></canary-loading-dots>`
-            : this._content()}`,
-      })}
-    </div>`;
+    return html`
+      <div class="scroll-container">
+        ${this._content(this._ask.response, this._ask.references)}
+      </div>
+    `;
   }
 
-  private _content() {
+  private _content(response: string, references: AskReference[]) {
     return html`
       <canary-markdown
         .hljs=${this.theme === "dark" ? "github-dark" : "github"}
-        .content=${this._ask.response}
+        .content=${response}
       ></canary-markdown>
 
       <div class="references">
-        ${this._ask.references.map(
+        ${references.map(
           (reference) =>
             html` <canary-reference
               title=${reference.title}

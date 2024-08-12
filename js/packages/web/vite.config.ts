@@ -8,7 +8,7 @@ import dts from "vite-plugin-dts";
 
 export default defineConfig({
   test: {
-    environmentMatchGlobs: [["./src/store.test.ts", "happy-dom"]],
+    environmentMatchGlobs: [["./src/store/*.test.ts", "happy-dom"]],
   },
   plugins: [
     unocss({ mode: "shadow-dom" }),
@@ -60,7 +60,7 @@ export default defineConfig({
           "mixins",
           "types/index",
           "utils",
-          "store",
+          "store/index",
         ],
       ].reduce(
         (acc, cur) => ({ ...acc, [cur]: resolve(__dirname, `src/${cur}.ts`) }),

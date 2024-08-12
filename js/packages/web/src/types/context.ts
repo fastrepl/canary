@@ -3,9 +3,9 @@ import type {
   BeforeSearchFunction,
   SearchReference,
 } from "./search";
-import type { AskFunction } from "./ask";
+import type { AskFunction, AskReference } from "./ask";
 import type { FeedbackFunction } from "./feedback";
-import { TaskStatus } from "../constants";
+import { TaskStatus } from "../store/managers";
 
 export type QueryContext = string;
 
@@ -17,6 +17,14 @@ export type ModeContext = {
 export type SearchContext = {
   status: TaskStatus;
   references: SearchReference[];
+};
+
+export type AskContext = {
+  status: TaskStatus;
+  query: string;
+  progress: boolean;
+  response: string;
+  references: AskReference[];
 };
 
 export type ThemeContext = "light" | "dark";

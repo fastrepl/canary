@@ -2,7 +2,7 @@ import { LitElement, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 
 import { wrapper } from "../styles";
-import type { SearchReference } from "../types";
+import type { SearchFunction, SearchReference } from "../types";
 import { createEvent } from "../store";
 
 const NAME = "canary-provider-vitepress-minisearch";
@@ -87,10 +87,7 @@ export class CanaryProviderVitepressMinisearch extends LitElement {
 
   static styles = wrapper;
 
-  search = async (
-    query: string,
-    _signal?: AbortSignal,
-  ): Promise<SearchReference[]> => {
+  search: SearchFunction = async (query, _signal) => {
     return new Promise((resolve) => {
       if (!this.minisearch) {
         resolve([]);

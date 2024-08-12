@@ -2,12 +2,11 @@ import { LitElement, html, css, nothing } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import { ref, createRef } from "lit/directives/ref.js";
 
-import { consume, provide } from "@lit/context";
-import { modeContext, searchContext } from "../contexts";
-import { SearchController } from "../controllers";
+import { consume } from "@lit/context";
+import { modeContext } from "../contexts";
 
-import type { ModeContext, SearchContext } from "../types";
-import { DEBOUNCE_MS, MODE_SEARCH, TaskStatus } from "../constants";
+import type { ModeContext } from "../types";
+import { MODE_SEARCH } from "../constants";
 import { scrollContainer } from "../styles";
 import { createEvent } from "../store";
 
@@ -24,38 +23,11 @@ export class CanarySearch extends LitElement {
   @state()
   private _mode!: ModeContext;
 
-  @provide({ context: searchContext })
-  @state()
-  private _search: SearchContext = {
-    status: TaskStatus.INITIAL,
-    references: [],
-  };
-
   private _containerRef = createRef<HTMLElement>();
-
-  private _searchTask = new SearchController(this, {
-    mode: this.MODE,
-    debounceTimeoutMs: DEBOUNCE_MS,
-  });
 
   connectedCallback() {
     super.connectedCallback();
     this.dispatchEvent(createEvent({ type: "register_mode", data: this.MODE }));
-  }
-
-  updated() {
-    if (this._search.status !== this._searchTask.status) {
-      this._search = {
-        status: this._searchTask.status,
-        references: this._searchTask.references ?? this._search.references,
-      };
-    }
-
-    if (this._search.status === TaskStatus.COMPLETE) {
-      if (this._containerRef.value) {
-        this._containerRef.value.scrollTop = 0;
-      }
-    }
   }
 
   render() {
@@ -76,27 +48,10 @@ export class CanarySearch extends LitElement {
               </div>
               <div class="results">
                 <slot name="result"></slot>
-                ${this.renderEmpty()}
               </div>
             </div>
           </div>
         `;
-  }
-
-  renderEmpty() {
-    if (
-      this._searchTask.status === TaskStatus.COMPLETE &&
-      this._searchTask.query &&
-      !this._searchTask.references?.length
-    ) {
-      return html`
-        <slot name="empty">
-          <canary-search-empty></canary-search-empty>
-        </slot>
-      `;
-    }
-
-    return nothing;
   }
 
   static styles = [

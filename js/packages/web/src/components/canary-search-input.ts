@@ -6,7 +6,7 @@ import { searchContext } from "../contexts";
 import type { SearchContext } from "../types";
 
 import { input } from "../styles";
-import { TaskStatus } from "../constants";
+import { TaskStatus } from "../store/managers";
 
 import "./canary-loading-spinner";
 import { createEvent } from "../store";
