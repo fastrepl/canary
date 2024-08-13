@@ -18,7 +18,8 @@ export const createStore = (host: HTMLElement) =>
         context: modeContext,
         initialValue: {
           options: new Set([]),
-          current: "",
+          default: null,
+          current: null,
         },
       }),
       query: new ContextProvider(host, {
@@ -39,9 +40,12 @@ export const createStore = (host: HTMLElement) =>
       },
       register_mode: {
         mode: (context, { data }: { data: string }) => {
-          const options = context.mode.value.options.add(data);
-          const current = context.mode.value.current || data;
-          context.mode.setValue({ options, current });
+          context.mode.setValue({
+            options: context.mode.value.options.add(data),
+            current: context.mode.value.current ?? data,
+            default: context.mode.value.default ?? data,
+          });
+
           return context.mode;
         },
       },

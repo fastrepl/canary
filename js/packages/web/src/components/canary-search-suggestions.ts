@@ -4,16 +4,18 @@ import { map } from "lit/directives/map.js";
 
 import { consume } from "@lit/context";
 import { searchContext } from "../contexts";
-import type { SearchContext } from "../types";
 
+import type { SearchContext } from "../types";
 import { global } from "../styles";
+import { createEvent } from "../store";
+import { MODE_ASK } from "../constants";
 
 const NAME = "canary-search-suggestions";
 
 @customElement(NAME)
 export class CanarySearchSuggestions extends LitElement {
   @property({ type: String })
-  header = "Ask AI";
+  header = "";
 
   @consume({ context: searchContext, subscribe: true })
   @state()
@@ -27,12 +29,12 @@ export class CanarySearchSuggestions extends LitElement {
 
     return html`
       <div class="container">
-        <div class="header">${this.header}</div>
+        ${this.header && html`<div class="header">${this.header}</div>`}
         <div class="items">
           ${map(
             questions,
             (message) => html`
-              <div class="item">
+              <div class="item" @click=${() => this._handleClick(message)}>
                 <span class="icon i-heroicons-chat-bubble-left"></span>
                 <span class="message">${message}</span>
                 <span class="icon i-heroicons-chevron-right arrow "></span>
@@ -42,6 +44,11 @@ export class CanarySearchSuggestions extends LitElement {
         </div>
       </div>
     `;
+  }
+
+  private _handleClick(message: string) {
+    this.dispatchEvent(createEvent({ type: "set_query", data: message }));
+    this.dispatchEvent(createEvent({ type: "set_mode", data: MODE_ASK }));
   }
 
   static styles = [
@@ -61,12 +68,12 @@ export class CanarySearchSuggestions extends LitElement {
 
       .header {
         margin: 4px;
+        margin-bottom: -1px;
       }
 
       .items {
         display: flex;
         flex-direction: column;
-        gap: 6px;
       }
 
       .message {
@@ -80,11 +87,12 @@ export class CanarySearchSuggestions extends LitElement {
         display: flex;
         align-items: center;
         gap: 12px;
-        padding: 4px 8px;
+        padding: 6px 12px;
+        border-radius: 8px;
       }
       .item:hover {
-        background-color: var(--canary-is-light, var(--canary-color-gray-90))
-          var(--canary-is-dark, var(--canary-color-gray-90));
+        background-color: var(--canary-is-light, var(--canary-color-gray-95))
+          var(--canary-is-dark, var(--canary-color-gray-70));
       }
 
       .arrow {

@@ -11,6 +11,7 @@ export type QueryContext = string;
 
 export type ModeContext = {
   options: Set<string>;
+  default: string | null;
   current: string | null;
 };
 

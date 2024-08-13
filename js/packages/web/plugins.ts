@@ -1,3 +1,5 @@
+import * as fs from "fs";
+import * as path from "path";
 import type { Plugin } from "vite";
 
 export const CSSVariablesReportPlugin = (): Plugin => {
@@ -25,14 +27,17 @@ export const CSSVariablesReportPlugin = (): Plugin => {
       return code;
     },
     buildEnd() {
-      const variables = Array.from(set).sort();
-      const seperator = new Array(20).fill("-").join("");
+      const outfile = path.resolve(
+        root,
+        "../../apps/docs/contents/docs/customization/styling.variables.md",
+      );
 
-      console.info(`\n${seperator}`);
-      variables.forEach((variable) => {
-        console.info(variable);
-      });
-      console.info(`${seperator}\n`);
+      const content = Array.from(set)
+        .sort()
+        .map((variable) => `- \`${variable}\``)
+        .join("\n");
+
+      fs.writeFileSync(outfile, content);
     },
   };
 };

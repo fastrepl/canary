@@ -91,5 +91,11 @@ export const Searchbar_Slash: StoryObj = {
 
 export const Searchbar_Placements: StoryObj = {
   args: { kind: Kind.Searchbar_Placements },
-  parameters: { viewport: { disable: true } },
+  parameters: {
+    viewport: { disable: true },
+    cssprops: {
+      "canary-trigger-searchbar-height": { value: "40px" },
+      "canary-trigger-searchbar-max-width": { value: "300px" },
+    },
+  },
 };

@@ -75,7 +75,12 @@ export const searchHandler = http.post(
 
     const result: SearchFunctionResult = {
       search: mockSearchReferences("search", query),
-      suggestion: { questions: [`Can you tell me about ${query}`] },
+      suggestion: {
+        questions:
+          query.startsWith("Can") || query.startsWith("What")
+            ? [query, query]
+            : [`Can you tell me about ${query}?`, `What is ${query}?`],
+      },
     };
     return HttpResponse.json(result);
   },

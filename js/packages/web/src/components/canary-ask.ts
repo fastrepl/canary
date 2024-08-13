@@ -1,5 +1,6 @@
 import { LitElement, html, css, nothing } from "lit";
 import { customElement, state } from "lit/decorators.js";
+import { ref, createRef } from "lit/directives/ref.js";
 
 import { consume } from "@lit/context";
 import { modeContext } from "../contexts";
@@ -7,7 +8,7 @@ import { modeContext } from "../contexts";
 import type { ModeContext } from "../types";
 import { MODE_ASK } from "../constants";
 import { createEvent } from "../store";
-import { global } from "../styles";
+import { global, scrollContainer } from "../styles";
 
 import "./canary-mode-tabs";
 
@@ -20,6 +21,8 @@ export class CanaryAsk extends LitElement {
   @consume({ context: modeContext, subscribe: true })
   @state()
   mode!: ModeContext;
+
+  private _containerRef = createRef<HTMLElement>();
 
   connectedCallback() {
     super.connectedCallback();
@@ -38,8 +41,10 @@ export class CanaryAsk extends LitElement {
               <slot name="input"></slot>
               <slot name="input-after"></slot>
             </div>
-            <div class="results">
-              <slot name="result"></slot>
+            <div class="scroll-container" ${ref(this._containerRef)}>
+              <div class="results">
+                <slot name="result"></slot>
+              </div>
             </div>
           </div>
         `;
@@ -47,6 +52,7 @@ export class CanaryAsk extends LitElement {
 
   static styles = [
     global,
+    scrollContainer,
     css`
       @unocss-placeholder;
     `,
@@ -54,7 +60,6 @@ export class CanaryAsk extends LitElement {
       .container {
         display: flex;
         flex-direction: column;
-        padding: 0px 12px;
       }
 
       .input-wrapper {
@@ -62,6 +67,7 @@ export class CanaryAsk extends LitElement {
         align-items: center;
         gap: 8px;
         margin-bottom: 4px;
+        padding: 1px 12px;
       }
     `,
   ];

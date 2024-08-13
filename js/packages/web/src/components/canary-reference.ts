@@ -3,6 +3,7 @@ import { customElement, property } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 
 import { urlToParts } from "../utils";
+import { global } from "../styles";
 import { MODAL_CLOSE_EVENT } from "./canary-modal";
 
 import "./canary-snippet";
@@ -70,6 +71,7 @@ export class CanaryReference extends LitElement {
   }
 
   static styles = [
+    global,
     css`
       @unocss-placeholder;
     `,
@@ -83,6 +85,7 @@ export class CanaryReference extends LitElement {
         align-items: center;
         justify-content: space-between;
 
+        width: 100%;
         padding: 8px 12px;
         border: 1px solid var(--canary-color-gray-90);
         border-radius: 8px;

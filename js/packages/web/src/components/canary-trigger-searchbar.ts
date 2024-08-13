@@ -53,10 +53,11 @@ export class CanaryTriggerSearchbar extends LitElement {
         display: flex;
         align-items: center;
         gap: 0.5rem;
-        height: 2.5rem;
-        width: 100%;
-        max-width: 22rem;
         font-size: 0.875rem;
+
+        width: 100%;
+        max-width: var(--canary-trigger-searchbar-max-width, 350px);
+        height: var(--canary-trigger-searchbar-height, 40px);
 
         border: 1px solid var(--canary-color-gray-80);
         border-radius: 0.5rem;

@@ -2,7 +2,7 @@ import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 
 import { consume } from "@lit/context";
-import { askContext } from "../contexts";
+import { queryContext, askContext } from "../contexts";
 
 import type { AskContext } from "../types";
 import { createEvent, TaskStatus } from "../store";
@@ -12,6 +12,7 @@ const NAME = "canary-ask-input";
 
 @customElement(NAME)
 export class CanaryAskInput extends LitElement {
+  @consume({ context: queryContext, subscribe: true })
   @property({ type: String })
   query = "";
 

@@ -7,7 +7,7 @@ import { modeContext } from "../contexts";
 
 import type { ModeContext } from "../types";
 import { MODE_SEARCH } from "../constants";
-import { scrollContainer } from "../styles";
+import { global, scrollContainer } from "../styles";
 import { createEvent } from "../store";
 
 import "./canary-mode-tabs";
@@ -43,14 +43,17 @@ export class CanarySearch extends LitElement {
               <slot name="input-after"></slot>
             </div>
             <div class="scroll-container" ${ref(this._containerRef)}>
-              <slot name="callout"></slot>
-              <slot name="result"></slot>
+              <div class="results">
+                <slot name="callout"></slot>
+                <slot name="result"></slot>
+              </div>
             </div>
           </div>
         `;
   }
 
   static styles = [
+    global,
     scrollContainer,
     css`
       @unocss-placeholder;
@@ -67,6 +70,12 @@ export class CanarySearch extends LitElement {
         gap: 8px;
         margin-bottom: 4px;
         padding: 1px 12px;
+      }
+
+      .results {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
       }
     `,
   ];

@@ -8,9 +8,8 @@ All components in Canary renders inside a [shadow DOM](https://developer.mozilla
 
 [CSS variables](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties) is one exception. And Canary exposes them for you to use.
 
-```html{3,4}
---canary-font-family-base
---canary-font-family-mono
+```bash{3,4}
+# colors
 --canary-color-primary-c
 --canary-color-primary-h
 --canary-color-gray-c
@@ -24,6 +23,12 @@ import Styling from "../../../components/Styling.vue";
 <div class="flex flex-col items-center justify-center">
 <Styling />
 </div>
+
+::: details Available CSS Variables
+
+<!--@include: ./styling.variables.md-->
+
+:::
 
 ## Light / Dark Mode
 

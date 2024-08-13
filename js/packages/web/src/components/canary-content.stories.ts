@@ -34,6 +34,7 @@ import "./canary-callout-discord";
 enum Kind {
   Ask,
   Search,
+  SearchCustomSize,
   SearchInitial,
   SearchEmpty,
   SearchSection,
@@ -90,6 +91,15 @@ export default {
       `);
     }
 
+    if (kind === Kind.SearchCustomSize) {
+      return wrapper(html`
+        <canary-search slot="mode">
+          <canary-search-input slot="input"></canary-search-input>
+          <canary-search-results slot="result"></canary-search-results>
+        </canary-search>
+      `);
+    }
+
     if (kind === Kind.SearchInitial) {
       return wrapper(html`
         <canary-search slot="mode">
@@ -115,9 +125,25 @@ export default {
       return wrapper(html`
         <canary-search slot="mode">
           <canary-search-input slot="input"></canary-search-input>
-          <canary-search-suggestions slot="result"></canary-search-suggestions>
-          <canary-search-results slot="result" group></canary-search-results>
+          <canary-search-results
+            slot="result"
+            header="Results"
+            limit="4"
+          ></canary-search-results>
+          <canary-search-suggestions
+            slot="result"
+            header="Ask AI"
+          ></canary-search-suggestions>
         </canary-search>
+        <canary-ask slot="mode">
+          <canary-mode-breadcrumb
+            slot="input-before"
+            previous="Search"
+            text="Ask AI2"
+          ></canary-mode-breadcrumb>
+          <canary-ask-input slot="input"></canary-ask-input>
+          <canary-ask-results slot="result"></canary-ask-results>
+        </canary-ask>
       `);
     }
 
@@ -232,6 +258,17 @@ export default {
 export const Search: StoryObj = {
   args: { kind: Kind.Search },
   play: type("20hi"),
+};
+
+export const SearchWithCustomSize: StoryObj = {
+  args: { kind: Kind.SearchCustomSize },
+  play: type("20hi"),
+  parameters: {
+    cssprops: {
+      "canary-content-max-width": { value: "700px" },
+      "canary-content-max-height": { value: "500px" },
+    },
+  },
 };
 
 export const SearchWithInitialQuery: StoryObj = {

@@ -12,7 +12,6 @@ export const global = css`
   }
 
   :host {
-    line-height: 1.5;
     -webkit-font-smoothing: antialiased;
   }
 
@@ -106,11 +105,11 @@ export const wrapper = css`
 export const scrollContainer = css`
   .scroll-container {
     overflow-y: auto;
-    max-height: var(--canary-max-height, 450px);
+    max-height: var(--canary-content-max-height, 450px);
+    padding-left: 12px;
+    padding-right: 2px;
 
-    padding: 0px 2px;
-
-    scrollbar-gutter: stable both-edges;
+    scrollbar-gutter: stable;
 
     scrollbar-width: thin;
     &::-webkit-scrollbar {

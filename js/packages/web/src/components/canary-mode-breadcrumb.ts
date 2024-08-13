@@ -1,6 +1,10 @@
 import { LitElement, html, css } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { customElement, property, state } from "lit/decorators.js";
 
+import { consume } from "@lit/context";
+import { modeContext } from "../contexts";
+
+import type { ModeContext } from "../types";
 import { createEvent } from "../store";
 
 const NAME = "canary-mode-breadcrumb";
@@ -8,13 +12,16 @@ const NAME = "canary-mode-breadcrumb";
 @customElement(NAME)
 export class CanaryModeBreadcrumb extends LitElement {
   @property({ type: String }) text = "";
-  @property({ type: String }) previous = "";
+
+  @consume({ context: modeContext, subscribe: true })
+  @state()
+  private _mode!: ModeContext;
 
   render() {
     return html`
       <div class="container">
         <button
-          class="icon i-heroicons-chevron-left"
+          class="i-heroicons-chevron-left"
           @click=${this._handleClick}
         ></button>
 
@@ -22,7 +29,7 @@ export class CanaryModeBreadcrumb extends LitElement {
           <slot name="icon"> </slot>
           <span>${this.text}</span>
           <button
-            class="icon i-heroicons-x-mark"
+            class="i-heroicons-x-mark"
             @click=${this._handleClick}
           ></button>
         </div>
@@ -31,7 +38,9 @@ export class CanaryModeBreadcrumb extends LitElement {
   }
 
   private _handleClick() {
-    this.dispatchEvent(createEvent({ type: "set_mode", data: this.previous }));
+    this.dispatchEvent(
+      createEvent({ type: "set_mode", data: this._mode.default! }),
+    );
   }
 
   static styles = [
