@@ -60,7 +60,7 @@ export class CanarySearchSuggestions extends LitElement {
       }
 
       .header {
-        margin-bottom: 4px;
+        margin: 4px;
       }
 
       .items {

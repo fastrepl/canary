@@ -1,7 +1,11 @@
-import { LitElement, css, html } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { LitElement, css, html, nothing } from "lit";
+import { customElement, property, state } from "lit/decorators.js";
 
-import { createEvent } from "../store";
+import { consume } from "@lit/context";
+import { askContext } from "../contexts";
+
+import type { AskContext } from "../types";
+import { createEvent, TaskStatus } from "../store";
 import { input } from "../styles";
 
 const NAME = "canary-ask-input";
@@ -10,6 +14,10 @@ const NAME = "canary-ask-input";
 export class CanaryAskInput extends LitElement {
   @property({ type: String })
   query = "";
+
+  @consume({ context: askContext, subscribe: true })
+  @state()
+  private _ask?: AskContext;
 
   render() {
     return html`
@@ -24,6 +32,9 @@ export class CanaryAskInput extends LitElement {
         autofocus
         onfocus="this.setSelectionRange(this.value.length,this.value.length);"
       />
+      ${this._ask?.status === TaskStatus.PENDING
+        ? html`<canary-loading-spinner></canary-loading-spinner>`
+        : nothing}
     `;
   }
 

@@ -43,12 +43,8 @@ export class CanarySearch extends LitElement {
               <slot name="input-after"></slot>
             </div>
             <div class="scroll-container" ${ref(this._containerRef)}>
-              <div class="callouts">
-                <slot name="callout"></slot>
-              </div>
-              <div class="results">
-                <slot name="result"></slot>
-              </div>
+              <slot name="callout"></slot>
+              <slot name="result"></slot>
             </div>
           </div>
         `;
@@ -71,17 +67,6 @@ export class CanarySearch extends LitElement {
         gap: 8px;
         margin-bottom: 4px;
         padding: 1px 12px;
-      }
-
-      .callouts {
-        display: flex;
-        flex-direction: column;
-        padding: 0px 12px;
-      }
-
-      .results {
-        display: flex;
-        flex-direction: column;
       }
     `,
   ];

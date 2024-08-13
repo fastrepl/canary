@@ -106,11 +106,12 @@ export const wrapper = css`
 export const scrollContainer = css`
   .scroll-container {
     overflow-y: auto;
-    max-height: 425px;
+    max-height: var(--canary-max-height, 450px);
 
-    padding-left: 12px;
+    padding: 0px 2px;
 
-    scrollbar-gutter: stable;
+    scrollbar-gutter: stable both-edges;
+
     scrollbar-width: thin;
     &::-webkit-scrollbar {
       width: 8px;
