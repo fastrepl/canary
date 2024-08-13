@@ -121,6 +121,7 @@ export class CanaryProviderPagefind extends LitElement {
           url: result.url,
           title: result.title,
           titles: getTitles(result),
+          excerpt: result.excerpt,
         };
 
         return ref;
