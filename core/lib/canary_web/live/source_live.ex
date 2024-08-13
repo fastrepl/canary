@@ -187,7 +187,7 @@ defmodule CanaryWeb.SourceLive do
       |> assign(:mode, "Status")
       |> assign(source: source)
       |> assign(:crawler_task_result, AsyncResult.ok([]))
-      |> assign(:source_form, AshPhoenix.Form.for_update(source, :update))
+      |> assign(:source_form, AshPhoenix.Form.for_update(source, :update) |> to_form())
 
     {:ok, socket}
   end
@@ -208,14 +208,20 @@ defmodule CanaryWeb.SourceLive do
 
   @impl true
   def handle_event("submit", %{"dry_run" => _, "form" => form}, socket) do
-    opts = [
-      include_patterns: parse_patterns(form["web_url_include_patterns"]),
-      exclude_patterns: parse_patterns(form["web_url_exclude_patterns"])
-    ]
-
     socket =
       socket
-      |> start_crawler_task(opts)
+      |> start_crawler_task(
+        include_patterns: parse_patterns(form["web_url_include_patterns"]),
+        exclude_patterns: parse_patterns(form["web_url_exclude_patterns"])
+      )
+      |> assign(
+        :source_form,
+        socket.assigns.source_form
+        |> AshPhoenix.Form.validate(%{
+          web_url_include_patterns: parse_patterns(form["web_url_include_patterns"]),
+          web_url_exclude_patterns: parse_patterns(form["web_url_exclude_patterns"])
+        })
+      )
 
     {:noreply, socket}
   end
@@ -229,8 +235,11 @@ defmodule CanaryWeb.SourceLive do
 
     socket =
       case AshPhoenix.Form.submit(socket.assigns.source_form, params: params) do
-        {:ok, _} ->
-          socket |> assign(:mode, "Status")
+        {:ok, source} ->
+          socket
+          |> assign(:mode, "Status")
+          |> assign(source: source)
+          |> assign(:source_form, AshPhoenix.Form.for_update(source, :update) |> to_form())
 
         {:error, form} ->
           socket

@@ -59,6 +59,7 @@ defmodule CanaryWeb.AuthLive.Index do
         domain: Canary.Accounts,
         as: "user"
       )
+      |> to_form()
     )
   end
 
@@ -75,6 +76,7 @@ defmodule CanaryWeb.AuthLive.Index do
         domain: Canary.Accounts,
         as: "user"
       )
+      |> to_form()
     )
   end
 
@@ -91,6 +93,7 @@ defmodule CanaryWeb.AuthLive.Index do
         domain: Canary.Accounts,
         as: "user"
       )
+      |> to_form()
     )
   end
 
@@ -115,6 +118,7 @@ defmodule CanaryWeb.AuthLive.Index do
           domain: Canary.Accounts,
           as: "user"
         )
+        |> to_form()
       )
     else
       _ ->

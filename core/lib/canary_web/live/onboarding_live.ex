@@ -216,19 +216,19 @@ defmodule CanaryWeb.OnboardingLive do
       |> assign(:current_source, account |> get_in([Access.key(:sources), Access.at(0)]))
       |> assign(
         :account_form,
-        AshPhoenix.Form.for_create(Canary.Accounts.Account, :create)
+        AshPhoenix.Form.for_create(Canary.Accounts.Account, :create) |> to_form()
       )
       |> assign(
         :web_source_form,
-        AshPhoenix.Form.for_create(Canary.Sources.Source, :create)
+        AshPhoenix.Form.for_create(Canary.Sources.Source, :create) |> to_form()
       )
       |> assign(
         :web_client_form,
-        AshPhoenix.Form.for_create(Canary.Interactions.Client, :create)
+        AshPhoenix.Form.for_create(Canary.Interactions.Client, :create) |> to_form()
       )
       |> assign(
         :discord_client_form,
-        AshPhoenix.Form.for_create(Canary.Interactions.Client, :create_discord)
+        AshPhoenix.Form.for_create(Canary.Interactions.Client, :create_discord) |> to_form()
       )
 
     {:ok, socket}
