@@ -12,8 +12,8 @@ defmodule CanaryWeb.Layouts do
     <aside class="drawer-side z-10">
       <label for="canary-drawer" class="drawer-overlay"></label>
       <nav class="flex min-h-screen w-52 flex-col gap-2 overflow-y-auto bg-base-200 px-6 pt-10 pb-4">
-        <div class="mx-4 font-black flex flex-row items-center gap-2">
-          <button class="text-lg" data-toggle-theme="dark,light">🐤</button>
+        <div class="mx-4 flex items-center gap-2 font-black">
+          <button class="text-lg">🐤</button>
           <.link navigate={~p"/"}>Canary</.link>
         </div>
 
@@ -30,6 +30,20 @@ defmodule CanaryWeb.Layouts do
               <span>Home</span>
             </.link>
           </li>
+
+          <li>
+            <.link class={if @active_tab == :source, do: "active"} navigate={~p"/source"}>
+              <span class={[
+                "h-4 w-4",
+                if(@active_tab == :source,
+                  do: "hero-document-solid",
+                  else: "hero-document"
+                )
+              ]} />
+              <span>Source</span>
+            </.link>
+          </li>
+
           <%!-- <li>
             <.link class={if @active_tab == :editor, do: "active"} navigate={~p"/editor"}>
               <span class={[

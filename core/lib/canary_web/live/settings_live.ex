@@ -1,19 +1,10 @@
 defmodule CanaryWeb.SettingsLive do
   use CanaryWeb, :live_view
-  import CanaryWeb.Layouts, only: [content_header: 1]
 
   alias Canary.Accounts.Billing
 
   def render(assigns) do
     ~H"""
-    <.content_header>
-      <div class="breadcrumbs text-md flex flex-row items-center justify-between">
-        <ul>
-          <li><a>Settings</a></li>
-        </ul>
-      </div>
-    </.content_header>
-
     <div class="divide-y">
       <div class="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-16 sm:px-6 md:grid-cols-3 lg:px-8">
         <div>

@@ -68,8 +68,8 @@ defmodule CanaryWeb.OnboardingLive do
                 <div class="form-control">
                   <label class="label"><span class="label-text">Documentation URL</span></label>
                   <input
-                    name={f[:web_base_url].name}
-                    value={f[:web_base_url].value}
+                    name={f[:web_url_base].name}
+                    value={f[:web_url_base].value}
                     type="url"
                     autocomplete="off"
                     class="input input-bordered w-full"
@@ -194,28 +194,37 @@ defmodule CanaryWeb.OnboardingLive do
 
   @impl true
   def mount(_params, _session, socket) do
+    account =
+      if socket.assigns.current_account do
+        socket.assigns.current_account
+        |> Ash.load!([:sources, :clients])
+      else
+        socket.assigns.current_account
+      end
+
     current =
       cond do
-        socket.assigns.current_account == nil -> 0
-        socket.assigns.current_account.sources == [] -> 1
-        socket.assigns.current_account.clients == [] -> 2
+        account == nil -> 0
+        account.sources == [] -> 1
+        account.clients == [] -> 2
         true -> 3
       end
 
     socket =
       socket
       |> assign(:current, current)
+      |> assign(:current_source, account |> get_in([Access.key(:sources), Access.at(0)]))
       |> assign(
         :account_form,
         AshPhoenix.Form.for_create(Canary.Accounts.Account, :create)
       )
       |> assign(
         :web_source_form,
-        AshPhoenix.Form.for_create(Canary.Sources.Source, :create_web)
+        AshPhoenix.Form.for_create(Canary.Sources.Source, :create)
       )
       |> assign(
         :web_client_form,
-        AshPhoenix.Form.for_create(Canary.Interactions.Client, :create_web)
+        AshPhoenix.Form.for_create(Canary.Interactions.Client, :create)
       )
       |> assign(
         :discord_client_form,
@@ -240,7 +249,7 @@ defmodule CanaryWeb.OnboardingLive do
 
   @impl true
   def handle_event("web_source", %{"form" => inputs}, socket) do
-    params = Map.put(inputs, "account", socket.assigns.current_account)
+    params = inputs |> Map.put("account", socket.assigns.current_account)
 
     case AshPhoenix.Form.submit(socket.assigns.web_source_form, params: params) do
       {:ok, source} ->
@@ -255,11 +264,11 @@ defmodule CanaryWeb.OnboardingLive do
 
   @impl true
   def handle_event("web_client", %{"form" => inputs}, socket) do
-    params = Map.put(inputs, "account", socket.assigns.current_account)
+    params = inputs |> Map.put("account", socket.assigns.current_account)
 
     case AshPhoenix.Form.submit(socket.assigns.web_client_form, params: params) do
       {:ok, client} ->
-        Canary.Interactions.Client.add_sources(client, [socket.assigns.current_source])
+        client |> Canary.Interactions.Client.add_sources([socket.assigns.current_source])
         {:noreply, socket |> assign(:current, 3)}
 
       {:error, form} ->
