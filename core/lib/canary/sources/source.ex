@@ -9,7 +9,11 @@ defmodule Canary.Sources.Source do
     create_timestamp :created_at
 
     attribute :type, :atom, constraints: [one_of: [:web]], allow_nil?: false
-    attribute :web_base_url, :string, allow_nil?: false
+
+    attribute :web_url_base, :string, allow_nil?: true
+    # TODO: let's just store as string once we got migration working
+    attribute :web_url_include_patterns, {:array, :string}, allow_nil?: true
+    attribute :web_url_exclude_patterns, {:array, :string}, allow_nil?: true
   end
 
   relationships do
@@ -31,18 +35,30 @@ defmodule Canary.Sources.Source do
       prepare build(load: [:num_documents, :last_updated])
     end
 
-    create :create_web do
-      argument :account, :map, allow_nil?: false
-      argument :web_base_url, :string, allow_nil?: false
+    update :update do
+      argument :web_url_include_patterns, {:array, :string}, default: []
+      argument :web_url_exclude_patterns, {:array, :string}, default: []
 
-      change manage_relationship(:account, :account, type: :append)
+      change set_attribute(:web_url_include_patterns, expr(^arg(:web_url_include_patterns)))
+      change set_attribute(:web_url_exclude_patterns, expr(^arg(:web_url_exclude_patterns)))
+    end
+
+    create :create do
+      argument :account, :map, allow_nil?: false
+      argument :web_url_base, :string, allow_nil?: false
+      argument :web_url_include_patterns, {:array, :string}, allow_nil?: true
+      argument :web_url_exclude_patterns, {:array, :string}, allow_nil?: true
+
       change set_attribute(:type, :web)
-      change set_attribute(:web_base_url, expr(^arg(:web_base_url)))
+      change manage_relationship(:account, :account, type: :append)
+      change set_attribute(:web_url_base, expr(^arg(:web_url_base)))
+      change set_attribute(:web_url_include_patterns, expr(^arg(:web_url_include_patterns)))
+      change set_attribute(:web_url_exclude_patterns, expr(^arg(:web_url_exclude_patterns)))
     end
   end
 
   code_interface do
-    define :create_web, args: [:account, :web_base_url], action: :create_web
+    define :create, args: [:account, :web_url_base], action: :create
   end
 
   postgres do

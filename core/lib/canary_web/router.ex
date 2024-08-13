@@ -49,9 +49,7 @@ defmodule CanaryWeb.Router do
         CanaryWeb.NavLive
       ] do
       live "/", CanaryWeb.HomeLive, :none
-      live "/editor/:id", CanaryWeb.EditorLive, :none
-      live "/editor", CanaryWeb.EditorHomeLive, :none
-      live "/interactions", CanaryWeb.InteractionsLive, :none
+      live "/source", CanaryWeb.SourceLive, :none
       live "/settings", CanaryWeb.SettingsLive, :none
     end
 

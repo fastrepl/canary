@@ -6,7 +6,7 @@ defmodule Canary.Interactions.Session do
   attributes do
     uuid_primary_key :id
     attribute :type, :atom, constraints: [one_of: [:discord, :web]], allow_nil?: false
-    attribute :client_session_id, :integer, allow_nil?: false
+    attribute :client_session_id, :uuid, allow_nil?: false
   end
 
   identities do

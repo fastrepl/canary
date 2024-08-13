@@ -11,13 +11,43 @@
       "type": "uuid"
     },
     {
-      "allow_nil?": false,
+      "allow_nil?": true,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "installation_id",
+      "source": "stripe_customer",
+      "type": "map"
+    },
+    {
+      "allow_nil?": true,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "stripe_subscription",
+      "type": "map"
+    },
+    {
+      "allow_nil?": false,
+      "default": "0",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "count_ask",
+      "type": "bigint"
+    },
+    {
+      "allow_nil?": false,
+      "default": "0",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "count_search",
       "type": "bigint"
     },
     {
@@ -38,8 +68,8 @@
           "global": null,
           "strategy": null
         },
-        "name": "github_apps_account_id_fkey",
-        "on_delete": "delete",
+        "name": "billings_account_id_fkey",
+        "on_delete": "nothing",
         "on_update": null,
         "primary_key?": true,
         "schema": "public",
@@ -55,7 +85,7 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "F46116CD6F8A3AE84C1D92026D9A0657FC8EC83004C746B2C704FAF583FF9A9D",
+  "hash": "55973F4DA99B5842296EF44C673BF65772333F5989C4295F7115491A2DB20B31",
   "identities": [],
   "multitenancy": {
     "attribute": null,
@@ -64,5 +94,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "github_apps"
+  "table": "billings"
 }

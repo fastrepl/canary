@@ -8,9 +8,11 @@ defmodule Canary.Sources.Document do
     create_timestamp :created_at
     update_timestamp :updated_at
 
-    attribute :index_id, :integer, allow_nil?: true
-    attribute :url, :string, allow_nil?: false
-    attribute :hash, :binary, allow_nil?: false
+    attribute :url, :string, allow_nil?: true
+    attribute :content, :binary, allow_nil?: false
+    attribute :chunks, {:array, Canary.Sources.Chunk}, default: []
+
+    attribute :keywords, {:array, :string}, allow_nil?: true
     attribute :summary, :string, allow_nil?: true
   end
 
@@ -26,59 +28,117 @@ defmodule Canary.Sources.Document do
     defaults [:read]
 
     create :create do
-      primary? true
+      argument :source_id, :uuid, allow_nil?: false
 
-      argument :source, :uuid, allow_nil?: false
-      argument :title, :string, allow_nil?: false
-      argument :titles, {:array, :string}, default: []
       argument :url, :string, allow_nil?: false
-      argument :content, :string, allow_nil?: false
+      argument :title, :string, allow_nil?: false
+      argument :html, :string, allow_nil?: false
       argument :tags, {:array, :string}, default: []
-      argument :summary, :string, allow_nil?: true
 
-      change manage_relationship(:source, :source, type: :append)
-      change set_attribute(:url, expr(^arg(:url)))
-      change set_attribute(:summary, expr(^arg(:summary)))
-
-      change {
-        Canary.Sources.Changes.Hash,
-        source_attrs: [:title, :titles, :content, :tags], hash_attr: :hash
-      }
-
-      change {
-        Canary.Sources.Changes.Index.Insert,
-        index_id_attr: :index_id,
-        source_arg: :source,
-        title_arg: :title,
-        titles_arg: :titles,
-        content_arg: :content,
-        tags_arg: :tags,
-        url_arg: :url
-      }
+      change manage_relationship(:source_id, :source, type: :append)
+      change Canary.Sources.Document.Changes.CreateChunks
     end
 
     destroy :destroy do
-      primary? true
-
-      change {
-        Canary.Sources.Changes.Index.Destroy,
-        index_id_attr: :index_id
-      }
+      change Canary.Sources.Document.Changes.DestroyChunks
     end
 
     update :update_summary do
+      argument :keywords, {:array, :string}, default: []
       argument :summary, :string, allow_nil?: false
+
+      change set_attribute(:keywords, expr(^arg(:keywords)))
       change set_attribute(:summary, expr(^arg(:summary)))
     end
   end
 
   code_interface do
-    define :destroy, args: [], action: :destroy
-    define :update_summary, args: [:summary], action: :update_summary
+    define :update_summary, args: [:keywords, :summary], action: :update_summary
   end
 
   postgres do
     table "documents"
     repo Canary.Repo
+  end
+end
+
+defmodule Canary.Sources.Document.Changes.CreateChunks do
+  use Ash.Resource.Change
+
+  @impl true
+  def change(changeset, _opts, _context) do
+    source_id = Ash.Changeset.get_argument(changeset, :source_id)
+    url = Ash.Changeset.get_argument(changeset, :url)
+    html = changeset |> Ash.Changeset.get_argument(:html)
+    content = Canary.Reader.markdown_from_html(html)
+    sections = Canary.Reader.markdown_sections_from_html(html)
+
+    title = Ash.Changeset.get_argument(changeset, :title)
+    tags = Ash.Changeset.get_argument(changeset, :tags)
+
+    inputs =
+      sections
+      |> Enum.map(fn section ->
+        %{
+          source_id: source_id,
+          url: url,
+          title: title,
+          content: section.content,
+          titles: [title],
+          tags: tags
+        }
+      end)
+
+    opts = [return_errors?: true, return_records?: true]
+
+    chunks =
+      case Ash.bulk_create(inputs, Canary.Sources.Chunk, :create, opts) do
+        %{status: :success, records: chunks} ->
+          chunks
+
+        error ->
+          IO.inspect(error)
+          []
+      end
+
+    changeset
+    |> Ash.Changeset.force_change_attribute(:content, content)
+    |> Ash.Changeset.force_change_attribute(:chunks, chunks)
+  end
+end
+
+defmodule Canary.Sources.Document.Changes.DestroyChunks do
+  use Ash.Resource.Change
+
+  @impl true
+  def atomic(changeset, opts, context) do
+    changeset = change(changeset, opts, context)
+    {:ok, changeset}
+  end
+
+  @impl true
+  def change(changeset, _opts, _context) do
+    changeset
+    |> Ash.Changeset.after_action(fn _changeset, record ->
+      case Ash.bulk_destroy(record.chunks, :destroy, %{}, return_errors?: true) do
+        %{status: :success} -> {:ok, record}
+        %{errors: errors} -> {:error, errors}
+      end
+    end)
+  end
+end
+
+defmodule Canary.Sources.Document.Changes.Summary do
+  use Ash.Resource.Change
+
+  @impl true
+  def change(changeset, _opts, _context) do
+    changeset
+    |> Ash.Changeset.after_action(fn _changeset, record ->
+      Canary.Workers.Summary.new(%{"document_id" => record.id})
+      |> Oban.insert()
+
+      {:ok, record}
+    end)
   end
 end
