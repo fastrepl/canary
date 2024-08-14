@@ -20,8 +20,9 @@ defmodule Canary.Query.Sugestor.Default do
     result =
       cond do
         empty?(query) -> []
-        question?(query) -> [add_question_mark(query)]
-        true -> ["Can you tell me about '#{remove_question_mark(query)}'?"]
+        not question?(query) -> ["Can you tell me about '#{remove_question_mark(query)}'?"]
+        count_words(query) > 3 -> [add_question_mark(query)]
+        true -> []
       end
 
     {:ok, result}
@@ -42,7 +43,8 @@ defmodule Canary.Query.Sugestor.Default do
       |> String.trim()
       |> String.downcase()
 
-    query =~ ~r/^(who|whom|whose|what|which|when|where|why|how|can|is|does|do|are|could|would|may)/
+    query =~
+      ~r/^(who|whom|whose|what|which|when|where|why|how|can|is|does|do|are|could|would|may)\b/
   end
 
   defp remove_question_mark(query) do
@@ -59,5 +61,9 @@ defmodule Canary.Query.Sugestor.Default do
     else
       query <> "?"
     end
+  end
+
+  defp count_words(query) do
+    query |> String.split() |> length()
   end
 end
