@@ -8,11 +8,13 @@ defmodule Canary.Application do
   @impl true
   def start(_type, _args) do
     Appsignal.Phoenix.LiveView.attach()
+
     Canary.Index.ensure_collection()
     Canary.Index.ensure_stopwords()
 
     children =
       [
+        {Cachex, name: :cache},
         {Task.Supervisor, name: Canary.TaskSupervisor},
         {AshAuthentication.Supervisor, otp_app: :canary},
         CanaryWeb.Telemetry,
@@ -21,12 +23,8 @@ defmodule Canary.Application do
         {DNSCluster, query: Application.get_env(:canary, :dns_cluster_query) || :ignore},
         {Phoenix.PubSub, name: Canary.PubSub},
         # Start the Finch HTTP client for sending emails
-        {Finch, name: Canary.Finch},
-        # Start a worker by calling: Canary.Worker.start_link(arg)
-        # {Canary.Worker, arg},
-        # Start to serve requests, typically the last entry
-        CanaryWeb.Endpoint
-      ] ++ discord() ++ stripe()
+        {Finch, name: Canary.Finch}
+      ] ++ discord() ++ stripe() ++ [CanaryWeb.Endpoint]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options

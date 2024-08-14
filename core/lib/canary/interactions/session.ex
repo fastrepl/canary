@@ -48,7 +48,6 @@ defmodule Canary.Interactions.Session do
       prepare build(load: [:account, :messages])
     end
 
-
     create :create_with_web do
       argument :account_id, :uuid, allow_nil?: false
       argument :web_session_id, :uuid, allow_nil?: false
@@ -68,12 +67,14 @@ defmodule Canary.Interactions.Session do
       change set_attribute(:discord_thread_id, expr(^arg(:discord_thread_id)))
       change load [:account, :messages]
     end
-
   end
 
   code_interface do
     define :create_with_web, args: [:account_id, :web_session_id], action: :create_with_web
-    define :create_with_discord, args: [:account_id, :discord_thread_id], action: :create_with_discord
+
+    define :create_with_discord,
+      args: [:account_id, :discord_thread_id],
+      action: :create_with_discord
 
     define :find_with_web, args: [:account_id, :web_session_id], action: :find_with_web
     define :find_with_discord, args: [:account_id, :discord_thread_id], action: :find_with_discord

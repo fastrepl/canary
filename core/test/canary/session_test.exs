@@ -17,7 +17,9 @@ defmodule Canary.Test.Session do
 
   test "create message" do
     account = account_fixture()
-    {:ok, session} = Canary.Interactions.find_or_create_session(account, {:web, Ash.UUID.generate()})
+
+    {:ok, session} =
+      Canary.Interactions.find_or_create_session(account, {:web, Ash.UUID.generate()})
 
     Canary.Interactions.Message.add_user!(session, "hi")
     Canary.Interactions.Message.add_assistant!(session, "hello")

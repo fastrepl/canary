@@ -1,7 +1,26 @@
 defmodule Canary.Searcher do
   @callback run(any(), String.t()) :: {:ok, map()} | {:error, any()}
 
-  def run(source, query), do: impl().run(source, query)
+  def run(source, query) do
+    with {:error, _} <- get_cache(source, query),
+         {:ok, result} <- impl().run(source, query) do
+      set_cache(source, query, result)
+      {:ok, result}
+    end
+  end
+
+  defp set_cache(source, query, result) do
+    Cachex.put(:cache, key(source, query), result, ttl: :timer.seconds(5))
+  end
+
+  defp get_cache(source, query) do
+    case Cachex.get(:cache, key(source, query)) do
+      {:ok, nil} -> {:error, :not_found}
+      {:ok, hit} -> {:ok, hit}
+    end
+  end
+
+  defp key(source, query), do: {source.id, query}
   defp impl(), do: Application.get_env(:canary, :searcher, Canary.Searcher.Default)
 end
 

@@ -95,6 +95,12 @@ defmodule Canary.MixProject do
       {:oapi_typesense,
        git: "https://github.com/fastrepl/open-api-typesense.git",
        rev: "bab31b99e353f87c53d62752601decd9c861ce0d"},
+      {:cachex, "~> 3.6"}
+    ] ++ deps_eval()
+  end
+
+  defp deps_eval() do
+    [
       {:progress_bar, "~> 3.0", only: [:dev, :test]},
       {:ymlr, "~> 5.0", only: [:dev, :test]},
       {:yaml_elixir, "~> 2.11", only: [:dev, :test]}
