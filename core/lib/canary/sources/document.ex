@@ -12,7 +12,6 @@ defmodule Canary.Sources.Document do
     attribute :content, :binary, allow_nil?: false
     attribute :chunks, {:array, Canary.Sources.Chunk}, default: []
 
-    attribute :keywords, {:array, :string}, allow_nil?: true
     attribute :summary, :string, allow_nil?: true
   end
 
@@ -38,6 +37,7 @@ defmodule Canary.Sources.Document do
       change set_attribute(:url, arg(:url))
       change manage_relationship(:source_id, :source, type: :append)
       change Canary.Sources.Document.Changes.CreateChunks
+      change Canary.Sources.Document.Changes.CreateSummary
     end
 
     destroy :destroy do
@@ -45,16 +45,13 @@ defmodule Canary.Sources.Document do
     end
 
     update :update_summary do
-      argument :keywords, {:array, :string}, default: []
       argument :summary, :string, allow_nil?: false
-
-      change set_attribute(:keywords, expr(^arg(:keywords)))
       change set_attribute(:summary, expr(^arg(:summary)))
     end
   end
 
   code_interface do
-    define :update_summary, args: [:keywords, :summary], action: :update_summary
+    define :update_summary, args: [:summary], action: :update_summary
   end
 
   postgres do
@@ -135,14 +132,15 @@ defmodule Canary.Sources.Document.Changes.DestroyChunks do
   end
 end
 
-defmodule Canary.Sources.Document.Changes.Summary do
+defmodule Canary.Sources.Document.Changes.CreateSummary do
   use Ash.Resource.Change
 
   @impl true
   def change(changeset, _opts, _context) do
     changeset
     |> Ash.Changeset.after_action(fn _changeset, record ->
-      Canary.Workers.Summary.new(%{"document_id" => record.id})
+      %{"document_id" => record.id}
+      |> Canary.Workers.Summary.new()
       |> Oban.insert()
 
       {:ok, record}

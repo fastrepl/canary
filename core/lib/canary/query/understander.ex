@@ -21,7 +21,7 @@ defmodule Canary.Query.Understander.LLM do
       system_message(),
       %{
         role: "user",
-        content: "These are summaries of documents: #{summary}\n\nUser query: #{query}"
+        content: "## Summaries of documents\n#{summary}\n\n\n## User query\n#{query}"
       }
     ]
 

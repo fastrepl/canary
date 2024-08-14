@@ -18,8 +18,7 @@ defmodule Canary.Workers.Summary do
     ]
 
     with {:ok, completion} <- Canary.AI.chat(%{model: chat_model, messages: messages}),
-         %{keywords: keywords, summary: summary} <- transform(completion),
-         {:ok, _} <- Canary.Sources.Document.update_summary(doc, keywords, summary) do
+         {:ok, _} <- Canary.Sources.Document.update_summary(doc, transform(completion)) do
       :ok
     end
   end
@@ -37,10 +36,11 @@ defmodule Canary.Workers.Summary do
       </analysis>
 
       IMPORTANT NOTES:
-      - <keywords></keywords> should contain comma separated list of keywords. MAX 30 keywords are allowed. Start with common or important words in the document.
+      - <keywords></keywords> should contain comma separated list of keywords. MAX 20 keywords are allowed. Start with important, domain specific, or frequently used words in the document.
       - Each "keyword" should be one or two words. It will be used to run keyword based search.
       - There should be only one "<summary>" and "<keywords>" within the "<analysis>".
       - The "summary" is one or two sentences that describe main points of the document.
+      - When writing the summary, go straight to the point. Do not start like "This is a..." or "Here is..."
 
       Do not include any other text, just respond with the XML-like format that I provided.
       If user's query is totally nonsense, just return <analysis></analysis>.
@@ -62,6 +62,6 @@ defmodule Canary.Workers.Summary do
       |> Enum.map(fn [query] -> String.trim(query) end)
       |> Enum.at(0, nil)
 
-    %{keywords: keywords, summary: summary}
+    "#{summary} - #{Enum.join(keywords, ", ")}"
   end
 end

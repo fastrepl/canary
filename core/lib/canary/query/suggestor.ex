@@ -17,11 +17,12 @@ defmodule Canary.Query.Sugestor.Default do
   def run(query) do
     query = clean(query)
 
-    result = cond do
-      empty?(query) -> []
-      question?(query) -> [add_question_mark(query)]
-      true -> ["Can you tell me about '#{query}'?"]
-    end
+    result =
+      cond do
+        empty?(query) -> []
+        question?(query) -> [add_question_mark(query)]
+        true -> ["Can you tell me about '#{query}'?"]
+      end
 
     {:ok, result}
   end

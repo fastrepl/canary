@@ -42,8 +42,22 @@ defmodule Canary.Interactions.Responder.Default do
         #{request}
         </user_question>
 
+        <instruction>
         Based on the retrieved documents, answer the user's question within 5 sentences. KEEP IT SIMPLE AND CONCISE.
         If user is asking for nonsense, or the retrieved documents are not relevant, just transparently say it.
+
+        When writing the response, stick to the markdown format.
+        Header, Link, Inline Code, Block Code, Bold, Italic and Footnotes are supported.
+        For footnotes, use it to reference the related document with the sentence, like this[^1].
+        You should try to add as many footnotes as possible for transparency and accuracy.
+
+        At the end of the response, include the footnotes in this format(Order matters. From top to bottom):
+
+        <notes>1:2,2:6,3:4</notes>
+
+        This means the first footnote is referencing the document at index 2, the second is referencing the document at index 6, and so on.
+        You can find the index of each document under the "## Index" section.
+        </instruction>
         """
       }
     ]
@@ -64,21 +78,29 @@ defmodule Canary.Interactions.Responder.Default do
               :ok
 
             %{"choices" => [%{"delta" => %{"content" => content}}]} ->
-              handle_delta.(%{type: :progress, content: content})
+              safe(handle_delta, %{type: :progress, content: content})
               Agent.update(pid, &(&1 <> content))
           end
         end
       )
 
     completion = if completion == "", do: Agent.get(pid, & &1), else: completion
-    response = if docs != [], do: "#{completion}\n\n#{render_sources(docs)}", else: completion
+    completion = delete_footnotes(completion)
+    safe(handle_delta, %{type: :complete, content: completion})
+
+    references =
+      docs
+      |> parse_footnotes()
+      |> Enum.map(fn i -> Enum.at(docs, i - 1) end)
+
+    safe(handle_delta, %{type: :references, items: references})
 
     Task.Supervisor.start_child(Canary.TaskSupervisor, fn ->
       Canary.Accounts.Billing.increment_ask(account.billing)
-      Canary.Interactions.Message.add_assistant!(session, response)
+      Canary.Interactions.Message.add_assistant!(session, completion)
     end)
 
-    {:ok, response}
+    {:ok, %{response: completion, references: references}}
   end
 
   defp render_history(history) do
@@ -99,8 +121,9 @@ defmodule Canary.Interactions.Responder.Default do
     if length(docs) > 0 do
       body =
         docs
-        |> Enum.map(fn %{title: title, content: content} ->
-          "##Title\n#{title}\n\n##Content\n#{content}\n"
+        |> Enum.with_index(1)
+        |> Enum.map(fn {%{title: title, content: content}, index} ->
+          "## Index\n\n#{index}\n\n## Title\n#{title}\n\n## Content\n#{content}\n"
         end)
         |> Enum.join("\n-------\n")
 
@@ -110,16 +133,29 @@ defmodule Canary.Interactions.Responder.Default do
     end
   end
 
-  defp render_sources(docs) do
-    docs
-    |> Enum.map(& &1.url)
-    |> Enum.reject(&is_nil/1)
-    |> Enum.uniq()
-    |> Enum.map(fn url -> "- <#{url}>" end)
-    |> Enum.join("\n")
+  defp safe(func, arg) do
+    if is_function(func, 1), do: func.(arg), else: :noop
   end
 
-  defp safe_handel_delta(func, arg) do
-    if is_function(func, 1), do: func.(arg), else: :noop
+  defp delete_footnotes(text) do
+    pattern = ~r/<notes>((?:\d+:\d+,?)+)<\/notes>/
+    Regex.replace(pattern, text, "")
+  end
+
+  defp parse_footnotes(text) do
+    regex = ~r/<notes>((?:\d+:\d+,?)+)<\/notes>/
+
+    case Regex.run(regex, text) do
+      [_, notes] ->
+        notes
+        |> String.split(",")
+        |> Enum.map(fn pair ->
+          [_, index] = String.split(pair, ":")
+          String.to_integer(index)
+        end)
+
+      nil ->
+        []
+    end
   end
 end
