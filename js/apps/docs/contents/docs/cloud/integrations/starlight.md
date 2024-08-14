@@ -13,3 +13,6 @@
   </canary-provider-pagefind> // [!code --]
 </canary-root>
 ```
+
+Disable `pagefind` in `astro.config.mjs`
+https://starlight.astro.build/reference/configuration/#pagefind

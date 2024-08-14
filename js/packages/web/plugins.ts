@@ -32,10 +32,11 @@ export const CSSVariablesReportPlugin = (): Plugin => {
         "../../apps/docs/contents/docs/customization/styling.variables.md",
       );
 
-      const content = Array.from(set)
-        .sort()
-        .map((variable) => `- \`${variable}\``)
-        .join("\n");
+      const content =
+        Array.from(set)
+          .sort()
+          .map((variable) => `- \`${variable}\``)
+          .join("\n") + "\n";
 
       fs.writeFileSync(outfile, content);
     },

@@ -20,6 +20,8 @@ npm install @getcanary/web
 npm run swizzle @docusaurus/theme-classic SearchBar -- --eject --javascript
 ```
 
+After ejecting, you can edit generated files in `src/theme/SearchBar`.
+
 ```html-vue
 <canary-root framework="docusaurus">
   <canary-provider-pagefind> // [!code --]
@@ -29,3 +31,5 @@ npm run swizzle @docusaurus/theme-classic SearchBar -- --eject --javascript
   </canary-provider-pagefind> // [!code --]
 </canary-root>
 ```
+
+Take a look at our implementation of `docusaurus-theme-search-pagefind` [here](https://github.com/fastrepl/canary/blob/main/js/packages/docusaurus-theme-search-pagefind/src/theme/SearchBar/Canary.jsx).
