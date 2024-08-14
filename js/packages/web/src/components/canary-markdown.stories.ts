@@ -70,7 +70,12 @@ This text is **bold**, this is *italic*, and this is ***both bold and italic***.
 
 ### Superscript
 
-This text contains a superscript<sup><a href="https://getcanary.dev">1</a></sup>.
+Here is a footnote[^1].
+
+Here is another footnote[^2].
+
+[^1]: This is a footnote content.
+[^2]: This is another footnote content.
 
 ### Links
 

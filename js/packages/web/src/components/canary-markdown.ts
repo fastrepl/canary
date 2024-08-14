@@ -2,8 +2,11 @@ import { LitElement, html, css } from "lit";
 import { ref, createRef } from "lit/directives/ref.js";
 import { customElement, property } from "lit/decorators.js";
 
-import { marked, type Tokens } from "marked";
-marked.use({
+import { marked, type MarkedExtension, type Tokens } from "marked";
+import footNote from "marked-footnote";
+
+const footNoteExtension = footNote() as MarkedExtension;
+marked.use(footNoteExtension).use({
   gfm: true,
   breaks: true,
   extensions: [
@@ -30,6 +33,7 @@ export class CanaryMarkdown extends LitElement {
   @property({ type: String }) hljs = "github-dark";
   @property({ attribute: false }) content = "";
 
+  private _domparser = new DOMParser();
   private _containerRef = createRef<HTMLDivElement>();
 
   render() {
@@ -50,7 +54,21 @@ export class CanaryMarkdown extends LitElement {
           return;
         }
 
-        container.innerHTML = html;
+        const { body: virtual } = this._domparser.parseFromString(
+          html,
+          "text/html",
+        );
+
+        const footnotes = virtual.querySelector("section.footnotes");
+        if (footnotes) {
+          const sups = virtual.getElementsByTagName("sup");
+          for (const sup of sups) {
+            sup.innerHTML = sup.textContent ?? "";
+          }
+          virtual.removeChild(footnotes);
+        }
+
+        container.innerHTML = virtual.innerHTML;
         container.querySelectorAll("pre code").forEach((code) => {
           code.className = "language-javascript";
           hljs.highlightElement(code as HTMLElement);

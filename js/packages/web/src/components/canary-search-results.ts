@@ -39,7 +39,7 @@ export class CanarySearchResults extends LitElement {
   });
 
   render() {
-    if (!this._search) {
+    if (!this._search || this._search.result.search.length === 0) {
       return nothing;
     }
 
