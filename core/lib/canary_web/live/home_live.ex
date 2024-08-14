@@ -33,8 +33,16 @@ defmodule CanaryWeb.HomeLive do
             <canary-content slot="content">
               <canary-search slot="mode">
                 <canary-search-input slot="input"></canary-search-input>
-                <canary-search-results slot="result"></canary-search-results>
+                <canary-search-results slot="result" header="Results" limit="4">
+                </canary-search-results>
+                <canary-search-suggestions slot="result" header="Ask AI"></canary-search-suggestions>
               </canary-search>
+              <canary-ask slot="mode">
+                <canary-mode-breadcrumb slot="input-before" previous="Search" text="Ask AI">
+                </canary-mode-breadcrumb>
+                <canary-ask-input slot="input"></canary-ask-input>
+                <canary-ask-results slot="result"></canary-ask-results>
+              </canary-ask>
             </canary-content>
           </canary-modal>
         </canary-provider-cloud>
@@ -46,8 +54,6 @@ defmodule CanaryWeb.HomeLive do
   def mount(_params, _session, socket) do
     account = socket.assigns.current_account |> Ash.load!([:clients])
     client = account.clients |> Enum.find(&(&1.type == :web))
-
-    IO.inspect(client)
 
     socket =
       socket

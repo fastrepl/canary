@@ -161,7 +161,7 @@ defmodule CanaryWeb.SettingsLive do
       socket
       |> assign(current_account: account)
       |> assign(stripe: Application.get_env(:canary, :stripe))
-      |> assign(:account_form, AshPhoenix.Form.for_update(account, :update_name))
+      |> assign(:account_form, AshPhoenix.Form.for_update(account, :update))
 
     {:ok, socket}
   end

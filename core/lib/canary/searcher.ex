@@ -28,7 +28,7 @@ defmodule Canary.Searcher.Default do
   @behaviour Canary.Searcher
 
   def run(source, query) do
-    ai = query |> String.split(" ", trim: true) |> Enum.count() > 3
+    ai = query |> String.split(" ", trim: true) |> Enum.count() > 2
     if ai, do: ai_search(source, query), else: normal_search(source, query)
   end
 

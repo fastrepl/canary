@@ -27,24 +27,8 @@ defmodule Canary.Interactions.Responder.Default do
     end)
 
     model = Application.fetch_env!(:canary, :chat_completion_model)
-
-    docs =
-      [request]
-      |> Enum.map(fn query ->
-        Task.Supervisor.async_nolink(Canary.TaskSupervisor, fn ->
-          Canary.Sources.Chunk
-          |> Ash.Query.filter(document.source_id in ^Enum.map(sources, & &1.id))
-          |> Ash.Query.for_read(:hybrid_search, %{text: query.text, embedding: query.embedding})
-          |> Ash.Query.limit(6)
-          |> Ash.read!()
-        end)
-      end)
-      |> Task.await_many(5000)
-      |> Enum.flat_map(fn docs -> docs end)
-      |> Enum.uniq_by(& &1.id)
-
-    {:ok, docs} = Canary.Reranker.run(request, docs, top_n: 6, threshold: 0.4)
-    safe_handel_delta(handle_delta, %{type: :resources, resources: docs})
+    source = sources |> Enum.at(0)
+    {:ok, docs} = Canary.Searcher.run(source, request)
 
     messages = [
       %{
@@ -112,11 +96,13 @@ defmodule Canary.Interactions.Responder.Default do
   end
 
   defp render_context(docs) do
-    if docs != [] do
+    if length(docs) > 0 do
       body =
         docs
-        |> Enum.map(&Canary.Renderable.render/1)
-        |> Enum.join("\n\n")
+        |> Enum.map(fn %{title: title, content: content} ->
+          "##Title\n#{title}\n\n##Content\n#{content}\n"
+        end)
+        |> Enum.join("\n-------\n")
 
       "<retrieved_documents>\n#{body}\n</retrieved_documents>"
     else
@@ -126,7 +112,7 @@ defmodule Canary.Interactions.Responder.Default do
 
   defp render_sources(docs) do
     docs
-    |> Enum.map(& &1.document.url)
+    |> Enum.map(& &1.url)
     |> Enum.reject(&is_nil/1)
     |> Enum.uniq()
     |> Enum.map(fn url -> "- <#{url}>" end)

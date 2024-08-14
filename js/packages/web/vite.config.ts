@@ -26,7 +26,6 @@ export default defineConfig({
     lib: {
       entry: [
         ...[
-          "index",
           "canary-root",
           "canary-provider-mock",
           "canary-provider-cloud",
@@ -45,6 +44,7 @@ export default defineConfig({
           "canary-search-input",
           "canary-search-results",
           "canary-search-results-tabs",
+          "canary-search-suggestions",
           "canary-ask",
           "canary-ask-input",
           "canary-ask-results",
@@ -55,6 +55,8 @@ export default defineConfig({
           "canary-tooltip",
           "canary-footer",
           "canary-media-query",
+          "canary-mode-tabs",
+          "canary-mode-breadcrumb",
         ].map((name) => `components/${name}`),
         ...[
           "contexts",

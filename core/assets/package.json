@@ -15,7 +15,7 @@
     "typescript": "^5.4.5"
   },
   "dependencies": {
-    "@getcanary/web": "^0.0.73",
+    "@getcanary/web": "^0.0.74",
     "clipboard": "^2.0.11",
     "clsx": "^2.1.1",
     "live_svelte": "file:../deps/live_svelte",
