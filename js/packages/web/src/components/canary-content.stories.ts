@@ -201,6 +201,11 @@ export default {
     if (kind === Kind.Ask) {
       return wrapper(html`
         <canary-ask slot="mode">
+          <canary-mode-breadcrumb
+            slot="input-before"
+            previous="Search"
+            text="Ask AI"
+          ></canary-mode-breadcrumb>
           <canary-ask-input slot="input"></canary-ask-input>
           <canary-ask-results slot="result"></canary-ask-results>
         </canary-ask>

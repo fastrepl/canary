@@ -31,11 +31,16 @@ export class SearchManager {
   private _options: SearchManagerOptions;
   private _callId = 0;
 
+  private _initialState: SearchContext = {
+    status: TaskStatus.INITIAL,
+    result: { search: [], suggestion: { questions: [] } },
+  };
+
   constructor(host: HTMLElement, options: SearchManagerOptions) {
     this._options = options;
     this._ctx = new ContextProvider(host, {
       context: searchContext,
-      initialValue: { status: TaskStatus.INITIAL, result: { search: [] } },
+      initialValue: this._initialState,
     });
   }
 
@@ -61,7 +66,7 @@ export class SearchManager {
     if (this.ctx.status === TaskStatus.PENDING) {
       this._abortController.abort(ABORT_REASON_MANAGER);
     }
-    this.transition({ status: TaskStatus.PENDING });
+    this.transition({ ...this._initialState, status: TaskStatus.PENDING });
 
     const callId = ++this._callId;
     operations.beforeSearch?.(query);
@@ -97,16 +102,18 @@ export class AskManager {
   private _ctx: ContextProvider<{ __context__: AskContext }, any>;
   private _abortController = new AbortController();
 
+  private _initialState: AskContext = {
+    status: TaskStatus.INITIAL,
+    response: "",
+    references: [],
+    progress: false,
+    query: "",
+  };
+
   constructor(host: HTMLElement) {
     this._ctx = new ContextProvider(host, {
       context: askContext,
-      initialValue: {
-        status: TaskStatus.INITIAL,
-        response: "",
-        references: [],
-        progress: false,
-        query: "",
-      },
+      initialValue: this._initialState,
     });
   }
 
@@ -132,33 +139,44 @@ export class AskManager {
     if (this.ctx.status === TaskStatus.PENDING) {
       this._abortController.abort(ABORT_REASON_MANAGER);
     }
-    this.transition({ status: TaskStatus.PENDING, query });
+    this.transition({
+      ...this._initialState,
+      status: TaskStatus.PENDING,
+      query,
+    });
 
     this._abortController = new AbortController();
 
-    const { search } = await operations.search(
-      query,
-      this._abortController.signal,
-    );
-    this.transition({
-      status: TaskStatus.PENDING,
-      references: search,
-      response: "",
-    });
+    try {
+      await operations.ask(
+        crypto.randomUUID(),
+        query,
+        this._handleDelta.bind(this),
+        this._abortController.signal,
+      );
+      this.transition({ status: TaskStatus.COMPLETE, progress: false });
+    } catch (e) {
+      if (e === ABORT_REASON_MANAGER) {
+        return;
+      }
 
-    await operations.ask(
-      crypto.randomUUID(),
-      query,
-      this._handleDelta.bind(this),
-      this._abortController.signal,
-    );
-    this.transition({ status: TaskStatus.COMPLETE, progress: false });
+      console.error(e);
+      this.transition({ status: TaskStatus.ERROR });
+    }
   }
 
   private _handleDelta(delta: Delta) {
     if (delta.type === "progress") {
       const response = this.ctx.response + delta.content;
       this.transition({ response, progress: true });
+    }
+
+    if (delta.type === "complete") {
+      this.transition({ response: delta.content, progress: false });
+    }
+
+    if (delta.type === "references") {
+      this.transition({ references: delta.items });
     }
   }
 

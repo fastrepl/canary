@@ -5,6 +5,8 @@ import { customElement, property } from "lit/decorators.js";
 import { marked, type MarkedExtension, type Tokens } from "marked";
 import footNote from "marked-footnote";
 
+import { global, codeBlockScrollbar } from "../styles";
+
 const footNoteExtension = footNote() as MarkedExtension;
 marked.use(footNoteExtension).use({
   gfm: true,
@@ -23,8 +25,6 @@ marked.use(footNoteExtension).use({
 import hljs from "highlight.js/lib/core";
 import javascript from "highlight.js/lib/languages/javascript";
 hljs.registerLanguage("javascript", javascript);
-
-import { global } from "../styles";
 
 const NAME = "canary-markdown";
 
@@ -80,6 +80,7 @@ export class CanaryMarkdown extends LitElement {
   // https://github.com/unocss/unocss/blob/main/packages/preset-typography/src/preflights/default.ts
   static styles = [
     global,
+    codeBlockScrollbar,
     css`
       .container {
         font-size: 14px;

@@ -10,6 +10,7 @@ type DeltaProgress = {
 
 type DeltaComplete = {
   type: "complete";
+  content: string;
 };
 
 type DeltaReferences = {

@@ -2,7 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 import type { Plugin } from "vite";
 
-export const CSSVariablesReportPlugin = (): Plugin => {
+export const cssVariablesReportPlugin = (): Plugin => {
   const regex = /--canary-[\w-]+/g;
   const set = new Set<string>();
   let root = "";

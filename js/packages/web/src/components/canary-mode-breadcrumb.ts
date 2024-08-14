@@ -66,7 +66,7 @@ export class CanaryModeBreadcrumb extends LitElement {
         margin-left: 2px;
         font-size: 12px;
 
-        padding: 4px 8px;
+        padding: 2px 6px;
         border-radius: 8px;
         border: 1px solid var(--canary-is-light, var(--canary-color-gray-90))
           var(--canary-is-dark, var(--canary-color-gray-60));

@@ -1,6 +1,8 @@
 {
   "scripts": {
-    "format": "prettier --plugin prettier-plugin-svelte --write ."
+    "format": "prettier --plugin prettier-plugin-svelte --write .",
+    "canary": "npm un @getcanary/web && npm i @getcanary/web",
+    "canary-dev": "npm un @getcanary/web && npm i ../../js/packages/web"
   },
   "devDependencies": {
     "@types/node": "^20.14.9",
@@ -15,7 +17,7 @@
     "typescript": "^5.4.5"
   },
   "dependencies": {
-    "@getcanary/web": "^0.0.74",
+    "@getcanary/web": "^0.0.75",
     "clipboard": "^2.0.11",
     "clsx": "^2.1.1",
     "live_svelte": "file:../deps/live_svelte",

@@ -5,14 +5,14 @@ import { resolve } from "path";
 import { defineConfig } from "vite";
 import unocss from "unocss/vite";
 import dts from "vite-plugin-dts";
-import { CSSVariablesReportPlugin } from "./plugins";
+import { cssVariablesReportPlugin } from "./plugins";
 
 export default defineConfig({
   test: {
     environmentMatchGlobs: [["./src/store/*.test.ts", "happy-dom"]],
   },
   plugins: [
-    CSSVariablesReportPlugin(),
+    cssVariablesReportPlugin(),
     unocss({ mode: "shadow-dom" }),
     dts({ exclude: ["**/*.stories.*"] }),
   ],

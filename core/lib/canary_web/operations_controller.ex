@@ -74,6 +74,10 @@ defmodule CanaryWeb.OperationsController do
 
   defp receive_and_send(conn) do
     Enum.reduce_while(Stream.repeatedly(fn -> receive_event() end), conn, fn
+      %{type: :references} = data, conn ->
+        chunk(conn, sse_encode(data))
+        {:cont, conn}
+
       %{type: :progress} = data, conn ->
         case chunk(conn, sse_encode(data)) do
           {:ok, conn} -> {:cont, conn}

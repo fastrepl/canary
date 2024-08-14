@@ -51,11 +51,13 @@ Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Duis moll
 
 This is an example of \`inline code\` inside a sentence.
 
+\`${Array(20).fill("Hello").join(" ")}\`
+
 ### Code Block
 
 \`\`\`python
 def hello_world():
-    print("Hello, World!")
+    print(${Array(20).fill("Hello").join(" ")})
 
 hello_world()
 \`\`\`

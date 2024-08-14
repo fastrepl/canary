@@ -44,6 +44,7 @@ export class KeyboardSelectionController<T> {
         this._moveSelection(1);
         break;
       case "Enter":
+        e.preventDefault();
         if (this.handleEnter && this._items.length > 0) {
           this.handleEnter(this._items[this.index]);
         }

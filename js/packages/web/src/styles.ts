@@ -105,12 +105,35 @@ export const wrapper = css`
 export const scrollContainer = css`
   .scroll-container {
     overflow-y: auto;
-    max-height: var(--canary-content-max-height, 450px);
+    max-height: var(--canary-content-max-height, 650px);
     padding-left: 12px;
     padding-right: 2px;
 
     scrollbar-gutter: stable;
 
+    scrollbar-width: thin;
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: var(--canary-color-gray-100);
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: var(--canary-is-light, var(--canary-color-gray-90));
+      background-color: var(--canary-is-dark, var(--canary-color-gray-60));
+      border-radius: 4px;
+    }
+
+    scrollbar-color: var(--canary-is-light, var(--canary-color-gray-90))
+      var(--canary-is-dark, var(--canary-color-gray-60))
+      var(--canary-color-gray-100);
+  }
+`;
+
+export const codeBlockScrollbar = css`
+  pre code {
     scrollbar-width: thin;
     &::-webkit-scrollbar {
       width: 8px;

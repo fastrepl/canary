@@ -44,19 +44,27 @@ defmodule Canary.Interactions.Responder.Default do
 
         <instruction>
         Based on the retrieved documents, answer the user's question within 5 sentences. KEEP IT SIMPLE AND CONCISE.
-        If user is asking for nonsense, or the retrieved documents are not relevant, just transparently say it.
+        If question is yes-or-no question, start with bold "Yes" or "No". Always go strait to the point.
 
         When writing the response, stick to the markdown format.
         Header, Link, Inline Code, Block Code, Bold, Italic and Footnotes are supported.
-        For footnotes, use it to reference the related document with the sentence, like this[^1].
-        You should try to add as many footnotes as possible for transparency and accuracy.
+        For footnotes, use it to reference the related document with the sentence, like this[^1]. (no duplicate footnotes)
+        Only single number footnote is allowed, no range, no multiple numbers.
 
-        At the end of the response, include the footnotes in this format(Order matters. From top to bottom):
+        You should add enough footnotes as possible for transparency and accuracy.
+        We should always have at least one footnote in the response.
 
-        <notes>1:2,2:6,3:4</notes>
+        If user is asking for nonsense, or the retrieved documents are not relevant, just transparently say it.
+        Also, if you can not find a relevant document to reference, just transparently say it.
+
+        At the end of the response, include the footnotes in this format:
+
+        [^1]: 2
+        [^2]: 6
+        [^3]: 4
 
         This means the first footnote is referencing the document at index 2, the second is referencing the document at index 6, and so on.
-        You can find the index of each document under the "## Index" section.
+        You can find the index of each document next to the "index:" field. When writing footnotes, do not add heading or other formatting around it.
         </instruction>
         """
       }
@@ -69,12 +77,15 @@ defmodule Canary.Interactions.Responder.Default do
         %{
           model: model,
           messages: messages,
-          max_tokens: 600,
+          max_tokens: 3000,
           stream: handle_delta != nil
         },
         callback: fn data ->
           case data do
             %{"choices" => [%{"finish_reason" => "stop"}]} ->
+              :ok
+
+            %{"choices" => [%{"delta" => %{"finish_reason" => "length"}}]} ->
               :ok
 
             %{"choices" => [%{"delta" => %{"content" => content}}]} ->
@@ -86,14 +97,14 @@ defmodule Canary.Interactions.Responder.Default do
 
     completion = if completion == "", do: Agent.get(pid, & &1), else: completion
     completion = delete_footnotes(completion)
-    safe(handle_delta, %{type: :complete, content: completion})
 
     references =
-      docs
+      completion
       |> parse_footnotes()
       |> Enum.map(fn i -> Enum.at(docs, i - 1) end)
 
     safe(handle_delta, %{type: :references, items: references})
+    safe(handle_delta, %{type: :complete, content: completion})
 
     Task.Supervisor.start_child(Canary.TaskSupervisor, fn ->
       Canary.Accounts.Billing.increment_ask(account.billing)
@@ -123,7 +134,7 @@ defmodule Canary.Interactions.Responder.Default do
         docs
         |> Enum.with_index(1)
         |> Enum.map(fn {%{title: title, content: content}, index} ->
-          "## Index\n\n#{index}\n\n## Title\n#{title}\n\n## Content\n#{content}\n"
+          "index: #{index}\n\ntitle: #{title}\n\ncontent: #{content}\n"
         end)
         |> Enum.join("\n-------\n")
 
@@ -142,20 +153,15 @@ defmodule Canary.Interactions.Responder.Default do
     Regex.replace(pattern, text, "")
   end
 
-  defp parse_footnotes(text) do
-    regex = ~r/<notes>((?:\d+:\d+,?)+)<\/notes>/
+  def parse_footnotes(text) do
+    regex = ~r/\[\^(\d+)\]:\s*(\d+)\s*$/m
 
-    case Regex.run(regex, text) do
-      [_, notes] ->
-        notes
-        |> String.split(",")
-        |> Enum.map(fn pair ->
-          [_, index] = String.split(pair, ":")
-          String.to_integer(index)
-        end)
-
-      nil ->
-        []
-    end
+    Regex.scan(regex, text)
+    |> Enum.sort_by(fn [_, footnote_number, _] ->
+      String.to_integer(footnote_number)
+    end)
+    |> Enum.map(fn [_, _, index] ->
+      String.to_integer(index)
+    end)
   end
 end
