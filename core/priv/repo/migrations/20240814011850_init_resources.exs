@@ -61,14 +61,17 @@ defmodule Canary.Repo.Migrations.InitResources do
         default: fragment("(now() AT TIME ZONE 'utc')")
 
       add :type, :text, null: false
-      add :web_base_url, :text, null: false
+      add :web_url_base, :text
+      add :web_url_include_patterns, {:array, :text}
+      add :web_url_exclude_patterns, {:array, :text}
       add :account_id, :uuid
     end
 
     create table(:sessions, primary_key: false) do
       add :id, :uuid, null: false, default: fragment("gen_random_uuid()"), primary_key: true
       add :type, :text, null: false
-      add :client_session_id, :bigint, null: false
+      add :web_session_id, :uuid
+      add :discord_thread_id, :bigint
       add :account_id, :uuid
     end
 
@@ -143,9 +146,10 @@ defmodule Canary.Repo.Migrations.InitResources do
         null: false,
         default: fragment("(now() AT TIME ZONE 'utc')")
 
-      add :index_id, :bigint
-      add :url, :text, null: false
-      add :hash, :binary, null: false
+      add :url, :text
+      add :content, :binary, null: false
+      add :chunks, {:array, :map}, default: []
+      add :keywords, {:array, :text}
       add :summary, :text
 
       add :source_id,
@@ -231,8 +235,12 @@ defmodule Canary.Repo.Migrations.InitResources do
              )
     end
 
-    create unique_index(:sessions, [:account_id, :type, :client_session_id],
-             name: "sessions_unique_session_index"
+    create unique_index(:sessions, [:account_id, :type, :discord_thread_id],
+             name: "sessions_discord_thread_identity_index"
+           )
+
+    create unique_index(:sessions, [:account_id, :type, :web_session_id],
+             name: "sessions_web_session_identity_index"
            )
 
     alter table(:github_apps) do
@@ -385,8 +393,12 @@ defmodule Canary.Repo.Migrations.InitResources do
       modify :account_id, :uuid
     end
 
-    drop_if_exists unique_index(:sessions, [:account_id, :type, :client_session_id],
-                     name: "sessions_unique_session_index"
+    drop_if_exists unique_index(:sessions, [:account_id, :type, :web_session_id],
+                     name: "sessions_web_session_identity_index"
+                   )
+
+    drop_if_exists unique_index(:sessions, [:account_id, :type, :discord_thread_id],
+                     name: "sessions_discord_thread_identity_index"
                    )
 
     drop constraint(:sessions, "sessions_account_id_fkey")

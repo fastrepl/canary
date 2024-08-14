@@ -2,13 +2,13 @@
   "attributes": [
     {
       "allow_nil?": false,
-      "default": "fragment(\"gen_random_uuid()\")",
+      "default": "fragment(\"(now() AT TIME ZONE 'utc')\")",
       "generated?": false,
-      "primary_key?": true,
+      "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "id",
-      "type": "uuid"
+      "source": "updated_at",
+      "type": "utc_datetime_usec"
     },
     {
       "allow_nil?": false,
@@ -21,33 +21,14 @@
       "type": "utc_datetime_usec"
     },
     {
-      "allow_nil?": false,
+      "allow_nil?": true,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
-      "references": {
-        "deferrable": false,
-        "destination_attribute": "id",
-        "destination_attribute_default": null,
-        "destination_attribute_generated": null,
-        "index?": false,
-        "match_type": null,
-        "match_with": null,
-        "multitenancy": {
-          "attribute": null,
-          "global": null,
-          "strategy": null
-        },
-        "name": "messages_session_id_fkey",
-        "on_delete": null,
-        "on_update": null,
-        "primary_key?": true,
-        "schema": "public",
-        "table": "sessions"
-      },
+      "references": null,
       "size": null,
-      "source": "session_id",
-      "type": "uuid"
+      "source": "extra_data",
+      "type": "map"
     },
     {
       "allow_nil?": false,
@@ -56,7 +37,7 @@
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "role",
+      "source": "purpose",
       "type": "text"
     },
     {
@@ -66,7 +47,27 @@
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "content",
+      "source": "expires_at",
+      "type": "utc_datetime"
+    },
+    {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "subject",
+      "type": "text"
+    },
+    {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": true,
+      "references": null,
+      "size": null,
+      "source": "jti",
       "type": "text"
     }
   ],
@@ -75,7 +76,7 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "FA65821A4835861D7899C42B1CEF7DFE5133741BD20E4B81E3B7226877B142EE",
+  "hash": "EF5B1D84FF86890DE7641D25F20FA44786D7D4A28AC895113979A220BB8ECAB3",
   "identities": [],
   "multitenancy": {
     "attribute": null,
@@ -84,5 +85,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "messages"
+  "table": "tokens"
 }

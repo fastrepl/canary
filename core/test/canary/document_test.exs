@@ -7,8 +7,9 @@ defmodule Canary.Test.Document do
 
   setup do
     account = account_fixture()
-    source = Canary.Sources.Source.create_web!(account, "https://example.com")
+    source = Canary.Sources.Source.create!(account, "https://example.com")
 
+    Canary.Index.ensure_collection()
     on_exit(fn -> Canary.Index.delete_collection() end)
 
     %{source: source}
@@ -18,23 +19,23 @@ defmodule Canary.Test.Document do
     {:ok, docs} = Canary.Index.list_documents(source.id)
     assert length(docs) == 0
 
-    Canary.AI.Mock
-    |> expect(:chat, 2, fn _, _ -> {:ok, "completion"} end)
+    # Canary.AI.Mock
+    # |> expect(:chat, 2, fn _, _ -> {:ok, "completion"} end)
 
     create_result =
       Ash.bulk_create(
         [
           %{
-            source: source.id,
+            source_id: source.id,
             title: "hello",
             url: "/a",
-            content: "content"
+            html: "<h1>hello</h1>"
           },
           %{
-            source: source.id,
+            source_id: source.id,
             title: "hello",
             url: "/b",
-            content: "content"
+            html: "<h1>hello</h1>"
           }
         ],
         Canary.Sources.Document,
@@ -44,7 +45,6 @@ defmodule Canary.Test.Document do
       )
 
     assert create_result.status == :success
-
     assert Canary.Repo.all(Canary.Sources.Document) |> length() == 0 + 2
 
     {:ok, docs} = Canary.Index.list_documents(source.id)

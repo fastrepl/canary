@@ -9,7 +9,10 @@ defmodule Canary.Sources.Source do
     create_timestamp :created_at
 
     attribute :type, :atom, constraints: [one_of: [:web]], allow_nil?: false
-    attribute :web_base_url, :string, allow_nil?: false
+
+    attribute :web_url_base, :string, allow_nil?: true
+    attribute :web_url_include_patterns, {:array, :string}, allow_nil?: true
+    attribute :web_url_exclude_patterns, {:array, :string}, allow_nil?: true
   end
 
   relationships do
@@ -24,25 +27,31 @@ defmodule Canary.Sources.Source do
   end
 
   actions do
-    defaults [:destroy]
+    defaults [:destroy, update: [:web_url_include_patterns, :web_url_exclude_patterns]]
 
     read :read do
       primary? true
       prepare build(load: [:num_documents, :last_updated])
     end
 
-    create :create_web do
-      argument :account, :map, allow_nil?: false
-      argument :web_base_url, :string, allow_nil?: false
+    create :create do
+      primary? true
 
-      change manage_relationship(:account, :account, type: :append)
+      argument :account, :map, allow_nil?: false
+      argument :web_url_base, :string, allow_nil?: false
+      argument :web_url_include_patterns, {:array, :string}, default: []
+      argument :web_url_exclude_patterns, {:array, :string}, default: []
+
       change set_attribute(:type, :web)
-      change set_attribute(:web_base_url, expr(^arg(:web_base_url)))
+      change manage_relationship(:account, :account, type: :append)
+      change set_attribute(:web_url_base, arg(:web_url_base))
+      change set_attribute(:web_url_include_patterns, arg(:web_url_include_patterns))
+      change set_attribute(:web_url_exclude_patterns, arg(:web_url_exclude_patterns))
     end
   end
 
   code_interface do
-    define :create_web, args: [:account, :web_base_url], action: :create_web
+    define :create, args: [:account, :web_url_base], action: :create
   end
 
   postgres do

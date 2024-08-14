@@ -31,11 +31,13 @@ defmodule CanaryWeb.OperationsController do
 
   def search(conn, %{"query" => query}) do
     source = conn.assigns.client.sources |> Enum.at(0)
-    {:ok, results} = Canary.Searcher.run(source, query)
+    {:ok, search_results} = Canary.Searcher.run(source, query)
+
+    data = Jason.encode!(%{search: search_results})
 
     conn
     |> put_resp_content_type("application/json")
-    |> send_resp(200, Jason.encode!(results))
+    |> send_resp(200, data)
     |> halt()
   end
 

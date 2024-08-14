@@ -22,12 +22,22 @@
     },
     {
       "allow_nil?": false,
+      "default": "fragment(\"(now() AT TIME ZONE 'utc')\")",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "updated_at",
+      "type": "utc_datetime_usec"
+    },
+    {
+      "allow_nil?": true,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "email",
+      "source": "url",
       "type": "text"
     },
     {
@@ -35,32 +45,43 @@
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
-      "references": {
-        "deferrable": false,
-        "destination_attribute": "id",
-        "destination_attribute_default": null,
-        "destination_attribute_generated": null,
-        "index?": false,
-        "match_type": null,
-        "match_with": null,
-        "multitenancy": {
-          "attribute": null,
-          "global": null,
-          "strategy": null
-        },
-        "name": "account_invites_user_id_fkey",
-        "on_delete": null,
-        "on_update": null,
-        "primary_key?": true,
-        "schema": "public",
-        "table": "users"
-      },
+      "references": null,
       "size": null,
-      "source": "user_id",
-      "type": "uuid"
+      "source": "content",
+      "type": "binary"
     },
     {
-      "allow_nil?": false,
+      "allow_nil?": true,
+      "default": "[]",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "chunks",
+      "type": ["array", "map"]
+    },
+    {
+      "allow_nil?": true,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "keywords",
+      "type": ["array", "text"]
+    },
+    {
+      "allow_nil?": true,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "summary",
+      "type": "text"
+    },
+    {
+      "allow_nil?": true,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
@@ -77,15 +98,15 @@
           "global": null,
           "strategy": null
         },
-        "name": "account_invites_account_id_fkey",
+        "name": "documents_source_id_fkey",
         "on_delete": null,
         "on_update": null,
         "primary_key?": true,
         "schema": "public",
-        "table": "accounts"
+        "table": "sources"
       },
       "size": null,
-      "source": "account_id",
+      "source": "source_id",
       "type": "uuid"
     }
   ],
@@ -94,8 +115,27 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "B05E9A7B7CA5571ACD75E443437E4074814629EB6A877C9E10EEA93846C5EDF9",
-  "identities": [],
+  "hash": "5007568B7C593D991F6641D844868A97A8A205F1B5A7242250D0936E5D3F111B",
+  "identities": [
+    {
+      "all_tenants?": false,
+      "base_filter": null,
+      "index_name": "documents_unique_document_index",
+      "keys": [
+        {
+          "type": "atom",
+          "value": "source_id"
+        },
+        {
+          "type": "atom",
+          "value": "url"
+        }
+      ],
+      "name": "unique_document",
+      "nils_distinct?": true,
+      "where": null
+    }
+  ],
   "multitenancy": {
     "attribute": null,
     "global": null,
@@ -103,5 +143,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "account_invites"
+  "table": "documents"
 }

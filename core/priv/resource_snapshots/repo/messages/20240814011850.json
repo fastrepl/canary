@@ -11,47 +11,17 @@
       "type": "uuid"
     },
     {
-      "allow_nil?": true,
-      "default": "nil",
+      "allow_nil?": false,
+      "default": "fragment(\"(now() AT TIME ZONE 'utc')\")",
       "generated?": false,
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "stripe_customer",
-      "type": "map"
-    },
-    {
-      "allow_nil?": true,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "stripe_subscription",
-      "type": "map"
+      "source": "created_at",
+      "type": "utc_datetime_usec"
     },
     {
       "allow_nil?": false,
-      "default": "0",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "count_ask",
-      "type": "bigint"
-    },
-    {
-      "allow_nil?": false,
-      "default": "0",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "count_search",
-      "type": "bigint"
-    },
-    {
-      "allow_nil?": true,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
@@ -68,16 +38,36 @@
           "global": null,
           "strategy": null
         },
-        "name": "billings_account_id_fkey",
-        "on_delete": "nothing",
+        "name": "messages_session_id_fkey",
+        "on_delete": null,
         "on_update": null,
         "primary_key?": true,
         "schema": "public",
-        "table": "accounts"
+        "table": "sessions"
       },
       "size": null,
-      "source": "account_id",
+      "source": "session_id",
       "type": "uuid"
+    },
+    {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "role",
+      "type": "text"
+    },
+    {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "content",
+      "type": "text"
     }
   ],
   "base_filter": null,
@@ -85,7 +75,7 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "FD28B0654BC49759BC9B939BDBD09B20A742FF144F4149BCC2AF78A4FE72FC3F",
+  "hash": "BCD1EFEF0CCA7B40A32546E39C79C72201CF910AE8812DA99B35701A00B5EF9E",
   "identities": [],
   "multitenancy": {
     "attribute": null,
@@ -94,5 +84,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "billings"
+  "table": "messages"
 }

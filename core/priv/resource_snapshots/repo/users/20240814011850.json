@@ -17,37 +17,18 @@
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "full_name",
-      "type": "text"
+      "source": "email",
+      "type": "citext"
     },
     {
-      "allow_nil?": false,
+      "allow_nil?": true,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
-      "references": {
-        "deferrable": false,
-        "destination_attribute": "id",
-        "destination_attribute_default": null,
-        "destination_attribute_generated": null,
-        "index?": false,
-        "match_type": null,
-        "match_with": null,
-        "multitenancy": {
-          "attribute": null,
-          "global": null,
-          "strategy": null
-        },
-        "name": "github_repos_app_id_fkey",
-        "on_delete": "delete",
-        "on_update": null,
-        "primary_key?": true,
-        "schema": "public",
-        "table": "github_apps"
-      },
+      "references": null,
       "size": null,
-      "source": "app_id",
-      "type": "uuid"
+      "source": "hashed_password",
+      "type": "text"
     }
   ],
   "base_filter": null,
@@ -55,23 +36,19 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "44DCE5E0733D052326B0799917F98E20B506A481CE2313967C770B0FC239DD8C",
+  "hash": "4D7CECE9BCF9CDF6F17FE3D28FDB1F96A1A82AAA40B47519E2DACD24BA5091A2",
   "identities": [
     {
       "all_tenants?": false,
       "base_filter": null,
-      "index_name": "github_repos_unique_repo_index",
+      "index_name": "users_unique_email_index",
       "keys": [
         {
           "type": "atom",
-          "value": "app_id"
-        },
-        {
-          "type": "atom",
-          "value": "full_name"
+          "value": "email"
         }
       ],
-      "name": "unique_repo",
+      "name": "unique_email",
       "nils_distinct?": true,
       "where": null
     }
@@ -83,5 +60,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "github_repos"
+  "table": "users"
 }

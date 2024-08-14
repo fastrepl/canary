@@ -27,21 +27,11 @@
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "type",
+      "source": "email",
       "type": "text"
     },
     {
       "allow_nil?": false,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "web_base_url",
-      "type": "text"
-    },
-    {
-      "allow_nil?": true,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
@@ -58,7 +48,36 @@
           "global": null,
           "strategy": null
         },
-        "name": "sources_account_id_fkey",
+        "name": "account_invites_user_id_fkey",
+        "on_delete": null,
+        "on_update": null,
+        "primary_key?": true,
+        "schema": "public",
+        "table": "users"
+      },
+      "size": null,
+      "source": "user_id",
+      "type": "uuid"
+    },
+    {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": {
+        "deferrable": false,
+        "destination_attribute": "id",
+        "destination_attribute_default": null,
+        "destination_attribute_generated": null,
+        "index?": false,
+        "match_type": null,
+        "match_with": null,
+        "multitenancy": {
+          "attribute": null,
+          "global": null,
+          "strategy": null
+        },
+        "name": "account_invites_account_id_fkey",
         "on_delete": null,
         "on_update": null,
         "primary_key?": true,
@@ -75,7 +94,7 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "E305712DA915D4942ED1CF586A31369E678FCA18CF479EA7DB92B9A4CBA35F35",
+  "hash": "98879BAC60B4ADD10E3B06B53567B604570352EE9C6327B6BF99833344A47811",
   "identities": [],
   "multitenancy": {
     "attribute": null,
@@ -84,5 +103,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "sources"
+  "table": "account_invites"
 }

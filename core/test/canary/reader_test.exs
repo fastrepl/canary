@@ -57,8 +57,8 @@ defmodule Canary.Test.Reader do
 
       assert Canary.Reader.markdown_sections_from_html(html) == [
                %{content: "# title\n\n123"},
-               %{id: "part1", content: "## 456\n\n456\n\n456"},
-               %{id: "part2", content: "## 789\n\n789"}
+               %{id: "part1", content: "## 456\n\n456\n\n456", title: "456"},
+               %{id: "part2", content: "## 789\n\n789", title: "789"}
              ]
 
       html = """
@@ -75,8 +75,8 @@ defmodule Canary.Test.Reader do
       """
 
       assert Canary.Reader.markdown_sections_from_html(html) == [
-               %{content: "## 456\n\n456\n\n456", id: "part1"},
-               %{content: "## 789\n\n789", id: "part2"}
+               %{content: "## 456\n\n456\n\n456", id: "part1", title: "456"},
+               %{content: "## 789\n\n789", id: "part2", title: "789"}
              ]
     end
 

@@ -9,7 +9,7 @@ if Application.get_env(:canary, :env) != :prod do
 
     defp create_source(name) do
       account = Canary.Mock.account()
-      source = Canary.Sources.Source.create_web!(account, "https://example.com")
+      source = Canary.Sources.Source.create!(account, "https://example.com")
 
       case @root
            |> Path.join("../eval/datasets/#{name}/*.json")

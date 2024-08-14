@@ -12,6 +12,16 @@
     },
     {
       "allow_nil?": false,
+      "default": "fragment(\"(now() AT TIME ZONE 'utc')\")",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "created_at",
+      "type": "utc_datetime_usec"
+    },
+    {
+      "allow_nil?": false,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
@@ -21,17 +31,47 @@
       "type": "text"
     },
     {
-      "allow_nil?": false,
+      "allow_nil?": true,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "client_session_id",
+      "source": "web_host_url",
+      "type": "text"
+    },
+    {
+      "allow_nil?": true,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "web_public_key",
+      "type": "text"
+    },
+    {
+      "allow_nil?": true,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "discord_server_id",
       "type": "bigint"
     },
     {
       "allow_nil?": true,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "discord_channel_id",
+      "type": "bigint"
+    },
+    {
+      "allow_nil?": false,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
@@ -48,7 +88,7 @@
           "global": null,
           "strategy": null
         },
-        "name": "sessions_account_id_fkey",
+        "name": "clients_account_id_fkey",
         "on_delete": null,
         "on_update": null,
         "primary_key?": true,
@@ -65,27 +105,37 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "20639908AB5E85B0F1AA1F94D88306B920D5AE4B707D9CAAE689B2C68809B842",
+  "hash": "DCCD9248AFCC71CCB74AF01AC1FBC59D92DFA703BEC9C5FF1343200658033FCB",
   "identities": [
     {
       "all_tenants?": false,
       "base_filter": null,
-      "index_name": "sessions_unique_session_index",
+      "index_name": "clients_unique_discord_index",
       "keys": [
         {
           "type": "atom",
-          "value": "account_id"
+          "value": "discord_server_id"
         },
         {
           "type": "atom",
-          "value": "type"
-        },
-        {
-          "type": "atom",
-          "value": "client_session_id"
+          "value": "discord_channel_id"
         }
       ],
-      "name": "unique_session",
+      "name": "unique_discord",
+      "nils_distinct?": true,
+      "where": null
+    },
+    {
+      "all_tenants?": false,
+      "base_filter": null,
+      "index_name": "clients_unique_web_index",
+      "keys": [
+        {
+          "type": "atom",
+          "value": "web_public_key"
+        }
+      ],
+      "name": "unique_web",
       "nils_distinct?": true,
       "where": null
     }
@@ -97,5 +147,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "sessions"
+  "table": "clients"
 }

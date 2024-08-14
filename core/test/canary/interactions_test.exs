@@ -10,8 +10,8 @@ defmodule Canary.Test.Interactions do
     test "create / find" do
       account = account_fixture()
 
-      session_1 = Session.create_with_discord!(account, 1)
-      session_2 = Session.create_with_web!(account, 2)
+      session_1 = Session.create_with_discord!(account.id, 1)
+      session_2 = Session.create_with_web!(account.id, Ash.UUID.generate())
 
       assert session_1.id != session_2.id
       assert session_1.account_id == session_2.account_id
@@ -27,8 +27,8 @@ defmodule Canary.Test.Interactions do
     test "create and find" do
       account = account_fixture()
 
-      client_1 = Client.create_web!(account, "https://example.com")
-      client_2 = Client.create_web!(account, "https://getcanary.dev")
+      client_1 = Client.create!(account, "https://example.com")
+      client_2 = Client.create!(account, "https://getcanary.dev")
       client_3 = Client.create_discord!(account, 1, 2)
 
       assert client_1.web_public_key != client_2.web_public_key
@@ -41,9 +41,9 @@ defmodule Canary.Test.Interactions do
 
     test "modify sources" do
       account = account_fixture()
-      source = Source.create_web!(account, "https://example.com")
+      source = Source.create!(account, "https://example.com")
 
-      client = Client.create_web!(account, "https://example.com") |> Ash.load!(:sources)
+      client = Client.create!(account, "https://example.com") |> Ash.load!(:sources)
       client = client |> Ash.load!(:sources)
       assert client.sources |> length() == 0
 

@@ -14,14 +14,14 @@ defmodule Canary.Interactions do
   def find_or_create_session(account, {:discord, discord_id}) do
     case Session.find_with_discord(account.id, discord_id) do
       {:ok, session} -> {:ok, session}
-      {:error, _} -> Session.create_with_discord(account, discord_id)
+      {:error, _} -> Session.create_with_discord(account.id, discord_id)
     end
   end
 
   def find_or_create_session(account, {:web, web_id}) do
     case Session.find_with_web(account.id, web_id) do
       {:ok, session} -> {:ok, session}
-      {:error, _} -> Session.create_with_web(account, web_id)
+      {:error, _} -> Session.create_with_web(account.id, web_id)
     end
   end
 end

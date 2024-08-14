@@ -53,7 +53,7 @@ defmodule Canary.Interactions.Client do
       prepare build(load: [:sources, account: [:billing]])
     end
 
-    create :create_web do
+    create :create do
       argument :account, :map, allow_nil?: false
       argument :web_url, :string, allow_nil?: false
 
@@ -110,9 +110,9 @@ defmodule Canary.Interactions.Client do
       args: [:discord_server_id, :discord_channel_id],
       action: :find_discord
 
-    define :create_web,
+    define :create,
       args: [:account, :web_url],
-      action: :create_web
+      action: :create
 
     define :create_discord,
       args: [:account, :discord_server_id, :discord_channel_id],

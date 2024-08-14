@@ -2,23 +2,24 @@ defmodule Canary.Workers.Summary do
   use Oban.Worker, queue: :summary, max_attempts: 3
 
   @impl true
-  def perform(%Oban.Job{args: %{"document_id" => id, "content" => content}}) do
+  def perform(%Oban.Job{args: %{"document_id" => id}}) do
     case Ash.get(Canary.Sources.Document, id) do
-      {:ok, doc} -> run(doc, content)
+      {:ok, doc} -> run(doc)
       {:error, _} -> :ok
     end
   end
 
-  def run(doc, content) do
+  def run(doc) do
     chat_model = Application.fetch_env!(:canary, :chat_completion_model_background)
 
     messages = [
       system_message(),
-      %{role: "user", content: "Document: #{content}"}
+      %{role: "user", content: "Document: #{doc.content}"}
     ]
 
     with {:ok, completion} <- Canary.AI.chat(%{model: chat_model, messages: messages}),
-         {:ok, _} <- Canary.Sources.Document.update_summary(doc, transform(completion)) do
+         %{keywords: keywords, summary: summary} <- transform(completion),
+         {:ok, _} <- Canary.Sources.Document.update_summary(doc, keywords, summary) do
       :ok
     end
   end
@@ -61,6 +62,6 @@ defmodule Canary.Workers.Summary do
       |> Enum.map(fn [query] -> String.trim(query) end)
       |> Enum.at(0, nil)
 
-    "# Summary\n\n#{summary}\n\n# Keywords\n\n#{Enum.join(keywords, "\n")}"
+    %{keywords: keywords, summary: summary}
   end
 end

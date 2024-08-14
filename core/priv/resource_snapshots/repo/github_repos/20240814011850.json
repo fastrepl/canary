@@ -2,38 +2,29 @@
   "attributes": [
     {
       "allow_nil?": false,
-      "default": "nil",
+      "default": "fragment(\"gen_random_uuid()\")",
       "generated?": false,
       "primary_key?": true,
-      "references": {
-        "deferrable": false,
-        "destination_attribute": "id",
-        "destination_attribute_default": null,
-        "destination_attribute_generated": null,
-        "index?": false,
-        "match_type": null,
-        "match_with": null,
-        "multitenancy": {
-          "attribute": null,
-          "global": null,
-          "strategy": null
-        },
-        "name": "client_sources_client_id_fkey",
-        "on_delete": "delete",
-        "on_update": null,
-        "primary_key?": true,
-        "schema": "public",
-        "table": "clients"
-      },
+      "references": null,
       "size": null,
-      "source": "client_id",
+      "source": "id",
       "type": "uuid"
     },
     {
       "allow_nil?": false,
       "default": "nil",
       "generated?": false,
-      "primary_key?": true,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "full_name",
+      "type": "text"
+    },
+    {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
       "references": {
         "deferrable": false,
         "destination_attribute": "id",
@@ -47,15 +38,15 @@
           "global": null,
           "strategy": null
         },
-        "name": "client_sources_source_id_fkey",
+        "name": "github_repos_app_id_fkey",
         "on_delete": "delete",
         "on_update": null,
         "primary_key?": true,
         "schema": "public",
-        "table": "sources"
+        "table": "github_apps"
       },
       "size": null,
-      "source": "source_id",
+      "source": "app_id",
       "type": "uuid"
     }
   ],
@@ -64,8 +55,27 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "F3D8314A266B415C417469094E1C0B5D2143DC62E8BF6C5F586955FA3279BAAD",
-  "identities": [],
+  "hash": "EE6332081152F2B571D07826708C5A55DA38AAC8CF086DD81D9DF3056459DE47",
+  "identities": [
+    {
+      "all_tenants?": false,
+      "base_filter": null,
+      "index_name": "github_repos_unique_repo_index",
+      "keys": [
+        {
+          "type": "atom",
+          "value": "app_id"
+        },
+        {
+          "type": "atom",
+          "value": "full_name"
+        }
+      ],
+      "name": "unique_repo",
+      "nils_distinct?": true,
+      "where": null
+    }
+  ],
   "multitenancy": {
     "attribute": null,
     "global": null,
@@ -73,5 +83,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "client_sources"
+  "table": "github_repos"
 }

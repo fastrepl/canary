@@ -13,26 +13,62 @@ defmodule Canary.Workers.Fetcher do
   end
 
   defp process(%Source{type: :web, documents: documents} = src) do
-    {:ok, pairs} = Canary.Crawler.run(src.web_base_url)
+    {:ok, pairs} =
+      Canary.Crawler.run(src.web_url_base,
+        include_patterns: src.web_url_include_patterns,
+        exclude_patterns: src.web_url_exclude_patterns
+      )
 
     inputs =
       pairs
       |> Enum.map(fn {url, html} ->
         title = Canary.Reader.title_from_html(html)
         content = Canary.Reader.markdown_from_html(html)
-        %{source: src.id, url: url, title: title, content: content}
+        %{source_id: src.id, url: url, title: title, html: html, content: content}
       end)
 
-    opts = [return_records?: false, return_errors?: true]
+    bulk_opts = [return_records?: false, return_errors?: true]
 
-    case Ash.bulk_destroy(documents, :destroy, %{}, opts) do
-      %Ash.BulkResult{status: :error, errors: errors} -> {:error, errors}
-      _ -> {:ok, src}
-    end
+    removed_documents =
+      documents
+      |> Enum.reject(fn doc -> Enum.any?(inputs, &same?(doc, &1)) end)
+      |> Enum.map(&Map.put(&1, :source_id, src.id))
 
-    case Ash.bulk_create(inputs, Document, :create, opts) do
-      %Ash.BulkResult{status: :error, errors: errors} -> {:error, errors}
-      _ -> {:ok, src}
+    updated_documents =
+      documents
+      |> Enum.filter(fn doc -> Enum.any?(inputs, &updated?(doc, &1)) end)
+      |> Enum.map(&Map.put(&1, :source_id, src.id))
+
+    added_documents =
+      inputs
+      |> Enum.reject(fn doc -> Enum.any?(documents, &same?(doc, &1)) end)
+      |> Enum.map(&Map.drop(&1, [:content]))
+
+    with :ok =
+           (updated_documents ++ removed_documents)
+           |> Ash.bulk_destroy(:destroy, %{}, bulk_opts)
+           |> wrap_ash_bulk(),
+         :ok =
+           (updated_documents ++ added_documents)
+           |> Ash.bulk_create(Document, :create, bulk_opts)
+           |> wrap_ash_bulk() do
+      :ok
     end
+  end
+
+  defp wrap_ash_bulk(%Ash.BulkResult{} = result) do
+    case result do
+      %Ash.BulkResult{status: :success} -> :ok
+      %Ash.BulkResult{status: :error, errors: errors} -> {:error, errors}
+      other -> {:error, other}
+    end
+  end
+
+  defp updated?(doc_a, doc_b) do
+    doc_a.url == doc_b.url && doc_a.content != doc_b.content
+  end
+
+  defp same?(doc_a, doc_b) do
+    doc_a.url == doc_b.url && doc_a.content == doc_b.content
   end
 end

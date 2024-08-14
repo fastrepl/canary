@@ -1,6 +1,6 @@
 defmodule Canary.Index.Document do
   @derive Jason.Encoder
-  defstruct [:source, :title, :content, :tags, :meta]
+  defstruct [:id, :source, :title, :content, :tags, :meta]
 end
 
 defmodule Canary.Index.DocumentMetadata do
@@ -174,6 +174,7 @@ defmodule Canary.Index do
     opts = [filter_by: "source:#{source_id}"]
 
     case Typesense.Documents.export_documents(@collection, opts) do
+      {:ok, ""} -> {:ok, []}
       {:ok, result} -> {:ok, parse_jsonl(result)}
       error -> error
     end
