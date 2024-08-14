@@ -35,6 +35,7 @@ defmodule Canary.Sources.Document do
       argument :html, :string, allow_nil?: false
       argument :tags, {:array, :string}, default: []
 
+      change set_attribute(:url, arg(:url))
       change manage_relationship(:source_id, :source, type: :append)
       change Canary.Sources.Document.Changes.CreateChunks
     end
@@ -79,14 +80,20 @@ defmodule Canary.Sources.Document.Changes.CreateChunks do
     inputs =
       sections
       |> Enum.map(fn section ->
+        titles =
+          if(is_nil(section[:title])) do
+            %{title: title, titles: []}
+          else
+            %{title: section[:title], titles: [title]}
+          end
+
         %{
           source_id: source_id,
-          url: url,
-          title: title,
+          url: URI.parse(url) |> Map.put(:fragment, section[:id]) |> URI.to_string(),
           content: section.content,
-          titles: [title],
           tags: tags
         }
+        |> Map.merge(titles)
       end)
 
     opts = [return_errors?: true, return_records?: true]

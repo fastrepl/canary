@@ -70,7 +70,8 @@ defmodule Canary.Repo.Migrations.InitResources do
     create table(:sessions, primary_key: false) do
       add :id, :uuid, null: false, default: fragment("gen_random_uuid()"), primary_key: true
       add :type, :text, null: false
-      add :client_session_id, :uuid, null: false
+      add :web_session_id, :uuid
+      add :discord_thread_id, :bigint
       add :account_id, :uuid
     end
 
@@ -234,8 +235,12 @@ defmodule Canary.Repo.Migrations.InitResources do
              )
     end
 
-    create unique_index(:sessions, [:account_id, :type, :client_session_id],
-             name: "sessions_unique_session_index"
+    create unique_index(:sessions, [:account_id, :type, :discord_thread_id],
+             name: "sessions_discord_thread_identity_index"
+           )
+
+    create unique_index(:sessions, [:account_id, :type, :web_session_id],
+             name: "sessions_web_session_identity_index"
            )
 
     alter table(:github_apps) do
@@ -388,8 +393,12 @@ defmodule Canary.Repo.Migrations.InitResources do
       modify :account_id, :uuid
     end
 
-    drop_if_exists unique_index(:sessions, [:account_id, :type, :client_session_id],
-                     name: "sessions_unique_session_index"
+    drop_if_exists unique_index(:sessions, [:account_id, :type, :web_session_id],
+                     name: "sessions_web_session_identity_index"
+                   )
+
+    drop_if_exists unique_index(:sessions, [:account_id, :type, :discord_thread_id],
+                     name: "sessions_discord_thread_identity_index"
                    )
 
     drop constraint(:sessions, "sessions_account_id_fkey")

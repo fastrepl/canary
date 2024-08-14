@@ -10,8 +10,8 @@ defmodule Canary.Test.Interactions do
     test "create / find" do
       account = account_fixture()
 
-      session_1 = Session.create_with_discord!(account, 1)
-      session_2 = Session.create_with_web!(account, 2)
+      session_1 = Session.create_with_discord!(account.id, 1)
+      session_2 = Session.create_with_web!(account.id, Ash.UUID.generate())
 
       assert session_1.id != session_2.id
       assert session_1.account_id == session_2.account_id

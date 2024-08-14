@@ -38,8 +38,8 @@ defmodule Canary.Reader do
           %{content: String.trim(content)}
 
         [marker, content] ->
-          [_, _tag, id, _title] = Regex.run(pattern, marker)
-          %{content: String.trim(content), id: id}
+          [_, _tag, id, title] = Regex.run(pattern, marker)
+          %{id: id, title: title, content: String.trim(content)}
       end
     end)
     |> Enum.reject(&(&1.content == ""))

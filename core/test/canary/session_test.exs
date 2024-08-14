@@ -4,9 +4,12 @@ defmodule Canary.Test.Session do
 
   test "find_or_create_session" do
     account = account_fixture()
-    {:ok, session_1} = Canary.Interactions.find_or_create_session(account, {:web, 1})
-    {:ok, session_2} = Canary.Interactions.find_or_create_session(account, {:web, 2})
-    {:ok, session_3} = Canary.Interactions.find_or_create_session(account, {:web, 1})
+    id_1 = Ash.UUID.generate()
+    id_2 = Ash.UUID.generate()
+
+    {:ok, session_1} = Canary.Interactions.find_or_create_session(account, {:web, id_1})
+    {:ok, session_2} = Canary.Interactions.find_or_create_session(account, {:web, id_2})
+    {:ok, session_3} = Canary.Interactions.find_or_create_session(account, {:web, id_1})
 
     assert session_1.id != session_2.id
     assert session_1.id == session_3.id
@@ -14,7 +17,7 @@ defmodule Canary.Test.Session do
 
   test "create message" do
     account = account_fixture()
-    {:ok, session} = Canary.Interactions.find_or_create_session(account, {:web, 1})
+    {:ok, session} = Canary.Interactions.find_or_create_session(account, {:web, Ash.UUID.generate()})
 
     Canary.Interactions.Message.add_user!(session, "hi")
     Canary.Interactions.Message.add_assistant!(session, "hello")

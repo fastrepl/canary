@@ -2,9 +2,39 @@
   "attributes": [
     {
       "allow_nil?": false,
-      "default": "nil",
+      "default": "fragment(\"gen_random_uuid()\")",
       "generated?": false,
       "primary_key?": true,
+      "references": null,
+      "size": null,
+      "source": "id",
+      "type": "uuid"
+    },
+    {
+      "allow_nil?": false,
+      "default": "fragment(\"(now() AT TIME ZONE 'utc')\")",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "created_at",
+      "type": "utc_datetime_usec"
+    },
+    {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "email",
+      "type": "text"
+    },
+    {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
       "references": {
         "deferrable": false,
         "destination_attribute": "id",
@@ -18,7 +48,7 @@
           "global": null,
           "strategy": null
         },
-        "name": "account_users_user_id_fkey",
+        "name": "account_invites_user_id_fkey",
         "on_delete": null,
         "on_update": null,
         "primary_key?": true,
@@ -33,7 +63,7 @@
       "allow_nil?": false,
       "default": "nil",
       "generated?": false,
-      "primary_key?": true,
+      "primary_key?": false,
       "references": {
         "deferrable": false,
         "destination_attribute": "id",
@@ -47,7 +77,7 @@
           "global": null,
           "strategy": null
         },
-        "name": "account_users_account_id_fkey",
+        "name": "account_invites_account_id_fkey",
         "on_delete": null,
         "on_update": null,
         "primary_key?": true,
@@ -64,7 +94,7 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "6E96BBEBE02F03B513F23C8D1E2CD0E79288D40DD6F2EC5B9AB9102559C600AA",
+  "hash": "98879BAC60B4ADD10E3B06B53567B604570352EE9C6327B6BF99833344A47811",
   "identities": [],
   "multitenancy": {
     "attribute": null,
@@ -73,5 +103,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "account_users"
+  "table": "account_invites"
 }

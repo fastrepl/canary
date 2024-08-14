@@ -110,10 +110,7 @@ defmodule CanaryWeb.SourceLive do
                 autocomplete="off"
                 spellcheck="false"
                 name={f[:web_url_include_patterns].name}
-                value={
-                  IO.inspect(f[:web_url_include_patterns].value, label: "web_url_include_patterns")
-                  Enum.join(f[:web_url_include_patterns].value, ",")
-                }
+                value={Enum.join(f[:web_url_include_patterns].value, ",")}
                 class="input input-bordered w-full"
               />
             </label>

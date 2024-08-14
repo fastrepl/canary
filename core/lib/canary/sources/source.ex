@@ -39,8 +39,8 @@ defmodule Canary.Sources.Source do
 
       argument :account, :map, allow_nil?: false
       argument :web_url_base, :string, allow_nil?: false
-      argument :web_url_include_patterns, {:array, :string}, allow_nil?: true
-      argument :web_url_exclude_patterns, {:array, :string}, allow_nil?: true
+      argument :web_url_include_patterns, {:array, :string}, default: []
+      argument :web_url_exclude_patterns, {:array, :string}, default: []
 
       change set_attribute(:type, :web)
       change manage_relationship(:account, :account, type: :append)

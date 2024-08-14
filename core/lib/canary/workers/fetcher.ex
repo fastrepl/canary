@@ -13,13 +13,18 @@ defmodule Canary.Workers.Fetcher do
   end
 
   defp process(%Source{type: :web, documents: documents} = src) do
-    {:ok, pairs} = Canary.Crawler.run(src.web_url_base)
+    {:ok, pairs} =
+      Canary.Crawler.run(src.web_url_base,
+        include_patterns: src.web_url_include_patterns,
+        exclude_patterns: src.web_url_exclude_patterns
+      )
 
     inputs =
       pairs
       |> Enum.map(fn {url, html} ->
         title = Canary.Reader.title_from_html(html)
-        %{source_id: src.id, url: url, title: title, html: html}
+        content = Canary.Reader.markdown_from_html(html)
+        %{source_id: src.id, url: url, title: title, html: html, content: content}
       end)
 
     bulk_opts = [return_records?: false, return_errors?: true]
@@ -37,6 +42,7 @@ defmodule Canary.Workers.Fetcher do
     added_documents =
       inputs
       |> Enum.reject(fn doc -> Enum.any?(documents, &same?(doc, &1)) end)
+      |> Enum.map(&Map.drop(&1, [:content]))
 
     with :ok =
            (updated_documents ++ removed_documents)

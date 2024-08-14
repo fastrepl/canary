@@ -17,21 +17,11 @@
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "type",
+      "source": "full_name",
       "type": "text"
     },
     {
       "allow_nil?": false,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "client_session_id",
-      "type": "uuid"
-    },
-    {
-      "allow_nil?": true,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
@@ -48,15 +38,15 @@
           "global": null,
           "strategy": null
         },
-        "name": "sessions_account_id_fkey",
-        "on_delete": null,
+        "name": "github_repos_app_id_fkey",
+        "on_delete": "delete",
         "on_update": null,
         "primary_key?": true,
         "schema": "public",
-        "table": "accounts"
+        "table": "github_apps"
       },
       "size": null,
-      "source": "account_id",
+      "source": "app_id",
       "type": "uuid"
     }
   ],
@@ -65,27 +55,23 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "CDEBDC71CEC88775B6B1042916D62573885085E60C0D63DDD8DFF8B6CD019D42",
+  "hash": "EE6332081152F2B571D07826708C5A55DA38AAC8CF086DD81D9DF3056459DE47",
   "identities": [
     {
       "all_tenants?": false,
       "base_filter": null,
-      "index_name": "sessions_unique_session_index",
+      "index_name": "github_repos_unique_repo_index",
       "keys": [
         {
           "type": "atom",
-          "value": "account_id"
+          "value": "app_id"
         },
         {
           "type": "atom",
-          "value": "type"
-        },
-        {
-          "type": "atom",
-          "value": "client_session_id"
+          "value": "full_name"
         }
       ],
-      "name": "unique_session",
+      "name": "unique_repo",
       "nils_distinct?": true,
       "where": null
     }
@@ -97,5 +83,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "sessions"
+  "table": "github_repos"
 }

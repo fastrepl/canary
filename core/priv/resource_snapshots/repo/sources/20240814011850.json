@@ -1,56 +1,6 @@
 {
   "attributes": [
     {
-      "allow_nil?": true,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "refresh_token",
-      "type": "text"
-    },
-    {
-      "allow_nil?": true,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "access_token_expires_at",
-      "type": "utc_datetime_usec"
-    },
-    {
-      "allow_nil?": true,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "access_token",
-      "type": "text"
-    },
-    {
-      "allow_nil?": false,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "uid",
-      "type": "text"
-    },
-    {
-      "allow_nil?": false,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "strategy",
-      "type": "text"
-    },
-    {
       "allow_nil?": false,
       "default": "fragment(\"gen_random_uuid()\")",
       "generated?": false,
@@ -59,6 +9,56 @@
       "size": null,
       "source": "id",
       "type": "uuid"
+    },
+    {
+      "allow_nil?": false,
+      "default": "fragment(\"(now() AT TIME ZONE 'utc')\")",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "created_at",
+      "type": "utc_datetime_usec"
+    },
+    {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "type",
+      "type": "text"
+    },
+    {
+      "allow_nil?": true,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "web_url_base",
+      "type": "text"
+    },
+    {
+      "allow_nil?": true,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "web_url_include_patterns",
+      "type": ["array", "text"]
+    },
+    {
+      "allow_nil?": true,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "web_url_exclude_patterns",
+      "type": ["array", "text"]
     },
     {
       "allow_nil?": true,
@@ -78,15 +78,15 @@
           "global": null,
           "strategy": null
         },
-        "name": "user_identities_user_id_fkey",
+        "name": "sources_account_id_fkey",
         "on_delete": null,
         "on_update": null,
         "primary_key?": true,
         "schema": "public",
-        "table": "users"
+        "table": "accounts"
       },
       "size": null,
-      "source": "user_id",
+      "source": "account_id",
       "type": "uuid"
     }
   ],
@@ -95,31 +95,8 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "FC01C71D3C5A5764F2E62560465AC9D9BB6475EF35637A4AD824632EE7822211",
-  "identities": [
-    {
-      "all_tenants?": false,
-      "base_filter": null,
-      "index_name": "user_identities_unique_on_strategy_and_uid_and_user_id_index",
-      "keys": [
-        {
-          "type": "atom",
-          "value": "strategy"
-        },
-        {
-          "type": "atom",
-          "value": "uid"
-        },
-        {
-          "type": "atom",
-          "value": "user_id"
-        }
-      ],
-      "name": "unique_on_strategy_and_uid_and_user_id",
-      "nils_distinct?": true,
-      "where": null
-    }
-  ],
+  "hash": "40D24862C7D33396BA0B110B7F0F4BDD0D69404E9B3EC0B8F771BD31AC98E762",
+  "identities": [],
   "multitenancy": {
     "attribute": null,
     "global": null,
@@ -127,5 +104,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "user_identities"
+  "table": "sources"
 }
