@@ -33,7 +33,7 @@ export class CanaryError extends LitElement {
         border: 1px solid var(--canary-color-gray-95);
 
         color: var(--canary-color-gray-10);
-        font-size: 14px;
+        font-size: 0.875rem;
       }
     `,
   ];

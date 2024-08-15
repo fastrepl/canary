@@ -129,7 +129,7 @@ export class CanaryReference extends LitElement {
         margin-bottom: 2px;
 
         color: var(--canary-color-gray-30);
-        font-size: 13px;
+        font-size: 0.75rem;
       }
 
       .path {
@@ -146,13 +146,13 @@ export class CanaryReference extends LitElement {
 
       .title {
         --canary-snippet-color: var(--canary-color-gray-10);
-        --canary-snippet-font-size: 16px;
+        --canary-snippet-font-size: 1rem;
         --canary-snippet-font-weight: 500;
       }
 
       .excerpt {
         --canary-snippet-color: var(--canary-color-gray-20);
-        --canary-snippet-font-size: 14px;
+        --canary-snippet-font-size: 0.875rem;
         --canary-snippet-font-weight: 400;
       }
     `,

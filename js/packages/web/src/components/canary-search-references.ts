@@ -85,7 +85,7 @@ export class CanarySearchReferences extends LitElement {
     }
 
     label {
-      font-size: 16px;
+      font-size: 1rem;
       margin-top: 4px;
       margin-left: 4px;
       color: var(--canary-color-gray-10);

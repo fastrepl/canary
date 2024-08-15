@@ -71,7 +71,7 @@ export class CanaryAskResults extends LitElement {
       }
 
       h2 {
-        font-size: 20px;
+        font-size: 1.25rem;
         margin: 10px 0px 20px 0px;
         color: var(--canary-color-gray-0);
       }

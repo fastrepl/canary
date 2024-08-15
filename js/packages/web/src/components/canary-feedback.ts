@@ -36,7 +36,7 @@ export class CanaryFeedback extends LitElement {
     css`
       .container {
         width: 300px;
-        font-size: 14px;
+        font-size: 0.875rem;
         background-color: var(--canary-is-light, var(--canary-color-gray-100))
           var(--canary-is-dark, var(--canary-color-gray-70));
 

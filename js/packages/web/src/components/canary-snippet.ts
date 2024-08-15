@@ -19,7 +19,7 @@ export class CanarySnippet extends LitElement {
     span {
       white-space: nowrap;
       color: var(--canary-snippet-color, var(--canary-color-gray-20));
-      font-size: var(--canary-snippet-font-size, 14px);
+      font-size: var(--canary-snippet-font-size, 0.875rem);
       font-weight: var(--canary-snippet-font-weight, normal);
     }
 

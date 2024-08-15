@@ -223,7 +223,7 @@ export class CanarySearchResultsTabs extends LitElement {
         display: none;
       }
       label {
-        font-size: 12px;
+        font-size: 0.75rem;
         text-decoration-skip-ink: none;
       }
     `,

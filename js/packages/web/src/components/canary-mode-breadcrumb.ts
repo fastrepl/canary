@@ -64,7 +64,7 @@ export class CanaryModeBreadcrumb extends LitElement {
         gap: 4px;
 
         margin-left: 2px;
-        font-size: 12px;
+        font-size: 0.75rem;
 
         padding: 2px 6px;
         border-radius: 8px;

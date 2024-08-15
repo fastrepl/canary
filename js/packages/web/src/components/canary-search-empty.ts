@@ -45,7 +45,7 @@ export class CanarySearchEmpty extends LitElement {
       p {
         cursor: default;
         margin-left: 4px;
-        font-size: 14px;
+        font-size: 0.875rem;
         color: var(--canary-color-gray-40);
       }
     `,

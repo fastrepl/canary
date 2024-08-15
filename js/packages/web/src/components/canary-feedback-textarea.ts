@@ -38,7 +38,7 @@ export class CanaryFeedbackTextarea extends LitElement {
     css`
       textarea {
         width: 100%;
-        font-size: 16px;
+        font-size: 1rem;
         height: 160px;
         resize: none;
         outline: none;

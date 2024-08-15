@@ -74,14 +74,14 @@ export const input = css`
     height: 30px;
     outline: none;
     border: none;
-    font-size: 16px;
+    font-size: 1rem;
     color: var(--canary-color-gray-10);
     background-color: var(--canary-color-gray-100);
   }
 
   input::placeholder {
     color: var(--canary-color-gray-40);
-    font-size: 14px;
+    font-size: 0.875rem;
   }
 `;
 

@@ -83,7 +83,7 @@ export class CanaryMarkdown extends LitElement {
     codeBlockScrollbar,
     css`
       .container {
-        font-size: 14px;
+        font-size: 0.875rem;
         color: var(--canary-color-gray-20);
         background-color: var(--canary-is-light, var(--canary-color-gray-100))
           var(--canary-is-dark, var(--canary-color-gray-90));
