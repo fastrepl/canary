@@ -184,12 +184,12 @@ export default {
       return wrapper(html`
         <canary-search slot="mode">
           <canary-search-input slot="input"></canary-search-input>
+          <canary-callout-discord slot="body"></canary-callout-discord>
           <canary-search-results-tabs
             slot="body"
             group
             tabs="Docs:*;API:/api/.+$"
           ></canary-search-results-tabs>
-          <canary-callout-discord slot="body"></canary-callout-discord>
         </canary-search>
       `);
     }
@@ -197,9 +197,9 @@ export default {
     if (kind === Kind.SearchCallout) {
       return wrapper(html`
         <canary-search slot="mode">
+          <canary-callout-discord slot="body"></canary-callout-discord>
           <canary-search-input slot="input"></canary-search-input>
           <canary-search-results slot="body"></canary-search-results>
-          <canary-callout-discord slot="body"></canary-callout-discord>
         </canary-search>
       `);
     }

@@ -34,7 +34,7 @@ export class CanarySearch extends LitElement {
           <div class="container">
             <div class="input-wrapper">
               <slot name="input-before">
-                <div class="icon i-heroicons-magnifying-glass"></div>
+                <div class="i-heroicons-magnifying-glass"></div>
               </slot>
               <slot name="input"></slot>
               <slot name="input-after"></slot>
