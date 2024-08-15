@@ -44,7 +44,7 @@ defmodule Canary.Query.Sugestor.Default do
       |> String.downcase()
 
     query =~
-      ~r/^(who|whom|whose|what|which|when|where|why|how|can|is|does|do|are|could|would|may)\b/
+      ~r/^(who|whom|whose|what|which|when|where|why|how|can|is|does|do|are|could|would|may|give)\b/
   end
 
   defp remove_question_mark(query) do

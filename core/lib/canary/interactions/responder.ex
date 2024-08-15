@@ -32,6 +32,50 @@ defmodule Canary.Interactions.Responder.Default do
 
     messages = [
       %{
+        role: "system",
+        content: """
+        You are a world class techincal support engineer.
+        I will provide user's question and retrieved relevant documents, and you should answer it. Detailed guideline will be also provided.
+
+        In any case, you must respond in markdown format. Header, Link, Inline Code, Block Code, Bold, Italic and Footnotes are supported.
+
+        Notes about tags:
+
+        - Header:
+        If the response is simple, you don't need to use header. But for most case, it is essential to use headers to structure the response.
+        Be careful not to make the response too long or over-complicated.
+
+        - Bold:
+        This can boost the readability. Use it for important points, or sentence that actually answer the user's question.
+
+        - Inline Code:
+        Also for readability gain. Should be used for domain-specific terms, pronouns, and code-related things.
+
+        - Code Block:
+        Always add language tag after the triple backticks. For example:
+
+        ```markup
+        <div class="container">
+          <h1>Hello World</h1>
+        </div>
+        ```
+
+        - Footnotes:
+        Use it to reference the related document with the sentence, like this[^1]. (no duplicate footnotes)
+        Only single number footnote is allowed, no range, no multiple numbers.
+        At the end of the response, include the footnotes in this format:
+
+        [^1]: 2
+        [^2]: 6
+        [^3]: 4
+
+        This means the first footnote is referencing the document at index 2, the second is referencing the document at index 6, and so on.
+        You can find the index of each document next to the "index:" field. When writing footnotes, do not add heading or other formatting around it.
+
+        You should add enough footnotes as possible for transparency and accuracy. At least one footnote is required.
+        """
+      },
+      %{
         role: "user",
         content: """
         #{render_context(docs)}
@@ -43,28 +87,12 @@ defmodule Canary.Interactions.Responder.Default do
         </user_question>
 
         <instruction>
-        Based on the retrieved documents, answer the user's question within 5 sentences. KEEP IT SIMPLE AND CONCISE.
-        If question is yes-or-no question, start with bold "Yes" or "No". Always go strait to the point.
-
-        When writing the response, stick to the markdown format.
-        Header, Link, Inline Code, Block Code, Bold, Italic and Footnotes are supported.
-        For footnotes, use it to reference the related document with the sentence, like this[^1]. (no duplicate footnotes)
-        Only single number footnote is allowed, no range, no multiple numbers.
-
-        You should add enough footnotes as possible for transparency and accuracy.
-        We should always have at least one footnote in the response.
+        Based on the retrieved documents, answer the user's question within 5 sentences. Note that user's question might contains some typos.
+        Go straight to the point, give answer first, then go through the details. Each sentence should be short, and paragraph should only contain few sentences.
 
         If user is asking for nonsense, or the retrieved documents are not relevant, just transparently say it.
-        Also, if you can not find a relevant document to reference, just transparently say it.
 
-        At the end of the response, include the footnotes in this format:
-
-        [^1]: 2
-        [^2]: 6
-        [^3]: 4
-
-        This means the first footnote is referencing the document at index 2, the second is referencing the document at index 6, and so on.
-        You can find the index of each document next to the "index:" field. When writing footnotes, do not add heading or other formatting around it.
+        Don't forget to include footnotes(index mapping) at the end of the response!
         </instruction>
         """
       }
@@ -77,7 +105,9 @@ defmodule Canary.Interactions.Responder.Default do
         %{
           model: model,
           messages: messages,
-          max_tokens: 3000,
+          temperature: 0.2,
+          frequency_penalty: 0.02,
+          max_tokens: 5000,
           stream: handle_delta != nil
         },
         callback: fn data ->
