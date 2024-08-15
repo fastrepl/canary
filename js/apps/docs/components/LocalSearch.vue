@@ -32,7 +32,7 @@ const { localeIndex } = useData();
             <canary-search slot="mode">
               <canary-search-input slot="input"></canary-search-input>
               <canary-search-results-tabs
-                slot="result"
+                slot="body"
                 tabs="Docs:*;Cloud:/cloud/.+$"
               >
               </canary-search-results-tabs>
@@ -43,3 +43,10 @@ const { localeIndex } = useData();
     </canary-root>
   </div>
 </template>
+
+<style scoped>
+canary-root {
+  --canary-color-primary-c: 0.05;
+  --canary-color-primary-h: 90;
+}
+</style>

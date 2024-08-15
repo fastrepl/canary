@@ -31,11 +31,11 @@ onMounted(() => {
           <canary-content slot="content">
             <canary-search slot="mode">
               <canary-search-input slot="input"></canary-search-input>
-              <canary-search-results slot="result"></canary-search-results>
+              <canary-search-results slot="body"></canary-search-results>
             </canary-search>
             <canary-ask slot="mode">
               <canary-ask-input slot="input"></canary-ask-input>
-              <canary-ask-results slot="result"></canary-ask-results>
+              <canary-ask-results slot="body"></canary-ask-results>
             </canary-ask>
           </canary-content>
         </canary-modal>

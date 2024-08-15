@@ -10,7 +10,7 @@
         <canary-content>
             <canary-search slot="mode"> // [!code focus]
                 <canary-search-input slot="input"></canary-search-input> // [!code focus]
-                <canary-search-results slot="result"></canary-search-results>  // [!code focus]
+                <canary-search-results slot="body"></canary-search-results>  // [!code focus]
             </canary-search> // [!code focus]
         </canary-content>
     </canary-provider-pagefind>
@@ -23,8 +23,8 @@
         <canary-content>
             <canary-search slot="mode">
                 <canary-search-input slot="input"></canary-search-input>
-                <canary-search-results slot="result"></canary-search-results>  // [!code --]
-                <canary-search-results-tabs slot="result" group></canary-search-results-tabs>  // [!code ++]
+                <canary-search-results slot="body"></canary-search-results>  // [!code --]
+                <canary-search-results-tabs slot="body" group></canary-search-results-tabs>  // [!code ++]
             </canary-search>
         </canary-content>
     </canary-provider-pagefind>

@@ -33,7 +33,7 @@ export default function Canary({ options }) {
             <canary-search slot="mode">
               <canary-search-input slot="input"></canary-search-input>
               <canary-search-results
-                slot="result"
+                slot="body"
                 group
               ></canary-search-results>
             </canary-search>

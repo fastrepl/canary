@@ -55,6 +55,15 @@ const sidebar = [
       },
     ],
   },
+  {
+    text: "Reference",
+    items: [
+      {
+        text: "Packages",
+        link: "/docs/reference/packages",
+      },
+    ],
+  },
 ];
 
 // https://vitepress.dev/reference/site-config
