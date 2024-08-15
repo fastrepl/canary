@@ -86,7 +86,7 @@ export class CanaryReference extends LitElement {
         justify-content: space-between;
 
         width: 100%;
-        padding: 8px 12px;
+        padding: 6px 9px;
         border: 1px solid var(--canary-color-gray-90);
         border-radius: 8px;
         background-color: var(--canary-is-light, var(--canary-color-gray-95))
@@ -115,7 +115,6 @@ export class CanaryReference extends LitElement {
         display: flex;
         flex-direction: column;
         align-items: flex-start;
-        gap: 3px;
 
         overflow: hidden;
         text-overflow: ellipsis;
@@ -146,13 +145,13 @@ export class CanaryReference extends LitElement {
 
       .title {
         --canary-snippet-color: var(--canary-color-gray-10);
-        --canary-snippet-font-size: 1rem;
+        --canary-snippet-font-size: 0.875rem;
         --canary-snippet-font-weight: 500;
       }
 
       .excerpt {
         --canary-snippet-color: var(--canary-color-gray-20);
-        --canary-snippet-font-size: 0.875rem;
+        --canary-snippet-font-size: 0.75rem;
         --canary-snippet-font-weight: 400;
       }
     `,

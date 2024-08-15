@@ -35,7 +35,7 @@ export class CanaryModal extends LitElement {
   static styles = [
     wrapper,
     css`
-      ::slotted(*) {
+      ::slotted([slot="trigger"]) {
         cursor: pointer;
       }
     `,

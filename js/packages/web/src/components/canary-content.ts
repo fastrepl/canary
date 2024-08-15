@@ -29,7 +29,7 @@ export class CanaryContent extends LitElement {
     css`
       .container {
         width: 100%;
-        max-width: var(--canary-content-max-width, 600px);
+        max-width: var(--canary-content-max-width, 550px);
 
         outline: none;
         padding-top: 6px;
@@ -46,7 +46,7 @@ export class CanaryContent extends LitElement {
 
       @media (min-width: 50rem) {
         .container {
-          width: var(--canary-content-max-width, 600px);
+          width: var(--canary-content-max-width, 550px);
         }
       }
     `,

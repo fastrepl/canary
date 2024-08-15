@@ -2,6 +2,10 @@ import { LitElement, html, css } from "lit";
 import { ref, createRef } from "lit/directives/ref.js";
 import { customElement, property } from "lit/decorators.js";
 
+import { consume } from "@lit/context";
+import { themeContext } from "../contexts";
+import { ThemeContext } from "../types";
+
 import { marked, type MarkedExtension, type Tokens } from "marked";
 import footNote from "marked-footnote";
 
@@ -22,26 +26,31 @@ marked.use(footNoteExtension).use({
   ],
 });
 
-import hljs from "highlight.js/lib/core";
-import javascript from "highlight.js/lib/languages/javascript";
-hljs.registerLanguage("javascript", javascript);
+import { highlightElement } from "prismjs";
+import "prismjs/components/prism-markup";
 
 const NAME = "canary-markdown";
 
 @customElement(NAME)
 export class CanaryMarkdown extends LitElement {
-  @property({ type: String }) hljs = "github-dark";
-  @property({ attribute: false }) content = "";
+  @consume({ context: themeContext, subscribe: true })
+  theme?: ThemeContext;
+
+  @property({ attribute: false })
+  content = "";
 
   private _domparser = new DOMParser();
   private _containerRef = createRef<HTMLDivElement>();
 
   render() {
+    const stylePath = `https://unpkg.com/prism-themes@1.9.0/themes/prism-one-${this.theme ?? "light"}.min.css`;
+
     return html`
-      <link
-        rel="stylesheet"
-        href="https://unpkg.com/highlight.js@11.9.0/styles/${this.hljs}.css"
-      />
+      <link rel="stylesheet" href=${stylePath} />
+      <script
+        src="https://unpkg.com/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js"
+        data-autoloader-path="https://unpkg.com/prismjs@1.29.0/components/"
+      ></script>
       <div class="container" ${ref(this._containerRef)}></div>
     `;
   }
@@ -69,9 +78,8 @@ export class CanaryMarkdown extends LitElement {
         }
 
         container.innerHTML = virtual.innerHTML;
-        container.querySelectorAll("pre code").forEach((code) => {
-          code.className = "language-javascript";
-          hljs.highlightElement(code as HTMLElement);
+        container.querySelectorAll("pre code").forEach((el) => {
+          highlightElement(el, false);
         });
       });
     }

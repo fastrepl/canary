@@ -56,10 +56,29 @@ This is an example of \`inline code\` inside a sentence.
 ### Code Block
 
 \`\`\`python
-def hello_world():
-    print(${Array(20).fill("Hello").join(" ")})
+a, b = 0, 1
+while a <= 50:
+    print(a, end=' ')
+    a, b = b, a + b
+\`\`\`
 
-hello_world()
+\`\`\`html
+<canary-root framework="docusaurus">
+    <canary-provider-pagefind>
+        <canary-content>
+            <canary-search slot="mode">
+                <canary-search-input slot="input"></canary-search-input>
+                <canary-search-results slot="body"></canary-search-results>
+            </canary-search>
+        </canary-content>
+    </canary-provider-pagefind>
+</canary-root>
+\`\`\`
+
+\`\`\`javascript
+function helloWorld() {
+    console.log("Hello World!");
+}
 \`\`\`
 
 ### Horizontal Rule

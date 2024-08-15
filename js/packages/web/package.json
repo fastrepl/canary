@@ -30,10 +30,10 @@
     "@lit/context": "^1.1.2",
     "@lit/task": "^1.0.1",
     "@xstate/store": "^2.1.0",
-    "highlight.js": "^11.10.0",
     "lit": "^3.1.4",
     "marked": "^14.0.0",
-    "marked-footnote": "^1.2.2"
+    "marked-footnote": "^1.2.2",
+    "prismjs": "^1.29.0"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^1.6.1",
@@ -52,6 +52,7 @@
     "@storybook/theming": "^8.2.7",
     "@storybook/web-components": "^8.2.7",
     "@storybook/web-components-vite": "^8.2.7",
+    "@types/prismjs": "^1.26.4",
     "@unocss/preset-icons": "^0.61.9",
     "@unocss/preset-uno": "^0.61.9",
     "chromatic": "^11.5.5",
