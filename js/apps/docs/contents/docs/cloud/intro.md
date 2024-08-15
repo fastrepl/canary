@@ -1,8 +1,6 @@
 # Canary Cloud
 
-::: warning
-`Canary Cloud` is in active development. Not ready for production use yet.
-:::
+<!--@include: ./callout.md-->
 
 `Canary` works great with local search index. But at some point, you'll need additional features that require talking to a server. `canary-provider-cloud` aims to provide that.
 

@@ -1,14 +1,9 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from "vue";
+import { onMounted, ref } from "vue";
 import { useData } from "vitepress";
-
-import Slider from "./Slider.vue";
-import ThemeSwitch from "vitepress/dist/client/theme-default/components/VPSwitchAppearance.vue";
 
 const { localeIndex } = useData();
 
-const chroma = ref(0.1);
-const hue = ref(250);
 const loaded = ref(false);
 
 onMounted(() => {
@@ -24,41 +19,14 @@ onMounted(() => {
   ]).then(() => {
     loaded.value = true;
   });
-
-  watch(
-    [chroma, hue],
-    ([c, h]) => {
-      document.documentElement.style.setProperty(
-        "--canary-color-primary-c",
-        c.toString(),
-      );
-      document.documentElement.style.setProperty(
-        "--canary-color-primary-h",
-        h.toString(),
-      );
-    },
-    { immediate: true },
-  );
 });
 </script>
 
 <template>
-  <div class="flex flex-row gap-4 mb-6" v-if="loaded">
-    <Slider
-      :min="0"
-      :max="0.3"
-      :step="0.001"
-      :value="chroma"
-      @change="chroma = $event"
-    />
-    <Slider :min="0" :max="360" :step="1" :value="hue" @change="hue = $event" />
-    <ThemeSwitch />
-  </div>
-
   <canary-root framework="vitepress">
     <canary-provider-vitepress-minisearch :localeIndex="localeIndex">
-      <div class="flex flex-col w-full items-center justify-center gap-4">
-        <canary-modal>
+      <div class="flex flex-col w-full items-center justify-center gap-4 mt-20">
+        <!-- <canary-modal>
           <canary-trigger-searchbar slot="trigger"></canary-trigger-searchbar>
           <canary-content slot="content">
             <canary-search slot="mode">
@@ -66,7 +34,7 @@ onMounted(() => {
               <canary-search-results slot="body"> </canary-search-results>
             </canary-search>
           </canary-content>
-        </canary-modal>
+        </canary-modal> -->
 
         <canary-content slot="content">
           <canary-search slot="mode">
@@ -78,3 +46,11 @@ onMounted(() => {
     </canary-provider-vitepress-minisearch>
   </canary-root>
 </template>
+
+<style scoped>
+canary-root {
+  --canary-color-primary-c: 0.05;
+  --canary-color-primary-h: 90;
+  --canary-content-max-height: 400px;
+}
+</style>

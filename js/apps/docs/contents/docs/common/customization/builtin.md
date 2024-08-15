@@ -24,14 +24,12 @@ Outermost wrapper component. Required for all other components.
 
 ## `canary-provider-*`
 
-Register `operation` to `canary-root`.
-
-| Provider                               | Search | AI Search | Ask |
-| -------------------------------------- | :----: | :-------: | :-: |
-| `canary-provider-mock`                 |  `O`   |    `O`    | `O` |
-| `canary-provider-pagefind`             |  `O`   |    `X`    | `X` |
-| `canary-provider-vitepress-minisearch` |  `O`   |    `X`    | `X` |
-| `canary-provider-cloud`                |  `O`   |    `O`    | `O` |
+| Provider                 | Keyword Search | Hybrid Search | Suggestion | Ask AI |
+| ------------------------ | :------------: | :-----------: | :--------: | :----: |
+| `-mock`                  |      `O`       |      `O`      |    `O`     |  `O`   |
+| `-pagefind`              |      `O`       |      `X`      |    `X`     |  `X`   |
+| `--vitepress-minisearch` |      `O`       |      `X`      |    `X`     |  `X`   |
+| `-cloud`                 |      `O`       |      `O`      |    `O`     |  `O`   |
 
 ## `canary-modal`, `canary-trigger-*`, `canary-content`
 

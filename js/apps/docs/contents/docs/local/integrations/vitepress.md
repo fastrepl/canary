@@ -1,8 +1,6 @@
 # VitePress
 
-::: tip
-If you're using `Canary Cloud`, please refer to [this page](/docs/cloud/integrations/vitepress) instead.
-:::
+<!--@include: ./callout.md-->
 
 [VitePress](https://vitepress.dev/) is Vite & Vue powered static site generator.
 

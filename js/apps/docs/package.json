@@ -5,7 +5,8 @@
     "build": "npm run build -w=@getcanary/web && vitepress build",
     "preview": "vitepress preview",
     "format": "prettier --write .",
-    "canary": "npm un @getcanary/web && npm i @getcanary/web "
+    "canary": "npm un @getcanary/web && npm i @getcanary/web",
+    "canary-dev": "npm un @getcanary/web && npm i ../../packages/web"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.19",

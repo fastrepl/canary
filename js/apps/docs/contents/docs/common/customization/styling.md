@@ -1,6 +1,6 @@
 # Styling
 
-[`canary-root`](https://github.com/fastrepl/canary/blob/main/js/packages/web/src/canary-root.ts) do the heavy lifting for you.
+[`canary-root`](https://github.com/fastrepl/canary/blob/main/js/packages/web/src/components/canary-root.ts) do the heavy lifting for you.
 
 ## CSS Variables
 
@@ -8,7 +8,7 @@ All components in Canary renders inside a [shadow DOM](https://developer.mozilla
 
 [CSS variables](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties) is one exception. And Canary exposes them for you to use.
 
-```bash{3,4}
+```bash{2,3}
 # colors
 --canary-color-primary-c
 --canary-color-primary-h
@@ -17,7 +17,7 @@ All components in Canary renders inside a [shadow DOM](https://developer.mozilla
 ```
 
 <script setup>
-import Styling from "../../../components/Styling.vue";
+import Styling from "../../../../components/Styling.vue";
 </script>
 
 <div class="flex flex-col items-center justify-center">

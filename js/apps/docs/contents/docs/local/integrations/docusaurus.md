@@ -1,8 +1,6 @@
 # Docusaurus
 
-::: tip
-If you're using `Canary Cloud`, please refer to [this page](/docs/cloud/integrations/docusaurus) instead.
-:::
+<!--@include: ./callout.md-->
 
 [Docusaurus](https://docusaurus.io/) is static site generator using React.
 
@@ -65,7 +63,7 @@ const config = {
     [
       require.resolve("@getcanary/docusaurus-theme-search-pagefind"),
       { // [!code ++]
-        // https://getcanary.dev/docs/customization/styling#css-variables // [!code ++]
+        // https://getcanary.dev/docs/common/customization/styling#css-variables // [!code ++]
         styles: { // [!code ++]
           "--canary-color-primary-c": 0.1, // [!code ++]
           "--canary-color-primary-h": 270, // [!code ++]
@@ -117,4 +115,4 @@ export default function SearchBar() {
 
 Note that since `Canary`'s **main focus is to provide composable primitives**, ejected components will be very simple and easy to customize.
 
-For information on how to compose components to build your own search-bar UI, please refer to the [Built-in Components](/docs/customization/builtin) and [Custom Components](/docs/customization/custom) guides.
+For information on how to compose components to build your own search-bar UI, please refer to the [Built-in Components](/docs/common/customization/builtin) and [Custom Components](/docs/common/customization/custom) guides.
