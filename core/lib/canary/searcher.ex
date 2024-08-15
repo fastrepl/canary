@@ -37,6 +37,7 @@ defmodule Canary.Searcher.Default do
 
     {:ok, analysis} = Canary.Query.Understander.run(query, Enum.join(source.summaries, "\n"))
     {:ok, docs} = Canary.Index.batch_search_documents(source.id, analysis.keywords)
+    docs = docs |> Enum.dedup_by(& &1.id)
     Canary.Reranker.run(analysis.query, docs, fn doc -> doc.content end)
   end
 

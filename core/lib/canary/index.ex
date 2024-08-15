@@ -62,6 +62,7 @@ defmodule Canary.Index do
 
   defp transform_hit(hit) do
     %{
+      id: hit["document"]["id"],
       title: hit["highlight"]["title"]["snippet"] || hit["document"]["title"],
       titles: hit["document"]["meta"]["titles"],
       url: hit["document"]["meta"]["url"],
@@ -88,7 +89,7 @@ defmodule Canary.Index do
       query_by_weights: "3,2",
       filter_by: filter_by,
       sort_by: "_text_match:desc",
-      exclude_fields: "id,source",
+      exclude_fields: "source",
       prefix: true,
       prioritize_exact_match: false,
       prioritize_token_position: false,
