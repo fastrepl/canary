@@ -45,6 +45,8 @@ export default defineConfig({
           "canary-search-results",
           "canary-search-results-tabs",
           "canary-search-suggestions",
+          "canary-search-empty",
+          "canary-search-options",
           "canary-ask",
           "canary-ask-input",
           "canary-ask-results",

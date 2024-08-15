@@ -19,10 +19,12 @@ import "./canary-ask-input";
 import "./canary-ask-results";
 
 import "./canary-search";
+import "./canary-search-empty";
 import "./canary-search-input";
 import "./canary-search-results";
 import "./canary-search-results-tabs";
 import "./canary-search-suggestions";
+import "./canary-search-options";
 
 import "./canary-ask";
 import "./canary-ask-input";
@@ -45,6 +47,7 @@ enum Kind {
   SearchMobile,
   SearchAndAskWithModeTabs,
   SearchAndAskWithModeButton,
+  SuggestMode,
 }
 
 const type = (text: string): StoryObj["play"] => {
@@ -86,7 +89,7 @@ export default {
       return wrapper(html`
         <canary-search slot="mode">
           <canary-search-input slot="input"></canary-search-input>
-          <canary-search-results slot="result"></canary-search-results>
+          <canary-search-results slot="body"></canary-search-results>
         </canary-search>
       `);
     }
@@ -95,7 +98,7 @@ export default {
       return wrapper(html`
         <canary-search slot="mode">
           <canary-search-input slot="input"></canary-search-input>
-          <canary-search-results slot="result"></canary-search-results>
+          <canary-search-results slot="body"></canary-search-results>
         </canary-search>
       `);
     }
@@ -107,7 +110,7 @@ export default {
             slot="input"
             query="initial query 2"
           ></canary-search-input>
-          <canary-search-results slot="result"></canary-search-results>
+          <canary-search-results slot="body"></canary-search-results>
         </canary-search>
       `);
     }
@@ -116,8 +119,29 @@ export default {
       return wrapper(html`
         <canary-search slot="mode">
           <canary-search-input slot="input"></canary-search-input>
-          <canary-search-results slot="result"></canary-search-results>
+          <canary-search-results slot="body"></canary-search-results>
+          <canary-search-empty slot="body"></canary-search-empty>
         </canary-search>
+      `);
+    }
+
+    if (kind === Kind.SuggestMode) {
+      return wrapper(html`
+        <canary-search slot="mode">
+          <canary-search-input slot="input"></canary-search-input>
+          <canary-search-results slot="body"></canary-search-results>
+          <canary-search-empty slot="body"></canary-search-empty>
+          <canary-search-options slot="body"></canary-search-options>
+        </canary-search>
+        <canary-ask slot="mode">
+          <canary-mode-breadcrumb
+            slot="input-before"
+            previous="Search"
+            text="Ask AI"
+          ></canary-mode-breadcrumb>
+          <canary-ask-input slot="input"></canary-ask-input>
+          <canary-ask-results slot="body"></canary-ask-results>
+        </canary-ask>
       `);
     }
 
@@ -126,12 +150,12 @@ export default {
         <canary-search slot="mode">
           <canary-search-input slot="input"></canary-search-input>
           <canary-search-results
-            slot="result"
+            slot="body"
             header="Results"
             limit="4"
           ></canary-search-results>
           <canary-search-suggestions
-            slot="result"
+            slot="body"
             header="Ask AI"
           ></canary-search-suggestions>
         </canary-search>
@@ -142,7 +166,7 @@ export default {
             text="Ask AI2"
           ></canary-mode-breadcrumb>
           <canary-ask-input slot="input"></canary-ask-input>
-          <canary-ask-results slot="result"></canary-ask-results>
+          <canary-ask-results slot="body"></canary-ask-results>
         </canary-ask>
       `);
     }
@@ -151,7 +175,7 @@ export default {
       return wrapper(html`
         <canary-search slot="mode">
           <canary-search-input slot="input"></canary-search-input>
-          <canary-search-results slot="result" group></canary-search-results>
+          <canary-search-results slot="body" group></canary-search-results>
         </canary-search>
       `);
     }
@@ -161,11 +185,11 @@ export default {
         <canary-search slot="mode">
           <canary-search-input slot="input"></canary-search-input>
           <canary-search-results-tabs
-            slot="result"
+            slot="body"
             group
             tabs="Docs:*;API:/api/.+$"
           ></canary-search-results-tabs>
-          <canary-callout-discord slot="callout"></canary-callout-discord>
+          <canary-callout-discord slot="body"></canary-callout-discord>
         </canary-search>
       `);
     }
@@ -174,8 +198,8 @@ export default {
       return wrapper(html`
         <canary-search slot="mode">
           <canary-search-input slot="input"></canary-search-input>
-          <canary-search-results slot="result"></canary-search-results>
-          <canary-callout-discord slot="callout"></canary-callout-discord>
+          <canary-search-results slot="body"></canary-search-results>
+          <canary-callout-discord slot="body"></canary-callout-discord>
         </canary-search>
       `);
     }
@@ -184,7 +208,7 @@ export default {
       return wrapper(html`
         <canary-search slot="mode">
           <canary-search-input slot="input"></canary-search-input>
-          <canary-search-results slot="result"></canary-search-results>
+          <canary-search-results slot="body"></canary-search-results>
         </canary-search>
       `);
     }
@@ -193,7 +217,7 @@ export default {
       return wrapper(html`
         <canary-search slot="mode">
           <canary-search-input slot="input"></canary-search-input>
-          <canary-search-results slot="result"></canary-search-results>
+          <canary-search-results slot="body"></canary-search-results>
         </canary-search>
       `);
     }
@@ -207,7 +231,7 @@ export default {
             text="Ask AI"
           ></canary-mode-breadcrumb>
           <canary-ask-input slot="input"></canary-ask-input>
-          <canary-ask-results slot="result"></canary-ask-results>
+          <canary-ask-results slot="body"></canary-ask-results>
         </canary-ask>
       `);
     }
@@ -217,12 +241,12 @@ export default {
         <canary-search slot="mode">
           <canary-search-input slot="input"></canary-search-input>
           <canary-mode-tabs slot="input-after"></canary-mode-tabs>
-          <canary-search-results slot="result"></canary-search-results>
+          <canary-search-results slot="body"></canary-search-results>
         </canary-search>
         <canary-ask slot="mode">
           <canary-ask-input slot="input"></canary-ask-input>
           <canary-mode-tabs slot="input-after"></canary-mode-tabs>
-          <canary-ask-results slot="result"></canary-ask-results>
+          <canary-ask-results slot="body"></canary-ask-results>
         </canary-ask>
       `);
     }
@@ -231,15 +255,7 @@ export default {
       return wrapper(html`
         <canary-search slot="mode">
           <canary-search-input slot="input"></canary-search-input>
-          <canary-search-results slot="result"></canary-search-results>
-          <div slot="empty">
-            <canary-button-mode mode="Ask" text="Ask AI Assistant">
-              <canary-hero-icon
-                slot="icon"
-                name="chat-bubble-left"
-              ></canary-hero-icon>
-            </canary-button-mode->
-          </div>
+          <canary-search-results slot="body"></canary-search-results>
           <canary-mode-button-ask></canary-mode-button-ask>
         </canary-search>
         <canary-ask slot="mode">
@@ -248,10 +264,13 @@ export default {
             previous="Search"
             text="Ask AI Assistant"
           >
-            <canary-hero-icon slot="icon" name="chat-bubble-left"></canary-hero-icon>
-        </canary-mode-breadcrumb>
+            <canary-hero-icon
+              slot="icon"
+              name="chat-bubble-left"
+            ></canary-hero-icon>
+          </canary-mode-breadcrumb>
           <canary-ask-input slot="input"></canary-ask-input>
-          <canary-ask-results slot="result"></canary-ask-results>
+          <canary-ask-results slot="body"></canary-ask-results>
         </canary-ask>
       `);
     }
@@ -328,6 +347,10 @@ export const SearchMobile: StoryObj = {
 export const Ask: StoryObj = {
   args: { kind: Kind.Ask },
   play: init_ask(),
+};
+
+export const SuggestMode: StoryObj = {
+  args: { kind: Kind.SuggestMode },
 };
 
 export const SearchAsk1: StoryObj = {

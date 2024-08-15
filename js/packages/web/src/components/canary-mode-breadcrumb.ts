@@ -11,7 +11,8 @@ const NAME = "canary-mode-breadcrumb";
 
 @customElement(NAME)
 export class CanaryModeBreadcrumb extends LitElement {
-  @property({ type: String }) text = "";
+  @property({ type: String })
+  text = "";
 
   @consume({ context: modeContext, subscribe: true })
   @state()
@@ -38,9 +39,8 @@ export class CanaryModeBreadcrumb extends LitElement {
   }
 
   private _handleClick() {
-    this.dispatchEvent(
-      createEvent({ type: "set_mode", data: this._mode.default! }),
-    );
+    const mode = this._mode.default ?? this._mode.options.values().next().value;
+    this.dispatchEvent(createEvent({ type: "set_mode", data: mode }));
   }
 
   static styles = [

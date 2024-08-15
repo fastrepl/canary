@@ -58,6 +58,10 @@ export class CanaryAskResults extends LitElement {
 
   static styles = [
     css`
+      .container {
+        margin-top: 8px;
+      }
+
       .references {
         display: flex;
         flex-direction: column;

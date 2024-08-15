@@ -59,13 +59,15 @@ export const createStore = (host: HTMLElement) =>
               context.query.value,
               context.operation.value,
             );
-          }
-          if (data === MODE_ASK) {
+          } else if (data === MODE_ASK) {
             context.searchManager.abort();
             context.askManager.run(
               context.query.value,
               context.operation.value,
             );
+          } else {
+            context.searchManager.abort();
+            context.askManager.abort();
           }
 
           return context.mode;

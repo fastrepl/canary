@@ -23,7 +23,7 @@ export default {
           <canary-content slot="content">
             <canary-search slot="mode">
               <canary-search-input slot="input"></canary-search-input>
-              <canary-search-results slot="result"></canary-search-results>
+              <canary-search-results slot="body"></canary-search-results>
             </canary-search>
           </canary-content>
         </canary-modal>

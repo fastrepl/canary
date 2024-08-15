@@ -35,9 +35,9 @@ export class CanarySearchSuggestions extends LitElement {
             questions,
             (message) => html`
               <div class="item" @click=${() => this._handleClick(message)}>
-                <span class="icon i-heroicons-chat-bubble-left"></span>
+                <span class="i-heroicons-chat-bubble-left"></span>
                 <span class="message">${message}</span>
-                <span class="icon i-heroicons-chevron-right arrow "></span>
+                <span class="i-heroicons-chevron-right arrow "></span>
               </div>
             `,
           )}

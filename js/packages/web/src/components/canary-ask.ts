@@ -36,14 +36,14 @@ export class CanaryAsk extends LitElement {
           <div class="container">
             <div class="input-wrapper">
               <slot name="input-before">
-                <div class="icon i-heroicons-chat-bubble-left"></div>
+                <div class="i-heroicons-chat-bubble-left"></div>
               </slot>
               <slot name="input"></slot>
               <slot name="input-after"></slot>
             </div>
             <div class="scroll-container" ${ref(this._containerRef)}>
-              <div class="results">
-                <slot name="result"></slot>
+              <div class="body">
+                <slot name="body"></slot>
               </div>
             </div>
           </div>
@@ -66,7 +66,6 @@ export class CanaryAsk extends LitElement {
         display: flex;
         align-items: center;
         gap: 8px;
-        margin-bottom: 4px;
         padding: 1px 12px;
       }
     `,

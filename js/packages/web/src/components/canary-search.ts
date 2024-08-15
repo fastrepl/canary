@@ -10,9 +10,6 @@ import { MODE_SEARCH } from "../constants";
 import { global, scrollContainer } from "../styles";
 import { createEvent } from "../store";
 
-import "./canary-mode-tabs";
-import "./canary-search-empty";
-
 const NAME = "canary-search";
 
 @customElement(NAME)
@@ -43,9 +40,8 @@ export class CanarySearch extends LitElement {
               <slot name="input-after"></slot>
             </div>
             <div class="scroll-container" ${ref(this._containerRef)}>
-              <div class="results">
-                <slot name="callout"></slot>
-                <slot name="result"></slot>
+              <div class="body">
+                <slot name="body"></slot>
               </div>
             </div>
           </div>
@@ -68,14 +64,7 @@ export class CanarySearch extends LitElement {
         display: flex;
         align-items: center;
         gap: 8px;
-        margin-bottom: 4px;
         padding: 1px 12px;
-      }
-
-      .results {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
       }
     `,
   ];

@@ -66,7 +66,7 @@ export class SearchManager {
     if (this.ctx.status === TaskStatus.PENDING) {
       this._abortController.abort(ABORT_REASON_MANAGER);
     }
-    this.transition({ ...this._initialState, status: TaskStatus.PENDING });
+    this.transition({ status: TaskStatus.PENDING });
 
     const callId = ++this._callId;
     operations.beforeSearch?.(query);
@@ -132,7 +132,7 @@ export class AskManager {
   }
 
   async run(query: string, operations: OperationContext) {
-    if (!operations.search || !operations.ask) {
+    if (!operations.ask || query.length === 0) {
       return;
     }
 
