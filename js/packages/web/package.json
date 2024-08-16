@@ -1,6 +1,6 @@
 {
   "name": "@getcanary/web",
-  "version": "0.0.77",
+  "version": "0.0.78",
   "type": "module",
   "main": "dist/components/index.js",
   "files": [

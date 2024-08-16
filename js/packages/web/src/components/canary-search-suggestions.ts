@@ -60,7 +60,6 @@ export class CanarySearchSuggestions extends LitElement {
       .container {
         display: flex;
         flex-direction: column;
-        gap: 4px;
 
         font-size: 0.875rem;
         color: var(--canary-color-gray-10);

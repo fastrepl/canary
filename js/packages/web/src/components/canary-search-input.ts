@@ -19,20 +19,35 @@ export class CanarySearchInput extends LitElement {
   @property({ type: String })
   query = "";
 
+  @state()
+  private _query = "";
+
   @consume({ context: searchContext, subscribe: true })
   @state()
-  private _search!: SearchContext;
+  private _search?: SearchContext;
+
+  private _timer: ReturnType<typeof setTimeout> | null = null;
 
   connectedCallback(): void {
     super.connectedCallback();
     this.dispatchEvent(createEvent({ type: "set_query", data: this.query }));
   }
 
+  updated(changed: Map<string, any>) {
+    if (changed.has("query")) {
+      this._query = this.query;
+    }
+  }
+
   render() {
+    if (!this._search) {
+      return nothing;
+    }
+
     return html`
       <input
         type="text"
-        value=${this.query}
+        value=${this._query}
         autocomplete="off"
         spellcheck="false"
         placeholder="Search for anything..."
@@ -49,12 +64,17 @@ export class CanarySearchInput extends LitElement {
   static styles = input;
 
   private _handleInput(e: KeyboardEvent) {
-    const input = e.target as HTMLInputElement;
+    const DEBOUNSE_MS = 50;
 
-    this.query = input.value;
-    this.updateComplete.then(() => {
+    const input = e.target as HTMLInputElement;
+    this._query = input.value;
+
+    if (this._timer) {
+      clearTimeout(this._timer);
+    }
+    this._timer = setTimeout(() => {
       this.dispatchEvent(createEvent({ type: "set_query", data: input.value }));
-    });
+    }, DEBOUNSE_MS);
   }
 }
 

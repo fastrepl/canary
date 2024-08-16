@@ -40,17 +40,23 @@ const mockSearchReferences = (
     return match ? parseInt(match[0], 10) : 0;
   };
 
+  const randomNumber = (min: number, max: number) => {
+    return Math.floor(Math.random() * (max - min + 1) + min);
+  };
+
   return Array(getN(query))
     .fill(null)
-    .map(() => {
+    .map((_, index) => {
       const url =
         Math.random() > 0.5
           ? `https://example.com/a/b?query=${query}`
           : `https://example.com/api/b?query=${query}`;
 
+      const titles = [`titles ${randomNumber(0, 4)}`];
+
       return {
-        title: "title",
-        titles: ["aaaa", "bbb"],
+        title: `title ${index}`,
+        titles,
         url,
         excerpt: `<mark>${type}</mark> response: <mark>${query}</mark>!`,
       };

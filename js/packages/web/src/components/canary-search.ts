@@ -66,6 +66,12 @@ export class CanarySearch extends LitElement {
         gap: 8px;
         padding: 1px 12px;
       }
+
+      .body {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
     `,
   ];
 }

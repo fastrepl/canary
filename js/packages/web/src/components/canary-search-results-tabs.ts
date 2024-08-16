@@ -21,6 +21,9 @@ const NAME = "canary-search-results-tabs";
 
 @customElement(NAME)
 export class CanarySearchResultsTabs extends LitElement {
+  @property({ type: String })
+  header = "";
+
   @property({ type: Boolean })
   group = false;
 
@@ -139,11 +142,17 @@ export class CanarySearchResultsTabs extends LitElement {
     const current = this._groupedReferences[this._selectedTab] ?? [];
     this._selection.items = current;
 
-    return html`<canary-search-references
-      .references=${current}
-      .selected=${this._selection.index}
-      .group=${this.group}
-    ></canary-search-references>`;
+    return html`
+      ${this.header && html`<div class="header">${this.header}</div>`}
+
+      <div class="items">
+        <canary-search-references
+          .references=${current}
+          .selected=${this._selection.index}
+          .group=${this.group}
+        ></canary-search-references>
+      </div>
+    `;
   }
 
   private _handleTabClick(name: string): void {
@@ -222,9 +231,14 @@ export class CanarySearchResultsTabs extends LitElement {
       input {
         display: none;
       }
+
       label {
         font-size: 0.75rem;
         text-decoration-skip-ink: none;
+      }
+
+      .header {
+        margin: 4px;
       }
     `,
   ];

@@ -38,7 +38,7 @@ export class CanaryReference extends LitElement {
             : nothing}
         </div>
         <div class=${classMap({ arrow: true, selected: this.selected })}>
-          <div class="icon i-heroicons-chevron-right"></div>
+          <div class="i-heroicons-chevron-right"></div>
         </div>
       </button>
     `;
@@ -83,7 +83,6 @@ export class CanaryReference extends LitElement {
         display: flex;
         flex-direction: row;
         align-items: center;
-        justify-content: space-between;
 
         width: 100%;
         padding: 6px 9px;
@@ -115,6 +114,7 @@ export class CanaryReference extends LitElement {
         display: flex;
         flex-direction: column;
         align-items: flex-start;
+        gap: 2px;
 
         overflow: hidden;
         text-overflow: ellipsis;
@@ -143,13 +143,13 @@ export class CanaryReference extends LitElement {
         width: 100%;
       }
 
-      .title {
+      canary-snippet.title {
         --canary-snippet-color: var(--canary-color-gray-10);
         --canary-snippet-font-size: 0.875rem;
         --canary-snippet-font-weight: 500;
       }
 
-      .excerpt {
+      canary-snippet.excerpt {
         --canary-snippet-color: var(--canary-color-gray-20);
         --canary-snippet-font-size: 0.75rem;
         --canary-snippet-font-weight: 400;

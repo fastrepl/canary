@@ -82,6 +82,7 @@ export class SearchManager {
         query,
         this._abortController.signal,
       );
+
       this.transition({ status: TaskStatus.COMPLETE, result });
     } catch (e) {
       if (e === ABORT_REASON_MANAGER) {

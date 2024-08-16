@@ -18,49 +18,41 @@ describe("urlToParts", () => {
 });
 
 describe("groupSearchReferences", () => {
-  test("empty", () => {
-    expect(groupSearchReferences([])).toEqual([]);
-  });
-
-  test("no sub-results", () => {
-    const actual = groupSearchReferences([
-      { url: "", title: "a", titles: [] },
-      { url: "", title: "b", titles: [] },
-      { url: "", title: "c", titles: [] },
-    ]);
-
-    const expected = [
-      {
-        name: null,
-        items: [{ url: "", title: "a", titles: [], index: 0 }],
-      },
-      {
-        name: null,
-        items: [{ url: "", title: "b", titles: [], index: 1 }],
-      },
-      {
-        name: null,
-        items: [{ url: "", title: "c", titles: [], index: 2 }],
-      },
-    ];
-
-    expect(actual).toEqual(expected);
-  });
-
-  test("with sub-results", () => {
-    const actual = groupSearchReferences([
-      { url: "", title: "a", titles: ["a", "1"] },
-      { url: "", title: "b", titles: ["a"] },
-      { url: "", title: "c", titles: [] },
-      { url: "", title: "d", titles: [] },
-      { url: "", title: "e", titles: ["b"] },
-      { url: "", title: "f", titles: ["b"] },
-      { url: "", title: "g", titles: ["a"] },
-      { url: "", title: "h", titles: ["c"] },
-      { url: "", title: "i", titles: ["c"] },
-    ]);
-
-    const expected = [
+  test.for([
+    ["empty", [], []],
+    [
+      "no sub-results",
+      [
+        { url: "", title: "a", titles: [] },
+        { url: "", title: "b", titles: [] },
+        { url: "", title: "c", titles: [] },
+      ],
+      [
+        {
+          name: null,
+          items: [{ url: "", title: "a", titles: [], index: 0 }],
+        },
+        {
+          name: null,
+          items: [{ url: "", title: "b", titles: [], index: 1 }],
+        },
+        {
+          name: null,
+          items: [{ url: "", title: "c", titles: [], index: 2 }],
+        },
+      ],
+      "with sub-results",
+      [
+        { url: "", title: "a", titles: ["a", "1"] },
+        { url: "", title: "b", titles: ["a"] },
+        { url: "", title: "c", titles: [] },
+        { url: "", title: "d", titles: [] },
+        { url: "", title: "e", titles: ["b"] },
+        { url: "", title: "f", titles: ["b"] },
+        { url: "", title: "g", titles: ["a"] },
+        { url: "", title: "h", titles: ["c"] },
+        { url: "", title: "i", titles: ["c"] },
+      ],
       {
         name: "a",
         items: [
@@ -94,8 +86,8 @@ describe("groupSearchReferences", () => {
           { url: "", title: "i", titles: ["c"], index: 8 },
         ],
       },
-    ];
-
-    expect(actual).toEqual(expected);
+    ],
+  ])("%s", ([_, input, expected]: any[]) => {
+    expect(groupSearchReferences(input)).toEqual(expected);
   });
 });

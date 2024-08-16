@@ -29,7 +29,7 @@ export const cssVariablesReportPlugin = (): Plugin => {
     buildEnd() {
       const outfile = path.resolve(
         root,
-        "../../apps/docs/contents/docs/common/customization/styling.variables.md"
+        "../../apps/docs/contents/docs/common/customization/styling.variables.md",
       );
 
       const content =

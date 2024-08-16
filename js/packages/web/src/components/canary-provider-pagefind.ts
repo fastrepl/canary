@@ -8,7 +8,6 @@ import type {
 } from "../types";
 import type { PagefindResult } from "../types/pagefind";
 
-import { cancellable } from "../utils";
 import { createEvent } from "../store";
 import { wrapper } from "../styles";
 
@@ -84,14 +83,9 @@ export class CanaryProviderPagefind extends LitElement {
         ).then((results: PagefindResult[]) => this._transform(results)),
       );
 
-    try {
-      signal.throwIfAborted();
-      const search = await cancellable(op, signal);
-      return { search: search };
-    } catch (e) {
-      console.error(e);
-      return { search: [] };
-    }
+    signal.throwIfAborted();
+    const search = await op;
+    return { search };
   };
 
   private _transform(results: PagefindResult[]): SearchReference[] {
