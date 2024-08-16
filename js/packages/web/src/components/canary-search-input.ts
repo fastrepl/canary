@@ -1,5 +1,6 @@
-import { LitElement, html, nothing } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
+import { LitElement, css, html, nothing } from "lit";
+import { customElement, state } from "lit/decorators.js";
+import { classMap } from "lit/directives/class-map.js";
 
 import { consume } from "@lit/context";
 import { queryContext, searchContext } from "../contexts";
@@ -16,9 +17,6 @@ const NAME = "canary-search-input";
 @customElement(NAME)
 export class CanarySearchInput extends LitElement {
   @consume({ context: queryContext, subscribe: true })
-  @property({ type: String })
-  query = "";
-
   @state()
   private _query = "";
 
@@ -30,13 +28,6 @@ export class CanarySearchInput extends LitElement {
 
   connectedCallback(): void {
     super.connectedCallback();
-    this.dispatchEvent(createEvent({ type: "set_query", data: this.query }));
-  }
-
-  updated(changed: Map<string, any>) {
-    if (changed.has("query")) {
-      this._query = this.query;
-    }
   }
 
   render() {
@@ -55,27 +46,36 @@ export class CanarySearchInput extends LitElement {
         autofocus
         onfocus="this.setSelectionRange(this.value.length,this.value.length);"
       />
-      ${this._search.status === TaskStatus.PENDING
-        ? html`<canary-loading-spinner></canary-loading-spinner>`
-        : nothing}
+      <span
+        class=${classMap({
+          hidden: this._search.status !== TaskStatus.PENDING,
+        })}
+      >
+        <canary-loading-spinner></canary-loading-spinner>
+      </span>
     `;
   }
 
-  static styles = input;
-
   private _handleInput(e: KeyboardEvent) {
-    const DEBOUNSE_MS = 50;
-
-    const input = e.target as HTMLInputElement;
-    this._query = input.value;
+    this._query = (e.target as HTMLInputElement).value;
 
     if (this._timer) {
       clearTimeout(this._timer);
     }
+
     this._timer = setTimeout(() => {
-      this.dispatchEvent(createEvent({ type: "set_query", data: input.value }));
-    }, DEBOUNSE_MS);
+      this.dispatchEvent(createEvent({ type: "set_query", data: this._query }));
+    }, 50);
   }
+
+  static styles = [
+    input,
+    css`
+      .hidden {
+        visibility: hidden;
+      }
+    `,
+  ];
 }
 
 declare global {

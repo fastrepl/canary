@@ -20,6 +20,9 @@ export class CanaryRoot extends LitElement {
   @property({ type: String, reflect: true })
   theme: ThemeContext = "light";
 
+  @property({ type: String })
+  query = "";
+
   private _store = createStore(this);
 
   connectedCallback() {
@@ -30,6 +33,15 @@ export class CanaryRoot extends LitElement {
     this.addEventListener(EVENT_NAME, (e) => {
       this._store.send(e.detail);
     });
+  }
+
+  firstUpdated() {
+    if (this.query) {
+      this._store.send({ type: "set_query", data: "..." });
+      setTimeout(() => {
+        this._store.send({ type: "set_query", data: this.query });
+      }, 200);
+    }
   }
 
   render() {

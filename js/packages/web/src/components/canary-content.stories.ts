@@ -37,7 +37,6 @@ enum Kind {
   Ask,
   Search,
   SearchCustomSize,
-  SearchInitial,
   SearchEmpty,
   SearchSection,
   SearchGroup,
@@ -98,18 +97,6 @@ export default {
       return wrapper(html`
         <canary-search slot="mode">
           <canary-search-input slot="input"></canary-search-input>
-          <canary-search-results slot="body"></canary-search-results>
-        </canary-search>
-      `);
-    }
-
-    if (kind === Kind.SearchInitial) {
-      return wrapper(html`
-        <canary-search slot="mode">
-          <canary-search-input
-            slot="input"
-            query="initial query 2"
-          ></canary-search-input>
           <canary-search-results slot="body"></canary-search-results>
         </canary-search>
       `);
@@ -293,10 +280,6 @@ export const SearchWithCustomSize: StoryObj = {
       "canary-content-max-height": { value: "500px" },
     },
   },
-};
-
-export const SearchWithInitialQuery: StoryObj = {
-  args: { kind: Kind.SearchInitial },
 };
 
 export const SearchEmpty: StoryObj = {

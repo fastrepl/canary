@@ -1,6 +1,20 @@
-# Canary Local
+# Not everyone needs a hosted service.
 
-Not everyone needs a hosted service. You can just use keyword-based search locally, and **still benefit from our composable components.**
+You can just use keyword-based search locally, and **still benefit from our composable components.**
+
+| Feature  |            Local            |           Cloud            |
+| -------- | :-------------------------: | :------------------------: |
+| `Search` | `Only Keyword-based Search` | `AI Powered Hybrid Search` |
+| `Ask AI` |             `X`             |            `O`             |
+
+## Any documentation & Any search index
+
+Our UI components are decoupled from the actual operation layer.
+
+We currently support:
+
+- Any `Pagefind` based search using `canary-provider-pagefind`
+- `VitePress` with `Minisearch` using `canary-provider-vitepress-minisearch`
 
 ## Migrate from local to cloud
 

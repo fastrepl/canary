@@ -54,6 +54,10 @@ const sidebar = [
         link: "/docs/local/introduction",
       },
       {
+        text: "Playground",
+        link: "/docs/local/playground",
+      },
+      {
         text: "Integrations",
         collapsed: true,
         items: [
@@ -79,6 +83,10 @@ const sidebar = [
       {
         link: "/docs/cloud/intro",
         text: "Introduction",
+      },
+      {
+        link: "/docs/cloud/playground",
+        text: "Playground",
       },
       {
         text: "Integrations",
@@ -111,10 +119,6 @@ const sidebar = [
       {
         text: "Pricing",
         link: "/docs/cloud/pricing",
-      },
-      {
-        text: "Miscellaneous",
-        link: "/docs/cloud/miscellaneous",
       },
     ],
   },
@@ -174,10 +178,6 @@ export default defineConfig({
       {
         text: "📚 Storybook",
         link: "https://storybook.getcanary.dev",
-      },
-      {
-        text: "🛹 Playground",
-        link: "https://stackblitz.com/edit/canary?file=index.html",
       },
     ],
     sidebar: {
