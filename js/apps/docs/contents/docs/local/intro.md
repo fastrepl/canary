@@ -7,6 +7,10 @@ You can just use keyword-based search locally, and **still benefit from our comp
 | `Search` | `Only Keyword-based Search` | `AI Powered Hybrid Search` |
 | `Ask AI` |             `X`             |            `O`             |
 
+::: tip
+Wanna try it out? We made a [playground](/docs/local/playground) for you!
+:::
+
 ## Any documentation & Any search index
 
 Our UI components are decoupled from the actual operation layer.

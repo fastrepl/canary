@@ -51,7 +51,7 @@ const sidebar = [
     items: [
       {
         text: "Introduction",
-        link: "/docs/local/introduction",
+        link: "/docs/local/intro",
       },
       {
         text: "Playground",
@@ -81,12 +81,12 @@ const sidebar = [
     text: "Cloud",
     items: [
       {
-        link: "/docs/cloud/intro",
         text: "Introduction",
+        link: "/docs/cloud/intro",
       },
       {
-        link: "/docs/cloud/playground",
         text: "Playground",
+        link: "/docs/cloud/playground",
       },
       {
         text: "Integrations",
@@ -185,6 +185,9 @@ export default defineConfig({
       "/docs/": sidebar,
     },
     outline: { level: [2, 3] },
+    editLink: {
+      pattern: "https://github.com/fastrepl/canary/edit/main/js/apps/docs/contents/:path",
+    },
     socialLinks: [
       { icon: "github", link: "https://github.com/fastrepl/canary" },
       { icon: "discord", link: "https://discord.gg/Y8bJkzuQZU" },

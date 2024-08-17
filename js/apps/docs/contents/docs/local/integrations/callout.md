@@ -1,3 +1,3 @@
 ::: tip
-If you're using `Canary Cloud`, please refer to [this page](/docs/cloud/integrations/docusaurus) instead.
+If you're looking for `Canary Cloud`, please refer to [this page](/docs/cloud/integrations/docusaurus) instead.
 :::

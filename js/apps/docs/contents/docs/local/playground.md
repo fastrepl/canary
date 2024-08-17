@@ -4,41 +4,44 @@ import { onMounted, computed, ref, watch } from "vue";
 import StyleController from "../../../components/StyleController.vue";
 import Markdown from "../../../components/Markdown.vue";
 
-const loaded = ref(false);
+const modes = ["UI", "Code"] as const;
+const mode = ref(modes[0]);
 
-const tabs = ["UI", "Code"] as const;
-const mode = ref(tabs[0]);
+const sources = ["litellm", "mistral", "prisma"] as const;
+const source = ref<(typeof sources)[number]>(sources[0]);
 
-const names = ["litellm", "mistral", "prisma"] as const;
-const name = ref<(typeof names)[number]>(names[0]);
+const configData: Record<typeof sources, any> = {
+  litellm: {
+    variants: ["basic", "group", "split"],
+    pattern: "All:*;Proxy:/proxy/.+$",
+  },
+  mistral: {
+    variants: ["basic", "group"],
+    pattern: "All:*;API:/api/.+$",
+  },
+  prisma: {
+    variants: ["basic", "group", "split"],
+    pattern: "All:*;ORM:/orm/.+$;Accelerate:/accelerate/.+$;Pulse:/pulse/.+$",
+  },
+};
 
-const variants = computed(() => {
-  const data: Record<(typeof names)[number], string[]> = {
-    litellm: ["basic", "group", "split"],
-    mistral: ["basic", "group"],
-    prisma: ["basic", "group", "split"],
-  };
-
-  return data[name.value];
-});
-
-const pattern = computed(() => {
-  const data: Record<(typeof names)[number], string> = {
-    litellm: "SDK:*;Proxy:/proxy/.+$",
-    mistral: "Docs:*;API:/api/.+$",
-    prisma: "Docs:*;ORM:/orm/.+$;Accelerate:/accelerate/.+$;Pulse:/pulse/.+$",
-  };
-
-  return data[name.value];
-});
-
+const pattern = computed(() => configData[source.value].pattern);
+const variants = computed(() => configData[source.value].variants);
 const variant = ref(variants.value[0]);
-watch(name, () => {
-  mode.value = tabs[0];
+
+const baseUrl = "https://hosted-pagefind.pages.dev";
+const options = computed(() => ({
+  path: `${baseUrl}/static/${source.value}/pagefind/pagefind.js`,
+}));
+
+watch(source, () => {
+  mode.value = modes[0];
   if (!variants.value.includes(variant.value)) {
     variant.value = variants.value[0];
   }
 });
+
+const loaded = ref(false);
 
 onMounted(() => {
   Promise.all([
@@ -53,13 +56,6 @@ onMounted(() => {
     loaded.value = true;
   });
 });
-
-const baseUrl = "https://hosted-pagefind.pages.dev";
-const options = computed(() => ({
-  path: `${baseUrl}/static/${name.value}/pagefind/pagefind.js`,
-}));
-
-const test = "123"
 </script>
 
 # Playground
@@ -84,9 +80,9 @@ const test = "123"
   <div class="flex gap-2 items-center">
     <span class="text-sm">Source</span>
     <button
-      v-for="current in names"
-      :class="{ tag: true, selected: name === current }"
-      @click="name = current"
+      v-for="current in sources"
+      :class="{ tag: true, selected: source === current }"
+      @click="source = current"
     >
       {{ current }}
     </button>
@@ -109,7 +105,7 @@ const test = "123"
   </div>
 </div>
 
-<div class="flex flex-col gap-2 mt-6 h-[500px]" v-if="loaded">
+<div class="container flex flex-col gap-2 mt-6" v-if="loaded">
   <div class="flex gap-2 text-sm font-semibold">
     <button
       v-for="current in tabs"
@@ -121,7 +117,7 @@ const test = "123"
     </button>
   </div>
 
-  <canary-root framework="vitepress" :key="name" :query="name" v-show="mode === 'UI'">
+  <canary-root framework="vitepress" :key="source" :query="source" v-show="mode === 'UI'">
     <canary-provider-pagefind :options="options">
       <canary-content>
         <canary-search slot="mode">
@@ -189,7 +185,16 @@ const test = "123"
    </Markdown>
 </div>
 
+## Looking for a better search experience?
+
+Local search is awesome, but we believe there's lots of room for improvement. Head over to our other
+[Playground](/docs/cloud/playground) to try out features that we are excited about.
+
 <style scoped>
+.container {
+  height: 500px;
+}
+
 button.tag {
   font-size: 0.875rem;
   border: 1px solid var(--vp-c-divider);

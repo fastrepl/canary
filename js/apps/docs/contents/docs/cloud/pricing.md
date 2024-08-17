@@ -4,4 +4,6 @@ import Pricing from "../../../components/Pricing.vue";
 
 # Pricing
 
+Not ready yet.
+
 <!-- <Pricing /> -->
