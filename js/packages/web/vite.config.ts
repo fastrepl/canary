@@ -63,7 +63,6 @@ export default defineConfig({
         ...[
           "contexts",
           "controllers",
-          "mixins",
           "types/index",
           "utils",
           "store/index",

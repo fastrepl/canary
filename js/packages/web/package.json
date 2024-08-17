@@ -1,6 +1,6 @@
 {
   "name": "@getcanary/web",
-  "version": "0.0.79",
+  "version": "0.0.80",
   "type": "module",
   "main": "dist/components/index.js",
   "files": [
@@ -8,6 +8,7 @@
   ],
   "exports": {
     "./components/*": "./dist/components/*",
+    "./parsers/*": "./dist/parsers/*",
     ".": "./dist/*"
   },
   "scripts": {

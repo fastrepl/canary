@@ -170,7 +170,7 @@ export class CanarySearchResultsTabs extends LitElement {
     const allGroup = definitions.find((group) => group.pattern === null);
 
     references.forEach((reference, index) => {
-      const item = {...reference, index};
+      const item = { ...reference, index };
 
       const matchedGroup = definitions.find(
         (group) => group.pattern && group.pattern.test(reference.url),

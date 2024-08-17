@@ -20,7 +20,7 @@ export class CanaryAsk extends LitElement {
 
   @consume({ context: modeContext, subscribe: true })
   @state()
-  mode!: ModeContext;
+  mode?: ModeContext;
 
   private _containerRef = createRef<HTMLElement>();
 

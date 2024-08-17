@@ -18,13 +18,17 @@ export class CanarySearchOptions extends LitElement {
   header = "Suggested";
 
   @consume({ context: modeContext, subscribe: true })
-  private _mode!: ModeContext;
+  private _mode?: ModeContext;
 
   @consume({ context: queryContext, subscribe: true })
   private _query!: QueryContext;
 
   render() {
-    if (this._mode.current !== this._mode.default || this._query.length > 0) {
+    if (
+      !this._mode ||
+      this._mode.current !== this._mode.default ||
+      this._query.length > 0
+    ) {
       return nothing;
     }
 

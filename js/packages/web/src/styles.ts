@@ -43,7 +43,6 @@ export const callout = css`
     border: none;
     border-radius: 8px;
     padding: 8px 16px;
-    margin-bottom: 8px;
     background-color: var(--canary-is-light, var(--canary-color-primary-90))
       var(--canary-is-dark, var(--canary-color-primary-80));
   }

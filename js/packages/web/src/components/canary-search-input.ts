@@ -24,8 +24,6 @@ export class CanarySearchInput extends LitElement {
   @state()
   private _search?: SearchContext;
 
-  private _timer: ReturnType<typeof setTimeout> | null = null;
-
   connectedCallback(): void {
     super.connectedCallback();
   }
@@ -58,14 +56,7 @@ export class CanarySearchInput extends LitElement {
 
   private _handleInput(e: KeyboardEvent) {
     this._query = (e.target as HTMLInputElement).value;
-
-    if (this._timer) {
-      clearTimeout(this._timer);
-    }
-
-    this._timer = setTimeout(() => {
-      this.dispatchEvent(createEvent({ type: "set_query", data: this._query }));
-    }, 50);
+    this.dispatchEvent(createEvent({ type: "set_query", data: this._query }));
   }
 
   static styles = [

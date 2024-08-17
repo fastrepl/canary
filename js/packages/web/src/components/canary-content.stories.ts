@@ -171,7 +171,6 @@ export default {
       return wrapper(html`
         <canary-search slot="mode">
           <canary-search-input slot="input"></canary-search-input>
-          <canary-callout-discord slot="body"></canary-callout-discord>
           <canary-search-results-tabs
             slot="body"
             group

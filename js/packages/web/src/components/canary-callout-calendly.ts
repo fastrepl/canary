@@ -3,6 +3,7 @@ import { customElement, property } from "lit/decorators.js";
 
 import { StringArray } from "../converters";
 
+import "./canary-callout";
 import "./canary-logo-calendly";
 
 const NAME = "canary-callout-calendly";

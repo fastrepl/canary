@@ -10,6 +10,7 @@ import type { PagefindResult } from "../types/pagefind";
 
 import { createEvent } from "../store";
 import { wrapper } from "../styles";
+import { cache } from "../decorators";
 
 const NAME = "canary-provider-pagefind";
 
@@ -24,7 +25,8 @@ export class CanaryProviderPagefind extends LitElement {
   @property({ type: Object }) options: Options = {};
   @state() pagefind: any = null;
 
-  private _limit = 30;
+  @property({ type: Number })
+  limit = 12;
 
   async connectedCallback() {
     super.connectedCallback();
@@ -35,7 +37,10 @@ export class CanaryProviderPagefind extends LitElement {
     this.dispatchEvent(
       createEvent({
         type: "register_operations",
-        data: { search: this.search, beforeSearch: this.beforeSearch },
+        data: {
+          search: cache(this.search),
+          beforeSearch: this.beforeSearch,
+        },
       }),
     );
   }
@@ -75,16 +80,13 @@ export class CanaryProviderPagefind extends LitElement {
   };
 
   search: SearchFunction = async (query, signal) => {
-    const op: Promise<SearchReference[]> = this.pagefind
-      .search(query)
-      .then(({ results }: any) =>
-        Promise.all(
-          results.slice(0, this._limit).map((r: any) => r.data()),
-        ).then((results: PagefindResult[]) => this._transform(results)),
-      );
-
+    const { results } = await this.pagefind.search(query);
     signal.throwIfAborted();
-    const search = await op;
+
+    const search = await Promise.all(
+      results.slice(0, this.limit).map((r: any) => r.data()),
+    ).then((results: PagefindResult[]) => this._transform(results));
+
     return { search };
   };
 
@@ -120,7 +122,7 @@ export class CanaryProviderPagefind extends LitElement {
 
         return ref;
       })
-      .slice(0, this._limit);
+      .slice(0, this.limit);
   }
 }
 
