@@ -19,7 +19,7 @@
     "build-storybook": "storybook build",
     "chromatic": "chromatic --exit-zero-on-changes",
     "format": "prettier --plugin=prettier-plugin-pegjs . --write",
-    "peggy": "peggy src/grammers/*.peggy --format es",
+    "peggy": "peggy src/parsers/*.peggy --format es",
     "test": "npm run test-utils && npm run test-storybook",
     "test-utils": "vitest run",
     "test-storybook": "test-storybook"

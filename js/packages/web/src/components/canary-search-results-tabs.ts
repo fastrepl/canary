@@ -13,8 +13,7 @@ import { MODAL_CLOSE_EVENT } from "./canary-modal";
 import "./canary-search-references";
 import "./canary-error";
 
-// @ts-ignore
-import { parse } from "../grammers/tabs";
+import { parseTabs } from "../parsers";
 type TabDefinition = { name: string; pattern: RegExp | null };
 
 const NAME = "canary-search-results-tabs";
@@ -27,7 +26,7 @@ export class CanarySearchResultsTabs extends LitElement {
   @property({ type: Boolean })
   group = false;
 
-  @property({ converter: { fromAttribute: parse } })
+  @property({ converter: { fromAttribute: parseTabs } })
   tabs: TabDefinition[] = [];
 
   @consume({ context: searchContext, subscribe: true })
@@ -53,7 +52,7 @@ export class CanarySearchResultsTabs extends LitElement {
     super.connectedCallback();
 
     if (typeof this.tabs === "string") {
-      this.tabs = parse(this.tabs);
+      this.tabs = parseTabs(this.tabs);
     }
   }
 

@@ -67,6 +67,7 @@ export default defineConfig({
           "types/index",
           "utils",
           "store/index",
+          "parsers/index",
         ],
       ].reduce(
         (acc, cur) => ({ ...acc, [cur]: resolve(__dirname, `src/${cur}.ts`) }),
