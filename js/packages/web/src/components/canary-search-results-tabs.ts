@@ -167,17 +167,20 @@ export class CanarySearchResultsTabs extends LitElement {
       {} as Record<string, (SearchReference & { index: number })[]>,
     );
 
-    const fallbackGroup = definitions.find((group) => group.pattern === null);
+    const allGroup = definitions.find((group) => group.pattern === null);
 
     references.forEach((reference, index) => {
+      const item = {...reference, index};
+
       const matchedGroup = definitions.find(
         (group) => group.pattern && group.pattern.test(reference.url),
       );
 
       if (matchedGroup) {
-        grouped[matchedGroup.name].push({ ...reference, index });
-      } else if (fallbackGroup) {
-        grouped[fallbackGroup.name].push({ ...reference, index });
+        grouped[matchedGroup.name].push(item);
+      }
+      if (allGroup) {
+        grouped[allGroup.name].push(item);
       }
     });
 
