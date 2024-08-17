@@ -24,7 +24,7 @@ const variants = computed(() => {
 
 const pattern = computed(() => {
   const data: Record<(typeof names)[number], string> = {
-    litellm: "Docs:*;API:/api/.+$",
+    litellm: "SDK:*;Proxy:/proxy/.+$",
     mistral: "Docs:*;API:/api/.+$",
     prisma: "Docs:*;ORM:/orm/.+$;Accelerate:/accelerate/.+$;Pulse:/pulse/.+$",
   };
@@ -74,9 +74,9 @@ const test = "123"
 
 ::: details Where did the source come from?
 
-- [litellm](https://docs.litellm.ai)
-- [mistral](https://docs.mistral.ai)
-- [prisma](https://prisma.io/docs)
+- [docs.litellm.ai](https://docs.litellm.ai)
+- [docs.mistral.ai](https://docs.mistral.ai)
+- [prisma.io/docs](https://prisma.io/docs)
 
 :::
 
