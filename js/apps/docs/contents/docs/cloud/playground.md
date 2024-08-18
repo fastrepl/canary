@@ -21,8 +21,7 @@ onMounted(() => {
 });
 </script>
 
-# Playground
-
+# Cloud Search Playground
 
 ::: info How does it work?
 

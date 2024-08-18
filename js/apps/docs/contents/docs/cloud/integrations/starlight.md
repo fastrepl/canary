@@ -2,7 +2,6 @@
 
 <!--@include: ../callout.md-->
 
-
 Everything is the same as [local search with Starlight](/docs/local/integrations/starlight), execpt for two things:
 
 1. Disable `pagefind` in `astro.config.mjs`
@@ -24,7 +23,6 @@ export default defineConfig({
 
 :::
 
-
 2. Swap `canary-provider-pagefind` with `canary-provider-cloud`
 
 ::: code-group
@@ -42,4 +40,3 @@ export default defineConfig({
 ```
 
 :::
-

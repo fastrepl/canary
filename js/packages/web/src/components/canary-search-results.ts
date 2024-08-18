@@ -3,11 +3,9 @@ import { customElement, property, state } from "lit/decorators.js";
 
 import { consume } from "@lit/context";
 import { searchContext } from "../contexts";
-import { KeyboardSelectionController } from "../controllers";
 
-import type { SearchContext, SearchReference } from "../types";
+import type { SearchContext } from "../types";
 import { TaskStatus } from "../store/managers";
-import { MODAL_CLOSE_EVENT } from "./canary-modal";
 
 import "./canary-error";
 import "./canary-search-references";
@@ -22,31 +20,13 @@ export class CanarySearchResults extends LitElement {
   @property({ type: Boolean })
   group = false;
 
-  @property({ type: Number })
-  limit = 12;
-
   @consume({ context: searchContext, subscribe: true })
   @state()
   private _search?: SearchContext;
 
-  private _selection = new KeyboardSelectionController<SearchReference>(this, {
-    handleEnter: (item) => {
-      this.dispatchEvent(
-        new CustomEvent(MODAL_CLOSE_EVENT, { bubbles: true, composed: true }),
-      );
-      window.location.href = item.url;
-    },
-  });
-
   render() {
     if (!this._search || this._search.result.search.length === 0) {
       return nothing;
-    }
-
-    const items = this._search.result.search.slice(0, this.limit);
-
-    if (this._search.status === TaskStatus.COMPLETE) {
-      this._selection.items = items;
     }
 
     return html`
@@ -58,8 +38,7 @@ export class CanarySearchResults extends LitElement {
               <div class="items">
                 <canary-search-references
                   .group=${this.group}
-                  .selected=${this._selection.index}
-                  .references=${items}
+                  .references=${this._search.result.search}
                 ></canary-search-references>
               </div>
             </div>`

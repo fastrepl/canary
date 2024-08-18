@@ -15,6 +15,7 @@ export const urlToParts = (url: string) => {
     })
     .map((text) => (text.includes("#") ? text.split("#")[0] : text))
     .map((text) => (text.endsWith(".html") ? text.replace(".html", "") : text))
+    .map(decodeURIComponent)
     .filter(Boolean)
     .slice(-4);
 
@@ -29,27 +30,32 @@ type GroupedResult = {
 export const groupSearchReferences = (
   references: SearchReference[],
 ): GroupedResult[] => {
-  const groups: GroupedResult[] = [];
-  let currentGroup: GroupedResult | null = null;
+  const groups: Map<string, GroupedResult> = new Map();
 
   for (const [index, ref] of references.entries()) {
-    if (!ref.titles || ref.titles.length === 0) {
-      groups.push({ name: null, items: [{ ...ref, index }] });
-      currentGroup = null;
-      continue;
+    const url = new URL(ref.url);
+    const pathKey = `${url.protocol}//${url.host}${url.pathname}`;
+
+    if (!groups.has(pathKey)) {
+      groups.set(pathKey, { name: ref.titles?.[0] ?? ref.title, items: [] });
     }
 
-    const [pageTitle] = ref.titles;
-    if (!currentGroup || currentGroup.name !== pageTitle) {
-      currentGroup = { name: pageTitle, items: [] };
-      groups.push(currentGroup);
-    }
-    currentGroup.items.push({ ...ref, index });
+    const group = groups.get(pathKey)!;
+    group.items.push({ ...ref, index });
   }
 
-  return groups;
+  return Array.from(groups.values());
 };
 
 export const asyncSleep = async (ms: number) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
+};
+
+export const stripURL = (url: string) => {
+  try {
+    const { pathname, search } = new URL(url);
+    return pathname + search;
+  } catch {
+    return url;
+  }
 };

@@ -7,15 +7,18 @@ import { global } from "../styles";
 import { MODAL_CLOSE_EVENT } from "./canary-modal";
 
 import "./canary-snippet";
+import "./canary-icon-tree";
 
 const NAME = "canary-reference";
 
 @customElement(NAME)
 export class CanaryReference extends LitElement {
-  @property() url = "";
-  @property() title = "";
-  @property() excerpt: string | undefined = undefined;
+  @property({ type: String }) url = "";
+  @property({ type: String }) title = "";
+  @property({ type: String }) excerpt = "";
   @property({ type: Boolean }) selected = false;
+  @property({ type: String }) mode: "parent" | "child" | "none" = "none";
+  @property({ type: Boolean }) last = false;
 
   updated(changed: PropertyValues<this>) {
     if (changed.get("selected")) {
@@ -29,10 +32,13 @@ export class CanaryReference extends LitElement {
         @click=${this._handleClick}
         class=${classMap({ container: true, selected: this.selected })}
       >
+        ${this.mode === "child"
+          ? html`<canary-icon-tree ?last=${this.last}></canary-icon-tree>`
+          : nothing}
         <div class="content">
-          ${this.depth()}
+          ${this.mode !== "child" ? this.depth() : nothing}
           <canary-snippet class="title" .value=${this.title}></canary-snippet>
-          ${this.excerpt
+          ${this.mode !== "parent" && this.excerpt
             ? html`<canary-snippet class="excerpt" .value=${this.excerpt}>
               </canary-snippet>`
             : nothing}
@@ -141,6 +147,13 @@ export class CanaryReference extends LitElement {
       button {
         cursor: pointer;
         width: 100%;
+      }
+
+      span.i-heroicons-document {
+        width: 1.2em;
+        margin-right: 6px;
+        color: var(--canary-is-light, var(--canary-color-gray-80))
+          var(--canary-is-dark, var(--canary-color-gray-50));
       }
 
       canary-snippet.title {

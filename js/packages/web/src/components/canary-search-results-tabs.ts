@@ -4,11 +4,9 @@ import { classMap } from "lit/directives/class-map.js";
 
 import { consume } from "@lit/context";
 import { searchContext } from "../contexts";
-import { KeyboardSelectionController } from "../controllers";
 
 import type { SearchContext, SearchReference } from "../types";
 import { TaskStatus } from "../store/managers";
-import { MODAL_CLOSE_EVENT } from "./canary-modal";
 
 import "./canary-search-references";
 import "./canary-error";
@@ -38,15 +36,6 @@ export class CanarySearchResultsTabs extends LitElement {
     string,
     (SearchReference & { index: number })[]
   > = {};
-
-  private _selection = new KeyboardSelectionController<SearchReference>(this, {
-    handleEnter: (item) => {
-      this.dispatchEvent(
-        new CustomEvent(MODAL_CLOSE_EVENT, { bubbles: true, composed: true }),
-      );
-      window.location.href = item.url;
-    },
-  });
 
   connectedCallback(): void {
     super.connectedCallback();
@@ -118,9 +107,7 @@ export class CanarySearchResultsTabs extends LitElement {
           const selected = name === this._selectedTab;
           const selectable = counts[name] > 0;
 
-          return html`<div
-            @click=${() => selectable && this._handleTabClick(name)}
-          >
+          return html`<div @click=${() => this._handleTabClick(name)}>
             <input
               type="radio"
               name="mode"
@@ -139,7 +126,6 @@ export class CanarySearchResultsTabs extends LitElement {
 
   private _currentResults() {
     const current = this._groupedReferences[this._selectedTab] ?? [];
-    this._selection.items = current;
 
     return html`
       ${this.header && html`<div class="header">${this.header}</div>`}
@@ -147,7 +133,6 @@ export class CanarySearchResultsTabs extends LitElement {
       <div class="items">
         <canary-search-references
           .references=${current}
-          .selected=${this._selection.index}
           .group=${this.group}
         ></canary-search-references>
       </div>

@@ -186,7 +186,8 @@ export default defineConfig({
     },
     outline: { level: [2, 3] },
     editLink: {
-      pattern: "https://github.com/fastrepl/canary/edit/main/js/apps/docs/contents/:path",
+      pattern:
+        "https://github.com/fastrepl/canary/edit/main/js/apps/docs/contents/:path",
     },
     socialLinks: [
       { icon: "github", link: "https://github.com/fastrepl/canary" },

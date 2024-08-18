@@ -5,10 +5,11 @@ import type {
   BeforeSearchFunction,
   SearchFunction,
   SearchReference,
+  PagefindResult,
 } from "../types";
-import type { PagefindResult } from "../types/pagefind";
 
 import { createEvent } from "../store";
+import { stripURL } from "../utils";
 import { wrapper } from "../styles";
 import { cache } from "../decorators";
 
@@ -18,15 +19,23 @@ type Options = {
   path?: string;
   styles?: Record<string, string>;
   pagefind?: { ranking: Record<string, number> };
+  _base?: string;
+  _replace?: string;
 };
 
 @customElement(NAME)
 export class CanaryProviderPagefind extends LitElement {
-  @property({ type: Object }) options: Options = {};
-  @state() pagefind: any = null;
+  @property({ type: Object })
+  options: Options = {};
 
-  @property({ type: Number })
-  limit = 12;
+  @state()
+  private _pagefind: any | null = null;
+
+  @property({ type: Number, attribute: "max-pages" })
+  maxPages = 30;
+
+  @property({ type: Number, attribute: "max-sub-results" })
+  maxSubResults = 5;
 
   async connectedCallback() {
     super.connectedCallback();
@@ -63,7 +72,7 @@ export class CanaryProviderPagefind extends LitElement {
       if (this.options.pagefind) {
         await pagefind.options(this.options.pagefind);
       }
-      this.pagefind = pagefind;
+      this._pagefind = pagefind;
     } catch (e) {
       throw new Error(`Failed to initialize pagefind': ${e}`);
     }
@@ -76,15 +85,15 @@ export class CanaryProviderPagefind extends LitElement {
   static styles = wrapper;
 
   beforeSearch: BeforeSearchFunction = async (query) => {
-    this.pagefind.preload(query);
+    this._pagefind.preload(query);
   };
 
   search: SearchFunction = async (query, signal) => {
-    const { results } = await this.pagefind.search(query);
+    const { results } = await this._pagefind.search(query);
     signal.throwIfAborted();
 
     const search = await Promise.all(
-      results.slice(0, this.limit).map((r: any) => r.data()),
+      results.slice(0, this.maxPages).map((r: any) => r.data()),
     ).then((results: PagefindResult[]) => this._transform(results));
 
     return { search };
@@ -110,11 +119,19 @@ export class CanaryProviderPagefind extends LitElement {
         : [subResult.meta.title];
     };
 
+    const transformURL = (url: string) => {
+      return this.options._base
+        ? this.options._base +
+            stripURL(url.replace(this.options._replace || "", ""))
+        : url;
+    };
+
     return subResults
       .sort((a, b) => getBestScore(b) - getBestScore(a))
+      .slice(0, this.maxSubResults)
       .map((result) => {
         const ref: SearchReference = {
-          url: result.url,
+          url: transformURL(result.url),
           title: result.title,
           titles: getTitles(result),
           excerpt: result.excerpt,
@@ -122,7 +139,7 @@ export class CanaryProviderPagefind extends LitElement {
 
         return ref;
       })
-      .slice(0, this.limit);
+      .slice(0, this.maxPages);
   }
 }
 

@@ -14,14 +14,20 @@ const configData: Record<typeof sources, any> = {
   litellm: {
     variants: ["basic", "group", "split"],
     pattern: "All:*;Proxy:/proxy/.+$",
+    base: "https://docs.litellm.ai",
+    replace: "/static/litellm",
   },
   mistral: {
     variants: ["basic", "group"],
     pattern: "All:*;API:/api/.+$",
+    base: "https://docs.mistral.ai",
+    replace: "/static/mistral",
   },
   prisma: {
     variants: ["basic", "group", "split"],
     pattern: "All:*;ORM:/orm/.+$;Accelerate:/accelerate/.+$;Pulse:/pulse/.+$",
+    base: "https://prisma.io/docs",
+    replace: "/static/prisma",
   },
 };
 
@@ -31,6 +37,8 @@ const variant = ref(variants.value[0]);
 
 const baseUrl = "https://hosted-pagefind.pages.dev";
 const options = computed(() => ({
+  _base: configData[source.value].base,
+  _replace: configData[source.value].replace,
   path: `${baseUrl}/static/${source.value}/pagefind/pagefind.js`,
 }));
 
@@ -58,7 +66,7 @@ onMounted(() => {
 });
 </script>
 
-# Playground
+# Local Search Playground
 
 ::: info How does it work?
 
@@ -108,7 +116,7 @@ onMounted(() => {
 <div class="container flex flex-col gap-2 mt-6" v-if="loaded">
   <div class="flex gap-2 text-sm font-semibold">
     <button
-      v-for="current in tabs"
+      v-for="current in modes"
       class="hover:underline"
       :class="{ underline: mode === current }"
       @click="mode = current"
@@ -118,7 +126,7 @@ onMounted(() => {
   </div>
 
   <canary-root framework="vitepress" :key="source" :query="source" v-show="mode === 'UI'">
-    <canary-provider-pagefind :options="options">
+    <canary-provider-pagefind :options="options" base="https://docs.litellm.ai">
       <canary-content>
         <canary-search slot="mode">
           <canary-search-input slot="input"></canary-search-input>
@@ -185,10 +193,10 @@ onMounted(() => {
    </Markdown>
 </div>
 
-## Looking for a better search experience?
+<!-- ## Looking for a better search experience?
 
 Local search is awesome, but we believe there's lots of room for improvement. Head over to our other
-[Playground](/docs/cloud/playground) to try out features that we are excited about.
+[Playground](/docs/cloud/playground) to try out features that we are excited about. -->
 
 <style scoped>
 .container {

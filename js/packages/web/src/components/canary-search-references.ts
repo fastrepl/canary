@@ -1,5 +1,5 @@
-import { LitElement, html, css, type PropertyValues } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
+import { LitElement, html, css } from "lit";
+import { customElement, property } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 
 import { groupSearchReferences } from "../utils";
@@ -11,16 +11,11 @@ import "./canary-reference";
 
 @customElement(NAME)
 export class CanarySearchReferences extends LitElement {
-  @property({ type: Boolean }) group = false;
-  @property({ type: Number }) selected = 0;
-  @property({ type: Array }) references: SearchReference[] = [];
+  @property({ type: Boolean })
+  group = false;
 
-  @state() _selectedRef: SearchReference | null = null;
-
-  connectedCallback(): void {
-    super.connectedCallback();
-    this._selectedRef = this.references[this.selected];
-  }
+  @property({ type: Array })
+  references: SearchReference[] = [];
 
   render() {
     return html`<div class="container">
@@ -28,66 +23,83 @@ export class CanarySearchReferences extends LitElement {
     </div>`;
   }
 
-  updated(changed: PropertyValues<this>) {
-    const selected = changed.get("selected");
-    if (selected !== undefined) {
-      this._selectedRef = this.references[selected];
-    }
-  }
-
   private _render() {
     return html`${this.references.map(
-      ({ title, url, excerpt }, index) => html`
+      ({ title, url, excerpt }) => html`
         <canary-reference
           url=${url}
           title=${title}
           excerpt=${ifDefined(excerpt)}
-          ?selected=${index === this.selected}
+          ?selected=${false}
         ></canary-reference>
       `,
     )}`;
   }
 
   private _renderGroup() {
-    return html`${groupSearchReferences(this.references).map((group) => {
-      if (group.name === null) {
-        return html`${group.items.map(
-          ({ url, title, excerpt, index }) => html`
-            <canary-reference
-              url=${url}
-              title=${title}
-              excerpt=${ifDefined(excerpt)}
-              ?selected=${index === this.selected}
-            ></canary-reference>
-          `,
-        )}`;
+    return groupSearchReferences(this.references).map((group) => {
+      if (group.name === null || group.items.length < 2) {
+        return html`
+          <div class="group single">
+            ${group.items.map(
+              ({ url, title, excerpt }) => html`
+                <canary-reference
+                  mode="none"
+                  url=${url}
+                  title=${title}
+                  excerpt=${ifDefined(excerpt)}
+                  ?selected=${false}
+                ></canary-reference>
+              `,
+            )}
+          </div>
+        `;
       }
 
-      return html` <label>${group.name}</label>
-        ${group.items.map(
-          ({ url, title, excerpt, index }) => html`
-            <canary-reference
-              url=${url}
-              title=${title}
-              excerpt=${ifDefined(excerpt)}
-              ?selected=${index === this.selected}
-            ></canary-reference>
-          `,
-        )}`;
-    })}`;
+      return html`
+        <div class="group multiple">
+          <canary-reference
+            mode="parent"
+            url=${group.items[0].url}
+            title=${group.items[0].title}
+          ></canary-reference>
+          ${group.items.map(
+            ({ url, title, excerpt }, i) => html`
+              <canary-reference
+                mode="child"
+                url=${url}
+                title=${title}
+                excerpt=${ifDefined(excerpt)}
+                ?selected=${false}
+                ?last=${i === group.items.length - 1}
+              ></canary-reference>
+            `,
+          )}
+        </div>
+      `;
+    });
   }
 
   static styles = css`
     .container {
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 4px;
+    }
+
+    .group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .group.multiple {
+      margin: 2px 0;
     }
 
     label {
-      font-size: 1rem;
+      font-size: 0.875rem;
       margin-top: 4px;
-      margin-left: 4px;
+      margin-left: 2px;
       color: var(--canary-color-gray-10);
     }
   `;
