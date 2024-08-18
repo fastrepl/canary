@@ -21,7 +21,12 @@ type Options = {
   pagefind?: { ranking: Record<string, number> };
   _base?: string;
   _replace?: string;
+  maxPages?: number;
+  maxSubResults?: number;
 };
+
+const DEFAULT_MAX_PAGES = 20;
+const DEFAULT_MAX_SUB_RESULTS = 3;
 
 @customElement(NAME)
 export class CanaryProviderPagefind extends LitElement {
@@ -30,12 +35,6 @@ export class CanaryProviderPagefind extends LitElement {
 
   @state()
   private _pagefind: any | null = null;
-
-  @property({ type: Number, attribute: "max-pages" })
-  maxPages = 30;
-
-  @property({ type: Number, attribute: "max-sub-results" })
-  maxSubResults = 5;
 
   async connectedCallback() {
     super.connectedCallback();
@@ -89,19 +88,23 @@ export class CanaryProviderPagefind extends LitElement {
   };
 
   search: SearchFunction = async (query, signal) => {
-    const { results } = await this._pagefind.search(query);
+    const maxPages = this.options.maxPages ?? DEFAULT_MAX_PAGES;
+
+    const { results: pages } = await this._pagefind.search(query);
+
+    const results: PagefindResult[] = await Promise.all(
+      pages.slice(0, maxPages).map((r: any) => r.data()),
+    );
+
     signal.throwIfAborted();
-
-    const search = await Promise.all(
-      results.slice(0, this.maxPages).map((r: any) => r.data()),
-    ).then((results: PagefindResult[]) => this._transform(results));
-
-    return { search };
+    return { search: this._transform(results) };
   };
 
   private _transform(results: PagefindResult[]): SearchReference[] {
+    const maxSubResults = this.options.maxSubResults ?? DEFAULT_MAX_SUB_RESULTS;
+
     const subResults = results.flatMap((result) => {
-      return result.sub_results.map((subResult) => ({
+      return result.sub_results.slice(0, maxSubResults).map((subResult) => ({
         ...subResult,
         meta: result.meta,
       }));
@@ -128,18 +131,12 @@ export class CanaryProviderPagefind extends LitElement {
 
     return subResults
       .sort((a, b) => getBestScore(b) - getBestScore(a))
-      .slice(0, this.maxSubResults)
-      .map((result) => {
-        const ref: SearchReference = {
-          url: transformURL(result.url),
-          title: result.title,
-          titles: getTitles(result),
-          excerpt: result.excerpt,
-        };
-
-        return ref;
-      })
-      .slice(0, this.maxPages);
+      .map((result) => ({
+        url: transformURL(result.url),
+        title: result.title,
+        titles: getTitles(result),
+        excerpt: result.excerpt,
+      }));
   }
 }
 
