@@ -1,7 +1,7 @@
 <script setup>
 import Headline from '../components/Headline.vue'
 import SizeChart from '../components/SizeChart.vue'
-import Demo from '../components/Demo.vue'
+import KeywordSearch from '../components/KeywordSearch.vue'
 
 import { data as canarySearch } from '../data/size_canary_search.data.js'
 import { data as canaryAll } from '../data/size_canary_all.data.js'
@@ -22,6 +22,23 @@ const packages = {
 
 <Headline />
 
-<!-- # What if user always read the docs? -->
+> 🐤Canary is [open-source](https://github.com/fastrepl/canary) project just for that!
 
-<!-- <Demo /> -->
+## Search works, only when users know the "keyword"
+
+<KeywordSearch />
+
+Above is what a typical search experience looks like.
+
+::: tip With Canary
+:::
+
+## Search results are not always easy to digest
+
+::: tip With Canary
+:::
+
+## Understand users through their interactions with the docs
+
+::: tip With Canary
+:::
