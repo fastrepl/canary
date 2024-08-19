@@ -49,7 +49,11 @@ defmodule Canary.Workers.Keywords do
     ~r/<keywords>(.*?)<\/keywords>/s
     |> Regex.scan(completion, capture: :all_but_first)
     |> Enum.flat_map(fn [keywords] ->
-      keywords |> String.split(",") |> Enum.map(&String.trim/1)
+      keywords
+      |> String.split(",")
+      |> Enum.map(&String.trim/1)
+      |> Enum.map(&String.downcase/1)
     end)
+    |> Enum.uniq()
   end
 end
