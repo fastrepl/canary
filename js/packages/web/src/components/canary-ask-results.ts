@@ -1,10 +1,11 @@
 import { LitElement, html, css, nothing } from "lit";
-import { customElement, state } from "lit/decorators.js";
+import { customElement, property, state } from "lit/decorators.js";
 
 import { consume } from "@lit/context";
-import type { AskContext, AskReference, ThemeContext } from "../types";
-import { askContext, themeContext } from "../contexts";
+import type { AskContext } from "../types";
+import { askContext } from "../contexts";
 
+import { StringArray } from "../converters";
 import { MODE_ASK } from "../constants";
 
 import "./canary-markdown";
@@ -17,13 +18,12 @@ const NAME = "canary-ask-results";
 export class CanaryAskResults extends LitElement {
   readonly MODE = MODE_ASK;
 
-  @consume({ context: themeContext, subscribe: true })
-  @state()
-  theme!: ThemeContext;
-
   @consume({ context: askContext, subscribe: true })
   @state()
   private _ask?: AskContext;
+
+  @property({ converter: StringArray })
+  languages = ["javascript", "python"];
 
   render() {
     if (!this._ask) {
@@ -32,26 +32,20 @@ export class CanaryAskResults extends LitElement {
 
     return html`
       <div class="container">
-        ${this._content(this._ask.response, this._ask.references)}
-      </div>
-    `;
-  }
+        <canary-markdown
+          .languages=${this.languages}
+          .content=${this._ask.response}
+        ></canary-markdown>
 
-  private _content(response: string, references: AskReference[]) {
-    return html`
-      <canary-markdown
-        .hljs=${this.theme === "dark" ? "github-dark" : "github"}
-        .content=${response}
-      ></canary-markdown>
-
-      <div class="references">
-        ${references.map(
-          (reference) =>
-            html` <canary-reference
-              title=${reference.title}
-              url=${reference.url}
-            ></canary-reference>`,
-        )}
+        <div class="references">
+          ${this._ask.references.map(
+            (reference) =>
+              html` <canary-reference
+                title=${reference.title}
+                url=${reference.url}
+              ></canary-reference>`,
+          )}
+        </div>
       </div>
     `;
   }

@@ -11,7 +11,10 @@ export default {
       <div
         style="width: 500px; padding: 12px; border: 1px solid black; border-radius: 8px;"
       >
-        <canary-markdown .content=${content}></canary-markdown>
+        <canary-markdown
+          .languages=${["javascript", "python"]}
+          .content=${content}
+        ></canary-markdown>
       </div>
     `;
   },

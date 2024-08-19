@@ -5,11 +5,11 @@ import { customElement, property } from "lit/decorators.js";
 import { consume } from "@lit/context";
 import { themeContext } from "../contexts";
 import { ThemeContext } from "../types";
+import { global, codeBlockScrollbar } from "../styles";
 
+import { highlightElement } from "prismjs";
 import { marked, type MarkedExtension, type Tokens } from "marked";
 import footNote from "marked-footnote";
-
-import { global, codeBlockScrollbar } from "../styles";
 
 const footNoteExtension = footNote() as MarkedExtension;
 marked.use(footNoteExtension).use({
@@ -26,9 +26,6 @@ marked.use(footNoteExtension).use({
   ],
 });
 
-import { highlightElement } from "prismjs";
-import "prismjs/components/prism-markup";
-
 const NAME = "canary-markdown";
 
 @customElement(NAME)
@@ -39,6 +36,9 @@ export class CanaryMarkdown extends LitElement {
   @property({ attribute: false })
   content = "";
 
+  @property({ attribute: false })
+  languages = [];
+
   private _domparser = new DOMParser();
   private _containerRef = createRef<HTMLDivElement>();
 
@@ -47,10 +47,11 @@ export class CanaryMarkdown extends LitElement {
 
     return html`
       <link rel="stylesheet" href=${stylePath} />
-      <script
-        src="https://unpkg.com/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js"
-        data-autoloader-path="https://unpkg.com/prismjs@1.29.0/components/"
-      ></script>
+      ${this.languages.map((lang) =>
+        this._script(
+          `https://unpkg.com/prismjs@1.29.0/components/prism-${lang}.min.js`,
+        ),
+      )}
       <div class="container" ${ref(this._containerRef)}></div>
     `;
   }
@@ -78,11 +79,28 @@ export class CanaryMarkdown extends LitElement {
         }
 
         container.innerHTML = virtual.innerHTML;
-        container.querySelectorAll("pre code").forEach((el) => {
-          highlightElement(el, false);
-        });
+        this._highlight(container);
       });
     }
+  }
+
+  private _script(src: string) {
+    const script = document.createElement("script");
+    script.onload = () => {
+      if (!this._containerRef.value) {
+        return;
+      }
+
+      this._highlight(this._containerRef.value);
+    };
+    script.src = src;
+    return script;
+  }
+
+  private _highlight(el: HTMLElement) {
+    el.querySelectorAll("pre code").forEach((el) => {
+      highlightElement(el, false);
+    });
   }
 
   // https://github.com/unocss/unocss/blob/main/packages/preset-typography/src/preflights/default.ts

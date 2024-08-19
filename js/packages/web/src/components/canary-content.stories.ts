@@ -136,8 +136,8 @@ export default {
       return wrapper(html`
         <canary-search slot="mode">
           <canary-search-input slot="input"></canary-search-input>
-          <canary-search-results slot="body"></canary-search-results>
           <canary-search-suggestions slot="body"></canary-search-suggestions>
+          <canary-search-results slot="body"></canary-search-results>
         </canary-search>
         <canary-ask slot="mode">
           <canary-mode-breadcrumb
