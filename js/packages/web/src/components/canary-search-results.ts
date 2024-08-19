@@ -52,13 +52,12 @@ export class CanarySearchResults extends LitElement {
     .container {
       display: flex;
       flex-direction: column;
-
-      font-size: 0.875rem;
-      color: var(--canary-color-gray-10);
     }
 
     .header {
+      font-size: 0.875rem;
       margin: 4px;
+      color: var(--canary-color-gray-10);
     }
   `;
 }

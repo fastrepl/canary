@@ -24,10 +24,6 @@ export class CanarySearchInput extends LitElement {
   @state()
   private _search?: SearchContext;
 
-  connectedCallback(): void {
-    super.connectedCallback();
-  }
-
   render() {
     if (!this._search) {
       return nothing;

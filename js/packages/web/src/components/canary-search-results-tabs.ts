@@ -129,7 +129,6 @@ export class CanarySearchResultsTabs extends LitElement {
 
     return html`
       ${this.header && html`<div class="header">${this.header}</div>`}
-
       <div class="items">
         <canary-search-references
           .references=${current}
@@ -225,7 +224,9 @@ export class CanarySearchResultsTabs extends LitElement {
       }
 
       .header {
+        font-size: 0.875rem;
         margin: 4px;
+        color: var(--canary-color-gray-10);
       }
     `,
   ];

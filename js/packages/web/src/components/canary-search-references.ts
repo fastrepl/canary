@@ -95,13 +95,6 @@ export class CanarySearchReferences extends LitElement {
     .group.multiple {
       margin: 2px 0;
     }
-
-    label {
-      font-size: 0.875rem;
-      margin-top: 4px;
-      margin-left: 2px;
-      color: var(--canary-color-gray-10);
-    }
   `;
 }
 
