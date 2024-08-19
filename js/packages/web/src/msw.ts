@@ -84,8 +84,8 @@ export const searchHandler = http.post(
       suggestion: {
         questions:
           query.startsWith("Can") || query.startsWith("What")
-            ? [query, query]
-            : [`Can you tell me about ${query}?`, `What is ${query}?`],
+            ? [query]
+            : [`Can you tell me about ${query}?`],
       },
     };
     return HttpResponse.json(result);
