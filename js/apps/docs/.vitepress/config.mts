@@ -114,6 +114,10 @@ const sidebar = [
             text: "Analytics",
             link: "/docs/cloud/features/analytics",
           },
+          {
+            text: "Feedback",
+            link: "/docs/cloud/features/feedback",
+          },
         ],
       },
       {

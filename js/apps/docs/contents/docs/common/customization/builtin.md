@@ -54,13 +54,33 @@ Must be placed in `mode` slot of `canary-content`.
 
 Inside `canary-search`, these slots are available:
 
-| Slot           | Possible Components                                   |
-| -------------- | :---------------------------------------------------- |
-| `input`        | `canary-search-input`                                 |
-| `input-before` | `canary-mode-breadcrumb`                              |
-| `input-after`  | `canary-mode-tabs`                                    |
-| `callout`      | `canary-callout-*`                                    |
-| `result`       | `canary-search-results`, `canary-search-results-tabs` |
-| `empty`        | `canary-search-empty`                                 |
+| Slot           | Possible Components                                                       |
+| -------------- | :------------------------------------------------------------------------ |
+| `input`        | `canary-search-input`                                                     |
+| `input-before` | `canary-mode-breadcrumb`                                                  |
+| `input-after`  | `canary-mode-tabs`                                                        |
+| `body`         | `canary-callout-*` ,`canary-search-results`, `canary-search-results-tabs` |
+| `empty`        | `canary-search-empty`                                                     |
 
 ### `canary-ask-input`, `canary-ask-results`
+
+Inside `canary-ask`, these slots are available:
+
+| Slot           | Possible Components      |
+| -------------- | :----------------------- |
+| `input`        | `canary-ask-input`       |
+| `input-before` | `canary-mode-breadcrumb` |
+| `input-after`  | `canary-mode-tabs`       |
+| `body`         | `canary-ask-results`     |
+
+#### Syntax Highlighting
+
+```html{5}
+<canary-ask slot="mode">
+  <canary-ask-input slot="input"></canary-ask-input>
+  <canary-ask-results
+    slot="body"
+    language="javascript,python,ruby"
+  ></canary-ask-results>
+</canary-ask>
+```
