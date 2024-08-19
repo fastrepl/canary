@@ -14,6 +14,8 @@ end
 defmodule Canary.Query.Understander.LLM do
   @behaviour Canary.Query.Understander
 
+  @keywords_section "Keywords extracted from documents"
+
   def run(query, keywords) do
     chat_model = Application.fetch_env!(:canary, :chat_completion_model)
 
@@ -22,7 +24,7 @@ defmodule Canary.Query.Understander.LLM do
       %{
         role: "user",
         content:
-          "## Keywords extracted from documents\n#{Enum.join(keywords, ", ")}\n\n\n## User query\n#{query}"
+          "## #{@keywords_section}\n#{Enum.join(keywords, ", ")}\n\n\n## User query\n#{query}"
       }
     ]
 
@@ -46,11 +48,9 @@ defmodule Canary.Query.Understander.LLM do
 
       IMPORTANT NOTES:
       - <keywords></keywords> should contain comma separated list of keywords. MAX 3 keywords are allowed.
-      - Each "keyword" should be one or two words. It will be used to run keyword based search.
-      - You might need to guess better keywords, correct typos, or rephrase the user's query.
-      - There should be only one "<query>" within the "<analysis>".
-      - The "query" is typo-corrected version of the user's raw query for better search results.
-      - Do minimal formatting if needed, like adding punctuations, capitalization, etc. Do not omit prepositions.
+      - Each "keyword" should be one or two words. It will be used to run keyword based search. User '#{@keywords_section}' section for inspiration.
+      - The "query" is typo-corrected version of the user's raw query for better search results, with minimal formatting applied.
+      - Do not omit prepositions or details that are not mentioned in the user's query.
 
       Do not include any other text, just respond with the XML-like format that I provided.
       If user's query is totally nonsense, just return <analysis></analysis>.
