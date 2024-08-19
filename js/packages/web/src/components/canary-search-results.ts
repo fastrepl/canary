@@ -34,13 +34,10 @@ export class CanarySearchResults extends LitElement {
         this._search.status === TaskStatus.ERROR
           ? html`<canary-error></canary-error>`
           : html` <div class="container">
-              ${this.header && html`<div class="header">${this.header}</div>`}
-              <div class="items">
-                <canary-search-references
-                  .group=${this.group}
-                  .references=${this._search.result.search}
-                ></canary-search-references>
-              </div>
+              <canary-search-references
+                .group=${this.group}
+                .references=${this._search.result.search}
+              ></canary-search-references>
             </div>`
       }
           </div>
@@ -52,12 +49,6 @@ export class CanarySearchResults extends LitElement {
     .container {
       display: flex;
       flex-direction: column;
-    }
-
-    .header {
-      font-size: 0.875rem;
-      margin: 4px;
-      color: var(--canary-color-gray-10);
     }
   `;
 }

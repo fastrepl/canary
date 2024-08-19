@@ -18,9 +18,6 @@ const NAME = "canary-search-results-tabs";
 
 @customElement(NAME)
 export class CanarySearchResultsTabs extends LitElement {
-  @property({ type: String })
-  header = "";
-
   @property({ type: Boolean })
   group = false;
 
@@ -128,13 +125,10 @@ export class CanarySearchResultsTabs extends LitElement {
     const current = this._groupedReferences[this._selectedTab] ?? [];
 
     return html`
-      ${this.header && html`<div class="header">${this.header}</div>`}
-      <div class="items">
-        <canary-search-references
-          .references=${current}
-          .group=${this.group}
-        ></canary-search-references>
-      </div>
+      <canary-search-references
+        .references=${current}
+        .group=${this.group}
+      ></canary-search-references>
     `;
   }
 
@@ -221,12 +215,6 @@ export class CanarySearchResultsTabs extends LitElement {
       label {
         font-size: 0.75rem;
         text-decoration-skip-ink: none;
-      }
-
-      .header {
-        font-size: 0.875rem;
-        margin: 4px;
-        color: var(--canary-color-gray-10);
       }
     `,
   ];
