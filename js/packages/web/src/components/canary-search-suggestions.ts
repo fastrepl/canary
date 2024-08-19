@@ -27,13 +27,11 @@ export class CanarySearchSuggestions extends LitElement {
       <div class="container">
         ${questions.map(
           (message) => html`
-            <div class="item" @click=${() => this._handleClick(message)}>
+            <button class="item" @click=${() => this._handleClick(message)}>
               <span class="i-heroicons-chat-bubble-left"></span>
               <span class="message">${message}</span>
-              <span class="arrow">
-                Ask AI
-              </span>
-            </div>
+              <span class="arrow"> Ask AI </span>
+            </button>
           `,
         )}
       </div>
@@ -59,21 +57,20 @@ export class CanarySearchSuggestions extends LitElement {
         color: var(--canary-color-gray-10);
       }
 
-      .message {
-        width: calc(100% - 2em);
-      }
-
-      .item {
+      button {
         position: relative;
-        cursor: pointer;
-
         display: flex;
         align-items: center;
         gap: 8px;
-        padding: 4px 8px;
+        padding: 6px 8px;
         border-radius: 6px;
+        border: none;
+
+        color: var(--canary-is-light, var(--canary-color-gray-30))
+          var(--canary-is-dark, var(--canary-color-gray-20));
+        background-color: transparent;
       }
-      .item:hover {
+      button:hover {
         background-color: var(--canary-is-light, var(--canary-color-primary-95))
           var(--canary-is-dark, var(--canary-color-primary-70));
       }
