@@ -19,9 +19,7 @@ defmodule Canary.Reranker.Cohere do
 
   use Retry
 
-  def run(query, docs, renderer) do
-    threshold = 0
-
+  def run(query, docs, renderer, threshold \\ 0.5) do
     result =
       retry with: exponential_backoff() |> randomize |> cap(1_000) |> expiry(4_000) do
         request(query, docs, renderer)
