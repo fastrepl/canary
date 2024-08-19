@@ -28,7 +28,7 @@ defmodule Canary.Interactions.Responder.Default do
 
     model = Application.fetch_env!(:canary, :chat_completion_model)
     source = sources |> Enum.at(0)
-    {:ok, docs} = Canary.Searcher.run(source, request)
+    {:ok, %{search: docs}} = Canary.Searcher.run(source, request)
 
     messages = [
       %{
@@ -63,14 +63,14 @@ defmodule Canary.Interactions.Responder.Default do
         - Footnotes:
         Use it to reference the related document with the sentence, like this[^1]. (no duplicate footnotes)
         Only single number footnote is allowed, no range, no multiple numbers.
-        At the end of the response, include the footnotes in this format:
+        At the end of the response, include the footnotes which strictly follow the format below:
 
         [^1]: 2
         [^2]: 6
         [^3]: 4
 
         This means the first footnote is referencing the document at index 2, the second is referencing the document at index 6, and so on.
-        You can find the index of each document next to the "index:" field. When writing footnotes, do not add heading or other formatting around it.
+        When writing footnotes, do not add heading or other formatting around <notes> tag.
 
         You should add enough footnotes as possible for transparency and accuracy. At least one footnote is required.
         """
@@ -92,7 +92,12 @@ defmodule Canary.Interactions.Responder.Default do
 
         If user is asking for nonsense, or the retrieved documents are not relevant, just transparently say it.
 
-        Don't forget to include footnotes(index mapping) at the end of the response!
+        Don't forget to include footnotes like below:
+        ```
+        [^1]: 2
+        [^2]: 6
+        [^3]: 4
+        ```
         </instruction>
         """
       }
@@ -112,10 +117,8 @@ defmodule Canary.Interactions.Responder.Default do
         },
         callback: fn data ->
           case data do
-            %{"choices" => [%{"finish_reason" => "stop"}]} ->
-              :ok
-
-            %{"choices" => [%{"delta" => %{"finish_reason" => "length"}}]} ->
+            %{"choices" => [%{"finish_reason" => reason}]}
+            when reason in ["stop", "length", "eos"] ->
               :ok
 
             %{"choices" => [%{"delta" => %{"content" => content}}]} ->
@@ -126,7 +129,6 @@ defmodule Canary.Interactions.Responder.Default do
       )
 
     completion = if completion == "", do: Agent.get(pid, & &1), else: completion
-    completion = delete_footnotes(completion)
 
     references =
       completion
@@ -176,11 +178,6 @@ defmodule Canary.Interactions.Responder.Default do
 
   defp safe(func, arg) do
     if is_function(func, 1), do: func.(arg), else: :noop
-  end
-
-  defp delete_footnotes(text) do
-    pattern = ~r/<notes>((?:\d+:\d+,?)+)<\/notes>/
-    Regex.replace(pattern, text, "")
   end
 
   def parse_footnotes(text) do

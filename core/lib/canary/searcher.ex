@@ -44,14 +44,30 @@ defmodule Canary.Searcher.Default do
       |> Enum.map(fn {k, v} -> if v > 0.5 * docs_size, do: k, else: nil end)
       |> Enum.reject(&is_nil/1)
 
-    {:ok, analysis} = Canary.Query.Understander.run(query, keywords)
-    {:ok, docs} = Canary.Index.batch_search_documents(source.id, analysis.keywords)
-    docs = docs |> Enum.dedup_by(& &1.id)
-    Canary.Reranker.run(analysis.query, docs, fn doc -> doc.content end)
+    with {:ok, analysis} <- Canary.Query.Understander.run(query, keywords),
+         {:ok, docs} <- Canary.Index.batch_search_documents(source.id, analysis.keywords),
+         {:ok, reranked} <-
+           Canary.Reranker.run(
+             analysis.query,
+             Enum.dedup_by(docs, & &1.id),
+             fn doc -> doc.content end
+           ) do
+      {:ok,
+       %{
+         search: reranked,
+         suggestion: %{questions: [analysis.query]}
+       }}
+    end
   end
 
   defp normal_search(source, query) do
     source_id = source |> Map.get(:id)
-    Canary.Index.search_documents(source_id, query)
+    {:ok, results} = Canary.Index.search_documents(source_id, query)
+
+    {:ok,
+     %{
+       search: results,
+       suggestion: %{questions: Canary.Query.Sugestor.run!(query)}
+     }}
   end
 end

@@ -49,7 +49,8 @@ defmodule Canary.Query.Understander.LLM do
       - Each "keyword" should be one or two words. It will be used to run keyword based search.
       - You might need to guess better keywords, correct typos, or rephrase the user's query.
       - There should be only one "<query>" within the "<analysis>".
-      - The "query" is simply rephrased version of the user's query for better search results. Should end with a question mark, single sentence, and less than 12 words.
+      - The "query" is typo-corrected version of the user's raw query for better search results.
+      - Do minimal formatting if needed, like adding punctuations, capitalization, etc. Do not omit prepositions.
 
       Do not include any other text, just respond with the XML-like format that I provided.
       If user's query is totally nonsense, just return <analysis></analysis>.
