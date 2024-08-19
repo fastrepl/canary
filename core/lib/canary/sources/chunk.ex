@@ -12,6 +12,7 @@ defmodule Canary.Sources.Chunk do
     attribute :content, :string, allow_nil?: false
     attribute :titles, {:array, :string}, allow_nil?: false
     attribute :tags, {:array, :string}, allow_nil?: false
+    attribute :tokens, :integer, allow_nil?: false
   end
 
   actions do
@@ -52,20 +53,28 @@ defmodule Canary.Sources.Chunk.Changes.InsertToIndex do
   def change(changeset, _opts, _context) do
     index_id = Ash.UUID.generate()
 
+    title = Ash.Changeset.get_argument(changeset, :title)
+    content = Ash.Changeset.get_argument(changeset, :content)
+
+    tokenizer = Canary.Tokenizer.load(:llama)
+    tokens = Canary.Tokenizer.count_tokens(tokenizer, title <> " " <> content)
+
     doc = %Canary.Index.Document{
       id: index_id,
-      title: Ash.Changeset.get_argument(changeset, :title),
-      content: Ash.Changeset.get_argument(changeset, :content),
+      title: title,
+      content: content,
       source: Ash.Changeset.get_argument(changeset, :source_id),
       tags: Ash.Changeset.get_argument(changeset, :tags),
       meta: %{
         url: Ash.Changeset.get_argument(changeset, :url),
-        titles: Ash.Changeset.get_argument(changeset, :titles)
+        titles: Ash.Changeset.get_argument(changeset, :titles),
+        tokens: tokens
       }
     }
 
     changeset
     |> Ash.Changeset.force_change_attribute(:index_id, index_id)
+    |> Ash.Changeset.force_change_attribute(:tokens, tokens)
     |> Ash.Changeset.after_action(fn _changeset, record ->
       case Canary.Index.insert_document(doc) do
         {:ok, _} -> {:ok, record}

@@ -68,7 +68,8 @@ defmodule Canary.Index do
       url: hit["document"]["meta"]["url"],
       excerpt: hit["highlight"]["content"]["snippet"] || hit["document"]["content"],
       tags: hit["document"]["tags"],
-      content: hit["document"]["content"]
+      content: hit["document"]["content"],
+      tokens: hit["document"]["meta"]["tokens"]
     }
   end
 
