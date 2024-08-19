@@ -33,9 +33,19 @@ defmodule Canary.Searcher.Default do
   end
 
   defp ai_search(source, query) do
-    source = source |> Ash.load!(:summaries)
+    source = source |> Ash.load!(:documents)
 
-    {:ok, analysis} = Canary.Query.Understander.run(query, Enum.join(source.summaries, "\n"))
+    keywords =
+      source.documents
+      |> Enum.map(& &1.keywords)
+      |> Enum.flat_map(fn k ->
+        k
+        |> Enum.map(&String.trim/1)
+        |> Enum.map(&String.downcase/1)
+      end)
+      |> Enum.uniq()
+
+    {:ok, analysis} = Canary.Query.Understander.run(query, keywords)
     {:ok, docs} = Canary.Index.batch_search_documents(source.id, analysis.keywords)
     docs = docs |> Enum.dedup_by(& &1.id)
     Canary.Reranker.run(analysis.query, docs, fn doc -> doc.content end)

@@ -149,8 +149,7 @@ defmodule Canary.Repo.Migrations.InitResources do
       add :url, :text
       add :content, :binary, null: false
       add :chunks, {:array, :map}, default: []
-      add :keywords, {:array, :text}
-      add :summary, :text
+      add :keywords, {:array, :text}, default: []
 
       add :source_id,
           references(:sources,

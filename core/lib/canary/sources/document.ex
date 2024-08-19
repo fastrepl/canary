@@ -11,8 +11,7 @@ defmodule Canary.Sources.Document do
     attribute :url, :string, allow_nil?: true
     attribute :content, :binary, allow_nil?: false
     attribute :chunks, {:array, Canary.Sources.Chunk}, default: []
-
-    attribute :summary, :string, allow_nil?: true
+    attribute :keywords, {:array, :string}, default: []
   end
 
   identities do
@@ -21,6 +20,14 @@ defmodule Canary.Sources.Document do
 
   relationships do
     belongs_to :source, Canary.Sources.Source
+  end
+
+  calculations do
+    calculate :tokens,
+              :integer,
+              expr(
+                fragment("COALESCE(SUM((chunk->>'tokens')::integer), 0) FROM unnest(?)", chunks)
+              )
   end
 
   actions do
@@ -57,14 +64,14 @@ defmodule Canary.Sources.Document do
       change Canary.Sources.Document.Changes.DestroyChunks
     end
 
-    update :update_summary do
-      argument :summary, :string, allow_nil?: false
-      change set_attribute(:summary, expr(^arg(:summary)))
+    update :update_kewords do
+      argument :keywords, {:array, :string}, allow_nil?: false
+      change set_attribute(:keywords, arg(:keywords))
     end
   end
 
   code_interface do
-    define :update_summary, args: [:summary], action: :update_summary
+    define :update_kewords, args: [:keywords], action: :update_kewords
     define :find_by_chunk_index_id, args: [:id], action: :find_by_chunk_index_id
   end
 
@@ -154,7 +161,7 @@ defmodule Canary.Sources.Document.Changes.CreateSummary do
     changeset
     |> Ash.Changeset.after_action(fn _changeset, record ->
       %{"document_id" => record.id}
-      |> Canary.Workers.Summary.new()
+      |> Canary.Workers.Keywords.new()
       |> Oban.insert()
 
       {:ok, record}

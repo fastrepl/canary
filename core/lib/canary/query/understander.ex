@@ -7,21 +7,22 @@ defmodule Canary.Query.Understander do
   @callback run(String.t(), String.t()) ::
               {:ok, Canary.Query.UnderstanderResult.t()} | {:error, any()}
 
-  def run(query, summary), do: impl().run(query, summary)
+  def run(query, keywords), do: impl().run(query, keywords)
   defp impl(), do: Canary.Query.Understander.LLM
 end
 
 defmodule Canary.Query.Understander.LLM do
   @behaviour Canary.Query.Understander
 
-  def run(query, summary) do
+  def run(query, keywords) do
     chat_model = Application.fetch_env!(:canary, :chat_completion_model)
 
     messages = [
       system_message(),
       %{
         role: "user",
-        content: "## Summaries of documents\n#{summary}\n\n\n## User query\n#{query}"
+        content:
+          "## Keywords extracted from documents\n#{Enum.join(keywords, ", ")}\n\n\n## User query\n#{query}"
       }
     ]
 

@@ -56,7 +56,7 @@ config :canary, :root, File.cwd!()
 
 config :canary, Oban,
   engine: Oban.Engines.Basic,
-  queues: [fetcher: 1, email: 2, updater: 5, stripe: 50, summary: 20],
+  queues: [fetcher: 1, email: 2, updater: 5, stripe: 50, keyword: 20],
   repo: Canary.Repo,
   plugins: [
     {Oban.Plugins.Pruner, max_age: 60 * 60 * 24 * 7},
