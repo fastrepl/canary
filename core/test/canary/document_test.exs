@@ -19,8 +19,8 @@ defmodule Canary.Test.Document do
     {:ok, docs} = Canary.Index.list_documents(source.id)
     assert length(docs) == 0
 
-    # Canary.AI.Mock
-    # |> expect(:chat, 2, fn _, _ -> {:ok, "completion"} end)
+    Canary.AI.Mock
+    |> expect(:chat, 2, fn _, _ -> {:ok, "completion"} end)
 
     create_result =
       Ash.bulk_create(
@@ -50,8 +50,12 @@ defmodule Canary.Test.Document do
     {:ok, docs} = Canary.Index.list_documents(source.id)
     assert length(docs) == 0 + 2
 
-    target = create_result.records |> Enum.at(1)
-    delete_result = Ash.bulk_destroy([target], :destroy, %{}, return_errors?: true)
+    some_chunk = create_result.records |> Enum.at(1) |> Map.get(:chunks) |> Enum.at(0)
+    found_doc = Canary.Sources.Document.find_by_chunk_index_id!(some_chunk.index_id)
+    assert found_doc.id == create_result.records |> Enum.at(1) |> Map.get(:id)
+
+    destroy_target = create_result.records |> Enum.at(1)
+    delete_result = Ash.bulk_destroy([destroy_target], :destroy, %{}, return_errors?: true)
     assert delete_result.status == :success
 
     assert Canary.Repo.all(Canary.Sources.Document) |> length() == 2 - 1

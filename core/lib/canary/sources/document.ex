@@ -26,6 +26,19 @@ defmodule Canary.Sources.Document do
   actions do
     defaults [:read]
 
+    read :find_by_chunk_index_id do
+      argument :id, :string, allow_nil?: false
+      get? true
+
+      filter expr(
+               fragment(
+                 "EXISTS (SELECT 1 FROM unnest(?) AS chunk WHERE (chunk->>'index_id')::text = ?)",
+                 chunks,
+                 ^arg(:id)
+               )
+             )
+    end
+
     create :create do
       argument :source_id, :uuid, allow_nil?: false
 
@@ -52,6 +65,7 @@ defmodule Canary.Sources.Document do
 
   code_interface do
     define :update_summary, args: [:summary], action: :update_summary
+    define :find_by_chunk_index_id, args: [:id], action: :find_by_chunk_index_id
   end
 
   postgres do
