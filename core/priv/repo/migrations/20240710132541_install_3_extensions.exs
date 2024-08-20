@@ -128,7 +128,7 @@ defmodule Canary.Repo.Migrations.Install3Extensions20240710132539 do
       SELECT to_timestamp(('x0000' || substr(_uuid::TEXT, 1, 8) || substr(_uuid::TEXT, 10, 4))::BIT(64)::BIGINT::NUMERIC / 1000);
     $$
     LANGUAGE SQL
-    IMMUTABLE PARALLEL SAFE STRICT LEAKPROOF;
+    IMMUTABLE PARALLEL SAFE STRICT;
     """)
   end
 
