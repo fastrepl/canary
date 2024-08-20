@@ -22,6 +22,10 @@ const packages = {
 
 # Why use Canary?
 
+## Modular and open-source
+
+We're fully [open-source](https://github.com/fastrepl/canary), and encourage anyone to contribute to our UI components. Also, we put a lot of effort into making the **core parts of `Canary` as modular as possible**.
+
 ## Tiny components that works anywhere
 
 `Canary` use [Web components](https://developer.mozilla.org/en-US/docs/Web/Web_Components), so browsers know how to render it.
@@ -34,8 +38,21 @@ title="Bundle size (Uncompressed)"
 :values="Object.values(packages)"
 />
 
-## Modular and open-source
+## Seamless integrations
 
-We're fully [open-source](https://github.com/fastrepl/canary), and encourage anyone to contribute to our UI components. Also, we put a lot of effort into making the **core parts of `Canary` as modular as possible**.
+We currently support [Docusaurus](https://docusaurus.io/), [VitePress](https://vitepress.dev/), and [Starlight](https://starlight.astro.build/). Since Canary uses [Web Components](https://developer.mozilla.org/en-US/docs/Web/Web_Components), it can easily be integrated with any other framework.
 
-<!--@include: ./index.examples.md-->
+**Not only that, but we support both [`Local`](/docs/local/intro) and [`Cloud`](/docs/cloud/intro) options.**
+This means you can quickly add search functionality to your docs, without setting up an account or paying anything.
+
+If you decide to use `Canary Cloud` for more features, you can easily migrate.
+
+```html-vue
+<canary-root framework="docusaurus">
+  <canary-provider-pagefind> // [!code --]
+  <canary-provider-cloud key="KEY" endpoint="https://cloud.getcanary.dev"> // [!code ++]
+    <!-- Rest of the code -->
+  </canary-provider-cloud> // [!code ++]
+  </canary-provider-pagefind> // [!code --]
+</canary-root>
+```

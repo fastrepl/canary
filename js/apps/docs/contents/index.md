@@ -1,44 +1,67 @@
 <script setup>
+import Chat from '../components/Chat.vue'
 import Headline from '../components/Headline.vue'
-import SizeChart from '../components/SizeChart.vue'
-import KeywordSearch from '../components/KeywordSearch.vue'
-
-import { data as canarySearch } from '../data/size_canary_search.data.js'
-import { data as canaryAll } from '../data/size_canary_all.data.js'
-import { data as docsearch } from '../data/size_docsearch.data.js'
-import { data as inkeep } from '../data/size_inkeep.data.js'
-import { data as kapa } from '../data/size_kapa.data.js'
-import { data as mendable } from '../data/size_mendable.data.js'
-
-const packages = {
-    "@docsearch/js": docsearch.size,
-    '🐤@getcanary/web (Search)': canarySearch.size,
-    '🐤@getcanary/web (Search + Ask)': canaryAll.size,
-    "kapa-widget.bundle.js": kapa.size,
-    "@mendable/search": mendable.size,
-    "@inkeep/uikit-js": inkeep.size,
-}
+import KeywordSearchProblem from '../components/KeywordSearchProblem.vue'
+import KeywordSearchSolution from '../components/KeywordSearchSolution.vue'
+import SearchDigestProblem from '../components/SearchDigestProblem.vue'
+import SearchDigestSolution from '../components/SearchDigestSolution.vue'
+import QueryRankChart from '../components/QueryRankChart.vue'
 </script>
 
 <Headline />
 
 > 🐤Canary is [open-source](https://github.com/fastrepl/canary) project just for that!
 
-## Search works, only when users know the "keyword"
+## Search works, only when users know the <ins>"keyword"</ins>
 
-<KeywordSearch />
+Typical search experience looks like this:
 
-Above is what a typical search experience looks like.
+<KeywordSearchProblem />
 
-::: tip With Canary
+And this leads to bunch of support questions like:
+
+<Chat
+  left="👤 hi there! how can i <strong>set limit for api cost?</strong>"
+  right="we <strong>already have docs</strong> for that. (readthemanual.com/<strong>budget</strong>-and-rate-limits) 👤"
+/>
+
+::: warning With Canary ↓
+
+<KeywordSearchSolution />
+
 :::
 
 ## Search results are not always easy to digest
 
-::: tip With Canary
+As documentation grows, users **often need to read multiple sections and pages to get questions answered**.
+This can be very time-consuming and frustrating.
+
+<SearchDigestProblem />
+
+::: warning With Canary ↓
+
+<SearchDigestSolution />
+
 :::
 
 ## Understand users through their interactions with the docs
 
-::: tip With Canary
+Beside traditional <ins>web analytics(pageview, etc)</ins>, and <ins>simple feedback form</ins>,, most of public documentation do not extracting enough insights from users.
+
+::: warning With Canary ↓
+
+<div class="my-2">
+(Not ready yet)
+<QueryRankChart
+title="User Query"
+:labels="['docusaurus', 'vitepress', 'starlight', 'pagefind', 'cloud']"
+:values="[50, 40, 30, 20, 10]"
+/>
+</div>
+
 :::
+
+<h2 class="text-2xl">There's a lot more!</h2>
+
+- [Why use Canary?](/docs/common/why)
+- [Local search playground](/docs/local/playground)

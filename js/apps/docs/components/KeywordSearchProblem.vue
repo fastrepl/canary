@@ -16,7 +16,7 @@ const handleClickRight = () => {
     <div class="flex flex-col gap-2 w-full" v-on:click="handleClickLeft">
       <input
         type="text"
-        value="how to limit api cost|"
+        value="🔎 how to limit api cost|"
         disabled
         class="border rounded-md w-full"
       />
@@ -34,7 +34,7 @@ const handleClickRight = () => {
     <div class="flex flex-col gap-2 w-full" v-on:click="handleClickRight">
       <input
         type="text"
-        value="budget|"
+        value="🔎 budget|"
         disabled
         class="border rounded-md w-full"
       />
