@@ -1,6 +1,6 @@
 defmodule Canary.Tokenizer do
   @tokenizer_ids %{
-    llama_2: "NousResearch/Llama-2-7b-hf",
+    llama_2: "NousResearch/Llama-2-7b-hf"
   }
 
   def load!(:llama_2), do: load_tokenizer!(@tokenizer_ids.llama_2, nil)
