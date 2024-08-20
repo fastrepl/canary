@@ -56,8 +56,8 @@ defmodule Canary.Sources.Chunk.Changes.InsertToIndex do
     title = Ash.Changeset.get_argument(changeset, :title)
     content = Ash.Changeset.get_argument(changeset, :content)
 
-    tokenizer = Canary.Tokenizer.load(:llama)
-    tokens = Canary.Tokenizer.count_tokens(tokenizer, title <> " " <> content)
+    tokenizer = Canary.Tokenizer.load!(:llama_2)
+    tokens = Canary.Tokenizer.count_tokens(title <> " " <> content, tokenizer)
 
     doc = %Canary.Index.Document{
       id: index_id,

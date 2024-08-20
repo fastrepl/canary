@@ -54,3 +54,5 @@ npm-debug.log
 .tinyb
 
 .typesense
+
+.cache

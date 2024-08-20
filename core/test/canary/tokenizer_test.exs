@@ -4,7 +4,8 @@ defmodule Canary.Test.Tokenizer do
 
   describe "count_tokens/1" do
     test "llama" do
-      num = Tokenizer.load(:llama) |> Tokenizer.count_tokens("Hello world")
+      tokenizer = Tokenizer.load!(:llama_2)
+      num = "Hello world" |> Tokenizer.count_tokens(tokenizer)
       assert num == 3
     end
   end
