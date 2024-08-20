@@ -27,12 +27,12 @@ jobs:
           POSTGRES_DB: canary_test
       typesense:
         image: typesense/typesense:26.0
-        restart: on-failure
         ports:
           - 8108:8108
-        volumes:
-          - ./.typesense/data:/data
-        command: --data-dir /data --api-key=canary --enable-cors
+        env:
+          TYPESENSE_API_KEY: canary
+          TYPESENSE_DATA_DIR: /data
+          TYPESENSE_ENABLE_CORS: true
     runs-on: ubuntu-latest
     defaults:
       run:
