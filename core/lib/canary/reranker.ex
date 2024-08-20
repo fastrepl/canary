@@ -2,12 +2,12 @@ defmodule Canary.Reranker do
   @callback run(
               query :: String.t(),
               docs :: list(any()),
-              renderer :: function()
+              opts :: keyword()
             ) :: {:ok, list(any())} | {:error, any()}
 
-  def run(_, _, _ \\ fn doc -> doc end)
+  def run(_, _, _ \\ [])
   def run(_, [], _), do: {:ok, []}
-  def run(query, docs, renderer), do: impl().run(query, docs, renderer)
+  def run(query, docs, opts), do: impl().run(query, docs, opts)
 
   defp impl(), do: Application.get_env(:canary, :reranker, Canary.Reranker.Noop)
 end
@@ -19,7 +19,10 @@ defmodule Canary.Reranker.Cohere do
 
   use Retry
 
-  def run(query, docs, renderer, threshold \\ 0.5) do
+  def run(query, docs, opts) do
+    renderer = opts[:renderer] || fn doc -> doc end
+    threshold = opts[:threshold] || 0
+
     result =
       retry with: exponential_backoff() |> randomize |> cap(1_000) |> expiry(4_000) do
         request(query, docs, renderer)

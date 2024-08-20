@@ -11,7 +11,7 @@ defmodule Canary.Sources.Document do
     attribute :url, :string, allow_nil?: true
     attribute :content, :binary, allow_nil?: false
     attribute :chunks, {:array, Canary.Sources.Chunk}, default: []
-    attribute :keywords, {:array, :string}, default: []
+    attribute :summary, Canary.Sources.DocumentSummary, allow_nil?: true
   end
 
   identities do
@@ -64,14 +64,14 @@ defmodule Canary.Sources.Document do
       change Canary.Sources.Document.Changes.DestroyChunks
     end
 
-    update :update_kewords do
-      argument :keywords, {:array, :string}, allow_nil?: false
-      change set_attribute(:keywords, arg(:keywords))
+    update :update_summary do
+      argument :summary, Canary.Sources.DocumentSummary, allow_nil?: false
+      change set_attribute(:summary, arg(:summary))
     end
   end
 
   code_interface do
-    define :update_kewords, args: [:keywords], action: :update_kewords
+    define :update_summary, args: [:summary], action: :update_summary
     define :find_by_chunk_index_id, args: [:id], action: :find_by_chunk_index_id
   end
 
@@ -161,7 +161,7 @@ defmodule Canary.Sources.Document.Changes.CreateSummary do
     changeset
     |> Ash.Changeset.after_action(fn _changeset, record ->
       %{"document_id" => record.id}
-      |> Canary.Workers.Keywords.new()
+      |> Canary.Workers.Summary.new()
       |> Oban.insert()
 
       {:ok, record}

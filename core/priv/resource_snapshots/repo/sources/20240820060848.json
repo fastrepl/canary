@@ -2,13 +2,13 @@
   "attributes": [
     {
       "allow_nil?": false,
-      "default": "fragment(\"(now() AT TIME ZONE 'utc')\")",
+      "default": "fragment(\"gen_random_uuid()\")",
       "generated?": false,
-      "primary_key?": false,
+      "primary_key?": true,
       "references": null,
       "size": null,
-      "source": "updated_at",
-      "type": "utc_datetime_usec"
+      "source": "id",
+      "type": "uuid"
     },
     {
       "allow_nil?": false,
@@ -21,54 +21,73 @@
       "type": "utc_datetime_usec"
     },
     {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "type",
+      "type": "text"
+    },
+    {
       "allow_nil?": true,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "extra_data",
-      "type": "map"
+      "source": "web_url_base",
+      "type": "text"
     },
     {
-      "allow_nil?": false,
+      "allow_nil?": true,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "purpose",
-      "type": "text"
+      "source": "web_url_include_patterns",
+      "type": ["array", "text"]
     },
     {
-      "allow_nil?": false,
+      "allow_nil?": true,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "expires_at",
-      "type": "utc_datetime"
+      "source": "web_url_exclude_patterns",
+      "type": ["array", "text"]
     },
     {
-      "allow_nil?": false,
+      "allow_nil?": true,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
-      "references": null,
+      "references": {
+        "deferrable": false,
+        "destination_attribute": "id",
+        "destination_attribute_default": null,
+        "destination_attribute_generated": null,
+        "index?": false,
+        "match_type": null,
+        "match_with": null,
+        "multitenancy": {
+          "attribute": null,
+          "global": null,
+          "strategy": null
+        },
+        "name": "sources_account_id_fkey",
+        "on_delete": null,
+        "on_update": null,
+        "primary_key?": true,
+        "schema": "public",
+        "table": "accounts"
+      },
       "size": null,
-      "source": "subject",
-      "type": "text"
-    },
-    {
-      "allow_nil?": false,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": true,
-      "references": null,
-      "size": null,
-      "source": "jti",
-      "type": "text"
+      "source": "account_id",
+      "type": "uuid"
     }
   ],
   "base_filter": null,
@@ -76,7 +95,7 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "EF5B1D84FF86890DE7641D25F20FA44786D7D4A28AC895113979A220BB8ECAB3",
+  "hash": "9529EFFA4B5AB7FFD6809D4E6C2318229D658F9C131A24BAF9CE6C6AC3F1866B",
   "identities": [],
   "multitenancy": {
     "attribute": null,
@@ -85,5 +104,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "tokens"
+  "table": "sources"
 }

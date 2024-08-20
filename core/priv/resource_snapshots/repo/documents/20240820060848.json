@@ -12,16 +12,66 @@
     },
     {
       "allow_nil?": false,
+      "default": "fragment(\"(now() AT TIME ZONE 'utc')\")",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "created_at",
+      "type": "utc_datetime_usec"
+    },
+    {
+      "allow_nil?": false,
+      "default": "fragment(\"(now() AT TIME ZONE 'utc')\")",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "updated_at",
+      "type": "utc_datetime_usec"
+    },
+    {
+      "allow_nil?": true,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "full_name",
+      "source": "url",
       "type": "text"
     },
     {
       "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "content",
+      "type": "binary"
+    },
+    {
+      "allow_nil?": true,
+      "default": "[]",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "chunks",
+      "type": ["array", "map"]
+    },
+    {
+      "allow_nil?": true,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "summary",
+      "type": "map"
+    },
+    {
+      "allow_nil?": true,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
@@ -38,15 +88,15 @@
           "global": null,
           "strategy": null
         },
-        "name": "github_repos_app_id_fkey",
-        "on_delete": "delete",
+        "name": "documents_source_id_fkey",
+        "on_delete": null,
         "on_update": null,
         "primary_key?": true,
         "schema": "public",
-        "table": "github_apps"
+        "table": "sources"
       },
       "size": null,
-      "source": "app_id",
+      "source": "source_id",
       "type": "uuid"
     }
   ],
@@ -55,23 +105,23 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "EE6332081152F2B571D07826708C5A55DA38AAC8CF086DD81D9DF3056459DE47",
+  "hash": "D80535A8B54308E72279E976190AD4A2A3EE9E99CA936B31F751848CA4BFE9C5",
   "identities": [
     {
       "all_tenants?": false,
       "base_filter": null,
-      "index_name": "github_repos_unique_repo_index",
+      "index_name": "documents_unique_document_index",
       "keys": [
         {
           "type": "atom",
-          "value": "app_id"
+          "value": "source_id"
         },
         {
           "type": "atom",
-          "value": "full_name"
+          "value": "url"
         }
       ],
-      "name": "unique_repo",
+      "name": "unique_document",
       "nils_distinct?": true,
       "where": null
     }
@@ -83,5 +133,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "github_repos"
+  "table": "documents"
 }

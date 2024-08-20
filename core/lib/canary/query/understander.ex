@@ -42,15 +42,12 @@ defmodule Canary.Query.Understander.LLM do
       Your job is to analyze the user's query and return a structured response like below:
 
       <analysis>
-      <query>QUERY</query>
       <keywords>KEYWORD_1,KEYWORD_2,KEYWORD_3</keywords>
       </analysis>
 
       IMPORTANT NOTES:
       - <keywords></keywords> should contain comma separated list of keywords. MAX 3 keywords are allowed.
-      - Each "keyword" should be one or two words. It will be used to run keyword based search. User '#{@keywords_section}' section for inspiration.
-      - The "query" is typo-corrected version of the user's raw query for better search results, with minimal formatting applied.
-      - Do not omit prepositions or details that are not mentioned in the user's query.
+      - Each "keyword" must be a single word. It will be used to run keyword based search. User '#{@keywords_section}' section for inspiration.
 
       Do not include any other text, just respond with the XML-like format that I provided.
       If user's query is totally nonsense, just return <analysis></analysis>.

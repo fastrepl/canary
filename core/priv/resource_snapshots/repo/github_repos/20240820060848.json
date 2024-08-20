@@ -12,16 +12,16 @@
     },
     {
       "allow_nil?": false,
-      "default": "fragment(\"(now() AT TIME ZONE 'utc')\")",
+      "default": "nil",
       "generated?": false,
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "created_at",
-      "type": "utc_datetime_usec"
+      "source": "full_name",
+      "type": "text"
     },
     {
-      "allow_nil?": true,
+      "allow_nil?": false,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
@@ -38,15 +38,15 @@
           "global": null,
           "strategy": null
         },
-        "name": "feedbacks_account_id_fkey",
-        "on_delete": null,
+        "name": "github_repos_app_id_fkey",
+        "on_delete": "delete",
         "on_update": null,
         "primary_key?": true,
         "schema": "public",
-        "table": "accounts"
+        "table": "github_apps"
       },
       "size": null,
-      "source": "account_id",
+      "source": "app_id",
       "type": "uuid"
     }
   ],
@@ -54,9 +54,28 @@
   "check_constraints": [],
   "custom_indexes": [],
   "custom_statements": [],
-  "has_create_action": false,
-  "hash": "713C62CB8FAC47ACAEEA948F98A97FD49476C8DD7B5DCDFAD3CB8C5AD32D6919",
-  "identities": [],
+  "has_create_action": true,
+  "hash": "FEA2BF4D2BEA6C2FE2268550DC11C24094F408AE5D6BDFFA70C56A1735DB36AA",
+  "identities": [
+    {
+      "all_tenants?": false,
+      "base_filter": null,
+      "index_name": "github_repos_unique_repo_index",
+      "keys": [
+        {
+          "type": "atom",
+          "value": "app_id"
+        },
+        {
+          "type": "atom",
+          "value": "full_name"
+        }
+      ],
+      "name": "unique_repo",
+      "nils_distinct?": true,
+      "where": null
+    }
+  ],
   "multitenancy": {
     "attribute": null,
     "global": null,
@@ -64,5 +83,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "feedbacks"
+  "table": "github_repos"
 }

@@ -1,23 +1,13 @@
 {
   "attributes": [
     {
-      "allow_nil?": false,
-      "default": "fragment(\"gen_random_uuid()\")",
-      "generated?": false,
-      "primary_key?": true,
-      "references": null,
-      "size": null,
-      "source": "id",
-      "type": "uuid"
-    },
-    {
-      "allow_nil?": false,
+      "allow_nil?": true,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "type",
+      "source": "refresh_token",
       "type": "text"
     },
     {
@@ -27,8 +17,8 @@
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "web_session_id",
-      "type": "uuid"
+      "source": "access_token_expires_at",
+      "type": "utc_datetime_usec"
     },
     {
       "allow_nil?": true,
@@ -37,8 +27,38 @@
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "discord_thread_id",
-      "type": "bigint"
+      "source": "access_token",
+      "type": "text"
+    },
+    {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "uid",
+      "type": "text"
+    },
+    {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "strategy",
+      "type": "text"
+    },
+    {
+      "allow_nil?": false,
+      "default": "fragment(\"gen_random_uuid()\")",
+      "generated?": false,
+      "primary_key?": true,
+      "references": null,
+      "size": null,
+      "source": "id",
+      "type": "uuid"
     },
     {
       "allow_nil?": true,
@@ -58,15 +78,15 @@
           "global": null,
           "strategy": null
         },
-        "name": "sessions_account_id_fkey",
+        "name": "user_identities_user_id_fkey",
         "on_delete": null,
         "on_update": null,
         "primary_key?": true,
         "schema": "public",
-        "table": "accounts"
+        "table": "users"
       },
       "size": null,
-      "source": "account_id",
+      "source": "user_id",
       "type": "uuid"
     }
   ],
@@ -75,49 +95,27 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "0456C71B7218EC634EA5DCE52A9479E43236ECD5421B066DB8FA2F16E7F1DD38",
+  "hash": "0B7BEC1405443921328364D5EB9EDB39808DEC6C70397759108C963AD7E909AB",
   "identities": [
     {
       "all_tenants?": false,
       "base_filter": null,
-      "index_name": "sessions_discord_thread_identity_index",
+      "index_name": "user_identities_unique_on_strategy_and_uid_and_user_id_index",
       "keys": [
         {
           "type": "atom",
-          "value": "account_id"
+          "value": "strategy"
         },
         {
           "type": "atom",
-          "value": "type"
+          "value": "uid"
         },
         {
           "type": "atom",
-          "value": "discord_thread_id"
+          "value": "user_id"
         }
       ],
-      "name": "discord_thread_identity",
-      "nils_distinct?": true,
-      "where": null
-    },
-    {
-      "all_tenants?": false,
-      "base_filter": null,
-      "index_name": "sessions_web_session_identity_index",
-      "keys": [
-        {
-          "type": "atom",
-          "value": "account_id"
-        },
-        {
-          "type": "atom",
-          "value": "type"
-        },
-        {
-          "type": "atom",
-          "value": "web_session_id"
-        }
-      ],
-      "name": "web_session_identity",
+      "name": "unique_on_strategy_and_uid_and_user_id",
       "nils_distinct?": true,
       "where": null
     }
@@ -129,5 +127,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "sessions"
+  "table": "user_identities"
 }

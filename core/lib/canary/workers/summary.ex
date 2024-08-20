@@ -1,5 +1,5 @@
-defmodule Canary.Workers.Keywords do
-  use Oban.Worker, queue: :keyword, max_attempts: 3
+defmodule Canary.Workers.Summary do
+  use Oban.Worker, queue: :summary, max_attempts: 3
 
   @impl true
   def perform(%Oban.Job{args: %{"document_id" => id}}) do
@@ -18,7 +18,7 @@ defmodule Canary.Workers.Keywords do
     ]
 
     with {:ok, completion} <- Canary.AI.chat(%{model: chat_model, messages: messages}),
-         {:ok, _} <- Canary.Sources.Document.update_kewords(doc, transform(completion)) do
+         {:ok, _} <- Canary.Sources.Document.update_summary(doc, to_summary(completion)) do
       :ok
     end
   end
@@ -45,15 +45,18 @@ defmodule Canary.Workers.Keywords do
     }
   end
 
-  defp transform(completion) do
-    ~r/<keywords>(.*?)<\/keywords>/s
-    |> Regex.scan(completion, capture: :all_but_first)
-    |> Enum.flat_map(fn [keywords] ->
-      keywords
-      |> String.split(",")
-      |> Enum.map(&String.trim/1)
-      |> Enum.map(&String.downcase/1)
-    end)
-    |> Enum.uniq()
+  defp to_summary(completion) do
+    keywords =
+      ~r/<keywords>(.*?)<\/keywords>/s
+      |> Regex.scan(completion, capture: :all_but_first)
+      |> Enum.flat_map(fn [keywords] ->
+        keywords
+        |> String.split(",")
+        |> Enum.map(&String.trim/1)
+        |> Enum.map(&String.downcase/1)
+      end)
+      |> Enum.uniq()
+
+    %Canary.Sources.DocumentSummary{keywords: keywords}
   end
 end

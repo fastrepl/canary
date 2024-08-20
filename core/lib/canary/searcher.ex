@@ -38,7 +38,7 @@ defmodule Canary.Searcher.Default do
 
     keywords =
       source.documents
-      |> Enum.map(& &1.keywords)
+      |> Enum.map(fn doc -> if doc.summary, do: doc.summary.keywords, else: [] end)
       |> Enum.flat_map(& &1)
       |> Enum.frequencies()
       |> Enum.map(fn {k, v} -> if v > 0.5 * docs_size, do: k, else: nil end)
@@ -48,14 +48,15 @@ defmodule Canary.Searcher.Default do
          {:ok, docs} <- Canary.Index.batch_search_documents(source.id, analysis.keywords),
          {:ok, reranked} <-
            Canary.Reranker.run(
-             analysis.query,
+             query,
              Enum.dedup_by(docs, & &1.id),
-             fn doc -> doc.content end
+             renderer: fn doc -> doc.content end,
+             threshold: 0.05
            ) do
       {:ok,
        %{
          search: reranked,
-         suggestion: %{questions: [analysis.query]}
+         suggestion: %{questions: [query]}
        }}
     end
   end
