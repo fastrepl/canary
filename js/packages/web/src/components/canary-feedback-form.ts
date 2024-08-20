@@ -3,10 +3,10 @@ import { customElement, property } from "lit/decorators.js";
 
 import { MODAL_CLOSE_EVENT } from "./canary-modal";
 
-const NAME = "canary-feedback";
+const NAME = "canary-feedback-form";
 
 @customElement(NAME)
-export class CanaryFeedback extends LitElement {
+export class CanaryFeedbackForm extends LitElement {
   @property({ type: String }) title = "Submit feedback";
 
   render() {
@@ -90,6 +90,6 @@ export class CanaryFeedback extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    [NAME]: CanaryFeedback;
+    [NAME]: CanaryFeedbackForm;
   }
 }

@@ -1,8 +1,8 @@
 defmodule CanaryWeb.OperationsController do
   use CanaryWeb, :controller
 
-  plug :find_client when action in [:search, :ask]
-  plug :ensure_valid_host when action in [:search, :ask]
+  plug :find_client when action in [:search, :ask, :feedback_page]
+  plug :ensure_valid_host when action in [:search, :ask, :feedback_page]
 
   defp find_client(conn, _opts) do
     err_msg = "no client found with the given key"
@@ -20,12 +20,46 @@ defmodule CanaryWeb.OperationsController do
     if Application.get_env(:canary, :env) == :prod and
          conn.host not in [
            host_url,
+           "getcanary.dev",
            "cloud.getcanary.dev",
            "demo.getcanary.dev"
          ] do
       conn |> send_resp(401, err_msg) |> halt()
     else
       conn
+    end
+  end
+
+  defp fingerprint(conn) do
+    ip = to_string(:inet_parse.ntoa(conn.remote_ip))
+    user_agent = get_req_header(conn, "user-agent") |> List.first()
+    current_date = Date.utc_today() |> Date.to_string()
+
+    :crypto.hash(:md5, ip <> user_agent <> current_date)
+    |> Base.encode16(case: :lower)
+  end
+
+  def feedback_page(conn, %{"url" => url, "score" => score}) do
+    %URI{host: host, path: path} = URI.parse(url)
+
+    data = %Canary.Analytics.FeedbackPage{
+      host: host,
+      path: path,
+      score: score,
+      account_id: conn.assigns.client.account.id,
+      fingerprint: fingerprint(conn)
+    }
+
+    case Canary.Analytics.event("feedback_page", data) do
+      {:ok, _} ->
+        conn
+        |> send_resp(200, "")
+        |> halt()
+
+      error ->
+        conn
+        |> send_resp(500, Jason.encode!(%{error: error}))
+        |> halt()
     end
   end
 

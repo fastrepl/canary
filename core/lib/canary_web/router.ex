@@ -66,6 +66,7 @@ defmodule CanaryWeb.Router do
 
     post "/search", CanaryWeb.OperationsController, :search
     post "/ask", CanaryWeb.OperationsController, :ask
+    post "/feedback/page", CanaryWeb.OperationsController, :feedback_page
 
     forward "/", CanaryWeb.AshRouter
   end

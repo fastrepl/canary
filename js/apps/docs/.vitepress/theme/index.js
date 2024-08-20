@@ -1,10 +1,11 @@
-// import { h } from "vue";
+import { h } from "vue";
 // import { useRoute } from "vitepress";
 import DefaultTheme from "vitepress/theme";
 import "./tailwind.css";
 
 import { inject } from "@vercel/analytics";
 // import Search from "../../components/CloudSearch.vue";
+import Footer from "../../components/Footer.vue";
 
 /** @type {import('vitepress').Theme} */
 export default {
@@ -12,12 +13,13 @@ export default {
   enhanceApp({ app }) {
     inject();
   },
-  // Layout() {
-  //   const route = useRoute();
-  //   const showSearch = () => /^\/docs/.test(route.path);
+  Layout() {
+    // const route = useRoute();
+    // const isDoc = () => /^\/docs/.test(route.path);
 
-  //   return h(DefaultTheme.Layout, null, {
-  //     "nav-bar-content-before": () => (showSearch() ? h(Search) : null),
-  //   });
-  // },
+    return h(DefaultTheme.Layout, null, {
+      // "nav-bar-content-before": () => (showSearch() ? h(Search) : null),
+      "doc-footer-before": () => h(Footer),
+    });
+  },
 };

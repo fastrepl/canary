@@ -125,3 +125,11 @@ export const askHandler = http.post(/.*\/api\/v1\/ask/, async () => {
     },
   });
 });
+
+export const feedbackPageHandler = http.post(
+  /.*\/api\/v1\/feedback\/page/,
+  async () => {
+    await delay(Math.random() * 200 + 400);
+    return new HttpResponse(null, { status: 200 });
+  },
+);

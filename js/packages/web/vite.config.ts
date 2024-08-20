@@ -27,6 +27,7 @@ export default defineConfig({
       entry: [
         ...[
           "canary-root",
+          "canary-styles",
           "canary-provider-mock",
           "canary-provider-cloud",
           "canary-provider-pagefind",
@@ -50,7 +51,6 @@ export default defineConfig({
           "canary-ask",
           "canary-ask-input",
           "canary-ask-results",
-          "canary-feedback",
           "canary-feedback-text",
           "canary-feedback-textarea",
           "canary-reference",
@@ -59,6 +59,7 @@ export default defineConfig({
           "canary-media-query",
           "canary-mode-tabs",
           "canary-mode-breadcrumb",
+          "canary-feedback-page",
         ].map((name) => `components/${name}`),
         ...[
           "contexts",
