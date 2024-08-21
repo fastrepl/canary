@@ -27,12 +27,6 @@ jobs:
           POSTGRES_DB: canary_test
       typesense:
         image: typesense/typesense:26.0
-        ports:
-          - 8108:8108
-        env:
-          TYPESENSE_API_KEY: canary
-          TYPESENSE_DATA_DIR: /data
-          TYPESENSE_ENABLE_CORS: true
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -41,10 +35,24 @@ jobs:
     strategy:
       matrix:
         otp:
-          - 26.2.5
+          - "26.2.5"
         elixir:
-          - 1.17.1
+          - "1.17.1"
+        typesense-version:
+          - "26.0"
+        typesense-port:
+          - 8108:8108
     steps:
+      - name: Start Typesense
+        run: |
+          docker run -d \
+          -p ${{ matrix.typesense-port }} \
+          --name typesense \
+          -v /tmp/typesense:/data \
+          typesense/typesense:${{ matrix.typesense-version}} \
+          --api-key=canary \
+          --data-dir /data \
+          --enable-cors
       - name: Set up Elixir
         uses: erlef/setup-beam@v1
         with:
