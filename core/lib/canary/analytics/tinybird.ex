@@ -9,7 +9,7 @@ defmodule Canary.Analytics do
     )
   end
 
-  def event(source, data) do
+  def ingest(source, data) do
     result =
       client()
       |> Req.post(
@@ -26,6 +26,20 @@ defmodule Canary.Analytics do
 
       error ->
         error
+    end
+  end
+
+  def feedback_page_breakdown(account_id) do
+    result =
+      client()
+      |> Req.post(
+        url: "/v0/pipes/feedback_page_breakdown.json",
+        json: %{account_id: account_id}
+      )
+
+    case result do
+      {:ok, %{status: 200, body: %{"data" => data}}} -> {:ok, data}
+      error -> error
     end
   end
 end

@@ -7,4 +7,5 @@ SCHEMA >
     `timestamp` DateTime `json:$.timestamp`
 
 ENGINE MergeTree
+ENGINE_PARTITION_KEY toYear(timestamp)
 ENGINE_SORTING_KEY fingerprint, timestamp

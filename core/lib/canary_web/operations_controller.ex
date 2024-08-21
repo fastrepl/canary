@@ -63,7 +63,7 @@ defmodule CanaryWeb.OperationsController do
       fingerprint: fingerprint(conn)
     }
 
-    case Canary.Analytics.event("feedback_page", data) do
+    case Canary.Analytics.ingest("feedback_page", data) do
       {:ok, _} ->
         conn
         |> send_resp(200, "")

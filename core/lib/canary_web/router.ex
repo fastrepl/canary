@@ -50,6 +50,7 @@ defmodule CanaryWeb.Router do
       ] do
       live "/", CanaryWeb.HomeLive, :none
       live "/source", CanaryWeb.SourceLive, :none
+      live "/feedback", CanaryWeb.FeedbackLive, :none
       live "/settings", CanaryWeb.SettingsLive, :none
     end
 
