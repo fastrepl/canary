@@ -172,8 +172,13 @@ defmodule Canary.Index do
     Typesense.Documents.update_document(@collection, id, doc)
   end
 
-  def list_documents(source_id) do
-    opts = [filter_by: "source:#{source_id}"]
+  def list_documents!(source_id \\ nil) do
+    {:ok, docs} = list_documents(source_id)
+    docs
+  end
+
+  def list_documents(source_id \\ nil) do
+    opts = if source_id, do: [filter_by: "source:#{source_id}"], else: []
 
     case Typesense.Documents.export_documents(@collection, opts) do
       {:ok, ""} -> {:ok, []}
