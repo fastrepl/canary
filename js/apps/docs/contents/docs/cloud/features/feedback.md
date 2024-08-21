@@ -26,8 +26,8 @@ onMounted(() => {
   <div class="flex justify-center items-center" v-if="loaded">
     <canary-styles framework="vitepress">
       <canary-feedback-page
-        endpoint="https://cloud.getcanary.dev"
-        key="pk_xxxxxxxxxxxxx"
+        api-base="https://cloud.getcanary.dev"
+        api-key="pk_xxxxxxxxxxxxx"
       ></canary-feedback-page>
     </canary-styles>
   </div>

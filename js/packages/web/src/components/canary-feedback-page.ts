@@ -16,26 +16,18 @@ export class CanaryFeedbackPage extends LitElement {
   @property({ type: String, attribute: "text-complete" })
   completeText = "Got it, Thank you!";
 
-  @property({ type: String })
-  endpoint = "https://cloud.getcanary.dev";
+  @property({ type: String, attribute: "api-base" })
+  apiBase = "https://cloud.getcanary.dev";
 
-  @property({ type: String })
-  key = "";
-
-  connectedCallback(): void {
-    super.connectedCallback();
-
-    if (this.key === "") {
-      throw new Error("key is required");
-    }
-  }
+  @property({ type: String, attribute: "api-key" })
+  apiKey = "";
 
   private _task = new Task(this, {
-    task: async ([url, score]: [string, number], { signal }) => {
-      const response = await fetch(`${this.endpoint}/api/v1/feedback/page`, {
+    task: async ([endpoint, key, url, score]: [string, string, string, number], { signal }) => {
+      const response = await fetch(`${endpoint}/api/v1/feedback/page`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ key: this.key, url, score }),
+        body: JSON.stringify({ key, url, score }),
         signal: withTimeout(signal, 2500),
       });
 
@@ -78,8 +70,8 @@ export class CanaryFeedbackPage extends LitElement {
     `;
   }
 
-  private _handleClick(value: number) {
-    this._task.run([document.location.href, value]);
+  private _handleClick(score: number) {
+    this._task.run([this.apiBase, this.apiKey, document.location.href, score]);
   }
 
   static styles = [

@@ -27,7 +27,7 @@ If you need more features, you can easily migrate.
 ```html-vue
 <canary-root framework="docusaurus">
   <canary-provider-pagefind> // [!code --]
-  <canary-provider-cloud key="KEY" endpoint="https://cloud.getcanary.dev"> // [!code ++]
+  <canary-provider-cloud api-key="KEY" api-base="https://cloud.getcanary.dev"> // [!code ++]
     <!-- Rest of the code -->
   </canary-provider-cloud> // [!code ++]
   </canary-provider-pagefind> // [!code --]

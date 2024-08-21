@@ -17,7 +17,7 @@ export default {
   parameters: { sourceLink: "components/canary-modal.stories.ts" },
   render: () => {
     return html`
-      <canary-provider-cloud key="key" endpoint="http://localhost:6006">
+      <canary-provider-cloud api-key="key" api-endpoint="http://localhost:6006">
         <canary-modal>
           <canary-trigger-searchbar slot="trigger"></canary-trigger-searchbar>
           <canary-content slot="content">

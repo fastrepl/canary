@@ -79,7 +79,7 @@ export default {
   parameters: { sourceLink: "components/canary-content.stories.ts" },
   render: ({ kind }: { kind: Kind }) => {
     const wrapper = (child: any) => html`
-      <canary-provider-cloud endpoint="http://localhost:6006" key="key">
+      <canary-provider-cloud api-endpoint="http://localhost:6006" api-key="key">
         <canary-content> ${child} </canary-content>
       </canary-provider-cloud>
     `;

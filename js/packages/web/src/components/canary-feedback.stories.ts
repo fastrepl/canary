@@ -14,7 +14,7 @@ export default {
   parameters: { sourceLink: "components/canary-feedback.stories.ts" },
   render: ({ type }: any) => {
     if (type === "page") {
-      return html` <canary-feedback-page key="123"></canary-feedback-page> `;
+      return html` <canary-feedback-page api-key="123"></canary-feedback-page> `;
     }
 
     if (type === "modal") {

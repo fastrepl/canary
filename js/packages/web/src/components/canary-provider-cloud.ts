@@ -11,13 +11,16 @@ const NAME = "canary-provider-cloud";
 
 @customElement(NAME)
 export class CanaryProviderCloud extends LitElement {
-  @property() endpoint = "";
-  @property() key = "";
+  @property({ type: String, attribute: "api-base" })
+  apiBase = "";
+  
+  @property({ type: String, attribute: "api-key" })
+  apiKey = "";
 
   connectedCallback() {
     super.connectedCallback();
 
-    if (!this.endpoint || !this.key) {
+    if (!this.apiBase || !this.apiKey) {
       throw new Error("Endpoint and key are required");
     }
 
@@ -42,11 +45,11 @@ export class CanaryProviderCloud extends LitElement {
     const params = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ key: this.key, query }),
+      body: JSON.stringify({ key: this.apiKey, query }),
       signal,
     };
 
-    const res = await fetch(`${this.endpoint}/api/v1/search`, params);
+    const res = await fetch(`${this.apiBase}/api/v1/search`, params);
     if (!res.ok) {
       throw new Error(res.statusText);
     }
@@ -55,11 +58,11 @@ export class CanaryProviderCloud extends LitElement {
   };
 
   ask: AskFunction = async (id, query, handleDelta, signal) => {
-    const url = `${this.endpoint}/api/v1/ask`;
+    const url = `${this.apiBase}/api/v1/ask`;
     const params = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id, key: this.key, query }),
+      body: JSON.stringify({ id, key: this.apiKey, query }),
       signal,
     };
 
