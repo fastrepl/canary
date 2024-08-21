@@ -62,7 +62,7 @@ onMounted(() => {
 <style scoped>
 canary-root {
   --canary-content-max-width: 650px;
-  --canary-content-max-height: 300px;
+  --canary-content-max-height: 500px;
   --canary-color-primary-c: 0.05;
   --canary-color-primary-h: 90;
 }

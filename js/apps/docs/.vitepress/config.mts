@@ -174,7 +174,15 @@ export default defineConfig({
     siteTitle: "🐤 Canary",
     nav: [
       {
-        text: "📚 Storybook",
+        text: "GitHub",
+        link: "https://github.com/fastrepl/canary",
+      },
+      {
+        text: "Discord",
+        link: "https://discord.gg/Y8bJkzuQZU",
+      },
+      {
+        text: "Storybook",
         link: "https://storybook.getcanary.dev",
       },
     ],
@@ -187,9 +195,5 @@ export default defineConfig({
       pattern:
         "https://github.com/fastrepl/canary/edit/main/js/apps/docs/contents/:path",
     },
-    socialLinks: [
-      { icon: "github", link: "https://github.com/fastrepl/canary" },
-      { icon: "discord", link: "https://discord.gg/Y8bJkzuQZU" },
-    ],
   },
 });

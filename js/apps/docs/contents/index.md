@@ -46,22 +46,8 @@ This can be very time-consuming and frustrating.
 
 ## Understand users through their interactions with the docs
 
-Beside traditional <ins>web analytics(pageview, etc)</ins>, and <ins>simple feedback form</ins>,, most of public documentation do not extracting enough insights from users.
+We're still working on `Search & Ask analytics`, which will help you gain insights into what users are searching and asking for. In the meantime, you can use other feedback components we provide to collect information,
 
-::: warning With Canary ↓
-
-<div class="my-2">
-(Not ready yet)
-<QueryRankChart
-title="User Query"
-:labels="['docusaurus', 'vitepress', 'starlight', 'pagefind', 'cloud']"
-:values="[50, 40, 30, 20, 10]"
-/>
-</div>
-
-:::
-
-<h2 class="text-2xl">There's a lot more!</h2>
-
-- [Why use Canary?](/docs/common/why)
-- [Local search playground](/docs/local/playground)
+  <div class="flex justify-center items-center">
+  like this 👇.
+  </div>

@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
+import { data } from "../data/url_cloud.data.js";
 
 const loaded = ref(false);
 
 onMounted(() => {
   Promise.all([
     import("@getcanary/web/components/canary-root.js"),
-    import("@getcanary/web/components/canary-provider-mock.js"),
+    import("@getcanary/web/components/canary-provider-cloud.js"),
     import("@getcanary/web/components/canary-content.js"),
     import("@getcanary/web/components/canary-search.js"),
     import("@getcanary/web/components/canary-search-input.js"),
@@ -47,7 +48,7 @@ const question = ref(questions[0]);
       :key="question"
       :query="question"
     >
-      <canary-provider-mock>
+      <canary-provider-cloud :api-key="data.key" :api-base="data.base">
         <canary-content>
           <canary-search slot="mode">
             <canary-search-input slot="input"></canary-search-input>
@@ -67,7 +68,7 @@ const question = ref(questions[0]);
             <canary-ask-results slot="body"></canary-ask-results>
           </canary-ask>
         </canary-content>
-      </canary-provider-mock>
+      </canary-provider-cloud>
     </canary-root>
   </div>
 </template>
