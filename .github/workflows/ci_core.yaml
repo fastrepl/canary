@@ -43,6 +43,8 @@ jobs:
         typesense-port:
           - 8108:8108
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
       - name: Start Typesense
         run: |
           docker run -d \
@@ -58,8 +60,6 @@ jobs:
         with:
           otp-version: ${{matrix.otp}}
           elixir-version: ${{matrix.elixir}}
-      - name: Checkout code
-        uses: actions/checkout@v3
       - name: Cache deps
         id: cache-deps
         uses: actions/cache@v3
