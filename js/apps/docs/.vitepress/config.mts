@@ -159,16 +159,10 @@ export default defineConfig({
   vite: {
     resolve: {
       alias: [
-        // {
-        //   find: /^.*\/VPHome\.vue$/,
-        //   replacement: fileURLToPath(
-        //     new URL("../components/Home.vue", import.meta.url),
-        //   ),
-        // },
         {
           find: /^.*\/VPNavBarSearch\.vue$/,
           replacement: fileURLToPath(
-            new URL("../components/LocalSearch.vue", import.meta.url),
+            new URL("../components/Empty.vue", import.meta.url),
           ),
         },
       ],

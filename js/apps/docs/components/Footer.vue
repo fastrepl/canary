@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
+import { data } from "../data/url_cloud.data.js";
 
 const loaded = ref(false);
 
@@ -16,10 +17,7 @@ onMounted(() => {
 <template>
   <div class="flex justify-center items-center" v-if="loaded">
     <canary-styles framework="vitepress">
-      <canary-feedback-page
-        api-base="https://cloud.getcanary.dev"
-        api-key="pk_3nU5ydAaTWcoqbsuUNYoyqHa"
-      >
+      <canary-feedback-page :api-base="data.base" :api-key="data.key">
       </canary-feedback-page>
     </canary-styles>
   </div>

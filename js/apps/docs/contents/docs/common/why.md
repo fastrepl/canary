@@ -1,7 +1,6 @@
 <script setup>
 import Headline from '../../../components/Headline.vue'
 import SizeChart from '../../../components/SizeChart.vue'
-import Demo from '../../../components/Demo.vue'
 
 import { data as canarySearch } from '../../../data/size_canary_search.data.js'
 import { data as canaryAll } from '../../../data/size_canary_all.data.js'
