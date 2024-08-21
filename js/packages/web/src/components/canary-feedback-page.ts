@@ -8,8 +8,6 @@ import "./canary-loading-spinner";
 
 const NAME = "canary-feedback-page";
 
-const BASE_URL = "https://cloud.getcanary.dev/api/v1";
-
 @customElement(NAME)
 export class CanaryFeedbackPage extends LitElement {
   @property({ type: String, attribute: "text-initial" })
@@ -19,11 +17,14 @@ export class CanaryFeedbackPage extends LitElement {
   completeText = "Got it, Thank you!";
 
   @property({ type: String })
+  endpoint = "";
+
+  @property({ type: String })
   key = "";
 
   private _task = new Task(this, {
     task: async ([url, score]: [string, number], { signal }) => {
-      const response = await fetch(`${BASE_URL}/feedback/page`, {
+      const response = await fetch(`${this.endpoint}/api/v1/feedback/page`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ key: this.key, url, score }),
