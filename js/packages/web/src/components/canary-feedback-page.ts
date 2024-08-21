@@ -23,7 +23,10 @@ export class CanaryFeedbackPage extends LitElement {
   apiKey = "";
 
   private _task = new Task(this, {
-    task: async ([endpoint, key, url, score]: [string, string, string, number], { signal }) => {
+    task: async (
+      [endpoint, key, url, score]: [string, string, string, number],
+      { signal },
+    ) => {
       const response = await fetch(`${endpoint}/api/v1/feedback/page`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },

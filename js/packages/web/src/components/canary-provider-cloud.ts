@@ -13,7 +13,7 @@ const NAME = "canary-provider-cloud";
 export class CanaryProviderCloud extends LitElement {
   @property({ type: String, attribute: "api-base" })
   apiBase = "";
-  
+
   @property({ type: String, attribute: "api-key" })
   apiKey = "";
 

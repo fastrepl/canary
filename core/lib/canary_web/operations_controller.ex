@@ -55,6 +55,12 @@ defmodule CanaryWeb.OperationsController do
     %URI{host: host, path: path} = URI.parse(url)
     path = path |> remove_extension() |> ensure_trailing_slash()
 
+    if host == "localhost" do
+      conn
+      |> send_resp(200, "")
+      |> halt()
+    end
+
     data = %Canary.Analytics.FeedbackPage{
       host: host,
       path: path,

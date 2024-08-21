@@ -44,6 +44,19 @@ defmodule CanaryWeb.Layouts do
             </.link>
           </li>
 
+          <li>
+            <.link class={if @active_tab == :feedback, do: "active"} navigate={~p"/feedback"}>
+              <span class={[
+                "h-4 w-4",
+                if(@active_tab == :feedback,
+                  do: "hero-hand-thumb-up-solid",
+                  else: "hero-hand-thumb-up"
+                )
+              ]} />
+              <span>Feedback</span>
+            </.link>
+          </li>
+
           <%!-- <li>
             <.link class={if @active_tab == :editor, do: "active"} navigate={~p"/editor"}>
               <span class={[

@@ -11,6 +11,7 @@ defmodule CanaryWeb.NavLive do
       case socket.view do
         CanaryWeb.HomeLive -> :home
         CanaryWeb.SourceLive -> :source
+        CanaryWeb.FeedbackLive -> :feedback
         CanaryWeb.SettingsLive -> :settings
         _ -> nil
       end

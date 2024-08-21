@@ -26,6 +26,7 @@ import * as Components from "../svelte/**/*.svelte";
 
 import { format } from "timeago.js";
 import ClipboardJS from "clipboard";
+import Chart from "chart.js/auto";
 
 import "@getcanary/web/components/canary-root.js";
 import "@getcanary/web/components/canary-provider-cloud.js";
@@ -47,6 +48,28 @@ let csrfToken = document
 
 let hooks = {
   ...getHooks(Components),
+  ChartJS: {
+    mounted() {
+      new Chart(
+        this.el,
+        {
+          type: "bar",
+          data: {
+            labels: JSON.parse(this.el.dataset.labels),
+            datasets: [
+              {
+                data: JSON.parse(this.el.dataset.points),
+                label: 'score',
+              },
+            ],
+          },
+        },
+        {
+          responsive: true,
+        },
+      );
+    },
+  },
   LocalTime: {
     mounted() {
       this.fn();
