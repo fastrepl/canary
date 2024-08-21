@@ -17,10 +17,18 @@ export class CanaryFeedbackPage extends LitElement {
   completeText = "Got it, Thank you!";
 
   @property({ type: String })
-  endpoint = "";
+  endpoint = "https://cloud.getcanary.dev";
 
   @property({ type: String })
   key = "";
+
+  connectedCallback(): void {
+    super.connectedCallback();
+
+    if (this.key === "") {
+      throw new Error("key is required");
+    }
+  }
 
   private _task = new Task(this, {
     task: async ([url, score]: [string, number], { signal }) => {
