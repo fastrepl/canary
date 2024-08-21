@@ -39,8 +39,21 @@ defmodule CanaryWeb.OperationsController do
     |> Base.encode16(case: :lower)
   end
 
+  defp remove_extension(path) do
+    path
+    |> String.replace(~r/\.html$/, "")
+  end
+
+  defp ensure_trailing_slash(path) do
+    case String.ends_with?(path, "/") do
+      true -> path
+      false -> path <> "/"
+    end
+  end
+
   def feedback_page(conn, %{"url" => url, "score" => score}) do
     %URI{host: host, path: path} = URI.parse(url)
+    path = path |> remove_extension() |> ensure_trailing_slash()
 
     data = %Canary.Analytics.FeedbackPage{
       host: host,
