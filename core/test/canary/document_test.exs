@@ -62,4 +62,27 @@ defmodule Canary.Test.Document do
     {:ok, docs} = Canary.Index.list_documents(source.id)
     assert length(docs) == 0 + 2 - 1
   end
+
+  test "update_summary", %{source: source} do
+    Canary.AI.Mock
+    |> expect(:chat, 1, fn _, _ -> {:ok, "completion"} end)
+
+    doc =
+      Canary.Sources.Document
+      |> Ash.create!(
+        %{
+          source_id: source.id,
+          title: "hello",
+          url: "/a",
+          html: "<h1>hello</h1>"
+        },
+        action: :create
+      )
+
+    assert doc.summary == nil
+
+    summary = %Canary.Sources.DocumentSummary{keywords: ["hello"]}
+    updated = Canary.Sources.Document.update_summary!(doc, summary)
+    assert updated.summary == summary
+  end
 end
