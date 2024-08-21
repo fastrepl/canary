@@ -15,7 +15,11 @@ const preview: Preview = {
   loaders: [mswLoader],
   decorators: [
     (story) =>
-      html`<canary-root framework="starlight">${story()}</canary-root>`,
+      html` <canary-root framework="starlight">
+        <canary-provider-cloud api-base="http://localhost:6006" api-key="key">
+          ${story()}
+        </canary-provider-cloud>
+      </canary-root>`,
     withThemeByDataAttribute({
       themes: { light: "light", dark: "dark" },
       parentSelector: "html",

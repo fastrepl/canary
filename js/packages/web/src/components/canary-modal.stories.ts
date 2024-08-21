@@ -17,17 +17,15 @@ export default {
   parameters: { sourceLink: "components/canary-modal.stories.ts" },
   render: () => {
     return html`
-      <canary-provider-cloud api-key="key" api-endpoint="http://localhost:6006">
-        <canary-modal>
-          <canary-trigger-searchbar slot="trigger"></canary-trigger-searchbar>
-          <canary-content slot="content">
-            <canary-search slot="mode">
-              <canary-search-input slot="input"></canary-search-input>
-              <canary-search-results slot="body"></canary-search-results>
-            </canary-search>
-          </canary-content>
-        </canary-modal>
-      </canary-provider-cloud>
+      <canary-modal>
+        <canary-trigger-searchbar slot="trigger"></canary-trigger-searchbar>
+        <canary-content slot="content">
+          <canary-search slot="mode">
+            <canary-search-input slot="input"></canary-search-input>
+            <canary-search-results slot="body"></canary-search-results>
+          </canary-search>
+        </canary-content>
+      </canary-modal>
     `;
   },
 } satisfies Meta;

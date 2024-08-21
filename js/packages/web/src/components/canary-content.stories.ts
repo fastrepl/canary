@@ -78,11 +78,9 @@ export default {
   title: "Public/canary-content",
   parameters: { sourceLink: "components/canary-content.stories.ts" },
   render: ({ kind }: { kind: Kind }) => {
-    const wrapper = (child: any) => html`
-      <canary-provider-cloud api-endpoint="http://localhost:6006" api-key="key">
-        <canary-content> ${child} </canary-content>
-      </canary-provider-cloud>
-    `;
+    const wrapper = (child: any) => {
+      return html`<canary-content> ${child} </canary-content>`;
+    };
 
     if (kind === Kind.Search) {
       return wrapper(html`
