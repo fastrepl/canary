@@ -6,7 +6,9 @@ SQL >
     WITH
         filtered AS (SELECT * FROM feedback_page WHERE account_id = {{ String(account_id) }}),
         deduped AS (
-            SELECT *, row_number() OVER (PARTITION BY fingerprint ORDER BY timestamp DESC) as rn
+            SELECT
+                *,
+                row_number() OVER (PARTITION BY fingerprint, host, path ORDER BY timestamp DESC) as rn
             FROM filtered
         )
     SELECT host, path, score

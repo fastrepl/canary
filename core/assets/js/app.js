@@ -49,25 +49,52 @@ let csrfToken = document
 let hooks = {
   ...getHooks(Components),
   ChartJS: {
+    labels() {
+      return JSON.parse(this.el.dataset.labels);
+    },
+    points() {
+      return JSON.parse(this.el.dataset.points);
+    },
     mounted() {
-      new Chart(
-        this.el,
-        {
-          type: "bar",
-          data: {
-            labels: JSON.parse(this.el.dataset.labels),
-            datasets: [
-              {
-                data: JSON.parse(this.el.dataset.points),
-                label: 'score',
+      const config = {
+        type: "bar",
+        data: {
+          labels: this.labels(),
+          datasets: [
+            {
+              axis: "y",
+              label: "score",
+              barThickness: 24,
+              data: this.points(),
+              fill: false,
+              borderWidth: 1,
+            },
+          ],
+        },
+        options: {
+          indexAxis: "y",
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: {
+              reverse: this.points().every((score) => score < 0),
+            },
+            y: {
+              position: "left",
+              afterFit: (scaleInstance) => {
+                scaleInstance.width = 160;
               },
-            ],
+            },
+          },
+          plugins: {
+            legend: {
+              display: false,
+            },
           },
         },
-        {
-          responsive: true,
-        },
-      );
+      };
+
+      new Chart(this.el, config);
     },
   },
   LocalTime: {
