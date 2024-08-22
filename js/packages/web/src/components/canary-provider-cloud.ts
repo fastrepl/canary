@@ -41,11 +41,14 @@ export class CanaryProviderCloud extends LitElement {
 
   static styles = wrapper;
 
-  search: SearchFunction = async (query, signal) => {
+  search: SearchFunction = async (payload, signal) => {
     const params = {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ key: this.apiKey, query }),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${this.apiKey}`,
+      },
+      body: JSON.stringify(payload),
       signal,
     };
 
@@ -57,12 +60,15 @@ export class CanaryProviderCloud extends LitElement {
     return res.json();
   };
 
-  ask: AskFunction = async (id, query, handleDelta, signal) => {
+  ask: AskFunction = async (payload, handleDelta, signal) => {
     const url = `${this.apiBase}/api/v1/ask`;
     const params = {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id, key: this.apiKey, query }),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${this.apiKey}`,
+      },
+      body: JSON.stringify(payload),
       signal,
     };
 

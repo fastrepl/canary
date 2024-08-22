@@ -79,7 +79,7 @@ export class SearchManager {
     this._abortController = new AbortController();
     try {
       const result = await operations.search(
-        query,
+        { query },
         this._abortController.signal,
       );
 
@@ -132,7 +132,7 @@ export class AskManager {
     this._ctx.setValue(ctx);
   }
 
-  async run(query: string, operations: OperationContext) {
+  async run(query: string, pattern: string, operations: OperationContext) {
     if (!operations.ask || query.length === 0) {
       return;
     }
@@ -150,8 +150,7 @@ export class AskManager {
 
     try {
       await operations.ask(
-        crypto.randomUUID(),
-        query,
+        { id: crypto.randomUUID(), query, pattern },
         this._handleDelta.bind(this),
         this._abortController.signal,
       );

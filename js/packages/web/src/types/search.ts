@@ -14,7 +14,7 @@ export type SearchFunctionResult = {
 };
 
 export type SearchFunction = (
-  query: string,
+  payload: { query: string },
   signal: AbortSignal,
 ) => Promise<SearchFunctionResult>;
 

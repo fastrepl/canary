@@ -26,7 +26,7 @@ export class CanaryProviderMock extends LitElement {
 
   static styles = wrapper;
 
-  search: SearchFunction = async (_query, _signal) => {
+  search: SearchFunction = async (_payload, _signal) => {
     await new Promise((resolve) =>
       setTimeout(resolve, Math.random() * 300 + 200),
     );
@@ -77,7 +77,7 @@ export class CanaryProviderMock extends LitElement {
     return { search: search };
   };
 
-  ask: AskFunction = async (_id, _query, handleDelta, _signal) => {
+  ask: AskFunction = async (_payload, handleDelta, _signal) => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
     handleDelta({ type: "progress", content: "hello" });
     await new Promise((resolve) => setTimeout(resolve, 100));

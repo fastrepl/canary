@@ -5,6 +5,7 @@ import type {
 } from "./search";
 import type { AskFunction, AskReference } from "./ask";
 import type { FeedbackFunction } from "./feedback";
+import type { TabDefinitions } from "./schema";
 import { TaskStatus } from "../store/managers";
 
 export type QueryContext = string;
@@ -13,6 +14,11 @@ export type ModeContext = {
   options: Set<string>;
   default: string | null;
   current: string | null;
+};
+
+export type TabContext = {
+  options: TabDefinitions;
+  current: number;
 };
 
 export type SearchContext = {

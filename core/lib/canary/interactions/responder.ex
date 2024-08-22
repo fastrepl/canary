@@ -4,12 +4,13 @@ defmodule Canary.Interactions.Responder do
   @callback run(
               session :: any(),
               query :: String.t(),
+              pattern :: String.t() | nil,
               client :: any(),
               handle_delta :: function()
             ) :: {:ok, any()} | {:error, any()}
 
-  def run(session, query, client, handle_delta \\ nil) do
-    impl().run(session, query, client, handle_delta)
+  def run(session, query, pattern, client, handle_delta \\ nil) do
+    impl().run(session, query, pattern, client, handle_delta)
   end
 
   defp impl, do: Application.get_env(:canary, :responder, Responder.Default)
@@ -21,14 +22,22 @@ defmodule Canary.Interactions.Responder.Default do
 
   alias Canary.Interactions.Client
 
-  def run(session, request, %Client{account: account, sources: sources}, handle_delta) do
+  def run(session, query, pattern, %Client{account: account, sources: sources}, handle_delta) do
     Task.Supervisor.start_child(Canary.TaskSupervisor, fn ->
-      Canary.Interactions.Message.add_user!(session, request)
+      Canary.Interactions.Message.add_user!(session, query)
     end)
 
     model = Application.fetch_env!(:canary, :chat_completion_model_response)
     source = sources |> Enum.at(0)
-    {:ok, %{search: docs}} = Canary.Searcher.run(source, request)
+    {:ok, %{search: docs}} = Canary.Searcher.run(source, query)
+
+    docs =
+      if is_nil(pattern) do
+        docs
+      else
+        docs
+        |> Enum.filter(fn doc -> Canary.Native.glob_match(pattern, URI.parse(doc.url).path) end)
+      end
 
     messages = [
       %{
@@ -83,7 +92,7 @@ defmodule Canary.Interactions.Responder.Default do
         #{render_history(session.messages)}
 
         <user_question>
-        #{request}
+        #{query}
         </user_question>
 
         <instruction>

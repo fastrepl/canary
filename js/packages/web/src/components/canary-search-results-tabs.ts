@@ -8,6 +8,7 @@ import { searchContext } from "../contexts";
 import pm from "picomatch";
 
 import type { SearchContext, SearchReference, TabDefinitions } from "../types";
+import { createEvent } from "../store";
 import { TaskStatus } from "../store/managers";
 
 import "./canary-search-references";
@@ -39,13 +40,11 @@ export class CanarySearchResultsTabs extends LitElement {
     if (typeof this.tabs === "string") {
       this.tabs = JSON.parse(this.tabs);
     }
+
+    this.dispatchEvent(createEvent({ type: "register_tab", data: this.tabs }));
   }
 
   updated(changed: PropertyValues<this>) {
-    if (!this._selectedTab && this.tabs.length > 0) {
-      this._selectedTab = this.tabs[0].name;
-    }
-
     if (changed.has("_groupedReferences") && !changed.has("_selectedTab")) {
       const relevantGroup = Object.entries(this._groupedReferences).reduce(
         (acc, [group, references]) => {
@@ -61,7 +60,7 @@ export class CanarySearchResultsTabs extends LitElement {
         this._selectedTab,
       );
 
-      this._selectedTab = relevantGroup;
+      this._handleChangeTab(relevantGroup);
     }
   }
 
@@ -103,7 +102,7 @@ export class CanarySearchResultsTabs extends LitElement {
           const selected = name === this._selectedTab;
           const selectable = counts[name] > 0;
 
-          return html`<div @click=${() => this._handleTabClick(name)}>
+          return html`<div @click=${() => this._handleChangeTab(name)}>
             <input
               type="radio"
               name="mode"
@@ -131,8 +130,11 @@ export class CanarySearchResultsTabs extends LitElement {
     `;
   }
 
-  private _handleTabClick(name: string): void {
+  private _handleChangeTab(name: string): void {
     this._selectedTab = name;
+
+    const index = this.tabs.findIndex((tab) => tab.name === name);
+    this.dispatchEvent(createEvent({ type: "set_tab", data: index }));
   }
 
   private _groupReferences(

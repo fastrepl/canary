@@ -36,8 +36,8 @@ const { localeIndex } = useData();
   <canary-provider-vitepress-minisearch :localeIndex="localeIndex">
     <canary-content>
         <canary-search slot="mode">
-          <canary-callout-discord slot="body"></canary-callout-discord>
           <canary-search-input slot="input"></canary-search-input>
+          <canary-callout-discord slot="body"></canary-callout-discord>
           <canary-search-results-tabs
             slot="body"
             :tabs="JSON.stringify(pattern)"

@@ -758,3 +758,31 @@ fn to_md_with_marker() {
     *
     "###);
 }
+
+#[test]
+fn to_md_vitepress_code() {
+    let html = r#"
+<div class="language-html vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">html</span><pre class="shiki shiki-themes github-light github-dark has-diff vp-code" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">canary-root</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;"> framework</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;">"vitepress"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">&gt;</span></span>
+<span class="line diff remove"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">  &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">canary-provider-vitepress-minisearch</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">&gt;</span></span>
+<span class="line diff add"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">    &lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">canary-provider-cloud</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;"> api-key</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;">"KEY"</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;"> api-base</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;">"https://cloud.getcanary.dev"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">&gt;</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D;">      &lt;!-- Rest of the code --&gt;</span></span>
+<span class="line diff add"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">    &lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">canary-provider-cloud</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">&gt;</span></span>
+<span class="line diff remove"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">  &lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">canary-provider-vitepress-minisearch</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">&gt;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">&lt;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">canary-root</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">&gt;</span></span></code></pre></div>
+    "#;
+
+    let md = html::to_md(&html).unwrap();
+    assert_snapshot!(md, @r###"
+    html
+
+    ```
+    <canary-root framework="vitepress">
+      <canary-provider-vitepress-minisearch>
+        <canary-provider-cloud api-key="KEY" api-base="https://cloud.getcanary.dev">
+          <!-- Rest of the code -->
+        </canary-provider-cloud>
+      </canary-provider-vitepress-minisearch>
+    </canary-root>
+    ```
+    "###);
+}

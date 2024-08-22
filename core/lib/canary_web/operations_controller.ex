@@ -7,9 +7,18 @@ defmodule CanaryWeb.OperationsController do
   defp find_client(conn, _opts) do
     err_msg = "no client found with the given key"
 
-    case Canary.Interactions.Client.find_web(conn.params["key"]) do
-      {:ok, client} -> conn |> assign(:client, client)
+    with {:ok, token} <- get_token_from_header(conn),
+         {:ok, client} <- Canary.Interactions.Client.find_web(token) do
+      conn |> assign(:client, client)
+    else
       _ -> conn |> send_resp(401, err_msg) |> halt()
+    end
+  end
+
+  defp get_token_from_header(conn) do
+    case Plug.Conn.get_req_header(conn, "authorization") do
+      ["Bearer " <> token] -> {:ok, token}
+      _ -> :error
     end
   end
 
@@ -99,7 +108,7 @@ defmodule CanaryWeb.OperationsController do
     end
   end
 
-  def ask(conn, %{"id" => id, "query" => query}) do
+  def ask(conn, %{"id" => id, "query" => query, "pattern" => pattern}) do
     client = conn.assigns.client
     {:ok, session} = Canary.Interactions.find_or_create_session(client.account, {:web, id})
 
@@ -116,6 +125,7 @@ defmodule CanaryWeb.OperationsController do
       Canary.Interactions.Responder.run(
         session,
         query,
+        pattern,
         client,
         fn data -> send(here, data) end
       )

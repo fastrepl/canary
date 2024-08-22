@@ -6,6 +6,7 @@ import type {
   ThemeContext,
   OperationContext,
   ModeContext,
+  TabContext,
   QueryContext,
   SearchContext,
   AskContext,
@@ -17,3 +18,4 @@ export const modeContext = ctx<ModeContext>("mode");
 export const queryContext = ctx<QueryContext>("query");
 export const searchContext = ctx<SearchContext>("search");
 export const askContext = ctx<AskContext>("ask");
+export const tabContext = ctx<TabContext>("tabs");
