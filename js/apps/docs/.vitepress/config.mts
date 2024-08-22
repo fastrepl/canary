@@ -121,6 +121,10 @@ const sidebar = [
         ],
       },
       {
+        text: "Evaluation",
+        link: "/docs/cloud/evaluation",
+      },
+      {
         text: "Pricing",
         link: "/docs/cloud/pricing",
       },
@@ -184,6 +188,10 @@ export default defineConfig({
       {
         text: "Storybook",
         link: "https://storybook.getcanary.dev",
+      },
+      {
+        text: "Status",
+        link: "https://status.getcanary.dev",
       },
     ],
     sidebar: {

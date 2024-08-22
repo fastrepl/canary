@@ -2,7 +2,7 @@
   <Bar :data="chartData" :options="chartOptions" />
 </template>
 
-<script>
+<script lang="ts">
 import { Bar } from "vue-chartjs";
 import {
   Chart as ChartJS,
@@ -26,7 +26,7 @@ ChartJS.register(
 import { useData } from "vitepress";
 
 export default {
-  name: "BarChart",
+  name: "SizeChart",
   components: { Bar },
   props: {
     title: {
@@ -38,7 +38,7 @@ export default {
       required: true,
     },
     values: {
-      type: Array,
+      type: Array<number>,
       required: true,
     },
   },
