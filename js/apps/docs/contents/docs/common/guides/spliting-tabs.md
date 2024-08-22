@@ -2,13 +2,9 @@
 import { onMounted, ref, computed } from "vue";
 import { useData } from "vitepress";
 
-import { parseTabs } from '@getcanary/web/parsers/index.js'
-
 const loaded = ref(false);
 
-RegExp.prototype.toJSON = RegExp.prototype.toString;
-const pattern = ref("All:*;Local:/local/.+$;Cloud:/cloud/.+$")
-const result = computed(() => parseTabs(pattern.value))
+const pattern = ref([{ name: "All", pattern: "**/*" }, { name: "Local", pattern: "**/local/**" }, { name: "Cloud", pattern: "**/cloud/**" }]);
 
 onMounted(() => {
   Promise.all([
@@ -31,23 +27,10 @@ const { localeIndex } = useData();
 ```html-vue
 <canary-search slot="mode">
   <canary-search-results slot="body"></canary-search-results> // [!code --]
-  <canary-search-results-tabs tabs="{{ pattern }}" slot="body">  // [!code ++]
+  <canary-search-results-tabs tabs="{{ JSON.stringify(pattern) }}" slot="body">  // [!code ++]
   </canary-search-results-tabs>  // [!code ++]
 </canary-search>
 ```
-
-<div class="flex flex-row gap-2 mt-6">
-  <label>tabs =</label>
-  <input type="text" v-model="pattern" />
-</div>
-
-Above pattern is [parsed](https://github.com/fastrepl/canary/blob/main/js/packages/web/src/parsers/tabs.peggy) to below:
-
-```json-vue
-{{ JSON.stringify(result, null, 2) }}
-```
-
-`pattern` is a `RegExp | null`, and `null` matches to any URL.
 
 <canary-root framework="vitepress" query="⬇️ we have tabs below" v-if="loaded" :key="pattern">
   <canary-provider-vitepress-minisearch :localeIndex="localeIndex">
@@ -57,7 +40,7 @@ Above pattern is [parsed](https://github.com/fastrepl/canary/blob/main/js/packag
           <canary-search-input slot="input"></canary-search-input>
           <canary-search-results-tabs
             slot="body"
-            :tabs="pattern"
+            :tabs="JSON.stringify(pattern)"
           ></canary-search-results-tabs>
         </canary-search>
     </canary-content>

@@ -61,14 +61,7 @@ export default defineConfig({
           "canary-mode-breadcrumb",
           "canary-feedback-page",
         ].map((name) => `components/${name}`),
-        ...[
-          "contexts",
-          "controllers",
-          "types/index",
-          "utils",
-          "store/index",
-          "parsers/index",
-        ],
+        ...["contexts", "controllers", "types/index", "utils", "store/index"],
       ].reduce(
         (acc, cur) => ({ ...acc, [cur]: resolve(__dirname, `src/${cur}.ts`) }),
         {} as Record<string, string>,

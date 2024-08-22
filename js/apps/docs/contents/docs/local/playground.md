@@ -13,19 +13,19 @@ const source = ref<(typeof sources)[number]>(sources[0]);
 const configData: Record<typeof sources, any> = {
   litellm: {
     variants: ["basic", "group", "split"],
-    pattern: "All:*;Proxy:/proxy/.+$",
+    pattern: JSON.stringify([{ name: "All", pattern: "**/*" }, { name: "Proxy", pattern: "**/proxy/**" }]),
     base: "https://docs.litellm.ai",
     replace: "/static/litellm",
   },
   mistral: {
     variants: ["basic", "group"],
-    pattern: "All:*;API:/api/.+$",
+    pattern: JSON.stringify([{ name: "All", pattern: "**/*" }, { name: "API", pattern: "**/api/**" }]),
     base: "https://docs.mistral.ai",
     replace: "/static/mistral",
   },
   prisma: {
     variants: ["basic", "group", "split"],
-    pattern: "All:*;ORM:/orm/.+$;Accelerate:/accelerate/.+$;Pulse:/pulse/.+$",
+    pattern: JSON.stringify([{ name: "All", pattern: "**/*" }, { name: "ORM", pattern: "**/orm/**" }, { name: "Accelerate", pattern: "**/accelerate/**" }, { name: "Pulse", pattern: "**/pulse/**" }]),
     base: "https://prisma.io/docs",
     replace: "/static/prisma",
   },

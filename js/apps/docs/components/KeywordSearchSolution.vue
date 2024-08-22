@@ -25,7 +25,7 @@ const counter = ref(0);
 const handleSelect = (q: string) => {
   question.value = q;
   counter.value += 1;
-}
+};
 </script>
 
 <template>

@@ -20,6 +20,12 @@ onMounted(() => {
 });
 
 const { localeIndex } = useData();
+
+const tabs = JSON.stringify([
+  { name: "All", pattern: "**/*" },
+  { name: "Local", pattern: "**/local/**" },
+  { name: "Cloud", pattern: "**/cloud/**" },
+]);
 </script>
 
 <template>
@@ -33,9 +39,8 @@ const { localeIndex } = useData();
               <canary-search-input slot="input"></canary-search-input>
               <canary-search-results-tabs
                 slot="body"
-                tabs="All:*;Local:/local/.+$;Cloud:/cloud/.+$"
-              >
-              </canary-search-results-tabs>
+                :tabs="tabs"
+              ></canary-search-results-tabs>
             </canary-search>
           </canary-content>
         </canary-modal>

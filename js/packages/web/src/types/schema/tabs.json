@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "array",
+  "title": "TabDefinitions",
+  "items": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "pattern": {
+        "type": "string"
+      }
+    },
+    "required": ["name", "pattern"],
+    "additionalProperties": false
+  }
+}

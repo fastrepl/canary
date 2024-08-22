@@ -5,14 +5,13 @@ import { classMap } from "lit/directives/class-map.js";
 import { consume } from "@lit/context";
 import { searchContext } from "../contexts";
 
-import type { SearchContext, SearchReference } from "../types";
+import pm from "picomatch";
+
+import type { SearchContext, SearchReference, TabDefinitions } from "../types";
 import { TaskStatus } from "../store/managers";
 
 import "./canary-search-references";
 import "./canary-error";
-
-import { parseTabs } from "../parsers";
-type TabDefinition = { name: string; pattern: RegExp | null };
 
 const NAME = "canary-search-results-tabs";
 
@@ -21,8 +20,8 @@ export class CanarySearchResultsTabs extends LitElement {
   @property({ type: Boolean })
   group = false;
 
-  @property({ converter: { fromAttribute: parseTabs } })
-  tabs: TabDefinition[] = [];
+  @property({ type: Array })
+  tabs: TabDefinitions = [];
 
   @consume({ context: searchContext, subscribe: true })
   @state()
@@ -38,7 +37,7 @@ export class CanarySearchResultsTabs extends LitElement {
     super.connectedCallback();
 
     if (typeof this.tabs === "string") {
-      this.tabs = parseTabs(this.tabs);
+      this.tabs = JSON.parse(this.tabs);
     }
   }
 
@@ -138,27 +137,23 @@ export class CanarySearchResultsTabs extends LitElement {
 
   private _groupReferences(
     references: SearchReference[],
-    definitions: TabDefinition[],
+    definitions: TabDefinitions,
   ) {
     const grouped = definitions.reduce(
       (acc, group) => ({ ...acc, [group.name]: [] }),
       {} as Record<string, (SearchReference & { index: number })[]>,
     );
 
-    const allGroup = definitions.find((group) => group.pattern === null);
+    const matchers = definitions.map((d) => pm(d.pattern));
 
     references.forEach((reference, index) => {
       const item = { ...reference, index };
+      const { pathname } = new URL(reference.url);
 
-      const matchedGroup = definitions.find(
-        (group) => group.pattern && group.pattern.test(reference.url),
-      );
-
-      if (matchedGroup) {
-        grouped[matchedGroup.name].push(item);
-      }
-      if (allGroup) {
-        grouped[allGroup.name].push(item);
+      for (let i = 0; i < matchers.length; i++) {
+        if (matchers[i](pathname)) {
+          grouped[definitions[i].name].push(item);
+        }
       }
     });
 

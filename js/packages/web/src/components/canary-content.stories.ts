@@ -165,7 +165,10 @@ export default {
           <canary-search-results-tabs
             slot="body"
             group
-            tabs="Docs:*;API:/api/.+$"
+            tabs=${JSON.stringify([
+              { name: "All", pattern: "**/*" },
+              { name: "API", pattern: "**/api/**" },
+            ])}
           ></canary-search-results-tabs>
         </canary-search>
       `);

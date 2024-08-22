@@ -21,6 +21,12 @@ onMounted(() => {
   });
 });
 
+const tabs = JSON.stringify([
+  { name: "All", pattern: "**/*" },
+  { name: "Local", pattern: "**/local/**" },
+  { name: "Cloud", pattern: "**/cloud/**" },
+]);
+
 const questions = [
   "docusaurus integration",
   "how to use canary local search this with vitepress",
@@ -32,7 +38,7 @@ const counter = ref(0);
 const handleSelect = (q: string) => {
   question.value = q;
   counter.value += 1;
-}
+};
 </script>
 
 <template>
@@ -61,13 +67,12 @@ const handleSelect = (q: string) => {
             <canary-search-suggestions slot="body"></canary-search-suggestions>
             <canary-search-results-tabs
               slot="body"
-              tabs="Docs:*;API:/api/.+$"
+              :tabs="tabs"
             ></canary-search-results-tabs>
           </canary-search>
           <canary-ask slot="mode">
             <canary-mode-breadcrumb
               slot="input-before"
-              previous="Search"
               text="Ask AI"
             ></canary-mode-breadcrumb>
             <canary-ask-input slot="input"></canary-ask-input>

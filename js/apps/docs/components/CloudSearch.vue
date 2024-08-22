@@ -24,6 +24,12 @@ onMounted(() => {
     loaded.value = true;
   });
 });
+
+const tabs = JSON.stringify([
+  { name: "All", pattern: "**/*" },
+  { name: "Local", pattern: "**/local/**" },
+  { name: "Cloud", pattern: "**/cloud/**" },
+]);
 </script>
 
 <template>
@@ -44,7 +50,7 @@ onMounted(() => {
               ></canary-search-suggestions>
               <canary-search-results-tabs
                 slot="body"
-                tabs="All:*;Local:/local/.+$;Cloud:/cloud/.+$"
+                :tabs="tabs"
                 group
               ></canary-search-results-tabs>
             </canary-search>

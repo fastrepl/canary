@@ -1,14 +1,13 @@
 {
   "name": "@getcanary/web",
-  "version": "0.0.88",
+  "version": "0.0.89",
   "type": "module",
   "main": "dist/components/canary-root.js",
   "files": [
     "dist"
   ],
   "exports": {
-    "./components/*": "./dist/components/*",
-    "./parsers/*": "./dist/parsers/*"
+    "./components/*": "./dist/components/*"
   },
   "scripts": {
     "dev": "vite",
@@ -19,10 +18,10 @@
     "build-storybook": "storybook build",
     "chromatic": "chromatic --exit-zero-on-changes",
     "format": "prettier --plugin=prettier-plugin-pegjs . --write",
-    "peggy": "peggy src/parsers/*.peggy --format es",
     "test": "npm run test-utils && npm run test-storybook",
     "test-utils": "vitest run",
-    "test-storybook": "test-storybook"
+    "test-storybook": "test-storybook",
+    "typegen": "npx json2ts 'src/types/schema/*.json' src/types/schema"
   },
   "dependencies": {
     "@floating-ui/dom": "^1.6.8",
@@ -33,6 +32,7 @@
     "lit": "^3.1.4",
     "marked": "^14.0.0",
     "marked-footnote": "^1.2.2",
+    "picomatch": "^4.0.2",
     "prismjs": "^1.29.0"
   },
   "devDependencies": {
@@ -52,14 +52,15 @@
     "@storybook/theming": "^8.2.7",
     "@storybook/web-components": "^8.2.7",
     "@storybook/web-components-vite": "^8.2.7",
+    "@types/picomatch": "^3.0.1",
     "@types/prismjs": "^1.26.4",
     "@unocss/preset-icons": "^0.61.9",
     "@unocss/preset-uno": "^0.61.9",
     "chromatic": "^11.5.5",
     "happy-dom": "^14.12.3",
+    "json-schema-to-typescript": "^15.0.1",
     "msw": "^2.3.4",
     "msw-storybook-addon": "^2.0.3",
-    "peggy": "^4.0.3",
     "prettier": "^3.3.3",
     "prettier-plugin-pegjs": "^2.0.2",
     "shadow-dom-testing-library": "^1.11.2",
