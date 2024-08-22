@@ -17,7 +17,7 @@ defmodule Canary.Query.Understander.LLM do
   @keywords_section "Keywords extracted from documents"
 
   def run(query, keywords) do
-    chat_model = Application.fetch_env!(:canary, :chat_completion_model)
+    chat_model = Application.fetch_env!(:canary, :chat_completion_model_understanding)
 
     messages = [
       system_message(),

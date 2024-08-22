@@ -26,7 +26,7 @@ defmodule Canary.Interactions.Responder.Default do
       Canary.Interactions.Message.add_user!(session, request)
     end)
 
-    model = Application.fetch_env!(:canary, :chat_completion_model)
+    model = Application.fetch_env!(:canary, :chat_completion_model_response)
     source = sources |> Enum.at(0)
     {:ok, %{search: docs}} = Canary.Searcher.run(source, request)
 

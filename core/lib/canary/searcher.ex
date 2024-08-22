@@ -10,7 +10,7 @@ defmodule Canary.Searcher do
   end
 
   defp set_cache(source, query, result) do
-    Cachex.put(:cache, key(source, query), result, ttl: :timer.seconds(5))
+    Cachex.put(:cache, key(source, query), result, ttl: :timer.minutes(5))
   end
 
   defp get_cache(source, query) do

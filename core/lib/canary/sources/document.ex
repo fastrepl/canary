@@ -61,6 +61,7 @@ defmodule Canary.Sources.Document do
     end
 
     destroy :destroy do
+      primary? true
       change Canary.Sources.Document.Changes.DestroyChunks
     end
 
