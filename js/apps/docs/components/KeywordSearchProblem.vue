@@ -11,14 +11,14 @@ const handleClickRight = () => {
 
 <template>
   <div
-    class="container w-full h-[210px] border rounded-md p-2 flex flex-row gap-8 justify-between"
+    class="container w-full border rounded-md p-2 flex flex-row gap-4 justify-between"
   >
     <div class="flex flex-col gap-2 w-full" v-on:click="handleClickLeft">
       <input
         type="text"
         value="🔎 how to limit api cost|"
         disabled
-        class="border rounded-md w-full"
+        class="border rounded-md w-full text-sm"
       />
       <div
         class="item w-full border rounded-md p-2 text-xs flex flex-col gap-1"
@@ -36,7 +36,7 @@ const handleClickRight = () => {
         type="text"
         value="🔎 budget|"
         disabled
-        class="border rounded-md w-full"
+        class="border rounded-md w-full text-sm"
       />
       <div
         class="item w-full border rounded-md p-2 text-xs flex flex-col gap-1"

@@ -13,7 +13,7 @@ onMounted(() => {
     import("@getcanary/web/components/canary-content.js"),
     import("@getcanary/web/components/canary-search.js"),
     import("@getcanary/web/components/canary-search-input.js"),
-    import("@getcanary/web/components/canary-search-results.js"),
+    import("@getcanary/web/components/canary-search-results-tabs.js"),
     import("@getcanary/web/components/canary-search-suggestions.js"),
     import("@getcanary/web/components/canary-callout-discord.js"),
     import("@getcanary/web/components/canary-ask.js"),
@@ -42,7 +42,11 @@ onMounted(() => {
               <canary-search-suggestions
                 slot="body"
               ></canary-search-suggestions>
-              <canary-search-results slot="body"></canary-search-results>
+              <canary-search-results-tabs
+                slot="body"
+                tabs="All:*;Local:/local/.+$;Cloud:/cloud/.+$"
+                group
+              ></canary-search-results-tabs>
             </canary-search>
             <canary-ask slot="mode">
               <canary-mode-breadcrumb

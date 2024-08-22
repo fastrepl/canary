@@ -120,14 +120,6 @@ const sidebar = [
           },
         ],
       },
-      {
-        text: "Evaluation",
-        link: "/docs/cloud/evaluation",
-      },
-      {
-        text: "Pricing",
-        link: "/docs/cloud/pricing",
-      },
     ],
   },
   {
