@@ -54,8 +54,8 @@ export class CanaryFeedbackPage extends LitElement {
       ) => {
         const response = await fetch(`${endpoint}/api/v1/feedback/page`, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ key, url, score }),
+          headers: { "Content-Type": "application/json", "Authorization": `Bearer ${key}` },
+          body: JSON.stringify({ url, score }),
           signal: withTimeout(signal, 2500),
         });
 

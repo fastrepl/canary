@@ -52,9 +52,6 @@ export class CanarySearchSuggestions extends LitElement {
       .container {
         display: flex;
         flex-direction: column;
-
-        font-size: 0.875rem;
-        color: var(--canary-color-gray-10);
       }
 
       button {
@@ -83,6 +80,14 @@ export class CanarySearchSuggestions extends LitElement {
       }
       .item:hover .arrow {
         opacity: 0.6;
+      }
+
+      .message {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        font-size: 0.875rem;
       }
     `,
   ];
