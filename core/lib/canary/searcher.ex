@@ -29,7 +29,16 @@ defmodule Canary.Searcher.Default do
 
   def run(source, query) do
     ai = query |> String.split(" ", trim: true) |> Enum.count() > 2
-    if ai, do: ai_search(source, query), else: normal_search(source, query)
+
+    if ai do
+      Appsignal.instrument("normal_search", fn ->
+        normal_search(source, query)
+      end)
+    else
+      Appsignal.instrument("ai_search", fn ->
+        ai_search(source, query)
+      end)
+    end
   end
 
   defp ai_search(source, query) do
