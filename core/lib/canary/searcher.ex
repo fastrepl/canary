@@ -65,7 +65,7 @@ defmodule Canary.Searcher.Default do
       {:ok,
        %{
          search: reranked,
-         suggestion: %{questions: [query]}
+         suggestion: %{questions: Canary.Query.Sugestor.run!(query)}
        }}
     end
   end

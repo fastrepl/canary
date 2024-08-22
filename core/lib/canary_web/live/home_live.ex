@@ -27,7 +27,7 @@ defmodule CanaryWeb.HomeLive do
 
       <span class="text-sm mb-2">Try it out!</span>
       <canary-root>
-        <canary-provider-cloud key={@web_client.web_public_key} endpoint={CanaryWeb.Endpoint.url()}>
+        <canary-provider-cloud api-key={@web_client.web_public_key} api-base={CanaryWeb.Endpoint.url()}>
           <canary-modal>
             <canary-trigger-searchbar slot="trigger"></canary-trigger-searchbar>
             <canary-content slot="content">
