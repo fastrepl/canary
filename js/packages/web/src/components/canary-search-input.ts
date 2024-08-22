@@ -1,6 +1,7 @@
 import { LitElement, css, html, nothing } from "lit";
-import { customElement, state } from "lit/decorators.js";
+import { customElement, property, state } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
+import { ifDefined } from "lit/directives/if-defined.js";
 
 import { consume } from "@lit/context";
 import { queryContext, searchContext } from "../contexts";
@@ -16,6 +17,9 @@ const NAME = "canary-search-input";
 
 @customElement(NAME)
 export class CanarySearchInput extends LitElement {
+  @property({ type: Boolean })
+  autofocus = false;
+  
   @consume({ context: queryContext, subscribe: true })
   @state()
   private _query = "";
@@ -37,14 +41,10 @@ export class CanarySearchInput extends LitElement {
         spellcheck="false"
         placeholder="Search for anything..."
         @input=${this._handleInput}
-        autofocus
         onfocus="this.setSelectionRange(this.value.length,this.value.length);"
+        autofocus=${ifDefined(this.autofocus || null)}
       />
-      <span
-        class=${classMap({
-          hidden: this._search.status !== TaskStatus.PENDING,
-        })}
-      >
+      <span class=${classMap({ hidden: this._search.status !== TaskStatus.PENDING })}>
         <canary-loading-spinner></canary-loading-spinner>
       </span>
     `;
