@@ -34,7 +34,7 @@ onMounted(() => {
           <canary-trigger-searchbar slot="trigger"></canary-trigger-searchbar>
           <canary-content slot="content">
             <canary-search slot="mode">
-              <canary-search-input slot="input"></canary-search-input>
+              <canary-search-input slot="input" autofocus></canary-search-input>
               <canary-callout-discord
                 slot="body"
                 url="https://discord.gg/Y8bJkzuQZU"

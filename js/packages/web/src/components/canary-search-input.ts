@@ -19,7 +19,7 @@ const NAME = "canary-search-input";
 export class CanarySearchInput extends LitElement {
   @property({ type: Boolean })
   autofocus = false;
-  
+
   @consume({ context: queryContext, subscribe: true })
   @state()
   private _query = "";
@@ -44,7 +44,11 @@ export class CanarySearchInput extends LitElement {
         onfocus="this.setSelectionRange(this.value.length,this.value.length);"
         autofocus=${ifDefined(this.autofocus || null)}
       />
-      <span class=${classMap({ hidden: this._search.status !== TaskStatus.PENDING })}>
+      <span
+        class=${classMap({
+          hidden: this._search.status !== TaskStatus.PENDING,
+        })}
+      >
         <canary-loading-spinner></canary-loading-spinner>
       </span>
     `;

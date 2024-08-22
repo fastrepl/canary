@@ -140,6 +140,16 @@ export class CanaryMarkdown extends LitElement {
       h3 {
         font-size: 1.1em;
       }
+
+      p,
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        overflow-wrap: break-word;
+      }
     `,
     css`
       :not(pre) > code::before,

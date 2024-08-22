@@ -3,21 +3,22 @@ defmodule CanaryWeb.FeedbackLive do
 
   def render(assigns) do
     ~H"""
-    <div>
-      <div class="mx-auto grid max-w-2xl items-center grid-cols-1 grid-rows-1 items-start gap-x-8 gap-y-8 lg:mx-0 lg:max-w-none lg:grid-cols-1">
+    <div class="w-full">
+      <div class="mx-auto max-w-7xl grid grid-cols-1 gap-8 lg:grid-cols-2">
         <div class="w-full h-80">
-          <h2>Positive</h2>
+          <h2 class="text-xl font-semibold mb-4">Positive</h2>
           <canvas
-            id="feedback-page-breakdown-positvie"
+            id="feedback-page-breakdown-positive"
             phx-hook="ChartJS"
-            data-labels={Jason.encode!(@positvie.labels)}
-            data-points={Jason.encode!(@positvie.points)}
+            data-labels={Jason.encode!(@positive.labels)}
+            data-points={Jason.encode!(@positive.points)}
+            class="w-full h-full"
           >
           </canvas>
         </div>
 
         <div class="w-full h-80">
-          <h2>Negative</h2>
+          <h2 class="text-xl font-semibold mb-4">Negative</h2>
           <canvas
             id="feedback-page-breakdown-negative"
             phx-hook="ChartJS"
@@ -35,12 +36,12 @@ defmodule CanaryWeb.FeedbackLive do
     account_id = socket.assigns.current_account.id
     {:ok, data} = Canary.Analytics.feedback_page_breakdown(account_id)
 
-    %{positvie: positvie, negative: negative} =
+    %{positive: positive, negative: negative} =
       data
       |> Enum.reduce(
-        %{positvie: %{labels: [], points: []}, negative: %{labels: [], points: []}},
+        %{positive: %{labels: [], points: []}, negative: %{labels: [], points: []}},
         fn %{"path" => path, "mean_score" => score}, acc ->
-          field = if score > 0, do: :positvie, else: :negative
+          field = if score > 0, do: :positive, else: :negative
 
           acc
           |> Map.update!(field, fn existing ->
@@ -51,7 +52,7 @@ defmodule CanaryWeb.FeedbackLive do
 
     socket =
       socket
-      |> assign(:positvie, positvie)
+      |> assign(:positive, positive)
       |> assign(:negative, negative)
 
     {:ok, socket}

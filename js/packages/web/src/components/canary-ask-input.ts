@@ -15,7 +15,7 @@ const NAME = "canary-ask-input";
 export class CanaryAskInput extends LitElement {
   @property({ type: Boolean })
   autofocus = false;
-  
+
   @consume({ context: queryContext, subscribe: true })
   @property({ type: String })
   query = "";

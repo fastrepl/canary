@@ -27,12 +27,15 @@ defmodule CanaryWeb.HomeLive do
 
       <span class="text-sm mb-2">Try it out!</span>
       <canary-root>
-        <canary-provider-cloud api-key={@web_client.web_public_key} api-base={CanaryWeb.Endpoint.url()}>
+        <canary-provider-cloud
+          api-key={@web_client.web_public_key}
+          api-base={CanaryWeb.Endpoint.url()}
+        >
           <canary-modal>
             <canary-trigger-searchbar slot="trigger"></canary-trigger-searchbar>
             <canary-content slot="content">
               <canary-search slot="mode">
-                <canary-search-input slot="input"></canary-search-input>
+                <canary-search-input slot="input" autofocus></canary-search-input>
                 <canary-search-suggestions slot="body" header="Ask AI"></canary-search-suggestions>
                 <canary-search-results slot="body" header="Results" limit="4"></canary-search-results>
               </canary-search>

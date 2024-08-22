@@ -1,15 +1,14 @@
 {
   "name": "@getcanary/web",
-  "version": "0.0.84",
+  "version": "0.0.87",
   "type": "module",
-  "main": "dist/components/index.js",
+  "main": "dist/components/canary-root.js",
   "files": [
     "dist"
   ],
   "exports": {
     "./components/*": "./dist/components/*",
-    "./parsers/*": "./dist/parsers/*",
-    ".": "./dist/*"
+    "./parsers/*": "./dist/parsers/*"
   },
   "scripts": {
     "dev": "vite",
