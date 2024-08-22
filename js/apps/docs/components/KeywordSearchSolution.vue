@@ -17,10 +17,7 @@ onMounted(() => {
   });
 });
 
-const questions = [
-  "How can I set a limit for API cost?",
-  "What is the difference between API cost and API rate limit?",
-];
+const questions = ["provider", "how to switch provider"];
 
 const question = ref(questions[0]);
 </script>

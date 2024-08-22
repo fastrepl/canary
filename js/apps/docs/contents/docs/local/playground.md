@@ -71,7 +71,7 @@ onMounted(() => {
 ::: info How does it work?
 
 1. Use [`@getcanary/docusaurus-theme-search-pagefind`](/docs/local/integrations/docusaurus.html#one-step-to-integrate) to create Pagefind index.
-2. Serve it using [Cloudflare Pages](https://github.com/fastrepl/hosted-pagefind/tree/main/public/static).
+2. [Serve it](https://github.com/fastrepl/hosted-pagefind/tree/main/public/static) using Cloudflare Pages.
 3. Use [`canary-provider-pagefind`](https://github.com/fastrepl/canary/blob/main/js/packages/web/src/components/canary-provider-pagefind.ts) to load the index, and build UI using `@getcanary/web`.
 
 :::
@@ -81,6 +81,16 @@ onMounted(() => {
 - [docs.litellm.ai](https://docs.litellm.ai)
 - [docs.mistral.ai](https://docs.mistral.ai)
 - [prisma.io/docs](https://prisma.io/docs)
+
+:::
+
+::: details What is `provider`?
+
+`Provider` registers operations like `search`.
+
+You can swap out the provider and keep the same UI.
+
+Click **Code** tab to read the code.
 
 :::
 
@@ -143,7 +153,7 @@ onMounted(() => {
 
 ```html-vue{4-7}
 <canary-root framework="vitepress">
-   <canary-provider-pagefind>
+   <canary-provider-pagefind options={JSON.stringify(options)}>
       <canary-content>
          <canary-search slot="mode">
             <canary-search-input slot="input"></canary-search-input>
@@ -160,7 +170,7 @@ onMounted(() => {
 
 ```html-vue{4-7}
 <canary-root framework="vitepress">
-   <canary-provider-pagefind>
+   <canary-provider-pagefind options={JSON.stringify(options)}>
       <canary-content>
          <canary-search slot="mode">
             <canary-search-input slot="input"></canary-search-input>
@@ -178,7 +188,7 @@ onMounted(() => {
 
 ```html-vue{4-7}
 <canary-root framework="vitepress">
-   <canary-provider-pagefind>
+   <canary-provider-pagefind options={JSON.stringify(options)}>
       <canary-content>
          <canary-search slot="mode">
             <canary-search-input slot="input"></canary-search-input>

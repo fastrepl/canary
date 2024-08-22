@@ -22,8 +22,8 @@ onMounted(() => {
 });
 
 const questions = [
-  "How can I set a limit for API cost?",
-  "What is the difference between API cost and API rate limit?",
+  "docusaurus integration",
+  "how to use canary local search this with vitepress",
 ];
 
 const question = ref(questions[0]);
