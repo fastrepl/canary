@@ -22,26 +22,56 @@ export class CanaryFeedbackPage extends LitElement {
   @property({ type: String, attribute: "api-key" })
   apiKey = "";
 
-  private _task = new Task(this, {
-    task: async (
-      [endpoint, key, url, score]: [string, string, string, number],
-      { signal },
-    ) => {
-      const response = await fetch(`${endpoint}/api/v1/feedback/page`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ key, url, score }),
-        signal: withTimeout(signal, 2500),
-      });
+  private _task = this._initTask();
 
-      if (!response.ok) {
-        throw new Error(response.statusText);
-      }
+  connectedCallback() {
+    super.connectedCallback();
 
-      return null;
-    },
-    autoRun: false,
-  });
+    if ("navigation" in window) {
+      (window.navigation as any).addEventListener(
+        "navigate",
+        this._handleNavigate,
+      );
+    }
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+
+    if ("navigation" in window) {
+      (window.navigation as any).removeEventListener(
+        "navigate",
+        this._handleNavigate,
+      );
+    }
+  }
+
+  private _initTask() {
+    return new Task(this, {
+      task: async (
+        [endpoint, key, url, score]: [string, string, string, number],
+        { signal },
+      ) => {
+        const response = await fetch(`${endpoint}/api/v1/feedback/page`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ key, url, score }),
+          signal: withTimeout(signal, 2500),
+        });
+
+        if (!response.ok) {
+          throw new Error(response.statusText);
+        }
+
+        return null;
+      },
+      autoRun: false,
+    });
+  }
+
+  private _handleNavigate() {
+    this._task = this._initTask();
+  }
 
   render() {
     return html`
