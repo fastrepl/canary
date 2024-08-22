@@ -1,6 +1,6 @@
 <template>
   <div
-    class="container w-full h-[260px] border rounded-md p-2 flex flex-row gap-8 justify-between"
+    class="container w-full border rounded-md p-2 flex flex-row gap-8 justify-between"
   >
     <div class="flex flex-col gap-2 w-full">
       <input

@@ -20,6 +20,12 @@ onMounted(() => {
 const questions = ["provider", "how to switch provider"];
 
 const question = ref(questions[0]);
+const counter = ref(0);
+
+const handleSelect = (q: string) => {
+  question.value = q;
+  counter.value += 1;
+}
 </script>
 
 <template>
@@ -27,7 +33,7 @@ const question = ref(questions[0]);
     <div class="flex flex-row gap-2 mb-4 text-xs">
       <button
         class="btn"
-        v-on:click="question = q"
+        v-on:click="handleSelect(q)"
         :key="q"
         v-for="q in questions"
       >
@@ -38,7 +44,7 @@ const question = ref(questions[0]);
     <canary-root
       framework="vitepress"
       v-if="loaded"
-      :key="question"
+      :key="counter"
       :query="question"
     >
       <canary-provider-cloud :api-key="data.key" :api-base="data.base">
@@ -60,6 +66,11 @@ const question = ref(questions[0]);
   border-radius: 8px;
   background-color: var(--vp-c-bg);
   color: var(--vp-c-text-1);
+
+  max-width: 130px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .btn:hover {
   background-color: var(--vp-c-brand-soft);
