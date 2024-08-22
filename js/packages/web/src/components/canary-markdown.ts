@@ -110,6 +110,8 @@ export class CanaryMarkdown extends LitElement {
     css`
       .container {
         font-size: 0.875rem;
+        text-wrap: wrap;
+
         color: var(--canary-color-gray-20);
         background-color: var(--canary-is-light, var(--canary-color-gray-100))
           var(--canary-is-dark, var(--canary-color-gray-90));
@@ -139,16 +141,6 @@ export class CanaryMarkdown extends LitElement {
       }
       h3 {
         font-size: 1.1em;
-      }
-
-      p,
-      h1,
-      h2,
-      h3,
-      h4,
-      h5,
-      h6 {
-        overflow-wrap: break-word;
       }
     `,
     css`

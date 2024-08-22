@@ -17,7 +17,7 @@
     "typescript": "^5.4.5"
   },
   "dependencies": {
-    "@getcanary/web": "^0.0.87",
+    "@getcanary/web": "^0.0.88",
     "chart.js": "^4.4.4",
     "clipboard": "^2.0.11",
     "clsx": "^2.1.1",
