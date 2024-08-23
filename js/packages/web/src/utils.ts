@@ -66,5 +66,11 @@ export const withTimeout = (signal: AbortSignal, ms = 3000) => {
 };
 
 export const parseURL = (url: string) => {
-  return new URL(url.startsWith("http") ? url : `https://${url}`);
+  const transformed = url.startsWith("http")
+    ? url
+    : url.startsWith("/")
+      ? `https://example.com${url}`
+      : `https://example.com/${url}`;
+
+  return new URL(transformed);
 };

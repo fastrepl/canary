@@ -1,6 +1,6 @@
 {
   "name": "@getcanary/web",
-  "version": "0.0.94",
+  "version": "0.0.95",
   "type": "module",
   "main": "dist/components/canary-root.js",
   "files": [
@@ -17,7 +17,7 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "chromatic": "chromatic --exit-zero-on-changes",
-    "format": "prettier --plugin=prettier-plugin-pegjs . --write",
+    "format": "prettier . --write",
     "test": "npm run test-utils && npm run test-storybook",
     "test-utils": "vitest run",
     "test-storybook": "test-storybook",
@@ -62,7 +62,6 @@
     "msw": "^2.3.4",
     "msw-storybook-addon": "^2.0.3",
     "prettier": "^3.3.3",
-    "prettier-plugin-pegjs": "^2.0.2",
     "shadow-dom-testing-library": "^1.11.2",
     "storybook": "^8.2.7",
     "storybook-source-link": "^4.0.1",
