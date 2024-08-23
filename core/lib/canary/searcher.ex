@@ -31,12 +31,12 @@ defmodule Canary.Searcher.Default do
     ai = query |> String.split(" ", trim: true) |> Enum.count() > 2
 
     if ai do
-      Appsignal.instrument("normal_search", fn ->
-        normal_search(source, query)
-      end)
-    else
       Appsignal.instrument("ai_search", fn ->
         ai_search(source, query)
+      end)
+    else
+      Appsignal.instrument("normal_search", fn ->
+        normal_search(source, query)
       end)
     end
   end
