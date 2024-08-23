@@ -1,3 +1,10 @@
+<script setup lang="ts">
+const props = defineProps<{
+  query: string;
+  items: Array<{ excerpt: string; title: string }>;
+}>();
+</script>
+
 <template>
   <div
     class="container w-full border rounded-md p-2 flex flex-row gap-8 justify-between"
@@ -5,35 +12,17 @@
     <div class="flex flex-col gap-2 w-full">
       <input
         type="text"
-        value="🔎 config feature_a|"
+        :value="`🔎 ${props.query}|`"
         disabled
         class="border rounded-md w-full"
       />
       <div
+        v-for="(item, index) in props.items"
+        :key="index"
         class="item w-full border rounded-md p-2 text-xs flex flex-col gap-1"
       >
-        <span
-          ><mark>feature_a</mark>: option_1, option_2, option_3, option_4,
-          option_5...</span
-        >
-        <span class="font-semibold">Reference - <mark>config</mark>.yaml</span>
-      </div>
-      <div
-        class="item w-full border rounded-md p-2 text-xs flex flex-col gap-1"
-      >
-        <span
-          >...<mark>feature_a</mark>is really good. there's 999 ways of doing...
-        </span>
-        <span class="font-semibold">What is <mark>Feature_A</mark>?</span>
-      </div>
-      <div
-        class="item w-full border rounded-md p-2 text-xs flex flex-col gap-1"
-      >
-        <span
-          >...to configure options for <mark>feature_a</mark>, you shoud do this
-          and that...
-        </span>
-        <span class="font-semibold">Tutorial - <mark>Config</mark>uration</span>
+        <span v-html="item.excerpt"></span>
+        <span class="font-semibold" v-html="item.title"></span>
       </div>
       <span class="mx-auto">・・・</span>
     </div>

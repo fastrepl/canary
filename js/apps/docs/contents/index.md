@@ -33,6 +33,24 @@ const keywordSearchProblemExample = {
     emoji: "😊"
   }
 }
+
+const searchDisgestProblemExample = {
+  query: "config feature_a",
+  items: [
+    {
+      excerpt: "<mark>feature_a</mark>: option_1, option_2, option_3, option_4, option_5...",
+      title: "Reference - <mark>config</mark>.yaml"
+    },
+    {
+      excerpt: "...<mark>feature_a</mark>is really good. there's 999 ways of doing...",
+      title: "What is <mark>Feature_A</mark>?"
+    },
+    {
+      excerpt: "...to configure options for <mark>feature_a</mark>, you shoud do this and that...",
+      title: "Tutorial - <mark>Config</mark>uration"
+    }
+  ]
+}
 </script>
 
 <Headline />
@@ -63,7 +81,7 @@ And this leads to bunch of support questions like:
 As documentation grows, users **often need to read multiple sections and pages to get questions answered**.
 This can be very time-consuming and frustrating.
 
-<SearchDigestProblem />
+<SearchDigestProblem v-bind="searchDisgestProblemExample" />
 
 ::: warning With Canary ↓
 
