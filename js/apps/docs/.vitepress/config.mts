@@ -170,7 +170,7 @@ export default defineConfig({
     siteTitle: "🐤 Canary",
     nav: [
       {
-        text: "GitHub",
+        text: "⭐ GitHub",
         link: "https://github.com/fastrepl/canary",
       },
       {

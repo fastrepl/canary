@@ -10,43 +10,61 @@ const mode = ref(modes[0]);
 const sources = ["litellm", "mistral", "prisma"] as const;
 const source = ref<(typeof sources)[number]>(sources[0]);
 
-const configData: Record<typeof sources, any> = {
+const sourceData: Record<typeof sources, any> = {
   litellm: {
-    variants: ["basic", "group", "split"],
-    pattern: JSON.stringify([{ name: "All", pattern: "**/*" }, { name: "Proxy", pattern: "**/proxy/**" }]),
     base: "https://docs.litellm.ai",
     replace: "/static/litellm",
   },
   mistral: {
-    variants: ["basic", "group"],
-    pattern: JSON.stringify([{ name: "All", pattern: "**/*" }, { name: "API", pattern: "**/api/**" }]),
     base: "https://docs.mistral.ai",
     replace: "/static/mistral",
   },
   prisma: {
-    variants: ["basic", "group", "split"],
-    pattern: JSON.stringify([{ name: "All", pattern: "**/*" }, { name: "ORM", pattern: "**/orm/**" }, { name: "Accelerate", pattern: "**/accelerate/**" }, { name: "Pulse", pattern: "**/pulse/**" }]),
     base: "https://prisma.io/docs",
     replace: "/static/prisma",
   },
 };
 
-const pattern = computed(() => configData[source.value].pattern);
-const variants = computed(() => configData[source.value].variants);
-const variant = ref(variants.value[0]);
+const tabs = computed(() => {
+  if (source.value === "litellm") {
+    return [
+      { name: "All", pattern: "**/*" },
+      { name: "Proxy", pattern: "**/proxy/**" }
+    ];
+  }
 
-const baseUrl = "https://hosted-pagefind.pages.dev";
-const options = computed(() => ({
-  _base: configData[source.value].base,
-  _replace: configData[source.value].replace,
-  path: `${baseUrl}/static/${source.value}/pagefind/pagefind.js`,
+  if (source.value === "mistral") {
+    return [
+      { name: "All", pattern: "**/*" },
+      { name: "Guide", pattern: "**/guides/**" }
+    ];
+  }
+
+  if (source.value === "prisma") {
+    return [
+      { name: "All", pattern: "**/*" }, 
+      { name: "ORM", pattern: "**/orm/**" }, 
+      { name: "Accelerate", pattern: "**/accelerate/**" }, 
+      { name: "Pulse", pattern: "**/pulse/**" }
+    ];
+  }
+
+  throw new Error();
+});
+
+const variants = ref({
+  group: false,
+  split: false,
+});
+
+const pagefindOptions = computed(() => ({
+  _base: sourceData[source.value].base,
+  _replace: sourceData[source.value].replace,
+  path: `https://hosted-pagefind.pages.dev/static/${source.value}/pagefind/pagefind.js`,
 }));
 
 watch(source, () => {
   mode.value = modes[0];
-  if (!variants.value.includes(variant.value)) {
-    variant.value = variants.value[0];
-  }
 });
 
 const loaded = ref(false);
@@ -68,7 +86,9 @@ onMounted(() => {
 
 # Local Search Playground
 
-::: info How does it work?
+`🐤 Canary X Pagefind` for `Litellm`, `Mistral`, and `Prisma`.
+
+::: details How does it work?
 
 1. Use [`@getcanary/docusaurus-theme-search-pagefind`](/docs/local/integrations/docusaurus.html#one-step-to-integrate) to create Pagefind index.
 2. [Serve it](https://github.com/fastrepl/hosted-pagefind/tree/main/public/static) using Cloudflare Pages.
@@ -109,9 +129,9 @@ Click **Code** tab to read the code.
   <div class="flex gap-2 items-center">
     <span class="text-sm">Variant</span>
     <button
-      v-for="current in variants"
-      :class="{ tag: true, selected: variant === current }"
-      @click="variant = current"
+      v-for="current in Object.keys(variants)"
+      :class="{ tag: true, selected: variants[current] }"
+      @click="variants[current] = !variants[current]"
     >
       {{ current }}
     </button>
@@ -136,20 +156,23 @@ Click **Code** tab to read the code.
   </div>
 
   <canary-root framework="vitepress" :key="source" :query="source" v-show="mode === 'UI'">
-    <canary-provider-pagefind :options="options" base="https://docs.litellm.ai">
+    <canary-provider-pagefind :options="pagefindOptions">
       <canary-content>
         <canary-search slot="mode">
           <canary-search-input slot="input"></canary-search-input>
-          <canary-search-results slot="body" :group="variant === 'group'" v-if="variant !== 'split'">
+          <canary-callout-discord slot="body" url="https://discord.gg/Y8bJkzuQZU" v-if="variants.callout"></canary-callout-discord>
+          <canary-search-results slot="body" v-if="!variants.split" :group="variants.group">
           </canary-search-results>
-          <canary-search-results-tabs slot="body" :tabs="pattern" v-if="variant === 'split'">
+          <canary-search-results-tabs slot="body" v-if="variants.split" :tabs="tabs" :group="variants.group">
           </canary-search-results-tabs>
         </canary-search>
       </canary-content>
     </canary-provider-pagefind>
   </canary-root>
 
-  <Markdown v-if="mode === 'Code' && variant === 'basic'">
+  <template v-if="mode === 'Code'">
+
+  <Markdown v-if="!variants.group && !variants.split">
 
 ```html-vue{4-7}
 <canary-root framework="vitepress">
@@ -166,7 +189,25 @@ Click **Code** tab to read the code.
 
   </Markdown>
 
-  <Markdown v-if="mode === 'Code' && variant === 'group'">
+  <Markdown v-if="variants.group && variants.split">
+
+```html-vue{4-7}
+<canary-root framework="vitepress">
+   <canary-provider-pagefind options={JSON.stringify(options)}>
+      <canary-content>
+         <canary-search slot="mode">
+            <canary-search-input slot="input"></canary-search-input>
+            <canary-search-results slot="body"></canary-search-results>  // [!code --]
+            <canary-search-results-tabs group tabs="{{ JSON.stringify(tabs) }}" slot="body"></canary-search-results-tabs>  // [!code ++]
+         </canary-search>
+      </canary-content>
+   </canary-provider-pagefind>
+</canary-root>
+```
+
+  </Markdown>
+
+  <Markdown v-if="variants.group && !variants.split">
 
 ```html-vue{4-7}
 <canary-root framework="vitepress">
@@ -184,7 +225,7 @@ Click **Code** tab to read the code.
 
    </Markdown>
 
-  <Markdown v-if="mode === 'Code' && variant === 'split'">
+  <Markdown v-if="variants.split && !variants.group">
 
 ```html-vue{4-7}
 <canary-root framework="vitepress">
@@ -193,7 +234,7 @@ Click **Code** tab to read the code.
          <canary-search slot="mode">
             <canary-search-input slot="input"></canary-search-input>
             <canary-search-results slot="body"></canary-search-results>  // [!code --]
-            <canary-search-results-tabs tabs="{{ pattern }}" slot="body"></canary-search-results-tabs>  // [!code ++]
+            <canary-search-results-tabs tabs={{ JSON.stringify(tabs) }} slot="body"></canary-search-results-tabs>  // [!code ++]
          </canary-search>
       </canary-content>
    </canary-provider-pagefind>
@@ -201,12 +242,9 @@ Click **Code** tab to read the code.
 ```
 
    </Markdown>
+
+  </template>
 </div>
-
-<!-- ## Looking for a better search experience?
-
-Local search is awesome, but we believe there's lots of room for improvement. Head over to our other
-[Playground](/docs/cloud/playground) to try out features that we are excited about. -->
 
 <style scoped>
 .container {
@@ -221,6 +259,7 @@ button.tag {
 }
 button.tag:hover {
   background-color: var(--vp-c-brand-soft);
+  opacity: 0.8;
 }
 
 button.tag.selected {

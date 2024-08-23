@@ -39,7 +39,7 @@ export const createStore = (host: HTMLElement) =>
         initialValue: "",
       }),
       searchManager: new SearchManager(host, {
-        debounceMs: 140,
+        debounceMs: 100,
       }),
       askManager: new AskManager(host),
     },

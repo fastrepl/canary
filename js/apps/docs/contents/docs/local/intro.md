@@ -20,7 +20,7 @@ We currently support:
 - Any `Pagefind` based search using `canary-provider-pagefind`
 - `VitePress` with `Minisearch` using `canary-provider-vitepress-minisearch`
 
-## Migrate from local to cloud
+## Migrate to cloud provider
 
 If you need more features, you can easily migrate.
 

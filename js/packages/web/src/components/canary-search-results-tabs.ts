@@ -45,6 +45,10 @@ export class CanarySearchResultsTabs extends LitElement {
   }
 
   updated(changed: PropertyValues<this>) {
+    if (!this._selectedTab && this.tabs.length > 0) {
+      this._selectedTab = this.tabs[0].name;
+    }
+
     if (changed.has("_groupedReferences") && !changed.has("_selectedTab")) {
       const relevantGroup = Object.entries(this._groupedReferences).reduce(
         (acc, [group, references]) => {
