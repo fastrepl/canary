@@ -6,6 +6,33 @@ import KeywordSearchSolution from '../components/KeywordSearchSolution.vue'
 import SearchDigestProblem from '../components/SearchDigestProblem.vue'
 import SearchDigestSolution from '../components/SearchDigestSolution.vue'
 import QueryRankChart from '../components/QueryRankChart.vue'
+
+const keywordSearchProblemExample = {
+  left: {
+    query: "how to limit api cost",
+    items: [
+      {
+        title: "Router - Load Balancing, Fallbacks",
+        excerpt: "...litellm_model_<mark>cost</mark>_map -> use deployment_<mark>cost</mark>..."
+      }
+    ],
+    emoji: "😢"
+  },
+  right: {
+    query: "budget",
+    items: [
+      {
+        title: "Budgets, Rate Limits",
+        excerpt: "Set <mark>Budget</mark>s"
+      },
+      {
+        title: "Budgets, Rate Limits",
+        excerpt: "Setting Team <mark>Budget</mark>s"
+      }
+    ],
+    emoji: "😊"
+  }
+}
 </script>
 
 <Headline />
@@ -16,7 +43,7 @@ import QueryRankChart from '../components/QueryRankChart.vue'
 
 Typical search experience looks like this:
 
-<KeywordSearchProblem />
+<KeywordSearchProblem v-bind="keywordSearchProblemExample" />
 
 And this leads to bunch of support questions like:
 

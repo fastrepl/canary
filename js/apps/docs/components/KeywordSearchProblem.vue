@@ -1,56 +1,40 @@
 <script setup lang="ts">
-const handleClickLeft = () => {
-  window.open(
-    "https://docs.litellm.ai/search?q=how%20to%20limit%20cost%20per%20user",
-  );
+type Side = {
+  query: string;
+  items: Array<{ title: string; excerpt: string }>;
+  emoji: string;
 };
-const handleClickRight = () => {
-  window.open("https://docs.litellm.ai/search?q=budget");
-};
+
+const props = defineProps<{
+  left: Side;
+  right: Side;
+}>();
 </script>
 
 <template>
   <div
     class="container w-full border rounded-md p-2 flex flex-row gap-4 justify-between"
   >
-    <div class="flex flex-col gap-2 w-full" v-on:click="handleClickLeft">
+    <div
+      v-for="side in ['left', 'right']"
+      :key="side"
+      class="flex flex-col gap-2 w-full"
+    >
       <input
         type="text"
-        value="🔎 how to limit api cost|"
+        :value="`🔎 ${props[side].query}|`"
         disabled
         class="border rounded-md w-full text-sm"
       />
       <div
+        v-for="(item, index) in props[side].items"
+        :key="index"
         class="item w-full border rounded-md p-2 text-xs flex flex-col gap-1"
       >
-        <span
-          >...litellm_model_<mark>cost</mark>_map -> use
-          deployment_<mark>cost</mark>...</span
-        >
-        <span class="font-semibold">Router - Load Balancing, Fallbacks</span>
+        <span v-html="item.excerpt"></span>
+        <span class="font-semibold" v-html="item.title"></span>
       </div>
-      <span class="mt-auto mx-auto text-2xl">😢</span>
-    </div>
-    <div class="flex flex-col gap-2 w-full" v-on:click="handleClickRight">
-      <input
-        type="text"
-        value="🔎 budget|"
-        disabled
-        class="border rounded-md w-full text-sm"
-      />
-      <div
-        class="item w-full border rounded-md p-2 text-xs flex flex-col gap-1"
-      >
-        <span>Set <mark>Budget</mark>s</span>
-        <span class="font-semibold">Budgets, Rate Limits</span>
-      </div>
-      <div
-        class="item w-full border rounded-md p-2 text-xs flex flex-col gap-1"
-      >
-        <span>Setting Team <mark>Budget</mark>s</span>
-        <span class="font-semibold">Budgets, Rate Limits</span>
-      </div>
-      <span class="mt-auto mx-auto text-2xl">😊</span>
+      <span class="mt-auto mx-auto text-2xl">{{ props[side].emoji }}</span>
     </div>
   </div>
 </template>
