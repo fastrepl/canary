@@ -12,7 +12,9 @@ export default function Canary({ options }) {
       import("@getcanary/web/components/canary-content"),
       import("@getcanary/web/components/canary-search"),
       import("@getcanary/web/components/canary-search-input"),
-      import("@getcanary/web/components/canary-search-results"),
+      options?.tabs?.length
+        ? import("@getcanary/web/components/canary-search-results-tabs")
+        : import("@getcanary/web/components/canary-search-results"),
     ])
       .then(() => setLoaded(true))
       .catch((e) =>
@@ -32,14 +34,35 @@ export default function Canary({ options }) {
           <canary-content slot="content">
             <canary-search slot="mode">
               <canary-search-input slot="input"></canary-search-input>
-              <canary-search-results
-                slot="body"
-                group
-              ></canary-search-results>
+              <Results options={options} />
             </canary-search>
           </canary-content>
         </canary-modal>
       </canary-provider-pagefind>
     </canary-root>
+  );
+}
+
+function Results({ options }) {
+  console.log(options);
+  if (options?.tabs?.length) {
+    return options?.group ? (
+      <canary-search-results-tabs
+        slot="body"
+        tabs={JSON.stringify(options.tabs)}
+        group
+      ></canary-search-results-tabs>
+    ) : (
+      <canary-search-results-tabs
+        slot="body"
+        tabs={JSON.stringify(options.tabs)}
+      ></canary-search-results-tabs>
+    );
+  }
+
+  return options?.group ? (
+    <canary-search-results slot="body" group></canary-search-results>
+  ) : (
+    <canary-search-results slot="body"></canary-search-results>
   );
 }

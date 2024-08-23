@@ -13,7 +13,7 @@ export default function Index() {
     setPath(`${siteConfig.baseUrl}pagefind/pagefind.js`);
   }, [siteConfig]);
 
-  const { options } = usePluginData("docusaurus-plugin-pagefind-canary");
+  const { options } = usePluginData("docusaurus-theme-search-pagefind");
   const { styles, ...rest } = options;
 
   React.useEffect(() => {
