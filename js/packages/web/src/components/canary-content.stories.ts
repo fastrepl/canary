@@ -140,8 +140,7 @@ export default {
         <canary-ask slot="mode">
           <canary-mode-breadcrumb
             slot="input-before"
-            previous="Search"
-            text="Ask AI2"
+            text="Ask AI"
           ></canary-mode-breadcrumb>
           <canary-ask-input slot="input"></canary-ask-input>
           <canary-ask-results slot="body"></canary-ask-results>

@@ -72,9 +72,9 @@ export class CanaryFeedbackPage extends LitElement {
     });
   }
 
-  private _handleNavigate() {
+  private _handleNavigate = () => {
     this._task = this._initTask();
-  }
+  };
 
   render() {
     return html`

@@ -73,6 +73,7 @@ export class SearchManager {
     await asyncSleep(this._options.debounceMs);
 
     if (callId !== this._callId) {
+      this.transition({ status: TaskStatus.INITIAL });
       return;
     }
 
@@ -86,6 +87,7 @@ export class SearchManager {
       this.transition({ status: TaskStatus.COMPLETE, result });
     } catch (e) {
       if (e === ABORT_REASON_MANAGER) {
+        this.transition({ status: TaskStatus.INITIAL });
         return;
       }
 
