@@ -47,6 +47,9 @@ export const getFilePaths = (routesPaths, outDir, baseUrl, options) => {
         ),
       ].some(Boolean)
     ) {
+      console.info(
+        `'@getcanary/docusaurus-theme-search-pagefind': Skipping ${filePath}`,
+      );
       continue;
     }
 

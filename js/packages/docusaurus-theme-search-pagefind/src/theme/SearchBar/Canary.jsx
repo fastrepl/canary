@@ -44,7 +44,6 @@ export default function Canary({ options }) {
 }
 
 function Results({ options }) {
-  console.log(options);
   if (options?.tabs?.length) {
     return options?.group ? (
       <canary-search-results-tabs
