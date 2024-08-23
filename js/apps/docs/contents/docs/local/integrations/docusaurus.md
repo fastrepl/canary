@@ -77,9 +77,13 @@ const config = {
             termSaturation: 1.5, // [!code ++]
           } // [!code ++]
         } // [!code ++]
+        disable: false, // [!code ++]
         indexOnly: false, // [!code ++]
         includeRoutes: ["**/*"], // [!code ++]
-        excludeRoutes: ['/api*', '/api/*'], // [!code ++]
+        excludeRoutes: ['/api/**'], // [!code ++]
+        // https://getcanary.dev/docs/local/playground // [!code ++]
+        group: false, // [!code ++]
+        tabs: [], // [!code ++]
       },
     ],
   ],
