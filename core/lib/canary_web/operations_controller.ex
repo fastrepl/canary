@@ -108,7 +108,7 @@ defmodule CanaryWeb.OperationsController do
     end
   end
 
-    def ask(conn, %{"id" => id, "query" => query } = params) do
+  def ask(conn, %{"id" => id, "query" => query} = params) do
     client = conn.assigns.client
     {:ok, session} = Canary.Interactions.find_or_create_session(client.account, {:web, id})
 
