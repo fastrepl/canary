@@ -8,6 +8,7 @@ import { searchContext } from "../contexts";
 import pm from "picomatch";
 
 import type { SearchContext, SearchReference, TabDefinitions } from "../types";
+import { parseURL } from "../utils";
 import { createEvent } from "../store";
 import { TaskStatus } from "../store/managers";
 
@@ -152,9 +153,9 @@ export class CanarySearchResultsTabs extends LitElement {
 
     const matchers = definitions.map((d) => pm(d.pattern));
 
-    references.forEach((reference, index) => {
-      const item = { ...reference, index };
-      const { pathname } = new URL(reference.url);
+    references.forEach((ref, index) => {
+      const item = { ...ref, index };
+      const { pathname } = parseURL(ref.url);
 
       for (let i = 0; i < matchers.length; i++) {
         if (matchers[i](pathname)) {

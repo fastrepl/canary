@@ -1,12 +1,7 @@
 import type { SearchReference } from "./types";
 
 export const urlToParts = (url: string) => {
-  let paths: string[] = [];
-  try {
-    paths = new URL(url).pathname.split("/");
-  } catch {
-    paths = url.split("/");
-  }
+  const paths = parseURL(url).pathname.split("/");
 
   const parts = paths
     .map((path, _) => {
@@ -33,7 +28,7 @@ export const groupSearchReferences = (
   const groups: Map<string, GroupedResult> = new Map();
 
   for (const [index, ref] of references.entries()) {
-    const url = new URL(ref.url);
+    const url = parseURL(ref.url);
     const pathKey = `${url.protocol}//${url.host}${url.pathname}`;
 
     if (!groups.has(pathKey)) {
@@ -53,7 +48,7 @@ export const asyncSleep = async (ms: number) => {
 
 export const stripURL = (url: string) => {
   try {
-    const { pathname, search } = new URL(url);
+    const { pathname, search } = parseURL(url);
     return pathname + search;
   } catch {
     return url;
@@ -68,4 +63,8 @@ export const withTimeout = (signal: AbortSignal, ms = 3000) => {
   }
 
   return timeout;
+};
+
+export const parseURL = (url: string) => {
+  return new URL(url.startsWith("http") ? url : `https://${url}`);
 };
