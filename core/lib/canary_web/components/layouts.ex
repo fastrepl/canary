@@ -45,15 +45,15 @@ defmodule CanaryWeb.Layouts do
           </li>
 
           <li>
-            <.link class={if @active_tab == :feedback, do: "active"} navigate={~p"/feedback"}>
+            <.link class={if @active_tab == :insights, do: "active"} navigate={~p"/insights"}>
               <span class={[
                 "h-4 w-4",
-                if(@active_tab == :feedback,
-                  do: "hero-hand-thumb-up-solid",
-                  else: "hero-hand-thumb-up"
+                if(@active_tab == :insights,
+                  do: "hero-light-bulb-solid",
+                  else: "hero-light-bulb"
                 )
               ]} />
-              <span>Feedback</span>
+              <span>Insights</span>
             </.link>
           </li>
 

@@ -48,12 +48,18 @@ let csrfToken = document
 
 let hooks = {
   ...getHooks(Components),
-  ChartJS: {
+  BarChart: {
+    title() {
+      return this.el.dataset.title;
+    },
     labels() {
       return JSON.parse(this.el.dataset.labels);
     },
     points() {
       return JSON.parse(this.el.dataset.points);
+    },
+    counts() {
+      return JSON.parse(this.el.dataset.counts);
     },
     mounted() {
       const config = {
@@ -68,6 +74,7 @@ let hooks = {
               data: this.points(),
               fill: false,
               borderWidth: 1,
+              backgroundColor: "#f4d47c",
             },
           ],
         },
@@ -77,7 +84,7 @@ let hooks = {
           maintainAspectRatio: false,
           scales: {
             x: {
-              reverse: this.points().every((score) => score < 0),
+              reverse: this.points().every((score) => score <= 0),
             },
             y: {
               position: "left",
@@ -89,6 +96,19 @@ let hooks = {
           plugins: {
             legend: {
               display: false,
+            },
+            title: {
+              display: !!this.title(),
+              text: this.title(),
+            },
+            tooltip: {
+              callbacks: {
+                label: (context) => {
+                  const score = context.raw.toFixed(2);
+                  const count = this.counts()[context.dataIndex];
+                  return `score: ${score}, count: ${count}`;
+                },
+              },
             },
           },
         },
