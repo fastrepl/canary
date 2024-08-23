@@ -61,5 +61,11 @@ export const stripURL = (url: string) => {
 };
 
 export const withTimeout = (signal: AbortSignal, ms = 3000) => {
-  return AbortSignal.any([signal, AbortSignal.timeout(ms)]);
+  const timeout = AbortSignal.timeout(ms);
+
+  if ("any" in AbortSignal) {
+    return AbortSignal.any([signal, timeout]);
+  }
+
+  return timeout;
 };
