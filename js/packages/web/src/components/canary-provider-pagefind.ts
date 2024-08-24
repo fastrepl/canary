@@ -39,7 +39,17 @@ export class CanaryProviderPagefind extends LitElement {
   async connectedCallback() {
     super.connectedCallback();
 
-    const pagefind = await this._importPagefind();
+    let pagefind: any;
+    try {
+      pagefind = await this._importPagefind();
+    } catch (e) {
+      console.info(
+        "Failed to import pagefind. This is totally fine if you are not in production mode.",
+        e,
+      );
+      return;
+    }
+
     this._initPagefind(pagefind);
 
     this.dispatchEvent(
