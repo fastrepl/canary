@@ -30,6 +30,16 @@ import Styling from "../../../../components/Styling.vue";
 
 :::
 
+## CSS Parts
+
+You can use [`::part CSS pseudo-element`](https://developer.mozilla.org/en-US/docs/Web/CSS/::part) to style Canary's components.
+
+::: details Available Parts
+
+<!--@include: ./styling.parts.md-->
+
+:::
+
 ## Light / Dark Mode
 
 ```html{1}

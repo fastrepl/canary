@@ -42,3 +42,53 @@ export const cssVariablesReportPlugin = (): Plugin => {
     },
   };
 };
+
+export const partsReportPlugin = (): Plugin => {
+  const components: Record<string, Set<string>> = {};
+  let root = "";
+
+  return {
+    name: "parts-report",
+    configResolved(config) {
+      root = config.root;
+      if (!root) {
+        throw new Error("Root directory not found in config");
+      }
+    },
+    transform(code, filePath) {
+      if (!filePath.startsWith(root)) {
+        return code;
+      }
+
+      const match = filePath.match(/\/(canary-[^\/]+)\.(ts|js)$/);
+      if (!match) {
+        return code;
+      }
+
+      const parts = [...code.matchAll(/part="([\w-]+)"/g)].map((m) => m[1]);
+      if (parts.length === 0) {
+        return code;
+      }
+
+      components[match[1]] = new Set(parts);
+
+      return code;
+    },
+    buildEnd() {
+      const outfile = path.resolve(
+        root,
+        "../../apps/docs/contents/docs/common/customization/styling.parts.md",
+      );
+
+      const content = Object.entries(components)
+        .map(([component, parts]) => {
+          return `- \`${component}\`\n${Array.from(parts)
+            .map((p) => `  - \`${p}\``)
+            .join("\n")}`;
+        })
+        .join("\n");
+
+      fs.writeFileSync(outfile, content);
+    },
+  };
+};

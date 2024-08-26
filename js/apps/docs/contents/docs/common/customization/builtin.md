@@ -46,6 +46,10 @@ For most cases, you'll want the panel to be shown when user clicks on the search
 
 But if you don't want modal, you can just use the `canary-content` directly. `canary-dropdown` is planned, but not implemented yet.
 
+### Custon trigger
+
+You can use any custom trigger with `slot="trigger"`. Dispatching `MouseEvent("click")` will open the modal.
+
 ## `canary-search` and `canary-ask`
 
 Must be placed in `mode` slot of `canary-content`.
