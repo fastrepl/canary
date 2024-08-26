@@ -46,7 +46,7 @@ enum Kind {
   SearchMobile,
   SearchAndAskWithModeTabs,
   SearchAndAskWithModeButton,
-  SuggestMode,
+  CustomMode,
 }
 
 const type = (text: string): StoryObj["play"] => {
@@ -110,7 +110,7 @@ export default {
       `);
     }
 
-    if (kind === Kind.SuggestMode) {
+    if (kind === Kind.CustomMode) {
       return wrapper(html`
         <canary-search slot="mode">
           <canary-search-input slot="input"></canary-search-input>
@@ -121,7 +121,6 @@ export default {
         <canary-ask slot="mode">
           <canary-mode-breadcrumb
             slot="input-before"
-            previous="Search"
             text="Ask AI"
           ></canary-mode-breadcrumb>
           <canary-ask-input slot="input"></canary-ask-input>
@@ -206,7 +205,6 @@ export default {
         <canary-ask slot="mode">
           <canary-mode-breadcrumb
             slot="input-before"
-            previous="Search"
             text="Ask AI"
           ></canary-mode-breadcrumb>
           <canary-ask-input slot="input"></canary-ask-input>
@@ -238,11 +236,7 @@ export default {
           <canary-mode-button-ask></canary-mode-button-ask>
         </canary-search>
         <canary-ask slot="mode">
-          <canary-mode-breadcrumb
-            slot="input-before"
-            previous="Search"
-            text="Ask AI Assistant"
-          >
+          <canary-mode-breadcrumb slot="input-before" text="Ask AI Assistant">
             <canary-hero-icon
               slot="icon"
               name="chat-bubble-left"
@@ -324,8 +318,8 @@ export const Ask: StoryObj = {
   play: init_ask(),
 };
 
-export const SuggestMode: StoryObj = {
-  args: { kind: Kind.SuggestMode },
+export const CustomMode: StoryObj = {
+  args: { kind: Kind.CustomMode },
 };
 
 export const SearchAsk1: StoryObj = {

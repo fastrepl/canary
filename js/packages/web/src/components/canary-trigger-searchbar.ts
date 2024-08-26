@@ -13,19 +13,19 @@ export class CanaryTriggerSearchbar extends LitElement {
 
   render() {
     return html`
-      <button aria-label="Search">
-        <div class="icon i-heroicons-magnifying-glass"></div>
-        <span>Search</span>
+      <button part="button" aria-label="Search">
+        <div part="icon" class="icon i-heroicons-magnifying-glass"></div>
+        <span part="text">Search</span>
 
         ${this.shortcut === "cmdk"
           ? html`
-              <kbd>
+              <kbd part="kbd">
                 <kbd class="meta">⌘</kbd>
                 <kbd class="key">K</kbd>
               </kbd>
             `
           : html`
-              <kbd>
+              <kbd part="kbd">
                 <kbd class="key">/</kbd>
               </kbd>
             `}

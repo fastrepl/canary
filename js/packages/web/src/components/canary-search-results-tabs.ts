@@ -23,7 +23,7 @@ export class CanarySearchResultsTabs extends LitElement {
   group = false;
 
   @property({ type: Array })
-  tabs: TabDefinitions = [];
+  tabs: TabDefinitions = [{ name: "All", pattern: "**/*" }];
 
   @consume({ context: searchContext, subscribe: true })
   @state()
