@@ -1,7 +1,7 @@
 import { h } from "vue";
-// import { useRoute } from "vitepress";
+import { useRoute } from "vitepress";
 import DefaultTheme from "vitepress/theme";
-import "./tailwind.css";
+import "./global.css";
 
 import { inject } from "@vercel/analytics";
 import CloudSearch from "../../components/CloudSearch.vue";
@@ -14,12 +14,14 @@ export default {
     inject();
   },
   Layout() {
-    // const route = useRoute();
-    // const isDoc = () => /^\/docs/.test(route.path);
+    const route = useRoute();
+    const isHome = () => route.path === "/";
+    const isDoc = () => /^\/docs/.test(route.path);
+    const show = isHome() || isDoc();
 
     return h(DefaultTheme.Layout, null, {
-      "nav-bar-content-before": () => h(CloudSearch),
-      "doc-footer-before": () => h(Footer),
+      "nav-bar-content-before": () => (show ? h(CloudSearch) : null),
+      "doc-footer-before": () => (show ? h(Footer) : null),
     });
   },
 };

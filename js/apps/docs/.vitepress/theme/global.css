@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+canary-trigger-searchbar::part(button) {
+  background-color: var(--vp-code-block-bg);
+}
+canary-trigger-searchbar::part(kbd) {
+  background-color: var(--vp-code-bg);
+}

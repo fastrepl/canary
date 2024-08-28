@@ -3,10 +3,16 @@ import { defineConfig } from "vitepress";
 
 const sidebar = [
   {
-    text: "Common",
+    text: "Start Here",
     items: [
       { text: "What is Canary?", link: "/" },
       { text: "Why use Canary?", link: "/docs/common/why" },
+      { text: "Quick Start (< 5m)", link: "/docs/quick-start" },
+    ],
+  },
+  {
+    text: "Common",
+    items: [
       {
         text: "Customization",
         collapsed: true,
@@ -45,7 +51,6 @@ const sidebar = [
       },
     ],
   },
-
   {
     text: "Local",
     items: [
@@ -124,10 +129,19 @@ const sidebar = [
   },
   {
     text: "Reference",
+    collapsed: false,
     items: [
+      {
+        text: "API",
+        link: "/docs/reference/api",
+      },
       {
         text: "Packages",
         link: "/docs/reference/packages",
+      },
+      {
+        text: "Storybook",
+        link: "https://storybook.getcanary.dev",
       },
     ],
   },
@@ -169,6 +183,7 @@ export default defineConfig({
     // https://vitepress.dev/reference/default-theme-config
     siteTitle: "🐤 Canary",
     nav: [
+      { text: "Blog", link: "/blog" },
       {
         text: "⭐ GitHub",
         link: "https://github.com/fastrepl/canary",
@@ -176,10 +191,6 @@ export default defineConfig({
       {
         text: "Discord",
         link: "https://discord.gg/Y8bJkzuQZU",
-      },
-      {
-        text: "Storybook",
-        link: "https://storybook.getcanary.dev",
       },
       {
         text: "Status",
