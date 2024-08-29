@@ -45,7 +45,7 @@ defmodule Canary.Searcher.Default do
     source = source |> Ash.load!(:documents)
     docs_size = source.documents |> Enum.count()
 
-    keywords =
+    existing_keywords =
       source.documents
       |> Enum.map(fn doc -> if doc.summary, do: doc.summary.keywords, else: [] end)
       |> Enum.flat_map(& &1)
@@ -53,8 +53,13 @@ defmodule Canary.Searcher.Default do
       |> Enum.map(fn {k, v} -> if v > 0.5 * docs_size, do: k, else: nil end)
       |> Enum.reject(&is_nil/1)
 
-    with {:ok, analysis} <- Canary.Query.Understander.run(query, keywords),
-         {:ok, docs} <- Canary.Index.batch_search_documents(source.id, analysis.keywords),
+    interested_keywords =
+      case Canary.Query.Understander.run(query, existing_keywords) do
+        {:ok, analysis} -> analysis.keywords
+        _ -> [query]
+      end
+
+    with {:ok, docs} <- Canary.Index.batch_search_documents(source.id, interested_keywords),
          {:ok, reranked} <-
            Canary.Reranker.run(
              query,

@@ -16,6 +16,8 @@ defmodule Canary.Reranker.Cohere do
   @behaviour Canary.Reranker
 
   @model "rerank-english-v3.0"
+  @timeout 300
+  @retry_interval 50
 
   use Retry
 
@@ -24,7 +26,7 @@ defmodule Canary.Reranker.Cohere do
     threshold = opts[:threshold] || 0
 
     result =
-      retry with: exponential_backoff() |> randomize |> cap(1_000) |> expiry(4_000) do
+      retry with: constant_backoff(@retry_interval) do
         request(query, docs, renderer)
       end
 
@@ -58,7 +60,8 @@ defmodule Canary.Reranker.Cohere do
         query: query,
         documents: Enum.map(docs, &renderer.(&1)),
         return_documents: false
-      }
+      },
+      timeout: @timeout
     )
   end
 end

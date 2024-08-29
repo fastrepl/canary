@@ -28,7 +28,7 @@ defmodule Canary.Query.Understander.LLM do
       }
     ]
 
-    case Canary.AI.chat(%{model: chat_model, messages: messages}) do
+    case Canary.AI.chat(%{model: chat_model, messages: messages}, timeout: 2_000) do
       {:ok, analysis} -> {:ok, parse(query, analysis)}
       error -> error
     end

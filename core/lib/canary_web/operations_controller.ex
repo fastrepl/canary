@@ -41,10 +41,11 @@ defmodule CanaryWeb.OperationsController do
 
   defp fingerprint(conn) do
     ip = to_string(:inet_parse.ntoa(conn.remote_ip))
-    user_agent = get_req_header(conn, "user-agent") |> List.first()
+    user_agent = get_req_header(conn, "user-agent") |> Enum.at(0)
     current_date = Date.utc_today() |> Date.to_string()
 
-    :crypto.hash(:md5, ip <> user_agent <> current_date)
+    (ip <> user_agent <> current_date)
+    |> then(&:crypto.hash(:md5, &1))
     |> Base.encode16(case: :lower)
   end
 

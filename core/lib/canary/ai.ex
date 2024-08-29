@@ -69,7 +69,8 @@ defmodule Canary.AI.OpenAI do
         |> Req.post(
           url: "/v1/chat/completions",
           json: request,
-          into: into
+          into: into,
+          receive_timeout: opts[:timeout] || 15_000
         )
       end
 
@@ -88,6 +89,9 @@ defmodule Canary.AI.OpenAI do
         else
           {:ok, message["content"]}
         end
+
+      {:ok, %{body: %{"error" => error}}} ->
+        {:error, error}
 
       {:ok, %{body: body}} ->
         {:ok, body}
