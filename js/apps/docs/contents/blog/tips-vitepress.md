@@ -5,7 +5,7 @@ next: false
 editLink: false
 ---
 
-# Tips on Documentation setup for Startups (Vitepress ver.)
+# Documentation handbook for startups (Vitepress ver.)
 
 ## common
 

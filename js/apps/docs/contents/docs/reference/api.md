@@ -1,6 +1,8 @@
-# API
+<script setup>
+import { data as schema } from "../../../data/openapi.data.js";
+</script>
 
-We expost a simple API for you to use.
+# API
 
 ## `/search`
 
@@ -8,21 +10,4 @@ We expost a simple API for you to use.
 
 #### Sources
 
-::: details Built-in Source
-
-- 1
-- 2
-
-:::
-
 ### `Response`
-
-```js
-const a = 1;
-const a = 1;
-const a = 1;
-const a = 1;
-const a = 1;
-const a = 1;
-const a = 1;
-```

@@ -5,7 +5,10 @@ next: false
 editLink: false
 ---
 
-# Tips on Documentation for Startups (Docusaurus ver.)
+https://docusaurus.io/community/resources
+https://github.com/webbertakken/awesome-docusaurus
+
+# Documentation handbook for startups (Docusaurus ver.)
 
 ## Page Feedback
 
