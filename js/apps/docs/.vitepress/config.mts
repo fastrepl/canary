@@ -6,7 +6,7 @@ const sidebar = [
     text: "Start Here",
     items: [
       { text: "What is Canary?", link: "/" },
-      { text: "Why use Canary?", link: "/docs/common/why" },
+      { text: "Why use Canary?", link: "/docs/why" },
       { text: "Quick Start (< 5m)", link: "/docs/quick-start" },
     ],
   },
@@ -75,6 +75,10 @@ const sidebar = [
             link: "/docs/local/integrations/vitepress",
           },
           {
+            text: "Astro",
+            link: "/docs/local/integrations/astro",
+          },
+          {
             text: "Starlight",
             link: "/docs/local/integrations/starlight",
           },
@@ -104,6 +108,10 @@ const sidebar = [
           {
             text: "VitePress",
             link: "/docs/cloud/integrations/vitepress",
+          },
+          {
+            text: "Astro",
+            link: "/docs/cloud/integrations/astro",
           },
           {
             text: "Starlight",

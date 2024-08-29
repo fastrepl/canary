@@ -26,3 +26,9 @@ const onChange = (e: Event) => {
     :step="step.toString()"
   />
 </template>
+
+<style scoped>
+input {
+  width: 80px;
+}
+</style>

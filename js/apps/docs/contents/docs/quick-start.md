@@ -1,18 +1,36 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, computed } from "vue";
 
-const providers = ["local", "cloud"] as const;
-const frameworks = ["docusaurus", "vitepress", "starlight"] as const;
+const providers = ["Local", "Cloud"] as const;
+const frameworks = ["Docusaurus", "Vitepress", "Astro", "Starlight"] as const;
 
-const framework = ref<typeof frameworks[number]>("docusaurus");
-const provider = ref<typeof providers[number]>("local");
+const framework = ref<typeof frameworks[number]>("");
+const provider = ref<typeof providers[number]>("");
+
+const url = computed(() => {
+  const MAP = {
+    Local: {
+      Docusaurus: "/docs/local/integrations/docusaurus",
+      Vitepress: "/docs/local/integrations/vitepress",
+      Astro: "/docs/local/integrations/astro",
+      Starlight: "/docs/local/integrations/starlight",
+    },
+    Cloud: {
+      Docusaurus: "/docs/cloud/integrations/docusaurus",
+      Vitepress: "/docs/cloud/integrations/vitepress",
+      Astro: "/docs/cloud/integrations/astro",
+      Starlight: "/docs/cloud/integrations/starlight",
+    },
+  }
+
+  return MAP?.[provider.value]?.[framework.value];
+});
+
 </script>
 
 # Quick Start
 
-<span class="mt-12">WIP</span>
-
-<div class="flex flex-col gap-4">
+<div class="flex flex-col gap-4 mt-6">
 <div class="flex gap-2 items-center">
   <button
     v-for="f in frameworks"
@@ -32,6 +50,11 @@ const provider = ref<typeof providers[number]>("local");
     {{ p }}
   </button>
 </div>
+
+<div v-if="url" class="mt-6">
+<a :href="url" target="_blank">This</a> is all you need.
+</div>
+
 </div>
 
 <style scoped>
