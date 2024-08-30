@@ -7,3 +7,13 @@
 ::: tip
 Wanna try it out? We made a [playground](/docs/local/playground) for you!
 :::
+
+## CLI
+
+::: warning
+WIP
+:::
+
+```bash
+npx @getcanary/cli@latest --help
+```

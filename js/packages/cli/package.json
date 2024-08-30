@@ -1,0 +1,29 @@
+{
+  "name": "@getcanary/cli",
+  "version": "0.0.5",
+  "description": "CLI for getcanary.dev",
+  "files": [
+    "dist"
+  ],
+  "bin": {
+    "canary": "dist/index.js",
+    "@getcanary/cli": "dist/index.js"
+  },
+  "scripts": {
+    "start": "node dist/index.js",
+    "format": "prettier --write .",
+    "build": "esbuild index.js --bundle --platform=node --outfile=dist/index.js",
+    "pub": "npm run build && npm publish --access public"
+  },
+  "author": "yujonglee <yujonglee@fastrepl.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "esbuild": "^0.23.1",
+    "prettier": "^3.3.3"
+  },
+  "dependencies": {
+    "@clack/core": "^0.3.4",
+    "@clack/prompts": "^0.7.0",
+    "commander": "^12.1.0"
+  }
+}
