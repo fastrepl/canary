@@ -1,24 +1,27 @@
 import { existsSync, writeFileSync } from "fs";
 import { resolve } from "path";
 
+import { Command } from "commander";
+
 import { isCancel } from "@clack/core";
 import { intro, outro, text, cancel } from "@clack/prompts";
 
 import { name } from "../package.json";
 
-const FILE_NAME = "canary.yaml";
+export const init = new Command("init");
 
-const getConfigPath = (path) => resolve(process.cwd(), path, FILE_NAME);
-const getDefaultConfigContent = () =>
-  `
+init.action(async () => {
+  const FILE_NAME = "canary.yaml";
+
+  const getConfigPath = (path) => resolve(process.cwd(), path, FILE_NAME);
+  const getDefaultConfigContent = () =>
+    `
 # yaml-language-server: $schema=./spec.schema.json
-
 sources:
   - name: doc
     type: web
 `.trim();
 
-export async function init() {
   intro(`${name}/init`);
 
   const path = await text({
@@ -43,9 +46,9 @@ export async function init() {
 
   try {
     writeFileSync(getConfigPath(path), getDefaultConfigContent());
-    outro(`Config file created at ${getConfigPath(path)}`);
+    outro(`Config file created at '${getConfigPath(path)}'`);
   } catch (e) {
     cancel(e.message);
     return process.exit(1);
   }
-}
+});

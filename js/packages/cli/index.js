@@ -2,12 +2,18 @@
 
 import { Command } from "commander";
 
-import { name, version } from "./package.json";
-import { init, auth } from "./commands";
+import { name } from "./package.json";
+import { init, auth, secrets } from "./commands";
 
 const program = new Command();
 
-program.name(name).version(version);
-program.command("init").action(() => init().catch(console.error));
-program.command("auth").action(() => auth().catch(console.error));
-program.parse();
+program.name(name);
+program.option(
+  "--base [URL]",
+  "base url for api requests",
+  "https://cloud.getcanary.dev",
+);
+program.addCommand(init);
+program.addCommand(auth);
+program.addCommand(secrets);
+program.parseAsync();
