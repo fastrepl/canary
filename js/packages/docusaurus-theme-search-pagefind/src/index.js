@@ -1,10 +1,11 @@
+import fs from "fs";
 import path from "path";
 
 import { getFilePaths } from "./utils";
 import { buildIndex } from "./pagefind";
 
-export default function plugin(_context, options) {
-  const { indexOnly = false, disable = false } = options;
+export default function plugin(context, options) {
+  const { indexOnly = false } = options;
 
   const config = {
     name: "docusaurus-theme-search-pagefind",
@@ -12,15 +13,27 @@ export default function plugin(_context, options) {
       actions.setGlobalData({ options });
     },
     async postBuild({ routesPaths = [], outDir, baseUrl }) {
-      if (process.env.NODE_ENV !== "production" || disable) {
-        console.info(
-          "\n'@getcanary/docusaurus-theme-search-pagefind': Pagefind indexing skipped.\n",
-        );
-        return;
-      }
-
       const docs = getFilePaths(routesPaths, outDir, baseUrl, options);
       await buildIndex(outDir, docs);
+    },
+    configureWebpack(config, isServer, utils) {
+      return {
+        devServer: {
+          setupMiddlewares(middlewares, devServer) {
+            devServer.app.get("/pagefind/*", (req, res) => {
+              const filePath = path.join(context.outDir, req.path);
+
+              if (fs.existsSync(filePath)) {
+                res.sendFile(filePath);
+              } else {
+                res.status(404).send("");
+              }
+            });
+
+            return middlewares;
+          },
+        },
+      };
     },
   };
 
