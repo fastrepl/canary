@@ -172,7 +172,6 @@ export class CanarySearchResultsTabs extends LitElement {
       .container {
         display: flex;
         flex-direction: column;
-        gap: 4px;
       }
 
       .skeleton-container {
@@ -184,11 +183,17 @@ export class CanarySearchResultsTabs extends LitElement {
     `,
     css`
       .tabs {
+        position: sticky;
+        top: 0px;
+        background-color: var(--canary-color-gray-100);
+        z-index: 50;
+
         display: flex;
         flex-direction: row;
         align-items: center;
 
         padding-left: 2px;
+        padding-bottom: 4px;
         gap: 8px;
 
         color: var(--canary-color-gray-50);
