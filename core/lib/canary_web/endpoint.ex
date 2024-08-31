@@ -54,5 +54,7 @@ defmodule CanaryWeb.Endpoint do
   plug Plug.MethodOverride
   plug Plug.Head
   plug Plug.Session, @session_options
+
+  plug CanaryWeb.Plugs.Subdomain, CanaryWeb.SubdomainRouter
   plug CanaryWeb.Router
 end

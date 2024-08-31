@@ -13,7 +13,7 @@ config :canary,
 
 # Configures the endpoint
 config :canary, CanaryWeb.Endpoint,
-  url: [host: "localhost"],
+  url: [host: "localhost.com"],
   adapter: Bandit.PhoenixAdapter,
   render_errors: [
     formats: [html: CanaryWeb.ErrorHTML, json: CanaryWeb.ErrorJSON],
