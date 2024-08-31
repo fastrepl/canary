@@ -15,7 +15,7 @@ npm install @getcanary/web
 ## Configuration
 
 ```bash
-npm run swizzle @docusaurus/theme-classic SearchBar -- --eject --javascript
+npm run swizzle @docusaurus/theme-classic SearchBar -- --eject
 ```
 
 After ejecting, you can edit generated files in `src/theme/SearchBar`.

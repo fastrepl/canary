@@ -34,12 +34,6 @@ const config = {
 
 :::
 
-::: warning
-You should run `docusaurus build && docusaurus serve` to try the search locally.
-
-It won't work with `docusaurus start`.
-:::
-
 ::: tip
 According to [Docusaurus docs](https://docusaurus.io/docs/using-plugins#using-themes),
 
@@ -97,7 +91,7 @@ const config = {
 When you add `@getcanary/docusaurus-theme-search-pagefind` to the `themes` list, it will override the default search component to use Canary's. To customize this search-bar further, you can [eject](https://docusaurus.io/docs/swizzling#ejecting) it and modify the code.
 
 ```bash
-npm run swizzle @getcanary/docusaurus-theme-search-pagefind SearchBar -- --eject --javascript
+npm run swizzle @getcanary/docusaurus-theme-search-pagefind SearchBar -- --eject
 ```
 
 ::: code-group
