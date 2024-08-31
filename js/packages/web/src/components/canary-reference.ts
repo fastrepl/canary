@@ -38,7 +38,7 @@ export class CanaryReference extends LitElement {
         <div class="content">
           ${this.mode !== "child" ? this.depth() : nothing}
           <canary-snippet class="title" .value=${this.title}></canary-snippet>
-          ${this.mode !== "parent" && this.excerpt
+          ${this.excerpt
             ? html`<canary-snippet class="excerpt" .value=${this.excerpt}>
               </canary-snippet>`
             : nothing}

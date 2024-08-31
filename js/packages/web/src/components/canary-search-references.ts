@@ -2,7 +2,7 @@ import { LitElement, html, css } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 
-import { groupSearchReferences } from "../utils";
+import { groupSearchReferences, stripURL } from "../utils";
 import type { SearchReference } from "../types";
 
 const NAME = "canary-search-references";
@@ -38,7 +38,7 @@ export class CanarySearchReferences extends LitElement {
 
   private _renderGroup() {
     return groupSearchReferences(this.references).map((group) => {
-      if (group.name === null || group.items.length < 2) {
+      if (group.title === null || group.items.length < 2) {
         return html`
           <div class="group single">
             ${group.items.map(
@@ -56,14 +56,18 @@ export class CanarySearchReferences extends LitElement {
         `;
       }
 
+      const parent = group.items.find((item) => item.titles?.length === 0);
+      const children = group.items.filter((item) => item.titles?.length);
+
       return html`
         <div class="group multiple">
           <canary-reference
             mode="parent"
-            url=${group.items[0].url}
-            title=${group.items[0].title}
+            url=${stripURL(children[0].url)}
+            title=${group.title}
+            excerpt=${ifDefined(parent?.excerpt)}
           ></canary-reference>
-          ${group.items.map(
+          ${children.map(
             ({ url, title, excerpt }, i) => html`
               <canary-reference
                 mode="child"
@@ -71,7 +75,7 @@ export class CanarySearchReferences extends LitElement {
                 title=${title}
                 excerpt=${ifDefined(excerpt)}
                 ?selected=${false}
-                ?last=${i === group.items.length - 1}
+                ?last=${i === children.length - 1}
               ></canary-reference>
             `,
           )}
