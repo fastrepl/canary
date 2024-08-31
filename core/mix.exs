@@ -96,7 +96,8 @@ defmodule Canary.MixProject do
        git: "https://github.com/fastrepl/open-api-typesense.git",
        rev: "bab31b99e353f87c53d62752601decd9c861ce0d"},
       {:cachex, "~> 3.6"},
-      {:bumblebee, "~> 0.5.3"}
+      {:bumblebee, "~> 0.5.3"},
+      {:absinthe_client, "~> 0.1.0"}
     ] ++ deps_eval()
   end
 

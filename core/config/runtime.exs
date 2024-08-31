@@ -214,3 +214,6 @@ else
     base_url: "http://localhost:8108",
     api_key: "canary"
 end
+
+config :canary, :fly_api_key, System.get_env("FLY_API_KEY")
+config :canary, :fly_app_name, System.get_env("FLY_APP_NAME")
