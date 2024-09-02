@@ -1,6 +1,5 @@
 import { LitElement, html, css, nothing, type PropertyValues } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
-import { classMap } from "lit/directives/class-map.js";
 
 import { consume } from "@lit/context";
 import { searchContext } from "../contexts";
@@ -12,8 +11,9 @@ import { parseURL } from "../utils";
 import { createEvent } from "../store";
 import { TaskStatus } from "../store/managers";
 
-import "./canary-search-references";
 import "./canary-error";
+import "./canary-tabs-url";
+import "./canary-search-references";
 
 const NAME = "canary-search-results-tabs";
 
@@ -83,43 +83,17 @@ export class CanarySearchResultsTabs extends LitElement {
 
     return html`
       <div class="container">
-        ${this._tabs()}
+        <div class="tab-container">
+          <canary-tabs-url
+            .tabs=${this.tabs.map(({ name }) => name)}
+            .selected=${this._selectedTab}
+          ></canary-tabs-url>
+        </div>
         <div>
           ${this._search.status === TaskStatus.ERROR
             ? html`<canary-error></canary-error>`
             : this._currentResults()}
         </div>
-      </div>
-    `;
-  }
-
-  private _tabs() {
-    const counts = Object.fromEntries(
-      Object.entries(this._groupedReferences).map(([group, references]) => [
-        group,
-        references.length,
-      ]),
-    );
-
-    return html`
-      <div class="tabs">
-        ${this.tabs.map(({ name }) => {
-          const selected = name === this._selectedTab;
-          const selectable = counts[name] > 0;
-
-          return html`<div @click=${() => this._handleChangeTab(name)}>
-            <input
-              type="radio"
-              name="mode"
-              .id=${name}
-              .value=${name}
-              ?checked=${name === this._selectedTab}
-            />
-            <label class=${classMap({ tab: true, selectable, selected })}>
-              ${name}
-            </label>
-          </div>`;
-        })}
       </div>
     `;
   }
@@ -174,54 +148,11 @@ export class CanarySearchResultsTabs extends LitElement {
         flex-direction: column;
       }
 
-      .skeleton-container {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        height: 425px;
-      }
-    `,
-    css`
-      .tabs {
+      .tab-container {
         position: sticky;
         top: 0px;
         background-color: var(--canary-color-gray-100);
         z-index: 50;
-
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-
-        padding-left: 2px;
-        padding-bottom: 4px;
-        gap: 8px;
-
-        color: var(--canary-color-gray-50);
-        text-decoration-color: var(--canary-color-gray-50);
-      }
-
-      .selectable.tab {
-        cursor: pointer;
-      }
-
-      .selectable.tab:hover {
-        color: var(--canary-color-gray-10);
-        text-decoration: underline;
-      }
-
-      .selected.tab {
-        color: var(--canary-color-gray-10);
-        text-decoration: underline;
-        text-decoration-color: var(--canary-color-gray-10);
-      }
-
-      input {
-        display: none;
-      }
-
-      label {
-        font-size: 0.75rem;
-        text-decoration-skip-ink: none;
       }
     `,
   ];
