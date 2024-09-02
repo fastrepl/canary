@@ -61,7 +61,7 @@ defmodule Canary.Reranker.Cohere do
         documents: Enum.map(docs, &renderer.(&1)),
         return_documents: false
       },
-      timeout: @timeout
+      receive_timeout: @timeout
     )
   end
 end
