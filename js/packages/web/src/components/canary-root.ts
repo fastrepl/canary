@@ -1,11 +1,9 @@
 import { LitElement, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
-import { provide } from "@lit/context";
-import { themeContext } from "../contexts";
 import { createStore, EVENT_NAME } from "../store";
 
-import type { Framework, ThemeContext } from "../types";
+import type { Framework } from "../types";
 import { wrapper } from "../styles";
 
 import "./canary-styles";
@@ -16,10 +14,6 @@ const NAME = "canary-root";
 export class CanaryRoot extends LitElement {
   @property({ type: String })
   framework: Framework = "starlight";
-
-  @provide({ context: themeContext })
-  @property({ type: String, reflect: true })
-  theme: ThemeContext = "light";
 
   @property({ type: String })
   query = "";
@@ -44,7 +38,7 @@ export class CanaryRoot extends LitElement {
   }
 
   render() {
-    return html`<canary-styles framework=${this.framework} theme=${this.theme}>
+    return html`<canary-styles framework=${this.framework}>
       <slot></slot>
     </canary-styles>`;
   }

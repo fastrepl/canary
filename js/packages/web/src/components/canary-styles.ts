@@ -2,6 +2,9 @@ import { LitElement, html, css } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { MutationController } from "@lit-labs/observers/mutation-controller.js";
 
+import { provide } from "@lit/context";
+import { themeContext } from "../contexts";
+
 import type { Framework, ThemeContext } from "../types";
 import { wrapper } from "../styles";
 
@@ -12,6 +15,7 @@ export class CanaryStyles extends LitElement {
   @property({ type: String })
   framework: Framework = "starlight";
 
+  @provide({ context: themeContext })
   @property({ type: String, reflect: true })
   theme: ThemeContext = "light";
 
