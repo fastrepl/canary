@@ -3,27 +3,40 @@ defmodule CanaryWeb.Plug.Subdomain do
   import Plug.Conn
 
   @impl true
-  def init(default), do: default
+  def init(router), do: router
 
   @impl true
   def call(conn, router) do
-    IO.inspect(conn.host)
-    IO.inspect(conn.headers)
-
-    case get_subdomain(conn.host) do
-      subdomain when byte_size(subdomain) > 0 ->
-        conn
-        |> put_private(:subdomain, subdomain)
-        |> router.call(router.init({}))
-        |> halt()
-
-      _ ->
-        conn
+    if not subdomain?(conn) do
+      conn
+    else
+      conn
+      |> fetch_session()
+      |> put_session(:account_id, find_account_id(conn.host))
+      |> router.call(router.init({}))
+      |> halt()
     end
   end
 
-  defp get_subdomain(host) do
+  defp subdomain?(conn) do
     root_host = CanaryWeb.Endpoint.config(:url)[:host]
-    String.replace(host, ~r/.?#{root_host}/, "")
+    conn.host != root_host
+  end
+
+  defp find_account_id(host) do
+    root_host = CanaryWeb.Endpoint.config(:url)[:host]
+
+    result =
+      if String.ends_with?(host, root_host) do
+        name = String.replace(host, ~r/.?#{root_host}/, "")
+        Canary.Accounts.Subdomain.find_by_name(name)
+      else
+        Canary.Accounts.Subdomain.find_by_host(host)
+      end
+
+    case result do
+      {:ok, %{account: account}} -> account.id
+      _ -> nil
+    end
   end
 end

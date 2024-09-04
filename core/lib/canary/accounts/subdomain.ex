@@ -21,6 +21,14 @@ defmodule Canary.Accounts.Subdomain do
   actions do
     defaults [:read]
 
+    read :find_by_name do
+      get? true
+
+      argument :name, :string, allow_nil?: false
+      filter expr(name == ^arg(:name))
+      prepare build(load: [:account])
+    end
+
     read :find_by_host do
       get? true
 
@@ -36,17 +44,23 @@ defmodule Canary.Accounts.Subdomain do
       argument :account_id, :uuid, allow_nil?: false
 
       change manage_relationship(:account_id, :account, type: :append)
-      change {Canary.Change.AddCert, host_attribute: :host}
+
+      if Application.compile_env(:canary, :env) == :prod do
+        change {Canary.Change.AddCert, host_attribute: :host}
+      end
     end
 
     destroy :destroy do
       primary? true
 
-      change {Canary.Change.RemoveCert, host_attribute: :host}
+      if Application.compile_env(:canary, :env) == :prod do
+        change {Canary.Change.RemoveCert, host_attribute: :host}
+      end
     end
   end
 
   code_interface do
+    define :find_by_name, args: [:name], action: :find_by_name
     define :find_by_host, args: [:host], action: :find_by_host
   end
 

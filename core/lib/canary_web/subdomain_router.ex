@@ -12,7 +12,11 @@ defmodule CanaryWeb.SubdomainRouter do
   scope "/" do
     pipe_through :browser
 
-    live_session :subdomain, layout: {CanaryWeb.Layouts, :subdomain} do
+    live_session :subdomain,
+      layout: {CanaryWeb.Layouts, :subdomain},
+      on_mount: [
+        {CanaryWeb.SubdomainMountLive, :current_account}
+      ] do
       live "/", CanaryWeb.SubdomainIndexLive, :none
       live "/p/:id", CanaryWeb.SubdomainPostLive, :none
     end
