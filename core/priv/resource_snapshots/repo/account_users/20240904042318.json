@@ -18,15 +18,15 @@
           "global": null,
           "strategy": null
         },
-        "name": "client_sources_client_id_fkey",
-        "on_delete": "delete",
+        "name": "account_users_user_id_fkey",
+        "on_delete": null,
         "on_update": null,
         "primary_key?": true,
         "schema": "public",
-        "table": "clients"
+        "table": "users"
       },
       "size": null,
-      "source": "client_id",
+      "source": "user_id",
       "type": "uuid"
     },
     {
@@ -47,15 +47,15 @@
           "global": null,
           "strategy": null
         },
-        "name": "client_sources_source_id_fkey",
-        "on_delete": "delete",
+        "name": "account_users_account_id_fkey",
+        "on_delete": null,
         "on_update": null,
         "primary_key?": true,
         "schema": "public",
-        "table": "sources"
+        "table": "accounts"
       },
       "size": null,
-      "source": "source_id",
+      "source": "account_id",
       "type": "uuid"
     }
   ],
@@ -64,7 +64,7 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "EFDAC643A9F3A4935E330675ED67E5B570662B56B241333379604D9877B14B4C",
+  "hash": "6E96BBEBE02F03B513F23C8D1E2CD0E79288D40DD6F2EC5B9AB9102559C600AA",
   "identities": [],
   "multitenancy": {
     "attribute": null,
@@ -73,5 +73,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "client_sources"
+  "table": "account_users"
 }

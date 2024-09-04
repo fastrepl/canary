@@ -11,17 +11,47 @@
       "type": "uuid"
     },
     {
-      "allow_nil?": false,
+      "allow_nil?": true,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "full_name",
-      "type": "text"
+      "source": "stripe_customer",
+      "type": "map"
+    },
+    {
+      "allow_nil?": true,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "stripe_subscription",
+      "type": "map"
     },
     {
       "allow_nil?": false,
+      "default": "0",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "count_ask",
+      "type": "bigint"
+    },
+    {
+      "allow_nil?": false,
+      "default": "0",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "count_search",
+      "type": "bigint"
+    },
+    {
+      "allow_nil?": true,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
@@ -38,15 +68,15 @@
           "global": null,
           "strategy": null
         },
-        "name": "github_repos_app_id_fkey",
-        "on_delete": "delete",
+        "name": "billings_account_id_fkey",
+        "on_delete": "nothing",
         "on_update": null,
         "primary_key?": true,
         "schema": "public",
-        "table": "github_apps"
+        "table": "accounts"
       },
       "size": null,
-      "source": "app_id",
+      "source": "account_id",
       "type": "uuid"
     }
   ],
@@ -55,27 +85,8 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "FEA2BF4D2BEA6C2FE2268550DC11C24094F408AE5D6BDFFA70C56A1735DB36AA",
-  "identities": [
-    {
-      "all_tenants?": false,
-      "base_filter": null,
-      "index_name": "github_repos_unique_repo_index",
-      "keys": [
-        {
-          "type": "atom",
-          "value": "app_id"
-        },
-        {
-          "type": "atom",
-          "value": "full_name"
-        }
-      ],
-      "name": "unique_repo",
-      "nils_distinct?": true,
-      "where": null
-    }
-  ],
+  "hash": "55973F4DA99B5842296EF44C673BF65772333F5989C4295F7115491A2DB20B31",
+  "identities": [],
   "multitenancy": {
     "attribute": null,
     "global": null,
@@ -83,5 +94,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "github_repos"
+  "table": "billings"
 }

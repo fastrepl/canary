@@ -12,13 +12,13 @@
     },
     {
       "allow_nil?": false,
-      "default": "fragment(\"(now() AT TIME ZONE 'utc')\")",
+      "default": "nil",
       "generated?": false,
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "created_at",
-      "type": "utc_datetime_usec"
+      "source": "installation_id",
+      "type": "bigint"
     },
     {
       "allow_nil?": true,
@@ -38,8 +38,8 @@
           "global": null,
           "strategy": null
         },
-        "name": "feedbacks_account_id_fkey",
-        "on_delete": null,
+        "name": "github_apps_account_id_fkey",
+        "on_delete": "delete",
         "on_update": null,
         "primary_key?": true,
         "schema": "public",
@@ -54,8 +54,8 @@
   "check_constraints": [],
   "custom_indexes": [],
   "custom_statements": [],
-  "has_create_action": false,
-  "hash": "6B54196233F50E22ACF8F95D69DC4968D0DEDB58D6061CB3B3B2F0E85A6B9B64",
+  "has_create_action": true,
+  "hash": "D37021F3ED8AAA584A3680F0CC3051405B806EF723F6B37F47380390690632EF",
   "identities": [],
   "multitenancy": {
     "attribute": null,
@@ -64,5 +64,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "feedbacks"
+  "table": "github_apps"
 }

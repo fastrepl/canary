@@ -9,6 +9,27 @@ defmodule Canary.Fly do
     )
   end
 
+  def get_certificate(hostname) do
+    case client()
+         |> Req.post(
+           graphql:
+             {"""
+              query($appName: String!, $hostname: String!) {
+                app(name: $appName) {
+                  certificate(hostname: $hostname) {
+                    check
+                    configured
+                    clientStatus
+                  }
+                }
+              }
+              """, %{appName: app_name(), hostname: hostname}}
+         ) do
+      {:ok, %{body: %{"data" => data}}} -> {:ok, get_in(data, ["app", "certificate"])}
+      error -> error
+    end
+  end
+
   def list_certificates() do
     client()
     |> Req.post!(
@@ -31,41 +52,45 @@ defmodule Canary.Fly do
   end
 
   def create_certificate(hostname) do
-    client()
-    |> Req.post!(
-      graphql:
-        {"""
-          mutation($appId: ID!, $hostname: String!) {
-            addCertificate(appId: $appId, hostname: $hostname) {
-              certificate {
-                id
-                hostname
-              }
-            }
-          }
-         """, %{appId: app_name(), hostname: hostname}}
-    )
-    |> get_in([Access.key(:body), "data", "addCertificate", "certificate"])
+    case client()
+         |> Req.post(
+           graphql:
+             {"""
+               mutation($appId: ID!, $hostname: String!) {
+                 addCertificate(appId: $appId, hostname: $hostname) {
+                   certificate {
+                     id
+                     hostname
+                   }
+                 }
+               }
+              """, %{appId: app_name(), hostname: hostname}}
+         ) do
+      {:ok, %{body: %{"data" => data}}} -> {:ok, data}
+      error -> error
+    end
   end
 
   def delete_certificate(hostname) do
-    client()
-    |> Req.post!(
-      graphql:
-        {"""
-          mutation($appId: ID!, $hostname: String!) {
-            deleteCertificate(appId: $appId, hostname: $hostname) {
-              app {
-                name
-              }
-              certificate {
-                id
-                hostname
-              }
-            }
-          }
-         """, %{appId: app_name(), hostname: hostname}}
-    )
-    |> get_in([Access.key(:body), "data", "deleteCertificate"])
+    case client()
+         |> Req.post(
+           graphql:
+             {"""
+               mutation($appId: ID!, $hostname: String!) {
+                 deleteCertificate(appId: $appId, hostname: $hostname) {
+                   app {
+                     name
+                   }
+                   certificate {
+                     id
+                     hostname
+                   }
+                 }
+               }
+              """, %{appId: app_name(), hostname: hostname}}
+         ) do
+      {:ok, %{body: %{"data" => data}}} -> {:ok, data}
+      error -> error
+    end
   end
 end

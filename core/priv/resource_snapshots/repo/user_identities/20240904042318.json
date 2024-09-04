@@ -1,33 +1,23 @@
 {
   "attributes": [
     {
-      "allow_nil?": false,
-      "default": "fragment(\"gen_random_uuid()\")",
-      "generated?": false,
-      "primary_key?": true,
-      "references": null,
-      "size": null,
-      "source": "id",
-      "type": "uuid"
-    },
-    {
-      "allow_nil?": false,
-      "default": "fragment(\"(now() AT TIME ZONE 'utc')\")",
+      "allow_nil?": true,
+      "default": "nil",
       "generated?": false,
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "created_at",
-      "type": "utc_datetime_usec"
+      "source": "refresh_token",
+      "type": "text"
     },
     {
-      "allow_nil?": false,
-      "default": "fragment(\"(now() AT TIME ZONE 'utc')\")",
+      "allow_nil?": true,
+      "default": "nil",
       "generated?": false,
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "updated_at",
+      "source": "access_token_expires_at",
       "type": "utc_datetime_usec"
     },
     {
@@ -37,7 +27,7 @@
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "url",
+      "source": "access_token",
       "type": "text"
     },
     {
@@ -47,28 +37,28 @@
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "content",
-      "type": "binary"
+      "source": "uid",
+      "type": "text"
     },
     {
-      "allow_nil?": true,
-      "default": "[]",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "chunks",
-      "type": ["array", "map"]
-    },
-    {
-      "allow_nil?": true,
+      "allow_nil?": false,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "summary",
-      "type": "map"
+      "source": "strategy",
+      "type": "text"
+    },
+    {
+      "allow_nil?": false,
+      "default": "fragment(\"gen_random_uuid()\")",
+      "generated?": false,
+      "primary_key?": true,
+      "references": null,
+      "size": null,
+      "source": "id",
+      "type": "uuid"
     },
     {
       "allow_nil?": true,
@@ -88,15 +78,15 @@
           "global": null,
           "strategy": null
         },
-        "name": "documents_source_id_fkey",
+        "name": "user_identities_user_id_fkey",
         "on_delete": null,
         "on_update": null,
         "primary_key?": true,
         "schema": "public",
-        "table": "sources"
+        "table": "users"
       },
       "size": null,
-      "source": "source_id",
+      "source": "user_id",
       "type": "uuid"
     }
   ],
@@ -105,23 +95,27 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "D80535A8B54308E72279E976190AD4A2A3EE9E99CA936B31F751848CA4BFE9C5",
+  "hash": "FC01C71D3C5A5764F2E62560465AC9D9BB6475EF35637A4AD824632EE7822211",
   "identities": [
     {
       "all_tenants?": false,
       "base_filter": null,
-      "index_name": "documents_unique_document_index",
+      "index_name": "user_identities_unique_on_strategy_and_uid_and_user_id_index",
       "keys": [
         {
           "type": "atom",
-          "value": "source_id"
+          "value": "strategy"
         },
         {
           "type": "atom",
-          "value": "url"
+          "value": "uid"
+        },
+        {
+          "type": "atom",
+          "value": "user_id"
         }
       ],
-      "name": "unique_document",
+      "name": "unique_on_strategy_and_uid_and_user_id",
       "nils_distinct?": true,
       "where": null
     }
@@ -133,5 +127,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "documents"
+  "table": "user_identities"
 }

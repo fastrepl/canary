@@ -20,6 +20,7 @@ defmodule Canary.Accounts.Account do
 
     has_one :github_app, Canary.Github.App
     has_one :billing, Canary.Accounts.Billing
+    has_one :subdomain, Canary.Accounts.Subdomain
   end
 
   actions do

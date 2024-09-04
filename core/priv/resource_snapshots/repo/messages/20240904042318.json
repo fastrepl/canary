@@ -12,16 +12,16 @@
     },
     {
       "allow_nil?": false,
-      "default": "nil",
+      "default": "fragment(\"(now() AT TIME ZONE 'utc')\")",
       "generated?": false,
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "installation_id",
-      "type": "bigint"
+      "source": "created_at",
+      "type": "utc_datetime_usec"
     },
     {
-      "allow_nil?": true,
+      "allow_nil?": false,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
@@ -38,16 +38,36 @@
           "global": null,
           "strategy": null
         },
-        "name": "github_apps_account_id_fkey",
-        "on_delete": "delete",
+        "name": "messages_session_id_fkey",
+        "on_delete": null,
         "on_update": null,
         "primary_key?": true,
         "schema": "public",
-        "table": "accounts"
+        "table": "sessions"
       },
       "size": null,
-      "source": "account_id",
+      "source": "session_id",
       "type": "uuid"
+    },
+    {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "role",
+      "type": "text"
+    },
+    {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "content",
+      "type": "text"
     }
   ],
   "base_filter": null,
@@ -55,7 +75,7 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "2E341957FC52089503F12B7B6489F131C4BBEDDAAB24BDAC75AE0B17EA6516B8",
+  "hash": "20AD823A36A5AC8E887B92F5E9D53B4A818DD7773CE68226A561C658DCC77575",
   "identities": [],
   "multitenancy": {
     "attribute": null,
@@ -64,5 +84,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "github_apps"
+  "table": "messages"
 }

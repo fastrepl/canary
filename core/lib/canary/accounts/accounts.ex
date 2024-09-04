@@ -9,5 +9,6 @@ defmodule Canary.Accounts do
     resource Canary.Accounts.UserIdentity
     resource Canary.Accounts.Billing
     resource Canary.Accounts.Invite
+    resource Canary.Accounts.Subdomain
   end
 end

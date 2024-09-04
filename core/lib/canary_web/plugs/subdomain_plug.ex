@@ -7,6 +7,9 @@ defmodule CanaryWeb.Plug.Subdomain do
 
   @impl true
   def call(conn, router) do
+    IO.inspect(conn.host)
+    IO.inspect(conn.headers)
+
     case get_subdomain(conn.host) do
       subdomain when byte_size(subdomain) > 0 ->
         conn
