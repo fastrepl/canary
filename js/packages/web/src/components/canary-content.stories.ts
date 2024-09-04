@@ -32,6 +32,7 @@ import "./canary-ask-results";
 
 import "./canary-callout-cal";
 import "./canary-callout-discord";
+import "./canary-footer";
 
 enum Kind {
   Ask,
@@ -47,6 +48,7 @@ enum Kind {
   SearchAndAskWithModeTabs,
   SearchAndAskWithModeButton,
   CustomMode,
+  SimpleFooter,
 }
 
 const type = (text: string): StoryObj["play"] => {
@@ -248,6 +250,16 @@ export default {
       `);
     }
 
+    if (kind === Kind.SimpleFooter) {
+      return wrapper(html`
+        <canary-search slot="mode">
+          <canary-search-input slot="input"></canary-search-input>
+          <canary-search-results slot="body"></canary-search-results>
+        </canary-search>
+        <canary-footer slot="footer"></canary-footer>
+      `);
+    }
+
     throw new Error();
   },
 } satisfies Meta<{ kind: Kind }>;
@@ -330,4 +342,9 @@ export const SearchAsk1: StoryObj = {
 export const SearchAsk2: StoryObj = {
   args: { kind: Kind.SearchAndAskWithModeButton },
   play: type("0hi"),
+};
+
+export const SimpleFooter: StoryObj = {
+  args: { kind: Kind.SimpleFooter },
+  play: type("20hi"),
 };

@@ -1,5 +1,6 @@
-import { LitElement, css, html, nothing } from "lit";
-import { customElement, state } from "lit/decorators.js";
+import { LitElement, css, html } from "lit";
+import { customElement, queryAssignedElements, state } from "lit/decorators.js";
+import { classMap } from "lit/directives/class-map.js";
 
 import { consume } from "@lit/context";
 import { queryContext } from "../contexts";
@@ -14,11 +15,21 @@ export class CanaryContent extends LitElement {
   @state()
   private _query = "";
 
+  @queryAssignedElements({ slot: "footer" })
+  private _footers!: Array<Node>;
+
   render() {
     return html`
       <div class="container">
         <slot name="mode"></slot>
-        ${this._query ? html`<slot name="footer"></slot>` : nothing}
+        <div
+          class=${classMap({
+            footer: true,
+            hide: !this._query || this._footers.length === 0,
+          })}
+        >
+          <slot name="footer"></slot>
+        </div>
       </div>
     `;
   }
@@ -33,7 +44,7 @@ export class CanaryContent extends LitElement {
 
         outline: none;
         padding-top: 6px;
-        padding-bottom: 12px;
+        padding-bottom: 8px;
 
         border: none;
         border-radius: 8px;
@@ -42,6 +53,14 @@ export class CanaryContent extends LitElement {
           0 8px 10px -6px rgb(0 0 0 / 0.1);
 
         background-color: var(--canary-color-gray-100);
+      }
+
+      .footer {
+        padding: 6px 0 2px 12px;
+      }
+
+      .hide {
+        display: none;
       }
 
       @media (min-width: 50rem) {
