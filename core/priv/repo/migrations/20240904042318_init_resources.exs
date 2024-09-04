@@ -316,6 +316,24 @@ defmodule Canary.Repo.Migrations.InitResources do
           null: false
     end
 
+    create table(:account_subdomains, primary_key: false) do
+      add :id, :uuid, null: false, default: fragment("gen_random_uuid()"), primary_key: true
+      add :name, :text, null: false
+      add :host, :text, null: false
+
+      add :account_id,
+          references(:accounts,
+            column: :id,
+            name: "account_subdomains_account_id_fkey",
+            type: :uuid,
+            prefix: "public"
+          )
+    end
+
+    create unique_index(:account_subdomains, [:name],
+             name: "account_subdomains_unique_name_index"
+           )
+
     create table(:account_invites, primary_key: false) do
       add :id, :uuid, null: false, default: fragment("gen_random_uuid()"), primary_key: true
 
@@ -351,6 +369,14 @@ defmodule Canary.Repo.Migrations.InitResources do
     drop constraint(:account_invites, "account_invites_account_id_fkey")
 
     drop table(:account_invites)
+
+    drop_if_exists unique_index(:account_subdomains, [:name],
+                     name: "account_subdomains_unique_name_index"
+                   )
+
+    drop constraint(:account_subdomains, "account_subdomains_account_id_fkey")
+
+    drop table(:account_subdomains)
 
     drop constraint(:account_users, "account_users_user_id_fkey")
 

@@ -12,23 +12,53 @@
     },
     {
       "allow_nil?": false,
+      "default": "fragment(\"(now() AT TIME ZONE 'utc')\")",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "created_at",
+      "type": "utc_datetime_usec"
+    },
+    {
+      "allow_nil?": false,
+      "default": "fragment(\"(now() AT TIME ZONE 'utc')\")",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "updated_at",
+      "type": "utc_datetime_usec"
+    },
+    {
+      "allow_nil?": true,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "type",
+      "source": "url",
       "type": "text"
     },
     {
-      "allow_nil?": true,
+      "allow_nil?": false,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "web_session_id",
-      "type": "uuid"
+      "source": "content",
+      "type": "binary"
+    },
+    {
+      "allow_nil?": true,
+      "default": "[]",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "chunks",
+      "type": ["array", "map"]
     },
     {
       "allow_nil?": true,
@@ -37,8 +67,8 @@
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "discord_thread_id",
-      "type": "bigint"
+      "source": "summary",
+      "type": "map"
     },
     {
       "allow_nil?": true,
@@ -58,15 +88,15 @@
           "global": null,
           "strategy": null
         },
-        "name": "sessions_account_id_fkey",
+        "name": "documents_source_id_fkey",
         "on_delete": null,
         "on_update": null,
         "primary_key?": true,
         "schema": "public",
-        "table": "accounts"
+        "table": "sources"
       },
       "size": null,
-      "source": "account_id",
+      "source": "source_id",
       "type": "uuid"
     }
   ],
@@ -75,49 +105,23 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "64CCDBC6E40C48594E0D5E9AD9FDE69D56FD49D616171034F1F1F4E14922F3B6",
+  "hash": "CD98399F54F40DD7720C4F93AD35BB1643495A42ADA6296CAC6A9CAC1A1BFFFA",
   "identities": [
     {
       "all_tenants?": false,
       "base_filter": null,
-      "index_name": "sessions_discord_thread_identity_index",
+      "index_name": "documents_unique_document_index",
       "keys": [
         {
           "type": "atom",
-          "value": "account_id"
+          "value": "source_id"
         },
         {
           "type": "atom",
-          "value": "type"
-        },
-        {
-          "type": "atom",
-          "value": "discord_thread_id"
+          "value": "url"
         }
       ],
-      "name": "discord_thread_identity",
-      "nils_distinct?": true,
-      "where": null
-    },
-    {
-      "all_tenants?": false,
-      "base_filter": null,
-      "index_name": "sessions_web_session_identity_index",
-      "keys": [
-        {
-          "type": "atom",
-          "value": "account_id"
-        },
-        {
-          "type": "atom",
-          "value": "type"
-        },
-        {
-          "type": "atom",
-          "value": "web_session_id"
-        }
-      ],
-      "name": "web_session_identity",
+      "name": "unique_document",
       "nils_distinct?": true,
       "where": null
     }
@@ -129,5 +133,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "sessions"
+  "table": "documents"
 }
