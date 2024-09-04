@@ -11,6 +11,11 @@ defmodule Canary.Change.RemoveCert do
   end
 
   @impl true
+  def atomic(changeset, opts, context) do
+    {:ok, change(changeset, opts, context)}
+  end
+
+  @impl true
   def change(changeset, opts, _context) do
     changeset
     |> Ash.Changeset.after_action(fn _, record ->

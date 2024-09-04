@@ -20,7 +20,7 @@ defmodule CanaryWeb.SubdomainIndexLive do
       ]}
     >
       <li :for={{id, post} <- @streams.posts} id={id}>
-        <.link navigate={~p"/post/#{post.id}"}>
+        <.link navigate={~p"/p/#{post.id}"}>
           <div class="border p-4 mb-4 rounded-lg shadow">
             <h2 class="text-xl font-bold"><%= post.title %></h2>
             <p class="text-gray-600"><%= post.excerpt %></p>
