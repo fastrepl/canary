@@ -11,6 +11,7 @@ defmodule Canary.Accounts.Subdomain do
 
   identities do
     identity :unique_name, [:name]
+    identity :unique_host, [:host]
   end
 
   relationships do
@@ -19,6 +20,14 @@ defmodule Canary.Accounts.Subdomain do
 
   actions do
     defaults [:read]
+
+    read :find_by_host do
+      get? true
+
+      argument :host, :string, allow_nil?: false
+      filter expr(host == ^arg(:host))
+      prepare build(load: [:account])
+    end
 
     create :create do
       primary? true
@@ -35,6 +44,10 @@ defmodule Canary.Accounts.Subdomain do
 
       change {Canary.Change.RemoveCert, host_attribute: :host}
     end
+  end
+
+  code_interface do
+    define :find_by_host, args: [:host], action: :find_by_host
   end
 
   postgres do

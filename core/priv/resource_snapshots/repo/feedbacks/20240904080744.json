@@ -21,46 +21,6 @@
       "type": "utc_datetime_usec"
     },
     {
-      "allow_nil?": false,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "type",
-      "type": "text"
-    },
-    {
-      "allow_nil?": true,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "web_url_base",
-      "type": "text"
-    },
-    {
-      "allow_nil?": true,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "web_url_include_patterns",
-      "type": ["array", "text"]
-    },
-    {
-      "allow_nil?": true,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "web_url_exclude_patterns",
-      "type": ["array", "text"]
-    },
-    {
       "allow_nil?": true,
       "default": "nil",
       "generated?": false,
@@ -78,7 +38,7 @@
           "global": null,
           "strategy": null
         },
-        "name": "sources_account_id_fkey",
+        "name": "feedbacks_account_id_fkey",
         "on_delete": null,
         "on_update": null,
         "primary_key?": true,
@@ -94,8 +54,8 @@
   "check_constraints": [],
   "custom_indexes": [],
   "custom_statements": [],
-  "has_create_action": true,
-  "hash": "A0EE4790E5DAF054E7628DCE5B1D29497AA88D5C80AA9E793B40AEB77DED4738",
+  "has_create_action": false,
+  "hash": "5F7B336AA53C301AA63884B706DFDF779BD1072E30A26C29960D0C637898A2D5",
   "identities": [],
   "multitenancy": {
     "attribute": null,
@@ -104,5 +64,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "sources"
+  "table": "feedbacks"
 }
