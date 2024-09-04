@@ -12,86 +12,75 @@ on:
       - core/**
 env:
   MIX_ENV: test
+
 permissions:
   contents: read
+
 jobs:
   test:
+    runs-on: ubuntu-latest
     services:
       db:
         image: postgres:16
-        ports:
-          - 5432:5432
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: canary_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
       typesense:
         image: typesense/typesense:26.0
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: core
-    name: Test on OTP ${{matrix.otp}} / Elixir ${{matrix.elixir}}
-    strategy:
-      matrix:
-        otp:
-          - "26.2.5"
-        elixir:
-          - "1.17.1"
-        typesense-version:
-          - "26.0"
-        typesense-port:
-          - 8108:8108
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - name: Start Typesense
-        run: |
-          docker run -d \
-          -p ${{ matrix.typesense-port }} \
-          --name typesense \
-          -v /tmp/typesense:/data \
-          typesense/typesense:${{ matrix.typesense-version}} \
-          --api-key=canary \
-          --data-dir /data \
-          --enable-cors
-      - name: Set up Elixir
-        uses: erlef/setup-beam@v1
+      - uses: actions/checkout@v3
         with:
-          otp-version: ${{matrix.otp}}
-          elixir-version: ${{matrix.elixir}}
-      - name: Cache deps
+          sparse-checkout: core
+      - uses: erlef/setup-beam@v1
+        with:
+          version-file: core/.tool-versions
+          version-type: strict
+      - uses: actions/cache@v3
         id: cache-deps
-        uses: actions/cache@v3
         env:
           cache-name: cache-elixir-deps
         with:
-          path: deps
+          path: core/deps
           key: ${{ runner.os }}-mix-${{ env.cache-name }}-${{ hashFiles('**/mix.lock') }}
           restore-keys: |
             ${{ runner.os }}-mix-${{ env.cache-name }}-
-      - name: Cache compiled build
+      - uses: actions/cache@v3
         id: cache-build
-        uses: actions/cache@v3
         env:
           cache-name: cache-compiled-build
         with:
-          path: _build
+          path: core/_build
           key: ${{ runner.os }}-mix-${{ env.cache-name }}-${{ hashFiles('**/mix.lock') }}
           restore-keys: |
             ${{ runner.os }}-mix-${{ env.cache-name }}-
             ${{ runner.os }}-mix-
-      - name: Clean to rule out incremental build as a source of flakiness
-        if: github.run_attempt != '1'
+      - if: github.run_attempt != '1'
         run: |
           mix deps.clean --all
           mix clean
         shell: sh
-      - name: Install dependencies
-        run: mix deps.get
-      - name: Compiles without warnings
-        run: mix compile --warnings-as-errors
-      - name: Check Formatting
-        run: mix format --check-formatted
-      - name: Run tests
-        run: mix test
+      - run: mix deps.get
+        working-directory: core
+      - run: mix compile --warnings-as-errors
+        working-directory: core
+      - run: mix format --check-formatted
+        working-directory: core
+      - run: |
+          docker run -d \
+          -p 8108:8108 \
+          --name typesense \
+          -v /tmp/typesense:/data \
+          typesense/typesense:26.0 \
+          --api-key=canary \
+          --data-dir /data \
+          --enable-cors
+      - run: mix test
+        working-directory: core
