@@ -320,6 +320,7 @@ defmodule Canary.Repo.Migrations.InitResources do
       add :id, :uuid, null: false, default: fragment("gen_random_uuid()"), primary_key: true
       add :name, :text, null: false
       add :host, :text, null: false
+      add :config, :map
 
       add :account_id,
           references(:accounts,

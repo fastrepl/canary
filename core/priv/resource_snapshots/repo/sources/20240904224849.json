@@ -22,43 +22,23 @@
     },
     {
       "allow_nil?": false,
-      "default": "fragment(\"(now() AT TIME ZONE 'utc')\")",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "updated_at",
-      "type": "utc_datetime_usec"
-    },
-    {
-      "allow_nil?": true,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "url",
+      "source": "type",
       "type": "text"
     },
     {
-      "allow_nil?": false,
+      "allow_nil?": true,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "content",
-      "type": "binary"
-    },
-    {
-      "allow_nil?": true,
-      "default": "[]",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "chunks",
-      "type": ["array", "map"]
+      "source": "web_url_base",
+      "type": "text"
     },
     {
       "allow_nil?": true,
@@ -67,8 +47,24 @@
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "summary",
-      "type": "map"
+      "source": "web_url_include_patterns",
+      "type": [
+        "array",
+        "text"
+      ]
+    },
+    {
+      "allow_nil?": true,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "web_url_exclude_patterns",
+      "type": [
+        "array",
+        "text"
+      ]
     },
     {
       "allow_nil?": true,
@@ -88,15 +84,15 @@
           "global": null,
           "strategy": null
         },
-        "name": "documents_source_id_fkey",
+        "name": "sources_account_id_fkey",
         "on_delete": null,
         "on_update": null,
         "primary_key?": true,
         "schema": "public",
-        "table": "sources"
+        "table": "accounts"
       },
       "size": null,
-      "source": "source_id",
+      "source": "account_id",
       "type": "uuid"
     }
   ],
@@ -105,27 +101,8 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "D10BFA0642B6CE852BA5DAB0771CCF07079086298EF79F6EA3D1A35BA10EEDF2",
-  "identities": [
-    {
-      "all_tenants?": false,
-      "base_filter": null,
-      "index_name": "documents_unique_document_index",
-      "keys": [
-        {
-          "type": "atom",
-          "value": "source_id"
-        },
-        {
-          "type": "atom",
-          "value": "url"
-        }
-      ],
-      "name": "unique_document",
-      "nils_distinct?": true,
-      "where": null
-    }
-  ],
+  "hash": "D7FA2D59DC5243A6816383B064C4A67E673FF1617F01D3A02EFA31055F793B7A",
+  "identities": [],
   "multitenancy": {
     "attribute": null,
     "global": null,
@@ -133,5 +110,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "documents"
+  "table": "sources"
 }

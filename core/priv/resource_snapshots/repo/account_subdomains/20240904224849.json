@@ -12,13 +12,33 @@
     },
     {
       "allow_nil?": false,
-      "default": "fragment(\"(now() AT TIME ZONE 'utc')\")",
+      "default": "nil",
       "generated?": false,
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "created_at",
-      "type": "utc_datetime_usec"
+      "source": "name",
+      "type": "text"
+    },
+    {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "host",
+      "type": "text"
+    },
+    {
+      "allow_nil?": true,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "config",
+      "type": "map"
     },
     {
       "allow_nil?": true,
@@ -38,7 +58,7 @@
           "global": null,
           "strategy": null
         },
-        "name": "feedbacks_account_id_fkey",
+        "name": "account_subdomains_account_id_fkey",
         "on_delete": null,
         "on_update": null,
         "primary_key?": true,
@@ -54,9 +74,38 @@
   "check_constraints": [],
   "custom_indexes": [],
   "custom_statements": [],
-  "has_create_action": false,
-  "hash": "5F7B336AA53C301AA63884B706DFDF779BD1072E30A26C29960D0C637898A2D5",
-  "identities": [],
+  "has_create_action": true,
+  "hash": "2842E5C5A3C0060D4CF90B86F503A73BA95FE6A6DA10F4454AABB8E4B47C369C",
+  "identities": [
+    {
+      "all_tenants?": false,
+      "base_filter": null,
+      "index_name": "account_subdomains_unique_host_index",
+      "keys": [
+        {
+          "type": "atom",
+          "value": "host"
+        }
+      ],
+      "name": "unique_host",
+      "nils_distinct?": true,
+      "where": null
+    },
+    {
+      "all_tenants?": false,
+      "base_filter": null,
+      "index_name": "account_subdomains_unique_name_index",
+      "keys": [
+        {
+          "type": "atom",
+          "value": "name"
+        }
+      ],
+      "name": "unique_name",
+      "nils_distinct?": true,
+      "where": null
+    }
+  ],
   "multitenancy": {
     "attribute": null,
     "global": null,
@@ -64,5 +113,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "feedbacks"
+  "table": "account_subdomains"
 }

@@ -5,8 +5,10 @@ defmodule Canary.Accounts.Subdomain do
 
   attributes do
     uuid_primary_key :id
+
     attribute :name, :string, allow_nil?: false
     attribute :host, :string, allow_nil?: false
+    attribute :config, Canary.Accounts.SubdomainConfig, allow_nil?: true
   end
 
   identities do

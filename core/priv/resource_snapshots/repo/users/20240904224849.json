@@ -17,37 +17,18 @@
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "installation_id",
-      "type": "bigint"
+      "source": "email",
+      "type": "citext"
     },
     {
       "allow_nil?": true,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
-      "references": {
-        "deferrable": false,
-        "destination_attribute": "id",
-        "destination_attribute_default": null,
-        "destination_attribute_generated": null,
-        "index?": false,
-        "match_type": null,
-        "match_with": null,
-        "multitenancy": {
-          "attribute": null,
-          "global": null,
-          "strategy": null
-        },
-        "name": "github_apps_account_id_fkey",
-        "on_delete": "delete",
-        "on_update": null,
-        "primary_key?": true,
-        "schema": "public",
-        "table": "accounts"
-      },
+      "references": null,
       "size": null,
-      "source": "account_id",
-      "type": "uuid"
+      "source": "hashed_password",
+      "type": "text"
     }
   ],
   "base_filter": null,
@@ -55,8 +36,23 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "F46116CD6F8A3AE84C1D92026D9A0657FC8EC83004C746B2C704FAF583FF9A9D",
-  "identities": [],
+  "hash": "AD5ACFAB5ACE6EAE51CF18A44C5A63382E5ED5A708C480A647A9AC25D4A5CB97",
+  "identities": [
+    {
+      "all_tenants?": false,
+      "base_filter": null,
+      "index_name": "users_unique_email_index",
+      "keys": [
+        {
+          "type": "atom",
+          "value": "email"
+        }
+      ],
+      "name": "unique_email",
+      "nils_distinct?": true,
+      "where": null
+    }
+  ],
   "multitenancy": {
     "attribute": null,
     "global": null,
@@ -64,5 +60,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "github_apps"
+  "table": "users"
 }

@@ -12,13 +12,13 @@
     },
     {
       "allow_nil?": false,
-      "default": "nil",
+      "default": "fragment(\"(now() AT TIME ZONE 'utc')\")",
       "generated?": false,
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "full_name",
-      "type": "text"
+      "source": "created_at",
+      "type": "utc_datetime_usec"
     },
     {
       "allow_nil?": false,
@@ -38,16 +38,36 @@
           "global": null,
           "strategy": null
         },
-        "name": "github_repos_app_id_fkey",
-        "on_delete": "delete",
+        "name": "messages_session_id_fkey",
+        "on_delete": null,
         "on_update": null,
         "primary_key?": true,
         "schema": "public",
-        "table": "github_apps"
+        "table": "sessions"
       },
       "size": null,
-      "source": "app_id",
+      "source": "session_id",
       "type": "uuid"
+    },
+    {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "role",
+      "type": "text"
+    },
+    {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "content",
+      "type": "text"
     }
   ],
   "base_filter": null,
@@ -55,27 +75,8 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "44DCE5E0733D052326B0799917F98E20B506A481CE2313967C770B0FC239DD8C",
-  "identities": [
-    {
-      "all_tenants?": false,
-      "base_filter": null,
-      "index_name": "github_repos_unique_repo_index",
-      "keys": [
-        {
-          "type": "atom",
-          "value": "app_id"
-        },
-        {
-          "type": "atom",
-          "value": "full_name"
-        }
-      ],
-      "name": "unique_repo",
-      "nils_distinct?": true,
-      "where": null
-    }
-  ],
+  "hash": "FB37B5CF2D4A15524C82FA82F771593E4ADBD6812C70877E5CCF7135AD4B7335",
+  "identities": [],
   "multitenancy": {
     "attribute": null,
     "global": null,
@@ -83,5 +84,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "github_repos"
+  "table": "messages"
 }

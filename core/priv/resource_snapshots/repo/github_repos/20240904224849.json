@@ -17,21 +17,11 @@
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "name",
+      "source": "full_name",
       "type": "text"
     },
     {
       "allow_nil?": false,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "host",
-      "type": "text"
-    },
-    {
-      "allow_nil?": true,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
@@ -48,15 +38,15 @@
           "global": null,
           "strategy": null
         },
-        "name": "account_subdomains_account_id_fkey",
-        "on_delete": null,
+        "name": "github_repos_app_id_fkey",
+        "on_delete": "delete",
         "on_update": null,
         "primary_key?": true,
         "schema": "public",
-        "table": "accounts"
+        "table": "github_apps"
       },
       "size": null,
-      "source": "account_id",
+      "source": "app_id",
       "type": "uuid"
     }
   ],
@@ -65,33 +55,23 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "A42844D88121159934489BA7721E1A74F57AF67D21E26F269E33441DD53C2533",
+  "hash": "CFCFED724840CFB8E3CCF203DE119C0FAB7279C7388A4980E5E80DD831CE97DD",
   "identities": [
     {
       "all_tenants?": false,
       "base_filter": null,
-      "index_name": "account_subdomains_unique_host_index",
+      "index_name": "github_repos_unique_repo_index",
       "keys": [
         {
           "type": "atom",
-          "value": "host"
-        }
-      ],
-      "name": "unique_host",
-      "nils_distinct?": true,
-      "where": null
-    },
-    {
-      "all_tenants?": false,
-      "base_filter": null,
-      "index_name": "account_subdomains_unique_name_index",
-      "keys": [
+          "value": "app_id"
+        },
         {
           "type": "atom",
-          "value": "name"
+          "value": "full_name"
         }
       ],
-      "name": "unique_name",
+      "name": "unique_repo",
       "nils_distinct?": true,
       "where": null
     }
@@ -103,5 +83,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "account_subdomains"
+  "table": "github_repos"
 }

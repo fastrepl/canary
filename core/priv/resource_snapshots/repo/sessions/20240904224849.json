@@ -12,16 +12,6 @@
     },
     {
       "allow_nil?": false,
-      "default": "fragment(\"(now() AT TIME ZONE 'utc')\")",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "created_at",
-      "type": "utc_datetime_usec"
-    },
-    {
-      "allow_nil?": false,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
@@ -37,8 +27,8 @@
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "web_url_base",
-      "type": "text"
+      "source": "web_session_id",
+      "type": "uuid"
     },
     {
       "allow_nil?": true,
@@ -47,18 +37,8 @@
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "web_url_include_patterns",
-      "type": ["array", "text"]
-    },
-    {
-      "allow_nil?": true,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "web_url_exclude_patterns",
-      "type": ["array", "text"]
+      "source": "discord_thread_id",
+      "type": "bigint"
     },
     {
       "allow_nil?": true,
@@ -78,7 +58,7 @@
           "global": null,
           "strategy": null
         },
-        "name": "sources_account_id_fkey",
+        "name": "sessions_account_id_fkey",
         "on_delete": null,
         "on_update": null,
         "primary_key?": true,
@@ -95,8 +75,53 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "26C5820909B3AAC33E15BF26477D8EE44B1FBB0105F5194B9D0895AD177B2D7E",
-  "identities": [],
+  "hash": "43F78E2AA83738D0C150AD3D4D28C58B3EDFBC43BDE352F70914CC47161EF63A",
+  "identities": [
+    {
+      "all_tenants?": false,
+      "base_filter": null,
+      "index_name": "sessions_discord_thread_identity_index",
+      "keys": [
+        {
+          "type": "atom",
+          "value": "account_id"
+        },
+        {
+          "type": "atom",
+          "value": "type"
+        },
+        {
+          "type": "atom",
+          "value": "discord_thread_id"
+        }
+      ],
+      "name": "discord_thread_identity",
+      "nils_distinct?": true,
+      "where": null
+    },
+    {
+      "all_tenants?": false,
+      "base_filter": null,
+      "index_name": "sessions_web_session_identity_index",
+      "keys": [
+        {
+          "type": "atom",
+          "value": "account_id"
+        },
+        {
+          "type": "atom",
+          "value": "type"
+        },
+        {
+          "type": "atom",
+          "value": "web_session_id"
+        }
+      ],
+      "name": "web_session_identity",
+      "nils_distinct?": true,
+      "where": null
+    }
+  ],
   "multitenancy": {
     "attribute": null,
     "global": null,
@@ -104,5 +129,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "sources"
+  "table": "sessions"
 }
