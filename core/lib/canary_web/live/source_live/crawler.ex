@@ -1,82 +1,18 @@
-defmodule CanaryWeb.SourceLive do
-  use CanaryWeb, :live_view
+defmodule CanaryWeb.SourceLive.Crawler do
+  use CanaryWeb, :live_component
+
   alias Phoenix.LiveView.AsyncResult
 
   @impl true
   def render(assigns) do
-    ~H"""
-    <div class="flex flex-col gap-4">
-      <div role="tablist" class="flex tabs tabs-lifted">
-        <.tab name="Status" current={@mode} />
-        <.tab name="Setting" current={@mode} />
-      </div>
-
-      <%= case @mode do %>
-        <% "Status" -> %>
-          <.status source={@source} />
-        <% "Setting" -> %>
-          <.setting source_form={@source_form} crawler_task_result={@crawler_task_result} />
-      <% end %>
-    </div>
-    """
-  end
-
-  attr :name, :string
-  attr :current, :string
-
-  defp tab(assigns) do
-    ~H"""
-    <a
-      role="tab"
-      phx-click="set_mode"
-      phx-value-mode={@name}
-      class={["tab font-semibold", @current == @name && "tab-active"]}
-    >
-      <%= @name %>
-    </a>
-    """
-  end
-
-  defp status(assigns) do
-    ~H"""
-    <div>
-      <section class="stats stats-vertical col-span-12 w-fullshadow-sm xl:stats-horizontal">
-        <div class="stat">
-          <div class="stat-title">Documents</div>
-          <div class="stat-value"><%= @source.num_documents %></div>
-        </div>
-
-        <div class="stat">
-          <div class="stat-title flex flex-row items-center gap-2">
-            <span>Updated</span>
-            <span
-              phx-click="fetch"
-              class="hero-arrow-path-solid h-4 w-4 text-neutural cursor-pointer"
-            />
-          </div>
-          <%= if @source.last_updated  do %>
-            <div id="updated" class="stat-value invisible" phx-hook="TimeAgo">
-              <%= @source.last_updated %>
-            </div>
-          <% else %>
-            <div class="stat-value">
-              Never
-            </div>
-          <% end %>
-        </div>
-      </section>
-    </div>
-    """
-  end
-
-  defp setting(assigns) do
     ~H"""
     <div class="flex flex-row gap-8">
       <div class="basis-2/5">
         <.form
           :let={f}
           phx-submit="submit"
-          for={@source_form}
+          phx-target={@myself}
+          for={@form}
           class="flex flex-col justify-between gap-4 h-[calc(100vh-120px)]"
         >
           <div class="flex flex-col gap-4">
@@ -175,32 +111,20 @@ defmodule CanaryWeb.SourceLive do
   end
 
   @impl true
-  def mount(_params, _session, socket) do
-    account = socket.assigns.current_account |> Ash.load!([:sources])
-    source = account.sources |> Enum.at(0)
+  def update(assigns, socket) do
+    socket = socket |> assign(assigns)
+
+    form =
+      socket.assigns.source
+      |> AshPhoenix.Form.for_update(:update)
+      |> to_form()
 
     socket =
       socket
-      |> assign(:mode, "Status")
-      |> assign(source: source)
+      |> assign(:form, form)
       |> assign(:crawler_task_result, AsyncResult.ok([]))
-      |> assign(:source_form, AshPhoenix.Form.for_update(source, :update) |> to_form())
 
     {:ok, socket}
-  end
-
-  @impl true
-  def handle_event("set_mode", %{"mode" => mode}, socket) do
-    {:noreply, socket |> assign(:mode, mode)}
-  end
-
-  @impl true
-  def handle_event("fetch", _params, socket) do
-    %{source_id: socket.assigns.source.id}
-    |> Canary.Workers.Fetcher.new()
-    |> Oban.insert()
-
-    {:noreply, socket}
   end
 
   @impl true
@@ -210,14 +134,6 @@ defmodule CanaryWeb.SourceLive do
       |> start_crawler_task(
         include_patterns: parse_patterns(form["web_url_include_patterns"]),
         exclude_patterns: parse_patterns(form["web_url_exclude_patterns"])
-      )
-      |> assign(
-        :source_form,
-        socket.assigns.source_form
-        |> AshPhoenix.Form.validate(%{
-          web_url_include_patterns: parse_patterns(form["web_url_include_patterns"]),
-          web_url_exclude_patterns: parse_patterns(form["web_url_exclude_patterns"])
-        })
       )
 
     {:noreply, socket}
@@ -231,22 +147,15 @@ defmodule CanaryWeb.SourceLive do
     }
 
     socket =
-      case AshPhoenix.Form.submit(socket.assigns.source_form, params: params) do
+      case AshPhoenix.Form.submit(socket.assigns.form, params: params) do
         {:ok, source} ->
           socket
           |> assign(:mode, "Status")
           |> assign(source: source)
-          |> assign(:source_form, AshPhoenix.Form.for_update(source, :update) |> to_form())
+          |> assign(:form, AshPhoenix.Form.for_update(source, :update) |> to_form())
 
         {:error, form} ->
-          socket
-          |> assign(
-            :account_form,
-            AshPhoenix.Form.clear_value(form, [
-              :web_url_include_patterns,
-              :web_url_exclude_patterns
-            ])
-          )
+          socket |> assign(:form, form)
       end
 
     {:noreply, socket}

@@ -49,7 +49,7 @@ defmodule CanaryWeb.Router do
         CanaryWeb.NavLive
       ] do
       live "/", CanaryWeb.HomeLive, :none
-      live "/source", CanaryWeb.SourceLive, :none
+      live "/source", CanaryWeb.SourceLive.Index, :none
       live "/insights", CanaryWeb.InsightsLive, :none
       live "/settings", CanaryWeb.SettingsLive.Index, :none
     end
