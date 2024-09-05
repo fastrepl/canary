@@ -12,7 +12,7 @@ defmodule CanaryWeb.NavLive do
         CanaryWeb.HomeLive -> :home
         CanaryWeb.SourceLive -> :source
         CanaryWeb.InsightsLive -> :insights
-        CanaryWeb.SettingsLive -> :settings
+        CanaryWeb.SettingsLive.Index -> :settings
         _ -> nil
       end
 

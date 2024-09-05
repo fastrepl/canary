@@ -1,4 +1,23 @@
-<div>
-  <span>Subdomain layout</span>
+<main class="p-10 mx-auto max-w-4xl">
+  <nav class="sticky top-0 flex flex-row gap-2 mb-4">
+    <.link href="https://docs.litellm.ai" class="link link-hover">
+      <%= @current_account.subdomain.config.name %>
+    </.link>
+  </nav>
+
+  <canary-root framework="docusaurus">
+    <canary-provider-cloud api-key="KEY" api-base="https://cloud.getcanary.dev">
+      <canary-modal>
+        <canary-trigger-searchbar slot="trigger"></canary-trigger-searchbar>
+        <canary-content slot="content">
+          <canary-search slot="mode">
+            <canary-search-input slot="input"></canary-search-input>
+            <canary-search-results slot="body"></canary-search-results>
+          </canary-search>
+        </canary-content>
+      </canary-modal>
+    </canary-provider-cloud>
+  </canary-root>
+
   <%= @inner_content %>
-</div>
+</main>

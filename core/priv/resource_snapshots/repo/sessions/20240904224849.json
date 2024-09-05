@@ -1,56 +1,6 @@
 {
   "attributes": [
     {
-      "allow_nil?": true,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "refresh_token",
-      "type": "text"
-    },
-    {
-      "allow_nil?": true,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "access_token_expires_at",
-      "type": "utc_datetime_usec"
-    },
-    {
-      "allow_nil?": true,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "access_token",
-      "type": "text"
-    },
-    {
-      "allow_nil?": false,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "uid",
-      "type": "text"
-    },
-    {
-      "allow_nil?": false,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "strategy",
-      "type": "text"
-    },
-    {
       "allow_nil?": false,
       "default": "fragment(\"gen_random_uuid()\")",
       "generated?": false,
@@ -59,6 +9,36 @@
       "size": null,
       "source": "id",
       "type": "uuid"
+    },
+    {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "type",
+      "type": "text"
+    },
+    {
+      "allow_nil?": true,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "web_session_id",
+      "type": "uuid"
+    },
+    {
+      "allow_nil?": true,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "discord_thread_id",
+      "type": "bigint"
     },
     {
       "allow_nil?": true,
@@ -78,15 +58,15 @@
           "global": null,
           "strategy": null
         },
-        "name": "user_identities_user_id_fkey",
+        "name": "sessions_account_id_fkey",
         "on_delete": null,
         "on_update": null,
         "primary_key?": true,
         "schema": "public",
-        "table": "users"
+        "table": "accounts"
       },
       "size": null,
-      "source": "user_id",
+      "source": "account_id",
       "type": "uuid"
     }
   ],
@@ -95,27 +75,49 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "FC01C71D3C5A5764F2E62560465AC9D9BB6475EF35637A4AD824632EE7822211",
+  "hash": "43F78E2AA83738D0C150AD3D4D28C58B3EDFBC43BDE352F70914CC47161EF63A",
   "identities": [
     {
       "all_tenants?": false,
       "base_filter": null,
-      "index_name": "user_identities_unique_on_strategy_and_uid_and_user_id_index",
+      "index_name": "sessions_discord_thread_identity_index",
       "keys": [
         {
           "type": "atom",
-          "value": "strategy"
+          "value": "account_id"
         },
         {
           "type": "atom",
-          "value": "uid"
+          "value": "type"
         },
         {
           "type": "atom",
-          "value": "user_id"
+          "value": "discord_thread_id"
         }
       ],
-      "name": "unique_on_strategy_and_uid_and_user_id",
+      "name": "discord_thread_identity",
+      "nils_distinct?": true,
+      "where": null
+    },
+    {
+      "all_tenants?": false,
+      "base_filter": null,
+      "index_name": "sessions_web_session_identity_index",
+      "keys": [
+        {
+          "type": "atom",
+          "value": "account_id"
+        },
+        {
+          "type": "atom",
+          "value": "type"
+        },
+        {
+          "type": "atom",
+          "value": "web_session_id"
+        }
+      ],
+      "name": "web_session_identity",
       "nils_distinct?": true,
       "where": null
     }
@@ -127,5 +129,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "user_identities"
+  "table": "sessions"
 }

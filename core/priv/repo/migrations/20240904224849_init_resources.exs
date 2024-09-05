@@ -320,6 +320,7 @@ defmodule Canary.Repo.Migrations.InitResources do
       add :id, :uuid, null: false, default: fragment("gen_random_uuid()"), primary_key: true
       add :name, :text, null: false
       add :host, :text, null: false
+      add :config, :map
 
       add :account_id,
           references(:accounts,
@@ -329,6 +330,10 @@ defmodule Canary.Repo.Migrations.InitResources do
             prefix: "public"
           )
     end
+
+    create unique_index(:account_subdomains, [:host],
+             name: "account_subdomains_unique_host_index"
+           )
 
     create unique_index(:account_subdomains, [:name],
              name: "account_subdomains_unique_name_index"
@@ -372,6 +377,10 @@ defmodule Canary.Repo.Migrations.InitResources do
 
     drop_if_exists unique_index(:account_subdomains, [:name],
                      name: "account_subdomains_unique_name_index"
+                   )
+
+    drop_if_exists unique_index(:account_subdomains, [:host],
+                     name: "account_subdomains_unique_host_index"
                    )
 
     drop constraint(:account_subdomains, "account_subdomains_account_id_fkey")

@@ -17,8 +17,28 @@
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "installation_id",
-      "type": "bigint"
+      "source": "name",
+      "type": "text"
+    },
+    {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "host",
+      "type": "text"
+    },
+    {
+      "allow_nil?": true,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "config",
+      "type": "map"
     },
     {
       "allow_nil?": true,
@@ -38,8 +58,8 @@
           "global": null,
           "strategy": null
         },
-        "name": "github_apps_account_id_fkey",
-        "on_delete": "delete",
+        "name": "account_subdomains_account_id_fkey",
+        "on_delete": null,
         "on_update": null,
         "primary_key?": true,
         "schema": "public",
@@ -55,8 +75,37 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "D37021F3ED8AAA584A3680F0CC3051405B806EF723F6B37F47380390690632EF",
-  "identities": [],
+  "hash": "2842E5C5A3C0060D4CF90B86F503A73BA95FE6A6DA10F4454AABB8E4B47C369C",
+  "identities": [
+    {
+      "all_tenants?": false,
+      "base_filter": null,
+      "index_name": "account_subdomains_unique_host_index",
+      "keys": [
+        {
+          "type": "atom",
+          "value": "host"
+        }
+      ],
+      "name": "unique_host",
+      "nils_distinct?": true,
+      "where": null
+    },
+    {
+      "all_tenants?": false,
+      "base_filter": null,
+      "index_name": "account_subdomains_unique_name_index",
+      "keys": [
+        {
+          "type": "atom",
+          "value": "name"
+        }
+      ],
+      "name": "unique_name",
+      "nils_distinct?": true,
+      "where": null
+    }
+  ],
   "multitenancy": {
     "attribute": null,
     "global": null,
@@ -64,5 +113,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "github_apps"
+  "table": "account_subdomains"
 }

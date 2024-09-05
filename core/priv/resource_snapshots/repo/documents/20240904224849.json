@@ -11,14 +11,57 @@
       "type": "uuid"
     },
     {
+      "allow_nil?": false,
+      "default": "fragment(\"(now() AT TIME ZONE 'utc')\")",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "created_at",
+      "type": "utc_datetime_usec"
+    },
+    {
+      "allow_nil?": false,
+      "default": "fragment(\"(now() AT TIME ZONE 'utc')\")",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "updated_at",
+      "type": "utc_datetime_usec"
+    },
+    {
       "allow_nil?": true,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "stripe_customer",
-      "type": "map"
+      "source": "url",
+      "type": "text"
+    },
+    {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "content",
+      "type": "binary"
+    },
+    {
+      "allow_nil?": true,
+      "default": "[]",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "chunks",
+      "type": [
+        "array",
+        "map"
+      ]
     },
     {
       "allow_nil?": true,
@@ -27,28 +70,8 @@
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "stripe_subscription",
+      "source": "summary",
       "type": "map"
-    },
-    {
-      "allow_nil?": false,
-      "default": "0",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "count_ask",
-      "type": "bigint"
-    },
-    {
-      "allow_nil?": false,
-      "default": "0",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "count_search",
-      "type": "bigint"
     },
     {
       "allow_nil?": true,
@@ -68,15 +91,15 @@
           "global": null,
           "strategy": null
         },
-        "name": "billings_account_id_fkey",
-        "on_delete": "nothing",
+        "name": "documents_source_id_fkey",
+        "on_delete": null,
         "on_update": null,
         "primary_key?": true,
         "schema": "public",
-        "table": "accounts"
+        "table": "sources"
       },
       "size": null,
-      "source": "account_id",
+      "source": "source_id",
       "type": "uuid"
     }
   ],
@@ -85,8 +108,27 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "55973F4DA99B5842296EF44C673BF65772333F5989C4295F7115491A2DB20B31",
-  "identities": [],
+  "hash": "A0F530A03DB937FFCF1A0110CC3B604033DFF8DB4B52A6C7B22CF43B4AAC40AB",
+  "identities": [
+    {
+      "all_tenants?": false,
+      "base_filter": null,
+      "index_name": "documents_unique_document_index",
+      "keys": [
+        {
+          "type": "atom",
+          "value": "source_id"
+        },
+        {
+          "type": "atom",
+          "value": "url"
+        }
+      ],
+      "name": "unique_document",
+      "nils_distinct?": true,
+      "where": null
+    }
+  ],
   "multitenancy": {
     "attribute": null,
     "global": null,
@@ -94,5 +136,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "billings"
+  "table": "documents"
 }
