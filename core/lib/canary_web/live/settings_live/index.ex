@@ -19,8 +19,10 @@ defmodule CanaryWeb.SettingsLive.Index do
   def render(assigns) do
     ~H"""
     <div>
-      <%= for %{id: id, module: module} <- @forms do %>
-        <hr />
+      <%= for {%{id: id, module: module}, index} <- Enum.with_index(@forms) do %>
+        <%= if index != 0 do %>
+          <hr class="my-8" />
+        <% end %>
         <.live_component id={id} module={module} current_account={@current_account} />
       <% end %>
     </div>
@@ -28,6 +30,13 @@ defmodule CanaryWeb.SettingsLive.Index do
   end
 
   def mount(_params, _session, socket) do
-    {:ok, socket |> assign(:forms, @forms)}
+    account = socket.assigns.current_account |> Ash.load!([:billing])
+
+    socket =
+      socket
+      |> assign(:current_account, account)
+      |> assign(:forms, @forms)
+
+    {:ok, socket}
   end
 end

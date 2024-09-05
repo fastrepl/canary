@@ -5,47 +5,76 @@ defmodule CanaryWeb.SettingsLive.SubdomainForm do
   def render(assigns) do
     ~H"""
     <div>
-      <h2 id="subdomain">Subdomain</h2>
+      <h2 id="subdomain" class="font-semibold mb-2">
+        <a href="#subdomain" class="link link-hover"># Subdomain</a>
+      </h2>
 
-      <.form :let={f} for={@form} phx-submit="submit" phx-target={@myself} class="flex flex-col gap-4">
+      <.form :let={f} for={@form} phx-submit="submit" phx-target={@myself} class="flex flex-col gap-2">
         <input type="hidden" name={f[:account_id].name} value={@current_account.id} />
-        <input
-          name={f[:name].name}
-          value={f[:name].value}
-          type="text"
-          placeholder="name"
-          disabled={@current_account.subdomain != nil}
-          class="input input-bordered w-full"
-        />
-        <input
-          name={f[:host].name}
-          value={f[:host].value}
-          type="text"
-          placeholder="host"
-          disabled={@current_account.subdomain != nil}
-          class="input input-bordered w-full"
-        />
+
+        <label class="form-control w-full">
+          <div class="label">
+            <span class="label-text">Name</span>
+          </div>
+          <input
+            name={f[:name].name}
+            value={f[:name].value}
+            type="text"
+            placeholder="name"
+            disabled={@current_account.subdomain != nil}
+            class="input input-bordered w-full"
+          />
+        </label>
+
+        <label class="form-control w-full">
+          <div class="label">
+            <span class="label-text">Host</span>
+            <span class="label-text-alt">
+              <%= "#{f[:name].value}.#{CanaryWeb.Endpoint.host()}" %>
+            </span>
+          </div>
+          <input
+            name={f[:host].name}
+            value={f[:host].value}
+            type="text"
+            placeholder="host"
+            disabled={@current_account.subdomain != nil}
+            class="input input-bordered w-full"
+          />
+        </label>
 
         <%= if @current_account.subdomain do %>
           <.inputs_for :let={fc} field={f[:config]}>
-            <input
-              name={fc[:name].name}
-              value={fc[:name].value}
-              type="text"
-              placeholder="name"
-              class="input input-bordered w-full"
-            />
-            <input
-              name={fc[:logo_url].name}
-              value={fc[:logo_url].value}
-              type="text"
-              placeholder="logo_url"
-              class="input input-bordered w-full"
-            />
+            <label class="form-control w-full">
+              <div class="label">
+                <span class="label-text">Name</span>
+              </div>
+              <input
+                name={fc[:name].name}
+                value={fc[:name].value}
+                type="text"
+                placeholder="name"
+                class="input input-bordered w-full"
+              />
+            </label>
+
+            <label class="form-control w-full">
+              <div class="label">
+                <span class="label-text">Logo URL</span>
+              </div>
+
+              <input
+                name={fc[:logo_url].name}
+                value={fc[:logo_url].value}
+                type="text"
+                placeholder="logo_url"
+                class="input input-bordered w-full"
+              />
+            </label>
           </.inputs_for>
         <% end %>
 
-        <div class="flex flex-row gap-2 justify-end">
+        <div class="flex flex-row mt-4 gap-2 justify-end">
           <%= if @current_account.subdomain do %>
             <button
               type="button"

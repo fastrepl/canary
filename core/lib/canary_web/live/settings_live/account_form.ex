@@ -5,15 +5,22 @@ defmodule CanaryWeb.SettingsLive.AccountForm do
   def render(assigns) do
     ~H"""
     <div>
-      <h2 id="account">Account</h2>
+      <h2 id="account" class="font-semibold mb-2">
+        <a href="#account" class="link link-hover"># Account</a>
+      </h2>
 
       <.form :let={f} for={@form} phx-submit="submit" phx-target={@myself} class="flex flex-col gap-4">
-        <input
-          type="text"
-          name={f[:name].name}
-          value={f[:name].value}
-          class="input input-bordered w-full"
-        />
+        <label class="form-control w-full">
+          <div class="label">
+            <span class="label-text">Name</span>
+          </div>
+          <input
+            type="text"
+            name={f[:name].name}
+            value={f[:name].value}
+            class="input input-bordered w-full"
+          />
+        </label>
 
         <div class="flex flex-row gap-2 justify-end">
           <button type="submit" class="btn btn-neutral btn-sm">
