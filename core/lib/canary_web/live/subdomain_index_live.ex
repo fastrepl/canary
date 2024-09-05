@@ -15,13 +15,14 @@ defmodule CanaryWeb.SubdomainIndexLive do
       phx-viewport-bottom={!@end_of_timeline? && "next-page"}
       phx-page-loading
       class={[
+        "flex flex-col gap-4",
         if(@end_of_timeline?, do: "pb-10", else: "pb-[calc(200vh)]"),
         if(@page == 1, do: "pt-10", else: "pt-[calc(200vh)]")
       ]}
     >
-      <li :for={{id, post} <- @streams.posts} id={id}>
+      <li :for={{id, post} <- @streams.posts} id={id} class="p-4 rounded-lg border">
         <.link navigate={~p"/p/#{post.id}"}>
-          <div class="border p-4 mb-4 rounded-lg shadow">
+          <div class="">
             <h2 class="text-xl font-bold"><%= post.title %></h2>
             <p class="text-gray-600"><%= post.excerpt %></p>
           </div>

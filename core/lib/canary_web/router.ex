@@ -51,8 +51,8 @@ defmodule CanaryWeb.Router do
       live "/", CanaryWeb.HomeLive, :none
       live "/source", CanaryWeb.SourceLive, :none
       live "/insights", CanaryWeb.InsightsLive, :none
-      live "/settings", CanaryWeb.SettingsLive, :none
-      live "/settings/subdomain", CanaryWeb.SettingsSubdomainLive, :none
+      live "/settings", CanaryWeb.SettingsLive.Index, :none
+      live "/settings2", CanaryWeb.SettingsOldLive, :none
     end
 
     ash_authentication_live_session :others,

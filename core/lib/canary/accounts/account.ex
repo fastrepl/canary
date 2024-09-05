@@ -51,8 +51,7 @@ defmodule Canary.Accounts.Account do
     end
 
     update :update_name do
-      argument :name, :string, allow_nil?: false
-      change set_attribute(:name, expr(^arg(:name)))
+      accept [:name]
     end
   end
 

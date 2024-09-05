@@ -11,6 +11,11 @@ defmodule Canary.Accounts.Subdomain do
     attribute :config, Canary.Accounts.SubdomainConfig, allow_nil?: true
   end
 
+  validations do
+    validate string_length(:name, min: 2, max: 255)
+    validate string_length(:host, min: 2, max: 255)
+  end
+
   identities do
     identity :unique_name, [:name]
     identity :unique_host, [:host]
@@ -50,6 +55,10 @@ defmodule Canary.Accounts.Subdomain do
       if Application.compile_env(:canary, :env) == :prod do
         change {Canary.Change.AddCert, host_attribute: :host}
       end
+    end
+
+    update :update_config do
+      accept [:config]
     end
 
     destroy :destroy do

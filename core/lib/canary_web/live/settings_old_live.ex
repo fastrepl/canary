@@ -1,4 +1,4 @@
-defmodule CanaryWeb.SettingsLive do
+defmodule CanaryWeb.SettingsOldLive do
   use CanaryWeb, :live_view
 
   alias Canary.Accounts.Billing
