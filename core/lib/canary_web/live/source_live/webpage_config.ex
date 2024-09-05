@@ -1,4 +1,4 @@
-defmodule CanaryWeb.SourceLive.Crawler do
+defmodule CanaryWeb.SourceLive.WebpageConfig do
   use CanaryWeb, :live_component
 
   alias Phoenix.LiveView.AsyncResult

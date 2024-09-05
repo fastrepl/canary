@@ -29,9 +29,14 @@ defmodule CanaryWeb.SettingsLive.SubdomainForm do
         <label class="form-control w-full">
           <div class="label">
             <span class="label-text">Host</span>
-            <span class="label-text-alt">
-              <%= "#{f[:name].value}.#{CanaryWeb.Endpoint.host()}" %>
-            </span>
+
+            <%= if f[:name].value do %>
+              <span class="label-text-alt">
+                <div class="badge bg-green-100 gap-2">
+                  <%= "#{f[:name].value}.#{CanaryWeb.Endpoint.host()}" %>
+                </div>
+              </span>
+            <% end %>
           </div>
           <input
             name={f[:host].name}
@@ -80,7 +85,7 @@ defmodule CanaryWeb.SettingsLive.SubdomainForm do
               type="button"
               phx-click="destroy"
               phx-target={@myself}
-              class="btn btn-neutral btn-sm"
+              class="btn btn-sm bg-red-200"
             >
               Remove
             </button>
@@ -144,7 +149,7 @@ defmodule CanaryWeb.SettingsLive.SubdomainForm do
 
       socket
       |> assign(:form, form)
-      |> assign(:submit_text, "Save")
+      |> assign(:submit_text, "Create")
     end
   end
 

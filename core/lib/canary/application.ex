@@ -42,7 +42,7 @@ defmodule Canary.Application do
 
   defp discord() do
     if Application.get_env(:nostrum, :token) do
-      [Nostrum.Application, Canary.Interactions.Discord]
+      [Nostrum.Application, Canary.Interactions.Discord.Consumer]
     else
       []
     end

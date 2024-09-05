@@ -2,13 +2,24 @@ defmodule Canary.Accounts.Changes.StructToMap do
   use Ash.Resource.Change
 
   @impl true
-  def init(opts), do: {:ok, opts}
+  def init(opts) do
+    if is_atom(opts[:argument]) do
+      {:ok, opts}
+    else
+      :error
+    end
+  end
+
+  @impl true
+  def atomic(changeset, opts, context) do
+    {:ok, change(changeset, opts, context)}
+  end
 
   @impl true
   def change(changeset, opts, _context) do
-    case Ash.Changeset.fetch_argument(changeset, opts[:attribute]) do
+    case Ash.Changeset.fetch_argument(changeset, opts[:argument]) do
       {:ok, value} ->
-        Ash.Changeset.force_set_argument(changeset, opts[:attribute], convert(value))
+        Ash.Changeset.force_set_argument(changeset, opts[:argument], convert(value))
 
       :error ->
         changeset

@@ -117,56 +117,9 @@ defmodule CanaryWeb.OnboardingLive do
             </.form>
           </div>
         </div>
-
-        <div class="collapse collapse-arrow join-item border-base-300 border">
-          <input
-            type="radio"
-            name="accordion"
-            checked={if(@current == 3, do: "checked")}
-            disabled={@current > 3}
-          />
-          <div class="collapse-title text-lg font-medium flex flex-row items-center gap-2">
-            <.status n={3} current={@current} /> Connecting to Discord
-          </div>
-          <div class="collapse-content">
-            <p class="text-sm">
-              You can skip this step if you don't have a Discord server.
-            </p>
-
-            <.form :let={f} phx-submit="discord_client" for={@discord_client_form} class="mt-2">
-              <div class="flex flex-col gap-2">
-                <div class="form-control">
-                  <label class="label"><span class="label-text">Server ID</span></label>
-                  <input
-                    name={f[:discord_server_id].name}
-                    value={f[:discord_server_id].value}
-                    type="number"
-                    autocomplete="off"
-                    class="input input-bordered w-full"
-                  />
-
-                  <label class="label"><span class="label-text">Channel ID</span></label>
-                  <input
-                    name={f[:discord_channel_id].name}
-                    value={f[:discord_channel_id].value}
-                    type="number"
-                    autocomplete="off"
-                    class="input input-bordered w-full"
-                  />
-                </div>
-                <button type="button" class="btn btn-sm" phx-click="skip">
-                  Skip
-                </button>
-                <button type="submit" class="btn btn-neutral btn-sm">
-                  Connect
-                </button>
-              </div>
-            </.form>
-          </div>
-        </div>
       </div>
 
-      <%= if @current == 4 do %>
+      <%= if @current == 3 do %>
         <div class="mt-12 flex flex-row items-center gap-2">
           <p class="text-md">All done!</p>
           <a class="link" href={~p"/"}>Go to dashboard</a>
@@ -274,24 +227,6 @@ defmodule CanaryWeb.OnboardingLive do
       {:error, form} ->
         {:noreply,
          socket |> assign(:web_client_form, AshPhoenix.Form.clear_value(form, [:web_url]))}
-    end
-  end
-
-  @impl true
-  def handle_event("discord_client", %{"form" => inputs}, socket) do
-    params = Map.put(inputs, "account", socket.assigns.current_account)
-
-    case AshPhoenix.Form.submit(socket.assigns.discord_client_form, params: params) do
-      {:ok, _} ->
-        {:noreply, socket |> assign(:current, 4)}
-
-      {:error, form} ->
-        {:noreply,
-         socket
-         |> assign(
-           :discord_client_form,
-           AshPhoenix.Form.clear_value(form, [:discord_server_id, :discord_channel_id])
-         )}
     end
   end
 
