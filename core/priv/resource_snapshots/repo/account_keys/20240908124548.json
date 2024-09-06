@@ -17,8 +17,18 @@
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "installation_id",
-      "type": "bigint"
+      "source": "value",
+      "type": "text"
+    },
+    {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "config",
+      "type": "map"
     },
     {
       "allow_nil?": true,
@@ -38,8 +48,8 @@
           "global": null,
           "strategy": null
         },
-        "name": "github_apps_account_id_fkey",
-        "on_delete": "delete",
+        "name": "account_keys_account_id_fkey",
+        "on_delete": null,
         "on_update": null,
         "primary_key?": true,
         "schema": "public",
@@ -55,8 +65,23 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "BA079FDC3BC5B691FCEBE5BA10DCF54AA9C2B5196F9B10A680B4A1D9EA019D19",
-  "identities": [],
+  "hash": "939090E09C6F81D6B1AEAE6A658234FC3B05B8C72FCBCC2382CF9DB90435158F",
+  "identities": [
+    {
+      "all_tenants?": false,
+      "base_filter": null,
+      "index_name": "account_keys_unique_value_index",
+      "keys": [
+        {
+          "type": "atom",
+          "value": "value"
+        }
+      ],
+      "name": "unique_value",
+      "nils_distinct?": true,
+      "where": null
+    }
+  ],
   "multitenancy": {
     "attribute": null,
     "global": null,
@@ -64,5 +89,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "github_apps"
+  "table": "account_keys"
 }

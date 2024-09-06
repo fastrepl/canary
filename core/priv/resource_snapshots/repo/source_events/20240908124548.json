@@ -2,38 +2,39 @@
   "attributes": [
     {
       "allow_nil?": false,
-      "default": "nil",
+      "default": "fragment(\"gen_random_uuid()\")",
       "generated?": false,
       "primary_key?": true,
-      "references": {
-        "deferrable": false,
-        "destination_attribute": "id",
-        "destination_attribute_default": null,
-        "destination_attribute_generated": null,
-        "index?": false,
-        "match_type": null,
-        "match_with": null,
-        "multitenancy": {
-          "attribute": null,
-          "global": null,
-          "strategy": null
-        },
-        "name": "account_users_user_id_fkey",
-        "on_delete": null,
-        "on_update": null,
-        "primary_key?": true,
-        "schema": "public",
-        "table": "users"
-      },
+      "references": null,
       "size": null,
-      "source": "user_id",
+      "source": "id",
       "type": "uuid"
+    },
+    {
+      "allow_nil?": false,
+      "default": "fragment(\"(now() AT TIME ZONE 'utc')\")",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "created_at",
+      "type": "utc_datetime_usec"
     },
     {
       "allow_nil?": false,
       "default": "nil",
       "generated?": false,
-      "primary_key?": true,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "meta",
+      "type": "map"
+    },
+    {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
       "references": {
         "deferrable": false,
         "destination_attribute": "id",
@@ -47,15 +48,15 @@
           "global": null,
           "strategy": null
         },
-        "name": "account_users_account_id_fkey",
+        "name": "source_events_source_id_fkey",
         "on_delete": null,
         "on_update": null,
         "primary_key?": true,
         "schema": "public",
-        "table": "accounts"
+        "table": "sources"
       },
       "size": null,
-      "source": "account_id",
+      "source": "source_id",
       "type": "uuid"
     }
   ],
@@ -64,7 +65,7 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "1ED77D36EEC9ADF98C7B3B5F47E4A5F924C5A9C2AAB8DECCC4CD72AED8069BDC",
+  "hash": "0F0B2145BA62F49E3160350F108F80AF11B1F478F50C604CC2CA1E9384DC556D",
   "identities": [],
   "multitenancy": {
     "attribute": null,
@@ -73,5 +74,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "account_users"
+  "table": "source_events"
 }

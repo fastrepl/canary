@@ -21,7 +21,17 @@
       "type": "utc_datetime_usec"
     },
     {
-      "allow_nil?": true,
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "email",
+      "type": "text"
+    },
+    {
+      "allow_nil?": false,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
@@ -38,7 +48,36 @@
           "global": null,
           "strategy": null
         },
-        "name": "feedbacks_account_id_fkey",
+        "name": "account_invites_user_id_fkey",
+        "on_delete": null,
+        "on_update": null,
+        "primary_key?": true,
+        "schema": "public",
+        "table": "users"
+      },
+      "size": null,
+      "source": "user_id",
+      "type": "uuid"
+    },
+    {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": {
+        "deferrable": false,
+        "destination_attribute": "id",
+        "destination_attribute_default": null,
+        "destination_attribute_generated": null,
+        "index?": false,
+        "match_type": null,
+        "match_with": null,
+        "multitenancy": {
+          "attribute": null,
+          "global": null,
+          "strategy": null
+        },
+        "name": "account_invites_account_id_fkey",
         "on_delete": null,
         "on_update": null,
         "primary_key?": true,
@@ -54,8 +93,8 @@
   "check_constraints": [],
   "custom_indexes": [],
   "custom_statements": [],
-  "has_create_action": false,
-  "hash": "9841E124A4BF96E208C9CF0EBC2E6544DA30A91D87EEEF5BF91F87F50629A233",
+  "has_create_action": true,
+  "hash": "23E19FFAD3F735D0DB61E5549AFE1EF1013738BB40D5E5C8750CB92A61185717",
   "identities": [],
   "multitenancy": {
     "attribute": null,
@@ -64,5 +103,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "feedbacks"
+  "table": "account_invites"
 }

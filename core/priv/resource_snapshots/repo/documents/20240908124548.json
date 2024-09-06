@@ -22,23 +22,13 @@
     },
     {
       "allow_nil?": false,
-      "default": "fragment(\"(now() AT TIME ZONE 'utc')\")",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "updated_at",
-      "type": "utc_datetime_usec"
-    },
-    {
-      "allow_nil?": true,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "url",
-      "type": "text"
+      "source": "meta",
+      "type": "map"
     },
     {
       "allow_nil?": false,
@@ -47,31 +37,8 @@
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "content",
-      "type": "binary"
-    },
-    {
-      "allow_nil?": true,
-      "default": "[]",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
       "source": "chunks",
-      "type": [
-        "array",
-        "map"
-      ]
-    },
-    {
-      "allow_nil?": true,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "summary",
-      "type": "map"
+      "type": ["array", "map"]
     },
     {
       "allow_nil?": true,
@@ -79,7 +46,7 @@
       "generated?": false,
       "primary_key?": false,
       "references": {
-        "deferrable": false,
+        "deferrable": "initially",
         "destination_attribute": "id",
         "destination_attribute_default": null,
         "destination_attribute_generated": null,
@@ -108,27 +75,8 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "A0F530A03DB937FFCF1A0110CC3B604033DFF8DB4B52A6C7B22CF43B4AAC40AB",
-  "identities": [
-    {
-      "all_tenants?": false,
-      "base_filter": null,
-      "index_name": "documents_unique_document_index",
-      "keys": [
-        {
-          "type": "atom",
-          "value": "source_id"
-        },
-        {
-          "type": "atom",
-          "value": "url"
-        }
-      ],
-      "name": "unique_document",
-      "nils_distinct?": true,
-      "where": null
-    }
-  ],
+  "hash": "78B9FA864405E248973FC5F44A1F16EDE92D69E8F7E339399482CE516761ECE7",
+  "identities": [],
   "multitenancy": {
     "attribute": null,
     "global": null,
