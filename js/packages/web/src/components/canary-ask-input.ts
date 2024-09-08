@@ -1,5 +1,6 @@
-import { LitElement, css, html, nothing } from "lit";
+import { LitElement, css, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
+import { classMap } from "lit/directives/class-map.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 
 import { consume } from "@lit/context";
@@ -28,6 +29,7 @@ export class CanaryAskInput extends LitElement {
     return html`
       <input
         type="text"
+        part="input"
         value=${this.query}
         autocomplete="off"
         spellcheck="false"
@@ -37,15 +39,24 @@ export class CanaryAskInput extends LitElement {
         onfocus="this.setSelectionRange(this.value.length,this.value.length);"
         autofocus=${ifDefined(this.autofocus || null)}
       />
-      ${this._ask?.status === TaskStatus.PENDING
-        ? html`<canary-loading-spinner></canary-loading-spinner>`
-        : nothing}
+        class=${classMap({
+          hidden: this._ask?.status !== TaskStatus.PENDING,
+        })}
+      >
+        <slot name="loading">
+          <canary-loading-spinner></canary-loading-spinner>
+        </slot>
+      </span>
     `;
   }
 
   static styles = [
     input,
     css`
+      .hidden {
+        visibility: hidden;
+      }
+
       span {
         font-size: 0.625rem;
         color: var(--canary-color-gray-30);

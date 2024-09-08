@@ -36,6 +36,7 @@ export class CanarySearchInput extends LitElement {
     return html`
       <input
         type="text"
+        part="input"
         value=${this._query}
         autocomplete="off"
         spellcheck="false"
@@ -49,7 +50,9 @@ export class CanarySearchInput extends LitElement {
           hidden: this._search.status !== TaskStatus.PENDING,
         })}
       >
-        <canary-loading-spinner></canary-loading-spinner>
+        <slot name="loading">
+          <canary-loading-spinner></canary-loading-spinner>
+        </slot>
       </span>
     `;
   }

@@ -1,5 +1,5 @@
 <script setup>
-import { data as schema } from "../../../data/openapi.data.js";
+// import { data as schema } from "../../../data/openapi.data.js";
 </script>
 
 # API
