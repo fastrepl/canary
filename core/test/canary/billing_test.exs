@@ -18,8 +18,8 @@ defmodule Canary.Test.Billing do
     assert account.billing.stripe_customer == nil
     assert account.billing.stripe_subscription == nil
 
-    updated = Billing.update_stripe_customer!(account.billing, %{id: "cus_123"})
-    updated = Billing.update_stripe_customer!(account.billing, %Stripe.Customer{id: "cus_123"})
+    updated_1 = Billing.update_stripe_customer!(account.billing, %{id: "cus_123"})
+    updated_2 = Billing.update_stripe_customer!(account.billing, %Stripe.Customer{id: "cus_123"})
 
     [found] =
       Billing
@@ -27,7 +27,8 @@ defmodule Canary.Test.Billing do
       |> Ash.Query.limit(1)
       |> Ash.read!()
 
-    assert found.id == updated.id
+    assert found.id == updated_1.id
+    assert found.id == updated_2.id
   end
 
   test "update usage" do
