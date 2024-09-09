@@ -29,15 +29,17 @@ defmodule CanaryWeb.SettingsLive.KeyForm do
                 </:group_button>
               </Primer.text_input>
 
-              <Primer.button
-                phx-click="destroy"
-                phx-target={@myself}
-                phx-value-id={id}
-                is_small
-                is_close_button
-              >
-                <Primer.octicon name="x-16" />
-              </Primer.button>
+              <%= if Enum.count(@current_account.keys) > 1   do %>
+                <Primer.button
+                  phx-click="destroy"
+                  phx-target={@myself}
+                  phx-value-id={id}
+                  is_small
+                  is_close_button
+                >
+                  <Primer.octicon name="x-16" />
+                </Primer.button>
+              <% end %>
             </li>
           <% end %>
         </ul>
