@@ -13,7 +13,7 @@ defmodule CanaryWeb.Plug.LoadAccountFromUser do
   defp current_account(user) do
     accounts =
       user
-      |> Ash.load!(accounts: [:sources, :clients])
+      |> Ash.load!(accounts: [:sources])
       |> Map.get(:accounts)
 
     if length(accounts) > 0, do: Enum.at(accounts, 0), else: nil

@@ -56,15 +56,14 @@ config :canary, :root, File.cwd!()
 
 config :canary, Oban,
   engine: Oban.Engines.Basic,
-  queues: [fetcher: 1, email: 2, updater: 5, stripe: 50, summary: 20],
+  queues: [github_fetcher: 20, web_fetcher: 10, email: 2, updater: 5, stripe: 50, summary: 20],
   repo: Canary.Repo,
   plugins: [
     {Oban.Plugins.Pruner, max_age: 60 * 60 * 24 * 7},
     {Oban.Plugins.Lifeline, rescue_after: :timer.minutes(5)},
     {Oban.Plugins.Cron,
      crontab: [
-       {"0 * * * *", Canary.Workers.StripeReport},
-       {"0 0 * * *", Canary.Workers.SourceUpdate}
+       {"0 * * * *", Canary.Workers.StripeReport}
      ]}
   ]
 
@@ -74,7 +73,6 @@ config :canary,
   ash_domains: [
     Canary.Accounts,
     Canary.Sources,
-    Canary.Interactions,
     Canary.Github
   ]
 
