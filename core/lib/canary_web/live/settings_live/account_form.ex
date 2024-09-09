@@ -1,31 +1,23 @@
 defmodule CanaryWeb.SettingsLive.AccountForm do
   use CanaryWeb, :live_component
+  alias PrimerLive.Component, as: Primer
 
   @impl true
   def render(assigns) do
     ~H"""
     <div>
-      <h2 id="account" class="font-semibold mb-2">
-        <a href="#account" class="link link-hover"># Account</a>
-      </h2>
+      <Primer.subhead>Account</Primer.subhead>
 
       <.form :let={f} for={@form} phx-submit="submit" phx-target={@myself} class="flex flex-col gap-4">
-        <label class="form-control w-full">
-          <div class="label">
-            <span class="label-text">Name</span>
-          </div>
-          <input
-            type="text"
-            name={f[:name].name}
-            value={f[:name].value}
-            class="input input-bordered w-full"
-          />
-        </label>
+        <Primer.text_input form={f} field={:name} form_control={%{label: "Name"}} />
 
         <div class="flex flex-row gap-2 justify-end">
-          <button type="submit" class="btn btn-neutral btn-sm">
-            <%= @submit_text %>
-          </button>
+          <Primer.button type="button" phx-click="destroy" phx-target={@myself} is_danger>
+            Delete
+          </Primer.button>
+          <Primer.button type="submit" is_primary>
+            Update
+          </Primer.button>
         </div>
       </.form>
     </div>
@@ -38,7 +30,6 @@ defmodule CanaryWeb.SettingsLive.AccountForm do
       socket
       |> assign(assigns)
       |> assign_form()
-      |> assign(:submit_text, "Update")
 
     {:ok, socket}
   end
@@ -64,5 +55,19 @@ defmodule CanaryWeb.SettingsLive.AccountForm do
     end
 
     {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("destroy", _, socket) do
+    case Ash.destroy(socket.assigns.current_account) do
+      :ok ->
+        {:noreply, socket |> redirect(to: ~p"/")}
+
+      {:error, _} ->
+        {:noreply,
+         socket
+         |> put_flash(:error, "Failed to delete account")
+         |> push_navigate(to: ~p"/settings")}
+    end
   end
 end

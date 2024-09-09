@@ -1,5 +1,6 @@
 defmodule CanaryWeb.SettingsLive.BillingForm do
   use CanaryWeb, :live_component
+  alias PrimerLive.Component, as: Primer
 
   alias Canary.Accounts.Billing
 
@@ -7,31 +8,19 @@ defmodule CanaryWeb.SettingsLive.BillingForm do
   def render(assigns) do
     ~H"""
     <div>
-      <h2 id="billing" class="font-semibold mb-2">
-        <a href="#billing" class="link link-hover"># Billing</a>
-      </h2>
+      <Primer.subhead>Billing</Primer.subhead>
 
-      <label class="form-control w-full">
-        <div class="label">
-          <span class="label-text">Current plan</span>
-        </div>
-        <input class="input input-bordered" value={@plan} disabled />
-      </label>
+      <Primer.text_input disabled value={@plan} form_control={%{label: "Current plan"}} />
 
       <div class="flex flex-row gap-2 mt-4 justify-end">
         <%= if @current_account.billing.stripe_subscription do %>
-          <.link href={@stripe_portal_url} class="btn btn-neutral btn-sm">
+          <Primer.button href={@stripe_portal_url}>
             Manage
-          </.link>
+          </Primer.button>
         <% else %>
-          <button
-            type="button"
-            phx-click="checkout"
-            phx-target={@myself}
-            class="btn btn-neutral btn-sm"
-          >
+          <Primer.button type="button" phx-click="checkout" phx-target={@myself} is_primary>
             Upgrade
-          </button>
+          </Primer.button>
         <% end %>
       </div>
     </div>
