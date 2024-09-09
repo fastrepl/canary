@@ -2,15 +2,14 @@ defmodule Canary.Interactions.Responder do
   alias Canary.Interactions.Responder
 
   @callback run(
-              session :: any(),
               query :: String.t(),
               pattern :: String.t() | nil,
               client :: any(),
               handle_delta :: function()
             ) :: {:ok, any()} | {:error, any()}
 
-  def run(session, query, pattern, client, handle_delta \\ nil) do
-    impl().run(session, query, pattern, client, handle_delta)
+  def run(query, pattern, client, handle_delta \\ nil) do
+    impl().run(query, pattern, client, handle_delta)
   end
 
   defp impl, do: Application.get_env(:canary, :responder, Responder.Default)
@@ -20,13 +19,7 @@ defmodule Canary.Interactions.Responder.Default do
   @behaviour Canary.Interactions.Responder
   require Ash.Query
 
-  alias Canary.Interactions.Client
-
-  def run(session, query, pattern, %Client{account: account, sources: sources}, handle_delta) do
-    Task.Supervisor.start_child(Canary.TaskSupervisor, fn ->
-      Canary.Interactions.Message.add_user!(session, query)
-    end)
-
+  def run(query, pattern, %{account: account, sources: sources}, handle_delta) do
     model = Application.fetch_env!(:canary, :chat_completion_model_response)
     source = sources |> Enum.at(0)
     {:ok, %{search: docs}} = Canary.Searcher.run(source, query)
@@ -89,8 +82,6 @@ defmodule Canary.Interactions.Responder.Default do
         content: """
         #{render_context(docs)}
 
-        #{render_history(session.messages)}
-
         <user_question>
         #{query}
         </user_question>
@@ -144,29 +135,15 @@ defmodule Canary.Interactions.Responder.Default do
       |> parse_footnotes()
       |> Enum.map(fn i -> Enum.at(docs, i - 1) end)
 
+    # TODO: there's great change this is invalid, and will cause problem to the client side.
     safe(handle_delta, %{type: :references, items: references})
     safe(handle_delta, %{type: :complete, content: completion})
 
     Task.Supervisor.start_child(Canary.TaskSupervisor, fn ->
       Canary.Accounts.Billing.increment_ask(account.billing)
-      Canary.Interactions.Message.add_assistant!(session, completion)
     end)
 
     {:ok, %{response: completion, references: references}}
-  end
-
-  defp render_history(history) do
-    if history != [] do
-      body =
-        history
-        |> Enum.sort_by(& &1.created_at, &(DateTime.compare(&1, &2) == :lt))
-        |> Enum.map(&Canary.Renderable.render/1)
-        |> Enum.join("\n\n")
-
-      "<history>\n#{body}\n</history>"
-    else
-      ""
-    end
   end
 
   defp render_context(docs) do

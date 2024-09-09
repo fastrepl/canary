@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="[scrollbar-gutter:stable]" data-theme="dark">
+<html lang="en" class="h-full bg-white [scrollbar-gutter:stable]" data-theme="light">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -8,10 +8,28 @@
     <link phx-track-static rel="stylesheet" href={~p"/assets/app.css"} />
     <script defer phx-track-static type="text/javascript" src={~p"/assets/app.js"}>
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/theme-change@2.0.2/index.js">
+
+    <link phx-track-static rel="stylesheet" href={~p"/primer_live/primer-live.min.css"} />
+    <script
+      defer
+      phx-track-static
+      type="text/javascript"
+      src={~p"/primer_live/primer-live.min.js"}
+    >
     </script>
   </head>
-  <body class="antialiased">
+  <body
+    class="h-full"
+    style={
+      [
+        %{key: "--canary-color-primary-c", value: assigns[:canary_color_c]},
+        %{key: "--canary-color-primary-h", value: assigns[:canary_color_h]}
+      ]
+      |> Enum.filter(fn %{value: value} -> value != nil end)
+      |> Enum.map(fn %{key: key, value: value} -> "#{key}:#{value}" end)
+      |> Enum.join(";")
+    }
+  >
     <%= @inner_content %>
   </body>
 </html>

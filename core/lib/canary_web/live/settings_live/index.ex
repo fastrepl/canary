@@ -7,6 +7,10 @@ defmodule CanaryWeb.SettingsLive.Index do
       module: CanaryWeb.SettingsLive.AccountForm
     },
     %{
+      id: "settings-key-form",
+      module: CanaryWeb.SettingsLive.KeyForm
+    },
+    %{
       id: "settings-billing-form",
       module: CanaryWeb.SettingsLive.BillingForm
     },
@@ -18,11 +22,8 @@ defmodule CanaryWeb.SettingsLive.Index do
 
   def render(assigns) do
     ~H"""
-    <div>
-      <%= for {%{id: id, module: module}, index} <- Enum.with_index(@forms) do %>
-        <%= if index != 0 do %>
-          <hr class="my-8" />
-        <% end %>
+    <div class="flex flex-col gap-4">
+      <%= for %{id: id, module: module} <- @forms do %>
         <.live_component id={id} module={module} current_account={@current_account} />
       <% end %>
     </div>
@@ -30,7 +31,7 @@ defmodule CanaryWeb.SettingsLive.Index do
   end
 
   def mount(_params, _session, socket) do
-    account = socket.assigns.current_account |> Ash.load!([:billing])
+    account = socket.assigns.current_account |> Ash.load!([:billing, :keys])
 
     socket =
       socket

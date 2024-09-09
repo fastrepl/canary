@@ -17,34 +17,6 @@ defmodule Canary.Reader do
     |> String.trim()
   end
 
-  def markdown_sections_from_html(html) do
-    pattern = ~r/__CANARY__\(tag=([^,]+),id=([^,]+),text=([^)]+)\)/
-
-    html
-    |> Canary.Native.html_to_md_with_marker()
-    |> String.split(pattern, include_captures: true)
-    |> Enum.reduce({[], []}, fn item, {current_group, result} ->
-      if Regex.match?(pattern, item) do
-        {[item], result ++ [current_group]}
-      else
-        {current_group ++ [item], result}
-      end
-    end)
-    |> then(fn {last_group, result} -> result ++ [last_group] end)
-    |> Enum.reject(&(&1 == []))
-    |> Enum.map(fn group ->
-      case group do
-        [content] ->
-          %{content: String.trim(content)}
-
-        [marker, content] ->
-          [_, _tag, id, title] = Regex.run(pattern, marker)
-          %{id: id, title: title, content: String.trim(content)}
-      end
-    end)
-    |> Enum.reject(&(&1.content == ""))
-  end
-
   def chunk_markdown(content) do
     content
     |> Canary.Native.chunk_markdown(1600)

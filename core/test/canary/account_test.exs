@@ -16,9 +16,9 @@ defmodule Canary.Test.Account do
     user = user_fixture()
 
     assert account.users |> length() == 1
-    {:ok, account} = Account.add_member(account, user)
+    {:ok, account} = Account.add_member(account, user.id)
     assert account.users |> length() == 1 + 1
-    {:ok, account} = Account.remove_member(account, user)
+    {:ok, account} = Account.remove_member(account, user.id)
     assert account.users |> length() == 1 + 1 - 1
   end
 end

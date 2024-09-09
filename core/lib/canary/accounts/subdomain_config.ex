@@ -12,16 +12,6 @@ defmodule Canary.Accounts.SubdomainConfig do
   end
 
   actions do
-    defaults [:read]
-
-    create :create do
-      primary? true
-      accept [:name, :logo_url]
-    end
-
-    update :update do
-      primary? true
-      accept [:name, :logo_url]
-    end
+    defaults [:read, create: [:name, :logo_url], update: [:name, :logo_url]]
   end
 end

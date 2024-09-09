@@ -10,43 +10,42 @@ defmodule Canary.Accounts.Account do
   end
 
   relationships do
-    many_to_many :users, Canary.Accounts.User do
-      through Canary.Accounts.AccountUser
-    end
-
-    has_many :sources, Canary.Sources.Source
-    has_many :clients, Canary.Interactions.Client
-    has_many :sessions, Canary.Interactions.Session
-
     has_one :github_app, Canary.Github.App
     has_one :billing, Canary.Accounts.Billing
     has_one :subdomain, Canary.Accounts.Subdomain
+
+    has_many :sources, Canary.Sources.Source
+    has_many :keys, Canary.Accounts.Key
+
+    many_to_many :users, Canary.Accounts.User do
+      through Canary.Accounts.AccountUser
+    end
   end
 
   actions do
-    defaults [:read]
+    defaults [:read, :destroy]
 
     create :create do
-      argument :user, :map, allow_nil?: false
+      argument :user_id, :uuid, allow_nil?: false
       argument :name, :string, allow_nil?: false
 
-      change manage_relationship(:user, :users, type: :append)
+      change manage_relationship(:user_id, :users, type: :append)
       change set_attribute(:name, expr(^arg(:name)))
     end
 
     update :add_member do
       require_atomic? false
-      argument :user, :map, allow_nil?: false
+      argument :user_id, :uuid, allow_nil?: false
 
-      change manage_relationship(:user, :users, type: :append)
+      change manage_relationship(:user_id, :users, type: :append)
       change Canary.Accounts.Changes.StripeReportSeat
     end
 
     update :remove_member do
       require_atomic? false
-      argument :user, :map, allow_nil?: false
+      argument :user_id, :uuid, allow_nil?: false
 
-      change manage_relationship(:user, :users, type: :remove)
+      change manage_relationship(:user_id, :users, type: :remove)
       change Canary.Accounts.Changes.StripeReportSeat
     end
 
@@ -56,13 +55,14 @@ defmodule Canary.Accounts.Account do
   end
 
   changes do
+    change Canary.Accounts.Changes.InitKey, on: [:create]
     change Canary.Accounts.Changes.InitBilling, on: [:create]
   end
 
   code_interface do
     define :update_name, args: [:name], action: :update_name
-    define :add_member, args: [:user], action: :add_member
-    define :remove_member, args: [:user], action: :remove_member
+    define :add_member, args: [:user_id], action: :add_member
+    define :remove_member, args: [:user_id], action: :remove_member
   end
 
   postgres do

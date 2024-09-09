@@ -10,5 +10,6 @@ defmodule Canary.Accounts do
     resource Canary.Accounts.Billing
     resource Canary.Accounts.Invite
     resource Canary.Accounts.Subdomain
+    resource Canary.Accounts.Key
   end
 end

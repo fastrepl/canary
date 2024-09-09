@@ -14,6 +14,7 @@ defmodule Canary.Application do
 
     children =
       [
+        Canary.Vault,
         {Cachex, name: :cache},
         {Task.Supervisor, name: Canary.TaskSupervisor},
         {AshAuthentication.Supervisor, otp_app: :canary},
@@ -42,7 +43,7 @@ defmodule Canary.Application do
 
   defp discord() do
     if Application.get_env(:nostrum, :token) do
-      [Nostrum.Application, Canary.Interactions.Discord.Consumer]
+      [Nostrum.Application, Canary.Sources.DiscordConsumer]
     else
       []
     end

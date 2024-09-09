@@ -1,15 +1,15 @@
 defmodule CanaryWeb.OperationsController do
   use CanaryWeb, :controller
 
-  plug :find_client when action in [:search, :ask, :feedback_page]
+  plug :find_key when action in [:search, :ask, :feedback_page]
   plug :ensure_valid_host when action in [:search, :ask, :feedback_page]
 
-  defp find_client(conn, _opts) do
+  defp find_key(conn, _opts) do
     err_msg = "no client found with the given key"
 
     with {:ok, token} <- get_token_from_header(conn),
-         {:ok, client} <- Canary.Interactions.Client.find_web(token) do
-      conn |> assign(:client, client)
+         {:ok, key} <- Canary.Accounts.Key.find(token) do
+      conn |> assign(:key, key)
     else
       _ -> conn |> send_resp(401, err_msg) |> halt()
     end
@@ -24,18 +24,18 @@ defmodule CanaryWeb.OperationsController do
 
   defp ensure_valid_host(conn, _opts) do
     err_msg = "invalid host"
-    host_url = conn.assigns.client.web_host_url
+
+    %Ash.Union{
+      type: :public,
+      value: %Canary.Accounts.PublicKeyConfig{} = config
+    } = conn.assigns.key.config
 
     if Application.get_env(:canary, :env) == :prod and
-         conn.host not in [
-           host_url,
-           "getcanary.dev",
-           "cloud.getcanary.dev",
-           "demo.getcanary.dev"
-         ] do
+         conn.host not in [config.allowed_host, "getcanary.dev", "cloud.getcanary.dev"] do
       conn |> send_resp(401, err_msg) |> halt()
     else
       conn
+      |> assign(:current_account, conn.assigns.key.account)
     end
   end
 
@@ -93,7 +93,7 @@ defmodule CanaryWeb.OperationsController do
   end
 
   def search(conn, %{"query" => query}) do
-    source = conn.assigns.client.sources |> Enum.at(0)
+    source = conn.assigns.current_account.sources |> Enum.at(0)
 
     case Canary.Searcher.run(source, query) do
       {:ok, data} ->
@@ -109,9 +109,8 @@ defmodule CanaryWeb.OperationsController do
     end
   end
 
-  def ask(conn, %{"id" => id, "query" => query} = params) do
+  def ask(conn, %{"id" => _, "query" => query} = params) do
     client = conn.assigns.client
-    {:ok, session} = Canary.Interactions.find_or_create_session(client.account, {:web, id})
 
     conn =
       conn
@@ -124,7 +123,6 @@ defmodule CanaryWeb.OperationsController do
 
     Task.Supervisor.start_child(Canary.TaskSupervisor, fn ->
       Canary.Interactions.Responder.run(
-        session,
         query,
         params["pattern"],
         client,

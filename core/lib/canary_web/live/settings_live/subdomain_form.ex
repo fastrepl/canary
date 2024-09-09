@@ -1,99 +1,44 @@
 defmodule CanaryWeb.SettingsLive.SubdomainForm do
   use CanaryWeb, :live_component
+  alias PrimerLive.Component, as: Primer
 
   @impl true
   def render(assigns) do
     ~H"""
     <div>
-      <h2 id="subdomain" class="font-semibold mb-2">
-        <a href="#subdomain" class="link link-hover"># Subdomain</a>
-      </h2>
+      <Primer.subhead>Subdomain</Primer.subhead>
 
       <.form :let={f} for={@form} phx-submit="submit" phx-target={@myself} class="flex flex-col gap-2">
         <input type="hidden" name={f[:account_id].name} value={@current_account.id} />
-
-        <label class="form-control w-full">
-          <div class="label">
-            <span class="label-text">Name</span>
-          </div>
-          <input
-            name={f[:name].name}
-            value={f[:name].value}
-            type="text"
-            placeholder="name"
-            disabled={@current_account.subdomain != nil}
-            class="input input-bordered w-full"
-          />
-        </label>
-
-        <label class="form-control w-full">
-          <div class="label">
-            <span class="label-text">Host</span>
-
-            <%= if f[:name].value do %>
-              <span class="label-text-alt">
-                <div class="badge bg-green-100 gap-2">
-                  <%= "#{f[:name].value}.#{CanaryWeb.Endpoint.host()}" %>
-                </div>
-              </span>
-            <% end %>
-          </div>
-          <input
-            name={f[:host].name}
-            value={f[:host].value}
-            type="text"
-            placeholder="host"
-            disabled={@current_account.subdomain != nil}
-            class="input input-bordered w-full"
-          />
-        </label>
-
+        <Primer.text_input
+          form={f}
+          field={:name}
+          disabled={@current_account.subdomain != nil}
+          form_control={%{label: "Name"}}
+        />
+        <Primer.text_input
+          form={f}
+          field={:host}
+          disabled={@current_account.subdomain != nil}
+          form_control={%{label: "Host"}}
+        />
         <%= if @current_account.subdomain do %>
           <.inputs_for :let={fc} field={f[:config]}>
-            <label class="form-control w-full">
-              <div class="label">
-                <span class="label-text">Name</span>
-              </div>
-              <input
-                name={fc[:name].name}
-                value={fc[:name].value}
-                type="text"
-                placeholder="name"
-                class="input input-bordered w-full"
-              />
-            </label>
-
-            <label class="form-control w-full">
-              <div class="label">
-                <span class="label-text">Logo URL</span>
-              </div>
-
-              <input
-                name={fc[:logo_url].name}
-                value={fc[:logo_url].value}
-                type="text"
-                placeholder="logo_url"
-                class="input input-bordered w-full"
-              />
-            </label>
+            <Primer.text_input form={fc} field={:name} form_control={%{label: "Brand name"}} />
+            <Primer.text_input form={fc} field={:logo_url} form_control={%{label: "Brand logo URL"}} />
           </.inputs_for>
         <% end %>
 
         <div class="flex flex-row mt-4 gap-2 justify-end">
           <%= if @current_account.subdomain do %>
-            <button
-              type="button"
-              phx-click="destroy"
-              phx-target={@myself}
-              class="btn btn-sm bg-red-200"
-            >
-              Remove
-            </button>
+            <Primer.button type="button" phx-click="destroy" phx-target={@myself} is_danger>
+              Delete
+            </Primer.button>
           <% end %>
 
-          <button type="submit" class="btn btn-neutral btn-sm">
+          <Primer.button type="submit" is_primary>
             <%= @submit_text %>
-          </button>
+          </Primer.button>
         </div>
       </.form>
     </div>
@@ -117,16 +62,7 @@ defmodule CanaryWeb.SettingsLive.SubdomainForm do
     if account.subdomain do
       form =
         account.subdomain
-        |> AshPhoenix.Form.for_update(:update_config,
-          forms: [
-            config: [
-              resource: Canary.Accounts.SubdomainConfig,
-              data: account.subdomain.config,
-              create_action: :create,
-              update_action: :update
-            ]
-          ]
-        )
+        |> AshPhoenix.Form.for_update(:update_config, forms: [auto?: true])
         |> then(fn form ->
           if form.forms[:config] do
             form

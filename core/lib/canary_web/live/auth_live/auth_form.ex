@@ -1,5 +1,6 @@
 defmodule CanaryWeb.AuthLive.AuthForm do
   use CanaryWeb, :live_component
+  alias PrimerLive.Component, as: Primer
 
   @impl true
   def render(assigns) do
@@ -13,60 +14,32 @@ defmodule CanaryWeb.AuthLive.AuthForm do
         action={@action}
         class="flex flex-col justify-center gap-4 px-10 py-10 lg:px-16"
       >
-        <div class="form-control">
-          <label class="label" for="input1"><span class="label-text">Email</span></label>
-          <input
-            name={f[:email].name}
-            value={f[:email].value}
-            type="email"
-            placeholder="email"
-            class="input input-bordered [&:user-invalid]:input-warning [&:user-valid]:input-success"
-            id="input1"
-          />
-        </div>
-        <div class="form-control">
-          <label class="label" for="input2"><span class="label-text">Password</span></label>
-          <input
-            name={f[:password].name}
-            value={f[:password].value}
-            type="password"
-            placeholder="password"
-            class="input input-bordered [&:user-invalid]:input-warning [&:user-valid]:input-success"
-            minlength="6"
-            for="input2"
-          />
-        </div>
+        <Primer.text_input type="email" placeholder="email" form={f} field={:email} is_large />
+        <Primer.text_input type="password" placeholder="password" form={f} field={:password} is_large />
 
         <%= if @register? do %>
-          <div class="form-control">
-            <label class="label" for="input3"><span class="label-text">Confirm Password</span></label>
-            <input
-              name={f[:password_confirmation].name}
-              value={f[:password_confirmation].value}
-              type="password"
-              placeholder="confirm password"
-              class="input input-bordered [&:user-invalid]:input-warning [&:user-valid]:input-success"
-              minlength="6"
-              for="input3"
-            />
-          </div>
+          <Primer.text_input
+            type="password"
+            placeholder="password confirmation"
+            form={f}
+            field={:password_confirmation}
+            is_large
+          />
         <% end %>
 
         <div class="flex items-center">
           <%= if not @register? do %>
-            <div class="label">
-              <a class="link-hover link label-text-alt" href="/reset-request">Forgot password?</a>
-            </div>
+            <.link navigate={~p"/reset-request"}>Forgot password?</.link>
           <% end %>
-          <.link class="link-hover link label-text-alt ml-auto" navigate={@alternative_path}>
+          <.link class="ml-auto" navigate={@alternative_path}>
             <%= @alternative_message %>
           </.link>
         </div>
 
-        <button class="btn btn-neutral" type="submit">Login</button>
+        <Primer.button type="submit" is_primary>Login</Primer.button>
 
         <%= if Application.get_env(:canary, :github)[:enabled?] do %>
-          <button class="btn fill-neutual" type="button" phx-click="github" phx-target={@myself}>
+          <Primer.button type="button" phx-click="github" phx-target={@myself}>
             <svg height="18" viewBox="0 0 16 16" width="32px">
               <path
                 fill-rule="evenodd"
@@ -80,10 +53,8 @@ defmodule CanaryWeb.AuthLive.AuthForm do
               />
             </svg>
             Login with GitHub
-          </button>
+          </Primer.button>
         <% end %>
-
-        <div class="label justify-end"></div>
       </.form>
     </div>
     """
