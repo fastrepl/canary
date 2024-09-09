@@ -63,9 +63,9 @@ defmodule Canary.MixProject do
       {:nostrum, "~> 0.8.0", runtime: false},
       {:gun, "~> 2.0"},
       {:ash, "~> 3.4"},
-      {:ash_authentication, "~> 4.0.2"},
-      {:ash_authentication_phoenix, "~> 2.0"},
-      {:ash_postgres, "~> 2.2.0"},
+      {:ash_authentication, "~> 4.0"},
+      {:ash_authentication_phoenix, "~> 2.1"},
+      {:ash_postgres, "~> 2.3"},
       {:ash_json_api, "~> 1.0"},
       {:open_api_spex, "~> 3.20"},
       {:picosat_elixir, "~> 0.2.3"},
@@ -97,7 +97,10 @@ defmodule Canary.MixProject do
        rev: "bab31b99e353f87c53d62752601decd9c861ce0d"},
       {:cachex, "~> 3.6"},
       {:bumblebee, "~> 0.5.3"},
-      {:absinthe_client, "~> 0.1.0"}
+      {:absinthe_client, "~> 0.1.0"},
+      {:cloak, "~> 1.1"},
+      {:ash_cloak, "~> 0.1.2"},
+      {:primer_live, "~> 0.7"}
     ] ++ deps_eval()
   end
 
