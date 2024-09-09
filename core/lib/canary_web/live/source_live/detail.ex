@@ -205,7 +205,7 @@ defmodule CanaryWeb.SourceLive.Detail do
         <:badge><Primer.octicon name="check-16" /></:badge>
         <div class="flex flex-row items-center gap-2">
           <span class="font-semibold">
-            <%= length(@source.documents) %>
+            <%= @source.num_documents %>
           </span>
           <span>
             documents indexed
@@ -216,7 +216,7 @@ defmodule CanaryWeb.SourceLive.Detail do
         </div>
       </Primer.timeline_item>
 
-      <div class="px-14">
+      <div class="px-14 mb-3">
         <Primer.timeline_item is_break />
       </div>
 
@@ -236,8 +236,6 @@ defmodule CanaryWeb.SourceLive.Detail do
   def update(assigns, socket) do
     socket = assign(socket, assigns)
 
-    source = socket.assigns.source |> Ash.load!([:events, :documents])
-
     form =
       socket.assigns.source
       |> AshPhoenix.Form.for_update(:update, forms: [auto?: true])
@@ -246,7 +244,7 @@ defmodule CanaryWeb.SourceLive.Detail do
     socket =
       socket
       |> assign(form: form)
-      |> assign(source: source)
+      |> assign(source: socket.assigns.source)
       |> assign(tabs: ["Status", "Documents"])
       |> assign(:tab, "Status")
       |> assign_new(:current_config, fn ->

@@ -72,7 +72,7 @@ defmodule CanaryWeb.SourceLive.List do
 
     sources =
       socket.assigns.sources
-      |> Ash.load!([:events, :lastest_event_at])
+      |> Ash.load!([:lastest_event_at])
 
     {:ok, socket |> assign(sources: sources)}
   end

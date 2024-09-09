@@ -41,8 +41,32 @@ defmodule CanaryWeb.SourceLive.Index do
 
   defp apply_action(socket, :detail, %{"id" => id}) do
     case Enum.find(socket.assigns.sources, &(&1.id == id)) do
-      nil -> socket |> redirect(to: ~p"/source")
-      source -> socket |> assign(source: source)
+      nil ->
+        socket |> push_navigate(to: ~p"/source")
+
+      source ->
+        :ok = Phoenix.PubSub.subscribe(Canary.PubSub, "source:event:created:#{source.id}")
+
+        source =
+          source
+          |> Ash.load!([{:events, load_event_query()}, :num_documents])
+
+        socket |> assign(source: source)
     end
+  end
+
+  @impl true
+  def handle_info(%Phoenix.Socket.Broadcast{topic: "source:event:created:" <> _}, socket) do
+    source =
+      socket.assigns.source
+      |> Ash.load!(events: load_event_query())
+
+    {:noreply, socket |> assign(source: source)}
+  end
+
+  defp load_event_query() do
+    Canary.Sources.Event
+    |> Ash.Query.sort(created_at: :desc)
+    |> Ash.Query.limit(5)
   end
 end
