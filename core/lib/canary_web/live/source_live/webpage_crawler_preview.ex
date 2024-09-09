@@ -41,7 +41,11 @@ defmodule CanaryWeb.SourceLive.WebpageCrawlerPreview do
   defp preview(assigns) do
     ~H"""
     <.async_result :let={urls} assign={@task_result}>
-      <:loading>Loading...</:loading>
+      <:loading>
+        <div class="flex items-center justify-center h-[240px]">
+          <Primer.spinner size="24" />
+        </div>
+      </:loading>
       <:failed :let={_failure}>Failed</:failed>
 
       <Primer.box is_condensed is_scrollable style="max-height: 400px">
