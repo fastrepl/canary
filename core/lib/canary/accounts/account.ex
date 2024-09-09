@@ -15,7 +15,6 @@ defmodule Canary.Accounts.Account do
     has_one :subdomain, Canary.Accounts.Subdomain
 
     has_many :sources, Canary.Sources.Source
-    has_many :sessions, Canary.Interactions.Session
     has_many :keys, Canary.Accounts.Key
 
     many_to_many :users, Canary.Accounts.User do

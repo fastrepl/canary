@@ -1,56 +1,60 @@
 defmodule Canary.Sources.Source do
   use Ash.Resource,
     domain: Canary.Sources,
-    data_layer: AshPostgres.DataLayer,
-    extensions: [AshJsonApi.Resource]
+    data_layer: AshPostgres.DataLayer
 
   attributes do
     uuid_primary_key :id
     create_timestamp :created_at
 
-    attribute :type, :atom, constraints: [one_of: [:web]], allow_nil?: false
+    attribute :name, :string, allow_nil?: false
+    attribute :config, Canary.Type.SourceConfig, allow_nil?: false
+  end
 
-    attribute :web_url_base, :string, allow_nil?: true
-    attribute :web_url_include_patterns, {:array, :string}, allow_nil?: true
-    attribute :web_url_exclude_patterns, {:array, :string}, allow_nil?: true
+  identities do
+    identity :unique_name, [:name, :account_id]
   end
 
   relationships do
-    belongs_to :account, Canary.Accounts.Account
+    belongs_to :account, Canary.Accounts.Account, allow_nil?: false
     has_many :documents, Canary.Sources.Document
+    has_many :events, Canary.Sources.Event
   end
 
   aggregates do
     count :num_documents, :documents
-    max :last_updated, :documents, :created_at
+    max :lastest_event_at, :events, :created_at
   end
 
   actions do
-    defaults [:destroy, update: [:web_url_include_patterns, :web_url_exclude_patterns]]
-
-    read :read do
-      primary? true
-      prepare build(load: [:num_documents, :last_updated])
-    end
+    defaults [:read]
 
     create :create do
       primary? true
 
-      argument :account, :map, allow_nil?: false
-      argument :web_url_base, :string, allow_nil?: false
-      argument :web_url_include_patterns, {:array, :string}, default: []
-      argument :web_url_exclude_patterns, {:array, :string}, default: []
+      accept [:name, :config]
+      argument :account_id, :uuid, allow_nil?: false
+      change manage_relationship(:account_id, :account, type: :append)
+    end
 
-      change set_attribute(:type, :web)
-      change manage_relationship(:account, :account, type: :append)
-      change set_attribute(:web_url_base, arg(:web_url_base))
-      change set_attribute(:web_url_include_patterns, arg(:web_url_include_patterns))
-      change set_attribute(:web_url_exclude_patterns, arg(:web_url_exclude_patterns))
+    update :update do
+      primary? true
+      # unions do not support atomic updates
+      require_atomic? false
+
+      accept [:name, :config]
+    end
+
+    destroy :destroy do
+      primary? true
+
+      change {Ash.Resource.Change.CascadeDestroy, relationship: :documents, action: :destroy}
+      change {Ash.Resource.Change.CascadeDestroy, relationship: :events, action: :destroy}
     end
   end
 
   code_interface do
-    define :create, args: [:account, :web_url_base], action: :create
+    define :create, args: [:account_id, :name, :config], action: :create
   end
 
   postgres do

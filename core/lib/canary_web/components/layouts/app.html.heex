@@ -1,14 +1,19 @@
-<div class="drawer min-h-screen bg-base-100 lg:drawer-open">
-  <input id="canary-drawer" type="checkbox" class="drawer-toggle" />
-  <main class="drawer-content">
-    <div class="p-4 lg:p-10">
-      <.flash_group flash={@flash} />
-      <%= @inner_content %>
+<aside class="fixed inset-y-0 z-50 flex w-60 flex-col">
+  <div class="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6">
+    <div class="flex h-16 shrink-0 items-center">
+      <span class="text-2xl">🐤</span>
     </div>
-  </main>
-  <CanaryWeb.Layouts.side_menu
-    active_tab={@active_tab}
-    current_user={@current_user}
-    current_account={@current_account}
-  />
-</div>
+    <CanaryWeb.Layouts.side_menu
+      active_tab={@active_tab}
+      current_user={@current_user}
+      current_account={@current_account}
+    />
+  </div>
+</aside>
+
+<main class="py-10 lg:pl-72">
+  <div class="px-4 sm:px-6 lg:px-8">
+    <.flash_group flash={@flash} />
+    <%= @inner_content %>
+  </div>
+</main>

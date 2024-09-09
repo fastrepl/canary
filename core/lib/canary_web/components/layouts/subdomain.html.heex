@@ -1,7 +1,8 @@
 <main class="p-10 mx-auto max-w-4xl">
   <nav class="sticky top-0 flex flex-row gap-2 mb-4">
-    <.link href="https://docs.litellm.ai" class="link link-hover">
-      <%= @current_account.subdomain.config.name %>
+    <img src={@current_account.subdomain.config[:logo_url]} class="h-6 w-6" />
+    <.link href="https://getcanary.dev" class="link link-hover">
+      <%= @current_account.subdomain.config[:name] || "Your Name" %>
     </.link>
   </nav>
 

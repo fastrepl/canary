@@ -1,6 +1,5 @@
 defmodule CanaryWeb.SettingsLive.Index do
   use CanaryWeb, :live_view
-  alias PrimerLive.Component, as: Primer
 
   @forms [
     %{

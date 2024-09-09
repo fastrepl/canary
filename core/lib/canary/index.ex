@@ -1,11 +1,67 @@
-defmodule Canary.Index.Document do
-  @derive Jason.Encoder
-  defstruct [:id, :source, :title, :content, :tags, :meta]
-end
-
 defmodule Canary.Index.DocumentMetadata do
   @derive Jason.Encoder
-  defstruct [:url, :titles]
+  defstruct [
+    :url,
+    :titles,
+    # for client side grouping, we need these kind of thing per source, I think
+    :source_name
+  ]
+end
+
+defmodule Canary.Index.Document do
+  @derive Jason.Encoder
+  defstruct [:id, :source_id, :title, :content, :tags, :meta]
+
+  alias Canary.Sources.Webpage
+  alias Canary.Sources.GithubIssue
+  alias Canary.Sources.GithubDiscussion
+  alias Canary.Sources.DiscordThread
+
+  def from(%Webpage.Chunk{} = chunk) do
+    meta = %Canary.Index.DocumentMetadata{
+      url: chunk.url,
+      source_name: "Webpage"
+    }
+
+    %__MODULE__{
+      id: chunk.index_id,
+      source_id: chunk.source_id,
+      title: chunk.title,
+      content: chunk.content,
+      tags: [],
+      meta: meta
+    }
+  end
+
+  def from(%GithubIssue.Chunk{} = chunk) do
+    meta = %Canary.Index.DocumentMetadata{}
+
+    %__MODULE__{
+      id: chunk.index_id,
+      meta: meta
+    }
+  end
+
+  def from(%GithubDiscussion.Chunk{} = chunk) do
+    meta = %Canary.Index.DocumentMetadata{}
+
+    %__MODULE__{
+      id: chunk.index_id,
+      meta: meta
+    }
+  end
+
+  def from(%DiscordThread.Chunk{} = chunk) do
+    meta = %Canary.Index.DocumentMetadata{
+      url:
+        "https://discord.com/channels/#{chunk.server_id}/#{chunk.channel_id}/#{chunk.message_id}"
+    }
+
+    %__MODULE__{
+      id: chunk.index_id,
+      meta: meta
+    }
+  end
 end
 
 defmodule Canary.Index do
@@ -76,7 +132,7 @@ defmodule Canary.Index do
   defp build_search_opts(source, query, tags) do
     filter_by =
       [
-        "source:=#{source}",
+        "source_id:=#{source}",
         if(tags != []) do
           "tags:=[#{Enum.join(tags, ",")}]"
         end
@@ -90,7 +146,7 @@ defmodule Canary.Index do
       query_by_weights: "3,2",
       filter_by: filter_by,
       sort_by: "_text_match:desc",
-      exclude_fields: "source",
+      exclude_fields: "source_id",
       prefix: true,
       prioritize_exact_match: false,
       prioritize_token_position: false,
@@ -119,9 +175,10 @@ defmodule Canary.Index do
     Typesense.Collections.create_collection(%Typesense.CollectionSchema{
       name: @collection,
       fields: [
-        %Typesense.Field{name: "source", type: "string"},
+        %Typesense.Field{name: "source_id", type: "string"},
         %Typesense.Field{name: "title", type: "string", stem: true},
         %Typesense.Field{name: "content", type: "string", stem: true},
+        # %Typesense.Field{name: "embedding", type: "float[]", num_dim: 384},
         %Typesense.Field{name: "tags", type: "string[]"},
         %Typesense.Field{name: "meta", type: "object", index: false}
       ],
@@ -178,13 +235,22 @@ defmodule Canary.Index do
   end
 
   def list_documents(source_id \\ nil) do
-    opts = if source_id, do: [filter_by: "source:#{source_id}"], else: []
+    opts = if source_id, do: [filter_by: "source_id:#{source_id}"], else: []
 
     case Typesense.Documents.export_documents(@collection, opts) do
       {:ok, ""} -> {:ok, []}
       {:ok, result} -> {:ok, parse_jsonl(result)}
       error -> error
     end
+  end
+
+  def get_document!(id) do
+    {:ok, doc} = Typesense.Documents.get_document(@collection, id)
+    doc
+  end
+
+  def get_document(id) do
+    Typesense.Documents.get_document(@collection, id)
   end
 
   def batch_update_documents(docs) do

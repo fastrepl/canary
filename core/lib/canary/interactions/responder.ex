@@ -146,20 +146,6 @@ defmodule Canary.Interactions.Responder.Default do
     {:ok, %{response: completion, references: references}}
   end
 
-  defp render_history(history) do
-    if history != [] do
-      body =
-        history
-        |> Enum.sort_by(& &1.created_at, &(DateTime.compare(&1, &2) == :lt))
-        |> Enum.map(&Canary.Renderable.render/1)
-        |> Enum.join("\n\n")
-
-      "<history>\n#{body}\n</history>"
-    else
-      ""
-    end
-  end
-
   defp render_context(docs) do
     if length(docs) > 0 do
       body =
