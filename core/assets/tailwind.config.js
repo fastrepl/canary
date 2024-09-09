@@ -12,12 +12,40 @@ module.exports = {
     "../lib/canary_web/**/*.*ex",
     "./svelte/**/*.svelte",
   ],
-  daisyui: {
-    themes: ["cmyk"],
+  theme: {
+    extend: {
+      colors: {
+        "c-primary-0": "var(--canary-color-primary-0)",
+        "c-primary-5": "var(--canary-color-primary-5)",
+        "c-primary-10": "var(--canary-color-primary-10)",
+        "c-primary-20": "var(--canary-color-primary-20)",
+        "c-primary-30": "var(--canary-color-primary-30)",
+        "c-primary-40": "var(--canary-color-primary-40)",
+        "c-primary-50": "var(--canary-color-primary-50)",
+        "c-primary-60": "var(--canary-color-primary-60)",
+        "c-primary-70": "var(--canary-color-primary-70)",
+        "c-primary-80": "var(--canary-color-primary-80)",
+        "c-primary-90": "var(--canary-color-primary-90)",
+        "c-primary-95": "var(--canary-color-primary-95)",
+        "c-primary-100": "var(--canary-color-primary-100)",
+        "c-gray-0": "var(--canary-color-gray-0)",
+        "c-gray-5": "var(--canary-color-gray-5)",
+        "c-gray-10": "var(--canary-color-gray-10)",
+        "c-gray-20": "var(--canary-color-gray-20)",
+        "c-gray-30": "var(--canary-color-gray-30)",
+        "c-gray-40": "var(--canary-color-gray-40)",
+        "c-gray-50": "var(--canary-color-gray-50)",
+        "c-gray-60": "var(--canary-color-gray-60)",
+        "c-gray-70": "var(--canary-color-gray-70)",
+        "c-gray-80": "var(--canary-color-gray-80)",
+        "c-gray-90": "var(--canary-color-gray-90)",
+        "c-gray-95": "var(--canary-color-gray-95)",
+        "c-gray-100": "var(--canary-color-gray-100)",
+      },
+    },
   },
   plugins: [
-    require("daisyui"),
-    // require("@tailwindcss/forms"),
+    require("@tailwindcss/forms"),
     // Allows prefixing tailwind classes with LiveView classes to add rules
     // only when LiveView classes are applied, for example:
     //
