@@ -12,7 +12,7 @@ defmodule CanaryWeb.AuthLive.ResetRequestForm do
         phx-target={@myself}
         phx-submit="submit"
         action={@action}
-        class="flex flex-col justify-center gap-4 px-10 py-10 lg:px-16"
+        class="flex flex-col justify-center gap-4"
       >
         <%= if @sent? do %>
           <div class="alert alert-success text-xs">

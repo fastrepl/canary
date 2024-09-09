@@ -12,7 +12,7 @@ defmodule CanaryWeb.AuthLive.ResetForm do
         phx-target={@myself}
         phx-submit="submit"
         action={@action}
-        class="flex flex-col justify-center gap-4 px-10 py-10 lg:px-16"
+        class="flex flex-col justify-center gap-4"
       >
         <input type="hidden" name={f[:reset_token].name} value={@token} />
         <Primer.text_input

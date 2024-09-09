@@ -4,8 +4,9 @@ defmodule CanaryWeb.AuthLive.Index do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="flex flex-col min-h-screen items-center justify-center">
-      <div class="w-full max-w-sm md:max-w-xl">
+    <div class="flex flex-col min-h-screen items-center justify-center gap-4">
+      <div>🐤</div>
+      <div class="w-full max-w-sm md:max-w-lg">
         <.live_component
           module={
             cond do
