@@ -48,6 +48,7 @@ let csrfToken = document
 
 let hooks = {
   ...getHooks(Components),
+  Prompt: window.Prompt,
   BarChart: {
     title() {
       return this.el.dataset.title;
