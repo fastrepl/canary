@@ -4,33 +4,24 @@ defmodule CanaryWeb.AuthLive.Index do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="flex min-h-screen items-center justify-center bg-base-200">
-      <div class="m-4 min-h-[50vh] w-full max-w-sm lg:max-w-4xl">
-        <div class="flex items-center justify-center gap-2 p-8">
-          <span>🐤</span>
-          <h1 class="text-lg font-bold"><%= @main_message %></h1>
-        </div>
-        <main class="grid bg-base-100 lg:aspect-[2/1] lg:grid-cols-2">
-          <figure class="pointer-events-none bg-base-300 object-cover max-lg:hidden">
-            <img src="https://picsum.photos/id/222/1200/1200?blur" alt="Login" class="h-full" />
-          </figure>
-          <.live_component
-            module={
-              cond do
-                @live_action == :reset_request -> CanaryWeb.AuthLive.ResetRequestForm
-                @live_action == :reset -> CanaryWeb.AuthLive.ResetForm
-                true -> CanaryWeb.AuthLive.AuthForm
-              end
-            }
-            id={@id}
-            form={@form}
-            register?={@live_action == :register}
-            alternative_path={@alternative_path}
-            alternative_message={@alternative_message}
-            action={@action}
-            token={assigns[:token]}
-          />
-        </main>
+    <div class="flex flex-col min-h-screen items-center justify-center">
+      <div class="w-full max-w-sm md:max-w-xl">
+        <.live_component
+          module={
+            cond do
+              @live_action == :reset_request -> CanaryWeb.AuthLive.ResetRequestForm
+              @live_action == :reset -> CanaryWeb.AuthLive.ResetForm
+              true -> CanaryWeb.AuthLive.AuthForm
+            end
+          }
+          id={@id}
+          form={@form}
+          register?={@live_action == :register}
+          alternative_path={@alternative_path}
+          alternative_message={@alternative_message}
+          action={@action}
+          token={assigns[:token]}
+        />
       </div>
     </div>
     """

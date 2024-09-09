@@ -1,5 +1,6 @@
 defmodule CanaryWeb.AuthLive.ResetForm do
   use CanaryWeb, :live_component
+  alias PrimerLive.Component, as: Primer
 
   @impl true
   def render(assigns) do
@@ -14,34 +15,25 @@ defmodule CanaryWeb.AuthLive.ResetForm do
         class="flex flex-col justify-center gap-4 px-10 py-10 lg:px-16"
       >
         <input type="hidden" name={f[:reset_token].name} value={@token} />
-        <div class="form-control">
-          <label class="label" for="input1"><span class="label-text">Password</span></label>
-          <input
-            name={f[:password].name}
-            value={f[:password].value}
-            disabled={@sent?}
-            type="password"
-            placeholder="password"
-            class="input input-bordered [&:user-invalid]:input-warning [&:user-valid]:input-success"
-            required
-            id="input1"
-          />
-
-          <label class="label" for="input1"><span class="label-text">Confirm Password</span></label>
-          <input
-            name={f[:password_confirmation].name}
-            value={f[:password_confirmation].value}
-            disabled={@sent?}
-            type="password"
-            placeholder="password"
-            class="input input-bordered [&:user-invalid]:input-warning [&:user-valid]:input-success"
-            required
-            id="input1"
-          />
-        </div>
+        <Primer.text_input
+          type="password"
+          placeholder="password"
+          form={f}
+          field={:password}
+          disabled={@sent?}
+          is_large
+        />
+        <Primer.text_input
+          type="password"
+          placeholder="password confirmation"
+          form={f}
+          field={:password_confirmation}
+          disabled={@sent?}
+          is_large
+        />
         <button class="btn btn-neutral" type="submit">Recover</button>
-        <div class="label justify-end">
-          <.link class="link-hover link label-text-alt" navigate={@alternative_path}>
+        <div class="justify-end">
+          <.link navigate={@alternative_path}>
             <%= @alternative_message %>
           </.link>
         </div>

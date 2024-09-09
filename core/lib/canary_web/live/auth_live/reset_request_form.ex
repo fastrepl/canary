@@ -1,5 +1,6 @@
 defmodule CanaryWeb.AuthLive.ResetRequestForm do
   use CanaryWeb, :live_component
+  alias PrimerLive.Component, as: Primer
 
   @impl true
   def render(assigns) do
@@ -31,25 +32,22 @@ defmodule CanaryWeb.AuthLive.ResetRequestForm do
             <span>Recovery email sent successfully</span>
           </div>
         <% end %>
-        <div class="form-control">
-          <label class="label" for="input1"><span class="label-text">Email</span></label>
-          <input
-            name={f[:email].name}
-            value={f[:email].value}
-            disabled={@sent?}
-            type="email"
-            placeholder="email"
-            class="input input-bordered [&:user-invalid]:input-warning [&:user-valid]:input-success"
-            required
-            id="input1"
-          />
-        </div>
-        <button class="btn btn-neutral" type="submit">Recover</button>
-        <div class="label justify-end">
-          <.link class="link-hover link label-text-alt" navigate={@alternative_path}>
-            <%= @alternative_message %>
-          </.link>
-        </div>
+
+        <Primer.text_input
+          type="email"
+          placeholder="email"
+          form={f}
+          field={:email}
+          disabled={@sent?}
+          is_large
+        />
+
+        <Primer.button type="submit">
+          Recover
+        </Primer.button>
+        <.link navigate={@alternative_path}>
+          <%= @alternative_message %>
+        </.link>
       </.form>
     </div>
     """
