@@ -41,6 +41,11 @@ defmodule CanaryWeb.Router do
 
     get "/checkout", CanaryWeb.CheckoutController, :session
 
+    live_session :demo, layout: {CanaryWeb.Layouts, :root} do
+      live "/demo", CanaryWeb.DemoLive.Index, :without_slug
+      live "/demo/:slug", CanaryWeb.DemoLive.Index, :with_slug
+    end
+
     ash_authentication_live_session :default,
       layout: {CanaryWeb.Layouts, :app},
       on_mount: [
@@ -49,7 +54,8 @@ defmodule CanaryWeb.Router do
         CanaryWeb.NavLive
       ] do
       live "/", CanaryWeb.HomeLive, :none
-      live "/source", CanaryWeb.SourceLive.Index, :none
+      live "/source", CanaryWeb.SourceLive.Index, :index
+      live "/source/:id", CanaryWeb.SourceLive.Index, :detail
       live "/insights", CanaryWeb.InsightsLive, :none
       live "/settings", CanaryWeb.SettingsLive.Index, :none
     end
@@ -70,18 +76,5 @@ defmodule CanaryWeb.Router do
     post "/feedback/page", CanaryWeb.OperationsController, :feedback_page
 
     forward "/", CanaryWeb.AshRouter
-  end
-
-  if Application.compile_env(:canary, :dev_routes) do
-    scope "/dev" do
-      pipe_through :browser
-
-      forward "/mailbox", Plug.Swoosh.MailboxPreview
-
-      live_session :dev, layout: {CanaryWeb.Layouts, :dev} do
-        live "/crawler", CanaryWeb.Dev.CrawlerLive, :none
-        live "/reader", CanaryWeb.Dev.ReaderLive, :none
-      end
-    end
   end
 end
