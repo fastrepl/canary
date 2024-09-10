@@ -64,7 +64,7 @@ defmodule Canary.Searcher.Default do
            ) do
       {:ok,
        %Canary.Searcher.Result{
-         reference: %{source.name => reranked},
+         references: %{source.name => reranked},
          suggestion: %{questions: Canary.Query.Sugestor.run!(query)}
        }}
     end
@@ -76,7 +76,7 @@ defmodule Canary.Searcher.Default do
 
     {:ok,
      %Canary.Searcher.Result{
-       reference: %{source.name => results},
+       references: %{source.name => results},
        suggestion: %{questions: Canary.Query.Sugestor.run!(query)}
      }}
   end
