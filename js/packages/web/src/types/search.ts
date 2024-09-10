@@ -7,7 +7,9 @@ export interface SearchReference {
 }
 
 export type SearchFunctionResult = {
-  search: SearchReference[];
+  references: {
+    [source: string]: SearchReference[];
+  };
   suggestion?: {
     questions: string[];
   };

@@ -6,6 +6,7 @@ import type { AskFunction, Delta, SearchFunction } from "../types";
 import { wrapper } from "../styles";
 import { createEvent } from "../store";
 import { cache } from "../decorators";
+import { StringArray } from "../converters";
 
 const NAME = "canary-provider-cloud";
 
@@ -16,6 +17,9 @@ export class CanaryProviderCloud extends LitElement {
 
   @property({ type: String, attribute: "api-key" })
   apiKey = "";
+
+  @property({ converter: StringArray, attribute: "sources" })
+  sources: string[] = [];
 
   connectedCallback() {
     super.connectedCallback();
@@ -48,7 +52,7 @@ export class CanaryProviderCloud extends LitElement {
         "Content-Type": "application/json",
         Authorization: `Bearer ${this.apiKey}`,
       },
-      body: JSON.stringify(payload),
+      body: JSON.stringify({ ...payload, sources: this.sources }),
       signal,
     };
 
@@ -68,7 +72,7 @@ export class CanaryProviderCloud extends LitElement {
         "Content-Type": "application/json",
         Authorization: `Bearer ${this.apiKey}`,
       },
-      body: JSON.stringify(payload),
+      body: JSON.stringify({ ...payload, sources: this.sources }),
       signal,
     };
 

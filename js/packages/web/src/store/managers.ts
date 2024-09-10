@@ -33,7 +33,7 @@ export class SearchManager {
 
   private _initialState: SearchContext = {
     status: TaskStatus.INITIAL,
-    result: { search: [], suggestion: { questions: [] } },
+    result: { references: {}, suggestion: { questions: [] } },
   };
 
   constructor(host: HTMLElement, options: SearchManagerOptions) {

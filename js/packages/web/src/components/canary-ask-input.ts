@@ -39,6 +39,7 @@ export class CanaryAskInput extends LitElement {
         onfocus="this.setSelectionRange(this.value.length,this.value.length);"
         autofocus=${ifDefined(this.autofocus || null)}
       />
+      <span
         class=${classMap({
           hidden: this._ask?.status !== TaskStatus.PENDING,
         })}

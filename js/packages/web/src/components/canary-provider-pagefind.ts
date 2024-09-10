@@ -12,6 +12,7 @@ import { createEvent } from "../store";
 import { stripURL } from "../utils";
 import { wrapper } from "../styles";
 import { cache } from "../decorators";
+import { LOCAL_SOURCE } from "../constants";
 
 const NAME = "canary-provider-pagefind";
 
@@ -107,7 +108,7 @@ export class CanaryProviderPagefind extends LitElement {
     );
 
     signal.throwIfAborted();
-    return { search: this._transform(results) };
+    return { references: { [LOCAL_SOURCE]: this._transform(results) } };
   };
 
   private _transform(results: PagefindResult[]): SearchReference[] {

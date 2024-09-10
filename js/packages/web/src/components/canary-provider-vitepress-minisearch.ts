@@ -1,9 +1,10 @@
 import { LitElement, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 
-import { wrapper } from "../styles";
 import type { SearchFunction, SearchReference } from "../types";
+import { wrapper } from "../styles";
 import { createEvent } from "../store";
+import { LOCAL_SOURCE } from "../constants";
 
 const NAME = "canary-provider-vitepress-minisearch";
 
@@ -90,7 +91,7 @@ export class CanaryProviderVitepressMinisearch extends LitElement {
   search: SearchFunction = async ({ query }, _signal) => {
     return new Promise((resolve) => {
       if (!this.minisearch) {
-        resolve({ search: [] });
+        resolve({ references: { [LOCAL_SOURCE]: [] } });
         return;
       }
 
@@ -102,7 +103,7 @@ export class CanaryProviderVitepressMinisearch extends LitElement {
           titles: result.titles,
         }));
 
-      resolve({ search: refs });
+      resolve({ references: { [LOCAL_SOURCE]: refs } });
     });
   };
 }

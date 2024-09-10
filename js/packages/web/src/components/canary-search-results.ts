@@ -25,7 +25,13 @@ export class CanarySearchResults extends LitElement {
   private _search?: SearchContext;
 
   render() {
-    if (!this._search || this._search.result.search.length === 0) {
+    if (!this._search) {
+      return nothing;
+    }
+
+    const references = Object.values(this._search.result.references).flat();
+
+    if (references.length === 0) {
       return nothing;
     }
 
@@ -36,7 +42,7 @@ export class CanarySearchResults extends LitElement {
           : html` <div class="container">
               <canary-search-references
                 .group=${this.group}
-                .references=${this._search.result.search}
+                .references=${references}
               ></canary-search-references>
             </div>`
       }
