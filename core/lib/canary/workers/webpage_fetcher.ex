@@ -6,6 +6,7 @@ defmodule Canary.Workers.WebpageFetcher do
   alias Canary.Sources.Source
   alias Canary.Sources.Webpage
   alias Canary.Sources.Document
+  alias Canary.Sources.Webpage.DocumentMeta
 
   @impl true
   def perform(%Oban.Job{args: %{"source_id" => id}}) do
@@ -36,7 +37,19 @@ defmodule Canary.Workers.WebpageFetcher do
       |> Ash.read!()
 
     incoming_map = Map.new(incomings)
-    existing_map = Map.new(existing_docs, &{&1.meta.url, &1})
+
+    existing_map =
+      existing_docs
+      |> Map.new(fn doc ->
+        %Document{
+          meta: %Ash.Union{
+            type: :webpage,
+            value: %DocumentMeta{url: url}
+          }
+        } = doc
+
+        {url, doc}
+      end)
 
     {to_create, to_update, to_keep} =
       Enum.reduce(incoming_map, {[], [], []}, fn {url, html}, {create, update, keep} ->
@@ -44,14 +57,20 @@ defmodule Canary.Workers.WebpageFetcher do
           nil ->
             {[{url, html} | create], update, keep}
 
-          doc ->
+          %Document{
+            id: doc_id,
+            meta: %Ash.Union{
+              type: :webpage,
+              value: %DocumentMeta{hash: doc_hash}
+            }
+          } ->
             hash =
               html
               |> then(&:crypto.hash(:sha256, &1))
               |> Base.encode16(case: :lower)
 
-            if hash == doc.meta.hash do
-              {create, update, [doc.id | keep]}
+            if hash == doc_hash do
+              {create, update, [doc_id | keep]}
             else
               {create, [{url, html} | update], keep}
             end
