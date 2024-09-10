@@ -121,7 +121,7 @@ defmodule CanaryWeb.SourceLive.Create do
   def handle_event("submit", %{"form" => params}, socket) do
     case AshPhoenix.Form.submit(socket.assigns.form, params: params) do
       {:ok, %{id: id}} ->
-        {:noreply, socket |> redirect(to: ~p"/source/#{id}")}
+        {:noreply, socket |> push_navigate(to: ~p"/source/#{id}")}
 
       {:error, form} ->
         {:noreply, assign(socket, :form, form)}
@@ -137,7 +137,6 @@ defmodule CanaryWeb.SourceLive.Create do
       socket.assigns.form
       |> AshPhoenix.Form.remove_form(path)
       |> AshPhoenix.Form.add_form(path, params: %{"_union_type" => new_type})
-      |> AshPhoenix.Form.add_form([:config, :start_urls])
 
     {:noreply, assign(socket, :form, form)}
   end
