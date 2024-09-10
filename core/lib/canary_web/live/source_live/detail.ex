@@ -319,9 +319,9 @@ defmodule CanaryWeb.SourceLive.Detail do
 
     job =
       case type do
-        :webpage -> Canary.Workers.WebpageFetcher.new(%{source_id: id})
-        :github_issue -> Canary.Workers.GithubIssueFetcher.new(%{source_id: id})
-        :github_discussion -> Canary.Workers.GithubDiscussionFetcher.new(%{source_id: id})
+        :webpage -> Canary.Workers.WebpageProcessor.new(%{source_id: id})
+        :github_issue -> Canary.Workers.GithubIssueProcessor.new(%{source_id: id})
+        :github_discussion -> Canary.Workers.GithubDiscussionProcessor.new(%{source_id: id})
       end
 
     case Oban.insert(job) do
