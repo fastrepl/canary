@@ -33,7 +33,13 @@ defmodule CanaryWeb.SourceLive.Detail do
           class="flex flex-col gap-6 basis-2/5"
         >
           <Primer.text_input
-            value={@source.config.type}
+            value={
+              case @source.config.type do
+                :webpage -> "Webpage"
+                :github_issue -> "Github Issue"
+                :github_discussion -> "Github Discussion"
+              end
+            }
             disabled
             is_large
             is_full_width
@@ -59,29 +65,29 @@ defmodule CanaryWeb.SourceLive.Detail do
                         name={fc[:start_urls].name <> "[]"}
                         value={url}
                         is_full_width
-                        is_large
                       />
                       <%!-- <Primer.button
                         type="button"
-                        phx-click="start_urls-remove"
+                        phx-click={JS.dispatch("change")}
                         phx-target={@myself}
-                        is_icon_button
                         is_small
+                        is_icon_button
                       >
                         <Primer.octicon name="x-16" />
                       </Primer.button> --%>
                     </div>
                   <% end %>
-                  <%!-- <div class="h-2"></div>
+                  <div class="h-1"></div>
                   <Primer.button
                     type="button"
-                    phx-click="start_urls-add"
+                    phx-click={JS.dispatch("change")}
+                    name={fc[:start_urls].name <> "[]"}
                     phx-target={@myself}
                     is_small
                     is_full_width
                   >
                     <Primer.octicon name="plus-16" />
-                  </Primer.button> --%>
+                  </Primer.button>
                 </Primer.form_control>
 
                 <Primer.form_control label="Include patterns">
@@ -91,35 +97,45 @@ defmodule CanaryWeb.SourceLive.Detail do
                       name={fc[:url_include_patterns].name <> "[]"}
                       value={url}
                       is_full_width
-                      is_large
-                      caption={
-                        fn _state ->
-                          ~H'''
-                          Comma separated list of glob patterns.
-                          '''
-                        end
-                      }
                     />
                   <% end %>
+
+                  <div class="h-1"></div>
+                  <Primer.button
+                    type="button"
+                    phx-click={JS.dispatch("change")}
+                    name={fc[:url_include_patterns].name <> "[]"}
+                    phx-target={@myself}
+                    is_small
+                    is_full_width
+                  >
+                    <Primer.octicon name="plus-16" />
+                  </Primer.button>
                 </Primer.form_control>
 
                 <Primer.form_control label="Exclude patterns">
                   <%= for url <- fc[:url_exclude_patterns].value || [] do %>
-                    <Primer.text_input
-                      type="text"
-                      name={fc[:url_exclude_patterns].name <> "[]"}
-                      value={url}
-                      is_full_width
-                      is_large
-                      caption={
-                        fn _state ->
-                          ~H'''
-                          Comma separated list of glob patterns.
-                          '''
-                        end
-                      }
-                    />
+                    <div class="flex flex-row w-full items-center gap-2">
+                      <Primer.text_input
+                        type="text"
+                        name={fc[:url_exclude_patterns].name <> "[]"}
+                        value={url}
+                        is_full_width
+                      />
+                    </div>
                   <% end %>
+
+                  <div class="h-1"></div>
+                  <Primer.button
+                    type="button"
+                    phx-click={JS.dispatch("change")}
+                    name={fc[:url_exclude_patterns].name <> "[]"}
+                    phx-target={@myself}
+                    is_small
+                    is_full_width
+                  >
+                    <Primer.octicon name="plus-16" />
+                  </Primer.button>
                 </Primer.form_control>
               <% :github_issue -> %>
                 <Primer.text_input
@@ -134,7 +150,7 @@ defmodule CanaryWeb.SourceLive.Detail do
                   field={:repo}
                   is_large
                   is_full_width
-                  form_control={%{label: "Repo"}}
+                  form_control={%{label: "Repository"}}
                 />
               <% :github_discussion -> %>
                 <Primer.text_input
@@ -149,7 +165,7 @@ defmodule CanaryWeb.SourceLive.Detail do
                   field={:repo}
                   is_large
                   is_full_width
-                  form_control={%{label: "Repo"}}
+                  form_control={%{label: "Repository"}}
                 />
             <% end %>
           </.inputs_for>
@@ -159,21 +175,15 @@ defmodule CanaryWeb.SourceLive.Detail do
 
         <div class="basis-3/5">
           <Primer.tabnav aria_label="Tabs">
-            <:item
-              is_selected={Enum.at(@tabs, 0) == @tab}
-              phx-click="set-tab"
-              phx-target={@myself}
-              phx-value-tab={Enum.at(@tabs, 0)}
-            >
-              <%= Enum.at(@tabs, 0) %>
+            <:item is_selected={Enum.at(@tabs, 0) == @tab}>
+              <span phx-click="set-tab" phx-target={@myself} phx-value-tab={Enum.at(@tabs, 0)}>
+                <%= Enum.at(@tabs, 0) %>
+              </span>
             </:item>
-            <:item
-              is_selected={Enum.at(@tabs, 1) == @tab}
-              phx-click="set-tab"
-              phx-target={@myself}
-              phx-value-tab={Enum.at(@tabs, 1)}
-            >
-              <%= Enum.at(@tabs, 1) %>
+            <:item is_selected={Enum.at(@tabs, 1) == @tab}>
+              <span phx-click="set-tab" phx-target={@myself} phx-value-tab={Enum.at(@tabs, 1)}>
+                <%= Enum.at(@tabs, 1) %>
+              </span>
             </:item>
           </Primer.tabnav>
 
@@ -248,7 +258,7 @@ defmodule CanaryWeb.SourceLive.Detail do
       |> assign(tabs: ["Status", "Documents"])
       |> assign(:tab, "Status")
       |> assign_new(:current_config, fn ->
-        %Ash.Union{type: :webpage, value: config} = form.data.config
+        %Ash.Union{value: config} = form.data.config
 
         Map.from_struct(config)
         |> Map.new(fn {k, v} -> {to_string(k), v} end)
@@ -276,29 +286,16 @@ defmodule CanaryWeb.SourceLive.Detail do
 
   @impl true
   def handle_event("submit", %{"form" => params}, socket) do
-    IO.inspect(params)
+    params = transform_params(params)
 
     case AshPhoenix.Form.submit(socket.assigns.form, params: params) do
       {:ok, _} ->
-        {:noreply, socket}
+        {:noreply, socket |> push_navigate(to: ~p"/source/#{socket.assigns.source.id}")}
 
       {:error, form} = e ->
         IO.inspect(e)
         {:noreply, assign(socket, :form, form)}
     end
-  end
-
-  @impl true
-  def handle_event("start_urls-add", _, socket) do
-    params =
-      socket.assigns.form.params
-      |> update_in(["config", "start_urls"], &((&1 || []) ++ [""]))
-
-    form =
-      socket.assigns.form
-      |> AshPhoenix.Form.validate(params)
-
-    {:noreply, assign(socket, :form, form)}
   end
 
   @impl true
@@ -332,5 +329,24 @@ defmodule CanaryWeb.SourceLive.Detail do
         IO.inspect(error)
         {:noreply, socket}
     end
+  end
+
+  defp transform_params(params) do
+    [
+      "start_urls",
+      "url_include_patterns",
+      "url_exclude_patterns"
+    ]
+    |> Enum.reduce(params, fn key, acc ->
+      if not is_list(acc["config"][key]) do
+        acc
+      else
+        update_in(acc, ["config", key], fn list ->
+          list
+          |> Enum.map(&String.trim/1)
+          |> Enum.reject(&(&1 == ""))
+        end)
+      end
+    end)
   end
 end
