@@ -9,7 +9,7 @@ services:
     ports:
       - 5432:5432
   typesense:
-    image: typesense/typesense:26.0
+    image: typesense/typesense:27.0
     restart: on-failure
     ports:
       - 8108:8108

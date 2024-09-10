@@ -79,7 +79,7 @@ jobs:
           -p 8108:8108 \
           --name typesense \
           -v /tmp/typesense:/data \
-          typesense/typesense:26.0 \
+          typesense/typesense:27.0 \
           --api-key=canary \
           --data-dir /data \
           --enable-cors
