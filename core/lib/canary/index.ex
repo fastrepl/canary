@@ -3,14 +3,13 @@ defmodule Canary.Index.DocumentMetadata do
   defstruct [
     :url,
     :titles,
-    # for client side grouping, we need these kind of thing per source, I think
     :source_name
   ]
 end
 
 defmodule Canary.Index.Document do
   @derive Jason.Encoder
-  defstruct [:id, :source_id, :title, :content, :tags, :meta]
+  defstruct [:id, :source_id, :title, :content, :embedding, :tags, :meta]
 
   alias Canary.Sources.Webpage
   alias Canary.Sources.GithubIssue
@@ -68,10 +67,10 @@ defmodule Canary.Index do
   @collection Application.compile_env!(:canary, [:typesense, :collection])
   @stopwords "default_stopwords"
 
-  def search_documents(source, query, tags \\ []) do
-    opts = build_search_opts(source, query, tags)
+  def search_documents(source, query, opts \\ []) do
+    args = build_search_args(source, query, opts)
 
-    case Typesense.Documents.search_collection(@collection, opts) do
+    case Typesense.Documents.search_collection(@collection, args) do
       {:ok, result} ->
         hits = Map.get(result, :hits, nil) || result["hits"]
         hits = hits |> Enum.map(&transform_hit/1)
@@ -86,14 +85,14 @@ defmodule Canary.Index do
 
   def batch_search_documents(_, [], _), do: {:ok, []}
 
-  def batch_search_documents(source, queries, tags) do
+  def batch_search_documents(source, queries, opts) do
     result =
       Typesense.Documents.multi_search(%Typesense.MultiSearchSearchesParameter{
         searches:
           Enum.map(queries, fn query ->
             struct(
               Typesense.MultiSearchCollectionParameters,
-              build_search_opts(source, query, tags) ++ [collection: @collection]
+              build_search_args(source, query, opts) ++ [collection: @collection]
             )
           end)
       })
@@ -129,21 +128,28 @@ defmodule Canary.Index do
     }
   end
 
-  defp build_search_opts(source, query, tags) do
+  defp build_search_args(source, query, opts) do
+    tags = opts[:tags]
+    embedding = opts[:embedding]
+    embedding_alpha = opts[:embedding_alpha] || 0.3
+
     filter_by =
       [
         "source_id:=#{source}",
-        if(tags != []) do
+        if(tags != nil and tags != []) do
           "tags:=[#{Enum.join(tags, ",")}]"
         end
       ]
       |> Enum.reject(&is_nil/1)
       |> Enum.join(" && ")
 
-    [
+    query_by = ["title", "content"] |> Enum.join(",")
+    query_by_weights = [3, 2] |> Enum.join(",")
+
+    args = [
       q: query,
-      query_by: "title,content",
-      query_by_weights: "3,2",
+      query_by: query_by,
+      query_by_weights: query_by_weights,
       filter_by: filter_by,
       sort_by: "_text_match:desc",
       exclude_fields: "source_id",
@@ -153,6 +159,16 @@ defmodule Canary.Index do
       prioritize_num_matching_fields: true,
       stopwords: @stopwords
     ]
+
+    if embedding do
+      args
+      |> Keyword.put(
+        :vector_query,
+        "embedding:([#{Enum.join(embedding, ",")}], alpha: #{embedding_alpha})"
+      )
+    else
+      args
+    end
   end
 
   def ensure_collection() do
@@ -178,9 +194,9 @@ defmodule Canary.Index do
         %Typesense.Field{name: "source_id", type: "string"},
         %Typesense.Field{name: "title", type: "string", stem: true},
         %Typesense.Field{name: "content", type: "string", stem: true},
-        # %Typesense.Field{name: "embedding", type: "float[]", num_dim: 384},
+        %Typesense.Field{name: "embedding", type: "float[]", num_dim: 384, optional: true},
         %Typesense.Field{name: "tags", type: "string[]"},
-        %Typesense.Field{name: "meta", type: "object", index: false}
+        %Typesense.Field{name: "meta", type: "object", index: false, optional: true}
       ],
       enable_nested_fields: true,
       token_separators: [".", "-", "_"]
