@@ -31,6 +31,7 @@ export class CanaryTabsUrl extends LitElement {
   }
 
   private _handleChangeTab(name: string): void {
+    this.dispatchEvent(new CustomEvent("tab-change", { detail: name }));
     this.selected = name;
   }
 

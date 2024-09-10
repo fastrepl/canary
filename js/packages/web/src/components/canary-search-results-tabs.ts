@@ -92,6 +92,7 @@ export class CanarySearchResultsTabs extends LitElement {
           <canary-tabs-url
             .tabs=${this.tabs.map(({ name }) => name)}
             .selected=${this._selectedTab}
+            @tab-change=${this._handleChangeTabEvent}
           ></canary-tabs-url>
         </div>
         <div>
@@ -112,6 +113,10 @@ export class CanarySearchResultsTabs extends LitElement {
         .group=${this.group}
       ></canary-search-references>
     `;
+  }
+
+  private _handleChangeTabEvent(e: CustomEvent<string>) {
+    this._handleChangeTab(e.detail);
   }
 
   private _handleChangeTab(name: string): void {
