@@ -1,9 +1,9 @@
-- `canary-search-input`
-  - `input`
 - `canary-ask-input`
+  - `input`
+- `canary-search-input`
   - `input`
 - `canary-trigger-searchbar`
   - `button`
   - `icon`
-  - `text`
   - `kbd`
+  - `text`

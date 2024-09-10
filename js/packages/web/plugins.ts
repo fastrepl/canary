@@ -81,10 +81,14 @@ export const partsReportPlugin = (): Plugin => {
       );
 
       const content = Object.entries(components)
+        .sort(([a], [b]) => a.localeCompare(b))
         .map(([component, parts]) => {
-          return `- \`${component}\`\n${Array.from(parts)
+          const partsRendered = Array.from(parts)
+            .sort()
             .map((p) => `  - \`${p}\``)
-            .join("\n")}`;
+            .join("\n");
+
+          return `- \`${component}\`\n${partsRendered}`;
         })
         .join("\n");
 
