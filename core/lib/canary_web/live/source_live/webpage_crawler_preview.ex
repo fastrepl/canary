@@ -80,18 +80,16 @@ defmodule CanaryWeb.SourceLive.WebpageCrawlerPreview do
 
   @impl true
   def handle_event("fetch", _params, socket) do
-    %{
-      "start_urls" => start_urls,
-      "url_include_patterns" => url_include_patterns,
-      "url_exclude_patterns" => url_exclude_patterns
-    } = socket.assigns.config
+    url = Enum.at(socket.assigns.config["start_urls"], 0)
+    url_include_patterns = socket.assigns.config["url_include_patterns"]
+    url_exclude_patterns = socket.assigns.config["url_exclude_patterns"]
 
     socket =
       socket
       |> assign(:task_result, AsyncResult.loading())
       |> start_async(:task, fn ->
         {:ok, pairs} =
-          Canary.Crawler.run(Enum.at(start_urls, 0),
+          Canary.Crawler.run(url,
             url_include_patterns: url_include_patterns,
             url_exclude_patterns: url_exclude_patterns
           )
