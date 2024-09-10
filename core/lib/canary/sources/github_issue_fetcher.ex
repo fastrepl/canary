@@ -1,3 +1,27 @@
+defmodule Canary.Sources.GithubIssue.FetcherResult do
+  defstruct [
+    :node_id,
+    :title,
+    :content,
+    :url,
+    :created_at,
+    :author_name,
+    :author_avatar_url,
+    :comment
+  ]
+
+  @type t :: %__MODULE__{
+          node_id: String.t(),
+          title: String.t(),
+          content: String.t(),
+          url: String.t(),
+          created_at: DateTime.t(),
+          author_name: String.t(),
+          author_avatar_url: String.t(),
+          comment: boolean()
+        }
+end
+
 defmodule Canary.Sources.GithubIssue.Fetcher do
   @default_issue_n 50
   @default_comment_n 50
@@ -8,7 +32,7 @@ defmodule Canary.Sources.GithubIssue.Fetcher do
   defp client() do
     Canary.graphql_client(
       url: "https://api.github.com/graphql",
-      auth: {:bearer, System.get_env("GITHUB_TOKEN")}
+      auth: {:bearer, System.get_env("GITHUB_API_KEY")}
     )
   end
 
@@ -73,48 +97,38 @@ defmodule Canary.Sources.GithubIssue.Fetcher do
     end
   end
 
-  # THIS is kind fo wrong because we need to call "Action" to create Chunk
-  # Here, we should think this as "Creating Document", but rather
-  # find existing documents, and dispatch "create/update/destroy" to Document resource
-  defp process(source_id, data) do
-    data = data["repository"]["issues"]["nodes"]
+  defp process(_source_id, data) do
+    issues = data["repository"]["issues"]["nodes"]
 
-    top = %Canary.Sources.GithubIssue.Chunk{
-      node_id: data["id"],
-      title: data["title"],
-      content: data["body"],
-      url: data["bodyUrl"],
-      created_at: data["createdAt"],
-      author_name: data["author"]["login"],
-      author_avatar_url: data["author"]["avatarUrl"],
-      comment: false
-    }
+    issues
+    |> Enum.flat_map(fn issue ->
+      top = %GithubIssue.FetcherResult{
+        node_id: issue["id"],
+        title: issue["title"],
+        content: issue["body"],
+        url: issue["bodyUrl"],
+        created_at: issue["createdAt"],
+        author_name: issue["author"]["login"],
+        author_avatar_url: issue["author"]["avatarUrl"],
+        comment: false
+      }
 
-    comments =
-      data["comments"]["nodes"]
-      |> Enum.map(fn comment ->
-        %Canary.Sources.GithubIssue.Chunk{
-          node_id: comment["id"],
-          title: "",
-          content: comment["body"],
-          url: comment["url"],
-          created_at: comment["createdAt"],
-          author_name: comment["author"]["login"],
-          author_avatar_url: comment["author"]["avatarUrl"],
-          comment: true
-        }
-      end)
+      comments =
+        issue["comments"]["nodes"]
+        |> Enum.map(fn comment ->
+          %GithubIssue.FetcherResult{
+            node_id: comment["id"],
+            title: "",
+            content: comment["body"],
+            url: comment["url"],
+            created_at: comment["createdAt"],
+            author_name: comment["author"]["login"],
+            author_avatar_url: comment["author"]["avatarUrl"],
+            comment: true
+          }
+        end)
 
-    input = [top | comments]
-
-    existing =
-      Canary.Sources.Document.find(
-        source_id,
-        :github_issue,
-        :node_id,
-        input |> Enum.map(& &1.node_id)
-      )
-
-    existing
+      [top | comments]
+    end)
   end
 end

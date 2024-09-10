@@ -13,21 +13,18 @@ defmodule Canary.Workers.WebpageFetcher do
     end
   end
 
-  defp process(%Source{
-         id: source_id,
-         config: %Ash.Union{type: :webpage, value: %Webpage.Config{} = config}
-       }) do
+  defp process(%Source{id: source_id} = source) do
     Event.create(source_id, %Event.Meta{
       level: :info,
-      message: "crawler started"
+      message: "webpage fetcher started"
     })
 
-    {:ok, incomings} = Webpage.Fetcher.run(config)
+    {:ok, incomings} = Webpage.Fetcher.run(source)
     :ok = Webpage.Syncer.run(source_id, incomings)
 
     Event.create(source_id, %Event.Meta{
       level: :info,
-      message: "crawler ended"
+      message: "webpage fetcher ended"
     })
 
     :ok

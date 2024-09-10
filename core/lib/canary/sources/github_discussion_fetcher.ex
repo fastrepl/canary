@@ -1,3 +1,25 @@
+defmodule Canary.Sources.GithubDiscussion.FetcherResult do
+  defstruct [
+    :title,
+    :content,
+    :url,
+    :created_at,
+    :author_name,
+    :author_avatar_url,
+    :comment
+  ]
+
+  @type t :: %__MODULE__{
+          title: String.t(),
+          content: String.t(),
+          url: String.t(),
+          created_at: DateTime.t(),
+          author_name: String.t(),
+          author_avatar_url: String.t(),
+          comment: boolean()
+        }
+end
+
 defmodule Canary.Sources.GithubDiscussion.Fetcher do
   @default_discussion_n 50
   @default_comment_n 50
@@ -5,7 +27,7 @@ defmodule Canary.Sources.GithubDiscussion.Fetcher do
   defp client() do
     Canary.graphql_client(
       url: "https://api.github.com/graphql",
-      auth: {:bearer, System.get_env("GITHUB_TOKEN")}
+      auth: {:bearer, System.get_env("GITHUB_API_KEY")}
     )
   end
 
@@ -67,32 +89,35 @@ defmodule Canary.Sources.GithubDiscussion.Fetcher do
   end
 
   defp to_document(data) do
-    data = data["repository"]["discussions"]["nodes"]
+    discussions = data["repository"]["discussions"]["nodes"]
 
-    top = %Canary.Sources.GithubDiscussion.Chunk{
-      title: data["title"],
-      content: data["body"],
-      url: data["url"],
-      created_at: data["createdAt"],
-      author_name: data["author"]["login"],
-      author_avatar_url: data["author"]["avatarUrl"],
-      comment: false
-    }
+    discussions
+    |> Enum.flat_map(fn discussion ->
+      top = %Canary.Sources.GithubDiscussion.Chunk{
+        title: discussion["title"],
+        content: discussion["body"],
+        url: discussion["url"],
+        created_at: discussion["createdAt"],
+        author_name: discussion["author"]["login"],
+        author_avatar_url: discussion["author"]["avatarUrl"],
+        comment: false
+      }
 
-    comments =
-      data["comments"]["nodes"]
-      |> Enum.map(fn comment ->
-        %Canary.Sources.GithubDiscussion.Chunk{
-          title: "",
-          content: comment["body"],
-          url: comment["url"],
-          created_at: comment["createdAt"],
-          author_name: comment["author"]["login"],
-          author_avatar_url: comment["author"]["avatarUrl"],
-          comment: true
-        }
-      end)
+      comments =
+        discussion["comments"]["nodes"]
+        |> Enum.map(fn comment ->
+          %Canary.Sources.GithubDiscussion.Chunk{
+            title: "",
+            content: comment["body"],
+            url: comment["url"],
+            created_at: comment["createdAt"],
+            author_name: comment["author"]["login"],
+            author_avatar_url: comment["author"]["avatarUrl"],
+            comment: true
+          }
+        end)
 
-    [top | comments]
+      [top | comments]
+    end)
   end
 end
