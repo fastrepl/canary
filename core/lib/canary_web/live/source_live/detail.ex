@@ -233,9 +233,12 @@ defmodule CanaryWeb.SourceLive.Detail do
       <%= for event <- @source.events do %>
         <Primer.timeline_item is_condensed>
           <:badge><Primer.octicon name="git-commit-16" /></:badge>
-          <span id={"event-#{event.id}"} phx-hook="TimeAgo" class="badge">
-            <%= event.created_at %>
-          </span>
+          <div class="flex flex-row justify-between">
+            <span><%= event.meta.message %></span>
+            <span id={"event-#{event.id}"} phx-hook="TimeAgo" class="badge">
+              <%= event.created_at %>
+            </span>
+          </div>
         </Primer.timeline_item>
       <% end %>
     </div>

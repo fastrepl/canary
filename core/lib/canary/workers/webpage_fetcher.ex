@@ -20,6 +20,11 @@ defmodule Canary.Workers.WebpageFetcher do
          id: source_id,
          config: %Ash.Union{type: :webpage, value: %Webpage.Config{} = config}
        }) do
+    Canary.Sources.Event.create(source_id, %Canary.Sources.EventMeta{
+      level: :info,
+      message: "crawler started"
+    })
+
     {:ok, incomings} =
       Canary.Crawler.run(Enum.at(config.start_urls, 0),
         include_patterns: config.url_include_patterns,
@@ -106,6 +111,11 @@ defmodule Canary.Workers.WebpageFetcher do
     # else
     #   :ok
     # end
+
+    Canary.Sources.Event.create(source_id, %Canary.Sources.EventMeta{
+      level: :info,
+      message: "crawler ended"
+    })
 
     :ok
   end
