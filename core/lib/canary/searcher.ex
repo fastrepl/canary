@@ -1,5 +1,11 @@
+defmodule Canary.Searcher.Result do
+  @derive Jason.Encoder
+  defstruct [:references, :suggestion]
+  @type t :: %__MODULE__{references: map(), suggestion: map()}
+end
+
 defmodule Canary.Searcher do
-  @callback run(any(), String.t()) :: {:ok, map()} | {:error, any()}
+  @callback run(any(), String.t()) :: {:ok, Canary.Searcher.Result.t()} | {:error, any()}
 
   def run(source, query) do
     with {:error, _} <- get_cache(source, query),
@@ -28,9 +34,7 @@ defmodule Canary.Searcher.Default do
   @behaviour Canary.Searcher
 
   def run(source, query) do
-    ai = query |> String.split(" ", trim: true) |> Enum.count() > 2
-
-    if ai do
+    if ai?(query) do
       Appsignal.instrument("ai_search", fn ->
         ai_search(source, query)
       end)
@@ -41,25 +45,16 @@ defmodule Canary.Searcher.Default do
     end
   end
 
+  defp ai?(query) do
+    query
+    |> String.split(" ", trim: true)
+    |> Enum.count() > 2
+  end
+
   defp ai_search(source, query) do
     source = source |> Ash.load!(:documents)
-    docs_size = source.documents |> Enum.count()
 
-    existing_keywords =
-      source.documents
-      |> Enum.map(fn doc -> if doc.summary, do: doc.summary.keywords, else: [] end)
-      |> Enum.flat_map(& &1)
-      |> Enum.frequencies()
-      |> Enum.map(fn {k, v} -> if v > 0.5 * docs_size, do: k, else: nil end)
-      |> Enum.reject(&is_nil/1)
-
-    interested_keywords =
-      case Canary.Query.Understander.run(query, existing_keywords) do
-        {:ok, analysis} -> analysis.keywords
-        _ -> [query]
-      end
-
-    with {:ok, docs} <- Canary.Index.batch_search_documents(source.id, interested_keywords),
+    with {:ok, docs} <- Canary.Index.search_documents(source.id, query),
          {:ok, reranked} <-
            Canary.Reranker.run(
              query,
@@ -68,8 +63,8 @@ defmodule Canary.Searcher.Default do
              threshold: 0.05
            ) do
       {:ok,
-       %{
-         search: reranked,
+       %Canary.Searcher.Result{
+         reference: %{source.name => reranked},
          suggestion: %{questions: Canary.Query.Sugestor.run!(query)}
        }}
     end
@@ -80,8 +75,8 @@ defmodule Canary.Searcher.Default do
     {:ok, results} = Canary.Index.search_documents(source_id, query)
 
     {:ok,
-     %{
-       search: results,
+     %Canary.Searcher.Result{
+       reference: %{source.name => results},
        suggestion: %{questions: Canary.Query.Sugestor.run!(query)}
      }}
   end
