@@ -1,4 +1,4 @@
-defmodule Canary.Sources.EventMeta do
+defmodule Canary.Sources.Event.Meta do
   use Ash.Resource, data_layer: :embedded
 
   attributes do

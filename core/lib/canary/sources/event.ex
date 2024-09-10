@@ -8,7 +8,7 @@ defmodule Canary.Sources.Event do
     uuid_primary_key :id
     create_timestamp :created_at
 
-    attribute :meta, Canary.Sources.EventMeta, allow_nil?: false
+    attribute :meta, Canary.Sources.Event.Meta, allow_nil?: false
   end
 
   relationships do

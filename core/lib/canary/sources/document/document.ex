@@ -21,12 +21,19 @@ defmodule Canary.Sources.Document do
     read :find do
       argument :source_id, :uuid, allow_nil?: false
       argument :type, :string, allow_nil?: false
-      argument :key, :string, allow_nil?: false
-      argument :values, {:array, :string}, allow_nil?: false
 
-      filter expr(source_id == ^arg(:source_id))
-      filter expr(fragment("(meta->>'type')::text = ?", ^arg(:type)))
-      filter expr(fragment("(meta->'value'->>?)::text = ANY(?)", ^arg(:key), ^arg(:values)))
+      argument :key, :string, allow_nil?: true
+      argument :values, {:array, :string}, allow_nil?: true
+
+      filter expr(
+               if is_nil(^arg(:key)) or is_nil(^arg(:values)) do
+                 source_id == ^arg(:source_id)
+               else
+                 source_id == ^arg(:source_id) and
+                   fragment("(meta->>'type')::text = ?", ^arg(:type)) and
+                   fragment("(meta->'value'->>?)::text = ANY(?)", ^arg(:key), ^arg(:values))
+               end
+             )
     end
 
     create :create_webpage do
