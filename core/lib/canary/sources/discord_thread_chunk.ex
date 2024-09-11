@@ -39,7 +39,10 @@ defmodule Canary.Sources.DiscordThread.Chunk do
     destroy :destroy do
       primary? true
 
-      change {Canary.Change.RemoveFromIndex, index_id_attribute: :index_id}
+      change {
+        Canary.Change.RemoveFromIndex,
+        source_type: :discord_thread, index_id_attribute: :index_id
+      }
     end
   end
 end

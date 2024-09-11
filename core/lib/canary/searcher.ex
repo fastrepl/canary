@@ -61,9 +61,7 @@ defmodule Canary.Searcher.Default do
   end
 
   defp ai_search(sources, query) do
-    source_ids = sources |> Enum.map(& &1.id)
-
-    with {:ok, docs} <- Canary.Index.search_documents(source_ids, query),
+    with {:ok, docs} <- Canary.Index.search(sources, query),
          {:ok, reranked} <-
            Canary.Reranker.run(
              query,
@@ -81,11 +79,18 @@ defmodule Canary.Searcher.Default do
   end
 
   defp normal_search(sources, query) do
-    source_ids = sources |> Enum.map(& &1.id)
-    {:ok, results} = Canary.Index.search_documents(source_ids, query)
+    {:ok, results} = Canary.Index.search(sources, query)
+
+    references =
+      results
+      |> Enum.reject(&Enum.empty?/1)
+      |> Enum.reduce(%{}, fn matches, acc ->
+        source = sources |> Enum.find(&(&1.id == Enum.at(matches, 0).source_id))
+        acc |> Map.put(source.name, matches)
+      end)
 
     result = %Canary.Searcher.Result{
-      references: %{"Doc" => results},
+      references: references,
       suggestion: %{questions: Canary.Query.Sugestor.run!(query)}
     }
 

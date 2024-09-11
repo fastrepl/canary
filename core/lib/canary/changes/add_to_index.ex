@@ -15,9 +15,7 @@ defmodule Canary.Change.AddToIndex do
     changeset
     |> Ash.Changeset.force_change_attribute(opts[:index_id_attribute], Ash.UUID.generate())
     |> Ash.Changeset.after_action(fn _, record ->
-      case record
-           |> Canary.Index.Document.from()
-           |> Canary.Index.insert_document() do
+      case Canary.Index.insert_document(record) do
         {:ok, _} ->
           {:ok, record}
 

@@ -3,10 +3,10 @@ defmodule Canary.Change.RemoveFromIndex do
 
   @impl true
   def init(opts) do
-    if is_atom(opts[:index_id_attribute]) do
-      {:ok, opts}
-    else
+    if is_nil(opts[:index_id_attribute]) or is_nil(opts[:source_type]) do
       :error
+    else
+      {:ok, opts}
     end
   end
 
@@ -16,7 +16,7 @@ defmodule Canary.Change.RemoveFromIndex do
     |> Ash.Changeset.after_action(fn _, record ->
       index_id = Map.get(record, opts[:index_id_attribute])
 
-      case Canary.Index.delete_document(index_id) do
+      case Canary.Index.delete_document(opts[:source_type], index_id) do
         {:ok, _} -> {:ok, record}
         error -> error
       end

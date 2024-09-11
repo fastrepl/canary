@@ -206,11 +206,11 @@ config :appsignal, :config,
   ignore_actions: ["Canary.Workers.Fetcher#perform", "CanaryWeb.OperationsController#ask"]
 
 if config_env() == :prod do
-  config :oapi_typesense,
+  config :canary, :typesense,
     base_url: System.get_env("TYPESENSE_BASE_URL"),
     api_key: System.get_env("TYPESENSE_API_KEY")
 else
-  config :oapi_typesense,
+  config :canary, :typesense,
     base_url: "http://localhost:8108",
     api_key: "canary"
 end

@@ -40,7 +40,10 @@ defmodule Canary.Sources.GithubIssue.Chunk do
     destroy :destroy do
       primary? true
 
-      change {Canary.Change.RemoveFromIndex, index_id_attribute: :index_id}
+      change {
+        Canary.Change.RemoveFromIndex,
+        source_type: :github_issue, index_id_attribute: :index_id
+      }
     end
   end
 end

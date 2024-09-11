@@ -9,8 +9,10 @@ defmodule Canary.Application do
   def start(_type, _args) do
     Appsignal.Phoenix.LiveView.attach()
 
-    Canary.Index.ensure_collection()
-    Canary.Index.ensure_stopwords()
+    Canary.Index.Collection.ensure(:webpage)
+    Canary.Index.Collection.ensure(:github_issue)
+    Canary.Index.Collection.ensure(:github_discussion)
+    Canary.Index.Stopword.ensure()
 
     children =
       [
