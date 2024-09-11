@@ -34,11 +34,13 @@ defmodule Canary.Test.Index do
         tags: ["tag1", "tag2"]
       })
 
-    {:ok, docs} = Index.search_documents(source_id, "title")
+    {:ok, docs} = Index.search_documents([source_id], "title")
     assert length(docs) == 1
     assert Enum.at(docs, 0).id == doc_1["id"]
 
-    {:ok, docs} = Index.search_documents(source_id, "aaaaa", embedding: List.duplicate(1.0, 384))
+    {:ok, docs} =
+      Index.search_documents([source_id], "aaaaa", embedding: List.duplicate(1.0, 384))
+
     assert length(docs) == 2
     assert Enum.at(docs, 0).id == doc_2["id"]
     assert Enum.at(docs, 1).id == doc_3["id"]
