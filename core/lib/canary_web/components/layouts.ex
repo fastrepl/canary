@@ -1,5 +1,4 @@
 defmodule CanaryWeb.Layouts do
-  alias ElixirSense.Log
   use CanaryWeb, :html
 
   embed_templates "layouts/*"
