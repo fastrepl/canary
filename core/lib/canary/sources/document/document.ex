@@ -16,7 +16,7 @@ defmodule Canary.Sources.Document do
   end
 
   actions do
-    defaults [:read]
+    defaults [:read, update: [:meta, :chunks]]
 
     read :find do
       argument :source_id, :uuid, allow_nil?: false
@@ -58,11 +58,34 @@ defmodule Canary.Sources.Document do
       }
     end
 
-    update :update do
-      primary? true
-      # unions do not support atomic updates
-      require_atomic? false
-      accept [:meta, :chunks]
+    create :create_github_issue do
+      argument :source_id, :uuid, allow_nil?: false
+      argument :fetcher_results, {:array, :map}, allow_nil?: false
+
+      change manage_relationship(:source_id, :source, type: :append)
+
+      change {
+        Canary.Sources.Document.CreateGithubIssue,
+        source_id_argument: :source_id,
+        fetcher_results_argument: :fetcher_results,
+        meta_attribute: :meta,
+        chunks_attribute: :chunks
+      }
+    end
+
+    create :create_github_discussion do
+      argument :source_id, :uuid, allow_nil?: false
+      argument :fetcher_results, {:array, :map}, allow_nil?: false
+
+      change manage_relationship(:source_id, :source, type: :append)
+
+      change {
+        Canary.Sources.Document.CreateGithubDiscussion,
+        source_id_argument: :source_id,
+        fetcher_results_argument: :fetcher_results,
+        meta_attribute: :meta,
+        chunks_attribute: :chunks
+      }
     end
 
     destroy :destroy do
@@ -74,6 +97,7 @@ defmodule Canary.Sources.Document do
 
   code_interface do
     define :find, args: [:source_id, :type, :key, :values], action: :find
+    define :update, args: [:meta, :chunks], action: :update
   end
 
   postgres do

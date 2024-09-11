@@ -6,7 +6,7 @@ defmodule Canary.Sources.Webpage.Chunk do
     attribute :source_id, :uuid, allow_nil?: false
     attribute :index_id, :uuid, allow_nil?: false
 
-    attribute :title, :string, allow_nil?: false
+    attribute :title, :string, allow_nil?: false, constraints: [allow_empty?: true]
     attribute :content, :string, allow_nil?: false
     attribute :url, :string, allow_nil?: false
     attribute :keywords, {:array, :string}, default: []

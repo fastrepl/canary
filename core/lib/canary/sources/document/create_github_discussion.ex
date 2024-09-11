@@ -1,17 +1,16 @@
-defmodule Canary.Sources.Document.CreateWebpage do
+defmodule Canary.Sources.Document.CreateGithubDiscussion do
   use Ash.Resource.Change
 
   alias Canary.Sources.Document
-  alias Canary.Sources.Webpage
+  alias Canary.Sources.GithubDiscussion
 
   @impl true
   def init(opts) do
     if [
          :source_id_argument,
-         :url_argument,
-         :html_argument,
-         :meta_attribute,
-         :chunks_attribute
+         :fetcher_results_argument,
+         :chunks_attribute,
+         :meta_attribute
        ]
        |> Enum.any?(&is_nil(opts[&1])) do
       :error
@@ -23,31 +22,30 @@ defmodule Canary.Sources.Document.CreateWebpage do
   @impl true
   def change(changeset, opts, _context) do
     source_id = Ash.Changeset.get_argument(changeset, opts[:source_id_argument])
-    url = Ash.Changeset.get_argument(changeset, opts[:url_argument])
-    html = Ash.Changeset.get_argument(changeset, opts[:html_argument])
+    fetcher_results = Ash.Changeset.get_argument(changeset, opts[:fetcher_results_argument])
 
     changeset
-    |> Ash.Changeset.change_attribute(opts[:meta_attribute], wrap_union(%Webpage.DocumentMeta{}))
+    |> Ash.Changeset.change_attribute(
+      opts[:meta_attribute],
+      wrap_union(%GithubDiscussion.DocumentMeta{})
+    )
     |> Ash.Changeset.change_attribute(opts[:chunks_attribute], [])
     |> Ash.Changeset.after_action(fn _, record ->
-      items = Canary.Scraper.run!(html)
-
-      hash =
-        html
-        |> then(&:crypto.hash(:sha256, &1))
-        |> Base.encode16(case: :lower)
-
       result =
-        items
-        |> Enum.map(fn %Canary.Scraper.Item{} = item ->
+        fetcher_results
+        |> Enum.map(fn %GithubDiscussion.FetcherResult{} = item ->
           %{
             source_id: source_id,
             title: item.title,
             content: item.content,
-            url: URI.parse(url) |> Map.put(:fragment, item.id) |> URI.to_string()
+            url: item.url,
+            created_at: item.created_at,
+            author_name: item.author_name,
+            author_avatar_url: item.author_avatar_url,
+            comment: item.comment
           }
         end)
-        |> Ash.bulk_create(Webpage.Chunk, :create,
+        |> Ash.bulk_create(GithubDiscussion.Chunk, :create,
           return_errors?: true,
           return_records?: true
         )
@@ -56,7 +54,7 @@ defmodule Canary.Sources.Document.CreateWebpage do
         %Ash.BulkResult{status: :success, records: records} ->
           case Document.update(
                  record,
-                 wrap_union(%Webpage.DocumentMeta{url: url, hash: hash}),
+                 wrap_union(%GithubDiscussion.DocumentMeta{}),
                  Enum.map(records, &wrap_union/1)
                ) do
             {:ok, updated_record} -> {:ok, updated_record}
@@ -70,5 +68,5 @@ defmodule Canary.Sources.Document.CreateWebpage do
   end
 
   defp wrap_union(%Ash.Union{} = v), do: v
-  defp wrap_union(v), do: %Ash.Union{type: :webpage, value: v}
+  defp wrap_union(v), do: %Ash.Union{type: :github_discussion, value: v}
 end

@@ -2,12 +2,15 @@ defmodule Canary.Sources.GithubIssue.Syncer do
   # alias Canary.Sources.GithubIssue.DocumentMeta
   # alias Canary.Sources.GithubIssue.FetcherResult
 
-  # alias Canary.Sources.Document
+  alias Canary.Sources.Document
 
-  @spec run(binary(), list(FetcherResult.t())) :: :ok | {:error, any()}
   def run(source_id, incomings) do
-    IO.inspect(incomings)
-    IO.inspect(source_id)
+    Document
+    |> Ash.Changeset.for_create(:create_github_issue, %{
+      source_id: source_id,
+      fetcher_results: incomings
+    })
+    |> Ash.create()
 
     :ok
   end

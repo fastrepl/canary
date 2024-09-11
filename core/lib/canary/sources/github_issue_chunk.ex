@@ -8,7 +8,7 @@ defmodule Canary.Sources.GithubIssue.Chunk do
     attribute :node_id, :string, allow_nil?: false
 
     attribute :url, :string
-    attribute :title, :string
+    attribute :title, :string, constraints: [allow_empty?: true]
     attribute :content, :string
     attribute :created_at, :utc_datetime
     attribute :author_name, :string
@@ -17,7 +17,7 @@ defmodule Canary.Sources.GithubIssue.Chunk do
   end
 
   actions do
-    defaults [:read]
+    defaults [:read, update: :*]
 
     create :create do
       primary? true

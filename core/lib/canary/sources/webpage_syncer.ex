@@ -47,6 +47,9 @@ defmodule Canary.Sources.Webpage.Syncer do
     with %Ash.BulkResult{status: :success} <- destroy_result,
          %Ash.BulkResult{status: :success} <- create_result do
       :ok
+    else
+      %Ash.BulkResult{errors: errors} ->
+        {:error, errors}
     end
   end
 
