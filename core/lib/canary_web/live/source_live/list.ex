@@ -39,7 +39,16 @@ defmodule CanaryWeb.SourceLive.List do
                 <span><%= source.name %></span>
                 <Primer.branch_name><%= source.config.type %></Primer.branch_name>
               </div>
-              <span class="text-gray-500 h-4 w-4 hero-chevron-right-solid"></span>
+
+              <div class="flex flex-row gap-2 items-center">
+                <span class="text-gray-700 font-light text-xs">
+                  Updated
+                  <span id={"event-#{source.id}"} phx-hook="TimeAgo">
+                    <%= source.lastest_event_at %>
+                  </span>
+                </span>
+                <span class="text-gray-500 h-4 w-4 hero-chevron-right-solid"></span>
+              </div>
             </div>
           </:row>
         </Primer.box>
