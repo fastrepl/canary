@@ -10,7 +10,7 @@ defmodule Canary.Sources.Webpage.Fetcher do
 
   alias Canary.Crawler
 
-  def run(%Source{config: %Ash.Union{type: :github_issue, value: %Config{} = config}}) do
+  def run(%Source{config: %Ash.Union{type: :webpage, value: %Config{} = config}}) do
     url = config.start_urls |> Enum.at(0)
 
     case Crawler.run(url,
