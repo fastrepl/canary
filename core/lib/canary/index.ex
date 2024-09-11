@@ -2,8 +2,7 @@ defmodule Canary.Index.DocumentMetadata do
   @derive Jason.Encoder
   defstruct [
     :url,
-    :titles,
-    :source_name
+    :titles
   ]
 end
 
@@ -18,8 +17,7 @@ defmodule Canary.Index.Document do
 
   def from(%Webpage.Chunk{} = chunk) do
     meta = %Canary.Index.DocumentMetadata{
-      url: chunk.url,
-      source_name: "Webpage"
+      url: chunk.url
     }
 
     %__MODULE__{
@@ -37,6 +35,10 @@ defmodule Canary.Index.Document do
 
     %__MODULE__{
       id: chunk.index_id,
+      source_id: chunk.source_id,
+      title: chunk.title,
+      content: chunk.content,
+      tags: [],
       meta: meta
     }
   end
@@ -46,6 +48,10 @@ defmodule Canary.Index.Document do
 
     %__MODULE__{
       id: chunk.index_id,
+      source_id: chunk.source_id,
+      title: chunk.title,
+      content: chunk.content,
+      tags: [],
       meta: meta
     }
   end
@@ -58,6 +64,7 @@ defmodule Canary.Index.Document do
 
     %__MODULE__{
       id: chunk.index_id,
+      source_id: chunk.source_id,
       meta: meta
     }
   end
@@ -67,8 +74,8 @@ defmodule Canary.Index do
   @collection Application.compile_env!(:canary, [:typesense, :collection])
   @stopwords "default_stopwords"
 
-  def search_documents(source, query, opts \\ []) do
-    args = build_search_args(source, query, opts)
+  def search_documents(source_ids, query, opts \\ []) do
+    args = build_search_args(source_ids, query, opts)
 
     case Typesense.Documents.search_collection(@collection, args) do
       {:ok, result} ->
@@ -124,18 +131,19 @@ defmodule Canary.Index do
       excerpt: hit["highlight"]["content"]["snippet"] || hit["document"]["content"],
       tags: hit["document"]["tags"],
       content: hit["document"]["content"],
-      tokens: hit["document"]["meta"]["tokens"]
+      tokens: hit["document"]["meta"]["tokens"],
+      source_id: hit["document"]["source_id"]
     }
   end
 
-  defp build_search_args(source, query, opts) do
+  defp build_search_args(source_ids, query, opts) do
     tags = opts[:tags]
     embedding = opts[:embedding]
     embedding_alpha = opts[:embedding_alpha] || 0.3
 
     filter_by =
       [
-        "source_id:=#{source}",
+        "source_id:=[#{Enum.join(source_ids, ",")}]",
         if(tags != nil and tags != []) do
           "tags:=[#{Enum.join(tags, ",")}]"
         end
@@ -152,7 +160,7 @@ defmodule Canary.Index do
       query_by_weights: query_by_weights,
       filter_by: filter_by,
       sort_by: "_text_match:desc",
-      exclude_fields: "source_id",
+      exclude_fields: "embedding",
       prefix: true,
       prioritize_exact_match: false,
       prioritize_token_position: false,

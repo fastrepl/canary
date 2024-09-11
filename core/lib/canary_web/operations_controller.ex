@@ -92,10 +92,14 @@ defmodule CanaryWeb.OperationsController do
     end
   end
 
-  def search(conn, %{"query" => query}) do
-    source = conn.assigns.current_account.sources |> Enum.at(0)
+  def search(conn, %{"query" => query, "sources" => sources}) do
+    sources =
+      conn.assigns.current_account.sources
+      |> Enum.filter(fn source ->
+        length(sources) == 0 || Enum.any?(sources, &(source.name == &1))
+      end)
 
-    case Canary.Searcher.run(source, query) do
+    case Canary.Searcher.run(sources, query, cache: cache?()) do
       {:ok, data} ->
         conn
         |> put_resp_content_type("application/json")
@@ -165,4 +169,6 @@ defmodule CanaryWeb.OperationsController do
   defp sse_encode(data) do
     "data: #{Jason.encode!(data)}\n\n"
   end
+
+  defp cache?(), do: Application.get_env(:canary, :env) == :prod
 end
