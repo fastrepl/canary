@@ -1,4 +1,5 @@
 defmodule CanaryWeb.Layouts do
+  alias ElixirSense.Log
   use CanaryWeb, :html
 
   embed_templates "layouts/*"
@@ -74,6 +75,12 @@ defmodule CanaryWeb.Layouts do
               </.link>
             </li>
           </ul>
+        </li>
+
+        <li class="mt-auto mb-4">
+          <.link navigate={~p"/sign-out"}>
+            Logout
+          </.link>
         </li>
       </ul>
     </nav>
