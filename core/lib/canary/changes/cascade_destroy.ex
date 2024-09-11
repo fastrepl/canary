@@ -14,10 +14,10 @@ defmodule Canary.Change.CascadeDestroy do
   def atomic(_, _, _), do: :ok
 
   @impl true
-  def after_batch(changesets_and_results, _opts, _context) do
+  def after_batch(changesets_and_results, opts, _context) do
     chunks =
       changesets_and_results
-      |> Enum.flat_map(fn {_, record} -> record.chunks end)
+      |> Enum.flat_map(fn {_, record} -> Map.get(record, opts[:attribute]) end)
       |> transform()
 
     %Ash.BulkResult{status: :success} = Ash.bulk_destroy(chunks, :destroy, %{})
