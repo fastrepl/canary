@@ -1,13 +1,25 @@
 defmodule Canary.Sources.GithubDiscussion.Syncer do
-  # alias Canary.Sources.GithubDiscussion.DocumentMeta
-  # alias Canary.Sources.GithubDiscussion.FetcherResult
+  alias Canary.Sources.Document
 
-  # alias Canary.Sources.Document
+  require Ash.Query
 
-  def run(source_id, incomings) do
-    IO.inspect(incomings)
-    IO.inspect(source_id)
+  def run(source_id, list_of_results) do
+    destroy_result =
+      Document
+      |> Ash.Query.filter(source_id == ^source_id and type == :github_discussion)
+      |> Ash.bulk_destroy(:destroy, %{}, return_errors?: true)
 
-    :ok
+    create_result =
+      list_of_results
+      |> Enum.map(&%{source_id: source_id, fetcher_results: &1})
+      |> Ash.bulk_create(Document, :create_github_discussion, return_errors?: true)
+
+    with %Ash.BulkResult{status: :success} <- destroy_result,
+         %Ash.BulkResult{status: :success} <- create_result do
+      :ok
+    else
+      %Ash.BulkResult{errors: errors} ->
+        {:error, errors}
+    end
   end
 end

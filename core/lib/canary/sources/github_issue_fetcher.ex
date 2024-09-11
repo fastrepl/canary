@@ -102,7 +102,7 @@ defmodule Canary.Sources.GithubIssue.Fetcher do
     issues = data["repository"]["issues"]["nodes"]
 
     issues
-    |> Enum.flat_map(fn issue ->
+    |> Enum.map(fn issue ->
       top = %GithubIssue.FetcherResult{
         node_id: issue["id"],
         title: issue["title"],

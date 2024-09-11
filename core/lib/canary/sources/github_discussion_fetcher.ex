@@ -92,7 +92,7 @@ defmodule Canary.Sources.GithubDiscussion.Fetcher do
     discussions = data["repository"]["discussions"]["nodes"]
 
     discussions
-    |> Enum.flat_map(fn discussion ->
+    |> Enum.map(fn discussion ->
       top = %Canary.Sources.GithubDiscussion.Chunk{
         title: discussion["title"],
         content: discussion["body"],
