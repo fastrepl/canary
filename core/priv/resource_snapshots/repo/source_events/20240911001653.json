@@ -36,7 +36,7 @@
       "generated?": false,
       "primary_key?": false,
       "references": {
-        "deferrable": false,
+        "deferrable": "initially",
         "destination_attribute": "id",
         "destination_attribute_default": null,
         "destination_attribute_generated": null,
@@ -65,7 +65,7 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "0F0B2145BA62F49E3160350F108F80AF11B1F478F50C604CC2CA1E9384DC556D",
+  "hash": "05525D0D334EC088CDEF2C8825258AC42E89A80A19B7662895FE8EC047C851DB",
   "identities": [],
   "multitenancy": {
     "attribute": null,

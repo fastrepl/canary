@@ -41,5 +41,9 @@ defmodule Canary.Sources.Event do
   postgres do
     table "source_events"
     repo Canary.Repo
+
+    references do
+      reference :source, deferrable: :initially
+    end
   end
 end
