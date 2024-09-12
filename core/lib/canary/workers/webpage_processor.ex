@@ -19,14 +19,14 @@ defmodule Canary.Workers.WebpageProcessor do
       message: "webpage fetcher started"
     })
 
-    {:ok, incomings} = Webpage.Fetcher.run(source)
-    :ok = Webpage.Syncer.run(source_id, incomings)
+    with {:ok, incomings} = Webpage.Fetcher.run(source),
+         :ok <- Webpage.Syncer.run(source_id, incomings) do
+      Event.create(source_id, %Event.Meta{
+        level: :info,
+        message: "webpage fetcher ended"
+      })
 
-    Event.create(source_id, %Event.Meta{
-      level: :info,
-      message: "webpage fetcher ended"
-    })
-
-    :ok
+      :ok
+    end
   end
 end
