@@ -24,24 +24,34 @@ defmodule Canary.Index do
   end
 
   def insert_document(%GithubIssue.Chunk{} = chunk) do
+    meta = %Document.Webpage.Meta{
+      url: chunk.url
+    }
+
     doc = %Document.GithubIssue{
       id: chunk.index_id,
       source_id: chunk.source_id,
       title: chunk.title,
       content: chunk.content,
-      tags: []
+      tags: [],
+      meta: meta
     }
 
     Client.index_document(:github_issue, doc)
   end
 
   def insert_document(%GithubDiscussion.Chunk{} = chunk) do
+    meta = %Document.Webpage.Meta{
+      url: chunk.url
+    }
+
     doc = %Document.GithubDiscussion{
       id: chunk.index_id,
       source_id: chunk.source_id,
       title: chunk.title,
       content: chunk.content,
-      tags: []
+      tags: [],
+      meta: meta
     }
 
     Client.index_document(:github_discussion, doc)
@@ -105,26 +115,33 @@ defmodule Canary.Index do
 
     case Canary.Index.Client.multi_search(args) do
       {:ok, %Req.Response{status: 200, body: %{"results" => results}}} ->
-        results =
+        ret =
           results
+          |> Enum.reject(fn %{"hits" => hits} -> length(hits) == 0 end)
           |> Enum.map(fn %{"hits" => hits} ->
-            hits
-            |> Enum.map(fn hit ->
-              %{
-                id: hit["document"]["id"],
-                source_id: hit["document"]["source_id"],
-                title: hit["highlight"]["title"]["snippet"] || hit["document"]["title"],
-                titles: hit["document"]["meta"]["titles"],
-                url: hit["document"]["meta"]["url"],
-                excerpt: hit["highlight"]["content"]["snippet"] || hit["document"]["content"],
-                tags: hit["document"]["tags"],
-                content: hit["document"]["content"],
-                tokens: hit["document"]["meta"]["tokens"]
-              }
-            end)
+            hits =
+              hits
+              |> Enum.map(fn hit ->
+                %{
+                  id: hit["document"]["id"],
+                  source_id: hit["document"]["source_id"],
+                  title: hit["highlight"]["title"]["snippet"] || hit["document"]["title"],
+                  titles: hit["document"]["meta"]["titles"],
+                  url: hit["document"]["meta"]["url"],
+                  excerpt: hit["highlight"]["content"]["snippet"] || hit["document"]["content"],
+                  tags: hit["document"]["tags"],
+                  content: hit["document"]["content"],
+                  tokens: hit["document"]["meta"]["tokens"]
+                }
+              end)
+
+            %{
+              source_id: hits |> Enum.at(0) |> Map.get(:source_id),
+              hits: hits
+            }
           end)
 
-        {:ok, results}
+        {:ok, ret}
 
       {:ok, res} ->
         {:error, res}

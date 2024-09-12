@@ -70,18 +70,13 @@ export class CanarySearchResultsTabs extends LitElement {
   }
 
   render() {
-    if (
-      !this._search ||
-      Object.values(this._search.result.references).every(
-        (refs) => refs.length === 0,
-      )
-    ) {
+    if (!this._search || this._search.result.search.length === 0) {
       return nothing;
     }
 
     if (this._search.status === TaskStatus.COMPLETE) {
       this._groupedReferences = this._groupReferences(
-        Object.values(this._search.result.references).flat(),
+        this._search.result.search.flatMap(({ hits }) => hits),
         this.tabs,
       );
     }

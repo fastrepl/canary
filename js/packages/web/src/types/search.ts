@@ -6,10 +6,14 @@ export interface SearchReference {
   excerpt?: string;
 }
 
+type SearchSourceType = "webpage" | "github_issue" | "github_discussion";
+
 export type SearchFunctionResult = {
-  references: {
-    [source: string]: SearchReference[];
-  };
+  search: Array<{
+    name: string;
+    type: SearchSourceType;
+    hits: SearchReference[];
+  }>;
   suggestion?: {
     questions: string[];
   };

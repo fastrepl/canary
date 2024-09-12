@@ -4,7 +4,7 @@ import { customElement } from "lit/decorators.js";
 import type { AskFunction, SearchFunction } from "../types";
 import { wrapper } from "../styles";
 import { createEvent } from "../store";
-import { LOCAL_SOURCE } from "../constants";
+import { LOCAL_SOURCE_NAME } from "../constants";
 
 const NAME = "canary-provider-mock";
 
@@ -75,7 +75,7 @@ export class CanaryProviderMock extends LitElement {
       },
     ];
 
-    return { references: { [LOCAL_SOURCE]: references } };
+    return { search: [{ name: LOCAL_SOURCE_NAME, type: "webpage", hits: references }] };
   };
 
   ask: AskFunction = async (_payload, handleDelta, _signal) => {

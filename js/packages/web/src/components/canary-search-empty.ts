@@ -18,16 +18,10 @@ export class CanarySearchEmpty extends LitElement {
   @consume({ context: searchContext, subscribe: true })
   private _search!: SearchContext;
 
-  private _isReferencesEmpty() {
-    return Object.values(this._search.result.references).every(
-      (refs) => refs.length === 0,
-    );
-  }
-
   render() {
     if (
       this._search.status !== TaskStatus.COMPLETE ||
-      this._isReferencesEmpty() ||
+      this._search.result.search.length === 0 ||
       this._query.length === 0
     ) {
       return nothing;

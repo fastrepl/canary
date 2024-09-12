@@ -29,7 +29,9 @@ export class CanarySearchResults extends LitElement {
       return nothing;
     }
 
-    const references = Object.values(this._search.result.references).flat();
+    const references = Object.values(this._search.result.search).flatMap(
+      ({ hits }) => hits,
+    );
 
     if (references.length === 0) {
       return nothing;

@@ -80,7 +80,13 @@ export const searchHandler = http.post(
     await delay(Math.random() * (isQuestion ? 1000 : 200) + 100);
 
     const result: SearchFunctionResult = {
-      references: { Docs: mockSearchReferences("search", query) },
+      search: [
+        {
+          name: "Docs",
+          type: "webpage",
+          hits: mockSearchReferences("search", query),
+        },
+      ],
       suggestion: {
         questions:
           query.startsWith("Can") || query.startsWith("What")

@@ -5,7 +5,7 @@ import { searchHandler, askHandler } from "../msw";
 
 import { asyncSleep } from "../utils";
 import { SearchFunction, AskFunction } from "../types";
-import { MODE_SEARCH, MODE_ASK, LOCAL_SOURCE } from "../constants";
+import { MODE_SEARCH, MODE_ASK } from "../constants";
 
 import { createStore } from "./store";
 import { TaskStatus } from "./managers";
@@ -33,7 +33,7 @@ test("debounced search", async () => {
         _query: string,
         _signal: AbortSignal,
       ): ReturnType<SearchFunction> => {
-        return { references: { [LOCAL_SOURCE]: data } };
+        return { search: [{ name: "Docs", type: "webpage", hits: data }] };
       },
     );
 
@@ -57,7 +57,7 @@ test("debounced search", async () => {
   const snapshot = store.getSnapshot().context.searchManager.ctx;
   expect(search).toHaveBeenCalledTimes(1);
   expect(snapshot.status).toBe(TaskStatus.COMPLETE);
-  expect(snapshot.result.references[LOCAL_SOURCE]).toEqual(data);
+  expect(snapshot.result.search[0].hits).toEqual(data);
 });
 
 test("ask", async () => {
