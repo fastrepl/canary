@@ -7,38 +7,46 @@ defmodule Canary.Sources.Webpage.Syncer do
   require Ash.Query
 
   @spec run(binary(), list(FetcherResult.t())) :: :ok | {:error, any()}
-  def run(source_id, incomings) do
-    existings =
+  def run(source_id, inputs) do
+    docs_existing =
       Ash.Query.for_read(Document, :find, %{source_id: source_id, type: :webpage})
       |> Ash.Query.build(select: [:id, :meta])
       |> Ash.read!()
 
-    creates =
-      incomings
-      |> Enum.filter(fn incoming ->
-        Enum.all?(existings, fn existing -> not url_eq?(existing, incoming) end)
+    inputs_for_create =
+      inputs
+      |> Enum.filter(fn %FetcherResult{} = input ->
+        Enum.all?(docs_existing, fn existing -> not url_eq?(existing, input) end)
       end)
 
-    destroys =
-      existings
-      |> Enum.filter(fn existing ->
-        Enum.all?(incomings, fn incoming -> not url_eq?(existing, incoming) end)
+    docs_for_destroy =
+      docs_existing
+      |> Enum.filter(fn %Document{} = existing ->
+        Enum.all?(inputs, fn input -> not url_eq?(existing, input) end)
       end)
 
-    updates =
-      incomings
-      |> Enum.filter(fn incoming ->
-        found = existings |> Enum.find(fn existing -> url_eq?(existing, incoming) end)
-        found && not hash_eq?(found, incoming)
+    inputs_for_update =
+      inputs
+      |> Enum.filter(fn %FetcherResult{} = input ->
+        found = docs_existing |> Enum.find(fn existing -> url_eq?(existing, input) end)
+        found && not hash_eq?(found, input)
       end)
+
+    docs_for_update =
+      docs_existing
+      |> Enum.filter(fn %Document{} = existing ->
+        Enum.any?(inputs_for_update, fn input -> url_eq?(existing, input) end)
+      end)
+
+    ids_for_destroy = Enum.map(docs_for_destroy, & &1.id) ++ Enum.map(docs_for_update, & &1.id)
 
     destroy_result =
       Document
-      |> Ash.Query.filter(id in ^(Enum.map(destroys, & &1.id) ++ Enum.map(updates, & &1.id)))
+      |> Ash.Query.filter(id in ^ids_for_destroy)
       |> Ash.bulk_destroy(:destroy, %{}, return_errors?: true)
 
     create_result =
-      (creates ++ updates)
+      (inputs_for_create ++ inputs_for_update)
       |> Enum.map(fn %FetcherResult{url: url, html: html} ->
         %{source_id: source_id, url: url, html: html}
       end)
