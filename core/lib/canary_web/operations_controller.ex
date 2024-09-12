@@ -100,7 +100,12 @@ defmodule CanaryWeb.OperationsController do
       end)
 
     case Canary.Searcher.run(sources, query, cache: cache?()) do
-      {:ok, data} ->
+      {:ok, search_result} ->
+        data = %{
+          search: search_result,
+          suggestion: %{questions: Canary.Query.Sugestor.run!(query)}
+        }
+
         conn
         |> put_resp_content_type("application/json")
         |> send_resp(200, Jason.encode!(data))

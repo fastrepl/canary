@@ -1,9 +1,3 @@
-defmodule Canary.Searcher.Result do
-  @derive Jason.Encoder
-  defstruct [:references, :suggestion]
-  @type t :: %__MODULE__{references: map(), suggestion: map()}
-end
-
 defmodule Canary.Searcher do
   @callback run(list(any()), String.t()) :: {:ok, Canary.Searcher.Result.t()} | {:error, any()}
   def run(sources, query, opts \\ []) do
@@ -44,8 +38,8 @@ defmodule Canary.Searcher.Default do
 
   def run(sources, query) do
     if ai?(query) do
-      Appsignal.instrument("ai_search", fn ->
-        ai_search(sources, query)
+      Appsignal.instrument("normal_search", fn ->
+        normal_search(sources, query)
       end)
     else
       Appsignal.instrument("normal_search", fn ->
@@ -60,40 +54,20 @@ defmodule Canary.Searcher.Default do
     |> Enum.count() > 2
   end
 
-  defp ai_search(sources, query) do
-    with {:ok, docs} <- Canary.Index.search(sources, query),
-         {:ok, reranked} <-
-           Canary.Reranker.run(
-             query,
-             Enum.dedup_by(docs, & &1.id),
-             renderer: fn doc -> doc.content end,
-             threshold: 0.05
-           ) do
-      result = %Canary.Searcher.Result{
-        references: %{"Doc" => reranked},
-        suggestion: %{questions: Canary.Query.Sugestor.run!(query)}
-      }
-
-      {:ok, result}
-    end
-  end
-
   defp normal_search(sources, query) do
     {:ok, results} = Canary.Index.search(sources, query)
 
-    references =
+    ret =
       results
-      |> Enum.reject(&Enum.empty?/1)
-      |> Enum.reduce(%{}, fn matches, acc ->
-        source = sources |> Enum.find(&(&1.id == Enum.at(matches, 0).source_id))
-        acc |> Map.put(source.name, matches)
+      |> Enum.map(fn %{source_id: source_id, hits: hits} ->
+        %Canary.Sources.Source{
+          name: name,
+          config: %Ash.Union{type: type}
+        } = sources |> Enum.find(&(&1.id == source_id))
+
+        %{name: name, type: type, hits: hits}
       end)
 
-    result = %Canary.Searcher.Result{
-      references: references,
-      suggestion: %{questions: Canary.Query.Sugestor.run!(query)}
-    }
-
-    {:ok, result}
+    {:ok, ret}
   end
 end
