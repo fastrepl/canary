@@ -36,6 +36,7 @@ defmodule Canary.Sources.Document.CreateGithubDiscussion do
         |> Enum.map(fn %GithubDiscussion.FetcherResult{} = item ->
           %{
             source_id: source_id,
+            node_id: item.node_id,
             title: item.title,
             content: item.content,
             url: item.url,

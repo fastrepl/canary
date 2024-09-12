@@ -24,7 +24,7 @@ defmodule Canary.Index do
   end
 
   def insert_document(%GithubIssue.Chunk{} = chunk) do
-    meta = %Document.Webpage.Meta{
+    meta = %Document.GithubIssue.Meta{
       url: chunk.url
     }
 
@@ -41,7 +41,7 @@ defmodule Canary.Index do
   end
 
   def insert_document(%GithubDiscussion.Chunk{} = chunk) do
-    meta = %Document.Webpage.Meta{
+    meta = %Document.GithubDiscussion.Meta{
       url: chunk.url
     }
 
@@ -125,13 +125,10 @@ defmodule Canary.Index do
                 %{
                   id: hit["document"]["id"],
                   source_id: hit["document"]["source_id"],
-                  title: hit["highlight"]["title"]["snippet"] || hit["document"]["title"],
-                  titles: hit["document"]["meta"]["titles"],
                   url: hit["document"]["meta"]["url"],
-                  excerpt: hit["highlight"]["content"]["snippet"] || hit["document"]["content"],
                   tags: hit["document"]["tags"],
-                  content: hit["document"]["content"],
-                  tokens: hit["document"]["meta"]["tokens"]
+                  title: hit["highlight"]["title"]["snippet"] || hit["document"]["title"],
+                  excerpt: hit["highlight"]["content"]["snippet"] || hit["document"]["content"]
                 }
               end)
 

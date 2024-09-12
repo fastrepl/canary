@@ -1,5 +1,6 @@
 defmodule Canary.Sources.GithubDiscussion.FetcherResult do
   defstruct [
+    :node_id,
     :title,
     :content,
     :url,
@@ -10,6 +11,7 @@ defmodule Canary.Sources.GithubDiscussion.FetcherResult do
   ]
 
   @type t :: %__MODULE__{
+          node_id: String.t(),
           title: String.t(),
           content: String.t(),
           url: String.t(),
@@ -21,8 +23,11 @@ defmodule Canary.Sources.GithubDiscussion.FetcherResult do
 end
 
 defmodule Canary.Sources.GithubDiscussion.Fetcher do
-  @default_discussion_n 50
-  @default_comment_n 50
+  @default_discussion_n 5
+  @default_comment_n 5
+
+  alias Canary.Sources.Source
+  alias Canary.Sources.GithubDiscussion
 
   defp client() do
     Canary.graphql_client(
@@ -31,7 +36,9 @@ defmodule Canary.Sources.GithubDiscussion.Fetcher do
     )
   end
 
-  def run(%{owner: _, repo: _} = input) do
+  def run(%Source{
+        config: %Ash.Union{type: :github_discussion, value: %GithubDiscussion.Config{} = config}
+      }) do
     result =
       client()
       |> Req.post(
@@ -68,7 +75,10 @@ defmodule Canary.Sources.GithubDiscussion.Fetcher do
               }
             }
            """,
-           Map.merge(%{discussion_n: @default_discussion_n, comment_n: @default_comment_n}, input)}
+           Map.merge(
+             %{discussion_n: @default_discussion_n, comment_n: @default_comment_n},
+             %{repo: config.repo, owner: config.owner}
+           )}
       )
 
     case result do
@@ -93,7 +103,8 @@ defmodule Canary.Sources.GithubDiscussion.Fetcher do
 
     discussions
     |> Enum.map(fn discussion ->
-      top = %Canary.Sources.GithubDiscussion.Chunk{
+      top = %GithubDiscussion.FetcherResult{
+        node_id: discussion["id"],
         title: discussion["title"],
         content: discussion["body"],
         url: discussion["url"],
@@ -106,7 +117,8 @@ defmodule Canary.Sources.GithubDiscussion.Fetcher do
       comments =
         discussion["comments"]["nodes"]
         |> Enum.map(fn comment ->
-          %Canary.Sources.GithubDiscussion.Chunk{
+          %GithubDiscussion.FetcherResult{
+            node_id: comment["id"],
             title: "",
             content: comment["body"],
             url: comment["url"],

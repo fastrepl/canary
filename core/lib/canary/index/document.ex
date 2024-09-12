@@ -13,7 +13,7 @@ end
 
 defmodule Canary.Index.Document.Webpage.Meta do
   @derive Jason.Encoder
-  defstruct [:url, :titles]
+  defstruct [:url]
 end
 
 defmodule Canary.Index.Document.GithubIssue do
@@ -29,6 +29,11 @@ defmodule Canary.Index.Document.GithubIssue do
   defstruct @common ++ [:title, :content]
 end
 
+defmodule Canary.Index.Document.GithubIssue.Meta do
+  @derive Jason.Encoder
+  defstruct [:url]
+end
+
 defmodule Canary.Index.Document.GithubDiscussion do
   @common [
     :id,
@@ -40,4 +45,9 @@ defmodule Canary.Index.Document.GithubDiscussion do
 
   @derive Jason.Encoder
   defstruct @common ++ [:title, :content]
+end
+
+defmodule Canary.Index.Document.GithubDiscussion.Meta do
+  @derive Jason.Encoder
+  defstruct [:url]
 end

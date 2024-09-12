@@ -36,10 +36,7 @@ defmodule Canary.Sources.GithubIssue.Fetcher do
     )
   end
 
-  def run(%Source{
-        id: source_id,
-        config: %Ash.Union{type: :github_issue, value: %GithubIssue.Config{} = config}
-      }) do
+  def run(%Source{config: %Ash.Union{type: :github_issue, value: %GithubIssue.Config{} = config}}) do
     result =
       client()
       |> Req.post(
@@ -83,7 +80,7 @@ defmodule Canary.Sources.GithubIssue.Fetcher do
 
     case result do
       {:ok, %{status: 200, body: %{"data" => data}}} ->
-        {:ok, process(source_id, data)}
+        {:ok, process(data)}
 
       # https://docs.github.com/en/graphql/overview/rate-limits-and-node-limits-for-the-graphql-api#exceeding-the-rate-limit
       {:ok, %{status: 403, headers: headers}} ->
@@ -98,7 +95,7 @@ defmodule Canary.Sources.GithubIssue.Fetcher do
     end
   end
 
-  defp process(_source_id, data) do
+  defp process(data) do
     issues = data["repository"]["issues"]["nodes"]
 
     issues
