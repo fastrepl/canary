@@ -6,7 +6,7 @@ defmodule Canary.Sources.GithubIssue.Syncer do
   def run(source_id, list_of_results) do
     destroy_result =
       Document
-      |> Ash.Query.filter(source_id == ^source_id and type == :github_issue)
+      |> Ash.Query.filter(source_id == ^source_id)
       |> Ash.bulk_destroy(:destroy, %{}, return_errors?: true)
 
     create_result =
