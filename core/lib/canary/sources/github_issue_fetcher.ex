@@ -23,8 +23,8 @@ defmodule Canary.Sources.GithubIssue.FetcherResult do
 end
 
 defmodule Canary.Sources.GithubIssue.Fetcher do
-  @default_issue_n 5
-  @default_comment_n 5
+  @default_issue_n 100
+  @default_comment_n 100
 
   alias Canary.Sources.Source
   alias Canary.Sources.GithubIssue
@@ -116,7 +116,7 @@ defmodule Canary.Sources.GithubIssue.Fetcher do
         |> Enum.map(fn comment ->
           %GithubIssue.FetcherResult{
             node_id: comment["id"],
-            title: "NONE",
+            title: "",
             content: comment["body"],
             url: comment["url"],
             created_at: comment["createdAt"],

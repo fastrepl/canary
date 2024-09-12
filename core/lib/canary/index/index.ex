@@ -14,8 +14,8 @@ defmodule Canary.Index do
     doc = %Document.Webpage{
       id: chunk.index_id,
       source_id: chunk.source_id,
-      title: chunk.title,
-      content: chunk.content,
+      title: chunk.title || "",
+      content: chunk.content || "",
       tags: [],
       meta: meta
     }
@@ -31,8 +31,8 @@ defmodule Canary.Index do
     doc = %Document.GithubIssue{
       id: chunk.index_id,
       source_id: chunk.source_id,
-      title: chunk.title,
-      content: chunk.content,
+      title: chunk.title || "",
+      content: chunk.content || "",
       tags: [],
       meta: meta
     }
@@ -48,8 +48,8 @@ defmodule Canary.Index do
     doc = %Document.GithubDiscussion{
       id: chunk.index_id,
       source_id: chunk.source_id,
-      title: chunk.title,
-      content: chunk.content,
+      title: chunk.title || "",
+      content: chunk.content || "",
       tags: [],
       meta: meta
     }

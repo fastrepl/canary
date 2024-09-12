@@ -23,8 +23,8 @@ defmodule Canary.Sources.GithubDiscussion.FetcherResult do
 end
 
 defmodule Canary.Sources.GithubDiscussion.Fetcher do
-  @default_discussion_n 5
-  @default_comment_n 5
+  @default_discussion_n 100
+  @default_comment_n 100
 
   alias Canary.Sources.Source
   alias Canary.Sources.GithubDiscussion
