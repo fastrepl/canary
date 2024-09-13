@@ -31,8 +31,9 @@ defmodule Canary.Test.Document do
       assert doc.meta.type == :webpage
       assert doc.meta.value.url == "https://example.com"
       assert length(doc.chunks) == 1
+      %Ash.Union{value: %{index_id: index_id}} = doc.chunks |> Enum.at(0)
 
-      [found] = Canary.Sources.Document.find!(source.id, :webpage, :url, ["https://example.com"])
+      [found] = Canary.Sources.Document.find_by_chunk_index_ids!([index_id, Ash.UUID.generate()])
       assert found.id == doc.id
     end
 

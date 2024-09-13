@@ -18,21 +18,14 @@ defmodule Canary.Sources.Document do
   actions do
     defaults [:read, update: [:meta, :chunks]]
 
-    read :find do
-      argument :source_id, :uuid, allow_nil?: false
-      argument :type, :string, allow_nil?: false
-
-      argument :key, :string, allow_nil?: true
-      argument :values, {:array, :string}, allow_nil?: true
+    read :find_by_chunk_index_ids do
+      argument :chunk_index_ids, {:array, :uuid}, allow_nil?: false
 
       filter expr(
-               if is_nil(^arg(:key)) or is_nil(^arg(:values)) do
-                 source_id == ^arg(:source_id)
-               else
-                 source_id == ^arg(:source_id) and
-                   fragment("(meta->>'type')::text = ?", ^arg(:type)) and
-                   fragment("(meta->'value'->>?)::text = ANY(?)", ^arg(:key), ^arg(:values))
-               end
+               fragment(
+                 "EXISTS (SELECT 1 FROM unnest(chunks) AS chunk WHERE (chunk->'value'->>'index_id')::text = ANY(?))",
+                 ^arg(:chunk_index_ids)
+               )
              )
     end
 
@@ -96,8 +89,8 @@ defmodule Canary.Sources.Document do
   end
 
   code_interface do
-    define :find, args: [:source_id, :type, :key, :values], action: :find
     define :update, args: [:meta, :chunks], action: :update
+    define :find_by_chunk_index_ids, args: [:chunk_index_ids], action: :find_by_chunk_index_ids
   end
 
   postgres do
