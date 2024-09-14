@@ -8,6 +8,7 @@ defmodule Canary.Sources.Source do
     create_timestamp :created_at
 
     attribute :name, :string, allow_nil?: false
+    attribute :overview, Canary.Sources.SourceOverview, allow_nil?: true
     attribute :config, Canary.Type.SourceConfig, allow_nil?: false
   end
 
@@ -42,7 +43,7 @@ defmodule Canary.Sources.Source do
       # unions do not support atomic updates
       require_atomic? false
 
-      accept [:name, :config]
+      accept [:name, :config, :overview]
     end
 
     destroy :destroy do
