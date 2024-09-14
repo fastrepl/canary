@@ -9,7 +9,8 @@ defmodule Canary.Sources.Webpage.Syncer do
   @spec run(binary(), list(FetcherResult.t())) :: :ok | {:error, any()}
   def run(source_id, inputs) do
     docs_existing =
-      Ash.Query.for_read(Document, :find, %{source_id: source_id, type: :webpage})
+      Document
+      |> Ash.Query.filter(source_id == ^source_id)
       |> Ash.Query.build(select: [:id, :meta])
       |> Ash.read!()
 
