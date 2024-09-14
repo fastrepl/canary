@@ -44,7 +44,7 @@ defmodule Canary.Scraper do
       |> Floki.attribute("id")
       |> Enum.at(0)
 
-    level = String.to_integer(level)
+    level = parse_integer(level)
 
     title =
       nodes
@@ -166,4 +166,11 @@ defmodule Canary.Scraper do
 
   defp update_first(list, fun) when length(list) == 0, do: [fun.(%Item{title: "", content: ""})]
   defp update_first(list, fun), do: List.update_at(list, 0, fun)
+
+  defp parse_integer(s)  do
+    case Integer.parse(s) do
+      {n, _} -> n
+      _ -> 0
+    end
+  end
 end
