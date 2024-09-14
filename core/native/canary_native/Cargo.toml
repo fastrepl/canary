@@ -19,6 +19,9 @@ git2 = "0.18.3"
 stop-words = "0.8.0"
 keyword_extraction = { version = "1.4.3", features = ["yake"] }
 glob-match = "0.2.1"
+unicode-segmentation = "1.12.0"
+emojis = "0.6.3"
+tokenizers = "0.20.0"
 
 [dev-dependencies]
 insta = "1.38.0"
