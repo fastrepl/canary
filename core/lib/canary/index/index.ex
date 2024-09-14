@@ -1,4 +1,5 @@
 defmodule Canary.Index do
+  alias Canary.Sources.Source
   alias Canary.Sources.Webpage
   alias Canary.Sources.GithubIssue
   alias Canary.Sources.GithubDiscussion
@@ -66,14 +67,14 @@ defmodule Canary.Index do
     Client.delete_document(source_type, id)
   end
 
-  def search(sources, query, opts \\ []) do
+  def search(sources, queries, opts \\ []) when is_list(queries) do
     tags = opts[:tags]
     embedding = opts[:embedding]
     embedding_alpha = opts[:embedding_alpha] || 0.3
 
     args =
-      sources
-      |> Enum.map(fn %Canary.Sources.Source{id: source_id, config: %Ash.Union{type: type}} ->
+      for(source <- sources, query <- queries, do: {source, query})
+      |> Enum.map(fn {%Source{id: source_id, config: %Ash.Union{type: type}}, query} ->
         filter_by =
           [
             "source_id:=[#{source_id}]",
@@ -131,6 +132,7 @@ defmodule Canary.Index do
                   excerpt: hit["highlight"]["content"]["snippet"] || hit["document"]["content"]
                 }
               end)
+              |> Enum.uniq_by(& &1.id)
 
             %{
               source_id: hits |> Enum.at(0) |> Map.get(:source_id),

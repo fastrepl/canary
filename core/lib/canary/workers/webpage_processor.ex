@@ -26,6 +26,10 @@ defmodule Canary.Workers.WebpageProcessor do
         message: "webpage fetcher ended"
       })
 
+      source
+      |> Ash.Changeset.for_update(:update_overview, %{})
+      |> Ash.update()
+
       :ok
     end
   end

@@ -19,6 +19,11 @@ defmodule Canary.Workers.GithubIssueProcessor do
     with {:ok, incomings} <- GithubIssue.Fetcher.run(source),
          :ok <- GithubIssue.Syncer.run(source_id, incomings) do
       notify_event_end(source_id)
+
+      source
+      |> Ash.Changeset.for_update(:update_overview, %{})
+      |> Ash.update()
+
       :ok
     end
   end

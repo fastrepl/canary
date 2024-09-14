@@ -3,6 +3,8 @@ defmodule Canary.Sources.Source do
     domain: Canary.Sources,
     data_layer: AshPostgres.DataLayer
 
+  require Ash.Query
+
   attributes do
     uuid_primary_key :id
     create_timestamp :created_at
@@ -44,6 +46,38 @@ defmodule Canary.Sources.Source do
       require_atomic? false
 
       accept [:name, :config, :overview]
+    end
+
+    update :update_overview do
+      require_atomic? false
+
+      change fn changeset, _ ->
+        id = Ash.Changeset.get_data(changeset, :id)
+
+        documents =
+          Canary.Sources.Document
+          |> Ash.Query.filter(source_id == ^id)
+          |> Ash.read!()
+
+        chunks =
+          documents
+          |> Enum.flat_map(fn %Canary.Sources.Document{chunks: chunks} ->
+            Enum.map(chunks, fn %Ash.Union{value: value} -> value end)
+          end)
+
+        titles = Enum.map(chunks, fn %{title: title} -> title end)
+
+        keywords =
+          chunks
+          |> Enum.map(fn %{content: content} -> content end)
+          |> Enum.join("\n")
+          |> then(&Canary.Native.extract_keywords(&1, length(documents) * 20))
+
+        overview = %Canary.Sources.SourceOverview{titles: titles, keywords: keywords}
+
+        changeset
+        |> Ash.Changeset.change_attribute(:overview, overview)
+      end
     end
 
     destroy :destroy do

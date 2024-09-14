@@ -29,7 +29,7 @@ defmodule Canary.Test.Index do
       config: %Ash.Union{type: :github_discussion}
     }
 
-    {:ok, _} =
+    {:ok, %{body: _doc_1}} =
       Index.insert_document(%Webpage.Chunk{
         source_id: source_webpage.id,
         index_id: Ash.UUID.generate(),
@@ -39,7 +39,7 @@ defmodule Canary.Test.Index do
         keywords: ["keyword1", "keyword2"]
       })
 
-    {:ok, _} =
+    {:ok, %{body: _doc_2}} =
       Index.insert_document(%GithubIssue.Chunk{
         source_id: source_github_issue.id,
         index_id: Ash.UUID.generate(),
@@ -52,7 +52,7 @@ defmodule Canary.Test.Index do
         comment: false
       })
 
-    {:ok, _} =
+    {:ok, %{body: _doc_3}} =
       Index.insert_document(%GithubDiscussion.Chunk{
         source_id: source_github_discussion.id,
         index_id: Ash.UUID.generate(),
@@ -67,8 +67,16 @@ defmodule Canary.Test.Index do
 
     {:ok, docs} =
       Index.search(
+        [source_webpage],
+        ["title"]
+      )
+
+    assert length(docs) == 1
+
+    {:ok, docs} =
+      Index.search(
         [source_webpage, source_github_issue, source_github_discussion],
-        "title"
+        ["title"]
       )
 
     assert length(docs) == 3

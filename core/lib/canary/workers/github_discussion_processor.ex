@@ -27,6 +27,10 @@ defmodule Canary.Workers.GithubDiscussionProcessor do
       message: "github discussion fetcher ended"
     })
 
+    source
+    |> Ash.Changeset.for_update(:update_overview, %{})
+    |> Ash.update()
+
     :ok
   end
 end

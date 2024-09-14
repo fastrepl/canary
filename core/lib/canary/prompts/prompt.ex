@@ -32,7 +32,7 @@ defmodule Canary.Prompt do
     |> String.trim()
   end
 
-  def format("understander_user", %{query: _, keywords: _} = inputs) do
+  def format("understander_user", %{query: _, sources: _} = inputs) do
     inputs
     |> then(&EEx.eval_string(@understander_user_prompt, assigns: &1))
     |> String.trim()

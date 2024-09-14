@@ -122,18 +122,7 @@ config :canary, :openai_api_base, System.get_env("OPENAI_API_BASE")
 config :canary, :openai_api_key, System.get_env("OPENAI_API_KEY")
 
 config :canary, :text_embedding_model, System.get_env("TEXT_EMBEDDING_MODEL")
-
-config :canary,
-       :chat_completion_model_understanding,
-       System.get_env("CHAT_COMPLETION_MODEL_UNDERSTANDING")
-
-config :canary,
-       :chat_completion_model_response,
-       System.get_env("CHAT_COMPLETION_MODEL_RESPONSE")
-
-config :canary,
-       :chat_completion_model_background,
-       System.get_env("CHAT_COMPLETION_MODEL_BACKGROUND")
+config :canary, :chat_completion_model, System.get_env("CHAT_COMPLETION_MODEL")
 
 if config_env() != :test do
   if System.get_env("GITHUB_CLIENT_ID") && System.get_env("GITHUB_CLIENT_SECRET") do

@@ -1,3 +1,10 @@
+# TODO: to support multi-start-urls, we need to provide store PID from the outside
+# Not sure how to handle "Sitemap" and "Fallback" in the same time
+
+# one clever way of doing it is to pass Store to Sitemap based thing? do not do dupliates.
+# To support forum use-case, we need lot more config. (split sitepap <> start-urls..?)
+# Do not over-complicate it for now
+
 defmodule Canary.Crawler do
   @callback run(String.t(), opts :: keyword()) :: {:ok, map()} | {:error, any()}
   @modules [Canary.Crawler.Sitemap, Canary.Crawler.Fallback]

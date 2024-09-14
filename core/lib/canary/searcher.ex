@@ -38,8 +38,8 @@ defmodule Canary.Searcher.Default do
 
   def run(sources, query) do
     if ai?(query) do
-      Appsignal.instrument("normal_search", fn ->
-        normal_search(sources, query)
+      Appsignal.instrument("ai_search", fn ->
+        ai_search(sources, query)
       end)
     else
       Appsignal.instrument("normal_search", fn ->
@@ -54,20 +54,27 @@ defmodule Canary.Searcher.Default do
     |> Enum.count() > 2
   end
 
+  defp ai_search(sources, query) do
+    with {:ok, queries} = Canary.Query.Understander.run(sources, query),
+         {:ok, results} <- Canary.Index.search(sources, queries) do
+      {:ok, transform(sources, results)}
+    end
+  end
+
   defp normal_search(sources, query) do
-    {:ok, results} = Canary.Index.search(sources, query)
+    {:ok, results} = Canary.Index.search(sources, [query])
+    {:ok, transform(sources, results)}
+  end
 
-    ret =
-      results
-      |> Enum.map(fn %{source_id: source_id, hits: hits} ->
-        %Canary.Sources.Source{
-          name: name,
-          config: %Ash.Union{type: type}
-        } = sources |> Enum.find(&(&1.id == source_id))
+  defp transform(sources, search_results) do
+    search_results
+    |> Enum.map(fn %{source_id: source_id, hits: hits} ->
+      %Canary.Sources.Source{
+        name: name,
+        config: %Ash.Union{type: type}
+      } = sources |> Enum.find(&(&1.id == source_id))
 
-        %{name: name, type: type, hits: hits}
-      end)
-
-    {:ok, ret}
+      %{name: name, type: type, hits: hits}
+    end)
   end
 end

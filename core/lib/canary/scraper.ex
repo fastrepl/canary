@@ -153,8 +153,16 @@ defmodule Canary.Scraper do
     |> Enum.map(&String.trim/1)
   end
 
-  defp to_text(node) when is_binary(node), do: String.trim(node)
-  defp to_text(node), do: Floki.text(node)
+  defp to_text(node) when is_binary(node), do: trim(node)
+  defp to_text(node), do: Floki.text(node) |> trim()
+
+  defp trim(s) do
+    s
+    |> String.to_charlist()
+    |> Enum.filter(&(&1 in 0..127))
+    |> List.to_string()
+    |> String.trim()
+  end
 
   defp update_first(list, fun) when length(list) == 0, do: [fun.(%Item{title: "", content: ""})]
   defp update_first(list, fun), do: List.update_at(list, 0, fun)

@@ -1,21 +1,24 @@
-defmodule Canary.Query.UnderstanderResult do
-  defstruct [:query, :keywords]
-  @type t :: %__MODULE__{query: String.t(), keywords: list(String.t())}
-end
-
 defmodule Canary.Query.Understander do
-  @callback run(String.t(), String.t()) ::
-              {:ok, Canary.Query.UnderstanderResult.t()} | {:error, any()}
+  @callback run(list(any()), String.t()) :: {:ok, list(String.t())} | {:error, any()}
 
-  def run(query, keywords), do: impl().run(query, keywords)
+  def run(sources, query), do: impl().run(sources, query)
   defp impl(), do: Canary.Query.Understander.LLM
 end
 
 defmodule Canary.Query.Understander.LLM do
   @behaviour Canary.Query.Understander
 
-  def run(query, keywords) do
-    chat_model = Application.fetch_env!(:canary, :chat_completion_model_understanding)
+  alias Canary.Sources.Source
+  alias Canary.Sources.SourceOverview
+
+  def run(sources, query) do
+    chat_model = Application.fetch_env!(:canary, :chat_completion_model)
+
+    overviews =
+      sources
+      |> Enum.map(fn %Source{name: name, overview: %SourceOverview{} = overview} ->
+        %{name: name, titles: overview.titles, keywords: overview.keywords}
+      end)
 
     messages = [
       %{
@@ -24,30 +27,25 @@ defmodule Canary.Query.Understander.LLM do
       },
       %{
         role: "user",
-        content: Canary.Prompt.format("understander_user", %{query: query, keywords: keywords})
+        content: Canary.Prompt.format("understander_user", %{query: query, sources: overviews})
       }
     ]
 
     case Canary.AI.chat(%{model: chat_model, messages: messages}, timeout: 2_000) do
-      {:ok, analysis} -> {:ok, parse(query, analysis)}
+      {:ok, completion} -> {:ok, parse(completion)}
       error -> error
     end
   end
 
-  defp parse(original_query, completion) do
-    keywords =
-      ~r/<keywords>(.*?)<\/keywords>/s
-      |> Regex.scan(completion, capture: :all_but_first)
-      |> Enum.flat_map(fn [keywords] ->
-        keywords |> String.split(",") |> Enum.map(&String.trim/1)
-      end)
+  defp parse(completion) do
+    case Regex.run(~r/<query>(.*?)<\/query>/s, completion) do
+      [_, match] ->
+        match
+        |> String.split(",")
+        |> Enum.map(&String.trim/1)
 
-    query =
-      ~r/<query>(.*?)<\/query>/s
-      |> Regex.scan(completion, capture: :all_but_first)
-      |> Enum.map(fn [query] -> String.trim(query) end)
-      |> Enum.at(0, nil)
-
-    %Canary.Query.UnderstanderResult{keywords: keywords, query: query || original_query}
+      nil ->
+        []
+    end
   end
 end

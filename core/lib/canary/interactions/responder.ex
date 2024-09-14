@@ -20,7 +20,7 @@ defmodule Canary.Interactions.Responder.Default do
   require Ash.Query
 
   def run(query, pattern, %{account: account, sources: sources}, handle_delta) do
-    model = Application.fetch_env!(:canary, :chat_completion_model_response)
+    model = Application.fetch_env!(:canary, :CHAT_COMPLETION_MODEL)
     source = sources |> Enum.at(0)
     {:ok, %{search: docs}} = Canary.Searcher.run(source, query)
 
