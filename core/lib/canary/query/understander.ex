@@ -14,17 +14,17 @@ end
 defmodule Canary.Query.Understander.LLM do
   @behaviour Canary.Query.Understander
 
-  @keywords_section "Keywords extracted from documents"
-
   def run(query, keywords) do
     chat_model = Application.fetch_env!(:canary, :chat_completion_model_understanding)
 
     messages = [
-      system_message(),
+      %{
+        role: "system",
+        content: Canary.Prompt.format("understander_system", %{})
+      },
       %{
         role: "user",
-        content:
-          "## #{@keywords_section}\n#{Enum.join(keywords, ", ")}\n\n\n## User query\n#{query}"
+        content: Canary.Prompt.format("understander_user", %{query: query, keywords: keywords})
       }
     ]
 
@@ -32,27 +32,6 @@ defmodule Canary.Query.Understander.LLM do
       {:ok, analysis} -> {:ok, parse(query, analysis)}
       error -> error
     end
-  end
-
-  defp system_message() do
-    %{
-      role: "system",
-      content: """
-      You are a world class techincal support engineer.
-      Your job is to analyze the user's query and return a structured response like below:
-
-      <analysis>
-      <keywords>KEYWORD_1,KEYWORD_2,KEYWORD_3</keywords>
-      </analysis>
-
-      IMPORTANT NOTES:
-      - <keywords></keywords> should contain comma separated list of keywords. MAX 3 keywords are allowed.
-      - Each "keyword" must be a single word. It will be used to run keyword based search. User '#{@keywords_section}' section for inspiration.
-
-      Do not include any other text, just respond with the XML-like format that I provided.
-      If user's query is totally nonsense, just return <analysis></analysis>.
-      """
-    }
   end
 
   defp parse(original_query, completion) do

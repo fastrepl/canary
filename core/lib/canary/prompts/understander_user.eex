@@ -1,0 +1,6 @@
+## Keywords extracted from documents
+
+<%= @keywords %>
+
+## User query
+<%= @query %>

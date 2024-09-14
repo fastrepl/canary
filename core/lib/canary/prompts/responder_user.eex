@@ -1,0 +1,37 @@
+<%
+  render_context = fn docs ->
+    if length(docs) > 0 do
+      body =
+        docs
+        |> Enum.with_index(1)
+        |> Enum.map(fn {%{title: title, content: content}, index} ->
+          "index: #{index}\n\ntitle: #{title}\n\ncontent: #{content}\n"
+        end)
+        |> Enum.join("\n-------\n")
+
+      "<retrieved_documents>\n#{body}\n</retrieved_documents>"
+    else
+      "<retrieved_documents>\nNo relevant documents found.\n</retrieved_documents>"
+    end
+  end
+%>
+
+<%= render_context.(@docs) %>
+
+<user_question>
+<%= @query %>
+</user_question>
+
+<instruction>
+Based on the retrieved documents, answer the user's question within 5 sentences. Note that user's question might contains some typos.
+Go straight to the point, give answer first, then go through the details. Each sentence should be short, and paragraph should only contain few sentences.
+
+If user is asking for nonsense, or the retrieved documents are not relevant, just transparently say it.
+
+Don't forget to include footnotes like below:
+```
+[^1]: 2
+[^2]: 6
+[^3]: 4
+```
+</instruction>
