@@ -12,13 +12,14 @@ pub fn extract<'a>(text: &'a str, n: usize) -> anyhow::Result<Vec<String>> {
         .get_ranked_keywords(n)
         .into_iter()
         .flat_map(|word| {
-            word.split(|c: char| c.is_whitespace() || c == '_' || c == '-')
+            word.split(|c: char| c.is_whitespace() || c == '_' || c == '-' || c == ':')
                 .map(String::from)
                 .collect::<Vec<_>>()
         })
         .map(|word| remove_emoji(&word))
         .map(|word| bert_normalize(&word))
         .filter(|word| word.len() >= 3 && word.len() <= 18)
+        .filter(|word| count_numbers(word) < count_letters(word) * 3)
         .collect::<HashSet<String>>()
         .into_iter()
         .collect::<Vec<String>>();
@@ -34,10 +35,18 @@ fn remove_emoji(string: &str) -> String {
     graphemes.filter(not_emoji).collect()
 }
 
-pub fn bert_normalize(text: &str) -> String {
+fn bert_normalize(text: &str) -> String {
     let mut text = NormalizedString::from(text);
     let bert_normalizer = BertNormalizer::new(true, false, Some(true), true);
     let _ = bert_normalizer.normalize(&mut text);
 
     text.get().to_string()
+}
+
+fn count_numbers(word: &str) -> usize {
+    word.chars().filter(|c| c.is_numeric()).count()
+}
+
+fn count_letters(word: &str) -> usize {
+    word.chars().filter(|c| c.is_alphabetic()).count()
 }
