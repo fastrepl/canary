@@ -1,10 +1,6 @@
 import { http, HttpResponse, delay } from "msw";
 
-import type {
-  AskReference,
-  SearchReference,
-  SearchFunctionResult,
-} from "./types";
+import type { AskReference, SearchResult, SearchFunctionResult } from "./types";
 
 const MOCK_RESPONSE = `
 # The Whimsical World of Flibbertigibbets
@@ -31,10 +27,7 @@ hello()
    - Have a peculiar fondness for wearing monocles on their elbows
 `.trim();
 
-const mockSearchReferences = (
-  type: string,
-  query: string,
-): SearchReference[] => {
+const mockSearchReferences = (type: string, query: string): SearchResult[] => {
   const getN = (q: string) => {
     const match = q.match(/(\d+)(?!.*\d)/);
     return match ? parseInt(match[0], 10) : 0;
@@ -52,13 +45,17 @@ const mockSearchReferences = (
           ? `https://example.com/a/b?query=${query}`
           : `https://example.com/api/b?query=${query}`;
 
-      const titles = [`titles ${randomNumber(0, 4)}`];
-
       return {
         title: `title ${index}`,
-        titles,
         url,
         excerpt: `<mark>${type}</mark> response: <mark>${query}</mark>!`,
+        sub_results: Array(randomNumber(0, 3))
+          .fill(null)
+          .map((_) => ({
+            title: `sub title ${index}`,
+            url: `https://example.com/a/b?query=${query}`,
+            excerpt: `<mark>${type}</mark> response: <mark>${query}</mark>!`,
+          })),
       };
     });
 };

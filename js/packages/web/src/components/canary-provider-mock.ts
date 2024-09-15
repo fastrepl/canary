@@ -1,7 +1,7 @@
 import { LitElement, html } from "lit";
 import { customElement } from "lit/decorators.js";
 
-import type { AskFunction, SearchFunction } from "../types";
+import type { AskFunction, SearchFunction, SearchResult } from "../types";
 import { wrapper } from "../styles";
 import { createEvent } from "../store";
 import { LOCAL_SOURCE_NAME } from "../constants";
@@ -32,50 +32,65 @@ export class CanaryProviderMock extends LitElement {
       setTimeout(resolve, Math.random() * 300 + 200),
     );
 
-    const references = [
-      {
-        title: "title 1",
-        url: "https://example.com/docs/a/b",
-        excerpt: "this is <mark>a match</mark>.",
-      },
-      {
-        title: "title 2",
-        url: "https://example.com/docs/a/c",
-        excerpt: "this is <mark>a match</mark>.",
-      },
-      {
-        title: "title 3",
-        url: "https://example.com/docs/a/d",
-        excerpt: "this is <mark>a match</mark>.",
-      },
+    const references: SearchResult[] = [
       {
         title: "title 4",
         url: "https://example.com/docs/a/e",
         excerpt: "this is <mark>a match</mark>.",
+        sub_results: [],
       },
       {
         title: "title 5",
         url: "https://example.com/docs/b/c/e",
         excerpt: "this is <mark>a match</mark>.",
+        sub_results: [
+          {
+            title: "title 8",
+            url: "https://example.com/api/a/d",
+            excerpt: "this is <mark>a match</mark>.",
+          },
+        ],
       },
       {
         title: "title 6",
         url: "https://example.com/api/a/b",
         excerpt: "this is <mark>a match</mark>.",
+        sub_results: [
+          {
+            title: "title 7",
+            url: "https://example.com/api/a/c",
+            excerpt: "this is <mark>a match</mark>.",
+          },
+          {
+            title: "title 8",
+            url: "https://example.com/api/a/d",
+            excerpt: "this is <mark>a match</mark>.",
+          },
+        ],
       },
       {
-        title: "title 7",
-        url: "https://example.com/api/a/c",
+        title: "title 1",
+        url: "https://example.com/docs/a/b",
         excerpt: "this is <mark>a match</mark>.",
+        sub_results: [],
       },
       {
-        title: "title 8",
-        url: "https://example.com/api/a/d",
+        title: "title 2",
+        url: "https://example.com/docs/a/c",
         excerpt: "this is <mark>a match</mark>.",
+        sub_results: [],
+      },
+      {
+        title: "title 3",
+        url: "https://example.com/docs/a/d",
+        excerpt: "this is <mark>a match</mark>.",
+        sub_results: [],
       },
     ];
 
-    return { search: [{ name: LOCAL_SOURCE_NAME, type: "webpage", hits: references }] };
+    return {
+      search: [{ name: LOCAL_SOURCE_NAME, type: "webpage", hits: references }],
+    };
   };
 
   ask: AskFunction = async (_payload, handleDelta, _signal) => {

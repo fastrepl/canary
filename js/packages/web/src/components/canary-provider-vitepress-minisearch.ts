@@ -1,14 +1,14 @@
 import { LitElement, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 
-import type { SearchFunction, SearchReference } from "../types";
+import type { SearchFunction, SearchResult } from "../types";
 import { wrapper } from "../styles";
 import { createEvent } from "../store";
 import { LOCAL_SOURCE_NAME } from "../constants";
 
 const NAME = "canary-provider-vitepress-minisearch";
 
-type SearchResult = {
+type MinisearchResult = {
   id: string;
   title: string;
   titles: string[];
@@ -24,7 +24,7 @@ export class CanaryProviderVitepressMinisearch extends LitElement {
 
   @state()
   minisearch: {
-    search: (query: string) => SearchResult[];
+    search: (query: string) => MinisearchResult[];
   } | null = null;
 
   async connectedCallback() {
@@ -33,7 +33,7 @@ export class CanaryProviderVitepressMinisearch extends LitElement {
     const index = await this._buildIndex(data);
 
     this.minisearch = {
-      search: (query) => index.search(query) as unknown as SearchResult[],
+      search: (query) => index.search(query) as unknown as MinisearchResult[],
     };
 
     this.dispatchEvent(
@@ -95,15 +95,22 @@ export class CanaryProviderVitepressMinisearch extends LitElement {
         return;
       }
 
-      const refs: SearchReference[] = this.minisearch
+      const ret: SearchResult[] = this.minisearch
         .search(query)
         .map((result) => ({
           url: new URL(result.id, window.location.origin).toString(),
           title: result.title,
-          titles: result.titles,
+          sub_results: [
+            {
+              url: new URL(result.id, window.location.origin).toString(),
+              title: result.title,
+            },
+          ],
         }));
 
-      resolve({ search: [{ name: LOCAL_SOURCE_NAME, type: "webpage", hits: refs }] });
+      resolve({
+        search: [{ name: LOCAL_SOURCE_NAME, type: "webpage", hits: ret }],
+      });
     });
   };
 }

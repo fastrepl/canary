@@ -1,6 +1,6 @@
 import { describe, test, expect } from "vitest";
 
-import { stripURL, groupSearchReferences, urlToParts } from "./utils";
+import { stripURL, urlToParts } from "./utils";
 
 describe("urlToParts", () => {
   test("with host", () => {
@@ -14,12 +14,6 @@ describe("urlToParts", () => {
 
   test("without host", () => {
     expect(urlToParts("/docs/abc/Bcd/d/e#a")).toEqual(["Abc", "Bcd", "D", "E"]);
-  });
-});
-
-describe("groupSearchReferences", () => {
-  test.for([["empty", [], []]])("%s", ([_, input, expected]: any[]) => {
-    expect(groupSearchReferences(input)).toEqual(expected);
   });
 });
 

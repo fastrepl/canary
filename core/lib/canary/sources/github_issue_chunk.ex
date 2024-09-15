@@ -5,6 +5,7 @@ defmodule Canary.Sources.GithubIssue.Chunk do
     uuid_primary_key :id
     attribute :index_id, :uuid, allow_nil?: false
     attribute :source_id, :uuid, allow_nil?: false
+    attribute :document_id, :string, allow_nil?: false
     attribute :node_id, :string, allow_nil?: false
 
     attribute :url, :string
@@ -24,6 +25,7 @@ defmodule Canary.Sources.GithubIssue.Chunk do
 
       accept [
         :source_id,
+        :document_id,
         :node_id,
         :url,
         :title,

@@ -1,5 +1,3 @@
-import type { SearchReference } from "./types";
-
 export const urlToParts = (url: string) => {
   const paths = parseURL(url).pathname.split("/");
 
@@ -15,41 +13,6 @@ export const urlToParts = (url: string) => {
     .slice(-4);
 
   return parts;
-};
-
-type GroupedResult = {
-  title: string | null;
-  items: (SearchReference & { index: number })[];
-};
-
-export const groupSearchReferences = (
-  references: SearchReference[],
-): GroupedResult[] => {
-  const groups: Map<string, GroupedResult> = new Map();
-
-  for (const [index, ref] of references.entries()) {
-    const url = parseURL(ref.url);
-    const pathKey = `${url.protocol}//${url.host}${url.pathname}`;
-
-    if (!groups.has(pathKey)) {
-      groups.set(pathKey, { title: ref.titles?.[0] ?? ref.title, items: [] });
-    }
-
-    const group = groups.get(pathKey)!;
-    const lastAddedIndex =
-      group.items.length > 0 ? group.items[group.items.length - 1].index : 999;
-
-    if (index - lastAddedIndex <= 3) {
-      group.items.push({ ...ref, index });
-    } else {
-      groups.set(`${pathKey}-${index}`, {
-        title: ref.titles?.[0] ?? ref.title,
-        items: [{ ...ref, index }],
-      });
-    }
-  }
-
-  return Array.from(groups.values());
 };
 
 export const asyncSleep = async (ms: number) => {

@@ -2,6 +2,7 @@ defmodule Canary.Index.Document.Webpage do
   @common [
     :id,
     :source_id,
+    :document_id,
     :embedding,
     :tags,
     :meta
@@ -20,6 +21,7 @@ defmodule Canary.Index.Document.GithubIssue do
   @common [
     :id,
     :source_id,
+    :document_id,
     :embedding,
     :tags,
     :meta
@@ -38,6 +40,7 @@ defmodule Canary.Index.Document.GithubDiscussion do
   @common [
     :id,
     :source_id,
+    :document_id,
     :embedding,
     :tags,
     :meta

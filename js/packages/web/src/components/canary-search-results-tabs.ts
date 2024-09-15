@@ -6,7 +6,7 @@ import { searchContext } from "../contexts";
 
 import pm from "picomatch";
 
-import type { SearchContext, SearchReference, TabDefinitions } from "../types";
+import type { SearchContext, SearchResult, TabDefinitions } from "../types";
 import { parseURL } from "../utils";
 import { createEvent } from "../store";
 import { TaskStatus } from "../store/managers";
@@ -32,7 +32,7 @@ export class CanarySearchResultsTabs extends LitElement {
   @state() _selectedTab = "";
   @state() _groupedReferences: Record<
     string,
-    (SearchReference & { index: number })[]
+    (SearchResult & { index: number })[]
   > = {};
 
   connectedCallback(): void {
@@ -122,12 +122,12 @@ export class CanarySearchResultsTabs extends LitElement {
   }
 
   private _groupReferences(
-    references: SearchReference[],
+    references: SearchResult[],
     definitions: TabDefinitions,
   ) {
     const grouped = definitions.reduce(
       (acc, group) => ({ ...acc, [group.name]: [] }),
-      {} as Record<string, (SearchReference & { index: number })[]>,
+      {} as Record<string, (SearchResult & { index: number })[]>,
     );
 
     const matchers = definitions.map((d) => pm(d.pattern));

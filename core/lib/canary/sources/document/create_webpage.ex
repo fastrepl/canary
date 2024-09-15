@@ -42,6 +42,7 @@ defmodule Canary.Sources.Document.CreateWebpage do
         |> Enum.map(fn %Canary.Scraper.Item{} = item ->
           %{
             source_id: source_id,
+            document_id: record.id,
             title: item.title,
             content: item.content,
             url: URI.parse(url) |> Map.put(:fragment, item.id) |> URI.to_string()

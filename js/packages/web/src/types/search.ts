@@ -1,8 +1,12 @@
-export interface SearchReference {
+export type SearchResult = SearchResultBase & {
+  sub_results: SearchSubResult[];
+};
+
+export type SearchSubResult = SearchResultBase & {};
+
+export interface SearchResultBase {
   url: string;
   title: string;
-  titles?: string[];
-  tags?: string[];
   excerpt?: string;
 }
 
@@ -12,7 +16,7 @@ export type SearchFunctionResult = {
   search: Array<{
     name: string;
     type: SearchSourceType;
-    hits: SearchReference[];
+    hits: SearchResult[];
   }>;
   suggestion?: {
     questions: string[];

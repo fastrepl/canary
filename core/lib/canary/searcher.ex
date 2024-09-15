@@ -74,6 +74,21 @@ defmodule Canary.Searcher.Default do
         config: %Ash.Union{type: type}
       } = sources |> Enum.find(&(&1.id == source_id))
 
+      hits =
+        hits
+        |> Enum.group_by(& &1.document_id)
+        |> Enum.map(fn {_, chunks} ->
+          first = chunks |> Enum.at(0)
+
+          %{
+            # TODO
+            url: first.url,
+            title: first.title,
+            excerpt: first.excerpt,
+            sub_results: chunks
+          }
+        end)
+
       %{name: name, type: type, hits: hits}
     end)
   end

@@ -19,7 +19,7 @@ defmodule CanaryWeb.HomeLive do
             <canary-search slot="mode">
               <canary-search-input slot="input" autofocus></canary-search-input>
               <canary-search-suggestions slot="body" header="Ask AI"></canary-search-suggestions>
-              <canary-search-results slot="body" header="Results"></canary-search-results>
+              <canary-search-results slot="body" header="Results" group></canary-search-results>
             </canary-search>
             <canary-ask slot="mode">
               <canary-mode-breadcrumb slot="input-before" text="Ask AI"></canary-mode-breadcrumb>

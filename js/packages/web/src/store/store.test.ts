@@ -4,7 +4,7 @@ import { setupServer } from "msw/node";
 import { searchHandler, askHandler } from "../msw";
 
 import { asyncSleep } from "../utils";
-import { SearchFunction, AskFunction } from "../types";
+import { SearchFunction, AskFunction, SearchResult } from "../types";
 import { MODE_SEARCH, MODE_ASK } from "../constants";
 
 import { createStore } from "./store";
@@ -20,10 +20,18 @@ afterAll(() => server.close());
 test("debounced search", async () => {
   const store = createStore(document.createElement("div"));
 
-  const data = [
+  const data: SearchResult[] = [
     {
       url: "https://example.com",
       title: "Hello",
+      excerpt: "Hello",
+      sub_results: [
+        {
+          url: "https://example.com",
+          title: "Hello",
+          excerpt: "Hello",
+        },
+      ],
     },
   ];
   const search = vi

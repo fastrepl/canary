@@ -5,6 +5,7 @@ defmodule Canary.Sources.DiscordThread.Chunk do
     uuid_primary_key :id
     attribute :index_id, :uuid, allow_nil?: false
     attribute :source_id, :uuid, allow_nil?: false
+    attribute :document_id, :string, allow_nil?: false
 
     attribute :server_id, :integer, allow_nil?: false
     attribute :channel_id, :integer, allow_nil?: false

@@ -4,8 +4,9 @@ import { customElement, property, state } from "lit/decorators.js";
 import type {
   BeforeSearchFunction,
   SearchFunction,
-  SearchReference,
+  SearchResult,
   PagefindResult,
+  PagefindSubResult,
 } from "../types";
 
 import { createEvent } from "../store";
@@ -120,27 +121,8 @@ export class CanaryProviderPagefind extends LitElement {
     };
   };
 
-  private _transform(results: PagefindResult[]): SearchReference[] {
+  private _transform(results: PagefindResult[]): SearchResult[] {
     const maxSubResults = this.options.maxSubResults ?? DEFAULT_MAX_SUB_RESULTS;
-
-    const subResults = results.flatMap((result) => {
-      return result.sub_results.slice(0, maxSubResults).map((subResult) => ({
-        ...subResult,
-        meta: result.meta,
-      }));
-    });
-
-    const getBestScore = (subResult: (typeof subResults)[0]) =>
-      subResult.weighted_locations.reduce(
-        (acc, cur) => Math.max(acc, cur.balanced_score),
-        -1,
-      );
-
-    const getTitles = (subResult: (typeof subResults)[0]) => {
-      return subResult.meta.title === subResult.title
-        ? []
-        : [subResult.meta.title];
-    };
 
     const transformURL = (url: string) => {
       return this.options._base
@@ -149,14 +131,32 @@ export class CanaryProviderPagefind extends LitElement {
         : url;
     };
 
-    return subResults
-      .sort((a, b) => getBestScore(b) - getBestScore(a))
-      .map((result) => ({
-        url: transformURL(result.url),
-        title: result.title,
-        titles: getTitles(result),
-        excerpt: result.excerpt,
-      }));
+    const getBestScore = (subResult: PagefindSubResult) =>
+      subResult.weighted_locations.reduce(
+        (acc, cur) => Math.max(acc, cur.balanced_score),
+        -1,
+      );
+
+    return results
+      .sort((a, b) => {
+        return getBestScore(b.sub_results[0]) - getBestScore(a.sub_results[0]);
+      })
+      .map((result) => {
+        const subs = result.sub_results
+          .slice(0, maxSubResults)
+          .map((subResult) => ({
+            url: transformURL(subResult.url),
+            title: subResult.title,
+            excerpt: subResult.excerpt,
+          }));
+
+        return {
+          title: result.meta.title,
+          url: transformURL(result.url),
+          excerpt: result.excerpt,
+          sub_results: subs,
+        };
+      });
   }
 }
 

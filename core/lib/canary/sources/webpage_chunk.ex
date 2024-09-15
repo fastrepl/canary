@@ -3,8 +3,9 @@ defmodule Canary.Sources.Webpage.Chunk do
 
   attributes do
     uuid_primary_key :id
-    attribute :source_id, :uuid, allow_nil?: false
     attribute :index_id, :uuid, allow_nil?: false
+    attribute :source_id, :uuid, allow_nil?: false
+    attribute :document_id, :string, allow_nil?: false
 
     attribute :title, :string, allow_nil?: false, constraints: [allow_empty?: true]
     attribute :content, :string, allow_nil?: false
@@ -20,6 +21,7 @@ defmodule Canary.Sources.Webpage.Chunk do
 
       accept [
         :source_id,
+        :document_id,
         :url,
         :title,
         :content,

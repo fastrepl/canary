@@ -15,6 +15,7 @@ defmodule Canary.Index do
     doc = %Document.Webpage{
       id: chunk.index_id,
       source_id: chunk.source_id,
+      document_id: chunk.document_id,
       title: chunk.title || "",
       content: chunk.content || "",
       tags: [],
@@ -32,6 +33,7 @@ defmodule Canary.Index do
     doc = %Document.GithubIssue{
       id: chunk.index_id,
       source_id: chunk.source_id,
+      document_id: chunk.document_id,
       title: chunk.title || "",
       content: chunk.content || "",
       tags: [],
@@ -49,6 +51,7 @@ defmodule Canary.Index do
     doc = %Document.GithubDiscussion{
       id: chunk.index_id,
       source_id: chunk.source_id,
+      document_id: chunk.document_id,
       title: chunk.title || "",
       content: chunk.content || "",
       tags: [],
@@ -122,22 +125,12 @@ defmodule Canary.Index do
           |> Enum.map(fn %{"hits" => hits} ->
             hits =
               hits
-              |> Enum.map(fn hit ->
-                %{
-                  id: hit["document"]["id"],
-                  source_id: hit["document"]["source_id"],
-                  url: hit["document"]["meta"]["url"],
-                  tags: hit["document"]["tags"],
-                  title: hit["highlight"]["title"]["snippet"] || hit["document"]["title"],
-                  excerpt: hit["highlight"]["content"]["snippet"] || hit["document"]["content"]
-                }
-              end)
+              |> Enum.map(&transform_hit/1)
               |> Enum.uniq_by(& &1.id)
 
-            %{
-              source_id: hits |> Enum.at(0) |> Map.get(:source_id),
-              hits: hits
-            }
+            source_id = hits |> Enum.at(0) |> Map.get(:source_id)
+
+            %{source_id: source_id, hits: hits}
           end)
 
         {:ok, ret}
@@ -148,5 +141,17 @@ defmodule Canary.Index do
       {:error, error} ->
         {:error, error}
     end
+  end
+
+  defp transform_hit(hit) do
+    %{
+      id: hit["document"]["id"],
+      document_id: hit["document"]["document_id"],
+      source_id: hit["document"]["source_id"],
+      url: hit["document"]["meta"]["url"],
+      title: hit["highlight"]["title"]["snippet"] || hit["document"]["title"],
+      excerpt: hit["highlight"]["content"]["snippet"] || hit["document"]["content"],
+      tags: hit["document"]["tags"]
+    }
   end
 end
