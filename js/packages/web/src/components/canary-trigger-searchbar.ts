@@ -5,15 +5,33 @@ import { KeyboardTriggerController } from "../controllers";
 import type { TriggerShortcut } from "../types";
 import { wrapper } from "../styles";
 
+import "./canary-media-query";
+
 const NAME = "canary-trigger-searchbar";
 
 @customElement(NAME)
 export class CanaryTriggerSearchbar extends LitElement {
-  @property({ type: String }) shortcut: TriggerShortcut = "cmdk";
+  @property({ type: String })
+  shortcut: TriggerShortcut = "cmdk";
 
   render() {
     return html`
-      <button part="button" aria-label="Search">
+      <canary-media-query query="(min-width: 40rem)">
+        ${this.desktop()}
+        <div slot="fallback">${this.mobile()}</div>
+      </canary-media-query>
+    `;
+  }
+
+  mobile() {
+    return html` <button part="button" class="mobile" aria-label="Search">
+      <div part="icon" class="icon i-heroicons-magnifying-glass"></div>
+    </button>`;
+  }
+
+  desktop() {
+    return html`
+      <button part="button" class="desktop" aria-label="Search">
         <div part="icon" class="icon i-heroicons-magnifying-glass"></div>
         <span part="text">Search</span>
 
@@ -48,6 +66,16 @@ export class CanaryTriggerSearchbar extends LitElement {
         display: contents;
       }
 
+      button.mobile {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+      }
+
+      button.desktop {
+        padding-left: 0.75rem;
+        padding-right: 0.5rem;
+      }
+
       button {
         cursor: pointer;
         display: flex;
@@ -61,8 +89,6 @@ export class CanaryTriggerSearchbar extends LitElement {
 
         border: 1px solid var(--canary-color-gray-80);
         border-radius: 0.5rem;
-        padding-inline-start: 0.75rem;
-        padding-inline-end: 0.5rem;
 
         background-color: var(--canary-color-gray-100);
         color: var(--canary-color-gray-10);
