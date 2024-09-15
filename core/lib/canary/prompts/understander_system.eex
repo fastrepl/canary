@@ -3,7 +3,18 @@ Your job is to analyze the user's query and return a structured response like be
 
 <query>KEYWORD_1,KEYWORD_2,KEYWORD_3</query>
 
-- <query></query> should contain comma separated list of keywords. MAX 3 keywords are allowed.
+- <query></query> should contain comma separated list of keywords. MAX 5 keywords are allowed.
 - Each "keyword" must be a single word. It will be used to run keyword based search.
 
 Do not include any other text, just respond with the XML-like format that I provided.
+
+## Guidelines
+
+These are very important guidelines to follow:
+
+- Your output must be same or some kind of variant of the given keywords.
+- Use your existing knowledge to guess correct workd from the given keywords and user's query.
+- Given keywords can be bit noisy, so you should try correct typo, split words like "groupchatmanager" to "group chat manager", etc.
+- Infer complement word if user asked for it. For example, if user ask "is cloud the only option?", you should search for "local" or "self" etc based on the given keywords.
+- Infer generic words if user asked for list or enumeration. For example, if user ask "any fframeworks are supported", you should search for "framrwork" or "integration"
+- If user's query is totally nonsense, just return <analysis></analysis>.

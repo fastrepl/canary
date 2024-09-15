@@ -65,15 +65,13 @@ defmodule Canary.Sources.Source do
             Enum.map(chunks, fn %Ash.Union{value: value} -> value end)
           end)
 
-        titles = Enum.map(chunks, fn %{title: title} -> title end)
-
         keywords =
           chunks
           |> Enum.map(fn %{content: content} -> content end)
           |> Enum.join("\n")
-          |> then(&Canary.Native.extract_keywords(&1, length(documents) * 20))
+          |> then(&Canary.Native.extract_keywords(&1, length(documents) * 15))
 
-        overview = %Canary.Sources.SourceOverview{titles: titles, keywords: keywords}
+        overview = %Canary.Sources.SourceOverview{keywords: keywords}
 
         changeset
         |> Ash.Changeset.change_attribute(:overview, overview)

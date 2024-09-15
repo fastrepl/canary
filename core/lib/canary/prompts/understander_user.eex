@@ -1,12 +1,5 @@
-Here, I provide titles and some messy keywords extracted from documents.
-
-<%= for source <- @sources do %>
-### <%= source.name %>
-#### Titles
-<%= source.titles |> Enum.join("\n") %>
-#### Keywords
-<%= source.keywords |> Enum.join(", ") %>
-<% end %>
+## Keywords
+<%= @keywords |> Enum.join(", ") %>
 
 Based on above information, come up with plausible keywords to fullfil below user's query.
 Query: "<%= @query %>"

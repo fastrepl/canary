@@ -14,11 +14,10 @@ defmodule Canary.Query.Understander.LLM do
   def run(sources, query) do
     chat_model = Application.fetch_env!(:canary, :chat_completion_model)
 
-    overviews =
+    keywords =
       sources
-      |> Enum.map(fn %Source{name: name, overview: %SourceOverview{} = overview} ->
-        %{name: name, titles: overview.titles, keywords: overview.keywords}
-      end)
+      |> Enum.flat_map(fn %Source{overview: %SourceOverview{} = overview} -> overview.keywords end)
+      |> Enum.uniq()
 
     messages = [
       %{
@@ -27,7 +26,7 @@ defmodule Canary.Query.Understander.LLM do
       },
       %{
         role: "user",
-        content: Canary.Prompt.format("understander_user", %{query: query, sources: overviews})
+        content: Canary.Prompt.format("understander_user", %{query: query, keywords: keywords})
       }
     ]
 
@@ -43,6 +42,7 @@ defmodule Canary.Query.Understander.LLM do
         match
         |> String.split(",")
         |> Enum.map(&String.trim/1)
+        |> Enum.reject(&(&1 == ""))
 
       nil ->
         []
