@@ -315,20 +315,16 @@ defmodule CanaryWeb.SourceLive.Detail do
 
   @impl true
   def handle_event("fetch", _, socket) do
-    %Canary.Sources.Source{id: id, config: %Ash.Union{type: type}} = socket.assigns.source
+    result =
+      socket.assigns.source
+      |> Ash.Changeset.for_update(:fetch, %{})
+      |> Ash.update()
 
-    job =
-      case type do
-        :webpage -> Canary.Workers.WebpageProcessor.new(%{source_id: id})
-        :github_issue -> Canary.Workers.GithubIssueProcessor.new(%{source_id: id})
-        :github_discussion -> Canary.Workers.GithubDiscussionProcessor.new(%{source_id: id})
-      end
-
-    case Oban.insert(job) do
+    case result do
       {:ok, _} ->
         {:noreply, socket}
 
-      error ->
+      {:error, error} ->
         IO.inspect(error)
         {:noreply, socket}
     end

@@ -48,7 +48,7 @@ defmodule Canary.Sources.Source do
       accept [:name, :config, :overview]
     end
 
-    update :update_overview do
+    update :post_fetch do
       require_atomic? false
 
       change fn changeset, _ ->
@@ -87,6 +87,35 @@ defmodule Canary.Sources.Source do
 
       change {Ash.Resource.Change.CascadeDestroy, relationship: :documents, action: :destroy}
       change {Ash.Resource.Change.CascadeDestroy, relationship: :events, action: :destroy}
+    end
+
+    update :fetch do
+      require_atomic? false
+
+      change fn changeset, _ctx ->
+        %{id: source_id, config: config} = changeset.data
+
+        job =
+          case config.type do
+            :webpage ->
+              Canary.Workers.WebpageProcessor.new(%{source_id: source_id})
+
+            :github_issue ->
+              Canary.Workers.GithubIssueProcessor.new(%{source_id: source_id})
+
+            :github_discussion ->
+              Canary.Workers.GithubDiscussionProcessor.new(%{source_id: source_id})
+          end
+
+        case Oban.insert(job) do
+          {:ok, _job} ->
+            changeset
+
+          {:error, %{errors: errors}} ->
+            changeset
+            |> Ash.Changeset.add_error(errors)
+        end
+      end
     end
   end
 

@@ -1,5 +1,5 @@
 defmodule Canary.Workers.GithubIssueProcessor do
-  use Oban.Worker, queue: :github_processor, max_attempts: 2
+  use Oban.Worker, queue: :github_processor, max_attempts: 1
 
   alias Canary.Sources.Event
   alias Canary.Sources.Source

@@ -1,5 +1,5 @@
 defmodule Canary.Workers.WebpageProcessor do
-  use Oban.Worker, queue: :webpage_processor, max_attempts: 2
+  use Oban.Worker, queue: :webpage_processor, max_attempts: 1
 
   alias Canary.Sources.Event
   alias Canary.Sources.Source
@@ -27,10 +27,8 @@ defmodule Canary.Workers.WebpageProcessor do
       })
 
       source
-      |> Ash.Changeset.for_update(:update_overview, %{})
+      |> Ash.Changeset.for_update(:post_fetch, %{})
       |> Ash.update()
-
-      :ok
     end
   end
 end
