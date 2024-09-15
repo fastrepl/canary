@@ -12,6 +12,7 @@ defmodule Canary.Scraper do
       items =
         process(body)
         |> Enum.reverse()
+        |> Enum.reject(&(&1.level == nil))
         |> Enum.map(&%Item{&1 | content: String.trim(&1.content)})
 
       {:ok, items}
@@ -50,6 +51,7 @@ defmodule Canary.Scraper do
       nodes
       |> Enum.map(&to_text/1)
       |> Enum.join(" ")
+      |> trim_leading_hash()
 
     content = String.duplicate("#", level) <> " #{title}\n"
 
@@ -167,10 +169,16 @@ defmodule Canary.Scraper do
   defp update_first(list, fun) when length(list) == 0, do: [fun.(%Item{title: "", content: ""})]
   defp update_first(list, fun), do: List.update_at(list, 0, fun)
 
-  defp parse_integer(s)  do
+  defp parse_integer(s) do
     case Integer.parse(s) do
       {n, _} -> n
       _ -> 0
     end
+  end
+
+  defp trim_leading_hash(s) do
+    s
+    |> String.trim_leading("#")
+    |> String.trim()
   end
 end

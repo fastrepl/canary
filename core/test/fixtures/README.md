@@ -1,0 +1,3 @@
+- `canary-1`: https://getcanary.dev/docs/local/intro
+- `litellm-1`: https://docs.litellm.ai/docs
+- `hono-1`: https://hono.dev/docs/middleware/builtin/bearer-auth
