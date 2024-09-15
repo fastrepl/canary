@@ -66,10 +66,14 @@ defmodule Canary.Sources.Source do
           end)
 
         keywords =
-          chunks
-          |> Enum.map(fn %{content: content} -> content end)
-          |> Enum.join("\n")
-          |> then(&Canary.Native.extract_keywords(&1, length(documents) * 15))
+          documents
+          |> Enum.flat_map(fn %Canary.Sources.Document{chunks: chunks} ->
+            chunks
+            |> Enum.map(fn %Ash.Union{value: value} -> value.content end)
+            |> Enum.join("\n")
+            |> then(&Canary.Native.extract_keywords(&1, 20))
+          end)
+          |> Enum.uniq()
 
         overview = %Canary.Sources.SourceOverview{keywords: keywords}
 
