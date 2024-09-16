@@ -1,3 +1,16 @@
+defmodule Canary.Index.Hit do
+  @derive Jason.Encoder
+  defstruct [
+    :id,
+    :document_id,
+    :source_id,
+    :url,
+    :title,
+    :excerpt,
+    :tags
+  ]
+end
+
 defmodule Canary.Index do
   alias Canary.Sources.Source
   alias Canary.Sources.Webpage
@@ -144,7 +157,7 @@ defmodule Canary.Index do
   end
 
   defp transform_hit(hit) do
-    %{
+    %Canary.Index.Hit{
       id: hit["document"]["id"],
       document_id: hit["document"]["document_id"],
       source_id: hit["document"]["source_id"],

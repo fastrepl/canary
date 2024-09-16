@@ -13,11 +13,11 @@ defmodule CanaryWeb.SettingsLive.Index do
     %{
       id: "settings-billing-form",
       module: CanaryWeb.SettingsLive.BillingForm
-    },
-    %{
-      id: "settings-subdomain-form",
-      module: CanaryWeb.SettingsLive.SubdomainForm
     }
+    # %{
+    #   id: "settings-subdomain-form",
+    #   module: CanaryWeb.SettingsLive.SubdomainForm
+    # }
   ]
 
   def render(assigns) do

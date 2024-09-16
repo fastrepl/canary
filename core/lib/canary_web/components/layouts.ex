@@ -43,7 +43,7 @@ defmodule CanaryWeb.Layouts do
                 <span>Source</span>
               </.link>
             </li>
-            <li>
+            <%!-- <li>
               <.link
                 navigate={~p"/insights"}
                 class="flex flex-row items-center gap-2 font-semibold hover:no-underline hover:bg-gray-100 rounded-md p-2"
@@ -57,7 +57,7 @@ defmodule CanaryWeb.Layouts do
                 ]} />
                 <span>Insights</span>
               </.link>
-            </li>
+            </li> --%>
             <li>
               <.link
                 navigate={~p"/settings"}

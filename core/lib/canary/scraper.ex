@@ -12,7 +12,8 @@ defmodule Canary.Scraper do
       items =
         process(body)
         |> Enum.reverse()
-        |> Enum.reject(&(&1.level == nil))
+        |> Enum.reject(&(&1.level == nil || &1.level == 0))
+        |> Enum.reject(&(&1.content == nil || &1.content == ""))
         |> Enum.map(&%Item{&1 | content: String.trim(&1.content)})
 
       {:ok, items}

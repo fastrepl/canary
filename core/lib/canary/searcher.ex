@@ -1,5 +1,6 @@
 defmodule Canary.Searcher do
-  @callback run(list(any()), String.t()) :: {:ok, Canary.Searcher.Result.t()} | {:error, any()}
+  @callback run(list(any()), String.t()) :: {:ok, list()} | {:error, any()}
+
   def run(sources, query, opts \\ []) do
     if opts[:cache] do
       with {:error, _} <- get_cache(sources, query),
