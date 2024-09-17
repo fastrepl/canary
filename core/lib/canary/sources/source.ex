@@ -71,7 +71,7 @@ defmodule Canary.Sources.Source do
             chunks
             |> Enum.map(fn %Ash.Union{value: value} -> value.content end)
             |> Enum.join("\n")
-            |> then(&Canary.Native.extract_keywords(&1, 20))
+            |> then(&Canary.Native.extract_keywords(&1, max(5, floor(500 / length(documents)))))
           end)
           |> Enum.uniq()
 
