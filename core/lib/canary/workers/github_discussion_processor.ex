@@ -28,7 +28,7 @@ defmodule Canary.Workers.GithubDiscussionProcessor do
     })
 
     source
-    |> Ash.Changeset.for_update(:update_overview, %{})
+    |> Ash.Changeset.for_update(:post_fetch, %{})
     |> Ash.update()
 
     :ok

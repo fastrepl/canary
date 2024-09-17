@@ -21,7 +21,7 @@ defmodule Canary.Workers.GithubIssueProcessor do
       notify_event_end(source_id)
 
       source
-      |> Ash.Changeset.for_update(:update_overview, %{})
+      |> Ash.Changeset.for_update(:post_fetch, %{})
       |> Ash.update()
 
       :ok

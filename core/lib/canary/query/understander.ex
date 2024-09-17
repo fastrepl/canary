@@ -16,7 +16,10 @@ defmodule Canary.Query.Understander.LLM do
 
     keywords =
       sources
-      |> Enum.flat_map(fn %Source{overview: %SourceOverview{} = overview} -> overview.keywords end)
+      |> Enum.flat_map(fn
+        %Source{overview: nil} -> []
+        %Source{overview: %SourceOverview{} = overview} -> overview.keywords
+      end)
       |> Enum.uniq()
 
     messages = [
