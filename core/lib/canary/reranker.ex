@@ -9,6 +9,11 @@ defmodule Canary.Reranker do
   def run(_, [], _), do: {:ok, []}
   def run(query, docs, opts), do: impl().run(query, docs, opts)
 
+  def run!(query, docs, opts \\ []) do
+    {:ok, ret} = run(query, docs, opts)
+    ret
+  end
+
   defp impl(), do: Application.get_env(:canary, :reranker, Canary.Reranker.Noop)
 end
 
@@ -16,8 +21,7 @@ defmodule Canary.Reranker.Cohere do
   @behaviour Canary.Reranker
 
   @model "rerank-english-v3.0"
-  @timeout 300
-  @retry_interval 50
+  @timeout 2000
 
   use Retry
 
@@ -26,7 +30,7 @@ defmodule Canary.Reranker.Cohere do
     threshold = opts[:threshold] || 0
 
     result =
-      retry with: constant_backoff(@retry_interval) do
+      retry with: exponential_backoff() |> randomize |> expiry(4_000) do
         request(query, docs, renderer)
       end
 
@@ -70,14 +74,16 @@ defmodule Canary.Reranker.Jina do
   @behaviour Canary.Reranker
 
   @model "jina-reranker-v2-base-multilingual"
+  @timeout 2000
 
   use Retry
 
-  def run(query, docs, renderer) do
-    threshold = 0
+  def run(query, docs, opts) do
+    threshold = opts[:threshold] || 0
+    renderer = opts[:renderer] || fn doc -> doc end
 
     result =
-      retry with: exponential_backoff() |> randomize |> cap(1_000) |> expiry(4_000) do
+      retry with: exponential_backoff() |> randomize |> expiry(4_000) do
         request(query, docs, renderer)
       end
 
@@ -110,7 +116,8 @@ defmodule Canary.Reranker.Jina do
         model: @model,
         query: query,
         documents: Enum.map(docs, &renderer.(&1))
-      }
+      },
+      receive_timeout: @timeout
     )
   end
 end
