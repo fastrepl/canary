@@ -2,14 +2,14 @@ defmodule Canary.Interactions.Responder do
   alias Canary.Interactions.Responder
 
   @callback run(
+              sources :: list(any()),
               query :: String.t(),
-              pattern :: String.t() | nil,
-              client :: any(),
-              handle_delta :: function()
+              handle_delta :: function(),
+              opts :: keyword()
             ) :: {:ok, any()} | {:error, any()}
 
-  def run(query, pattern, client, handle_delta \\ nil) do
-    impl().run(query, pattern, client, handle_delta)
+  def run(sources, query, handle_delta, opts \\ []) do
+    impl().run(sources, query, handle_delta, opts)
   end
 
   defp impl, do: Application.get_env(:canary, :responder, Responder.Default)
@@ -19,25 +19,22 @@ defmodule Canary.Interactions.Responder.Default do
   @behaviour Canary.Interactions.Responder
   require Ash.Query
 
-  def run(query, pattern, %{account: account, sources: sources}, handle_delta) do
-    model = Application.fetch_env!(:canary, :CHAT_COMPLETION_MODEL)
-    source = sources |> Enum.at(0)
-    {:ok, %{search: docs}} = Canary.Searcher.run(source, query)
+  def run(sources, query, handle_delta, opts) do
+    {:ok, results} = Canary.Searcher.run(sources, query, cache: opts[:cache])
 
     docs =
-      if is_nil(pattern) do
-        docs
-      else
-        docs
-        |> Enum.filter(fn doc -> Canary.Native.glob_match(pattern, URI.parse(doc.url).path) end)
-      end
+      results
+      |> search_results_to_docs()
+      |> then(
+        &Canary.Reranker.run!(query, &1, threshold: 0.05, renderer: fn doc -> doc.content end)
+      )
 
     {:ok, pid} = Agent.start_link(fn -> "" end)
 
     {:ok, completion} =
       Canary.AI.chat(
         %{
-          model: model,
+          model: Application.fetch_env!(:canary, :chat_completion_model),
           messages: [
             %{
               role: "system",
@@ -67,36 +64,29 @@ defmodule Canary.Interactions.Responder.Default do
       )
 
     completion = if completion == "", do: Agent.get(pid, & &1), else: completion
-
-    references =
-      completion
-      |> parse_footnotes()
-      |> Enum.map(fn i -> Enum.at(docs, i - 1) end)
-
-    # TODO: there's great change this is invalid, and will cause problem to the client side.
-    safe(handle_delta, %{type: :references, items: references})
     safe(handle_delta, %{type: :complete, content: completion})
 
-    Task.Supervisor.start_child(Canary.TaskSupervisor, fn ->
-      Canary.Accounts.Billing.increment_ask(account.billing)
-    end)
+    {:ok, %{response: completion, references: []}}
+  end
 
-    {:ok, %{response: completion, references: references}}
+  defp search_results_to_docs(results) do
+    doc_ids =
+      results
+      |> Enum.flat_map(fn %Canary.Searcher.Result{} = result ->
+        result.hits
+        |> Enum.flat_map(fn hit -> Enum.map(hit.sub_results, & &1.document_id) end)
+      end)
+      |> Enum.uniq()
+
+    r =
+      Canary.Sources.Document
+      |> Ash.Query.filter(id in ^doc_ids)
+      |> Ash.read!()
+      |> Enum.flat_map(fn %{chunks: chunks} -> chunks end)
+      |> Enum.map(fn chunk -> %{title: chunk.value.title, content: chunk.value.content} end)
   end
 
   defp safe(func, arg) do
     if is_function(func, 1), do: func.(arg), else: :noop
-  end
-
-  def parse_footnotes(text) do
-    regex = ~r/\[\^(\d+)\]:\s*(\d+)\s*$/m
-
-    Regex.scan(regex, text)
-    |> Enum.sort_by(fn [_, footnote_number, _] ->
-      String.to_integer(footnote_number)
-    end)
-    |> Enum.map(fn [_, _, index] ->
-      String.to_integer(index)
-    end)
   end
 end

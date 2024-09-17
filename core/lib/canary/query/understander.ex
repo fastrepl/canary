@@ -37,7 +37,7 @@ defmodule Canary.Query.Understander.LLM do
   end
 
   defp parse(completion) do
-    case Regex.run(~r/<query>(.*?)<\/query>/s, completion) do
+    case Regex.run(~r/<keywords>(.*?)<\/keywords>/s, completion) do
       [_, match] ->
         match
         |> String.split(",")

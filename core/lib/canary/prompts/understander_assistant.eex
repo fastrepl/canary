@@ -1,1 +1,1 @@
-<query><%= Enum.join(@queries, ",") %></query>
+<keywords><%= Enum.join(@keywords, ",") %></keywords>

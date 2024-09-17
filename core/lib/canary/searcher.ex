@@ -1,5 +1,17 @@
+defmodule Canary.Searcher.Result do
+  @derive Jason.Encoder
+  defstruct [:name, :type, :hits]
+
+  @type t :: %__MODULE__{
+          name: String.t(),
+          type: String.t(),
+          hits: list(any())
+        }
+end
+
 defmodule Canary.Searcher do
-  @callback run(list(any()), String.t()) :: {:ok, list()} | {:error, any()}
+  @callback run(list(any()), String.t()) ::
+              {:ok, list(Canary.Searcher.Result.t())} | {:error, any()}
 
   def run(sources, query, opts \\ []) do
     if opts[:cache] do
@@ -90,7 +102,7 @@ defmodule Canary.Searcher.Default do
           }
         end)
 
-      %{name: name, type: type, hits: hits}
+      %Canary.Searcher.Result{name: name, type: type, hits: hits}
     end)
   end
 end

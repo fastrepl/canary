@@ -1,5 +1,7 @@
-## Keywords
-<%= @keywords |> Enum.join(", ") %>
+<keywords>
+<%= @keywords |> Enum.join(",") %>
+</keywords>
 
-Based on above information, come up with plausible keywords to fullfil below user's query.
-Query: "<%= @query %>"
+<user_query>
+<%= @query %>
+</user_query>
