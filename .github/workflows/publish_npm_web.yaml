@@ -1,12 +1,10 @@
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - js/packages/web/**
+  release:
+    types:
+      - published
 jobs:
-  chromatic:
-    name: Run Chromatic
+  publish:
+    if: startsWith(github.event.release.tag_name, '@getcanary/web_')
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -21,7 +19,7 @@ jobs:
           cache: "npm"
           cache-dependency-path: js/package-lock.json
       - run: npm ci
-      - uses: chromaui/action@latest
+      - run: npm run build
+      - uses: JS-DevTools/npm-publish@v3
         with:
-          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-          workingDir: js/packages/web
+          token: ${{ secrets.NPM_TOKEN }}
