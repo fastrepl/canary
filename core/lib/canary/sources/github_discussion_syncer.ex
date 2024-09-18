@@ -1,8 +1,10 @@
 defmodule Canary.Sources.GithubDiscussion.Syncer do
   alias Canary.Sources.Document
+  alias Canary.Sources.GithubDiscussion.FetcherResult
 
   require Ash.Query
 
+  @spec run(binary(), list(FetcherResult.t())) :: :ok | {:error, any()}
   def run(source_id, list_of_results) do
     destroy_result =
       Document

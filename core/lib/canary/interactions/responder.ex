@@ -29,22 +29,24 @@ defmodule Canary.Interactions.Responder.Default do
         &Canary.Reranker.run!(query, &1, threshold: 0.05, renderer: fn doc -> doc.content end)
       )
 
+    messages = [
+      %{
+        role: "system",
+        content: Canary.Prompt.format("responder_system", %{})
+      },
+      %{
+        role: "user",
+        content: Canary.Prompt.format("responder_user", %{query: query, docs: docs})
+      }
+    ]
+
     {:ok, pid} = Agent.start_link(fn -> "" end)
 
     {:ok, completion} =
       Canary.AI.chat(
         %{
           model: Application.fetch_env!(:canary, :chat_completion_model),
-          messages: [
-            %{
-              role: "system",
-              content: Canary.Prompt.format("responder_system", %{})
-            },
-            %{
-              role: "user",
-              content: Canary.Prompt.format("responder_user", %{query: query, docs: docs})
-            }
-          ],
+          messages: messages,
           temperature: 0.2,
           frequency_penalty: 0.02,
           max_tokens: 5000,
@@ -78,12 +80,11 @@ defmodule Canary.Interactions.Responder.Default do
       end)
       |> Enum.uniq()
 
-    r =
-      Canary.Sources.Document
-      |> Ash.Query.filter(id in ^doc_ids)
-      |> Ash.read!()
-      |> Enum.flat_map(fn %{chunks: chunks} -> chunks end)
-      |> Enum.map(fn chunk -> %{title: chunk.value.title, content: chunk.value.content} end)
+    Canary.Sources.Document
+    |> Ash.Query.filter(id in ^doc_ids)
+    |> Ash.read!()
+    |> Enum.flat_map(fn %{chunks: chunks} -> chunks end)
+    |> Enum.map(fn chunk -> %{title: chunk.value.title, content: chunk.value.content} end)
   end
 
   defp safe(func, arg) do

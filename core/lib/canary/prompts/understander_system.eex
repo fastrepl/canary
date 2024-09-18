@@ -15,7 +15,7 @@ You are a world-class technical support engineer. Your job is to analyze the req
 
 <keywords>KEYWORD_1,KEYWORD_2,KEYWORD_3</keywords>
 
-- <keywords></keywords> should contain a comma-separated list of keywords. MAX 5 keywords are allowed.
+- <keywords></keywords> should contain a comma-separated list of keywords. Include as much keywords as possible, but no more than 5.
 - Each "keyword" must be a single word without any punctuation or special characters.
 
 ## Guidelines

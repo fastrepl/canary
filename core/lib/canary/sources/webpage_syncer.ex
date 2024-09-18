@@ -1,8 +1,7 @@
 defmodule Canary.Sources.Webpage.Syncer do
+  alias Canary.Sources.Document
   alias Canary.Sources.Webpage.DocumentMeta
   alias Canary.Sources.Webpage.FetcherResult
-
-  alias Canary.Sources.Document
 
   require Ash.Query
 
