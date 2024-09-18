@@ -95,6 +95,7 @@ config :canary, :github_app_url, "https://github.com/apps/getcanary-dev/installa
 config :ash, :missed_notifications, :ignore
 
 config :honeybadger,
+  environment_name: Mix.env(),
   api_key: {:system, "HONEYBADGER_API_KEY"},
   revision: {:system, "APP_REVISION"},
   ecto_repos: [Canary.Repo]
