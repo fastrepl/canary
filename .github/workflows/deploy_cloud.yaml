@@ -1,10 +1,10 @@
----
 on:
   release:
     types:
       - published
 jobs:
   deploy:
+    if: startsWith(github.event.release.tag_name, 'core_')
     runs-on: ubuntu-latest
     defaults:
       run:
