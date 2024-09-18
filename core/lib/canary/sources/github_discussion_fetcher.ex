@@ -43,14 +43,51 @@ defmodule Canary.Sources.GithubDiscussion.Fetcher do
   def run(%Source{
         config: %Ash.Union{type: :github_discussion, value: %GithubDiscussion.Config{} = config}
       }) do
+    {:ok, fetch_all(config.owner, config.repo)}
+  end
+
+  def fetch_all(owner, repo) do
+    Stream.unfold(nil, fn
+      :stop ->
+        nil
+
+      cursor ->
+        case fetch_page(owner, repo, cursor) do
+          {:ok, data} ->
+            page_info = data["repository"]["discussions"]["pageInfo"]
+            nodes = data["repository"]["discussions"]["nodes"]
+
+            if page_info["hasNextPage"] do
+              {nodes, page_info["endCursor"]}
+            else
+              {nodes, :stop}
+            end
+
+          {:try_after_s, seconds} ->
+            Process.sleep(seconds * 1000)
+            {[], cursor}
+
+          {:error, _} ->
+            {[], :stop}
+        end
+    end)
+    |> Stream.flat_map(fn nodes -> Enum.map(nodes, &transform_discussion_node/1) end)
+    |> Enum.to_list()
+  end
+
+  def fetch_page(owner, repo, cursor) do
     result =
       client()
       |> Req.post(
         graphql:
           {"""
-            query ($owner: String!, $repo: String!, $discussion_n: Int!, $comment_n: Int!) {
+            query ($owner: String!, $repo: String!, $discussion_n: Int!, $comment_n: Int!, $cursor: String) {
               repository(owner: $owner, name: $repo) {
-                discussions(first: $discussion_n, orderBy: {field: UPDATED_AT, direction: DESC}) {
+                discussions(first: $discussion_n, orderBy: {field: UPDATED_AT, direction: DESC}, after: $cursor) {
+                  pageInfo {
+                    endCursor
+                    hasNextPage
+                  }
                   nodes {
                     id
                     url
@@ -79,15 +116,18 @@ defmodule Canary.Sources.GithubDiscussion.Fetcher do
               }
             }
            """,
-           Map.merge(
-             %{discussion_n: @default_discussion_n, comment_n: @default_comment_n},
-             %{repo: config.repo, owner: config.owner}
-           )}
+           %{
+             discussion_n: @default_discussion_n,
+             comment_n: @default_comment_n,
+             repo: repo,
+             owner: owner,
+             cursor: cursor
+           }}
       )
 
     case result do
       {:ok, %{status: 200, body: %{"data" => data}}} ->
-        {:ok, to_document(data)}
+        {:ok, data}
 
       # https://docs.github.com/en/graphql/overview/rate-limits-and-node-limits-for-the-graphql-api#exceeding-the-rate-limit
       {:ok, %{status: 403, headers: headers}} ->
@@ -97,45 +137,43 @@ defmodule Canary.Sources.GithubDiscussion.Fetcher do
           {:try_after_s, 60}
         end
 
+      {:ok, %{status: 200, body: %{"errors" => errors}}} ->
+        {:error, errors}
+
       {:error, error} ->
         {:error, error}
     end
   end
 
-  defp to_document(data) do
-    discussions = data["repository"]["discussions"]["nodes"]
+  defp transform_discussion_node(discussion) do
+    top = %GithubDiscussion.FetcherResult{
+      node_id: discussion["id"],
+      title: discussion["title"],
+      content: discussion["body"],
+      url: discussion["url"],
+      created_at: discussion["createdAt"],
+      author_name: discussion["author"]["login"],
+      author_avatar_url: discussion["author"]["avatarUrl"],
+      comment: false,
+      closed: discussion["closed"],
+      answered: discussion["isAnswered"]
+    }
 
-    discussions
-    |> Enum.map(fn discussion ->
-      top = %GithubDiscussion.FetcherResult{
-        node_id: discussion["id"],
-        title: discussion["title"],
-        content: discussion["body"],
-        url: discussion["url"],
-        created_at: discussion["createdAt"],
-        author_name: discussion["author"]["login"],
-        author_avatar_url: discussion["author"]["avatarUrl"],
-        comment: false,
-        closed: discussion["closed"],
-        answered: discussion["isAnswered"]
-      }
+    comments =
+      discussion["comments"]["nodes"]
+      |> Enum.map(fn comment ->
+        %GithubDiscussion.FetcherResult{
+          node_id: comment["id"],
+          title: "",
+          content: comment["body"],
+          url: comment["url"],
+          created_at: comment["createdAt"],
+          author_name: comment["author"]["login"],
+          author_avatar_url: comment["author"]["avatarUrl"],
+          comment: true
+        }
+      end)
 
-      comments =
-        discussion["comments"]["nodes"]
-        |> Enum.map(fn comment ->
-          %GithubDiscussion.FetcherResult{
-            node_id: comment["id"],
-            title: "",
-            content: comment["body"],
-            url: comment["url"],
-            created_at: comment["createdAt"],
-            author_name: comment["author"]["login"],
-            author_avatar_url: comment["author"]["avatarUrl"],
-            comment: true
-          }
-        end)
-
-      [top | comments]
-    end)
+    [top | comments]
   end
 end
