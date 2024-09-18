@@ -38,13 +38,27 @@ defmodule Canary.Sources.GithubDiscussion.Fetcher do
         config: %Ash.Union{type: :github_discussion, value: %GithubDiscussion.Config{} = config}
       }) do
     query = """
-    query ($owner: String!, $repo: String!, $discussion_n: Int!, $comment_n: Int!, $cursor: String) {
-          repository(owner: $owner, name: $repo) {
-            discussions(first: $discussion_n, orderBy: {field: UPDATED_AT, direction: DESC}, after: $cursor) {
-              pageInfo {
-                endCursor
-                hasNextPage
-              }
+    query ($owner: String!, $repo: String!, $discussion_n: Int!, $comment_n: Int!, $since: DateTime!, $cursor: String) {
+      repository(owner: $owner, name: $repo) {
+        discussions(first: $discussion_n, orderBy: {field: UPDATED_AT, direction: DESC}, filterBy: {since: $since}, after: $cursor) {
+          pageInfo {
+            endCursor
+            hasNextPage
+          }
+          nodes {
+            id
+            url
+            author {
+              login
+              avatarUrl
+            }
+            upvoteCount
+            title
+            body
+            closed
+            isAnswered
+            createdAt
+            comments(last: $comment_n) {
               nodes {
                 id
                 url
@@ -52,34 +66,22 @@ defmodule Canary.Sources.GithubDiscussion.Fetcher do
                   login
                   avatarUrl
                 }
-                upvoteCount
-                title
                 body
-                closed
-                isAnswered
-                createdAt
-                comments(last: $comment_n) {
-                  nodes {
-                    id
-                    url
-                    author {
-                      login
-                      avatarUrl
-                    }
-                    body
-                  }
-                }
               }
             }
           }
         }
+      }
+    }
     """
 
     variables = %{
       owner: config.owner,
       repo: config.repo,
       discussion_n: @default_discussion_n,
-      comment_n: @default_comment_n
+      comment_n: @default_comment_n,
+      cursor: nil,
+      since: DateTime.utc_now() |> DateTime.add(-365, :day) |> DateTime.to_iso8601()
     }
 
     nodes = GithubFetcher.run_all(query, variables)

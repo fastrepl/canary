@@ -42,6 +42,7 @@ defmodule Canary.Sources.GithubFetcher do
       {:ok, %{status: 200, body: %{"data" => data}}} ->
         {:ok, data}
 
+      # https://docs.github.com/en/graphql/overview/rate-limits-and-node-limits-for-the-graphql-api#exceeding-the-rate-limit
       {:ok, %{status: 403, headers: headers}} ->
         if headers["x-ratelimit-remaining"] == "0" and length(headers["x-ratelimit-reset"]) == 1 do
           {:try_after_s, String.to_integer(Enum.at(headers["x-ratelimit-reset"], 0))}
@@ -51,6 +52,9 @@ defmodule Canary.Sources.GithubFetcher do
 
       {:ok, %{status: 200, body: %{"errors" => errors}}} ->
         {:error, errors}
+
+      {:ok, res} ->
+        {:error, res}
 
       {:error, error} ->
         {:error, error}

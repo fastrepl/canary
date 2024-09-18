@@ -34,46 +34,48 @@ defmodule Canary.Sources.GithubIssue.Fetcher do
 
   def run(%Source{config: %Ash.Union{type: :github_issue, value: %GithubIssue.Config{} = config}}) do
     query = """
-     query ($owner: String!, $repo: String!, $issue_n: Int!, $comment_n: Int!, $cursor: String) {
-       repository(owner: $owner, name: $repo) {
-         issues(first: $issue_n, orderBy: {field: UPDATED_AT, direction: DESC}, after: $cursor) {
-           pageInfo {
-             endCursor
-             hasNextPage
-           }
-           nodes {
-             id
-             bodyUrl
-             author {
-               login
-               avatarUrl
-             }
-             title
-             body
-             closed
-             createdAt
-             comments(last: $comment_n) {
-               nodes {
-                 id
-                 url
-                 author {
-                   login
-                   avatarUrl
-                 }
-                 body
-               }
-             }
-           }
-         }
-       }
-     }
+    query ($owner: String!, $repo: String!, $issue_n: Int!, $comment_n: Int!, $since: DateTime!, $cursor: String) {
+      repository(owner: $owner, name: $repo) {
+        issues(first: $issue_n, orderBy: {field: UPDATED_AT, direction: DESC}, filterBy: {since: $since}, after: $cursor) {
+          pageInfo {
+            endCursor
+            hasNextPage
+          }
+          nodes {
+            id
+            bodyUrl
+            author {
+              login
+              avatarUrl
+            }
+            title
+            body
+            closed
+            createdAt
+            comments(last: $comment_n) {
+              nodes {
+                id
+                url
+                author {
+                  login
+                  avatarUrl
+                }
+                body
+              }
+            }
+          }
+        }
+      }
+    }
     """
 
     variables = %{
       owner: config.owner,
       repo: config.repo,
       issue_n: @default_issue_n,
-      comment_n: @default_comment_n
+      comment_n: @default_comment_n,
+      cursor: nil,
+      since: DateTime.utc_now() |> DateTime.add(-365, :day) |> DateTime.to_iso8601()
     }
 
     nodes = GithubFetcher.run_all(query, variables)
