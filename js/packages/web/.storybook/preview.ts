@@ -4,6 +4,7 @@ import { MINIMAL_VIEWPORTS } from "@storybook/addon-viewport";
 
 import { html } from "lit";
 import "../src/components/canary-root";
+import "../src/components/canary-provider-cloud";
 
 import { initialize, mswLoader } from "msw-storybook-addon";
 initialize();
