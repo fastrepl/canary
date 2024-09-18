@@ -41,15 +41,23 @@ export class CanaryProviderPagefind extends LitElement {
   async connectedCallback() {
     super.connectedCallback();
 
-    let pagefind: any;
-    try {
-      pagefind = await this._importPagefind();
-    } catch (e) {
-      console.info(
-        "Failed to import pagefind. This is totally fine if you are not in production mode.",
-        e,
-      );
-      return;
+    // @ts-expect-error
+    let pagefind = window.pagefind;
+
+    if (!pagefind) {
+      try {
+        pagefind = await import(
+          /* @vite-ignore */
+          /* webpackIgnore: true */
+          this.options?.path ?? "/pagefind/pagefind.js"
+        );
+      } catch (e) {
+        console.info(
+          "Failed to import pagefind. Try serving app with production build.",
+          e,
+        );
+        return;
+      }
     }
 
     this._initPagefind(pagefind);
@@ -63,18 +71,6 @@ export class CanaryProviderPagefind extends LitElement {
         },
       }),
     );
-  }
-
-  private async _importPagefind() {
-    try {
-      return import(
-        /* @vite-ignore */
-        /* webpackIgnore: true */
-        this.options?.path ?? "/pagefind/pagefind.js"
-      );
-    } catch (e) {
-      throw new Error(`Failed to import pagefind': ${e}`);
-    }
   }
 
   private async _initPagefind(pagefind: any) {
@@ -111,7 +107,7 @@ export class CanaryProviderPagefind extends LitElement {
     signal.throwIfAborted();
 
     return {
-      search: [
+      sources: [
         {
           name: LOCAL_SOURCE_NAME,
           type: "webpage",
