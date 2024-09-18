@@ -27,7 +27,10 @@ defmodule Canary.Sources.Document.CreateGithubDiscussion do
     changeset
     |> Ash.Changeset.change_attribute(
       opts[:meta_attribute],
-      wrap_union(%GithubDiscussion.DocumentMeta{})
+      wrap_union(%GithubDiscussion.DocumentMeta{
+        closed: fetcher_results |> Enum.at(0) |> Map.get(:closed),
+        answered: fetcher_results |> Enum.at(0) |> Map.get(:answered)
+      })
     )
     |> Ash.Changeset.change_attribute(opts[:chunks_attribute], [])
     |> Ash.Changeset.after_action(fn _, record ->
@@ -54,11 +57,7 @@ defmodule Canary.Sources.Document.CreateGithubDiscussion do
 
       case result do
         %Ash.BulkResult{status: :success, records: records} ->
-          case Document.update(
-                 record,
-                 wrap_union(%GithubDiscussion.DocumentMeta{}),
-                 Enum.map(records, &wrap_union/1)
-               ) do
+          case Document.update_chunks(record, Enum.map(records, &wrap_union/1)) do
             {:ok, updated_record} -> {:ok, updated_record}
             error -> error
           end

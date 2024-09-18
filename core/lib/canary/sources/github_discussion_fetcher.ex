@@ -7,7 +7,9 @@ defmodule Canary.Sources.GithubDiscussion.FetcherResult do
     :created_at,
     :author_name,
     :author_avatar_url,
-    :comment
+    :comment,
+    :closed,
+    :answered
   ]
 
   @type t :: %__MODULE__{
@@ -18,7 +20,9 @@ defmodule Canary.Sources.GithubDiscussion.FetcherResult do
           created_at: DateTime.t(),
           author_name: String.t(),
           author_avatar_url: String.t(),
-          comment: boolean()
+          comment: boolean(),
+          closed: boolean(),
+          answered: boolean()
         }
 end
 
@@ -111,7 +115,9 @@ defmodule Canary.Sources.GithubDiscussion.Fetcher do
         created_at: discussion["createdAt"],
         author_name: discussion["author"]["login"],
         author_avatar_url: discussion["author"]["avatarUrl"],
-        comment: false
+        comment: false,
+        closed: discussion["closed"],
+        answered: discussion["isAnswered"]
       }
 
       comments =

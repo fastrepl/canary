@@ -89,7 +89,7 @@ defmodule Canary.Sources.Document do
   end
 
   code_interface do
-    define :update, args: [:meta, :chunks], action: :update
+    define :update_chunks, args: [:chunks], action: :update
     define :find_by_chunk_index_ids, args: [:chunk_index_ids], action: :find_by_chunk_index_ids
   end
 
