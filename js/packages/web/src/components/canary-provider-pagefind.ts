@@ -160,4 +160,9 @@ declare global {
   interface HTMLElementTagNameMap {
     [NAME]: CanaryProviderPagefind;
   }
+  namespace JSX {
+    interface IntrinsicElements {
+      [NAME]: any;
+    }
+  }
 }

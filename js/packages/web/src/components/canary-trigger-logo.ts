@@ -34,4 +34,9 @@ declare global {
   interface HTMLElementTagNameMap {
     [NAME]: CanaryTriggerLogo;
   }
+  namespace JSX {
+    interface IntrinsicElements {
+      [NAME]: any;
+    }
+  }
 }

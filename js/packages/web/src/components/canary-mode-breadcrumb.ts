@@ -39,7 +39,7 @@ export class CanaryModeBreadcrumb extends LitElement {
   }
 
   private _handleClick() {
-    const mode = this._mode.default ?? this._mode.options.values().next().value;
+    const mode = this._mode.default ?? this._mode.options.values().next().value as string;
     this.dispatchEvent(createEvent({ type: "set_mode", data: mode }));
   }
 
@@ -84,5 +84,10 @@ export class CanaryModeBreadcrumb extends LitElement {
 declare global {
   interface HTMLElementTagNameMap {
     [NAME]: CanaryModeBreadcrumb;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      [NAME]: any;
+    }
   }
 }

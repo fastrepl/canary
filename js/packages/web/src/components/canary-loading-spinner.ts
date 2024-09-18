@@ -36,4 +36,9 @@ declare global {
   interface HTMLElementTagNameMap {
     [NAME]: CanaryLoadingSpinner;
   }
+  namespace JSX {
+    interface IntrinsicElements {
+      [NAME]: any;
+    }
+  }
 }

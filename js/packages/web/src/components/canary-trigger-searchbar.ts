@@ -128,4 +128,9 @@ declare global {
   interface HTMLElementTagNameMap {
     [NAME]: CanaryTriggerSearchbar;
   }
+  namespace JSX {
+    interface IntrinsicElements {
+      [NAME]: any;
+    }
+  }
 }

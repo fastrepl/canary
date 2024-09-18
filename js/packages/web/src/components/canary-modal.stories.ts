@@ -9,7 +9,7 @@ import "./canary-modal";
 import "./canary-trigger-searchbar";
 import "./canary-content";
 import "./canary-search";
-import "./canary-search-input";
+import "./canary-input";
 import "./canary-search-results";
 
 export default {
@@ -18,10 +18,10 @@ export default {
   render: () => {
     return html`
       <canary-modal>
-        <canary-trigger-searchbar slot="trigger"></canary-trigger-searchbar>
+        <canary-trigger-searchbar data-testid="trigger" slot="trigger"></canary-trigger-searchbar>
         <canary-content slot="content">
+          <canary-input slot="input"></canary-input>
           <canary-search slot="mode">
-            <canary-search-input slot="input"></canary-search-input>
             <canary-search-results slot="body"></canary-search-results>
           </canary-search>
         </canary-content>
@@ -33,7 +33,7 @@ export default {
 export const Default: StoryObj = {
   args: {},
   play: async ({ canvasElement }) => {
-    const trigger = shadow.getByShadowRole(canvasElement, "button");
+    const trigger = shadow.getByShadowTestId(canvasElement, "trigger");
     await userEvent.click(trigger);
   },
 };

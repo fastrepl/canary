@@ -8,14 +8,12 @@ import type {
   ModeContext,
   TabContext,
   QueryContext,
-  SearchContext,
-  AskContext,
+  ExecutionContext,
 } from "./types";
 
 export const themeContext = ctx<ThemeContext>("theme");
 export const operationContext = ctx<OperationContext>("operation");
 export const modeContext = ctx<ModeContext>("mode");
 export const queryContext = ctx<QueryContext>("query");
-export const searchContext = ctx<SearchContext>("search");
-export const askContext = ctx<AskContext>("ask");
 export const tabContext = ctx<TabContext>("tabs");
+export const executionContext = ctx<ExecutionContext>("execution");

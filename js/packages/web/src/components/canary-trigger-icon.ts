@@ -49,4 +49,9 @@ declare global {
   interface HTMLElementTagNameMap {
     [NAME]: CanaryTriggerIcon;
   }
+  namespace JSX {
+    interface IntrinsicElements {
+      [NAME]: any;
+    }
+  }
 }

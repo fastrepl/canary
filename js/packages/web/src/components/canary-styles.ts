@@ -157,4 +157,9 @@ declare global {
   interface HTMLElementTagNameMap {
     [NAME]: CanaryStyles;
   }
+  namespace JSX {
+    interface IntrinsicElements {
+      [NAME]: any;
+    }
+  }
 }

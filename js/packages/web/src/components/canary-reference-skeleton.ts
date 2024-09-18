@@ -38,4 +38,9 @@ declare global {
   interface HTMLElementTagNameMap {
     [NAME]: CanaryReferenceSkeleton;
   }
+  namespace JSX {
+    interface IntrinsicElements {
+      [NAME]: any;
+    }
+  }
 }

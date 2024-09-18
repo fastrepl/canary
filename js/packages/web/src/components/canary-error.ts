@@ -43,4 +43,9 @@ declare global {
   interface HTMLElementTagNameMap {
     [NAME]: CanaryError;
   }
+  namespace JSX {
+    interface IntrinsicElements {
+      [NAME]: any;
+    }
+  }
 }

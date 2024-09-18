@@ -2,9 +2,9 @@ import { LitElement, html, css, nothing } from "lit";
 import { customElement } from "lit/decorators.js";
 
 import { consume } from "@lit/context";
-import { queryContext, searchContext } from "../contexts";
+import { queryContext, executionContext } from "../contexts";
 
-import type { QueryContext, SearchContext } from "../types";
+import type { QueryContext, ExecutionContext } from "../types";
 import { TaskStatus } from "../store";
 import { global } from "../styles";
 
@@ -15,13 +15,13 @@ export class CanarySearchEmpty extends LitElement {
   @consume({ context: queryContext, subscribe: true })
   private _query!: QueryContext;
 
-  @consume({ context: searchContext, subscribe: true })
-  private _search!: SearchContext;
+  @consume({ context: executionContext, subscribe: true })
+  private _execution!: ExecutionContext;
 
   render() {
     if (
-      this._search.status !== TaskStatus.COMPLETE ||
-      this._search.result.search.length === 0 ||
+      this._execution.status !== TaskStatus.COMPLETE ||
+      this._execution.search.sources.length === 0 ||
       this._query.length === 0
     ) {
       return nothing;
@@ -55,5 +55,10 @@ export class CanarySearchEmpty extends LitElement {
 declare global {
   interface HTMLElementTagNameMap {
     [NAME]: CanarySearchEmpty;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      [NAME]: any;
+    }
   }
 }

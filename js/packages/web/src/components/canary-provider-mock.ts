@@ -89,7 +89,7 @@ export class CanaryProviderMock extends LitElement {
     ];
 
     return {
-      search: [{ name: LOCAL_SOURCE_NAME, type: "webpage", hits: references }],
+      sources: [{ name: LOCAL_SOURCE_NAME, type: "webpage", hits: references }],
     };
   };
 
@@ -107,5 +107,10 @@ export class CanaryProviderMock extends LitElement {
 declare global {
   interface HTMLElementTagNameMap {
     [NAME]: CanaryProviderMock;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      [NAME]: any;
+    }
   }
 }

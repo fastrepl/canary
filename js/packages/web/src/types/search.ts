@@ -13,7 +13,7 @@ export interface SearchResultBase {
 type SearchSourceType = "webpage" | "github_issue" | "github_discussion";
 
 export type SearchFunctionResult = {
-  search: Array<{
+  sources: Array<{
     name: string;
     type: SearchSourceType;
     hits: SearchResult[];

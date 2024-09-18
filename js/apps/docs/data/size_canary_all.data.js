@@ -6,10 +6,9 @@ const components = [
   "@getcanary/web@latest/components/canary-trigger-searchbar.js",
   "@getcanary/web@latest/components/canary-content.js",
   "@getcanary/web@latest/components/canary-search.js",
-  "@getcanary/web@latest/components/canary-search-input.js",
+  "@getcanary/web@latest/components/canary-input.js",
   "@getcanary/web@latest/components/canary-search-results.js",
   "@getcanary/web@latest/components/canary-ask.js",
-  "@getcanary/web@latest/components/canary-ask-input.js",
   "@getcanary/web@latest/components/canary-ask-results.js",
 ];
 

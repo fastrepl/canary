@@ -36,4 +36,9 @@ declare global {
   interface HTMLElementTagNameMap {
     [NAME]: CanaryFooter;
   }
+  namespace JSX {
+    interface IntrinsicElements {
+      [NAME]: any;
+    }
+  }
 }

@@ -66,4 +66,9 @@ declare global {
   interface HTMLElementTagNameMap {
     [NAME]: CanarySnippet;
   }
+  namespace JSX {
+    interface IntrinsicElements {
+      [NAME]: any;
+    }
+  }
 }

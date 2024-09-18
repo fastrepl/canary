@@ -3,7 +3,7 @@ import type {
   BeforeSearchFunction,
   SearchFunctionResult,
 } from "./search";
-import type { AskFunction, AskReference } from "./ask";
+import type { AskFunction } from "./ask";
 import type { FeedbackFunction } from "./feedback";
 import type { TabDefinitions } from "./schema";
 import { TaskStatus } from "../store/managers";
@@ -21,17 +21,12 @@ export type TabContext = {
   current: number;
 };
 
-export type SearchContext = {
+export type ExecutionContext = {
   status: TaskStatus;
-  result: SearchFunctionResult;
-};
-
-export type AskContext = {
-  status: TaskStatus;
-  query: string;
-  progress: boolean;
-  response: string;
-  references: AskReference[];
+  ask: {
+    response: string;
+  };
+  search: SearchFunctionResult;
 };
 
 export type ThemeContext = "light" | "dark";

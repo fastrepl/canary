@@ -88,4 +88,9 @@ declare global {
   interface HTMLElementTagNameMap {
     [NAME]: CanaryTabsSource;
   }
+  namespace JSX {
+    interface IntrinsicElements {
+      [NAME]: any;
+    }
+  }
 }

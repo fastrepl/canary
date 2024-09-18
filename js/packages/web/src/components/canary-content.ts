@@ -21,6 +21,7 @@ export class CanaryContent extends LitElement {
   render() {
     return html`
       <div class="container">
+        <slot name="input"></slot>
         <slot name="mode"></slot>
         <div
           class=${classMap({
@@ -55,18 +56,19 @@ export class CanaryContent extends LitElement {
         background-color: var(--canary-color-gray-100);
       }
 
+      @media (min-width: 50rem) {
+        .container {
+          width: var(--canary-content-max-width, 550px);
+        }
+      }
+    `,
+    css`
       .footer {
         padding: 6px 0 2px 12px;
       }
 
       .hide {
         display: none;
-      }
-
-      @media (min-width: 50rem) {
-        .container {
-          width: var(--canary-content-max-width, 550px);
-        }
       }
     `,
   ];
@@ -75,5 +77,10 @@ export class CanaryContent extends LitElement {
 declare global {
   interface HTMLElementTagNameMap {
     [NAME]: CanaryContent;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      [NAME]: any;
+    }
   }
 }

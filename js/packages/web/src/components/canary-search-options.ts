@@ -93,4 +93,9 @@ declare global {
   interface HTMLElementTagNameMap {
     [NAME]: CanarySearchOptions;
   }
+  namespace JSX {
+    interface IntrinsicElements {
+      [NAME]: any;
+    }
+  }
 }

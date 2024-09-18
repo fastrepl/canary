@@ -11,8 +11,8 @@ onMounted(() => {
     import("@getcanary/web/components/canary-root.js"),
     import("@getcanary/web/components/canary-provider-vitepress-minisearch.js"),
     import("@getcanary/web/components/canary-content.js"),
+    import("@getcanary/web/components/canary-input.js"),
     import("@getcanary/web/components/canary-search.js"),
-    import("@getcanary/web/components/canary-search-input.js"),
     import("@getcanary/web/components/canary-search-results-tabs.js"),
   ]).then(() => {
     loaded.value = true;
@@ -35,8 +35,8 @@ const { localeIndex } = useData();
 <canary-root framework="vitepress" query="⬇️ we have tabs below" v-if="loaded" :key="pattern">
   <canary-provider-vitepress-minisearch :localeIndex="localeIndex">
     <canary-content>
+        <canary-input slot="input"></canary-input>
         <canary-search slot="mode">
-          <canary-search-input slot="input"></canary-search-input>
           <canary-callout-discord slot="body"></canary-callout-discord>
           <canary-search-results-tabs
             slot="body"

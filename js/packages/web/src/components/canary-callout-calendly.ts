@@ -40,4 +40,9 @@ declare global {
   interface HTMLElementTagNameMap {
     [NAME]: CanaryCalloutCalendly;
   }
+  namespace JSX {
+    interface IntrinsicElements {
+      [NAME]: any;
+    }
+  }
 }

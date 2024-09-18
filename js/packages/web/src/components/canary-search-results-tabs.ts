@@ -2,11 +2,11 @@ import { LitElement, html, css, nothing, type PropertyValues } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 
 import { consume } from "@lit/context";
-import { searchContext } from "../contexts";
+import { executionContext } from "../contexts";
 
 import pm from "picomatch";
 
-import type { SearchContext, SearchResult, TabDefinitions } from "../types";
+import type { ExecutionContext, SearchResult, TabDefinitions } from "../types";
 import { parseURL } from "../utils";
 import { createEvent } from "../store";
 import { TaskStatus } from "../store/managers";
@@ -25,9 +25,9 @@ export class CanarySearchResultsTabs extends LitElement {
   @property({ type: Array })
   tabs: TabDefinitions = [{ name: "All", pattern: "**/*" }];
 
-  @consume({ context: searchContext, subscribe: true })
+  @consume({ context: executionContext, subscribe: true })
   @state()
-  private _search?: SearchContext;
+  private _execution?: ExecutionContext;
 
   @state() _selectedTab = "";
   @state() _groupedReferences: Record<
@@ -70,13 +70,13 @@ export class CanarySearchResultsTabs extends LitElement {
   }
 
   render() {
-    if (!this._search || this._search.result.search.length === 0) {
+    if (!this._execution || this._execution.search.sources.length === 0) {
       return nothing;
     }
 
-    if (this._search.status === TaskStatus.COMPLETE) {
+    if (this._execution.status === TaskStatus.COMPLETE) {
       this._groupedReferences = this._groupReferences(
-        this._search.result.search.flatMap(({ hits }) => hits),
+        this._execution.search.sources.flatMap(({ hits }) => hits),
         this.tabs,
       );
     }
@@ -91,7 +91,7 @@ export class CanarySearchResultsTabs extends LitElement {
           ></canary-tabs-url>
         </div>
         <div>
-          ${this._search.status === TaskStatus.ERROR
+          ${this._execution.status === TaskStatus.ERROR
             ? html`<canary-error></canary-error>`
             : this._currentResults()}
         </div>
@@ -166,5 +166,10 @@ export class CanarySearchResultsTabs extends LitElement {
 declare global {
   interface HTMLElementTagNameMap {
     [NAME]: CanarySearchResultsTabs;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      [NAME]: any;
+    }
   }
 }

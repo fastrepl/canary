@@ -2,9 +2,9 @@ import { LitElement, html, css, nothing } from "lit";
 import { customElement, state } from "lit/decorators.js";
 
 import { consume } from "@lit/context";
-import { searchContext } from "../contexts";
+import { executionContext } from "../contexts";
 
-import type { SearchContext } from "../types";
+import type { ExecutionContext } from "../types";
 import { global } from "../styles";
 import { createEvent } from "../store";
 import { MODE_ASK } from "../constants";
@@ -13,12 +13,12 @@ const NAME = "canary-search-suggestions";
 
 @customElement(NAME)
 export class CanarySearchSuggestions extends LitElement {
-  @consume({ context: searchContext, subscribe: true })
+  @consume({ context: executionContext, subscribe: true })
   @state()
-  private _search?: SearchContext;
+  private _execution?: ExecutionContext;
 
   render() {
-    const questions = this._search?.result.suggestion?.questions;
+    const questions = this._execution?.search?.suggestion?.questions;
     if (!questions?.length) {
       return nothing;
     }
@@ -96,5 +96,10 @@ export class CanarySearchSuggestions extends LitElement {
 declare global {
   interface HTMLElementTagNameMap {
     [NAME]: CanarySearchSuggestions;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      [NAME]: any;
+    }
   }
 }

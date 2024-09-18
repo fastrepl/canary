@@ -91,11 +91,11 @@ export class CanaryProviderVitepressMinisearch extends LitElement {
   search: SearchFunction = async ({ query }, _signal) => {
     return new Promise((resolve) => {
       if (!this.minisearch) {
-        resolve({ search: [] });
+        resolve({ sources: [] });
         return;
       }
 
-      const ret: SearchResult[] = this.minisearch
+      const hits: SearchResult[] = this.minisearch
         .search(query)
         .map((result) => ({
           url: new URL(result.id, window.location.origin).toString(),
@@ -109,7 +109,7 @@ export class CanaryProviderVitepressMinisearch extends LitElement {
         }));
 
       resolve({
-        search: [{ name: LOCAL_SOURCE_NAME, type: "webpage", hits: ret }],
+        sources: [{ name: LOCAL_SOURCE_NAME, type: "webpage", hits }],
       });
     });
   };
@@ -118,5 +118,10 @@ export class CanaryProviderVitepressMinisearch extends LitElement {
 declare global {
   interface HTMLElementTagNameMap {
     [NAME]: CanaryProviderVitepressMinisearch;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      [NAME]: any;
+    }
   }
 }

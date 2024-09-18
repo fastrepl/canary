@@ -9,12 +9,6 @@ const loaded = ref(false);
 onMounted(() => {
   Promise.all([
     import("@getcanary/web/components/canary-root.js"),
-    import("@getcanary/web/components/canary-provider-pagefind.js"),
-    import("@getcanary/web/components/canary-content.js"),
-    import("@getcanary/web/components/canary-search.js"),
-    import("@getcanary/web/components/canary-search-input.js"),
-    import("@getcanary/web/components/canary-search-results.js"),
-    import("@getcanary/web/components/canary-search-results-tabs.js"),
   ]).then(() => {
     loaded.value = true;
   });

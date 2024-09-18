@@ -8,8 +8,8 @@
 <canary-root framework="docusaurus">
     <canary-provider-pagefind>
         <canary-content>
+            <canary-input slot="input"></canary-input> // [!code focus]
             <canary-search slot="mode"> // [!code focus]
-                <canary-search-input slot="input"></canary-search-input> // [!code focus]
                 <canary-search-results slot="body"></canary-search-results>  // [!code focus]
             </canary-search> // [!code focus]
         </canary-content>
@@ -21,8 +21,8 @@
 <canary-root framework="docusaurus">
     <canary-provider-pagefind>
         <canary-content>
+            <canary-input slot="input"></canary-input>
             <canary-search slot="mode">
-                <canary-search-input slot="input"></canary-search-input>
                 <canary-search-results slot="body"></canary-search-results>  // [!code --]
                 <canary-search-results-tabs slot="body" group></canary-search-results-tabs>  // [!code ++]
             </canary-search>

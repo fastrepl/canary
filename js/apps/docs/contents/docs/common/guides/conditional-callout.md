@@ -10,7 +10,6 @@ onMounted(() => {
     import("@getcanary/web/components/canary-provider-vitepress-minisearch.js"),
     import("@getcanary/web/components/canary-content.js"),
     import("@getcanary/web/components/canary-search.js"),
-    import("@getcanary/web/components/canary-search-input.js"),
     import("@getcanary/web/components/canary-search-results.js"),
     import("@getcanary/web/components/canary-callout-discord.js"),
   ]).then(() => {
@@ -25,7 +24,6 @@ const { localeIndex } = useData();
 
 ```html-vue
 <canary-search slot="mode">
-  <canary-search-input slot="input"></canary-search-input>
   <canary-callout-discord keywords="discord,community" url="https://discord.gg/Y8bJkzuQZU" slot="body"></canary-callout-discord> // [!code ++]
   <canary-search-results slot="body"></canary-search-results>
 </canary-search>
@@ -34,8 +32,8 @@ const { localeIndex } = useData();
 <canary-root framework="vitepress" query="is there a discord channel?" v-if="loaded">
   <canary-provider-vitepress-minisearch :localeIndex="localeIndex">
     <canary-content>
+        <canary-input slot="input"></canary-input>
         <canary-search slot="mode">
-          <canary-search-input slot="input"></canary-search-input>
           <canary-callout-discord slot="body"></canary-callout-discord>
           <canary-search-results slot="body"></canary-search-results>
         </canary-search>

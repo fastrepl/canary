@@ -52,4 +52,9 @@ declare global {
   interface HTMLElementTagNameMap {
     [NAME]: CanaryLoadingDots;
   }
+  namespace JSX {
+    interface IntrinsicElements {
+      [NAME]: any;
+    }
+  }
 }

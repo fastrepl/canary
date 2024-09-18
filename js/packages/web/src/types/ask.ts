@@ -29,10 +29,8 @@ export type Delta =
   | DeltaComplete
   | DeltaReferences;
 
-type UUID_V4 = ReturnType<typeof crypto.randomUUID>;
-
 export type AskFunction = (
-  payload: { id: UUID_V4; query: string; pattern: string | undefined | null },
+  payload: { query: string },
   handleDelta: (delta: Delta) => void,
-  signal?: AbortSignal,
+  signal: AbortSignal,
 ) => Promise<null>;

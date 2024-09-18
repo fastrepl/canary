@@ -117,4 +117,9 @@ declare global {
   interface HTMLElementTagNameMap {
     [NAME]: CanaryProviderCloud;
   }
+  namespace JSX {
+    interface IntrinsicElements {
+      [NAME]: any;
+    }
+  }
 }

@@ -55,4 +55,9 @@ declare global {
   interface HTMLElementTagNameMap {
     [NAME]: CanaryModeButton;
   }
+  namespace JSX {
+    interface IntrinsicElements {
+      [NAME]: any;
+    }
+  }
 }

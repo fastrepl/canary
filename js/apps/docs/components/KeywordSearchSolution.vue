@@ -10,7 +10,7 @@ onMounted(() => {
     import("@getcanary/web/components/canary-provider-cloud.js"),
     import("@getcanary/web/components/canary-content.js"),
     import("@getcanary/web/components/canary-search.js"),
-    import("@getcanary/web/components/canary-search-input.js"),
+    import("@getcanary/web/components/canary-input.js"),
     import("@getcanary/web/components/canary-search-results.js"),
   ]).then(() => {
     loaded.value = true;
@@ -49,8 +49,8 @@ const handleSelect = (q: string) => {
     >
       <canary-provider-cloud :api-key="data.key" :api-base="data.base">
         <canary-content>
+          <canary-input slot="input"></canary-input>
           <canary-search slot="mode">
-            <canary-search-input slot="input"></canary-search-input>
             <canary-search-results slot="body"></canary-search-results>
           </canary-search>
         </canary-content>

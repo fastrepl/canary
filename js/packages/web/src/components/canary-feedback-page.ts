@@ -152,4 +152,9 @@ declare global {
   interface HTMLElementTagNameMap {
     [NAME]: CanaryFeedbackPage;
   }
+  namespace JSX {
+    interface IntrinsicElements {
+      [NAME]: any;
+    }
+  }
 }

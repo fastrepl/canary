@@ -2,14 +2,14 @@ import { ContextProvider } from "@lit/context";
 
 import { createStore as store } from "@xstate/store";
 
-import type { OperationContext, AskContext, TabDefinitions } from "../types";
+import type { OperationContext, TabDefinitions } from "../types";
 import {
   operationContext,
   modeContext,
   queryContext,
   tabContext,
 } from "../contexts";
-import { SearchManager, AskManager } from "./managers";
+import { ExecutionManager } from "./managers";
 import { MODE_ASK, MODE_SEARCH } from "../constants";
 
 export const createStore = (host: HTMLElement) =>
@@ -38,10 +38,10 @@ export const createStore = (host: HTMLElement) =>
         context: queryContext,
         initialValue: "",
       }),
-      searchManager: new SearchManager(host, {
-        debounceMs: 100,
+      executionManager: new ExecutionManager(host, {
+        searchDebounceMs: 150,
+        askDebounceMs: 500,
       }),
-      askManager: new AskManager(host),
     },
     {
       register_operations: {
@@ -70,29 +70,6 @@ export const createStore = (host: HTMLElement) =>
       set_mode: {
         mode: (context, { data }: { data: string }) => {
           context.mode.setValue({ ...context.mode.value, current: data });
-
-          if (data === MODE_SEARCH) {
-            context.askManager.abort();
-            context.searchManager.run(
-              context.query.value,
-              context.operation.value,
-            );
-          } else if (data === MODE_ASK) {
-            context.searchManager.abort();
-
-            const tab = context.tab.value;
-            const pattern = tab.options?.[tab.current]?.pattern;
-
-            context.askManager.run(
-              context.query.value,
-              pattern,
-              context.operation.value,
-            );
-          } else {
-            context.searchManager.abort();
-            context.askManager.abort();
-          }
-
           return context.mode;
         },
       },
@@ -104,25 +81,27 @@ export const createStore = (host: HTMLElement) =>
       },
       set_query: {
         query: (context, { data }: { data: string }) => {
-          context.query.setValue(data);
+          context.query.setValue(data, true);
 
-          if (context.mode.value.current === MODE_SEARCH) {
-            context.searchManager.run(data, context.operation.value);
+          const next =
+            context.mode.value.options.has(MODE_ASK) &&
+            data
+              .split(" ")
+              .map((s) => s.trim())
+              .filter(Boolean).length > 2
+              ? MODE_ASK
+              : MODE_SEARCH;
+
+          context.mode.setValue({ ...context.mode.value, current: next });
+
+          if (next === MODE_SEARCH) {
+            context.executionManager.search(data, context.operation.value);
           }
-          if (context.mode.value.current === MODE_ASK) {
-            const tab = context.tab.value;
-            const pattern = tab.options?.[tab.current]?.pattern;
-
-            context.askManager.run(data, pattern, context.operation.value);
+          if (next === MODE_ASK) {
+            context.executionManager.ask(data, context.operation.value);
           }
 
           return context.query;
-        },
-      },
-      _unsafe_set_ask_ctx: {
-        askManager: (context, { data }: { data: Partial<AskContext> }) => {
-          context.askManager.ctx = { ...context.askManager.ctx, ...data };
-          return context.askManager;
         },
       },
     },

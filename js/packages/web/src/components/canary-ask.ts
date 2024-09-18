@@ -34,13 +34,6 @@ export class CanaryAsk extends LitElement {
       ? nothing
       : html`
           <div class="container">
-            <div class="input-wrapper">
-              <slot name="input-before">
-                <div class="i-heroicons-chat-bubble-left"></div>
-              </slot>
-              <slot name="input"></slot>
-              <slot name="input-after"></slot>
-            </div>
             <div class="scroll-container" ${ref(this._containerRef)}>
               <div class="body">
                 <slot name="body"></slot>
@@ -61,13 +54,6 @@ export class CanaryAsk extends LitElement {
         display: flex;
         flex-direction: column;
       }
-
-      .input-wrapper {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 1px 12px;
-      }
     `,
   ];
 }
@@ -75,5 +61,10 @@ export class CanaryAsk extends LitElement {
 declare global {
   interface HTMLElementTagNameMap {
     [NAME]: CanaryAsk;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      [NAME]: any;
+    }
   }
 }

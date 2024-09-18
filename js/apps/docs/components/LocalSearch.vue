@@ -11,8 +11,8 @@ onMounted(() => {
     import("@getcanary/web/components/canary-modal.js"),
     import("@getcanary/web/components/canary-trigger-searchbar.js"),
     import("@getcanary/web/components/canary-content.js"),
+    import("@getcanary/web/components/canary-input.js"),
     import("@getcanary/web/components/canary-search.js"),
-    import("@getcanary/web/components/canary-search-input.js"),
     import("@getcanary/web/components/canary-search-results-tabs.js"),
   ]).then(() => {
     loaded.value = true;
@@ -35,8 +35,8 @@ const tabs = JSON.stringify([
         <canary-modal>
           <canary-trigger-searchbar slot="trigger"></canary-trigger-searchbar>
           <canary-content slot="content">
+            <canary-input slot="input" autofocus></canary-input>
             <canary-search slot="mode">
-              <canary-search-input slot="input"></canary-search-input>
               <canary-search-results-tabs
                 slot="body"
                 :tabs="tabs"

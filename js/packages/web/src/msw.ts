@@ -3,28 +3,18 @@ import { http, HttpResponse, delay } from "msw";
 import type { AskReference, SearchResult, SearchFunctionResult } from "./types";
 
 const MOCK_RESPONSE = `
-# The Whimsical World of Flibbertigibbets
+**Yes.**
 
-## Introduction
+Here's some references:
 
-In the land of Zorkle, flibbertigibbets roam free, spreading their peculiar brand of gobbledygook wherever they wander. 
+<canary-reference url="https://example.com/docs/a/b" title="title" excerpt="this is a match."></canary-reference>
+<canary-reference url="https://example.com/docs/a/c" title="title" excerpt="this is a match."></canary-reference>
 
-\`\`\`python
-def hello():
-  print("hello")
+Please let me know if you have any questions.
 
-hello()
-\`\`\`
+Please let me know if you have any questions.
 
-## Key Characteristics of Flibbertigibbets
-
-1. **Appearance**
-   - Resemble a cross between a turnip and a disco ball
-   - Sport iridescent feathers made of crystallized bubblegum
-
-2. **Behavior**
-   - Communicate through interpretive dance and armpit noises
-   - Have a peculiar fondness for wearing monocles on their elbows
+Please let me know if you have any questions.
 `.trim();
 
 const mockSearchReferences = (type: string, query: string): SearchResult[] => {
@@ -49,7 +39,7 @@ const mockSearchReferences = (type: string, query: string): SearchResult[] => {
         title: `title ${index}`,
         url,
         excerpt: `<mark>${type}</mark> response: <mark>${query}</mark>!`,
-        sub_results: Array(randomNumber(0, 3))
+        sub_results: Array(randomNumber(1, 3))
           .fill(null)
           .map((_) => ({
             title: `sub title ${index}`,
@@ -77,7 +67,7 @@ export const searchHandler = http.post(
     await delay(Math.random() * (isQuestion ? 1000 : 200) + 100);
 
     const result: SearchFunctionResult = {
-      search: [
+      sources: [
         {
           name: "Docs",
           type: "webpage",
@@ -101,7 +91,7 @@ export const askHandler = http.post(/.*\/api\/v1\/ask/, async () => {
   const encoder = new TextEncoder();
   const stream = new ReadableStream({
     async start(controller) {
-      const chunkSize = Math.floor(Math.random() * 3) + 3; // 3-5 characters
+      const chunkSize = Math.floor(Math.random() * 3) + 10; // 10 characters
       let index = 0;
 
       while (index < MOCK_RESPONSE.length) {

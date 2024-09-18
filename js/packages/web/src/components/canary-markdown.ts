@@ -11,10 +11,12 @@ import { highlightElement } from "prismjs";
 import { marked, type MarkedExtension, type Tokens } from "marked";
 import footNote from "marked-footnote";
 
+import "./canary-reference";
+
 const footNoteExtension = footNote() as MarkedExtension;
 marked.use(footNoteExtension).use({
-  gfm: true,
-  breaks: true,
+  gfm: false,
+  breaks: false,
   extensions: [
     {
       name: "link",
@@ -24,6 +26,20 @@ marked.use(footNoteExtension).use({
       },
     },
   ],
+  hooks: {
+    preprocess(md: string) {
+      const TAG = "canary".substring(0, 3);
+
+      const lastOpen = md.lastIndexOf(`<${TAG}`);
+      const lastClose = md.lastIndexOf(`</${TAG}`);
+
+      if (lastOpen > lastClose) {
+        return md.substring(0, lastOpen);
+      }
+
+      return md;
+    },
+  },
 });
 
 const NAME = "canary-markdown";
@@ -68,15 +84,6 @@ export class CanaryMarkdown extends LitElement {
           html,
           "text/html",
         );
-
-        const footnotes = virtual.querySelector("section.footnotes");
-        if (footnotes) {
-          const sups = virtual.getElementsByTagName("sup");
-          for (const sup of sups) {
-            sup.innerHTML = sup.textContent ?? "";
-          }
-          virtual.removeChild(footnotes);
-        }
 
         container.innerHTML = virtual.innerHTML;
         this._highlight(container);
@@ -224,5 +231,10 @@ export class CanaryMarkdown extends LitElement {
 declare global {
   interface HTMLElementTagNameMap {
     [NAME]: CanaryMarkdown;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      [NAME]: any;
+    }
   }
 }

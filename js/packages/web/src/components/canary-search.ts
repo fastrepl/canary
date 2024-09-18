@@ -32,13 +32,6 @@ export class CanarySearch extends LitElement {
       ? nothing
       : html`
           <div class="container">
-            <div class="input-wrapper">
-              <slot name="input-before">
-                <div class="i-heroicons-magnifying-glass"></div>
-              </slot>
-              <slot name="input"></slot>
-              <slot name="input-after"></slot>
-            </div>
             <div class="scroll-container" ${ref(this._containerRef)}>
               <div class="body">
                 <slot name="body"></slot>
@@ -60,13 +53,6 @@ export class CanarySearch extends LitElement {
         flex-direction: column;
       }
 
-      .input-wrapper {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 1px 12px;
-      }
-
       .body {
         display: flex;
         flex-direction: column;
@@ -79,5 +65,10 @@ export class CanarySearch extends LitElement {
 declare global {
   interface HTMLElementTagNameMap {
     [NAME]: CanarySearch;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      [NAME]: any;
+    }
   }
 }

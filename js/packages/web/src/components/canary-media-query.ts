@@ -49,4 +49,9 @@ declare global {
   interface HTMLElementTagNameMap {
     [NAME]: CanaryMediaQuery;
   }
+  namespace JSX {
+    interface IntrinsicElements {
+      [NAME]: any;
+    }
+  }
 }

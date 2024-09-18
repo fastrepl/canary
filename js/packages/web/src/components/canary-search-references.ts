@@ -1,4 +1,4 @@
-import { LitElement, html, css } from "lit";
+import { LitElement, html, css, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 
@@ -40,6 +40,10 @@ export class CanarySearchReferences extends LitElement {
 
   private _renderGroup() {
     return this.references.map((group) => {
+      if (group.sub_results.length === 0) {
+        return nothing;
+      }
+
       if (group.title === null || group.sub_results.length < 2) {
         return html`
           <div class="group single">
@@ -95,14 +99,16 @@ export class CanarySearchReferences extends LitElement {
       flex-direction: column;
       gap: 4px;
     }
-    .group.multiple {
-      margin: 2px 0;
-    }
   `;
 }
 
 declare global {
   interface HTMLElementTagNameMap {
     [NAME]: CanarySearchReferences;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      [NAME]: any;
+    }
   }
 }

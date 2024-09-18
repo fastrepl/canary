@@ -75,7 +75,7 @@ onMounted(() => {
     import("@getcanary/web/components/canary-provider-pagefind.js"),
     import("@getcanary/web/components/canary-content.js"),
     import("@getcanary/web/components/canary-search.js"),
-    import("@getcanary/web/components/canary-search-input.js"),
+    import("@getcanary/web/components/canary-input.js"),
     import("@getcanary/web/components/canary-search-results.js"),
     import("@getcanary/web/components/canary-search-results-tabs.js"),
   ]).then(() => {
@@ -158,8 +158,8 @@ Click **Code** tab to read the code.
   <canary-root framework="vitepress" :key="source" :query="source" v-show="mode === 'UI'">
     <canary-provider-pagefind :options="pagefindOptions">
       <canary-content>
+        <canary-input slot="input"></canary-input>
         <canary-search slot="mode">
-          <canary-search-input slot="input"></canary-search-input>
           <canary-callout-discord slot="body" url="https://discord.gg/Y8bJkzuQZU" v-if="variants.callout"></canary-callout-discord>
           <canary-search-results slot="body" v-if="!variants.split" :group="variants.group">
           </canary-search-results>
@@ -176,14 +176,14 @@ Click **Code** tab to read the code.
 
 ```html-vue{4-7}
 <canary-root framework="vitepress">
-   <canary-provider-pagefind options={JSON.stringify(options)}>
-      <canary-content>
-         <canary-search slot="mode">
-            <canary-search-input slot="input"></canary-search-input>
-            <canary-search-results slot="body"></canary-search-results>
-         </canary-search>
-      </canary-content>
-   </canary-provider-pagefind>
+  <canary-provider-pagefind options={JSON.stringify(options)}>
+    <canary-content>
+      <canary-input slot="input"></canary-input>
+      <canary-search slot="mode">
+        <canary-search-results slot="body"></canary-search-results>
+      </canary-search>
+    </canary-content>
+  </canary-provider-pagefind>
 </canary-root>
 ```
 
@@ -193,15 +193,15 @@ Click **Code** tab to read the code.
 
 ```html-vue{4-7}
 <canary-root framework="vitepress">
-   <canary-provider-pagefind options={JSON.stringify(options)}>
-      <canary-content>
-         <canary-search slot="mode">
-            <canary-search-input slot="input"></canary-search-input>
-            <canary-search-results slot="body"></canary-search-results>  // [!code --]
-            <canary-search-results-tabs group tabs="{{ JSON.stringify(tabs) }}" slot="body"></canary-search-results-tabs>  // [!code ++]
-         </canary-search>
-      </canary-content>
-   </canary-provider-pagefind>
+  <canary-provider-pagefind options={JSON.stringify(options)}>
+    <canary-content>
+      <canary-input slot="input"></canary-input>
+      <canary-search slot="mode">
+        <canary-search-results slot="body"></canary-search-results>  // [!code --]
+        <canary-search-results-tabs group tabs="{{ JSON.stringify(tabs) }}" slot="body"></canary-search-results-tabs>  // [!code ++]
+      </canary-search>
+    </canary-content>
+  </canary-provider-pagefind>
 </canary-root>
 ```
 
@@ -211,15 +211,15 @@ Click **Code** tab to read the code.
 
 ```html-vue{4-7}
 <canary-root framework="vitepress">
-   <canary-provider-pagefind options={JSON.stringify(options)}>
-      <canary-content>
-         <canary-search slot="mode">
-            <canary-search-input slot="input"></canary-search-input>
-            <canary-search-results slot="body"></canary-search-results>  // [!code --]
-            <canary-search-results slot="body" group></canary-search-results> // [!code ++]
-         </canary-search>
-      </canary-content>
-   </canary-provider-pagefind>
+  <canary-provider-pagefind options={JSON.stringify(options)}>
+    <canary-content>
+      <canary-input slot="input"></canary-input>
+        <canary-search slot="mode">
+          <canary-search-results slot="body"></canary-search-results>  // [!code --]
+        <canary-search-results slot="body" group></canary-search-results> // [!code ++]
+      </canary-search>
+    </canary-content>
+  </canary-provider-pagefind>
 </canary-root>
 ```
 
@@ -229,14 +229,14 @@ Click **Code** tab to read the code.
 
 ```html-vue{4-7}
 <canary-root framework="vitepress">
-   <canary-provider-pagefind options={JSON.stringify(options)}>
-      <canary-content>
-         <canary-search slot="mode">
-            <canary-search-input slot="input"></canary-search-input>
-            <canary-search-results slot="body"></canary-search-results>  // [!code --]
-            <canary-search-results-tabs tabs={{ JSON.stringify(tabs) }} slot="body"></canary-search-results-tabs>  // [!code ++]
-         </canary-search>
-      </canary-content>
+  <canary-provider-pagefind options={JSON.stringify(options)}>
+    <canary-content>
+      <canary-input slot="input"></canary-input>
+        <canary-search slot="mode">
+          <canary-search-results slot="body"></canary-search-results>  // [!code --]
+        <canary-search-results-tabs tabs={{ JSON.stringify(tabs) }} slot="body"></canary-search-results-tabs>  // [!code ++]
+      </canary-search>
+    </canary-content>
    </canary-provider-pagefind>
 </canary-root>
 ```

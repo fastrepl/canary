@@ -41,7 +41,7 @@ test("debounced search", async () => {
         _query: string,
         _signal: AbortSignal,
       ): ReturnType<SearchFunction> => {
-        return { search: [{ name: "Docs", type: "webpage", hits: data }] };
+        return { sources: [{ name: "Docs", type: "webpage", hits: data }] };
       },
     );
 
@@ -54,7 +54,7 @@ test("debounced search", async () => {
 
   await vi.waitFor(
     () => {
-      const ctx = store.getSnapshot().context.searchManager.ctx;
+      const ctx = store.getSnapshot().context.executionManager.ctx;
       if (ctx.status !== TaskStatus.COMPLETE) {
         throw new Error();
       }
@@ -62,10 +62,10 @@ test("debounced search", async () => {
     { timeout: 2000, interval: 50 },
   );
 
-  const snapshot = store.getSnapshot().context.searchManager.ctx;
+  const snapshot = store.getSnapshot().context.executionManager.ctx;
   expect(search).toHaveBeenCalledTimes(1);
   expect(snapshot.status).toBe(TaskStatus.COMPLETE);
-  expect(snapshot.result.search[0].hits).toEqual(data);
+  expect(snapshot.search.sources[0].hits).toEqual(data);
 });
 
 test("ask", async () => {

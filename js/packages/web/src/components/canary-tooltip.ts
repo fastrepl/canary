@@ -115,4 +115,9 @@ declare global {
   interface HTMLElementTagNameMap {
     [NAME]: CanaryTooltip;
   }
+  namespace JSX {
+    interface IntrinsicElements {
+      [NAME]: any;
+    }
+  }
 }

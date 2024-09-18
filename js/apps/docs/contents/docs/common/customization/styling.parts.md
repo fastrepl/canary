@@ -1,6 +1,4 @@
-- `canary-ask-input`
-  - `input`
-- `canary-search-input`
+- `canary-input`
   - `input`
 - `canary-trigger-searchbar`
   - `button`
