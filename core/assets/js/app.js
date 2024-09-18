@@ -33,14 +33,14 @@ import "@getcanary/web/components/canary-provider-cloud.js";
 import "@getcanary/web/components/canary-modal.js";
 import "@getcanary/web/components/canary-trigger-searchbar.js";
 import "@getcanary/web/components/canary-content.js";
+import "@getcanary/web/components/canary-input.js";
 import "@getcanary/web/components/canary-search.js";
-import "@getcanary/web/components/canary-search-input.js";
 import "@getcanary/web/components/canary-search-results.js";
 import "@getcanary/web/components/canary-ask.js";
-import "@getcanary/web/components/canary-ask-input.js";
 import "@getcanary/web/components/canary-ask-results.js";
 import "@getcanary/web/components/canary-mode-breadcrumb.js";
 import "@getcanary/web/components/canary-search-suggestions.js";
+import "@getcanary/web/components/canary-search-empty.js"
 
 let csrfToken = document
   .querySelector("meta[name='csrf-token']")

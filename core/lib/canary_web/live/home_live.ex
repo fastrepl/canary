@@ -16,16 +16,13 @@ defmodule CanaryWeb.HomeLive do
           }
         >
           <canary-content>
+            <canary-input slot="input"></canary-input>
             <canary-search slot="mode">
-              <canary-search-input slot="input" autofocus></canary-search-input>
-              <canary-search-suggestions slot="body" header="Ask AI"></canary-search-suggestions>
-              <canary-search-results slot="body" header="Results" group></canary-search-results>
+              <canary-search-suggestions slot="body"></canary-search-suggestions>
+              <canary-search-results group slot="body"></canary-search-results>
+              <canary-search-empty slot="body"></canary-search-empty>
             </canary-search>
-            <canary-ask slot="mode">
-              <canary-mode-breadcrumb slot="input-before" text="Ask AI"></canary-mode-breadcrumb>
-              <canary-ask-input slot="input"></canary-ask-input>
-              <canary-ask-results slot="body"></canary-ask-results>
-            </canary-ask>
+
           </canary-content>
         </canary-provider-cloud>
       </canary-root>
