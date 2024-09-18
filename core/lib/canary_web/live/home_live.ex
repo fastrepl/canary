@@ -22,7 +22,6 @@ defmodule CanaryWeb.HomeLive do
               <canary-search-results group slot="body"></canary-search-results>
               <canary-search-empty slot="body"></canary-search-empty>
             </canary-search>
-
           </canary-content>
         </canary-provider-cloud>
       </canary-root>

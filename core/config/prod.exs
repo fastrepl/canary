@@ -21,15 +21,6 @@ config :canary, Canary.Native,
   skip_compilation?: true,
   load_from: {:canary, "priv/native/libcanary_native"}
 
-config :opentelemetry,
-  traces_exporter: :otlp,
-  span_processor: :batch,
-  resource: [
-    service: [name: "core", namespace: "canary"],
-    deployment: [environment: "prod"]
-  ],
-  sampler: {:parent_based, %{root: {:trace_id_ratio_based, 1.0}}}
-
 config :canary, :github_app_url, "https://github.com/apps/getcanary/installations/new"
 
 config :canary, :typesense, collection: "canary_prod"

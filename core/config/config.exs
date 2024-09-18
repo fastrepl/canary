@@ -92,19 +92,12 @@ config :mime, :extensions, %{"json" => "application/vnd.api+json"}
 
 config :canary, :github_app_url, "https://github.com/apps/getcanary-dev/installations/new"
 
-config :ash, :tracer, [AshAppsignal]
+config :ash, :missed_notifications, :ignore
 
-config :ash_appsignal,
-  trace_types: [
-    :custom,
-    :action,
-    :before_transaction,
-    :before_action,
-    :after_transaction,
-    :after_action,
-    :custom_flow_step,
-    :flow
-  ]
+config :honeybadger,
+  api_key: {:system, "HONEYBADGER_API_KEY"},
+  revision: {:system, "APP_REVISION"},
+  ecto_repos: [Canary.Repo]
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

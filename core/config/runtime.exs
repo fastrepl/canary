@@ -167,13 +167,6 @@ end
 
 config :canary, :master_user_email, System.get_env("MASTER_USER_EMAIL")
 
-if config_env() == :prod and System.get_env("OTEL_COLLECTOR_URL") do
-  config :opentelemetry_exporter,
-    otlp_protocol: :http_protobuf,
-    otlp_endpoint: System.fetch_env!("OTEL_COLLECTOR_URL"),
-    otlp_headers: [{"Authorization", "Bearer #{System.fetch_env!("OTEL_COLLECTOR_URL_AUTH")}"}]
-end
-
 config :canary, :clone_dir, System.get_env("REPO_DIR", "./tmp")
 
 config :canary, :tinybird,
@@ -185,14 +178,6 @@ config :canary, :github,
   client_id: System.get_env("GITHUB_CLIENT_ID"),
   client_secret: System.get_env("GITHUB_CLIENT_SECRET"),
   redirect_uri: System.get_env("GITHUB_REDIRECT_URI")
-
-config :appsignal, :config,
-  otp_app: :canary,
-  name: "canary",
-  push_api_key: System.get_env("APPSIGNAL_PUSH_API_KEY"),
-  env: Application.fetch_env!(:canary, :env),
-  active: System.get_env("APPSIGNAL_PUSH_API_KEY") != nil,
-  ignore_actions: ["Canary.Workers.Fetcher#perform", "CanaryWeb.OperationsController#ask"]
 
 if config_env() == :prod do
   config :canary, :typesense,

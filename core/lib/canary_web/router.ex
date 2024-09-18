@@ -1,6 +1,7 @@
 defmodule CanaryWeb.Router do
   use CanaryWeb, :router
   use AshAuthentication.Phoenix.Router
+  use Honeybadger.Plug
 
   pipeline :browser do
     plug :accepts, ["html"]

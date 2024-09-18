@@ -51,13 +51,9 @@ defmodule Canary.Searcher.Default do
 
   def run(sources, query) do
     if ai?(query) do
-      Appsignal.instrument("ai_search", fn ->
-        ai_search(sources, query)
-      end)
+      ai_search(sources, query)
     else
-      Appsignal.instrument("normal_search", fn ->
-        normal_search(sources, query)
-      end)
+      normal_search(sources, query)
     end
   end
 
@@ -94,7 +90,7 @@ defmodule Canary.Searcher.Default do
           first = chunks |> Enum.at(0)
 
           %{
-            # TODO
+            # TODO: duplicated, and too many subresults
             url: first.url,
             title: first.title,
             excerpt: first.excerpt,

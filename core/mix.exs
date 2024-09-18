@@ -79,11 +79,6 @@ defmodule Canary.MixProject do
       {:req_crawl, "~> 0.2.0"},
       {:saxy, "~> 1.5"},
       {:hammer, "~> 6.0"},
-      {:opentelemetry_exporter, "~> 1.2"},
-      {:opentelemetry, "~> 1.2"},
-      {:opentelemetry_api, "~> 1.2"},
-      {:opentelemetry_req, "~> 0.2.0"},
-      {:abstracing, git: "https://github.com/msramos/abstracing.git", branch: "main"},
       {:live_svelte, "~> 0.13.3"},
       {:stripity_stripe, "~> 3.2"},
       {:oapi_github, "~> 0.3.3"},
@@ -92,15 +87,13 @@ defmodule Canary.MixProject do
        git: "https://github.com/fredwu/crawler.git",
        ref: "6866bbe287c760b7e4bba1925e80f2a4494d7af3"},
       {:resend, "~> 0.4.2"},
-      {:appsignal, "~> 2.12"},
-      {:appsignal_phoenix, "~> 2.4"},
-      {:ash_appsignal, "~> 0.1.3"},
       {:cachex, "~> 3.6"},
       {:bumblebee, "~> 0.5.3"},
       {:absinthe_client, "~> 0.1.0"},
       {:cloak, "~> 1.1"},
       {:ash_cloak, "~> 0.1.2"},
-      {:primer_live, "~> 0.7"}
+      {:primer_live, "~> 0.7"},
+      {:honeybadger, "~> 0.16"}
     ] ++ deps_eval()
   end
 

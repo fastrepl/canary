@@ -1,5 +1,6 @@
 defmodule CanaryWeb.SubdomainRouter do
   use CanaryWeb, :router
+  use Honeybadger.Plug
 
   pipeline :browser do
     plug :accepts, ["html"]
