@@ -223,6 +223,7 @@ defmodule CanaryWeb.SourceLive.Detail do
           <Primer.button phx-click="fetch" phx-target={@myself} is_small>
             Refresh
           </Primer.button>
+          <pre><%= String.upcase(to_string(@source.state)) %></pre>
         </div>
       </Primer.timeline_item>
 

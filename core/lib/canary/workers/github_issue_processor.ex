@@ -1,7 +1,14 @@
 defmodule Canary.Workers.GithubIssueProcessor do
-  use Oban.Worker, queue: :github_processor, max_attempts: 1
+  use Oban.Worker,
+    queue: :github_processor,
+    max_attempts: 1,
+    unique: [
+      period: 120,
+      fields: [:worker, :queue, :args],
+      states: Oban.Job.states() -- [:discarded, :cancelled],
+      timestamp: :scheduled_at
+    ]
 
-  alias Canary.Sources.Event
   alias Canary.Sources.Source
   alias Canary.Sources.GithubIssue
 
@@ -14,35 +21,9 @@ defmodule Canary.Workers.GithubIssueProcessor do
   end
 
   defp process(%Source{id: source_id} = source) do
-    notify_event_start(source_id)
-
     with {:ok, incomings} <- GithubIssue.Fetcher.run(source),
          :ok <- GithubIssue.Syncer.run(source_id, incomings) do
-      notify_event_end(source_id)
-
-      source
-      |> Ash.Changeset.for_update(:post_fetch, %{})
-      |> Ash.update()
-
-      :ok
+      Source.update_overview(source)
     end
-  end
-
-  defp notify_event_start(source_id) do
-    Event.create(source_id, %Event.Meta{
-      level: :info,
-      message: "github issue fetcher started"
-    })
-  end
-
-  defp notify_event_end(source_id) do
-    {:ok, _record, notifications} =
-      Event.create(
-        source_id,
-        %Event.Meta{level: :info, message: "github issue fetcher ended"},
-        return_notifications?: true
-      )
-
-    Ash.Notifier.notify(notifications)
   end
 end

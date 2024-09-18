@@ -22,6 +22,26 @@
     },
     {
       "allow_nil?": false,
+      "default": "\"idle\"",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "state",
+      "type": "text"
+    },
+    {
+      "allow_nil?": true,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "last_fetched_at",
+      "type": "utc_datetime"
+    },
+    {
+      "allow_nil?": false,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
@@ -85,7 +105,7 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "19107EA9EA9654F1A10A68DDEAE166C2519D43C285532D388182F7A95ED8F3DA",
+  "hash": "213464119D30532F8EE6951F8D63BD51E82B3EAD4248ADDBCDCD7AD9E27510C6",
   "identities": [
     {
       "all_tenants?": false,

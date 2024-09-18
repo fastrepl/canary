@@ -1,7 +1,14 @@
 defmodule Canary.Workers.GithubDiscussionProcessor do
-  use Oban.Worker, queue: :github_processor, max_attempts: 1
+  use Oban.Worker,
+    queue: :github_processor,
+    max_attempts: 1,
+    unique: [
+      period: 120,
+      fields: [:worker, :queue, :args],
+      states: Oban.Job.states() -- [:discarded, :cancelled],
+      timestamp: :scheduled_at
+    ]
 
-  alias Canary.Sources.Event
   alias Canary.Sources.Source
   alias Canary.Sources.GithubDiscussion
 
@@ -14,23 +21,9 @@ defmodule Canary.Workers.GithubDiscussionProcessor do
   end
 
   defp process(%Source{id: source_id} = source) do
-    Event.create(source_id, %Event.Meta{
-      level: :info,
-      message: "github discussion fetcher started"
-    })
-
-    {:ok, incomings} = GithubDiscussion.Fetcher.run(source)
-    :ok = GithubDiscussion.Syncer.run(source_id, incomings)
-
-    Event.create(source_id, %Event.Meta{
-      level: :info,
-      message: "github discussion fetcher ended"
-    })
-
-    source
-    |> Ash.Changeset.for_update(:post_fetch, %{})
-    |> Ash.update()
-
-    :ok
+    with {:ok, incomings} <- GithubDiscussion.Fetcher.run(source),
+         :ok <- GithubDiscussion.Syncer.run(source_id, incomings) do
+      Source.update_overview(source)
+    end
   end
 end

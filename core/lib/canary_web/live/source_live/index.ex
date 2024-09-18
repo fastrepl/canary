@@ -58,8 +58,10 @@ defmodule CanaryWeb.SourceLive.Index do
   @impl true
   def handle_info(%Phoenix.Socket.Broadcast{topic: "source:event:created:" <> _}, socket) do
     source =
-      socket.assigns.source
-      |> Ash.load!([{:events, load_event_query()}, :num_documents])
+      Canary.Sources.Source
+      |> Ash.get!(socket.assigns.source.id,
+        load: [{:events, load_event_query()}, :num_documents]
+      )
 
     {:noreply, socket |> assign(source: source)}
   end

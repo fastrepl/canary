@@ -8,6 +8,12 @@ defmodule Canary.Sources.Source do
   attributes do
     uuid_primary_key :id
     create_timestamp :created_at
+    attribute :last_fetched_at, :utc_datetime, allow_nil?: true
+
+    attribute :state, :atom,
+      constraints: [one_of: [:idle, :running, :error]],
+      default: :idle,
+      allow_nil?: false
 
     attribute :name, :string, allow_nil?: false
     attribute :overview, Canary.Sources.SourceOverview, allow_nil?: true
@@ -30,7 +36,7 @@ defmodule Canary.Sources.Source do
   end
 
   actions do
-    defaults [:read]
+    defaults [:read, update: [:state, :last_fetched_at, :name, :overview, :config]]
 
     create :create do
       primary? true
@@ -40,15 +46,11 @@ defmodule Canary.Sources.Source do
       change manage_relationship(:account_id, :account, type: :append)
     end
 
-    update :update do
-      primary? true
-      # unions do not support atomic updates
-      require_atomic? false
-
-      accept [:name, :config, :overview]
+    update :update_last_fetched_at do
+      change set_attribute(:last_fetched_at, &DateTime.utc_now/0)
     end
 
-    update :post_fetch do
+    update :update_overview do
       require_atomic? false
 
       change fn changeset, _ ->
@@ -121,6 +123,9 @@ defmodule Canary.Sources.Source do
 
   code_interface do
     define :create, args: [:account_id, :name, :config], action: :create
+    define :update_state, args: [:state], action: :update
+    define :update_overview, args: [], action: :update_overview
+    define :update_last_fetched_at, args: [], action: :update_last_fetched_at
   end
 
   postgres do

@@ -7,6 +7,8 @@ defmodule Canary.Application do
 
   @impl true
   def start(_type, _args) do
+    attach_oban_telemetry()
+
     Canary.Index.Collection.ensure(:webpage)
     Canary.Index.Collection.ensure(:github_issue)
     Canary.Index.Collection.ensure(:github_discussion)
@@ -57,5 +59,19 @@ defmodule Canary.Application do
     else
       []
     end
+  end
+
+  # https://hexdocs.pm/oban/Oban.Telemetry.html#module-job-events
+  defp attach_oban_telemetry do
+    :telemetry.attach_many(
+      "oban-job-events",
+      [
+        [:oban, :job, :start],
+        [:oban, :job, :stop],
+        [:oban, :job, :exception]
+      ],
+      &Canary.Workers.Reporter.handle_job/4,
+      nil
+    )
   end
 end

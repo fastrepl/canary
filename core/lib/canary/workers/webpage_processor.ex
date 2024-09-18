@@ -1,7 +1,14 @@
 defmodule Canary.Workers.WebpageProcessor do
-  use Oban.Worker, queue: :webpage_processor, max_attempts: 1
+  use Oban.Worker,
+    queue: :webpage_processor,
+    max_attempts: 1,
+    unique: [
+      period: 120,
+      fields: [:worker, :queue, :args],
+      states: Oban.Job.states() -- [:discarded, :cancelled],
+      timestamp: :scheduled_at
+    ]
 
-  alias Canary.Sources.Event
   alias Canary.Sources.Source
   alias Canary.Sources.Webpage
 
@@ -14,21 +21,9 @@ defmodule Canary.Workers.WebpageProcessor do
   end
 
   defp process(%Source{id: source_id} = source) do
-    Event.create(source_id, %Event.Meta{
-      level: :info,
-      message: "webpage fetcher started"
-    })
-
     with {:ok, incomings} = Webpage.Fetcher.run(source),
          :ok <- Webpage.Syncer.run(source_id, incomings) do
-      Event.create(source_id, %Event.Meta{
-        level: :info,
-        message: "webpage fetcher ended"
-      })
-
-      source
-      |> Ash.Changeset.for_update(:post_fetch, %{})
-      |> Ash.update()
+      Source.update_overview(source)
     end
   end
 end
