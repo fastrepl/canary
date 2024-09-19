@@ -12,7 +12,6 @@ defmodule Canary.Index.Collection do
     # https://typesense.org/docs/27.0/api/collections.html#indexing-all-but-some-fields
     shared = [
       %{name: "source_id", type: "string"},
-      %{name: "document_id", type: "string", index: false, optional: true},
       %{name: "embedding", type: "float[]", num_dim: 384, optional: true},
       %{name: "tags", type: "string[]"},
       %{name: "meta", type: "object", index: false, optional: true}

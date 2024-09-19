@@ -9,13 +9,13 @@ defmodule Canary.Index do
 
   def insert_document(%Webpage.Chunk{} = chunk) do
     meta = %Document.Webpage.Meta{
-      url: chunk.url
+      url: chunk.url,
+      document_id: chunk.document_id
     }
 
     doc = %Document.Webpage{
       id: chunk.index_id,
       source_id: chunk.source_id,
-      document_id: chunk.document_id,
       title: chunk.title || "",
       content: chunk.content || "",
       tags: [],
@@ -27,13 +27,13 @@ defmodule Canary.Index do
 
   def insert_document(%GithubIssue.Chunk{} = chunk) do
     meta = %Document.GithubIssue.Meta{
-      url: chunk.url
+      url: chunk.url,
+      document_id: chunk.document_id
     }
 
     doc = %Document.GithubIssue{
       id: chunk.index_id,
       source_id: chunk.source_id,
-      document_id: chunk.document_id,
       title: chunk.title || "",
       content: chunk.content || "",
       tags: [],
@@ -45,13 +45,13 @@ defmodule Canary.Index do
 
   def insert_document(%GithubDiscussion.Chunk{} = chunk) do
     meta = %Document.GithubDiscussion.Meta{
-      url: chunk.url
+      url: chunk.url,
+      document_id: chunk.document_id
     }
 
     doc = %Document.GithubDiscussion{
       id: chunk.index_id,
       source_id: chunk.source_id,
-      document_id: chunk.document_id,
       title: chunk.title || "",
       content: chunk.content || "",
       tags: [],
@@ -146,7 +146,7 @@ defmodule Canary.Index do
   defp transform_hit(hit) do
     %{
       id: hit["document"]["id"],
-      document_id: hit["document"]["document_id"],
+      document_id: hit["document"]["meta"]["document_id"],
       source_id: hit["document"]["source_id"],
       url: hit["document"]["meta"]["url"],
       title: hit["highlight"]["title"]["snippet"] || hit["document"]["title"],
