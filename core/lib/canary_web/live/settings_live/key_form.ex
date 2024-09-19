@@ -14,9 +14,13 @@ defmodule CanaryWeb.SettingsLive.KeyForm do
 
       <div class="flex flex-col gap-4">
         <ul class="flex flex-col gap-2">
-          <%= for %{id: id, value: value} <- @current_account.keys do %>
+          <%= for %{id: id, value: value, config: %Ash.Union{} = config} <- @current_account.keys do %>
             <li class="flex flex-row items-center gap-2">
-              <Primer.text_input disabled value={value}>
+              <Primer.text_input
+                value={value}
+                disabled
+                caption={fn -> "(#{config.type}) #{config.value.allowed_host}" end}
+              >
                 <:group_button>
                   <Primer.button
                     aria-label="Copy"
