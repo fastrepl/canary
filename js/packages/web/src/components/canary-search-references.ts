@@ -46,7 +46,7 @@ export class CanarySearchReferences extends LitElement {
 
       if (group.title === null || group.sub_results.length < 2) {
         return html`
-          <div class="group single">
+          <div class="group single" part="group">
             ${group.sub_results.map(
               ({ url, title, excerpt }) => html`
                 <canary-reference
@@ -63,7 +63,7 @@ export class CanarySearchReferences extends LitElement {
       }
 
       return html`
-        <div class="group multiple">
+        <div class="group multiple" part="group">
           <canary-reference
             mode="parent"
             url=${stripURL(group.url)}

@@ -29,6 +29,7 @@ export class CanaryReference extends LitElement {
   render() {
     return html`
       <button
+        part="button"
         @click=${this._handleClick}
         class=${classMap({ container: true, selected: this.selected })}
       >

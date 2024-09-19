@@ -32,7 +32,7 @@ export class CanarySearch extends LitElement {
       ? nothing
       : html`
           <div class="container">
-            <div class="scroll-container" ${ref(this._containerRef)}>
+            <div part="scroll-container" class="scroll-container" ${ref(this._containerRef)}>
               <div class="body">
                 <slot name="body"></slot>
               </div>
