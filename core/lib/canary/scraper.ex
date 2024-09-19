@@ -3,59 +3,98 @@ defmodule Canary.Scraper.Item do
   defstruct [:id, :level, :title, :content]
 end
 
+# Inspired by: https://github.com/agoodway/html2markdown/blob/06e3587/lib/html2markdown.ex#L6-L32
 defmodule Canary.Scraper do
   alias Canary.Scraper.Item
 
+  @non_content_tags [
+    "aside",
+    "audio",
+    "base",
+    "button",
+    "datalist",
+    "embed",
+    "form",
+    "iframe",
+    "input",
+    "keygen",
+    "nav",
+    "noscript",
+    "object",
+    "output",
+    "script",
+    "select",
+    "source",
+    "style",
+    "svg",
+    "template",
+    "textarea",
+    "track",
+    "video"
+  ]
+
   def run(html) do
-    with {:ok, doc} <- Floki.parse_document(html),
-         [body] <- doc |> Floki.find("body") do
-      items =
-        process(body)
-        |> Enum.reverse()
-        |> Enum.reject(&(&1.level == nil || &1.level == 0))
-        |> Enum.reject(&(&1.content == nil || &1.content == ""))
-        |> Enum.map(&%Item{&1 | content: String.trim(&1.content)})
-
-      {:ok, items}
-    else
-      error -> {:error, error}
-    end
+    html
+    |> preprocess()
+    |> process()
+    |> postprocess()
   end
 
-  def run!(html) do
-    {:ok, content} = run(html)
+  defp postprocess(items) do
+    items
+    |> Enum.reverse()
+    |> Enum.reject(&(&1.level == nil || &1.level == 0))
+    |> Enum.reject(&(&1.content == nil || &1.content == ""))
+    |> Enum.map(&%Item{&1 | content: String.trim(&1.content)})
+  end
+
+  defp preprocess(content) do
     content
+    |> ensure_html()
+    |> Floki.parse_document!()
+    |> Floki.find("body")
+    |> Floki.filter_out(:comment)
+    |> remove_non_content_tags()
   end
 
-  def print!(html) do
-    run!(html)
-    |> Enum.each(&IO.puts("#{&1.content}\n-----"))
+  defp ensure_html(content) do
+    if is_html_document?(content), do: content, else: wrap_fragment(content)
+  end
+
+  defp is_html_document?(content) do
+    String.contains?(content, "<html") and String.contains?(content, "<body")
+  end
+
+  defp wrap_fragment(fragment), do: "<html><body>#{fragment}</body></html>"
+
+  defp remove_non_content_tags(document) do
+    Enum.reduce(@non_content_tags, document, &Floki.filter_out(&2, &1))
   end
 
   defp process(_, acc \\ [])
-  defp process({"script", _, _}, acc), do: acc
-  defp process({"style", _, _}, acc), do: acc
-  defp process({"nav", _, _}, acc), do: acc
-  defp process({"header", _, _}, acc), do: acc
-  defp process({"footer", _, _}, acc), do: acc
-  defp process({:comment, _}, acc), do: acc
 
-  defp process({"h" <> level, _, nodes} = node, acc) do
+  defp process(nodes, acc) when is_list(nodes) do
+    nodes
+    |> Enum.reduce(acc, &process/2)
+  end
+
+  defp process({"h" <> level, _, nodes} = node, acc)
+       when level in ["1", "2", "3", "4", "5", "6"] do
+    level = String.to_integer(level)
+
     id =
       node
       |> Floki.attribute("id")
       |> Enum.at(0)
 
-    level = parse_integer(level)
-
     title =
       nodes
       |> Enum.map(&to_text/1)
       |> Enum.join(" ")
-      |> trim_leading_hash()
+      |> String.trim_leading("#")
+      |> String.trim()
 
-    content = String.duplicate("#", level) <> " #{title}\n"
-
+    content = "#{String.duplicate("#", level)} #{title}" <> "\n"
     [%Item{id: id, level: level, title: title, content: content} | acc]
   end
 
@@ -66,7 +105,7 @@ defmodule Canary.Scraper do
     if String.trim(text) in ["Skip to content"] do
       acc
     else
-      acc |> update_first(&%Item{&1 | content: &1.content <> "[#{text}](#{href})"})
+      acc |> append_content("[#{text}](#{href})")
     end
   end
 
@@ -75,28 +114,9 @@ defmodule Canary.Scraper do
       classes(node)
       |> Enum.any?(&String.contains?(&1, "VPLocalNav"))
 
-    # code = nodes |> Enum.find(&(elem(&1, 0) == "pre"))
-
     cond do
       is_nav ->
         acc
-
-      # not is_nil(code) ->
-      #   lang =
-      #     classes(node)
-      #     |> Enum.find("", &String.contains?(&1, "language-"))
-      #     |> String.replace("language-", "")
-
-      #   is_diff =
-      #     classes(code)
-      #     |> Enum.any?(fn c -> String.contains?(c, "diff") end)
-
-      #   lang = if is_diff, do: "#{lang}-diff", else: lang
-
-      #   rendered_code = process(code) |> Enum.at(0) |> Map.get(:content)
-      #   content = "\n```#{lang}\n#{rendered_code}\n```\n"
-
-      #   acc |> update_first(&%Item{&1 | content: &1.content <> content})
 
       true ->
         nodes |> Enum.reduce(acc, &process(&1, &2))
@@ -115,11 +135,11 @@ defmodule Canary.Scraper do
       end)
       |> Enum.join("\n")
 
-    acc |> update_first(&%Item{&1 | content: &1.content <> content})
+    acc |> append_content(content)
   end
 
   defp process({"code", _, [text]}, acc) when is_binary(text) do
-    acc |> update_first(&%Item{&1 | content: &1.content <> "`#{text}`"})
+    acc |> append_content("`#{text}`")
   end
 
   defp process({"li", _, nodes}, acc) do
@@ -129,20 +149,20 @@ defmodule Canary.Scraper do
       |> Enum.map(& &1.content)
       |> Enum.join()
 
-    acc |> update_first(&%Item{&1 | content: &1.content <> "\n- #{text}"})
+    acc |> append_content("\n- #{text}")
   end
 
   defp process({"tr", _, nodes}, acc) do
     row = nodes |> Enum.map(&to_text/1) |> Enum.join(",")
-    acc |> update_first(&%Item{&1 | content: &1.content <> "\n#{row}"})
+    acc |> append_content("\n#{row}")
   end
 
   defp process({_, _, [text]}, acc) when is_binary(text) do
-    acc |> update_first(&%Item{&1 | content: &1.content <> text})
+    acc |> append_content(text)
   end
 
   defp process(text, acc) when is_binary(text) do
-    acc |> update_first(&%Item{&1 | content: &1.content <> text})
+    acc |> append_content(text)
   end
 
   defp process({_, _, nodes}, acc) do
@@ -167,19 +187,10 @@ defmodule Canary.Scraper do
     |> String.trim()
   end
 
-  defp update_first(list, fun) when length(list) == 0, do: [fun.(%Item{title: "", content: ""})]
-  defp update_first(list, fun), do: List.update_at(list, 0, fun)
-
-  defp parse_integer(s) do
-    case Integer.parse(s) do
-      {n, _} -> n
-      _ -> 0
-    end
+  defp append_content(list, content) when length(list) > 0 do
+    list
+    |> List.update_at(0, &%Item{&1 | content: &1.content <> content})
   end
 
-  defp trim_leading_hash(s) do
-    s
-    |> String.trim_leading("#")
-    |> String.trim()
-  end
+  defp append_content(list, _content), do: list
 end

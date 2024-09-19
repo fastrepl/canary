@@ -24,7 +24,7 @@ defmodule Canary.Test.Document do
         |> Ash.Changeset.for_create(:create_webpage, %{
           source_id: source.id,
           url: "https://example.com/",
-          html: "<body><h1>hello</h1></body>"
+          html: "<html><body><h1>hello</h1></body></html>"
         })
         |> Ash.create!()
 

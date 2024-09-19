@@ -30,7 +30,7 @@ defmodule Canary.Sources.Document.CreateWebpage do
     |> Ash.Changeset.change_attribute(opts[:meta_attribute], wrap_union(%Webpage.DocumentMeta{}))
     |> Ash.Changeset.change_attribute(opts[:chunks_attribute], [])
     |> Ash.Changeset.after_action(fn _, record ->
-      items = Canary.Scraper.run!(html)
+      items = Canary.Scraper.run(html)
 
       hash =
         html

@@ -41,7 +41,7 @@ defmodule CanaryWeb.Dev.ReaderLive do
         params["url"]
         |> Req.get!()
         |> Map.get(:body)
-        |> Scraper.run!()
+        |> Scraper.run()
 
       {:noreply, socket |> assign(url: params["url"], chunks: chunks)}
     else
