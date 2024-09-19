@@ -4,13 +4,12 @@ defmodule CanaryWeb.CheckoutController do
 
   def session(%{assigns: %{current_account: current_account}} = conn, _params) do
     url = CanaryWeb.Endpoint.url()
-    seat_price = Application.get_env(:canary, :stripe) |> Keyword.fetch!(:seat_price_id)
-    chat_price = Application.get_env(:canary, :stripe) |> Keyword.fetch!(:chat_price_id)
+    price = Application.get_env(:canary, :stripe) |> Keyword.fetch!(:starter_price_id)
 
     base_params = %{
       ui_mode: :hosted,
       mode: :subscription,
-      line_items: [%{price: seat_price, quantity: 1}, %{price: chat_price}],
+      line_items: [%{price: price, quantity: 1}],
       success_url: url <> "/settings",
       cancel_url: url <> "/settings",
       metadata: %{"account_id" => current_account.id}

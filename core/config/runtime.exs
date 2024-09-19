@@ -146,22 +146,19 @@ if config_env() != :test do
   if [
        "STRIPE_SECRET_KEY",
        "STRIPE_PUBLIC_KEY",
-       "STRIPE_SEAT_PRODUCT",
-       "STRIPE_CHAT_PRODUCT",
        "STRIPE_CUSTOMER_PORTAL_URL",
-       "STRIPE_WEBHOOK_SECRET"
+       "STRIPE_WEBHOOK_SECRET",
+       "STRIPE_STARTER_PRICE"
      ]
      |> Enum.any?(&System.get_env/1) do
+    config :stripity_stripe, api_key: System.get_env("STRIPE_SECRET_KEY")
+
     config :canary, :stripe,
       api_key: System.fetch_env!("STRIPE_SECRET_KEY"),
       public_key: System.fetch_env!("STRIPE_PUBLIC_KEY"),
-      seat_price_id: System.fetch_env!("STRIPE_SEAT_PRICE"),
-      ask_price_id: System.fetch_env!("STRIPE_ASK_PRICE"),
-      search_price_id: System.fetch_env!("STRIPE_SEARCH_PRICE"),
       customer_portal_url: System.fetch_env!("STRIPE_CUSTOMER_PORTAL_URL"),
-      webhook_secret: System.fetch_env!("STRIPE_WEBHOOK_SECRET")
-
-    config :stripity_stripe, api_key: System.get_env("STRIPE_SECRET_KEY")
+      webhook_secret: System.fetch_env!("STRIPE_WEBHOOK_SECRET"),
+      starter_price_id: System.fetch_env!("STRIPE_STARTER_PRICE")
   end
 end
 
