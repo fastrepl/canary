@@ -83,7 +83,7 @@ export class CanarySearchResultsTabs extends LitElement {
 
     return html`
       <div class="container">
-        <div class="tab-container">
+        <div class="tab-container" part="tab-container">
           <canary-tabs-url
             .tabs=${this.tabs.map(({ name }) => name)}
             .selected=${this._selectedTab}

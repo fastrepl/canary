@@ -15,7 +15,7 @@ export class CanaryTabsUrl extends LitElement {
         ${this.tabs.map((name) => {
           const selected = name === this.selected;
 
-          return html`<div @click=${() => this._handleChangeTab(name)}>
+          return html`<div part="tab-item" @click=${() => this._handleChangeTab(name)}>
             <input
               type="radio"
               name="mode"
@@ -23,7 +23,7 @@ export class CanaryTabsUrl extends LitElement {
               .value=${name}
               ?checked=${selected}
             />
-            <label class=${classMap({ tab: true, selected })}> ${name} </label>
+            <label class=${classMap({ tab: true, selected })} part="label"> ${name} </label>
           </div>`;
         })}
       </div>
