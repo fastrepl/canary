@@ -15,7 +15,6 @@ const config: StorybookConfig = {
     getAbsolutePath("@storybook/addon-viewport"),
     getAbsolutePath("@storybook/addon-actions"),
     getAbsolutePath("@storybook/addon-interactions"),
-    getAbsolutePath("@chromatic-com/storybook"),
   ],
   framework: {
     name: getAbsolutePath("@storybook/web-components-vite"),
