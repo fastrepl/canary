@@ -20,7 +20,7 @@ export class CanaryContent extends LitElement {
 
   render() {
     return html`
-      <div class="container">
+      <div part="container" class="container">
         <slot name="input"></slot>
         <slot name="mode"></slot>
         <div

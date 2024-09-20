@@ -1,6 +1,24 @@
 export type SearchResult = SearchResultBase & {
   sub_results: SearchSubResult[];
-};
+} & (
+    | {
+        type: "webpage";
+        meta: {};
+      }
+    | {
+        type: "github_issue";
+        meta: {
+          closed: boolean;
+        };
+      }
+    | {
+        type: "github_discussion";
+        meta: {
+          closed: boolean;
+          answered: boolean;
+        };
+      }
+  );
 
 export type SearchSubResult = SearchResultBase & {};
 
@@ -10,14 +28,8 @@ export interface SearchResultBase {
   excerpt?: string;
 }
 
-type SearchSourceType = "webpage" | "github_issue" | "github_discussion";
-
 export type SearchFunctionResult = {
-  sources: Array<{
-    name: string;
-    type: SearchSourceType;
-    hits: SearchResult[];
-  }>;
+  matches: SearchResult[];
   suggestion?: {
     questions: string[];
   };

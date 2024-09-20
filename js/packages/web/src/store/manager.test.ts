@@ -1,4 +1,6 @@
 import { vi, afterEach, beforeEach, describe, test, expect } from "vitest";
+
+import type { SearchFunctionResult } from "../types";
 import { ExecutionManager, TaskStatus } from "./managers";
 
 beforeEach(() => {
@@ -29,12 +31,14 @@ describe("ExecutionManager", () => {
     "debounced $method",
     async ({ method, debounceMs }) => {
       const manager = createManager();
-      const fn = vi.fn();
+      const fn = vi.fn().mockImplementation((_input, _signal) => {
+        return { matches: [] } as SearchFunctionResult;
+      });
 
       expect(manager.ctx.status).toBe(TaskStatus.INITIAL);
 
       // moved to pending, but not executed yet
-      manager[method]("query", { [method]: fn });
+      manager[method]("query", { [method]: fn }, {});
       expect(manager.ctx.status).toBe(TaskStatus.PENDING);
       await vi.advanceTimersByTimeAsync(debounceMs - 50);
       expect(manager.ctx.status).toBe(TaskStatus.PENDING);
@@ -46,12 +50,12 @@ describe("ExecutionManager", () => {
       expect(fn).toHaveBeenCalledTimes(1);
 
       // multiple calls are ignored and only the last one is executed
-      manager[method]("query", { [method]: fn });
+      manager[method]("query", { [method]: fn }, {});
       expect(manager.ctx.status).toBe(TaskStatus.PENDING);
       await vi.advanceTimersByTimeAsync(debounceMs - 50);
-      manager[method]("query", { [method]: fn });
+      manager[method]("query", { [method]: fn }, {});
       await vi.advanceTimersByTimeAsync(debounceMs - 50);
-      manager[method]("query", { [method]: fn });
+      manager[method]("query", { [method]: fn }, {});
       await vi.advanceTimersByTimeAsync(debounceMs);
       expect(manager.ctx.status).toBe(TaskStatus.COMPLETE);
       expect(fn).toHaveBeenCalledTimes(1 + 1);
@@ -75,7 +79,7 @@ describe("ExecutionManager", () => {
                 return new Promise((resolve) => {
                   setTimeout(() => {
                     expect(signal.aborted).toBe(true);
-                    resolve({ search: [] });
+                    resolve({ matches: [] } as SearchFunctionResult);
                   }, LATENCY);
                 });
               })
@@ -83,7 +87,7 @@ describe("ExecutionManager", () => {
                 return new Promise((resolve) => {
                   setTimeout(() => {
                     expect(signal.aborted).toBe(false);
-                    resolve({ search: [] });
+                    resolve({ matches: [] } as SearchFunctionResult);
                   }, LATENCY);
                 });
               })
@@ -108,10 +112,10 @@ describe("ExecutionManager", () => {
 
       expect(manager.ctx.status).toBe(TaskStatus.INITIAL);
 
-      manager[method]("query", { [method]: fn });
+      manager[method]("query", { [method]: fn }, {});
       expect(manager.ctx.status).toBe(TaskStatus.PENDING);
       await vi.advanceTimersByTimeAsync(debounceMs + 10);
-      manager[method]("query", { [method]: fn });
+      manager[method]("query", { [method]: fn }, {});
 
       await vi.advanceTimersByTimeAsync(LATENCY + 1);
 
@@ -124,12 +128,17 @@ describe("ExecutionManager", () => {
 
   test("pending", async () => {
     const manager = createManager();
-    const operations = { search: vi.fn(), ask: vi.fn() };
+    const operations = {
+      search: vi.fn().mockImplementation((_input, _signal) => {
+        return { matches: [] } as SearchFunctionResult;
+      }),
+      ask: vi.fn(),
+    };
 
     expect(manager.ctx.status).toBe(TaskStatus.INITIAL);
 
     // immediately transition to pending
-    manager.search("query", operations);
+    manager.search("query", operations, {});
     expect(manager.ctx.status).toBe(TaskStatus.PENDING);
 
     // finish search, back to complete
@@ -137,15 +146,15 @@ describe("ExecutionManager", () => {
     expect(manager.ctx.status).toBe(TaskStatus.COMPLETE);
 
     // keep staying pending if search frequent enough
-    manager.search("query", operations);
+    manager.search("query", operations, {});
     expect(manager.ctx.status).toBe(TaskStatus.PENDING);
     await vi.advanceTimersByTimeAsync(SEARCH_DEBOUNCE_MS - 50);
     expect(manager.ctx.status).toBe(TaskStatus.PENDING);
-    manager.search("query", operations);
+    manager.search("query", operations, {});
     expect(manager.ctx.status).toBe(TaskStatus.PENDING);
     await vi.advanceTimersByTimeAsync(SEARCH_DEBOUNCE_MS - 50);
     expect(manager.ctx.status).toBe(TaskStatus.PENDING);
-    manager.search("query", operations);
+    manager.search("query", operations, {});
     await vi.advanceTimersByTimeAsync(SEARCH_DEBOUNCE_MS - 50);
     expect(manager.ctx.status).toBe(TaskStatus.PENDING);
 
@@ -154,20 +163,20 @@ describe("ExecutionManager", () => {
     expect(manager.ctx.status).toBe(TaskStatus.COMPLETE);
 
     // debounce timer resets since we do 'ask' after 'search'
-    manager.search("query", operations);
+    manager.search("query", operations, {});
     await vi.advanceTimersByTimeAsync(SEARCH_DEBOUNCE_MS - 50);
     expect(manager.ctx.status).toBe(TaskStatus.PENDING);
-    manager.ask("query", operations);
+    manager.ask("query", operations, {});
     await vi.advanceTimersByTimeAsync(ASK_DEBOUNCE_MS - 50);
     expect(manager.ctx.status).toBe(TaskStatus.PENDING);
     await vi.advanceTimersByTimeAsync(ASK_DEBOUNCE_MS - 50);
     expect(manager.ctx.status).toBe(TaskStatus.COMPLETE);
 
-    manager.ask("query", operations);
+    manager.ask("query", operations, {});
     expect(manager.ctx.status).toBe(TaskStatus.PENDING);
     await vi.advanceTimersByTimeAsync(ASK_DEBOUNCE_MS - 50);
     expect(manager.ctx.status).toBe(TaskStatus.PENDING);
-    manager.ask("query", operations);
+    manager.ask("query", operations, {});
     expect(manager.ctx.status).toBe(TaskStatus.PENDING);
     await vi.advanceTimersByTimeAsync(ASK_DEBOUNCE_MS + 50);
     expect(manager.ctx.status).toBe(TaskStatus.COMPLETE);

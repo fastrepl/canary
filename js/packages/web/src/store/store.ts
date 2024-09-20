@@ -1,16 +1,16 @@
 import { ContextProvider } from "@lit/context";
-
 import { createStore as store } from "@xstate/store";
 
-import type { OperationContext, TabDefinitions } from "../types";
+import type { FiltersContext, OperationContext } from "../types";
 import {
   operationContext,
   modeContext,
+  filtersContext,
   queryContext,
-  tabContext,
 } from "../contexts";
 import { ExecutionManager } from "./managers";
 import { MODE_ASK, MODE_SEARCH } from "../constants";
+import { applyFilters } from "../utils";
 
 export const createStore = (host: HTMLElement) =>
   store(
@@ -27,12 +27,9 @@ export const createStore = (host: HTMLElement) =>
           current: null,
         },
       }),
-      tab: new ContextProvider(host, {
-        context: tabContext,
-        initialValue: {
-          options: [],
-          current: 0,
-        },
+      filters: new ContextProvider(host, {
+        context: filtersContext,
+        initialValue: {},
       }),
       query: new ContextProvider(host, {
         context: queryContext,
@@ -44,65 +41,95 @@ export const createStore = (host: HTMLElement) =>
       }),
     },
     {
-      register_operations: {
-        operation: (context, { data }: { data: Partial<OperationContext> }) => {
-          context.operation.setValue({ ...context.operation.value, ...data });
-          return context.operation;
-        },
+      register_operations: (
+        context,
+        { data }: { data: Partial<OperationContext> },
+      ) => {
+        context.operation.setValue({ ...context.operation.value, ...data });
+        return {
+          operation: context.operation,
+        };
       },
-      register_mode: {
-        mode: (context, { data }: { data: string }) => {
-          context.mode.setValue({
-            options: context.mode.value.options.add(data),
-            current: context.mode.value.current ?? data,
-            default: context.mode.value.default ?? data,
-          });
+      register_mode: (context, { data }: { data: string }) => {
+        context.mode.setValue({
+          options: context.mode.value.options.add(data),
+          current: context.mode.value.current ?? data,
+          default: context.mode.value.default ?? data,
+        });
 
-          return context.mode;
-        },
+        return {
+          mode: context.mode,
+        };
       },
-      register_tab: {
-        tab: (context, { data }: { data: TabDefinitions }) => {
-          context.tab.setValue({ options: data, current: 0 });
-          return context.tab;
+      set_filter: (
+        context,
+        {
+          data,
+        }: {
+          data: { name: string; filter: Partial<FiltersContext[string]> };
         },
+      ) => {
+        const filters = context.filters.value;
+        const execution = context.executionManager.ctx;
+
+        const newFilters = {
+          ...filters,
+          [data.name]: { ...filters[data.name], ...data.filter },
+        };
+
+        const newSearch = {
+          ...execution.search,
+          matches: applyFilters(execution._search.matches, newFilters),
+        };
+
+        context.filters.setValue(newFilters);
+        context.executionManager.ctx = {
+          ...execution,
+          search: newSearch,
+        };
+
+        return {
+          filters: context.filters,
+          executionManager: context.executionManager,
+        };
       },
-      set_mode: {
-        mode: (context, { data }: { data: string }) => {
-          context.mode.setValue({ ...context.mode.value, current: data });
-          return context.mode;
-        },
+      set_mode: (context, { data }: { data: string }) => {
+        context.mode.setValue({ ...context.mode.value, current: data });
+        return {
+          mode: context.mode,
+        };
       },
-      set_tab: {
-        tab: (context, { data }: { data: number }) => {
-          context.tab.setValue({ ...context.tab.value, current: data });
-          return context.tab;
-        },
-      },
-      set_query: {
-        query: (context, { data }: { data: string }) => {
-          context.query.setValue(data, true);
+      set_query: (context, { data }: { data: string }) => {
+        context.query.setValue(data, true);
+        const next =
+          context.mode.value.options.has(MODE_ASK) &&
+          data
+            .split(" ")
+            .map((s) => s.trim())
+            .filter(Boolean).length > 2
+            ? MODE_ASK
+            : MODE_SEARCH;
 
-          const next =
-            context.mode.value.options.has(MODE_ASK) &&
-            data
-              .split(" ")
-              .map((s) => s.trim())
-              .filter(Boolean).length > 2
-              ? MODE_ASK
-              : MODE_SEARCH;
+        context.mode.setValue({ ...context.mode.value, current: next });
 
-          context.mode.setValue({ ...context.mode.value, current: next });
+        if (next === MODE_SEARCH) {
+          context.executionManager.search(
+            data,
+            context.operation.value,
+            context.filters.value,
+          );
+        }
+        if (next === MODE_ASK) {
+          context.executionManager.ask(
+            data,
+            context.operation.value,
+            context.filters.value,
+          );
+        }
 
-          if (next === MODE_SEARCH) {
-            context.executionManager.search(data, context.operation.value);
-          }
-          if (next === MODE_ASK) {
-            context.executionManager.ask(data, context.operation.value);
-          }
-
-          return context.query;
-        },
+        return {
+          query: context.query,
+        };
       },
     },
   );

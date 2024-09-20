@@ -32,6 +32,9 @@ export class CanarySearch extends LitElement {
       ? nothing
       : html`
           <div class="container">
+            <div class="head">
+              <slot name="head"></slot>
+            </div>
             <div class="scroll-container" ${ref(this._containerRef)}>
               <div class="body">
                 <slot name="body"></slot>
@@ -51,6 +54,15 @@ export class CanarySearch extends LitElement {
       .container {
         display: flex;
         flex-direction: column;
+      }
+
+      .head {
+        position: sticky;
+        top: 0px;
+        background-color: var(--canary-color-gray-100);
+        z-index: 50;
+        padding-left: 12px;
+        margin-bottom: 4px;
       }
 
       .body {

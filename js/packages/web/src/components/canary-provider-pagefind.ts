@@ -13,7 +13,6 @@ import { createEvent } from "../store";
 import { stripURL } from "../utils";
 import { wrapper } from "../styles";
 import { cache } from "../decorators";
-import { LOCAL_SOURCE_NAME } from "../constants";
 
 const NAME = "canary-provider-pagefind";
 
@@ -100,21 +99,13 @@ export class CanaryProviderPagefind extends LitElement {
 
     const { results: pages } = await this._pagefind.search(query);
 
-    const results: PagefindResult[] = await Promise.all(
+    const matches: PagefindResult[] = await Promise.all(
       pages.slice(0, maxPages).map((r: any) => r.data()),
     );
 
     signal.throwIfAborted();
 
-    return {
-      sources: [
-        {
-          name: LOCAL_SOURCE_NAME,
-          type: "webpage",
-          hits: this._transform(results),
-        },
-      ],
-    };
+    return { matches: this._transform(matches) };
   };
 
   private _transform(results: PagefindResult[]): SearchResult[] {
@@ -147,6 +138,8 @@ export class CanaryProviderPagefind extends LitElement {
           }));
 
         return {
+          type: "webpage",
+          meta: {},
           title: result.meta.title,
           url: transformURL(result.url),
           excerpt: result.excerpt,

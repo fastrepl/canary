@@ -20,8 +20,10 @@ afterAll(() => server.close());
 test("debounced search", async () => {
   const store = createStore(document.createElement("div"));
 
-  const data: SearchResult[] = [
+  const matches: SearchResult[] = [
     {
+      type: "webpage",
+      meta: {},
       url: "https://example.com",
       title: "Hello",
       excerpt: "Hello",
@@ -41,7 +43,7 @@ test("debounced search", async () => {
         _query: string,
         _signal: AbortSignal,
       ): ReturnType<SearchFunction> => {
-        return { sources: [{ name: "Docs", type: "webpage", hits: data }] };
+        return { matches };
       },
     );
 
@@ -65,7 +67,7 @@ test("debounced search", async () => {
   const snapshot = store.getSnapshot().context.executionManager.ctx;
   expect(search).toHaveBeenCalledTimes(1);
   expect(snapshot.status).toBe(TaskStatus.COMPLETE);
-  expect(snapshot.search.sources[0].hits).toEqual(data);
+  expect(snapshot.search.matches).toEqual(matches);
 });
 
 test("ask", async () => {

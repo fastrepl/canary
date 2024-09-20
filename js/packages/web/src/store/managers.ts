@@ -1,7 +1,12 @@
 import { ContextProvider } from "@lit/context";
 
-import type { OperationContext, ExecutionContext, Delta } from "../types";
-import { asyncSleep } from "../utils";
+import type {
+  OperationContext,
+  ExecutionContext,
+  Delta,
+  FiltersContext,
+} from "../types";
+import { applyFilters, asyncSleep } from "../utils";
 import { executionContext } from "../contexts";
 
 // https://github.com/lit/lit/blob/main/packages/task/src/task.ts
@@ -30,7 +35,8 @@ export class ExecutionManager {
   private _initialState: ExecutionContext = {
     status: TaskStatus.INITIAL,
     ask: { response: "" },
-    search: { sources: [], suggestion: { questions: [] } },
+    search: { matches: [], suggestion: { questions: [] } },
+    _search: { matches: [], suggestion: { questions: [] } },
   };
 
   constructor(host: HTMLElement, options: ExecutionManagerOptions) {
@@ -57,7 +63,11 @@ export class ExecutionManager {
     this.ctx = { ...this.ctx, ...diff };
   }
 
-  async search(query: string, operations: OperationContext) {
+  async search(
+    query: string,
+    operations: OperationContext,
+    filters: FiltersContext,
+  ) {
     if (!operations.search) {
       return;
     }
@@ -82,7 +92,11 @@ export class ExecutionManager {
         this._abortController.signal,
       );
 
-      this.transition({ status: TaskStatus.COMPLETE, search: result });
+      this.transition({
+        status: TaskStatus.COMPLETE,
+        search: { ...result, matches: applyFilters(result.matches, filters) },
+        _search: { ...result, matches: result.matches },
+      });
     } catch (e) {
       if (e === ABORT_REASON_MANAGER) {
         this.transition({ status: TaskStatus.INITIAL });
@@ -94,7 +108,11 @@ export class ExecutionManager {
     }
   }
 
-  async ask(query: string, operations: OperationContext) {
+  async ask(
+    query: string,
+    operations: OperationContext,
+    _filters: FiltersContext,
+  ) {
     if (!operations.ask) {
       return;
     }

@@ -4,7 +4,6 @@ import { customElement } from "lit/decorators.js";
 import type { AskFunction, SearchFunction, SearchResult } from "../types";
 import { wrapper } from "../styles";
 import { createEvent } from "../store";
-import { LOCAL_SOURCE_NAME } from "../constants";
 
 const NAME = "canary-provider-mock";
 
@@ -32,65 +31,67 @@ export class CanaryProviderMock extends LitElement {
       setTimeout(resolve, Math.random() * 300 + 200),
     );
 
-    const references: SearchResult[] = [
+    const matches: SearchResult[] = [
       {
-        title: "title 4",
-        url: "https://example.com/docs/a/e",
-        excerpt: "this is <mark>a match</mark>.",
-        sub_results: [],
-      },
-      {
-        title: "title 5",
-        url: "https://example.com/docs/b/c/e",
+        type: "webpage",
+        title: "Page title 1",
+        url: "https://example.com/a",
         excerpt: "this is <mark>a match</mark>.",
         sub_results: [
           {
-            title: "title 8",
-            url: "https://example.com/api/a/d",
+            title: "Page sub title 1",
+            url: "https://example.com/a#sub-1",
             excerpt: "this is <mark>a match</mark>.",
           },
         ],
+        meta: {},
       },
       {
-        title: "title 6",
-        url: "https://example.com/api/a/b",
+        type: "webpage",
+        title: "Page title 2",
+        url: "https://example.com/b",
         excerpt: "this is <mark>a match</mark>.",
         sub_results: [
           {
-            title: "title 7",
-            url: "https://example.com/api/a/c",
+            title: "Page sub title 1",
+            url: "https://example.com/b#sub-1",
             excerpt: "this is <mark>a match</mark>.",
           },
           {
-            title: "title 8",
-            url: "https://example.com/api/a/d",
+            title: "Page sub title 2",
+            url: "https://example.com/b#sub-2",
             excerpt: "this is <mark>a match</mark>.",
           },
         ],
+        meta: {},
       },
       {
-        title: "title 1",
-        url: "https://example.com/docs/a/b",
+        type: "webpage",
+        title: "Page title 3",
+        url: "https://example.com/c",
         excerpt: "this is <mark>a match</mark>.",
-        sub_results: [],
-      },
-      {
-        title: "title 2",
-        url: "https://example.com/docs/a/c",
-        excerpt: "this is <mark>a match</mark>.",
-        sub_results: [],
-      },
-      {
-        title: "title 3",
-        url: "https://example.com/docs/a/d",
-        excerpt: "this is <mark>a match</mark>.",
-        sub_results: [],
+        sub_results: [
+          {
+            title: "Page sub title 1",
+            url: "https://example.com/c#sub-1",
+            excerpt: "this is <mark>a match</mark>.",
+          },
+          {
+            title: "Page sub title 2",
+            url: "https://example.com/c#sub-2",
+            excerpt: "this is <mark>a match</mark>.",
+          },
+          {
+            title: "Page sub title 3",
+            url: "https://example.com/c#sub-3",
+            excerpt: "this is <mark>a match</mark>.",
+          },
+        ],
+        meta: {},
       },
     ];
 
-    return {
-      sources: [{ name: LOCAL_SOURCE_NAME, type: "webpage", hits: references }],
-    };
+    return { matches };
   };
 
   ask: AskFunction = async (_payload, handleDelta, _signal) => {

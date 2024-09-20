@@ -1,11 +1,11 @@
 import type {
+  SearchResult,
   SearchFunction,
   BeforeSearchFunction,
   SearchFunctionResult,
 } from "./search";
 import type { AskFunction } from "./ask";
 import type { FeedbackFunction } from "./feedback";
-import type { TabDefinitions } from "./schema";
 import { TaskStatus } from "../store/managers";
 
 export type QueryContext = string;
@@ -16,17 +16,20 @@ export type ModeContext = {
   current: string | null;
 };
 
-export type TabContext = {
-  options: TabDefinitions;
-  current: number;
-};
-
 export type ExecutionContext = {
   status: TaskStatus;
   ask: {
     response: string;
   };
   search: SearchFunctionResult;
+  _search: SearchFunctionResult;
+};
+
+export type FiltersContext = {
+  [ID: string]: {
+    fn: (matches: SearchResult[], args: any) => SearchResult[];
+    args: any;
+  };
 };
 
 export type ThemeContext = "light" | "dark";

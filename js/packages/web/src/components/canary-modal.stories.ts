@@ -18,7 +18,10 @@ export default {
   render: () => {
     return html`
       <canary-modal>
-        <canary-trigger-searchbar data-testid="trigger" slot="trigger"></canary-trigger-searchbar>
+        <canary-trigger-searchbar
+          data-testid="trigger"
+          slot="trigger"
+        ></canary-trigger-searchbar>
         <canary-content slot="content">
           <canary-input slot="input"></canary-input>
           <canary-search slot="mode">

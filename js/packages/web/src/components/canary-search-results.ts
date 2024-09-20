@@ -1,5 +1,5 @@
 import { LitElement, css, html, nothing } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
+import { customElement, state } from "lit/decorators.js";
 
 import { consume } from "@lit/context";
 import { executionContext } from "../contexts";
@@ -8,18 +8,14 @@ import type { ExecutionContext } from "../types";
 import { TaskStatus } from "../store/managers";
 
 import "./canary-error";
-import "./canary-search-references";
+import "./canary-search-match-webpage";
+import "./canary-search-match-github-issue";
+import "./canary-search-match-github-discussion";
 
 const NAME = "canary-search-results";
 
 @customElement(NAME)
 export class CanarySearchResults extends LitElement {
-  @property({ type: String })
-  header = "";
-
-  @property({ type: Boolean })
-  group = false;
-
   @consume({ context: executionContext, subscribe: true })
   @state()
   private _execution?: ExecutionContext;
@@ -29,27 +25,37 @@ export class CanarySearchResults extends LitElement {
       return nothing;
     }
 
-    const references = Object.values(this._execution.search.sources).flatMap(
-      ({ hits }) => hits,
-    );
+    const { matches } = this._execution.search;
 
-    if (references.length === 0) {
+    if (matches.length === 0) {
       return nothing;
     }
 
     return html`
-      ${
-        this._execution.status === TaskStatus.ERROR
-          ? html`<canary-error></canary-error>`
-          : html` <div class="container">
-              <canary-search-references
-                .group=${this.group}
-                .references=${references}
-              ></canary-search-references>
-            </div>`
-      }
-          </div>
-      </div>
+      ${this._execution.status === TaskStatus.ERROR
+        ? html`<canary-error></canary-error>`
+        : html`
+            <div class="container">
+              ${matches.map((match) => {
+                switch (match.type) {
+                  case "webpage":
+                    return html`<canary-search-match-webpage .match=${match}>
+                    </canary-search-match-webpage>`;
+                  case "github_issue":
+                    return html`<canary-search-match-github-issue
+                      .match=${match}
+                    >
+                    </canary-search-match-github-issue>`;
+                  case "github_discussion":
+                    return html`<canary-search-match-github-discussion
+                      .match=${match}
+                    ></canary-search-match-github-discussion>`;
+                  default:
+                    throw new Error();
+                }
+              })}
+            </div>
+          `}
     `;
   }
 
@@ -57,6 +63,7 @@ export class CanarySearchResults extends LitElement {
     .container {
       display: flex;
       flex-direction: column;
+      gap: 8px;
     }
   `;
 }

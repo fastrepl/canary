@@ -1,3 +1,5 @@
+import type { FiltersContext, SearchResult } from "./types";
+
 export const urlToParts = (url: string) => {
   const paths = parseURL(url).pathname.split("/");
 
@@ -46,4 +48,14 @@ export const parseURL = (url: string) => {
       : `https://example.com/${url}`;
 
   return new URL(transformed);
+};
+
+export const applyFilters = (
+  matches: SearchResult[],
+  filters: FiltersContext,
+): SearchResult[] => {
+  return Object.entries(filters).reduce(
+    (acc, [_, { fn, args }]) => fn(acc, args),
+    matches,
+  );
 };

@@ -1,5 +1,6 @@
 import { LitElement, html, css } from "lit";
 import { customElement, property } from "lit/decorators.js";
+import { wrapper } from "../styles";
 
 const NAME = "canary-badge";
 
@@ -12,15 +13,18 @@ export class CanaryBadge extends LitElement {
     return html` <span class="container"> ${this.name} </span> `;
   }
 
-  static styles = css`
-    .container {
-      padding: 0.25em 0.4em;
-      border-radius: 0.25em;
-      font-size: 0.75rem;
-      border: 1px solid var(--canary-color-primary-60);
-      color: var(--canary-color-primary-60);
-    }
-  `;
+  static styles = [
+    wrapper,
+    css`
+      .container {
+        padding: 0.15em 0.3em;
+        border-radius: 0.25em;
+        font-size: 0.625rem;
+        border: 1px solid var(--canary-color-primary-60);
+        color: var(--canary-color-primary-60);
+      }
+    `,
+  ];
 }
 
 declare global {

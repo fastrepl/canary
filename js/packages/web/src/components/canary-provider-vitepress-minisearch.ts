@@ -4,7 +4,6 @@ import { customElement, property, state } from "lit/decorators.js";
 import type { SearchFunction, SearchResult } from "../types";
 import { wrapper } from "../styles";
 import { createEvent } from "../store";
-import { LOCAL_SOURCE_NAME } from "../constants";
 
 const NAME = "canary-provider-vitepress-minisearch";
 
@@ -91,13 +90,15 @@ export class CanaryProviderVitepressMinisearch extends LitElement {
   search: SearchFunction = async ({ query }, _signal) => {
     return new Promise((resolve) => {
       if (!this.minisearch) {
-        resolve({ sources: [] });
+        resolve({ matches: [] });
         return;
       }
 
-      const hits: SearchResult[] = this.minisearch
+      const matches: SearchResult[] = this.minisearch
         .search(query)
         .map((result) => ({
+          type: "webpage",
+          meta: {},
           url: new URL(result.id, window.location.origin).toString(),
           title: result.title,
           sub_results: [
@@ -108,9 +109,7 @@ export class CanaryProviderVitepressMinisearch extends LitElement {
           ],
         }));
 
-      resolve({
-        sources: [{ name: LOCAL_SOURCE_NAME, type: "webpage", hits }],
-      });
+      resolve({ matches });
     });
   };
 }

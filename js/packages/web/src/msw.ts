@@ -35,7 +35,48 @@ const mockSearchReferences = (type: string, query: string): SearchResult[] => {
           ? `https://example.com/a/b?query=${query}`
           : `https://example.com/api/b?query=${query}`;
 
+      if (index % 3 === 1) {
+        return {
+          type: "github_issue",
+          meta: {
+            closed: Math.random() > 0.5,
+          },
+          title: `title ${index}`,
+          url,
+          excerpt: `<mark>${type}</mark> response: <mark>${query}</mark>!`,
+          sub_results: Array(randomNumber(1, 3))
+            .fill(null)
+            .map((_) => ({
+              title: `sub title ${index}`,
+              url: `https://example.com/a/b?query=${query}`,
+              excerpt: `<mark>${type}</mark> response: <mark>${query}</mark>!`,
+            })),
+        };
+      }
+
+      if (index % 3 === 2) {
+        return {
+          type: "github_discussion",
+          meta: {
+            closed: Math.random() > 0.5,
+            answered: Math.random() > 0.5,
+          },
+          title: `title ${index}`,
+          url,
+          excerpt: `<mark>${type}</mark> response: <mark>${query}</mark>!`,
+          sub_results: Array(randomNumber(1, 3))
+            .fill(null)
+            .map((_) => ({
+              title: `sub title ${index}`,
+              url: `https://example.com/a/b?query=${query}`,
+              excerpt: `<mark>${type}</mark> response: <mark>${query}</mark>!`,
+            })),
+        };
+      }
+
       return {
+        type: "webpage",
+        meta: {},
         title: `title ${index}`,
         url,
         excerpt: `<mark>${type}</mark> response: <mark>${query}</mark>!`,
@@ -67,13 +108,7 @@ export const searchHandler = http.post(
     await delay(Math.random() * (isQuestion ? 1000 : 200) + 100);
 
     const result: SearchFunctionResult = {
-      sources: [
-        {
-          name: "Docs",
-          type: "webpage",
-          hits: mockSearchReferences("search", query),
-        },
-      ],
+      matches: mockSearchReferences("search", query),
       suggestion: {
         questions:
           query.startsWith("Can") || query.startsWith("What")

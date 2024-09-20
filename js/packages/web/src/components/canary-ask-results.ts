@@ -9,7 +9,6 @@ import { StringArray } from "../converters";
 import { MODE_ASK } from "../constants";
 
 import "./canary-markdown";
-import "./canary-reference";
 import "./canary-loading-dots";
 
 const NAME = "canary-ask-results";

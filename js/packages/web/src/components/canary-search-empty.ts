@@ -21,7 +21,7 @@ export class CanarySearchEmpty extends LitElement {
   render() {
     if (
       this._execution.status !== TaskStatus.COMPLETE ||
-      this._execution.search.sources.length === 0 ||
+      this._execution.search.matches.length === 0 ||
       this._query.length === 0
     ) {
       return nothing;

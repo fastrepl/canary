@@ -11,8 +11,6 @@ import { highlightElement } from "prismjs";
 import { marked, type MarkedExtension, type Tokens } from "marked";
 import footNote from "marked-footnote";
 
-import "./canary-reference";
-
 const footNoteExtension = footNote() as MarkedExtension;
 marked.use(footNoteExtension).use({
   gfm: false,
