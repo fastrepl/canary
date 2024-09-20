@@ -13,7 +13,7 @@ export class CanarySearchMatchBase extends LitElement {
 
   render() {
     return html`
-      <button class="container" @click=${this._handleClick}>
+      <button class="container" part="container" @click=${this._handleClick}>
         <slot name="content-before"></slot>
         <div class="content">
           <slot name="url"></slot>
