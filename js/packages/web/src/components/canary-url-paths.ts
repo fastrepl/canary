@@ -1,4 +1,4 @@
-import { LitElement, html, css, nothing } from "lit";
+import { LitElement, html, css } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
 import { urlToParts } from "../utils";
@@ -13,10 +13,11 @@ export class CanaryURLPaths extends LitElement {
 
   render() {
     const parts = urlToParts(this.url);
+    const host = new URL(this.url).host;
 
     return html`
       ${parts.length == 0
-        ? nothing
+        ? html`<span class="path">${host}</span>`
         : html`<div class="paths">
             ${parts.map((part, i) =>
               i < parts.length - 1
@@ -48,6 +49,7 @@ export class CanaryURLPaths extends LitElement {
       }
 
       .path {
+        line-height: 1;
         max-width: 120px;
         overflow: hidden;
         text-overflow: ellipsis;

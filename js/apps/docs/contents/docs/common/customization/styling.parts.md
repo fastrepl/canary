@@ -5,8 +5,6 @@
 - `canary-input`
   - `container`
   - `input`
-- `canary-logo-github`
-  - `svg`
 - `canary-search`
   - `body`
   - `container`

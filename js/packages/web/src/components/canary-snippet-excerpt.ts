@@ -2,10 +2,12 @@ import { LitElement, html, css } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
 
-const NAME = "canary-snippet";
+import { wrapper } from "../styles";
+
+const NAME = "canary-snippet-excerpt";
 
 @customElement(NAME)
-export class CanarySnippet extends LitElement {
+export class CanarySnippetExcerpt extends LitElement {
   @property({ type: String }) value = "";
 
   private _maxLength = 110;
@@ -15,21 +17,25 @@ export class CanarySnippet extends LitElement {
     return html` <span class="excerpt">${unsafeHTML(content)}</span> `;
   }
 
-  static styles = css`
-    span {
-      white-space: nowrap;
-      color: var(--canary-snippet-color, var(--canary-color-gray-20));
-      font-size: var(--canary-snippet-font-size, 0.875rem);
-      font-weight: var(--canary-snippet-font-weight, normal);
-    }
+  static styles = [
+    wrapper,
+    css`
+      span {
+        line-height: 1;
+        white-space: nowrap;
+        color: var(--canary-color-gray-20);
+        font-size: 0.875rem;
+        font-weight: normal;
+      }
 
-    mark {
-      border-radius: 2px;
-      background-color: var(--canary-is-light, var(--canary-color-primary-30))
-        var(--canary-is-dark, var(--canary-color-primary-20));
-      color: var(--canary-color-gray-90);
-    }
-  `;
+      mark {
+        border-radius: 2px;
+        background-color: var(--canary-is-light, var(--canary-color-primary-30))
+          var(--canary-is-dark, var(--canary-color-primary-20));
+        color: var(--canary-color-gray-90);
+      }
+    `,
+  ];
 
   private _sanitize(html: string) {
     return html
@@ -64,7 +70,7 @@ export class CanarySnippet extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    [NAME]: CanarySnippet;
+    [NAME]: CanarySnippetExcerpt;
   }
   namespace JSX {
     interface IntrinsicElements {

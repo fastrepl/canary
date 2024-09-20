@@ -38,8 +38,5 @@
 - `--canary-font-size-logo`
 - `--canary-is-dark`
 - `--canary-is-light`
-- `--canary-snippet-color`
-- `--canary-snippet-font-size`
-- `--canary-snippet-font-weight`
 - `--canary-trigger-searchbar-height`
 - `--canary-trigger-searchbar-max-width`

@@ -3,8 +3,9 @@ import { customElement, property } from "lit/decorators.js";
 
 import "./canary-search-match-base";
 import "./canary-url-paths";
-import "./canary-snippet";
 import "./canary-icon-tree";
+import "./canary-snippet-title";
+import "./canary-snippet-excerpt";
 
 import { SearchResult } from "../types";
 import { global } from "../styles";
@@ -30,10 +31,10 @@ export class CanarySearchMatchWebpage extends LitElement {
           <canary-url-paths slot="url" .url=${this.match.url}>
           </canary-url-paths>
           <span slot="title-icon" class="i-heroicons-bookmark"></span>
-          <canary-snippet slot="title" .value=${this.match.title}>
-          </canary-snippet>
-          <canary-snippet slot="excerpt" .value=${this.match.excerpt}>
-          </canary-snippet>
+          <canary-snippet-title slot="title" .value=${this.match.title}>
+          </canary-snippet-title>
+          <canary-snippet-excerpt slot="excerpt" .value=${this.match.excerpt}>
+          </canary-snippet-excerpt>
         </canary-search-match-base>
         ${this.match.sub_results.map(
           (sub_result, i) => html`
@@ -46,18 +47,18 @@ export class CanarySearchMatchWebpage extends LitElement {
                 .last=${i === this.match.sub_results.length - 1}
               >
               </canary-icon-tree>
-              <canary-snippet
+              <canary-snippet-title
                 slot="title"
                 class="title"
                 .value=${sub_result.title}
               >
-              </canary-snippet>
-              <canary-snippet
+              </canary-snippet-title>
+              <canary-snippet-excerpt
                 slot="excerpt"
                 class="excerpt"
                 .value=${sub_result.excerpt}
               >
-              </canary-snippet>
+              </canary-snippet-excerpt>
             </canary-search-match-base>
           `,
         )}

@@ -84,7 +84,7 @@ export class CanarySearchMatchBase extends LitElement {
         display: flex;
         flex-direction: column;
         align-items: flex-start;
-        gap: 4px;
+        gap: 8px;
 
         overflow: hidden;
         text-overflow: ellipsis;

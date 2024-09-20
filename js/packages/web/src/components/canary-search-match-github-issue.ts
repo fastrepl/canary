@@ -2,10 +2,10 @@ import { LitElement, html, css } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
 import "./canary-search-match-base";
-import "./canary-snippet";
 import "./canary-icon-tree";
-import "./canary-logo-github";
 import "./canary-badge";
+import "./canary-snippet-title";
+import "./canary-snippet-excerpt";
 
 import { SearchResult } from "../types";
 import { global } from "../styles";
@@ -28,17 +28,17 @@ export class CanarySearchMatchGithubIssue extends LitElement {
           url=${this.match.url}
           exportparts="container:match-item"
         >
-          <canary-logo-github slot="title-icon"></canary-logo-github>
-          <canary-snippet slot="title" .value=${this.match.title}>
-          </canary-snippet>
+          <span slot="title-icon" class="i-octicon-mark-github-16"></span>
+          <canary-snippet-title slot="title" .value=${this.match.title}>
+          </canary-snippet-title>
           <canary-badge slot="title-badge" .name=${"ISSUE"}> </canary-badge>
           <canary-badge
             slot="title-badge"
             .name=${this.match.meta.closed ? "CLOSED" : "OPEN"}
           >
           </canary-badge>
-          <canary-snippet slot="excerpt" .value=${this.match.excerpt}>
-          </canary-snippet>
+          <canary-snippet-excerpt slot="excerpt" .value=${this.match.excerpt}>
+          </canary-snippet-excerpt>
         </canary-search-match-base>
         ${this.match.sub_results.map(
           (sub_result, i) => html`
@@ -51,18 +51,18 @@ export class CanarySearchMatchGithubIssue extends LitElement {
                 .last=${i === this.match.sub_results.length - 1}
               >
               </canary-icon-tree>
-              <canary-snippet
+              <canary-snippet-title
                 slot="title"
                 class="title"
                 .value=${sub_result.title}
               >
-              </canary-snippet>
-              <canary-snippet
+              </canary-snippet-title>
+              <canary-snippet-excerpt
                 slot="excerpt"
                 class="excerpt"
                 .value=${sub_result.excerpt}
               >
-              </canary-snippet>
+              </canary-snippet-excerpt>
             </canary-search-match-base>
           `,
         )}
@@ -80,11 +80,6 @@ export class CanarySearchMatchGithubIssue extends LitElement {
         display: flex;
         flex-direction: column;
         gap: 4px;
-      }
-    `,
-    css`
-      canary-logo-github::part(svg) {
-        width: 0.875em;
       }
     `,
   ];

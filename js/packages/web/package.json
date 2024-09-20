@@ -39,6 +39,7 @@
   },
   "devDependencies": {
     "@iconify-json/heroicons": "^1.1.24",
+    "@iconify-json/octicon": "^1.2.0",
     "@iconify-json/ph": "^1.1.14",
     "@ljcl/storybook-addon-cssprops": "^4.0.0",
     "@storybook/addon-a11y": "^8.3.1",
