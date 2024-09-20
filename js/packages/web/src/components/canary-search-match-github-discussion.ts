@@ -24,7 +24,10 @@ export class CanarySearchMatchGithubDiscussion extends LitElement {
 
     return html`
       <div class="container" part="container">
-        <canary-search-match-base url=${this.match.url} exportparts="container:match-item">
+        <canary-search-match-base
+          url=${this.match.url}
+          exportparts="container:match-item"
+        >
           <canary-logo-github slot="title-icon"></canary-logo-github>
           <canary-snippet slot="title" .value=${this.match.title}>
           </canary-snippet>
@@ -44,7 +47,10 @@ export class CanarySearchMatchGithubDiscussion extends LitElement {
         </canary-search-match-base>
         ${this.match.sub_results.map(
           (sub_result, i) => html`
-            <canary-search-match-base url=${sub_result.url} exportparts="container:match-item">
+            <canary-search-match-base
+              url=${sub_result.url}
+              exportparts="container:match-item"
+            >
               <canary-icon-tree
                 slot="content-before"
                 .last=${i === this.match.sub_results.length - 1}

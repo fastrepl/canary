@@ -100,7 +100,11 @@ export default {
       return html` <canary-trigger-searchbar></canary-trigger-searchbar> `;
     }
 
-    if (kind === Kind.SearchContainerPadding || kind === Kind.MatchBorder || kind === Kind.ActiveTab) {
+    if (
+      kind === Kind.SearchContainerPadding ||
+      kind === Kind.MatchBorder ||
+      kind === Kind.ActiveTab
+    ) {
       return html`
         <canary-content>
           <canary-input slot="input"></canary-input>

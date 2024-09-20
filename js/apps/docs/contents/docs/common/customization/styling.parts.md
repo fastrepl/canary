@@ -1,5 +1,7 @@
 - `canary-content`
   - `container`
+- `canary-filter-tabs-glob`
+  - `container`
 - `canary-input`
   - `container`
   - `input`
@@ -9,17 +11,17 @@
   - `body`
   - `container`
   - `head`
+  - `scroll-container`
 - `canary-search-match`
   - `match-group`
+- `canary-search-match-base`
+  - `container`
 - `canary-search-match-github-discussion`
   - `container`
-  - `match-item`
 - `canary-search-match-github-issue`
   - `container`
-  - `match-item`
 - `canary-search-match-webpage`
   - `container`
-  - `match-item`
 - `canary-trigger-searchbar`
   - `button`
   - `icon`
