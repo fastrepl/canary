@@ -47,8 +47,8 @@ defmodule Canary.Sources.Webpage.Syncer do
 
     create_result =
       (inputs_for_create ++ inputs_for_update)
-      |> Enum.map(fn %FetcherResult{url: url, html: html} ->
-        %{source_id: source_id, url: url, html: html}
+      |> Enum.map(fn %FetcherResult{} = fetcher_result ->
+        %{source_id: source_id, fetcher_result: fetcher_result}
       end)
       |> Ash.bulk_create(Document, :create_webpage, return_errors?: true)
 

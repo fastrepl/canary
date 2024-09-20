@@ -8,8 +8,7 @@ defmodule Canary.Sources.Document.CreateWebpage do
   def init(opts) do
     if [
          :source_id_argument,
-         :url_argument,
-         :html_argument,
+         :fetcher_result_argument,
          :meta_attribute,
          :chunks_attribute
        ]
@@ -23,21 +22,21 @@ defmodule Canary.Sources.Document.CreateWebpage do
   @impl true
   def change(changeset, opts, _context) do
     source_id = Ash.Changeset.get_argument(changeset, opts[:source_id_argument])
-    url = Ash.Changeset.get_argument(changeset, opts[:url_argument])
-    html = Ash.Changeset.get_argument(changeset, opts[:html_argument])
+    fetcher_result = Ash.Changeset.get_argument(changeset, opts[:fetcher_result_argument])
 
     changeset
     |> Ash.Changeset.change_attribute(opts[:meta_attribute], wrap_union(%Webpage.DocumentMeta{}))
     |> Ash.Changeset.change_attribute(opts[:chunks_attribute], [])
     |> Ash.Changeset.after_action(fn _, record ->
-      items = Canary.Scraper.run(html)
+      %Webpage.FetcherResult{url: url, html: html, items: items} = fetcher_result
+      top_level_item = items |> Enum.at(0)
 
       hash =
         html
         |> then(&:crypto.hash(:sha256, &1))
         |> Base.encode16(case: :lower)
 
-      result =
+      chunks_create_result =
         items
         |> Enum.map(fn %Canary.Scraper.Item{} = item ->
           %{
@@ -45,7 +44,7 @@ defmodule Canary.Sources.Document.CreateWebpage do
             document_id: record.id,
             title: item.title,
             content: item.content,
-            url: URI.parse(url) |> Map.put(:fragment, item.id) |> URI.to_string()
+            url: URI.parse(url) |> Map.put(:fragment, item.id) |> to_string()
           }
         end)
         |> Ash.bulk_create(Webpage.Chunk, :create,
@@ -53,13 +52,15 @@ defmodule Canary.Sources.Document.CreateWebpage do
           return_records?: true
         )
 
-      case result do
+      meta = %{
+        title: top_level_item.title,
+        url: url,
+        hash: hash
+      }
+
+      case chunks_create_result do
         %Ash.BulkResult{status: :success, records: records} ->
-          case Document.update(
-                 record,
-                 wrap_union(%Webpage.DocumentMeta{url: url, hash: hash}),
-                 Enum.map(records, &wrap_union/1)
-               ) do
+          case Document.update(record, wrap_union(meta), Enum.map(records, &wrap_union/1)) do
             {:ok, updated_record} -> {:ok, updated_record}
             error -> error
           end

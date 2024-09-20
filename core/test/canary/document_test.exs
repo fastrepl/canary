@@ -23,17 +23,25 @@ defmodule Canary.Test.Document do
         Canary.Sources.Document
         |> Ash.Changeset.for_create(:create_webpage, %{
           source_id: source.id,
-          url: "https://example.com/",
-          html: "<html><body><h1>hello</h1></body></html>"
+          fetcher_result: %Webpage.FetcherResult{
+            url: "https://example.com/",
+            html: "<body><h1>hello</h1></body>",
+            items: [
+              %Canary.Scraper.Item{id: nil, level: 1, title: "hello", content: "<h1>hello</h1>"}
+            ]
+          }
         })
         |> Ash.create!()
 
       assert doc.meta.type == :webpage
       assert doc.meta.value.url == "https://example.com"
       assert length(doc.chunks) == 1
-      %Ash.Union{value: %{index_id: index_id}} = doc.chunks |> Enum.at(0)
+      %Ash.Union{value: chunk} = doc.chunks |> Enum.at(0)
+      assert chunk.url == "https://example.com"
 
-      [found] = Canary.Sources.Document.find_by_chunk_index_ids!([index_id, Ash.UUID.generate()])
+      [found] =
+        Canary.Sources.Document.find_by_chunk_index_ids!([chunk.index_id, Ash.UUID.generate()])
+
       assert found.id == doc.id
     end
 
@@ -53,8 +61,13 @@ defmodule Canary.Test.Document do
       Canary.Sources.Document
       |> Ash.Changeset.for_create(:create_webpage, %{
         source_id: source.id,
-        url: "https://example.com/",
-        html: "<body><h1>hello</h1></body>"
+        fetcher_result: %Webpage.FetcherResult{
+          url: "https://example.com/",
+          html: "<body><h1>hello</h1></body>",
+          items: [
+            %Canary.Scraper.Item{id: nil, level: 1, title: "hello", content: "<h1>hello</h1>"}
+          ]
+        }
       })
       |> Ash.create!()
 

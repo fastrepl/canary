@@ -2,7 +2,6 @@ defmodule Canary.Sources.Webpage.Chunk do
   use Ash.Resource, data_layer: :embedded
 
   attributes do
-    uuid_primary_key :id
     attribute :index_id, :uuid, allow_nil?: false
     attribute :source_id, :uuid, allow_nil?: false
     attribute :document_id, :string, allow_nil?: false
@@ -14,7 +13,7 @@ defmodule Canary.Sources.Webpage.Chunk do
   end
 
   actions do
-    defaults [:read, update: :*]
+    defaults [:read]
 
     create :create do
       primary? true

@@ -2,7 +2,6 @@ defmodule Canary.Sources.GithubIssue.Chunk do
   use Ash.Resource, data_layer: :embedded
 
   attributes do
-    uuid_primary_key :id
     attribute :index_id, :uuid, allow_nil?: false
     attribute :source_id, :uuid, allow_nil?: false
     attribute :document_id, :string, allow_nil?: false
@@ -18,7 +17,7 @@ defmodule Canary.Sources.GithubIssue.Chunk do
   end
 
   actions do
-    defaults [:read, update: :*]
+    defaults [:read]
 
     create :create do
       primary? true
@@ -36,6 +35,7 @@ defmodule Canary.Sources.GithubIssue.Chunk do
         :comment
       ]
 
+      change {Canary.Change.NormalizeURL, input_argument: :url, output_attribute: :url}
       change {Canary.Change.AddToIndex, index_id_attribute: :index_id}
     end
 

@@ -27,13 +27,13 @@ defmodule Canary.Sources.Document.CreateGithubIssue do
     changeset
     |> Ash.Changeset.change_attribute(
       opts[:meta_attribute],
-      wrap_union(%GithubIssue.DocumentMeta{
-        closed: fetcher_results |> Enum.at(0) |> Map.get(:closed)
-      })
+      wrap_union(%GithubIssue.DocumentMeta{})
     )
     |> Ash.Changeset.change_attribute(opts[:chunks_attribute], [])
     |> Ash.Changeset.after_action(fn _, record ->
-      result =
+      top_level_item = fetcher_results |> Enum.at(0)
+
+      create_chunks_result =
         fetcher_results
         |> Enum.map(fn %GithubIssue.FetcherResult{} = item ->
           %{
@@ -54,9 +54,15 @@ defmodule Canary.Sources.Document.CreateGithubIssue do
           return_records?: true
         )
 
-      case result do
+      meta = %{
+        title: top_level_item.title,
+        url: top_level_item.url,
+        closed: top_level_item.closed
+      }
+
+      case create_chunks_result do
         %Ash.BulkResult{status: :success, records: records} ->
-          case Document.update_chunks(record, Enum.map(records, &wrap_union/1)) do
+          case Document.update(record, wrap_union(meta), Enum.map(records, &wrap_union/1)) do
             {:ok, updated_record} -> {:ok, updated_record}
             error -> error
           end

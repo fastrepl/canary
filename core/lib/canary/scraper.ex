@@ -1,6 +1,7 @@
 defmodule Canary.Scraper.Item do
   @derive Jason.Encoder
   defstruct [:id, :level, :title, :content]
+  @type t :: %__MODULE__{id: String.t(), level: integer(), title: String.t(), content: String.t()}
 end
 
 # Inspired by: https://github.com/agoodway/html2markdown/blob/06e3587/lib/html2markdown.ex#L6-L32

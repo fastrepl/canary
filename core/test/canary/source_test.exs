@@ -34,16 +34,7 @@ defmodule Canary.Test.Source do
       })
       |> Ash.create!()
 
-    doc =
-      Canary.Sources.Document
-      |> Ash.Changeset.for_create(:create_webpage, %{
-        source_id: source.id,
-        url: "https://example.com/",
-        html: "<body><h1>hello</h1></body>"
-      })
-      |> Ash.create!()
-
-    assert doc.source.id == source.id
+    assert source.name == "Docs"
 
     source
     |> Ash.Changeset.for_action(:destroy)

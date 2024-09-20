@@ -36,6 +36,8 @@ end
 defmodule Canary.Searcher.Default do
   @behaviour Canary.Searcher
 
+  require Ash.Query
+
   def run(sources, query) do
     if ai?(query) do
       ai_search(sources, query)
@@ -63,6 +65,16 @@ defmodule Canary.Searcher.Default do
   end
 
   defp transform(sources, search_results) do
+    document_ids =
+      search_results
+      |> Enum.flat_map(fn %{hits: hits} -> Enum.map(hits, & &1.document_id) end)
+
+    docs =
+      Canary.Sources.Document
+      |> Ash.Query.filter(id in ^document_ids)
+      |> Ash.Query.build(select: [:id, :meta])
+      |> Ash.read!()
+
     search_results
     |> Enum.flat_map(fn %{source_id: source_id, hits: hits} ->
       %Canary.Sources.Source{
@@ -72,16 +84,32 @@ defmodule Canary.Searcher.Default do
       hits
       |> Enum.group_by(& &1.document_id)
       |> Enum.map(fn {_, chunks} ->
-        first = chunks |> Enum.at(0)
+        doc_id = chunks |> Enum.at(0) |> Map.get(:document_id)
+        doc = docs |> Enum.find(&(&1.id == doc_id))
+        chunk = chunks |> Enum.find(&(&1.title == doc.meta.value.title))
+
+        meta =
+          case type do
+            :webpage ->
+              %{}
+
+            :github_issue ->
+              %{closed: doc.meta.value.closed}
+
+            :github_discussion ->
+              %{closed: doc.meta.value.closed, answered: doc.meta.value.answered}
+          end
 
         %{
-          # TODO: duplicated, and too many subresults
           type: type,
-          meta: %{},
-          url: first.url,
-          title: first.title,
-          excerpt: first.excerpt,
-          sub_results: chunks
+          meta: meta,
+          url: doc.meta.value.url,
+          title: doc.meta.value.title,
+          excerpt: if(chunk, do: chunk.excerpt, else: nil),
+          sub_results:
+            chunks
+            |> Enum.reject(&(&1.title == doc.meta.value.title))
+            |> Enum.slice(0, 3)
         }
       end)
     end)

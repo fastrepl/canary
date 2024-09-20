@@ -33,21 +33,14 @@ defmodule Canary.Sources.Document do
 
     create :create_webpage do
       argument :source_id, :uuid, allow_nil?: false
-      argument :url, :string, allow_nil?: false
-      argument :html, :string, allow_nil?: false
+      argument :fetcher_result, :map, allow_nil?: false
 
       change manage_relationship(:source_id, :source, type: :append)
 
       change {
-        Canary.Change.NormalizeURL,
-        input_argument: :url, output_argument: :url
-      }
-
-      change {
         Canary.Sources.Document.CreateWebpage,
         source_id_argument: :source_id,
-        url_argument: :url,
-        html_argument: :html,
+        fetcher_result_argument: :fetcher_result,
         meta_attribute: :meta,
         chunks_attribute: :chunks
       }
