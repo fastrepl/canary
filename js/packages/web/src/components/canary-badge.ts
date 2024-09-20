@@ -20,8 +20,8 @@ export class CanaryBadge extends LitElement {
         padding: 0.15em 0.3em;
         border-radius: 0.25em;
         font-size: 0.625rem;
-        border: 1px solid var(--canary-color-primary-60);
-        color: var(--canary-color-primary-60);
+        border: 1px solid var(--canary-color-primary-30);
+        color: var(--canary-color-primary-30);
       }
     `,
   ];
