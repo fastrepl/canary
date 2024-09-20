@@ -1,7 +1,7 @@
 import { LitElement, html, css } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
-import "./canary-search-match";
+import "./canary-search-match-base";
 import "./canary-snippet";
 import "./canary-icon-tree";
 import "./canary-logo-github";
@@ -24,7 +24,7 @@ export class CanarySearchMatchGithubDiscussion extends LitElement {
 
     return html`
       <div class="container" part="container">
-        <canary-search-match url=${this.match.url} part="match-item">
+        <canary-search-match-base url=${this.match.url} part="match-item">
           <canary-logo-github slot="title-icon"></canary-logo-github>
           <canary-snippet slot="title" .value=${this.match.title}>
           </canary-snippet>
@@ -32,15 +32,19 @@ export class CanarySearchMatchGithubDiscussion extends LitElement {
           </canary-badge>
           <canary-badge
             slot="title-badge"
-            .name=${this.match.meta.closed ? "CLOSED" : "OPEN"}
+            .name=${this.match.meta.answered
+              ? "ANSWERED"
+              : this.match.meta.closed
+                ? "CLOSED"
+                : "OPEN"}
           >
           </canary-badge>
           <canary-snippet slot="excerpt" .value=${this.match.excerpt}>
           </canary-snippet>
-        </canary-search-match>
+        </canary-search-match-base>
         ${this.match.sub_results.map(
           (sub_result, i) => html`
-            <canary-search-match url=${sub_result.url} part="match-item">
+            <canary-search-match-base url=${sub_result.url} part="match-item">
               <canary-icon-tree
                 slot="content-before"
                 .last=${i === this.match.sub_results.length - 1}
@@ -58,7 +62,7 @@ export class CanarySearchMatchGithubDiscussion extends LitElement {
                 .value=${sub_result.excerpt}
               >
               </canary-snippet>
-            </canary-search-match>
+            </canary-search-match-base>
           `,
         )}
       </div>

@@ -8,9 +8,7 @@ import type { ExecutionContext } from "../types";
 import { TaskStatus } from "../store/managers";
 
 import "./canary-error";
-import "./canary-search-match-webpage";
-import "./canary-search-match-github-issue";
-import "./canary-search-match-github-discussion";
+import "./canary-search-match";
 
 const NAME = "canary-search-results";
 
@@ -36,32 +34,13 @@ export class CanarySearchResults extends LitElement {
         ? html`<canary-error></canary-error>`
         : html`
             <div class="container">
-              ${matches.map((match) => {
-                switch (match.type) {
-                  case "webpage":
-                    return html`<canary-search-match-webpage
-                      .match=${match}
-                      part="match-group"
-                      exportparts="match-item"
-                    >
-                    </canary-search-match-webpage>`;
-                  case "github_issue":
-                    return html`<canary-search-match-github-issue
-                      part="match-group"
-                      .match=${match}
-                      exportparts="match-item"
-                    >
-                    </canary-search-match-github-issue>`;
-                  case "github_discussion":
-                    return html`<canary-search-match-github-discussion
-                      .match=${match}
-                      part="match-group"
-                      exportparts="match-item"
-                    ></canary-search-match-github-discussion>`;
-                  default:
-                    throw new Error();
-                }
-              })}
+              ${matches.map(
+                (match) =>
+                  html`<canary-search-match
+                    exportparts="match-group,match-item"
+                    .match=${match}
+                  ></canary-search-match>`,
+              )}
             </div>
           `}
     `;

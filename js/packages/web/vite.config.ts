@@ -53,6 +53,7 @@ export default defineConfig({
           "canary-search-results",
           "canary-search-suggestions",
           "canary-search-empty",
+          "canary-search-match",
           "canary-ask",
           "canary-ask-results",
           "canary-tooltip",
