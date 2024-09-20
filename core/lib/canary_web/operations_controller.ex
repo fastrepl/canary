@@ -43,9 +43,9 @@ defmodule CanaryWeb.OperationsController do
     sources = find_sources(conn, sources)
 
     case Canary.Searcher.run(sources, query, cache: cache?()) do
-      {:ok, search_result} ->
+      {:ok, matches} ->
         data = %{
-          sources: search_result,
+          matches: matches,
           suggestion: %{questions: Canary.Query.Sugestor.run!(query)}
         }
 

@@ -1,18 +1,5 @@
-defmodule Canary.Searcher.Result do
-  @derive Jason.Encoder
-  defstruct [:name, :type, :hits]
-
-  @type t :: %__MODULE__{
-          name: String.t(),
-          type: String.t(),
-          hits: list(any())
-        }
-end
-
 defmodule Canary.Searcher do
-  @callback run(list(any()), String.t()) ::
-              {:ok, list(Canary.Searcher.Result.t())} | {:error, any()}
-
+  @callback run(list(any()), String.t()) :: {:ok, list(map())} | {:error, any()}
   def run(sources, query, opts \\ []) do
     if opts[:cache] do
       with {:error, _} <- get_cache(sources, query),
@@ -77,28 +64,26 @@ defmodule Canary.Searcher.Default do
 
   defp transform(sources, search_results) do
     search_results
-    |> Enum.map(fn %{source_id: source_id, hits: hits} ->
+    |> Enum.flat_map(fn %{source_id: source_id, hits: hits} ->
       %Canary.Sources.Source{
-        name: name,
         config: %Ash.Union{type: type}
       } = sources |> Enum.find(&(&1.id == source_id))
 
-      hits =
-        hits
-        |> Enum.group_by(& &1.document_id)
-        |> Enum.map(fn {_, chunks} ->
-          first = chunks |> Enum.at(0)
+      hits
+      |> Enum.group_by(& &1.document_id)
+      |> Enum.map(fn {_, chunks} ->
+        first = chunks |> Enum.at(0)
 
-          %{
-            # TODO: duplicated, and too many subresults
-            url: first.url,
-            title: first.title,
-            excerpt: first.excerpt,
-            sub_results: chunks
-          }
-        end)
-
-      %Canary.Searcher.Result{name: name, type: type, hits: hits}
+        %{
+          # TODO: duplicated, and too many subresults
+          type: type,
+          meta: %{},
+          url: first.url,
+          title: first.title,
+          excerpt: first.excerpt,
+          sub_results: chunks
+        }
+      end)
     end)
   end
 end

@@ -74,10 +74,7 @@ defmodule Canary.Interactions.Responder.Default do
   defp search_results_to_docs(results) do
     doc_ids =
       results
-      |> Enum.flat_map(fn %Canary.Searcher.Result{} = result ->
-        result.hits
-        |> Enum.flat_map(fn hit -> Enum.map(hit.sub_results, & &1.document_id) end)
-      end)
+      |> Enum.flat_map(fn result -> Enum.map(result.sub_results, & &1.document_id) end)
       |> Enum.uniq()
 
     Canary.Sources.Document

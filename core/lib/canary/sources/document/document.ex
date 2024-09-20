@@ -27,6 +27,8 @@ defmodule Canary.Sources.Document do
                  ^arg(:chunk_index_ids)
                )
              )
+
+      prepare build(select: [:meta])
     end
 
     create :create_webpage do

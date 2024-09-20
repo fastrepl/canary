@@ -9,18 +9,11 @@ defmodule CanaryWeb.HomeLive do
         <canary-provider-cloud
           api-key={Enum.at(@current_account.keys, 0).value}
           api-base={CanaryWeb.Endpoint.url()}
-          sources={
-            @current_account.sources
-            |> Enum.map(& &1.name)
-            |> Enum.join(",")
-          }
         >
           <canary-content>
             <canary-input slot="input"></canary-input>
             <canary-search slot="mode">
-              <canary-search-suggestions slot="body"></canary-search-suggestions>
-              <canary-search-results group slot="body"></canary-search-results>
-              <canary-search-empty slot="body"></canary-search-empty>
+              <canary-search-results slot="body"></canary-search-results>
             </canary-search>
           </canary-content>
         </canary-provider-cloud>
