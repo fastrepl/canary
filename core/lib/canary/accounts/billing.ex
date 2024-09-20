@@ -24,6 +24,8 @@ defmodule Canary.Accounts.Billing do
     defaults [:read]
 
     create :create do
+      primary? true
+
       argument :account, :map, allow_nil?: false
       argument :stripe_customer, :map, allow_nil?: true
       argument :stripe_subscription, :map, allow_nil?: true

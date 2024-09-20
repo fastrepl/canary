@@ -55,7 +55,6 @@ defmodule Canary.Accounts.Account do
   end
 
   changes do
-    change Canary.Accounts.Changes.InitKey, on: [:create]
     change Canary.Accounts.Changes.InitBilling, on: [:create]
   end
 
