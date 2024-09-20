@@ -88,11 +88,3 @@ This can be very time-consuming and frustrating.
 <SearchDigestSolution />
 
 :::
-
-## Understand users through their interactions with the docs
-
-We're still working on `Search & Ask analytics`, which will help you gain insights into what users are searching and asking for. In the meantime, you can use other feedback components we provide to collect information,
-
-  <div class="flex justify-center items-center">
-  like this 👇.
-  </div>

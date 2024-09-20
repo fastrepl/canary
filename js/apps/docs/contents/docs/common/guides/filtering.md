@@ -4,7 +4,11 @@ import { useData } from "vitepress";
 
 const loaded = ref(false);
 
-const pattern = ref([{ name: "All", pattern: "**/*" }, { name: "Local", pattern: "**/local/**" }, { name: "Cloud", pattern: "**/cloud/**" }]);
+const pattern = ref([
+  { name: "All", pattern: "**/*" },
+  { name: "Local", pattern: "**/local/**" },
+  { name: "Cloud", pattern: "**/cloud/**" }
+]);
 
 onMounted(() => {
   Promise.all([
@@ -13,7 +17,8 @@ onMounted(() => {
     import("@getcanary/web/components/canary-content.js"),
     import("@getcanary/web/components/canary-input.js"),
     import("@getcanary/web/components/canary-search.js"),
-    import("@getcanary/web/components/canary-search-results-tabs.js"),
+    import("@getcanary/web/components/canary-search-results.js"),
+    import("@getcanary/web/components/canary-filter-tabs-glob.js"),
   ]).then(() => {
     loaded.value = true;
   });
@@ -22,13 +27,12 @@ onMounted(() => {
 const { localeIndex } = useData();
 </script>
 
-# Spliting Tabs
+# Filtering
 
 ```html-vue
 <canary-search slot="mode">
-  <canary-search-results slot="body"></canary-search-results> // [!code --]
-  <canary-search-results-tabs tabs="{{ JSON.stringify(pattern) }}" slot="body">  // [!code ++]
-  </canary-search-results-tabs>  // [!code ++]
+  <canary-filter-tabs-glob slot="head" tabs='{{ JSON.stringify(pattern) }}'> </canary-filter-tabs-glob> // [!code ++]
+  <canary-search-results slot="body"></canary-search-results>
 </canary-search>
 ```
 
@@ -37,11 +41,8 @@ const { localeIndex } = useData();
     <canary-content>
         <canary-input slot="input"></canary-input>
         <canary-search slot="mode">
-          <canary-callout-discord slot="body"></canary-callout-discord>
-          <canary-search-results-tabs
-            slot="body"
-            :tabs="JSON.stringify(pattern)"
-          ></canary-search-results-tabs>
+          <canary-filter-tabs-glob slot="head" :tabs="JSON.stringify(pattern)"></canary-filter-tabs-glob>
+          <canary-search-results slot="body"></canary-search-results>
         </canary-search>
     </canary-content>
   </canary-provider-vitepress-minisearch>

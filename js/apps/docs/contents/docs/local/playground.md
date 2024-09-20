@@ -77,7 +77,8 @@ onMounted(() => {
     import("@getcanary/web/components/canary-search.js"),
     import("@getcanary/web/components/canary-input.js"),
     import("@getcanary/web/components/canary-search-results.js"),
-    import("@getcanary/web/components/canary-search-results-tabs.js"),
+    import("@getcanary/web/components/canary-search-results.js"),
+    import("@getcanary/web/components/canary-filter-tabs-glob.js"),
   ]).then(() => {
     loaded.value = true;
   });

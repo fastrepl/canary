@@ -36,16 +36,12 @@ const sidebar = [
         collapsed: true,
         items: [
           {
-            text: "Spliting Tabs",
-            link: "/docs/common/guides/spliting-tabs",
+            text: "Filtering",
+            link: "/docs/common/guides/filtering",
           },
           {
             text: "Conditional Callout",
             link: "/docs/common/guides/conditional-callout",
-          },
-          {
-            text: "Custom Mode",
-            link: "/docs/common/guides/custom-mode",
           },
         ],
       },
@@ -116,20 +112,6 @@ const sidebar = [
           {
             text: "Starlight",
             link: "/docs/cloud/integrations/starlight",
-          },
-        ],
-      },
-      {
-        text: "Features",
-        collapsed: true,
-        items: [
-          {
-            text: "Analytics",
-            link: "/docs/cloud/features/analytics",
-          },
-          {
-            text: "Feedback",
-            link: "/docs/cloud/features/feedback",
           },
         ],
       },

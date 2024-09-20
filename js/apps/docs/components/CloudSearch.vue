@@ -13,12 +13,13 @@ onMounted(() => {
     import("@getcanary/web/components/canary-content.js"),
     import("@getcanary/web/components/canary-input.js"),
     import("@getcanary/web/components/canary-search.js"),
-    import("@getcanary/web/components/canary-search-results-tabs.js"),
+    import("@getcanary/web/components/canary-search-results.js"),
     import("@getcanary/web/components/canary-search-suggestions.js"),
     import("@getcanary/web/components/canary-callout-discord.js"),
     import("@getcanary/web/components/canary-ask.js"),
     import("@getcanary/web/components/canary-ask-results.js"),
     import("@getcanary/web/components/canary-mode-breadcrumb.js"),
+    import("@getcanary/web/components/canary-filter-tabs-glob.js"),
   ]).then(() => {
     loaded.value = true;
   });
@@ -44,14 +45,17 @@ const tabs = JSON.stringify([
                 slot="body"
                 url="https://discord.gg/Y8bJkzuQZU"
               ></canary-callout-discord>
+              <canary-filter-tabs-glob
+                slot="body"
+                :tabs="tabs"
+              ></canary-filter-tabs-glob>
               <canary-search-suggestions
                 slot="body"
               ></canary-search-suggestions>
-              <canary-search-results-tabs
+              <canary-search-results
                 slot="body"
                 :tabs="tabs"
-                group
-              ></canary-search-results-tabs>
+              ></canary-search-results>
             </canary-search>
           </canary-content>
         </canary-modal>

@@ -13,7 +13,7 @@ onMounted(() => {
     import("@getcanary/web/components/canary-content.js"),
     import("@getcanary/web/components/canary-input.js"),
     import("@getcanary/web/components/canary-search.js"),
-    import("@getcanary/web/components/canary-search-results-tabs.js"),
+    import("@getcanary/web/components/canary-search-results.js"),
   ]).then(() => {
     loaded.value = true;
   });
@@ -37,10 +37,7 @@ const tabs = JSON.stringify([
           <canary-content slot="content">
             <canary-input slot="input" autofocus></canary-input>
             <canary-search slot="mode">
-              <canary-search-results-tabs
-                slot="body"
-                :tabs="tabs"
-              ></canary-search-results-tabs>
+              <canary-search-results slot="body"></canary-search-results>
             </canary-search>
           </canary-content>
         </canary-modal>

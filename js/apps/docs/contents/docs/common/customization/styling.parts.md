@@ -1,5 +1,25 @@
+- `canary-content`
+  - `container`
 - `canary-input`
+  - `container`
   - `input`
+- `canary-logo-github`
+  - `svg`
+- `canary-search`
+  - `body`
+  - `container`
+  - `head`
+- `canary-search-match`
+  - `match-group`
+- `canary-search-match-github-discussion`
+  - `container`
+  - `match-item`
+- `canary-search-match-github-issue`
+  - `container`
+  - `match-item`
+- `canary-search-match-webpage`
+  - `container`
+  - `match-item`
 - `canary-trigger-searchbar`
   - `button`
   - `icon`

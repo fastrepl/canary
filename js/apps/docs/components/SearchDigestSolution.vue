@@ -11,10 +11,11 @@ onMounted(() => {
     import("@getcanary/web/components/canary-content.js"),
     import("@getcanary/web/components/canary-input.js"),
     import("@getcanary/web/components/canary-search.js"),
-    import("@getcanary/web/components/canary-search-results-tabs.js"),
+    import("@getcanary/web/components/canary-search-results.js"),
     import("@getcanary/web/components/canary-search-suggestions.js"),
     import("@getcanary/web/components/canary-ask.js"),
     import("@getcanary/web/components/canary-ask-results.js"),
+    import("@getcanary/web/components/canary-filter-tabs-glob.js"),
   ]).then(() => {
     loaded.value = true;
   });
@@ -63,11 +64,12 @@ const handleSelect = (q: string) => {
         <canary-content>
           <canary-input slot="input"></canary-input>
           <canary-search slot="mode">
-            <canary-search-suggestions slot="body"></canary-search-suggestions>
-            <canary-search-results-tabs
-              slot="body"
+            <canary-search-suggestions slot="head"></canary-search-suggestions>
+            <canary-filter-tabs-glob
+              slot="head"
               :tabs="tabs"
-            ></canary-search-results-tabs>
+            ></canary-filter-tabs-glob>
+            <canary-search-results slot="body"></canary-search-results>
           </canary-search>
           <canary-ask slot="mode">
             <canary-mode-breadcrumb

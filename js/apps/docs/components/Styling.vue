@@ -9,7 +9,7 @@ const loaded = ref(false);
 onMounted(() => {
   Promise.all([
     import("@getcanary/web/components/canary-root.js"),
-    import("@getcanary/web/components/canary-reference.js"),
+    import("@getcanary/web/components/canary-search-match.js"),
   ]).then(() => {
     loaded.value = true;
   });
@@ -32,6 +32,21 @@ onMounted(() => {
 
 const chroma = ref(0.1);
 const hue = ref(250);
+
+const match = {
+  type: "webpage",
+  meta: {},
+  url: "https://example.com",
+  title: "Title",
+  excerpt: "This is a mock excerpt for webpage.",
+  sub_results: [
+    {
+      title: "Page sub title 1",
+      url: "https://example.com/a#sub-1",
+      excerpt: "this is <mark>a match</mark>.",
+    },
+  ],
+};
 </script>
 
 <template>
@@ -60,12 +75,7 @@ const hue = ref(250);
     </div>
 
     <canary-root framework="vitepress">
-      <canary-reference
-        url="https://example.com/docs/facilisi/odio"
-        title="Tincidunt pretium varius"
-        excerpt="Lorem ipsum odor amet, <mark>consectetuer</mark> adipiscing elit."
-        selected
-      ></canary-reference>
+      <canary-search-match match="match"></canary-search-match>
     </canary-root>
   </div>
 </template>

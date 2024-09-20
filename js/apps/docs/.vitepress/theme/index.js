@@ -5,7 +5,6 @@ import "./global.css";
 
 import { inject } from "@vercel/analytics";
 import CloudSearch from "../../components/CloudSearch.vue";
-import Footer from "../../components/Footer.vue";
 
 /** @type {import('vitepress').Theme} */
 export default {
@@ -21,7 +20,6 @@ export default {
 
     return h(DefaultTheme.Layout, null, {
       "nav-bar-content-before": () => (show ? h(CloudSearch) : null),
-      "doc-footer-before": () => (show ? h(Footer) : null),
     });
   },
 };
