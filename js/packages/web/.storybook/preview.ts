@@ -17,7 +17,7 @@ const preview: Preview = {
   decorators: [
     (story) =>
       html` <canary-root framework="starlight">
-        <canary-provider-cloud api-base="http://localhost:6006" api-key="key">
+        <canary-provider-cloud api-base="/" api-key="key">
           ${story()}
         </canary-provider-cloud>
       </canary-root>`,
