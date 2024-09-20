@@ -30,7 +30,7 @@ export class CanaryInput extends LitElement {
 
   render() {
     return html`
-      <div class="container">
+      <div class="container" part="container">
         <slot name="before">
           <div class="i-heroicons-magnifying-glass"></div>
         </slot>

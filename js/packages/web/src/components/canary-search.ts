@@ -31,12 +31,12 @@ export class CanarySearch extends LitElement {
     return this._mode.current !== this.MODE
       ? nothing
       : html`
-          <div class="container">
-            <div class="head">
+          <div class="container" part="container">
+            <div class="head" part="head">
               <slot name="head"></slot>
             </div>
             <div class="scroll-container" ${ref(this._containerRef)}>
-              <div class="body">
+              <div class="body" part="body">
                 <slot name="body"></slot>
               </div>
             </div>

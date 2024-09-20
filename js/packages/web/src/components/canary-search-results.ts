@@ -39,16 +39,24 @@ export class CanarySearchResults extends LitElement {
               ${matches.map((match) => {
                 switch (match.type) {
                   case "webpage":
-                    return html`<canary-search-match-webpage .match=${match}>
+                    return html`<canary-search-match-webpage
+                      .match=${match}
+                      part="match-group"
+                      exportparts="match-item"
+                    >
                     </canary-search-match-webpage>`;
                   case "github_issue":
                     return html`<canary-search-match-github-issue
+                      part="match-group"
                       .match=${match}
+                      exportparts="match-item"
                     >
                     </canary-search-match-github-issue>`;
                   case "github_discussion":
                     return html`<canary-search-match-github-discussion
                       .match=${match}
+                      part="match-group"
+                      exportparts="match-item"
                     ></canary-search-match-github-discussion>`;
                   default:
                     throw new Error();

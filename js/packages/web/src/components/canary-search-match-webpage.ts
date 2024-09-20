@@ -22,8 +22,8 @@ export class CanarySearchMatchWebpage extends LitElement {
     }
 
     return html`
-      <div class="container">
-        <canary-search-match url=${this.match.url}>
+      <div class="container" part="container">
+        <canary-search-match url=${this.match.url} part="match-item">
           <canary-url-paths slot="url" .url=${this.match.url}>
           </canary-url-paths>
           <span slot="title-icon" class="i-heroicons-bookmark"></span>
@@ -34,7 +34,7 @@ export class CanarySearchMatchWebpage extends LitElement {
         </canary-search-match>
         ${this.match.sub_results.map(
           (sub_result, i) => html`
-            <canary-search-match>
+            <canary-search-match url=${sub_result.url} part="match-item">
               <canary-icon-tree
                 slot="content-before"
                 .last=${i === this.match.sub_results.length - 1}
