@@ -47,11 +47,14 @@ export class CanaryFilterTabsGlob extends LitElement {
 
   render() {
     return html`
-      <div class="container">
+      <div class="container" part="container">
         ${this.tabs.map(({ name }) => {
           const selected = name === this._selected;
 
-          return html`<div @click=${() => this._handleChangeTab(name)}>
+          return html`<div
+            @click=${() => this._handleChangeTab(name)}
+            part=${["tab", selected ? "active" : "inactive"].join(" ")}
+          >
             <input
               type="radio"
               name="mode"
@@ -59,7 +62,12 @@ export class CanaryFilterTabsGlob extends LitElement {
               .value=${name}
               ?checked=${selected}
             />
-            <label class=${classMap({ tab: true, selected })}> ${name} </label>
+            <label
+              part=${["label", selected ? "active" : "inactive"].join(" ")}
+              class=${classMap({ tab: true, selected })}
+            >
+              ${name}
+            </label>
           </div>`;
         })}
       </div>

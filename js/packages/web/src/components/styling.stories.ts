@@ -24,6 +24,7 @@ enum Kind {
   TriggerSearchBarBackbround,
   SearchContainerPadding,
   MatchBorder,
+  ActiveTab,
 }
 
 export default {
@@ -63,11 +64,33 @@ export default {
             }
             canary-search-results::part(match-item) {
               padding: 12px 12px;
+              background-color: red;
             }
           </style>
           ${story()}
         `;
       }
+
+      if (kind === Kind.ActiveTab) {
+        return html`
+          <style>
+            canary-filter-tabs-glob::part(tab) {
+              background-color: gray;
+            }
+            canary-filter-tabs-glob::part(tab inactive) {
+              border: 1px solid red;
+            }
+            canary-filter-tabs-glob::part(tab active) {
+              border: 1px solid blue;
+            }
+            canary-filter-tabs-glob::part(label) {
+              font-weight: bold;
+            }
+          </style>
+          ${story()}
+        `;
+      }
+
       throw new Error();
     },
   ],
@@ -77,7 +100,7 @@ export default {
       return html` <canary-trigger-searchbar></canary-trigger-searchbar> `;
     }
 
-    if (kind === Kind.SearchContainerPadding || kind === Kind.MatchBorder) {
+    if (kind === Kind.SearchContainerPadding || kind === Kind.MatchBorder || kind === Kind.ActiveTab) {
       return html`
         <canary-content>
           <canary-input slot="input"></canary-input>
@@ -113,5 +136,10 @@ export const SearchContainerPadding: StoryObj = {
 
 export const MatchBorder: StoryObj = {
   args: { kind: Kind.MatchBorder },
+  play: type("20hi"),
+};
+
+export const ActiveTab: StoryObj = {
+  args: { kind: Kind.ActiveTab },
   play: type("20hi"),
 };
