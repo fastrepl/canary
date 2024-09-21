@@ -89,7 +89,7 @@ defmodule Canary.Index do
           |> Enum.join(" && ")
 
         query_by = ["title", "content"] |> Enum.join(",")
-        query_by_weights = [3, 2] |> Enum.join(",")
+        query_by_weights = [3, 1] |> Enum.join(",")
 
         arg = %{
           collection: to_string(type),
