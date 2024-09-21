@@ -1,7 +1,7 @@
 defmodule Canary.Workers.Email do
-  use Oban.Worker, queue: :fetcher, max_attempts: 3
+  use Oban.Worker, queue: :email, max_attempts: 3
 
-  @sender {"Canary", "yujonglee@getcanary.dev"}
+  @sender {"Canary", "yujonglee@fastrepl.com"}
 
   @impl true
   def perform(%Oban.Job{args: args}) do

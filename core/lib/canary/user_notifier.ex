@@ -61,7 +61,7 @@ defmodule Canary.UserNotifier.ResetPassword do
   use CanaryWeb, :verified_routes
 
   @impl AshAuthentication.Sender
-  def send(user, token, _) do
+  def send(%Canary.Accounts.User{} = user, token, _) do
     assigns = %{user: user, url: url(~p"/password-reset/#{token}")}
     {html, text} = render_content(&tpl/1, assigns)
 
@@ -94,19 +94,21 @@ defmodule Canary.UserNotifier.ResetPassword do
   end
 end
 
-defmodule Canary.UserNotifier.MemberInvite do
+defmodule Canary.UserNotifier.NewUserEmailConfirmation do
   import Phoenix.Component
   import Canary.UserNotifier, only: [deliver: 1, render_content: 2, default_layout: 1]
 
   use CanaryWeb, :verified_routes
+  use AshAuthentication.Sender
 
-  def send(%Canary.Accounts.Invite{} = invite) do
-    assigns = %{url: url(~p"/sign-in"), invitee: invite.email, inviter: invite.user.email}
+  @impl AshAuthentication.Sender
+  def send(%Canary.Accounts.User{} = user, token, _opts) do
+    assigns = %{user: user, url: url(~p"/auth/user/confirm_new_user?#{[confirm: token]}")}
     {html, text} = render_content(&tpl/1, assigns)
 
     deliver(%{
-      to: to_string(invite.email),
-      subject: "Canary: Member Invite",
+      to: to_string(user.email),
+      subject: "Canary: Email Confirmation",
       html_body: html,
       text_body: text
     })
@@ -118,15 +120,16 @@ defmodule Canary.UserNotifier.MemberInvite do
     ~H"""
     <.default_layout>
       <p>
-        Hi <%= @invitee %>, <%= @inviter %> invited you to join Canary.
+        Hi <%= @user.email %>,
       </p>
 
       <p>
-        <a href={@url}>Click here</a> to sign in.
+        Someone has tried to register a new account using this email address.
+        If it was you, then please click the link below to confirm your identity. If you did not initiate this request then please ignore this email.
       </p>
 
       <p>
-        If you are not expecting this, feel free to ignore this.
+        <a href={@url}>Click here</a> to confirm your email address.
       </p>
     </.default_layout>
     """

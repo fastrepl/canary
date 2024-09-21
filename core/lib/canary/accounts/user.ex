@@ -42,7 +42,7 @@ defmodule Canary.Accounts.User do
   end
 
   identities do
-    identity :unique_email, [:email]
+    identity :unique_email, [:email], eager_check_with: Canary.Accounts
   end
 
   authentication do
@@ -66,6 +66,16 @@ defmodule Canary.Accounts.User do
       enabled? true
       token_resource Canary.Accounts.Token
       signing_secret Canary.Accounts.Secrets
+    end
+
+    add_ons do
+      confirmation :confirm_new_user do
+        monitor_fields [:email]
+        confirm_on_create? true
+        confirm_on_update? false
+        confirm_action_name :confirm_new_user
+        sender Canary.UserNotifier.NewUserEmailConfirmation
+      end
     end
   end
 
