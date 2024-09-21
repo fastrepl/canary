@@ -1,0 +1,3203 @@
+<!doctype html>
+<html dir="ltr" lang="en" class="initial astro-TMOCKCVF">
+  <head>
+    <!-- Global Metadata -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta
+      name="theme-color"
+      content="hsl(256, 44%, 15%)"
+      media="(prefers-color-scheme: dark)"
+    />
+    <meta
+      name="theme-color"
+      content="hsl(273, 37%, 93%)"
+      media="(prefers-color-scheme: light)"
+    />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <!-- Global CSS -->
+    <link rel="stylesheet" href="/theme.css" />
+    <link rel="stylesheet" href="/index.css" />
+
+    <!-- Scrollable a11y code helper -->
+    <script type="module" src="/make-scrollable-code-focusable.js"></script>
+
+    <!-- This is intentionally inlined to avoid FOUC -->
+
+    <!-- Double-click to highlight code blocks (inline only). -->
+
+    <!-- Google tag (gtag.js) -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-SHVYTGRTPB"
+    ></script>
+
+    <!-- Fathom - beautiful, simple website analytics -->
+    <script
+      src="https://certain-quality.astro.build/script.js"
+      data-site="EZBHTSIG"
+      defer
+    ></script>
+
+    <!-- Page Metadata -->
+    <link
+      rel="canonical"
+      href="https://docs.openreplay.com/en/v1.8.1/integrations/elastic/"
+    />
+
+    <link
+      rel="alternate"
+      href="https://docs.openreplay.com/en/v1.8.1/integrations/elastic/"
+      hreflang="en"
+    />
+    <link
+      rel="alternate"
+      href="https://docs.opesreplay.com/en/v1.8.1/integrations/elastic/"
+      hreflang="es"
+    />
+    <link
+      rel="alternate"
+      href="https://docs.opfrreplay.com/en/v1.8.1/integrations/elastic/"
+      hreflang="fr"
+    />
+    <link
+      rel="alternate"
+      href="https://docs.oprureplay.com/en/v1.8.1/integrations/elastic/"
+      hreflang="ru"
+    />
+    <link
+      rel="alternate"
+      href="https://docs.opzhreplay.com/en/v1.8.1/integrations/elastic/"
+      hreflang="zh"
+    />
+    <link
+      rel="alternate"
+      href="https://docs.opar-aereplay.com/en/v1.8.1/integrations/elastic/"
+      hreflang="ar-AE"
+    />
+
+    <!-- Algolia docsearch language facet -->
+    <meta name="docsearch:language" content="en" />
+
+    <!-- OpenGraph Tags -->
+    <meta property="og:title" content="Elastic" />
+    <meta property="og:type" content="article" />
+    <meta
+      property="og:url"
+      content="https://docs.openreplay.com/en/v1.8.1/integrations/elastic/"
+    />
+    <meta property="og:locale" content="en" />
+    <meta
+      property="og:image"
+      content="https://docs.openreplay.com/default-og-image.png?v=1"
+    />
+    <meta
+      property="og:image:alt"
+      content="Open-source session replay suite, built for developers."
+    />
+    <meta
+      name="description"
+      property="og:description"
+      content="Open-source session replay suite, built for developers."
+    />
+    <meta property="og:site_name" content="OpenReplay Documentation" />
+
+    <!-- Twitter Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="openreplayhq" />
+    <meta name="twitter:title" content="Elastic" />
+    <meta
+      name="twitter:description"
+      content="Open-source session replay suite, built for developers."
+    />
+    <meta
+      name="twitter:image"
+      content="https://docs.openreplay.com/default-og-image.png?v=1"
+    />
+    <meta
+      name="twitter:image:alt"
+      content="Open-source session replay suite, built for developers."
+    />
+
+    <!--
+  TODO: Add json+ld data, maybe https://schema.org/APIReference makes sense?
+  Docs: https://developers.google.com/search/docs/advanced/structured-data/intro-structured-data
+  https://www.npmjs.com/package/schema-dts seems like a great resource for implementing this.
+  Even better, there’s a React component that integrates with `schema-dts`: https://github.com/google/react-schemaorg
+-->
+
+    <title>Elastic - OpenReplay Documentation</title>
+    <script type="application/json" data-tooltips-options>
+      { "interactive": true, "class": "astro-TMOCKCVF" }
+    </script>
+
+    <script>
+      // This code was migrated/copied from ThemToggleBotton to make the
+      // dark mode toggle instant, vs. hidden inside of a Preact useEffect() call.
+      const theme = (() => {
+        if (
+          typeof localStorage !== "undefined" &&
+          localStorage.getItem("theme")
+        ) {
+          return localStorage.getItem("theme");
+        }
+        if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+          return "dark";
+        }
+        return "light";
+      })();
+      if (theme === "light") {
+        document.documentElement.classList.remove("theme-dark");
+      } else {
+        document.documentElement.classList.add("theme-dark");
+      }
+    </script>
+    <!-- OpenReplay Tracking Code for OpenReplay Documentation Site -->
+    <script>
+      var initOpts = {
+        projectKey: "AnCnp3jCbPkBu2vQNrax",
+        ingestPoint: "https://foss.openreplay.com/ingest",
+        defaultInputMode: 0,
+        obscureTextNumbers: false,
+        obscureTextEmails: true,
+      };
+      var startOpts = { userID: "" };
+      (function (A, s, a, y, e, r) {
+        r = window.OpenReplay = [e, r, y, [s - 1, e]];
+        s = document.createElement("script");
+        s.src = A;
+        s.async = !a;
+        document.getElementsByTagName("head")[0].appendChild(s);
+        r.start = function (v) {
+          r.push([0]);
+        };
+        r.stop = function (v) {
+          r.push([1]);
+        };
+        r.setUserID = function (id) {
+          r.push([2, id]);
+        };
+        r.setUserAnonymousID = function (id) {
+          r.push([3, id]);
+        };
+        r.setMetadata = function (k, v) {
+          r.push([4, k, v]);
+        };
+        r.event = function (k, p, i) {
+          r.push([5, k, p, i]);
+        };
+        r.issue = function (k, p) {
+          r.push([6, k, p]);
+        };
+        r.isActive = function () {
+          return false;
+        };
+        r.getSessionToken = function () {};
+      })(
+        "//static.openreplay.com/latest/openreplay.js",
+        1,
+        0,
+        initOpts,
+        startOpts,
+      );
+    </script>
+    <link rel="stylesheet" href="/assets/404.c33f0598.css" />
+    <link rel="stylesheet" href="/assets/home.c3f0daa8.css" />
+    <link rel="stylesheet" href="/assets/deployment.1088b0e3.css" />
+    <link rel="stylesheet" href="/assets/deployment.52dde23f.css" />
+    <link rel="stylesheet" href="/assets/deployment.c4ebdfd1.css" />
+    <script type="module" src="/hoisted.f56f4cad.js"></script>
+  </head>
+
+  <body class="astro-TMOCKCVF">
+    <header class="astro-3W24ZQP4">
+      <a
+        href="#article"
+        class="sr-only focus:not-sr-only skiplink flex items-center justify-center p-3 fixed top-0 astro-A2WVL2TS"
+      >
+        <span class="astro-A2WVL2TS">Skip to Content </span>
+      </a>
+
+      <nav
+        class="nav-wrapper flex justify-between w-full max-w-screen-2xl mx-auto astro-3W24ZQP4"
+        aria-label="Top"
+      >
+        <div
+          class="flex logo justify-start items-center gap-4 w-max astro-3W24ZQP4"
+        >
+          <a
+            class="block logo-clickarea astro pl-0 pb-0 astro-3W24ZQP4"
+            href="/en/home"
+          >
+            <svg
+              class="w-36 block"
+              viewBox="0 0 179 30"
+              version="1.1"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+            >
+              <title>Open Replay</title>
+              <g
+                id="logos"
+                stroke="none"
+                stroke-width="1"
+                fill="none"
+                fill-rule="evenodd"
+              >
+                <g id="Open-Replay" fill-rule="nonzero">
+                  <g id="Group-Copy" transform="translate(0.000000, 0.000000)">
+                    <path
+                      d="M22.4262619,15 L3.29604084,3.77288564 L3.29604084,26.2271144 L22.4262619,15 Z M25.0367262,12.6792184 C25.8592781,13.1556443 26.3667376,14.0411275 26.3667376,15 C26.3667376,15.9588725 25.8592781,16.8443557 25.0367262,17.3207816 L4.06401836,29.6315942 C2.35007712,30.6386 0,29.4882126 0,27.3108127 L0,2.68918734 C0,0.511787376 2.35007712,-0.638600048 4.06401836,0.368405755 L25.0367262,12.6792184 Z"
+                      id="Combined-Shape"
+                      fill="#394EFF"
+                    ></path>
+                    <path
+                      d="M13.7524069,14.3811249 C13.9742492,14.5081718 14.1111111,14.7443007 14.1111111,15 C14.1111111,15.2556993 13.9742492,15.4918282 13.7524069,15.6188751 L8.09606605,18.9017585 C7.63381597,19.1702933 7,18.8635234 7,18.2828834 L7,11.7171166 C7,11.1364766 7.63381597,10.8297067 8.09606605,11.0982415 L13.7524069,14.3811249 Z"
+                      id="Path-Copy"
+                      fill="#3EAAAF"
+                    ></path>
+                    <path
+                      class="text"
+                      d="M60.0272706,8.76855581 C61.1027831,8.76855581 62.0909102,9.01047676 62.9916519,9.49431864 C63.8923936,9.97816052 64.6116426,10.7532035 65.1493989,11.8194477 C65.6871551,12.8856918 65.9560332,14.2968973 65.9560332,16.0530642 C65.9560332,17.7733908 65.6625079,19.2181965 65.0754574,20.387481 C64.4884068,21.5567656 63.6167936,22.439329 62.4606176,23.0351713 C61.3044417,23.6310136 59.8749063,23.9289348 58.1720116,23.9289348 C57.8403952,23.9289348 57.5065382,23.9154947 57.1704406,23.8886146 C56.8343429,23.8617345 56.5228924,23.8303744 56.2360891,23.7945343 L56.2360891,23.7945343 L56.2360891,29.5737568 L52.7003418,29.5737568 L52.7003418,8.9970367 L55.6848889,8.9970367 L55.8999914,10.5829629 L56.0747622,10.5829629 L56.2416557,10.3830421 C56.6440626,9.92832033 57.137391,9.55591888 57.7216407,9.26583775 C58.3893547,8.93431646 59.157898,8.76855581 60.0272706,8.76855581 Z M137.230204,8.76575595 C138.305716,8.76575595 139.293844,9.00767689 140.194585,9.49151877 C141.095327,9.97536066 141.814576,10.7504037 142.352332,11.8166478 C142.890088,12.882892 143.158967,14.2940975 143.158967,16.0502643 C143.158967,17.770591 142.865441,19.2153966 142.278391,20.3846812 C141.69134,21.5539657 140.819727,22.4365291 139.663551,23.0323715 C138.507375,23.6282138 137.07784,23.9261349 135.374945,23.9261349 C135.043329,23.9261349 134.709472,23.9126949 134.373374,23.8858148 C134.037276,23.8589347 133.725826,23.8275745 133.439022,23.7917344 L133.439022,23.7917344 L133.439022,29.5709569 L129.903275,29.5709569 L129.903275,8.99423684 L132.887822,8.99423684 L133.102925,10.580163 L133.277696,10.580163 L133.444589,10.3802422 C133.846996,9.92552046 134.340324,9.55311901 134.924574,9.26303788 C135.592288,8.93151659 136.360831,8.76575595 137.230204,8.76575595 Z M166.871915,8.99423684 L170.744603,20.5983309 L174.709713,8.99423684 L178.205128,8.99423684 L170.770648,29.5709569 L167.288676,29.5709569 L169.439701,23.6573339 L168.458296,23.6573339 L163.174841,8.99423684 L166.871915,8.99423684 Z M73.8289804,8.76855581 C75.1464832,8.76855581 76.2600867,9.05303692 77.169791,9.62199914 C78.0794954,10.1909613 78.7673752,11.0444047 79.2334306,12.1823291 C79.699486,13.3202535 79.9325138,14.735939 79.9325138,16.4293856 L79.9325138,16.4293856 L79.9325138,17.3836293 L70.8684595,17.3836406 L70.8703874,17.4241362 C70.9120884,18.2460949 71.0580419,18.9202753 71.308248,19.4466774 C71.6084952,20.0783598 72.0947165,20.5308416 72.7669118,20.8041226 C73.4391071,21.0774037 74.3398488,21.2140442 75.4691369,21.2140442 C76.033781,21.2140442 76.6253128,21.1692441 77.2437325,21.0796437 C77.8621522,20.9900434 78.4984971,20.8646029 79.1527672,20.7033222 L79.1527672,20.7033222 L79.1527672,23.4047728 L78.7056229,23.511218 C78.115525,23.6445433 77.5498055,23.7434621 77.0084642,23.8079743 C76.3317876,23.8886146 75.6573516,23.9289348 74.9851563,23.9289348 C73.2553737,23.9289348 71.8235977,23.6668538 70.6898283,23.1426917 C69.5560589,22.6185297 68.7113334,21.7964465 68.155652,20.6764421 C67.5999705,19.5564378 67.3221298,18.1049121 67.3221298,16.3218652 C67.3221298,14.6642588 67.5798046,13.2754533 68.0951544,12.155449 C68.6105041,11.0354446 69.3521596,10.1909613 70.3201209,9.62199914 C71.2880821,9.05303692 72.4577019,8.76855581 73.8289804,8.76855581 Z M122.084104,8.76575595 C123.401606,8.76575595 124.51521,9.05023706 125.424914,9.61919927 C126.334619,10.1881615 127.022498,11.0416048 127.488554,12.1795292 C127.954609,13.3174537 128.187637,14.7331392 128.187637,16.4265858 L128.187637,16.4265858 L128.187637,17.3808295 L119.123573,17.3808407 L119.125511,17.4213363 C119.167212,18.243295 119.313165,18.9174754 119.563371,19.4438775 C119.863618,20.0755599 120.34984,20.5280417 121.022035,20.8013228 C121.69423,21.0746038 122.594972,21.2112444 123.72426,21.2112444 C124.288904,21.2112444 124.880436,21.1664442 125.498856,21.0768438 C126.117275,20.9872435 126.75362,20.861803 127.40789,20.7005224 L127.40789,20.7005224 L127.40789,23.4019729 L126.960746,23.5084181 C126.370648,23.6417434 125.804929,23.7406622 125.263587,23.8051745 C124.586911,23.8858148 123.912475,23.9261349 123.24028,23.9261349 C121.510497,23.9261349 120.078721,23.6640539 118.944952,23.1398919 C117.811182,22.6157298 116.966457,21.7936466 116.410775,20.6736423 C115.855094,19.5536379 115.577253,18.1021123 115.577253,16.3190653 C115.577253,14.6614589 115.834928,13.2726535 116.350278,12.1526491 C116.865627,11.0326448 117.607283,10.1881615 118.575244,9.61919927 C119.543205,9.05023706 120.712825,8.76575595 122.084104,8.76575595 Z M41.6411889,3.51349537 C43.4516349,3.51349537 45.0290532,3.87637678 46.3734438,4.60213961 C47.7178345,5.32790243 48.7619778,6.44566678 49.505874,7.95543265 C50.2497701,9.46519853 50.6217182,11.384886 50.6217182,13.7144951 C50.6217182,16.0441041 50.2497701,17.9637916 49.505874,19.4735575 C48.7619778,20.9833233 47.7155938,22.1010877 46.3667219,22.8268505 C45.01785,23.5526133 43.4426723,23.9154947 41.6411889,23.9154947 C39.8397054,23.9154947 38.2667684,23.5526133 36.9223778,22.8268505 C35.5779872,22.1010877 34.5316032,20.9855633 33.7832257,19.4802775 C33.0348483,17.9749916 32.6606596,16.0530642 32.6606596,13.7144951 C32.6606596,11.375926 33.0348483,9.45399848 33.7832257,7.94871263 C34.5316032,6.44342677 35.5779872,5.32790243 36.9223778,4.60213961 C38.2667684,3.87637678 39.8397054,3.51349537 41.6411889,3.51349537 Z M156.054753,8.76575595 C157.497732,8.76575595 158.687518,8.94719666 159.62411,9.31007807 C160.560702,9.67295948 161.257544,10.2822418 161.714637,11.1379252 C162.17173,11.9936085 162.400276,13.156173 162.400276,14.6256187 L162.400276,14.6256187 L162.400276,23.6573339 L159.482949,23.6573339 L159.227515,22.138608 L159.052744,22.138608 L158.898637,22.332991 C158.475071,22.8360803 157.950592,23.2170477 157.325202,23.4758932 C156.621637,23.7670943 155.862057,23.9126949 155.04646,23.9126949 C153.585555,23.9126949 152.445064,23.5341334 151.624986,22.7770105 C150.804907,22.0198875 150.394868,21.0141236 150.394868,19.7597187 C150.394868,18.4157135 150.854202,17.3651494 151.772869,16.6080265 L151.772869,16.6080265 L151.80477,16.5820386 C152.725657,15.8404901 154.196094,15.3944309 156.21608,15.2438612 L156.21608,15.2438612 L158.94512,14.9840332 L158.945193,14.4105779 L158.940794,14.168574 C158.917337,13.538938 158.800048,13.0349637 158.588929,12.6566511 C158.35142,12.2310494 157.974991,11.9308883 157.459641,11.7561676 C156.944291,11.5814469 156.274337,11.4940866 155.449777,11.4940866 C154.894096,11.4940866 154.262232,11.5433668 153.554186,11.6419271 C152.84614,11.7404875 152.15602,11.8928081 151.483825,12.0988889 L151.483825,12.0988889 L151.483825,9.39743841 L151.905694,9.27970355 C152.478584,9.13060857 153.09306,9.01305291 153.749123,8.92703658 C154.569201,8.81951616 155.337744,8.76575595 156.054753,8.76575595 Z M89.4052857,8.76855581 C90.3553217,8.76855581 91.2000472,8.95223653 91.939462,9.31959796 C92.6788769,9.68695939 93.2592055,10.2760817 93.6804479,11.0869648 C94.1016903,11.897848 94.3123115,12.9797722 94.3123115,14.3327375 L94.3123115,14.3327375 L94.3123115,23.6601337 L90.7765641,23.6601337 L90.7765641,14.5343382 L90.7727458,14.3061755 C90.7421987,13.4154738 90.528369,12.7881653 90.1312566,12.42425 C89.7010516,12.0300085 89.1095198,11.8328877 88.356661,11.8328877 C87.9981569,11.8328877 87.6262088,11.8821679 87.2408168,11.9807283 C86.8554248,12.0792887 86.4834768,12.2360893 86.1249726,12.4511301 C85.7664684,12.666171 85.4527773,12.9484121 85.1838992,13.2978534 L85.1838992,13.2978534 L85.1838992,23.6601337 L81.6481519,23.6601337 L81.6481519,8.9970367 L84.5789234,8.9970367 L84.8209137,10.5426427 L84.9956845,10.5426427 L85.2118373,10.3339019 C85.7264868,9.86154007 86.3131873,9.49207863 86.9719387,9.22551759 C87.7247974,8.92087641 88.5359131,8.76855581 89.4052857,8.76855581 Z M105.92971,3.53757561 C108.708118,3.53757561 110.789682,4.04157757 112.174405,5.04958149 C113.559127,6.05758541 114.251488,7.62783152 114.251488,9.76031982 C114.251488,11.1401652 113.922113,12.2960097 113.263361,13.2278533 C112.60461,14.1596969 111.654574,14.8608197 110.413253,15.3312215 L110.413253,15.3312215 L110.347682,15.3557623 C110.216065,15.4044096 110.081593,15.4504508 109.944266,15.4938858 L109.944266,15.4938858 L109.942568,15.4944823 L115.864757,23.6573339 L111.885361,23.6573339 L106.429325,16.0299683 L106.3726,16.0313949 C106.222471,16.0350144 106.07036,16.0368242 105.916266,16.0368242 C105.459174,16.0368242 105.051375,16.0278642 104.692871,16.0099441 C104.334367,15.9920241 103.962419,15.974104 103.577027,15.9561839 L103.577027,15.9561839 L103.577027,23.6573339 L100.041279,23.6573339 L100.041279,4.16925807 L100.471484,4.08357773 C100.908411,3.99957741 101.365504,3.9206171 101.842763,3.84669681 C102.479108,3.74813643 103.1401,3.67197613 103.825739,3.61821592 C104.511378,3.56445571 105.212702,3.53757561 105.92971,3.53757561 Z M148.571679,1.93820939 L148.571679,23.6573339 L145.035932,23.6573339 L145.035932,1.93820939 L148.571679,1.93820939 Z M158.94512,17.0575269 L156.552177,17.273309 L156.302076,17.3010778 C155.490257,17.4047476 154.896947,17.6194922 154.522147,17.9453117 C154.109868,18.3037131 153.903728,18.796515 153.903728,19.4237174 C153.903728,20.0598799 154.091942,20.5482018 154.468372,20.8886831 C154.844801,21.2291644 155.400483,21.3994051 156.135416,21.3994051 C156.619397,21.3994051 157.107859,21.3053247 157.600802,21.117164 L157.600802,21.117164 L157.649947,21.0979298 C158.123571,20.9079571 158.555319,20.6007673 158.945193,20.1763603 L158.945193,20.1763603 L158.94512,17.0575269 Z M59.0458655,11.6850472 C58.5260344,11.6850472 58.015166,11.7858476 57.5132602,11.9874483 C57.0113543,12.1890491 56.5856306,12.5138504 56.2360891,12.9618521 L56.2360891,12.9618521 L56.2360891,20.9990034 L56.4453099,21.0380635 C56.6620929,21.0758637 56.9015624,21.1098838 57.1637186,21.1401239 C57.5132602,21.1804441 57.8538391,21.2006042 58.1854555,21.2006042 C59.5836217,21.2006042 60.634487,20.8242827 61.3380515,20.0716398 C62.0416159,19.3189969 62.3933981,18.073552 62.3933981,16.3353053 C62.3933981,15.1257005 62.2499964,14.1848969 61.9631931,13.5128943 C61.6763898,12.8408917 61.2820352,12.3682498 60.7801294,12.0949688 C60.2782235,11.8216877 59.7001356,11.6850472 59.0458655,11.6850472 Z M136.248799,11.6822473 C135.728968,11.6822473 135.218099,11.7830477 134.716194,11.9846485 C134.214288,12.1862493 133.788564,12.5110505 133.439022,12.9590523 L133.439022,12.9590523 L133.439022,20.9962035 L133.648243,21.0352637 C133.865026,21.0730638 134.104496,21.107084 134.366652,21.1373241 C134.716194,21.1776442 135.056772,21.1978043 135.388389,21.1978043 C136.786555,21.1978043 137.83742,20.8214829 138.540985,20.0688399 C139.244549,19.316197 139.596331,18.0707522 139.596331,16.3325054 C139.596331,15.1229007 139.45293,14.182097 139.166126,13.5100944 C138.879323,12.8380918 138.484969,12.36545 137.983063,12.0921689 C137.481157,11.8188878 136.903069,11.6822473 136.248799,11.6822473 Z M41.6411889,6.45686682 C40.5656764,6.45686682 39.6313249,6.69206774 38.8381344,7.16246957 C38.044944,7.6328714 37.4332462,8.39447436 37.0030412,9.44727846 C36.5728362,10.5000826 36.3577338,11.895608 36.3577338,13.6338547 C36.3577338,15.4258617 36.5728362,16.8594673 37.0030412,17.9346715 C37.4332462,19.0098757 38.0427033,19.7849187 38.8314125,20.2598005 C39.6201216,20.7346824 40.5567138,20.9721233 41.6411889,20.9721233 C42.7346266,20.9721233 43.6757,20.7346824 44.4644092,20.2598005 C45.2531183,19.7849187 45.8603348,19.0210757 46.2860584,17.9682716 C46.7117821,16.9154675 46.924644,15.5244221 46.924644,13.7951354 C46.924644,12.0120884 46.7095415,10.5829629 46.2793365,9.50775869 C45.8491315,8.43255451 45.2396744,7.65527148 44.4509653,7.17590962 C43.6622561,6.69654775 42.725664,6.45686682 41.6411889,6.45686682 Z M73.7886486,11.0802448 C73.170229,11.0802448 72.6414353,11.2191253 72.2022677,11.4968864 C71.7631001,11.7746475 71.4292431,12.2405693 71.2006967,12.8946519 L71.2006967,12.8946519 L71.1862638,12.9367121 C70.9911355,13.5157762 70.8829665,14.2687091 70.8617569,15.1955109 L70.8617569,15.1955109 L70.8604326,15.2601532 L76.6225914,15.2601532 L76.6216613,15.208951 C76.6012124,14.2595442 76.4948783,13.4925912 76.3026591,12.9080919 C76.0875566,12.2540094 75.7693841,11.7858476 75.3481418,11.5036065 C74.9268994,11.2213654 74.4070683,11.0802448 73.7886486,11.0802448 Z M122.043772,11.0774449 C121.425352,11.0774449 120.896559,11.2163255 120.457391,11.4940866 C120.018223,11.7718476 119.684366,12.2377695 119.45582,12.891852 L119.45582,12.891852 L119.441387,12.9339122 C119.246259,13.5129763 119.13809,14.2659092 119.11688,15.1927111 L119.11688,15.1927111 L119.115547,15.2573534 L124.877705,15.2573534 L124.876785,15.2061511 C124.856336,14.2567444 124.750002,13.4897913 124.557782,12.9052921 C124.34268,12.2512095 124.024507,11.7830477 123.603265,11.5008066 C123.182023,11.2185655 122.662192,11.0774449 122.043772,11.0774449 Z M106.279252,6.22558607 C105.741496,6.22558607 105.259756,6.24798615 104.834032,6.29278633 C104.408308,6.3375865 103.989307,6.39582673 103.577027,6.46750701 L103.577027,6.46750701 L103.577027,13.2009732 L103.857108,13.22636 C104.039348,13.2422889 104.212625,13.2562268 104.376939,13.2681735 C104.623411,13.2860935 104.874364,13.2995336 105.129798,13.3084936 C105.385232,13.3174537 105.665313,13.3219337 105.970042,13.3219337 C107.655012,13.3219337 108.891851,13.0374526 109.68056,12.4684904 C110.469269,11.8995281 110.863624,10.9968046 110.863624,9.76031982 C110.863624,8.93599661 110.700056,8.263994 110.372921,7.74431198 C110.045786,7.22462995 109.54388,6.84158846 108.867204,6.59518751 C108.190527,6.34878655 107.327877,6.22558607 106.279252,6.22558607 Z"
+                      id="Combined-Shape"
+                      fill="#000000"
+                    ></path>
+                  </g>
+                </g>
+              </g>
+            </svg>
+            <span class="sr-only astro-3W24ZQP4">OpenReplay</span>
+          </a>
+          <div class="block pt-1 astro-3W24ZQP4">
+            <div class="flex items-baseline astro-HDPX7I7M">
+              <span
+                class="lgl:inline-block docs mr-1 items-baseline astro-HDPX7I7M"
+                >DOCS</span
+              >
+              <select id="version-selector" class="astro-HDPX7I7M">
+                <option value="" class="astro-HDPX7I7M">v1.15.0</option>
+                <option value="/v1.14.0" class="astro-HDPX7I7M">v1.14.0</option>
+                <option value="/v1.13.0" class="astro-HDPX7I7M">v1.13.0</option>
+                <option value="/v1.12.0" class="astro-HDPX7I7M">v1.12.0</option>
+                <option value="/v1.11.0" class="astro-HDPX7I7M">v1.11.0</option>
+                <option value="/v1.10.0" class="astro-HDPX7I7M">v1.10.0</option>
+                <option value="/v1.9.0" class="astro-HDPX7I7M">v1.9.0</option>
+                <option value="/v1.8.1" class="astro-HDPX7I7M">v1.8.1</option>
+              </select>
+            </div>
+
+            <script>
+              let currentVersion = "";
+
+              if (typeof window != "undefined") {
+                currentVersion = window.location.pathname.split("/")[2];
+              }
+
+              if (currentVersion && currentVersion.indexOf("v") != 0)
+                currentVersion = "";
+
+              function updateLocation(evt) {
+                let selectedVersion = evt.target.value;
+                let versionRegExp = /v[0-9]+.[0-9]+.[0-9]+/;
+
+                let pathname = window.location.pathname.replace(/\/$/, ""); //remove the trailing "/" if there is any
+
+                let pathParts = pathname.split("/");
+
+                if (pathname.match(versionRegExp)) {
+                  pathParts[2] = selectedVersion.replace("/", "");
+                } else {
+                  console.log(pathParts);
+                  pathParts = [
+                    pathParts[0],
+                    pathParts[1],
+                    selectedVersion.replace("/", ""),
+                    ...pathParts.slice(2),
+                  ];
+                }
+
+                //when we're visiting the root of the default version, we ignore the "index" part
+                //but if we're inside a specific version coming from the default version, we need to add it
+                if (
+                  pathParts[pathParts.length - 1] == "index" &&
+                  selectedVersion == ""
+                ) {
+                  pathParts[pathParts.length - 1] = "";
+                } else {
+                  if (
+                    pathParts[pathParts.length - 1] == "" &&
+                    pathname === ""
+                  ) {
+                    pathParts[pathParts.length - 1] = "/index";
+                  }
+                }
+
+                let newPath = `${window.location.protocol}//${window.location.host}${pathParts.join("/").replace("//", "/")}`;
+                window.location.href = newPath;
+              }
+
+              function selectCurrentVersion(dropDown) {
+                if (
+                  typeof currentVersion != "undefined" &&
+                  currentVersion != ""
+                ) {
+                  dropDown
+                    .querySelector("option[value*='" + currentVersion + "']")
+                    .setAttribute("selected", true);
+                } else {
+                  dropDown
+                    .querySelector("option[value='']")
+                    .setAttribute("selected", true);
+                }
+              }
+              const dropDown = document.getElementById("version-selector");
+
+              selectCurrentVersion(dropDown);
+              dropDown.addEventListener("change", updateLocation);
+            </script>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-end astro-3W24ZQP4">
+          <div class="flex astro-3W24ZQP4">
+            <div class="hidden xl:flex justify-end gap-1 astro-3W24ZQP4">
+              <div dir="ltr" lang="en" class="astro-3W24ZQP4">
+                <style>
+                  astro-island,
+                  astro-slot {
+                    display: contents;
+                  }
+                </style>
+                <script>
+                  ((self.Astro = self.Astro || {}).idle = (t) => {
+                    const e = async () => {
+                      await (
+                        await t()
+                      )();
+                    };
+                    "requestIdleCallback" in window
+                      ? window.requestIdleCallback(e)
+                      : setTimeout(e, 200);
+                  }),
+                    window.dispatchEvent(new Event("astro:idle"));
+                  var l;
+                  {
+                    const c = {
+                        0: (t) => t,
+                        1: (t) => JSON.parse(t, o),
+                        2: (t) => new RegExp(t),
+                        3: (t) => new Date(t),
+                        4: (t) => new Map(JSON.parse(t, o)),
+                        5: (t) => new Set(JSON.parse(t, o)),
+                        6: (t) => BigInt(t),
+                        7: (t) => new URL(t),
+                        8: (t) => new Uint8Array(JSON.parse(t)),
+                        9: (t) => new Uint16Array(JSON.parse(t)),
+                        10: (t) => new Uint32Array(JSON.parse(t)),
+                      },
+                      o = (t, s) => {
+                        if (t === "" || !Array.isArray(s)) return s;
+                        const [e, n] = s;
+                        return e in c ? c[e](n) : void 0;
+                      };
+                    customElements.get("astro-island") ||
+                      customElements.define(
+                        "astro-island",
+                        ((l = class extends HTMLElement {
+                          constructor() {
+                            super(...arguments);
+                            this.hydrate = () => {
+                              if (
+                                !this.hydrator ||
+                                (this.parentElement &&
+                                  this.parentElement.closest(
+                                    "astro-island[ssr]",
+                                  ))
+                              )
+                                return;
+                              const s = this.querySelectorAll("astro-slot"),
+                                e = {},
+                                n = this.querySelectorAll(
+                                  "template[data-astro-template]",
+                                );
+                              for (const r of n) {
+                                const i = r.closest(this.tagName);
+                                !i ||
+                                  !i.isSameNode(this) ||
+                                  ((e[
+                                    r.getAttribute("data-astro-template") ||
+                                      "default"
+                                  ] = r.innerHTML),
+                                  r.remove());
+                              }
+                              for (const r of s) {
+                                const i = r.closest(this.tagName);
+                                !i ||
+                                  !i.isSameNode(this) ||
+                                  (e[r.getAttribute("name") || "default"] =
+                                    r.innerHTML);
+                              }
+                              const a = this.hasAttribute("props")
+                                ? JSON.parse(this.getAttribute("props"), o)
+                                : {};
+                              this.hydrator(this)(this.Component, a, e, {
+                                client: this.getAttribute("client"),
+                              }),
+                                this.removeAttribute("ssr"),
+                                window.removeEventListener(
+                                  "astro:hydrate",
+                                  this.hydrate,
+                                ),
+                                window.dispatchEvent(
+                                  new CustomEvent("astro:hydrate"),
+                                );
+                            };
+                          }
+                          connectedCallback() {
+                            !this.hasAttribute("await-children") ||
+                            this.firstChild
+                              ? this.childrenConnectedCallback()
+                              : new MutationObserver((s, e) => {
+                                  e.disconnect(),
+                                    this.childrenConnectedCallback();
+                                }).observe(this, { childList: !0 });
+                          }
+                          async childrenConnectedCallback() {
+                            window.addEventListener(
+                              "astro:hydrate",
+                              this.hydrate,
+                            );
+                            let s = this.getAttribute("before-hydration-url");
+                            s && (await import(s)), this.start();
+                          }
+                          start() {
+                            const s = JSON.parse(this.getAttribute("opts")),
+                              e = this.getAttribute("client");
+                            if (Astro[e] === void 0) {
+                              window.addEventListener(
+                                `astro:${e}`,
+                                () => this.start(),
+                                { once: !0 },
+                              );
+                              return;
+                            }
+                            Astro[e](
+                              async () => {
+                                const n = this.getAttribute("renderer-url"),
+                                  [a, { default: r }] = await Promise.all([
+                                    import(this.getAttribute("component-url")),
+                                    n ? import(n) : () => () => {},
+                                  ]),
+                                  i =
+                                    this.getAttribute("component-export") ||
+                                    "default";
+                                if (!i.includes(".")) this.Component = a[i];
+                                else {
+                                  this.Component = a;
+                                  for (const d of i.split("."))
+                                    this.Component = this.Component[d];
+                                }
+                                return (this.hydrator = r), this.hydrate;
+                              },
+                              s,
+                              this,
+                            );
+                          }
+                          attributeChangedCallback() {
+                            this.hydrator && this.hydrate();
+                          }
+                        }),
+                        (l.observedAttributes = ["props"]),
+                        l),
+                      );
+                  }
+                </script>
+                <astro-island
+                  uid="12DUji"
+                  component-url="/LanguageSelect.ea145bcf.js"
+                  component-export="default"
+                  renderer-url="/client.c4386747.js"
+                  props='{"lang":[0,"en"],"class":[0,"astro-3W24ZQP4"]}'
+                  ssr=""
+                  client="idle"
+                  opts='{"name":"LanguageSelect","value":true}'
+                  await-children=""
+                  ><div class="language-select-wrapper flex items-center">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                      viewBox="0 0 16 16"
+                      class="bi bi-translate relative"
+                    >
+                      <path
+                        d="M4.545 6.714 4.11 8H3l1.862-5h1.284L8 8H6.833l-.435-1.286H4.545zm1.634-.736L5.5 3.956h-.049l-.679 2.022H6.18z"
+                      ></path>
+                      <path
+                        d="M0 2a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v3h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-3H2a2 2 0 0 1-2-2V2zm2-1a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H2zm7.138 9.995c.193.301.402.583.63.846-.748.575-1.673 1.001-2.768 1.292.178.217.451.635.555.867 1.125-.359 2.08-.844 2.886-1.494.777.665 1.739 1.165 2.93 1.472.133-.254.414-.673.629-.89-1.125-.253-2.057-.694-2.82-1.284.681-.747 1.222-1.651 1.621-2.757H14V8h-3v1.047h.765c-.318.844-.74 1.546-1.272 2.13a6.066 6.066 0 0 1-.415-.492 1.988 1.988 0 0 1-.94.31z"
+                      ></path></svg
+                    ><select
+                      aria-label="Select language"
+                      class="header-button language-select"
+                    >
+                      <option selected value="en">
+                        <span>English   </span>
+                      </option>
+                      <option value="es"><span>Español   </span></option>
+                      <option value="fr"><span>Français   </span></option>
+                      <option value="ru"><span>Русский   </span></option>
+                      <option value="zh"><span>中國人   </span></option>
+                      <option value="ar-ae"><span>العربية   </span></option>
+                    </select>
+                  </div></astro-island
+                >
+              </div>
+
+              <div class="nav-theme-toggle astro-3W24ZQP4">
+                <script>
+                  ((self.Astro = self.Astro || {}).visible = (s, c, n) => {
+                    const r = async () => {
+                      await (
+                        await s()
+                      )();
+                    };
+                    let i = new IntersectionObserver((e) => {
+                      for (const t of e)
+                        if (!!t.isIntersecting) {
+                          i.disconnect(), r();
+                          break;
+                        }
+                    });
+                    for (let e = 0; e < n.children.length; e++) {
+                      const t = n.children[e];
+                      i.observe(t);
+                    }
+                  }),
+                    window.dispatchEvent(new Event("astro:visible"));
+                </script>
+                <astro-island
+                  uid="Z1ntYsQ"
+                  component-url="/ThemeToggleButton.d8c74c74.js"
+                  component-export="default"
+                  renderer-url="/client.c4386747.js"
+                  props='{"labels":[0,{"useLight":[0,"Use light theme"],"useDark":[0,"Use dark theme"]}],"isInsideHeader":[0,true],"class":[0,"astro-3W24ZQP4"]}'
+                  ssr=""
+                  client="visible"
+                  opts='{"name":"ThemeToggleButton","value":true}'
+                  await-children=""
+                  ><div class="theme-toggle hide-toggle-on-smaller-screens">
+                    <label
+                      ><svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20"
+                        height="20"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+                          clip-rule="evenodd"
+                        ></path></svg
+                      ><input
+                        type="radio"
+                        name="theme-toggle"
+                        value="light" /></label
+                    ><label
+                      ><svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20"
+                        height="20"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"
+                        ></path></svg
+                      ><input type="radio" name="theme-toggle" value="dark"
+                    /></label></div
+                ></astro-island>
+              </div>
+            </div>
+          </div>
+          <astro-island
+            uid="Z1tgnfo"
+            component-url="/SidebarToggle.6df214ce.js"
+            component-export="default"
+            renderer-url="/client.c4386747.js"
+            props='{"class":[0,"astro-3W24ZQP4"]}'
+            ssr=""
+            client="idle"
+            opts='{"name":"SidebarToggle","value":true}'
+            await-children=""
+            ><button
+              id="menu-toggle"
+              type="button"
+              aria-pressed="false"
+              class="header-button ml-4"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="1.2rem"
+                height="1.2rem"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 6h16M4 12h16M4 18h16"
+                ></path></svg
+              ><span class="sr-only">Toggle sidebar</span>
+            </button></astro-island
+          >
+        </div>
+      </nav>
+    </header>
+
+    <main
+      class="layout max-w-screen-2xl lg:flex xl:gap-10 mx-auto justify-between astro-TMOCKCVF"
+    >
+      <aside
+        id="left-sidebar"
+        class="sidebar lg:w-72 xl:w-1/5 relative astro-TMOCKCVF"
+      >
+        <div class="fixed nav-container sm:w-full astro-54DZ2EUX">
+          <div
+            class="block sidenav-search py-2 lg:pt-0 px-8 lg:px-0 astro-54DZ2EUX"
+          >
+            <button
+              class="search-input header-button w-full drop-shadow-sm astro-QKRKB5Y2"
+              type="button"
+              aria-label="Search"
+              id="docsearch-search-button"
+            >
+              <svg
+                width="1em"
+                height="1em"
+                viewBox="0 0 24 24"
+                fill="none"
+                focusable="false"
+                aria-hidden="true"
+                role="img"
+                class="astro-QKRKB5Y2"
+              >
+                <path
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  transform="translate(-1)"
+                  class="astro-QKRKB5Y2"
+                ></path>
+              </svg>
+              <span class="search-placeholder astro-QKRKB5Y2">
+                Search
+                <span class="sr-only astro-QKRKB5Y2">(Press / to search)</span>
+              </span>
+              <span
+                class="search-keyboard-hint border-0 astro-QKRKB5Y2"
+                title="Keyboard Shortcut"
+                data-tooltip-placement="bottom"
+              >
+                <kbd aria-hidden="true" class="astro-QKRKB5Y2">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="21"
+                    height="9"
+                    fill="currentColor"
+                    class="box-content rounded-[3px] inline-flex text-black/35 dark:text-white/40 astro-QKRKB5Y2"
+                  >
+                    <g class="astro-QKRKB5Y2">
+                      <path
+                        d="M3.437 3.545v1.717l-.756.006C1.697 5.268.9 6.04.9 7.03a1.78 1.78 0 1 0 3.562 0v-.75h1.7v.75c0 .979.802 1.782 1.78 1.782A1.78 1.78 0 0 0 9.725 7.03c0-.99-.797-1.763-1.781-1.763l-.762-.006V3.545h.762c.984-.006 1.781-.774 1.781-1.764a1.78 1.78 0 1 0-3.562 0v.75h-1.7v-.75C4.462.803 3.66 0 2.682 0A1.78 1.78 0 0 0 .9 1.781c0 .99.797 1.758 1.781 1.764h.756Zm-.732-1.002a.763.763 0 0 1-.774-.762c0-.416.34-.75.75-.75s.756.34.756.774v.738h-.732Zm5.214 0h-.732v-.738c0-.434.346-.774.756-.774.41 0 .75.334.75.75a.767.767 0 0 1-.774.762Zm-3.457 2.73V3.54h1.7v1.734h-1.7Zm-1.757.997h.732v.732a.77.77 0 0 1-.756.78c-.41 0-.75-.34-.75-.757 0-.416.34-.755.774-.755Zm5.214 0c.428 0 .774.34.774.755 0 .416-.34.756-.75.756a.77.77 0 0 1-.756-.779V6.27h.732ZM14.52 8.63V5.716l.924-.948L18.06 8.63h2.04l-3.54-5.04L19.8.23h-2.148L14.52 3.555V.23h-1.632v8.4h1.632Z"
+                        class="astro-QKRKB5Y2"
+                      ></path>
+                    </g></svg
+                ></kbd>
+              </span>
+            </button>
+            <script>
+              ((self.Astro = self.Astro || {}).only = (t) => {
+                (async () => await (await t())())();
+              }),
+                window.dispatchEvent(new Event("astro:only"));
+            </script>
+            <astro-island
+              uid="ZzPCxv"
+              component-url="/DocSearch.7d452f14.js"
+              component-export="default"
+              renderer-url="/client.c4386747.js"
+              props='{"lang":[0,"en"],"labels":[0,{"modal":[0,{}],"placeholder":[0,"Search docs"]}],"class":[0,"astro-QKRKB5Y2"]}'
+              ssr=""
+              client="only"
+              opts='{"name":"DocSearch","value":"preact"}'
+            ></astro-island>
+          </div>
+
+          <nav aria-label="Primary" class="mt-5 astro-54DZ2EUX">
+            <script>
+              ((self.Astro = self.Astro || {}).load = (a) => {
+                (async () => await (await a())())();
+              }),
+                window.dispatchEvent(new Event("astro:load"));
+            </script>
+            <astro-island
+              uid="trtrC"
+              component-url="/SidebarToggleTabGroup.ddc674a5.js"
+              component-export="default"
+              renderer-url="/client.c4386747.js"
+              props='{"defaultActiveTab":[0,"learn"],"labels":[0,{"learn":[0,"Learn"],"api":[0,"Reference"]}],"class":[0,"astro-54DZ2EUX"]}'
+              ssr=""
+              client="load"
+              opts='{"name":"SidebarToggleTabGroup","value":true}'
+              await-children=""
+              ><div class="TabGroup">
+                <button class="active">Learn</button><button>Reference</button>
+              </div></astro-island
+            >
+            <ul class="nav-groups left-nav-parent astro-54DZ2EUX">
+              <li class="menu-item astro-RSE2NWEF">
+                <a
+                  href="/en/v1.8.1/home"
+                  class="flex items-center justify-between uppercase font-bold astro-RSE2NWEF"
+                  style="display: flex"
+                >
+                  <div class="flex items-center astro-RSE2NWEF">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                      viewBox="0 0 16 16"
+                      class="bi bi-house-door"
+                    >
+                      <path
+                        d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146ZM2.5 14V7.707l5.5-5.5 5.5 5.5V14H10v-4a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4H2.5Z"
+                      ></path>
+                    </svg>
+                    <span class="ml-2 astro-RSE2NWEF">Home</span>
+                  </div>
+                  <div class="toggle px-2 astro-RSE2NWEF"></div>
+                </a>
+              </li>
+              <li class="menu-item astro-RSE2NWEF">
+                <a
+                  href="/en/v1.8.1/getting-started"
+                  class="flex items-center justify-between uppercase font-bold astro-RSE2NWEF"
+                  style="display: flex"
+                >
+                  <div class="flex items-center astro-RSE2NWEF">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="15"
+                      height="16"
+                      style="margin-right: 1px"
+                      fill="currentColor"
+                      viewBox="0 0 16 16"
+                      class="bi bi-collection-play"
+                    >
+                      <path
+                        d="M2 3a.5.5 0 0 0 .5.5h11a.5.5 0 0 0 0-1h-11A.5.5 0 0 0 2 3zm2-2a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 0-1h-7A.5.5 0 0 0 4 1zm2.765 5.576A.5.5 0 0 0 6 7v5a.5.5 0 0 0 .765.424l4-2.5a.5.5 0 0 0 0-.848l-4-2.5z"
+                      ></path>
+                      <path
+                        d="M1.5 14.5A1.5 1.5 0 0 1 0 13V6a1.5 1.5 0 0 1 1.5-1.5h13A1.5 1.5 0 0 1 16 6v7a1.5 1.5 0 0 1-1.5 1.5h-13zm13-1a.5.5 0 0 0 .5-.5V6a.5.5 0 0 0-.5-.5h-13A.5.5 0 0 0 1 6v7a.5.5 0 0 0 .5.5h13z"
+                      ></path>
+                    </svg>
+                    <span class="ml-2 astro-RSE2NWEF">Getting started</span>
+                  </div>
+                  <div class="toggle px-2 astro-RSE2NWEF"></div>
+                </a>
+              </li>
+              <li class="menu-item astro-RSE2NWEF">
+                <a
+                  href="/en/v1.8.1/deployment/"
+                  class="flex items-center justify-between uppercase font-bold astro-RSE2NWEF"
+                  style="display: flex"
+                >
+                  <div class="flex items-center astro-RSE2NWEF">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                      viewBox="0 0 16 16"
+                      class="bi bi-infinity"
+                    >
+                      <path
+                        d="M5.68 5.792 7.345 7.75 5.681 9.708a2.75 2.75 0 1 1 0-3.916ZM8 6.978 6.416 5.113l-.014-.015a3.75 3.75 0 1 0 0 5.304l.014-.015L8 8.522l1.584 1.865.014.015a3.75 3.75 0 1 0 0-5.304l-.014.015L8 6.978Zm.656.772 1.663-1.958a2.75 2.75 0 1 1 0 3.916L8.656 7.75Z"
+                      ></path>
+                    </svg>
+                    <span class="ml-2 astro-RSE2NWEF">Deployment</span>
+                  </div>
+                  <div class="toggle px-2 astro-RSE2NWEF">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                      class="chevron bi bi-chevron-right astro-RSE2NWEF"
+                      viewBox="0 0 16 16"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"
+                        class="astro-RSE2NWEF"
+                      ></path>
+                    </svg>
+                  </div>
+                </a>
+                <ul class="submenu astro-RSE2NWEF">
+                  <li class="astro-RSE2NWEF">
+                    <a href="/en/v1.8.1/deployment/" class="astro-RSE2NWEF">
+                      Overview <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/deployment/deploy-aws/"
+                      class="astro-RSE2NWEF"
+                    >
+                      Deploy to AWS
+                      <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/deployment/deploy-azure/"
+                      class="astro-RSE2NWEF"
+                    >
+                      Deploy to Azure
+                      <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/deployment/deploy-gcp/"
+                      class="astro-RSE2NWEF"
+                    >
+                      Deploy to GCP
+                      <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/deployment/deploy-digitalocean/"
+                      class="astro-RSE2NWEF"
+                    >
+                      Deploy to Digital Ocean
+                      <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/deployment/deploy-kubernetes/"
+                      class="astro-RSE2NWEF"
+                    >
+                      Deploy to Kubernetes
+                      <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/deployment/deploy-docker/"
+                      class="astro-RSE2NWEF"
+                    >
+                      Deploy to Docker
+                      <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/deployment/deploy-ovhcloud/"
+                      class="astro-RSE2NWEF"
+                    >
+                      Deploy to OVHCloud
+                      <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/deployment/deploy-scaleway/"
+                      class="astro-RSE2NWEF"
+                    >
+                      Deploy to Scaleway
+                      <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/deployment/deploy-source/"
+                      class="astro-RSE2NWEF"
+                    >
+                      Deploy from Source
+                      <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/deployment/deploy-ubuntu/"
+                      class="astro-RSE2NWEF"
+                    >
+                      Deploy to Ubuntu
+                      <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/deployment/openreplay-admin/"
+                      class="astro-RSE2NWEF"
+                    >
+                      OpenReplay Administration
+                      <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/deployment/upgrade/"
+                      class="astro-RSE2NWEF"
+                    >
+                      Upgrade Deployment
+                      <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li class="menu-item astro-RSE2NWEF">
+                <a
+                  href="/en/v1.8.1/using-or/"
+                  class="flex items-center justify-between uppercase font-bold astro-RSE2NWEF"
+                  style="display: flex"
+                >
+                  <div class="flex items-center astro-RSE2NWEF">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                      viewBox="0 0 16 16"
+                      class="bi bi-braces-asterisk"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M1.114 8.063V7.9c1.005-.102 1.497-.615 1.497-1.6V4.503c0-1.094.39-1.538 1.354-1.538h.273V2h-.376C2.25 2 1.49 2.759 1.49 4.352v1.524c0 1.094-.376 1.456-1.49 1.456v1.299c1.114 0 1.49.362 1.49 1.456v1.524c0 1.593.759 2.352 2.372 2.352h.376v-.964h-.273c-.964 0-1.354-.444-1.354-1.538V9.663c0-.984-.492-1.497-1.497-1.6ZM14.886 7.9v.164c-1.005.103-1.497.616-1.497 1.6v1.798c0 1.094-.39 1.538-1.354 1.538h-.273v.964h.376c1.613 0 2.372-.759 2.372-2.352v-1.524c0-1.094.376-1.456 1.49-1.456v-1.3c-1.114 0-1.49-.362-1.49-1.456V4.352C14.51 2.759 13.75 2 12.138 2h-.376v.964h.273c.964 0 1.354.444 1.354 1.538V6.3c0 .984.492 1.497 1.497 1.6ZM7.5 11.5V9.207l-1.621 1.621-.707-.707L6.792 8.5H4.5v-1h2.293L5.172 5.879l.707-.707L7.5 6.792V4.5h1v2.293l1.621-1.621.707.707L9.208 7.5H11.5v1H9.207l1.621 1.621-.707.707L8.5 9.208V11.5h-1Z"
+                      ></path>
+                    </svg>
+                    <span class="ml-2 astro-RSE2NWEF">Tracker Setup</span>
+                  </div>
+                  <div class="toggle px-2 astro-RSE2NWEF">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                      class="chevron bi bi-chevron-right astro-RSE2NWEF"
+                      viewBox="0 0 16 16"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"
+                        class="astro-RSE2NWEF"
+                      ></path>
+                    </svg>
+                  </div>
+                </a>
+                <ul class="submenu astro-RSE2NWEF">
+                  <li class="astro-RSE2NWEF">
+                    <a href="/en/v1.8.1/using-or/" class="astro-RSE2NWEF">
+                      Overview <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/using-or/snippet/"
+                      class="astro-RSE2NWEF"
+                    >
+                      JS Snippet <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a href="/en/v1.8.1/using-or/react/" class="astro-RSE2NWEF">
+                      React <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a href="/en/v1.8.1/using-or/vue/" class="astro-RSE2NWEF">
+                      Vue <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a href="/en/v1.8.1/using-or/next/" class="astro-RSE2NWEF">
+                      Next.js <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a href="/en/v1.8.1/using-or/nuxt/" class="astro-RSE2NWEF">
+                      Nuxt <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a href="/en/v1.8.1/using-or/remix/" class="astro-RSE2NWEF">
+                      Remix <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/using-or/svelte/"
+                      class="astro-RSE2NWEF"
+                    >
+                      Svelte <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/using-or/angular/"
+                      class="astro-RSE2NWEF"
+                    >
+                      Angular <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/using-or/gatsby/"
+                      class="astro-RSE2NWEF"
+                    >
+                      Gatsby <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a href="/en/v1.8.1/ios-sdk/init/" class="astro-RSE2NWEF">
+                      iOS (beta) <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a href="/en/v1.8.1/rn-sdk/init/" class="astro-RSE2NWEF">
+                      React Native <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li class="menu-item astro-RSE2NWEF">
+                <a
+                  href="/en/v1.8.1/configuration/"
+                  class="flex items-center justify-between uppercase font-bold astro-RSE2NWEF"
+                  style="display: flex"
+                >
+                  <div class="flex items-center astro-RSE2NWEF">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="15"
+                      height="16"
+                      style="margin-right: 1px"
+                      fill="currentColor"
+                      viewBox="0 0 16 16"
+                      class="bi bi-sliders"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M11.5 2a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM9.05 3a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0V3h9.05zM4.5 7a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM2.05 8a2.5 2.5 0 0 1 4.9 0H16v1H6.95a2.5 2.5 0 0 1-4.9 0H0V8h2.05zm9.45 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm-2.45 1a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0v-1h9.05z"
+                      ></path>
+                    </svg>
+                    <span class="ml-2 astro-RSE2NWEF">Administration</span>
+                  </div>
+                  <div class="toggle px-2 astro-RSE2NWEF">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                      class="chevron bi bi-chevron-right astro-RSE2NWEF"
+                      viewBox="0 0 16 16"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"
+                        class="astro-RSE2NWEF"
+                      ></path>
+                    </svg>
+                  </div>
+                </a>
+                <ul class="submenu astro-RSE2NWEF">
+                  <li class="astro-RSE2NWEF">
+                    <a href="/en/v1.8.1/configuration/" class="astro-RSE2NWEF">
+                      Overview <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/configuration/cleanup-storage/"
+                      class="astro-RSE2NWEF"
+                    >
+                      Cleanup Storage
+                      <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/configuration/configure-smtp/"
+                      class="astro-RSE2NWEF"
+                    >
+                      Configure SMTP
+                      <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/configuration/external-db/"
+                      class="astro-RSE2NWEF"
+                    >
+                      External Database (Postgres)
+                      <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/configuration/external-storage/"
+                      class="astro-RSE2NWEF"
+                    >
+                      External Storage
+                      <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/configuration/proxy-settings/"
+                      class="astro-RSE2NWEF"
+                    >
+                      Proxy Settings
+                      <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/configuration/secure-or/"
+                      class="astro-RSE2NWEF"
+                    >
+                      Secure OpenReplay
+                      <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/configuration/sso/"
+                      class="astro-RSE2NWEF"
+                    >
+                      Single Sign-On (SSO)
+                      <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li class="menu-item astro-RSE2NWEF">
+                <a
+                  href="/en/v1.8.1/installation/"
+                  class="flex items-center justify-between uppercase font-bold astro-RSE2NWEF"
+                  style="display: flex"
+                >
+                  <div class="flex items-center astro-RSE2NWEF">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                      viewBox="0 0 16 16"
+                      class="bi bi-card-checklist"
+                    >
+                      <path
+                        d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"
+                      ></path>
+                      <path
+                        d="M7 5.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0zM7 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 0 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0z"
+                      ></path>
+                    </svg>
+                    <span class="ml-2 astro-RSE2NWEF">How-tos</span>
+                  </div>
+                  <div class="toggle px-2 astro-RSE2NWEF">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                      class="chevron bi bi-chevron-right astro-RSE2NWEF"
+                      viewBox="0 0 16 16"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"
+                        class="astro-RSE2NWEF"
+                      ></path>
+                    </svg>
+                  </div>
+                </a>
+                <ul class="submenu astro-RSE2NWEF">
+                  <li class="astro-RSE2NWEF">
+                    <a href="/en/v1.8.1/installation/" class="astro-RSE2NWEF">
+                      Overview <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/installation/identify-user/"
+                      class="astro-RSE2NWEF"
+                    >
+                      Identify a User
+                      <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/tutorials/adding-users/"
+                      class="astro-RSE2NWEF"
+                    >
+                      Add users to your team
+                      <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/installation/metadata/"
+                      class="astro-RSE2NWEF"
+                    >
+                      Metadata <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/installation/custom-events/"
+                      class="astro-RSE2NWEF"
+                    >
+                      Custom Events
+                      <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/installation/error-reporting/"
+                      class="astro-RSE2NWEF"
+                    >
+                      Error reporting
+                      <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/installation/upload-sourcemaps/"
+                      class="astro-RSE2NWEF"
+                    >
+                      Upload Source maps
+                      <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/installation/sanitize-data/"
+                      class="astro-RSE2NWEF"
+                    >
+                      Sanitize Data (Web)
+                      <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/installation/sanitize-data-ios/"
+                      class="astro-RSE2NWEF"
+                    >
+                      Sanitize Data (iOS)
+                      <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/tutorials/custom-heuristics/"
+                      class="astro-RSE2NWEF"
+                    >
+                      Custom Heuristics
+                      <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/tutorials/omnisearch/"
+                      class="astro-RSE2NWEF"
+                    >
+                      OmniSearch <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/tutorials/custom-dashboard/"
+                      class="astro-RSE2NWEF"
+                    >
+                      Custom Dashboards
+                      <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/installation/network-options/"
+                      class="astro-RSE2NWEF"
+                    >
+                      Network options (Web)
+                      <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li class="menu-item astro-RSE2NWEF">
+                <a
+                  href="/en/v1.8.1/plugins/"
+                  class="flex items-center justify-between uppercase font-bold astro-RSE2NWEF"
+                  style="display: flex"
+                >
+                  <div class="flex items-center astro-RSE2NWEF">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                      viewBox="0 0 16 16"
+                      class="bi bi-plug"
+                    >
+                      <path
+                        d="M6 0a.5.5 0 0 1 .5.5V3h3V.5a.5.5 0 0 1 1 0V3h1a.5.5 0 0 1 .5.5v3A3.5 3.5 0 0 1 8.5 10c-.002.434-.01.845-.04 1.22-.041.514-.126 1.003-.317 1.424a2.083 2.083 0 0 1-.97 1.028C6.725 13.9 6.169 14 5.5 14c-.998 0-1.61.33-1.974.718A1.922 1.922 0 0 0 3 16H2c0-.616.232-1.367.797-1.968C3.374 13.42 4.261 13 5.5 13c.581 0 .962-.088 1.218-.219.241-.123.4-.3.514-.55.121-.266.193-.621.23-1.09.027-.34.035-.718.037-1.141A3.5 3.5 0 0 1 4 6.5v-3a.5.5 0 0 1 .5-.5h1V.5A.5.5 0 0 1 6 0zM5 4v2.5A2.5 2.5 0 0 0 7.5 9h1A2.5 2.5 0 0 0 11 6.5V4H5z"
+                      ></path>
+                    </svg>
+                    <span class="ml-2 astro-RSE2NWEF">Plugins</span>
+                  </div>
+                  <div class="toggle px-2 astro-RSE2NWEF">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                      class="chevron bi bi-chevron-right astro-RSE2NWEF"
+                      viewBox="0 0 16 16"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"
+                        class="astro-RSE2NWEF"
+                      ></path>
+                    </svg>
+                  </div>
+                </a>
+                <ul class="submenu astro-RSE2NWEF">
+                  <li class="astro-RSE2NWEF">
+                    <a href="/en/v1.8.1/plugins/" class="astro-RSE2NWEF">
+                      Overview <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a href="/en/v1.8.1/plugins/assist/" class="astro-RSE2NWEF">
+                      Assist <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a href="/en/v1.8.1/plugins/axios/" class="astro-RSE2NWEF">
+                      Axios <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a href="/en/v1.8.1/plugins/fetch/" class="astro-RSE2NWEF">
+                      Fetch <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/plugins/graphql/"
+                      class="astro-RSE2NWEF"
+                    >
+                      GraphQL <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a href="/en/v1.8.1/plugins/mobx/" class="astro-RSE2NWEF">
+                      MobX <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a href="/en/v1.8.1/plugins/ngrx/" class="astro-RSE2NWEF">
+                      NgRx <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a href="/en/v1.8.1/plugins/pinia/" class="astro-RSE2NWEF">
+                      Pinia <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a href="/en/v1.8.1/plugins/vuex/" class="astro-RSE2NWEF">
+                      VueX <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/plugins/profiler/"
+                      class="astro-RSE2NWEF"
+                    >
+                      Profiler <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a href="/en/v1.8.1/plugins/redux/" class="astro-RSE2NWEF">
+                      Redux <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/plugins/zustand/"
+                      class="astro-RSE2NWEF"
+                    >
+                      Zustand <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li class="menu-item active astro-RSE2NWEF">
+                <a
+                  href="/en/v1.8.1/integrations/"
+                  class="flex items-center justify-between uppercase font-bold active astro-RSE2NWEF"
+                  style="display: flex"
+                >
+                  <div class="flex items-center astro-RSE2NWEF">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                      viewBox="0 0 16 16"
+                      class="bi bi-puzzle"
+                    >
+                      <path
+                        d="M3.112 3.645A1.5 1.5 0 0 1 4.605 2H7a.5.5 0 0 1 .5.5v.382c0 .696-.497 1.182-.872 1.469a.459.459 0 0 0-.115.118.113.113 0 0 0-.012.025L6.5 4.5v.003l.003.01c.004.01.014.028.036.053a.86.86 0 0 0 .27.194C7.09 4.9 7.51 5 8 5c.492 0 .912-.1 1.19-.24a.86.86 0 0 0 .271-.194.213.213 0 0 0 .039-.063v-.009a.112.112 0 0 0-.012-.025.459.459 0 0 0-.115-.118c-.375-.287-.872-.773-.872-1.469V2.5A.5.5 0 0 1 9 2h2.395a1.5 1.5 0 0 1 1.493 1.645L12.645 6.5h.237c.195 0 .42-.147.675-.48.21-.274.528-.52.943-.52.568 0 .947.447 1.154.862C15.877 6.807 16 7.387 16 8s-.123 1.193-.346 1.638c-.207.415-.586.862-1.154.862-.415 0-.733-.246-.943-.52-.255-.333-.48-.48-.675-.48h-.237l.243 2.855A1.5 1.5 0 0 1 11.395 14H9a.5.5 0 0 1-.5-.5v-.382c0-.696.497-1.182.872-1.469a.459.459 0 0 0 .115-.118.113.113 0 0 0 .012-.025L9.5 11.5v-.003a.214.214 0 0 0-.039-.064.859.859 0 0 0-.27-.193C8.91 11.1 8.49 11 8 11c-.491 0-.912.1-1.19.24a.859.859 0 0 0-.271.194.214.214 0 0 0-.039.063v.003l.001.006a.113.113 0 0 0 .012.025c.016.027.05.068.115.118.375.287.872.773.872 1.469v.382a.5.5 0 0 1-.5.5H4.605a1.5 1.5 0 0 1-1.493-1.645L3.356 9.5h-.238c-.195 0-.42.147-.675.48-.21.274-.528.52-.943.52-.568 0-.947-.447-1.154-.862C.123 9.193 0 8.613 0 8s.123-1.193.346-1.638C.553 5.947.932 5.5 1.5 5.5c.415 0 .733.246.943.52.255.333.48.48.675.48h.238l-.244-2.855zM4.605 3a.5.5 0 0 0-.498.55l.001.007.29 3.4A.5.5 0 0 1 3.9 7.5h-.782c-.696 0-1.182-.497-1.469-.872a.459.459 0 0 0-.118-.115.112.112 0 0 0-.025-.012L1.5 6.5h-.003a.213.213 0 0 0-.064.039.86.86 0 0 0-.193.27C1.1 7.09 1 7.51 1 8c0 .491.1.912.24 1.19.07.14.14.225.194.271a.213.213 0 0 0 .063.039H1.5l.006-.001a.112.112 0 0 0 .025-.012.459.459 0 0 0 .118-.115c.287-.375.773-.872 1.469-.872H3.9a.5.5 0 0 1 .498.542l-.29 3.408a.5.5 0 0 0 .497.55h1.878c-.048-.166-.195-.352-.463-.557-.274-.21-.52-.528-.52-.943 0-.568.447-.947.862-1.154C6.807 10.123 7.387 10 8 10s1.193.123 1.638.346c.415.207.862.586.862 1.154 0 .415-.246.733-.52.943-.268.205-.415.39-.463.557h1.878a.5.5 0 0 0 .498-.55l-.001-.007-.29-3.4A.5.5 0 0 1 12.1 8.5h.782c.696 0 1.182.497 1.469.872.05.065.091.099.118.115.013.008.021.01.025.012a.02.02 0 0 0 .006.001h.003a.214.214 0 0 0 .064-.039.86.86 0 0 0 .193-.27c.14-.28.24-.7.24-1.191 0-.492-.1-.912-.24-1.19a.86.86 0 0 0-.194-.271.215.215 0 0 0-.063-.039H14.5l-.006.001a.113.113 0 0 0-.025.012.459.459 0 0 0-.118.115c-.287.375-.773.872-1.469.872H12.1a.5.5 0 0 1-.498-.543l.29-3.407a.5.5 0 0 0-.497-.55H9.517c.048.166.195.352.463.557.274.21.52.528.52.943 0 .568-.447.947-.862 1.154C9.193 5.877 8.613 6 8 6s-1.193-.123-1.638-.346C5.947 5.447 5.5 5.068 5.5 4.5c0-.415.246-.733.52-.943.268-.205.415-.39.463-.557H4.605z"
+                      ></path>
+                    </svg>
+                    <span class="ml-2 astro-RSE2NWEF">Integrations</span>
+                  </div>
+                  <div class="toggle px-2 astro-RSE2NWEF">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                      class="chevron bi bi-chevron-right astro-RSE2NWEF"
+                      viewBox="0 0 16 16"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"
+                        class="astro-RSE2NWEF"
+                      ></path>
+                    </svg>
+                  </div>
+                </a>
+                <ul class="submenu astro-RSE2NWEF">
+                  <li class="astro-RSE2NWEF">
+                    <a href="/en/v1.8.1/integrations/" class="astro-RSE2NWEF">
+                      Overview <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/integrations/bugsnag/"
+                      class="astro-RSE2NWEF"
+                    >
+                      Bugsnag <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/integrations/cloudwatch/"
+                      class="astro-RSE2NWEF"
+                    >
+                      CloudWatch <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/integrations/datadog/"
+                      class="astro-RSE2NWEF"
+                    >
+                      Datadog <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/integrations/elastic/"
+                      class="active astro-RSE2NWEF"
+                    >
+                      Elastic <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/integrations/github/"
+                      class="astro-RSE2NWEF"
+                    >
+                      GitHub <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/integrations/google-tag-manager/"
+                      class="astro-RSE2NWEF"
+                    >
+                      Google Tag Manager
+                      <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/integrations/jira/"
+                      class="astro-RSE2NWEF"
+                    >
+                      Jira Cloud <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/integrations/msteams/"
+                      class="astro-RSE2NWEF"
+                    >
+                      MSTeams <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/integrations/newrelic/"
+                      class="astro-RSE2NWEF"
+                    >
+                      New Relic <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/integrations/rollbar/"
+                      class="astro-RSE2NWEF"
+                    >
+                      Rollbar <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/integrations/segment/"
+                      class="astro-RSE2NWEF"
+                    >
+                      Segment <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/integrations/sentry/"
+                      class="astro-RSE2NWEF"
+                    >
+                      Sentry <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/integrations/slack/"
+                      class="astro-RSE2NWEF"
+                    >
+                      Slack <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/integrations/stackdriver/"
+                      class="astro-RSE2NWEF"
+                    >
+                      Stackdriver <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/integrations/sumo/"
+                      class="astro-RSE2NWEF"
+                    >
+                      SumoLogic <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li class="menu-item astro-RSE2NWEF">
+                <a
+                  href="/en/v1.8.1/troubleshooting/"
+                  class="flex items-center justify-between uppercase font-bold astro-RSE2NWEF"
+                  style="display: flex"
+                >
+                  <div class="flex items-center astro-RSE2NWEF">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                      viewBox="0 0 16 16"
+                      class="bi bi-magic"
+                    >
+                      <path
+                        d="M9.5 2.672a.5.5 0 1 0 1 0V.843a.5.5 0 0 0-1 0v1.829Zm4.5.035A.5.5 0 0 0 13.293 2L12 3.293a.5.5 0 1 0 .707.707L14 2.707ZM7.293 4A.5.5 0 1 0 8 3.293L6.707 2A.5.5 0 0 0 6 2.707L7.293 4Zm-.621 2.5a.5.5 0 1 0 0-1H4.843a.5.5 0 1 0 0 1h1.829Zm8.485 0a.5.5 0 1 0 0-1h-1.829a.5.5 0 0 0 0 1h1.829ZM13.293 10A.5.5 0 1 0 14 9.293L12.707 8a.5.5 0 1 0-.707.707L13.293 10ZM9.5 11.157a.5.5 0 0 0 1 0V9.328a.5.5 0 0 0-1 0v1.829Zm1.854-5.097a.5.5 0 0 0 0-.706l-.708-.708a.5.5 0 0 0-.707 0L8.646 5.94a.5.5 0 0 0 0 .707l.708.708a.5.5 0 0 0 .707 0l1.293-1.293Zm-3 3a.5.5 0 0 0 0-.706l-.708-.708a.5.5 0 0 0-.707 0L.646 13.94a.5.5 0 0 0 0 .707l.708.708a.5.5 0 0 0 .707 0L8.354 9.06Z"
+                      ></path>
+                    </svg>
+                    <span class="ml-2 astro-RSE2NWEF">Troubleshooting</span>
+                  </div>
+                  <div class="toggle px-2 astro-RSE2NWEF">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                      class="chevron bi bi-chevron-right astro-RSE2NWEF"
+                      viewBox="0 0 16 16"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"
+                        class="astro-RSE2NWEF"
+                      ></path>
+                    </svg>
+                  </div>
+                </a>
+                <ul class="submenu astro-RSE2NWEF">
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/troubleshooting/"
+                      class="astro-RSE2NWEF"
+                    >
+                      Overview <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/troubleshooting/cache/"
+                      class="astro-RSE2NWEF"
+                    >
+                      Clear Cache <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/troubleshooting/csp/"
+                      class="astro-RSE2NWEF"
+                    >
+                      Content Security Policy (CSP)
+                      <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/troubleshooting/js-errors/"
+                      class="astro-RSE2NWEF"
+                    >
+                      JS Errors <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/troubleshooting/localhost/"
+                      class="astro-RSE2NWEF"
+                    >
+                      Localhost Testing
+                      <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/troubleshooting/session-recordings/"
+                      class="astro-RSE2NWEF"
+                    >
+                      Session Recording Issues
+                      <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/troubleshooting/sourcemaps/"
+                      class="astro-RSE2NWEF"
+                    >
+                      Sourcemaps Issues
+                      <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/troubleshooting/supported-browsers/"
+                      class="astro-RSE2NWEF"
+                    >
+                      Supported Browsers
+                      <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/troubleshooting/deployment-faq/"
+                      class="astro-RSE2NWEF"
+                    >
+                      Deployment Issues
+                      <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li class="menu-item astro-RSE2NWEF">
+                <a
+                  href="/en/v1.8.1/structure/"
+                  class="flex items-center justify-between uppercase font-bold astro-RSE2NWEF"
+                  style="display: flex"
+                >
+                  <div class="flex items-center astro-RSE2NWEF">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                      viewBox="0 0 16 16"
+                      class="bi bi-diagram-2"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M6 3.5A1.5 1.5 0 0 1 7.5 2h1A1.5 1.5 0 0 1 10 3.5v1A1.5 1.5 0 0 1 8.5 6v1H11a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0V8h-5v.5a.5.5 0 0 1-1 0v-1A.5.5 0 0 1 5 7h2.5V6A1.5 1.5 0 0 1 6 4.5v-1zM8.5 5a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1zM3 11.5A1.5 1.5 0 0 1 4.5 10h1A1.5 1.5 0 0 1 7 11.5v1A1.5 1.5 0 0 1 5.5 14h-1A1.5 1.5 0 0 1 3 12.5v-1zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1zm4.5.5a1.5 1.5 0 0 1 1.5-1.5h1a1.5 1.5 0 0 1 1.5 1.5v1a1.5 1.5 0 0 1-1.5 1.5h-1A1.5 1.5 0 0 1 9 12.5v-1zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1z"
+                      ></path>
+                    </svg>
+                    <span class="ml-2 astro-RSE2NWEF">Exporting data</span>
+                  </div>
+                  <div class="toggle px-2 astro-RSE2NWEF">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                      class="chevron bi bi-chevron-right astro-RSE2NWEF"
+                      viewBox="0 0 16 16"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"
+                        class="astro-RSE2NWEF"
+                      ></path>
+                    </svg>
+                  </div>
+                </a>
+                <ul class="submenu astro-RSE2NWEF">
+                  <li class="astro-RSE2NWEF">
+                    <a href="/en/v1.8.1/structure/" class="astro-RSE2NWEF">
+                      Overview <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                  <li class="astro-RSE2NWEF">
+                    <a
+                      href="/en/v1.8.1/structure/exported-data/"
+                      class="astro-RSE2NWEF"
+                    >
+                      Exported Data
+                      <sup class="fallback astro-RSE2NWEF">EN</sup>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+
+              <li class="astro-54DZ2EUX">
+                <div class="nav-link pt-4 border-t astro-54DZ2EUX">
+                  <ul class="nav-groups astro-54DZ2EUX">
+                    <li class="menu-item astro-RSE2NWEF">
+                      <a
+                        href="/en/v1.8.1/api/"
+                        class="flex items-center justify-between uppercase font-bold astro-RSE2NWEF"
+                        style="display: flex"
+                      >
+                        <div class="flex items-center astro-RSE2NWEF">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            fill="currentColor"
+                            viewBox="0 0 16 16"
+                            class="bi bi-node-plus"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              d="M11 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8zM6.025 7.5a5 5 0 1 1 0 1H4A1.5 1.5 0 0 1 2.5 10h-1A1.5 1.5 0 0 1 0 8.5v-1A1.5 1.5 0 0 1 1.5 6h1A1.5 1.5 0 0 1 4 7.5h2.025zM11 5a.5.5 0 0 1 .5.5v2h2a.5.5 0 0 1 0 1h-2v2a.5.5 0 0 1-1 0v-2h-2a.5.5 0 0 1 0-1h2v-2A.5.5 0 0 1 11 5zM1.5 7a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1z"
+                            ></path>
+                          </svg>
+                          <span class="ml-2 astro-RSE2NWEF">API</span>
+                        </div>
+                        <div class="toggle px-2 astro-RSE2NWEF">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            fill="currentColor"
+                            class="chevron bi bi-chevron-right astro-RSE2NWEF"
+                            viewBox="0 0 16 16"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"
+                              class="astro-RSE2NWEF"
+                            ></path>
+                          </svg>
+                        </div>
+                      </a>
+                      <ul class="submenu astro-RSE2NWEF">
+                        <li class="astro-RSE2NWEF">
+                          <a href="/en/v1.8.1/api/" class="astro-RSE2NWEF">
+                            Overview
+                          </a>
+                        </li>
+                        <li class="astro-RSE2NWEF">
+                          <a
+                            href="/en/v1.8.1/api/assist/"
+                            class="astro-RSE2NWEF"
+                          >
+                            Assist
+                          </a>
+                        </li>
+                        <li class="astro-RSE2NWEF">
+                          <a
+                            href="/en/v1.8.1/api/events/"
+                            class="astro-RSE2NWEF"
+                          >
+                            Events
+                          </a>
+                        </li>
+                        <li class="astro-RSE2NWEF">
+                          <a href="/en/v1.8.1/api/jobs/" class="astro-RSE2NWEF">
+                            Jobs
+                          </a>
+                        </li>
+                        <li class="astro-RSE2NWEF">
+                          <a
+                            href="/en/v1.8.1/api/projects/"
+                            class="astro-RSE2NWEF"
+                          >
+                            Projects
+                          </a>
+                        </li>
+                        <li class="astro-RSE2NWEF">
+                          <a
+                            href="/en/v1.8.1/api/sessions/"
+                            class="astro-RSE2NWEF"
+                          >
+                            Sessions
+                          </a>
+                        </li>
+                        <li class="astro-RSE2NWEF">
+                          <a
+                            href="/en/v1.8.1/api/users/"
+                            class="astro-RSE2NWEF"
+                          >
+                            Users
+                          </a>
+                        </li>
+                      </ul>
+                    </li>
+                    <li class="menu-item astro-RSE2NWEF">
+                      <a
+                        href="/en/v1.8.1/sdk/"
+                        class="flex items-center justify-between uppercase font-bold astro-RSE2NWEF"
+                        style="display: flex"
+                      >
+                        <div class="flex items-center astro-RSE2NWEF">
+                          <svg
+                            width="16"
+                            height="16"
+                            viewBox="0 0 16 16"
+                            fill="currentColor"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              clip-rule="evenodd"
+                              d="M5.6 9.8V3.8H6.8V9.8C6.8 11.1254 5.72549 12.2 4.4 12.2C3.07451 12.2 2 11.1254 2 9.8H3.2C3.2 10.4627 3.73726 11 4.4 11C5.06274 11 5.6 10.4627 5.6 9.8ZM8 6.2C8 4.87451 9.07451 3.8 10.4 3.8H11.8C13.015 3.8 14 4.78496 14 6V6.2H12.8V6C12.8 5.44772 12.3522 5 11.8 5H10.4C9.73725 5 9.2 5.53726 9.2 6.2C9.2 6.86275 9.73725 7.4 10.4 7.4H11.6C12.9255 7.4 14 8.47455 14 9.8C14 11.1255 12.9255 12.2 11.6 12.2H10.4C9.07451 12.2 8 11.1254 8 9.8H9.2C9.2 10.4627 9.73726 11 10.4 11H11.6C12.2627 11 12.8 10.4627 12.8 9.8C12.8 9.13729 12.2627 8.6 11.6 8.6H10.4C9.07451 8.6 8 7.52549 8 6.2Z"
+                            ></path>
+                          </svg>
+                          <span class="ml-2 astro-RSE2NWEF"
+                            >JavaScript SDK</span
+                          >
+                        </div>
+                        <div class="toggle px-2 astro-RSE2NWEF">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            fill="currentColor"
+                            class="chevron bi bi-chevron-right astro-RSE2NWEF"
+                            viewBox="0 0 16 16"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"
+                              class="astro-RSE2NWEF"
+                            ></path>
+                          </svg>
+                        </div>
+                      </a>
+                      <ul class="submenu astro-RSE2NWEF">
+                        <li class="astro-RSE2NWEF">
+                          <a href="/en/v1.8.1/sdk/" class="astro-RSE2NWEF">
+                            Overview
+                          </a>
+                        </li>
+                        <li class="astro-RSE2NWEF">
+                          <a
+                            href="/en/v1.8.1/sdk/constructor/"
+                            class="astro-RSE2NWEF"
+                          >
+                            Initialization
+                          </a>
+                        </li>
+                        <li class="astro-RSE2NWEF">
+                          <a
+                            href="/en/v1.8.1/sdk/methods/"
+                            class="astro-RSE2NWEF"
+                          >
+                            Methods
+                          </a>
+                        </li>
+                        <li class="astro-RSE2NWEF">
+                          <a
+                            href="/en/v1.8.1/sdk/event/"
+                            class="astro-RSE2NWEF"
+                          >
+                            event
+                          </a>
+                        </li>
+                        <li class="astro-RSE2NWEF">
+                          <a
+                            href="/en/v1.8.1/sdk/get-session-token/"
+                            class="astro-RSE2NWEF"
+                          >
+                            getSessionToken
+                          </a>
+                        </li>
+                        <li class="astro-RSE2NWEF">
+                          <a
+                            href="/en/v1.8.1/sdk/get-session-id/"
+                            class="astro-RSE2NWEF"
+                          >
+                            getSessionID
+                          </a>
+                        </li>
+                        <li class="astro-RSE2NWEF">
+                          <a
+                            href="/en/v1.8.1/sdk/get-session-url/"
+                            class="astro-RSE2NWEF"
+                          >
+                            getSessionURL
+                          </a>
+                        </li>
+                        <li class="astro-RSE2NWEF">
+                          <a
+                            href="/en/v1.8.1/sdk/handle-error/"
+                            class="astro-RSE2NWEF"
+                          >
+                            handleError
+                          </a>
+                        </li>
+                        <li class="astro-RSE2NWEF">
+                          <a
+                            href="/en/v1.8.1/sdk/is-active/"
+                            class="astro-RSE2NWEF"
+                          >
+                            isActive
+                          </a>
+                        </li>
+                        <li class="astro-RSE2NWEF">
+                          <a
+                            href="/en/v1.8.1/sdk/issue/"
+                            class="astro-RSE2NWEF"
+                          >
+                            issue
+                          </a>
+                        </li>
+                        <li class="astro-RSE2NWEF">
+                          <a
+                            href="/en/v1.8.1/sdk/set-user-id/"
+                            class="astro-RSE2NWEF"
+                          >
+                            setUserID
+                          </a>
+                        </li>
+                        <li class="astro-RSE2NWEF">
+                          <a
+                            href="/en/v1.8.1/sdk/set-user-anonymous-id/"
+                            class="astro-RSE2NWEF"
+                          >
+                            setUserAnonymousID
+                          </a>
+                        </li>
+                        <li class="astro-RSE2NWEF">
+                          <a
+                            href="/en/v1.8.1/sdk/set-metadata/"
+                            class="astro-RSE2NWEF"
+                          >
+                            setMetadata
+                          </a>
+                        </li>
+                        <li class="astro-RSE2NWEF">
+                          <a
+                            href="/en/v1.8.1/sdk/is-flag-enabled/"
+                            class="astro-RSE2NWEF"
+                          >
+                            isFlagEnabled
+                          </a>
+                        </li>
+                        <li class="astro-RSE2NWEF">
+                          <a
+                            href="/en/v1.8.1/sdk/on-flag-loads/"
+                            class="astro-RSE2NWEF"
+                          >
+                            onFlagLoads
+                          </a>
+                        </li>
+                        <li class="astro-RSE2NWEF">
+                          <a
+                            href="/en/v1.8.1/sdk/reload-flags/"
+                            class="astro-RSE2NWEF"
+                          >
+                            reloadFags
+                          </a>
+                        </li>
+                        <li class="astro-RSE2NWEF">
+                          <a
+                            href="/en/v1.8.1/sdk/get-feature-flag/"
+                            class="astro-RSE2NWEF"
+                          >
+                            getFeatureFlag
+                          </a>
+                        </li>
+                        <li class="astro-RSE2NWEF">
+                          <a
+                            href="/en/v1.8.1/sdk/get-all-feature-flags/"
+                            class="astro-RSE2NWEF"
+                          >
+                            getAllFeatureFlags
+                          </a>
+                        </li>
+                        <li class="astro-RSE2NWEF">
+                          <a
+                            href="/en/v1.8.1/sdk/clear-persist-flag/"
+                            class="astro-RSE2NWEF"
+                          >
+                            clearPersistFlag
+                          </a>
+                        </li>
+                        <li class="astro-RSE2NWEF">
+                          <a
+                            href="/en/v1.8.1/sdk/start/"
+                            class="astro-RSE2NWEF"
+                          >
+                            start
+                          </a>
+                        </li>
+                        <li class="astro-RSE2NWEF">
+                          <a href="/en/v1.8.1/sdk/stop/" class="astro-RSE2NWEF">
+                            stop
+                          </a>
+                        </li>
+                      </ul>
+                    </li>
+                    <li class="menu-item astro-RSE2NWEF">
+                      <a
+                        href="/en/v1.8.1/ios-sdk/"
+                        class="flex items-center justify-between uppercase font-bold astro-RSE2NWEF"
+                        style="display: flex"
+                      >
+                        <div class="flex items-center astro-RSE2NWEF">
+                          <svg
+                            width="16"
+                            height="16"
+                            viewBox="0 0 16 16"
+                            fill="currentColor"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <g clip-path="url(#clip0_1_10)">
+                              <path
+                                fill-rule="evenodd"
+                                clip-rule="evenodd"
+                                d="M15 8C15 11.864 11.8674 15 8 15C4.13261 15 1 11.864 1 8C1 4.13228 4.13228 1 8 1C11.8677 1 15 4.13228 15 8ZM16 8C16 12.416 12.42 16 8 16C3.58 16 0 12.416 0 8C0 3.58 3.58 0 8 0C12.42 0 16 3.58 16 8ZM3.78003 10.7654H2.90627V6.71103H3.78003V10.7654ZM3.82916 5.66303C3.82916 5.94989 3.6116 6.17937 3.3414 6.17937C3.07471 6.17937 2.85714 5.94989 2.85714 5.66303C2.85714 5.36851 3.07471 5.14286 3.3414 5.14286C3.6116 5.14286 3.82916 5.36851 3.82916 5.66303ZM4.42922 8.00766C4.42922 6.25206 5.3556 5.15434 6.83297 5.15434C8.30674 5.15434 9.23314 6.25206 9.23314 8.00766C9.23314 9.76326 8.30674 10.8571 6.83297 10.8571C5.3556 10.8571 4.42922 9.76326 4.42922 8.00766ZM8.31029 8.00766C8.31029 6.77606 7.7348 5.99577 6.83297 5.99577C5.9276 5.99577 5.3556 6.77606 5.3556 8.00766C5.3556 9.23543 5.9276 10.0157 6.83297 10.0157C7.7348 10.0157 8.31029 9.23543 8.31029 8.00766ZM9.74903 9.21246C9.7876 10.2299 10.5526 10.8571 11.7176 10.8571C12.9423 10.8571 13.7143 10.1993 13.7143 9.15126C13.7143 8.32891 13.2791 7.86611 12.251 7.60989L11.6685 7.46451C11.0474 7.30389 10.7912 7.08971 10.7912 6.72251C10.7912 6.26354 11.1772 5.95754 11.7492 5.95754C12.3282 5.95754 12.7247 6.26737 12.7669 6.78371H13.6301C13.609 5.81223 12.8721 5.15434 11.7562 5.15434C10.6543 5.15434 9.87183 5.816 9.87183 6.7952C9.87183 7.58309 10.314 8.07269 11.2474 8.306L11.9036 8.47429C12.5422 8.63874 12.8019 8.86823 12.8019 9.266C12.8019 9.72497 12.3773 10.0539 11.7667 10.0539C11.1491 10.0539 10.6824 9.72114 10.6263 9.21246H9.74903Z"
+                              ></path>
+                            </g>
+                            <defs>
+                              <clipPath id="clip0_1_10">
+                                <rect
+                                  width="16"
+                                  height="16"
+                                  fill="white"
+                                ></rect>
+                              </clipPath>
+                            </defs>
+                          </svg>
+                          <span class="ml-2 astro-RSE2NWEF"
+                            >iOS SDK (beta)</span
+                          >
+                        </div>
+                        <div class="toggle px-2 astro-RSE2NWEF">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            fill="currentColor"
+                            class="chevron bi bi-chevron-right astro-RSE2NWEF"
+                            viewBox="0 0 16 16"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"
+                              class="astro-RSE2NWEF"
+                            ></path>
+                          </svg>
+                        </div>
+                      </a>
+                      <ul class="submenu astro-RSE2NWEF">
+                        <li class="astro-RSE2NWEF">
+                          <a
+                            href="/en/v1.8.1/ios-sdk/init/"
+                            class="astro-RSE2NWEF"
+                          >
+                            Initialization
+                          </a>
+                        </li>
+                        <li class="astro-RSE2NWEF">
+                          <a
+                            href="/en/v1.8.1/ios-sdk/modules/"
+                            class="astro-RSE2NWEF"
+                          >
+                            Modules
+                          </a>
+                        </li>
+                        <li class="astro-RSE2NWEF">
+                          <a
+                            href="/en/v1.8.1/ios-sdk/start/"
+                            class="astro-RSE2NWEF"
+                          >
+                            Start
+                          </a>
+                        </li>
+                        <li class="astro-RSE2NWEF">
+                          <a
+                            href="/en/v1.8.1/ios-sdk/inputs/"
+                            class="astro-RSE2NWEF"
+                          >
+                            Capturing Inputs
+                          </a>
+                        </li>
+                        <li class="astro-RSE2NWEF">
+                          <a
+                            href="/en/v1.8.1/ios-sdk/network/"
+                            class="astro-RSE2NWEF"
+                          >
+                            Network
+                          </a>
+                        </li>
+                        <li class="astro-RSE2NWEF">
+                          <a
+                            href="/en/v1.8.1/ios-sdk/event/"
+                            class="astro-RSE2NWEF"
+                          >
+                            Events
+                          </a>
+                        </li>
+                        <li class="astro-RSE2NWEF">
+                          <a
+                            href="/en/v1.8.1/ios-sdk/analytics/"
+                            class="astro-RSE2NWEF"
+                          >
+                            Analytics
+                          </a>
+                        </li>
+                        <li class="astro-RSE2NWEF">
+                          <a
+                            href="/en/v1.8.1/ios-sdk/sanitization/"
+                            class="astro-RSE2NWEF"
+                          >
+                            Sanitization
+                          </a>
+                        </li>
+                        <li class="astro-RSE2NWEF">
+                          <a
+                            href="/en/v1.8.1/ios-sdk/set-user-id/"
+                            class="astro-RSE2NWEF"
+                          >
+                            setUserID
+                          </a>
+                        </li>
+                        <li class="astro-RSE2NWEF">
+                          <a
+                            href="/en/v1.8.1/ios-sdk/set-metadata/"
+                            class="astro-RSE2NWEF"
+                          >
+                            setMetadata
+                          </a>
+                        </li>
+                        <li class="astro-RSE2NWEF">
+                          <a
+                            href="/en/v1.8.1/ios-sdk/user-anonymous-id/"
+                            class="astro-RSE2NWEF"
+                          >
+                            userAnonymousId
+                          </a>
+                        </li>
+                      </ul>
+                    </li>
+                    <li class="menu-item astro-RSE2NWEF">
+                      <a
+                        href="/en/v1.8.1/rn-sdk/"
+                        class="flex items-center justify-between uppercase font-bold astro-RSE2NWEF"
+                        style="display: flex"
+                      >
+                        <div class="flex items-center astro-RSE2NWEF">
+                          <svg
+                            width="16"
+                            height="16"
+                            viewBox="0 0 16 16"
+                            fill="currentColor"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <g clip-path="url(#clip0_10_44)">
+                              <path
+                                fill-rule="evenodd"
+                                clip-rule="evenodd"
+                                d="M11.6501 1.77626C11.885 1.90977 12.0714 2.17782 12.1682 2.62346C12.2651 3.06925 12.2625 3.65547 12.1492 4.35125C12.106 4.61664 12.0472 4.89527 11.973 5.18475C11.3143 5.03793 10.5963 4.92693 9.83714 4.85791C9.39868 4.24828 8.94401 3.69414 8.48744 3.2078C8.70593 2.9988 8.92253 2.80847 9.13528 2.63825C9.69076 2.19382 10.2052 1.89847 10.6458 1.75815C11.0862 1.61788 11.4152 1.64274 11.6501 1.77626ZM7.51254 3.2078C7.29405 2.9988 7.07746 2.80847 6.86471 2.63825C6.30923 2.19382 5.79483 1.89847 5.35423 1.75815C4.91377 1.61788 4.58478 1.64274 4.34987 1.77626C4.11495 1.90977 3.92859 2.17782 3.83176 2.62346C3.7349 3.06925 3.73753 3.65547 3.85076 4.35125C3.89395 4.61664 3.95279 4.89526 4.02697 5.18474C4.68568 5.03793 5.40372 4.92693 6.16285 4.8579C6.60131 4.24828 7.05598 3.69414 7.51254 3.2078ZM7.99999 2.71494C7.76609 2.49106 7.53303 2.28618 7.30275 2.10193C6.70795 1.62604 6.1168 1.27589 5.56474 1.10007C5.01253 0.924213 4.46174 0.912583 3.99794 1.17619C3.53413 1.4398 3.26897 1.91518 3.14758 2.47389C3.02621 3.03245 3.03867 3.71151 3.15993 4.45654C3.2067 4.74395 3.27013 5.04394 3.34971 5.35409C3.0376 5.44118 2.74246 5.53696 2.46671 5.64061C1.75145 5.90945 1.14849 6.23798 0.718114 6.62044C0.288091 7.00259 -7.62939e-06 7.468 -7.62939e-06 8C-7.62939e-06 8.532 0.288091 8.99742 0.718114 9.37956C1.14849 9.76202 1.75145 10.0906 2.46671 10.3594C2.74247 10.463 3.0376 10.5588 3.34972 10.6459C3.27014 10.9561 3.20671 11.2561 3.15994 11.5435C3.03868 12.2885 3.02622 12.9675 3.14759 13.5261C3.26898 14.0848 3.53414 14.5602 3.99795 14.8238C4.46176 15.0874 5.01254 15.0758 5.56475 14.8999C6.11681 14.7241 6.70796 14.374 7.30276 13.8981C7.53304 13.7138 7.7661 13.5089 8 13.2851C8.23389 13.5089 8.46695 13.7138 8.69723 13.8981C9.29203 14.374 9.88318 14.7241 10.4352 14.8999C10.9874 15.0758 11.5382 15.0874 12.002 14.8238C12.4658 14.5602 12.731 14.0848 12.8524 13.5261C12.9738 12.9675 12.9613 12.2885 12.8401 11.5435C12.7933 11.2561 12.7299 10.9561 12.6503 10.6459C12.9624 10.5588 13.2575 10.463 13.5333 10.3594C14.2485 10.0906 14.8515 9.76202 15.2819 9.37956C15.7119 8.99742 16 8.532 16 8C16 7.468 15.7119 7.00259 15.2819 6.62044C14.8515 6.23798 14.2485 5.90945 13.5333 5.64061C13.2575 5.53696 12.9624 5.44118 12.6503 5.35409C12.7299 5.04394 12.7933 4.74395 12.8401 4.45654C12.9613 3.71151 12.9738 3.03245 12.8524 2.47389C12.731 1.91518 12.4659 1.4398 12.0021 1.17619C11.5382 0.912583 10.9875 0.924213 10.4353 1.10007C9.88319 1.27589 9.29204 1.62604 8.69724 2.10193C8.46695 2.28618 8.2339 2.49106 7.99999 2.71494ZM11.78 5.85451C11.3332 5.75639 10.8554 5.67492 10.3529 5.61272C10.5164 5.86451 10.6766 6.12384 10.8327 6.39001C10.9897 6.65771 11.1385 6.9255 11.279 7.19227C11.4756 6.73269 11.6429 6.28454 11.78 5.85451ZM11.6805 8.00001C11.998 7.32092 12.2586 6.65571 12.4585 6.0228C12.7535 6.10497 13.0309 6.19494 13.2885 6.29178C13.958 6.54343 14.4757 6.83468 14.8198 7.14044C15.1642 7.44651 15.3043 7.73775 15.3043 8C15.3043 8.26226 15.1642 8.55349 14.8198 8.85957C14.4757 9.16532 13.958 9.45657 13.2885 9.70822C13.0309 9.80506 12.7534 9.89503 12.4585 9.9772C12.2586 9.3443 11.998 8.6791 11.6805 8.00001ZM10.9086 8.00001C10.7042 7.58234 10.4771 7.15869 10.2279 6.73375C9.9796 6.31039 9.72146 5.90641 9.45723 5.52461C8.98667 5.48988 8.49945 5.47159 7.99999 5.47159C7.50054 5.47159 7.01332 5.48987 6.54276 5.5246C6.27853 5.90641 6.02039 6.31039 5.7721 6.73375C5.52287 7.15869 5.29579 7.58234 5.09143 8.00001C5.29578 8.41768 5.52287 8.84131 5.77209 9.26625C6.02038 9.68961 6.27852 10.0936 6.54275 10.4754C7.01331 10.5101 7.50054 10.5284 7.99999 10.5284C8.49945 10.5284 8.98668 10.5101 9.45724 10.4754C9.72147 10.0936 9.97961 9.68961 10.2279 9.26625C10.4771 8.84131 10.7042 8.41768 10.9086 8.00001ZM10.3529 10.3873C10.5164 10.1355 10.6766 9.87616 10.8327 9.60999C10.9897 9.34229 11.1385 9.07452 11.279 8.80775C11.4756 9.26733 11.6429 9.71546 11.78 10.1455C11.3332 10.2436 10.8554 10.3251 10.3529 10.3873ZM8.92567 11.2036C8.6218 11.2171 8.31289 11.2241 7.99999 11.2241C7.68709 11.2241 7.37819 11.2171 7.07432 11.2036C7.38011 11.6004 7.69049 11.9666 8 12.2981C8.3095 11.9666 8.61988 11.6004 8.92567 11.2036ZM8.48745 12.7922C8.94401 12.3059 9.39869 11.7517 9.83715 11.1421C10.5963 11.0731 11.3143 10.9621 11.973 10.8153C12.0472 11.1047 12.106 11.3834 12.1492 11.6487C12.2625 12.3445 12.2651 12.9307 12.1682 13.3765C12.0714 13.8222 11.885 14.0902 11.6501 14.2237C11.4152 14.3573 11.0862 14.3821 10.6457 14.2418C10.2051 14.1015 9.69075 13.8062 9.13527 13.3618C8.92252 13.1915 8.70593 13.0012 8.48745 12.7922ZM7.51254 12.7922C7.05598 12.3059 6.6013 11.7517 6.16284 11.1421C5.40372 11.0731 4.68568 10.9621 4.02698 10.8153C3.9528 11.1047 3.89397 11.3834 3.85077 11.6487C3.73754 12.3445 3.73491 12.9307 3.83177 13.3765C3.9286 13.8222 4.11496 14.0902 4.34988 14.2237C4.58479 14.3573 4.91378 14.3821 5.35424 14.2418C5.79484 14.1015 6.30924 13.8062 6.86472 13.3618C7.07746 13.1915 7.29406 13.0012 7.51254 12.7922ZM4.22001 10.1455C4.66683 10.2436 5.14461 10.3251 5.64707 10.3873C5.4836 10.1355 5.3234 9.87616 5.16729 9.60999C5.01029 9.34229 4.86145 9.07452 4.72097 8.80775C4.52438 9.26733 4.35711 9.71547 4.22001 10.1455ZM4.72097 7.19227C4.86145 6.92549 5.0103 6.65771 5.1673 6.39001C5.32341 6.12384 5.48361 5.86451 5.64708 5.61272C5.14461 5.67492 4.66683 5.75639 4.22 5.85451C4.3571 6.28454 4.52437 6.73269 4.72097 7.19227ZM4.31949 8.00001C4.00195 8.6791 3.7414 9.3443 3.5415 9.97721C3.24654 9.89504 2.9691 9.80506 2.71147 9.70822C2.04195 9.45657 1.52428 9.16532 1.18021 8.85957C0.835795 8.55349 0.695644 8.26226 0.695644 8C0.695644 7.73775 0.835795 7.44651 1.18021 7.14044C1.52428 6.83468 2.04195 6.54343 2.71147 6.29178C2.96909 6.19494 3.24653 6.10497 3.54149 6.0228C3.74139 6.65571 4.00195 7.32092 4.31949 8.00001ZM7.07433 4.79642C7.37819 4.78288 7.6871 4.77593 7.99999 4.77593C8.31289 4.77593 8.62179 4.78288 8.92566 4.79642C8.61987 4.39955 8.3095 4.03338 7.99999 3.70194C7.69049 4.03338 7.38012 4.39955 7.07433 4.79642ZM9.42608 8C9.42608 8.77534 8.7876 9.40388 8 9.40388C7.21239 9.40388 6.57391 8.77534 6.57391 8C6.57391 7.22466 7.21239 6.59612 8 6.59612C8.7876 6.59612 9.42608 7.22466 9.42608 8Z"
+                              ></path>
+                            </g>
+                            <defs>
+                              <clipPath id="clip0_10_44">
+                                <rect
+                                  width="16"
+                                  height="16"
+                                  fill="white"
+                                ></rect>
+                              </clipPath>
+                            </defs>
+                          </svg>
+                          <span class="ml-2 astro-RSE2NWEF"
+                            >React Native SDK (beta)</span
+                          >
+                        </div>
+                        <div class="toggle px-2 astro-RSE2NWEF">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            fill="currentColor"
+                            class="chevron bi bi-chevron-right astro-RSE2NWEF"
+                            viewBox="0 0 16 16"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"
+                              class="astro-RSE2NWEF"
+                            ></path>
+                          </svg>
+                        </div>
+                      </a>
+                      <ul class="submenu astro-RSE2NWEF">
+                        <li class="astro-RSE2NWEF">
+                          <a
+                            href="/en/v1.8.1/rn-sdk/init/"
+                            class="astro-RSE2NWEF"
+                          >
+                            Initialization
+                          </a>
+                        </li>
+                        <li class="astro-RSE2NWEF">
+                          <a
+                            href="/en/v1.8.1/rn-sdk/modules/"
+                            class="astro-RSE2NWEF"
+                          >
+                            Modules
+                          </a>
+                        </li>
+                        <li class="astro-RSE2NWEF">
+                          <a
+                            href="/en/v1.8.1/rn-sdk/start/"
+                            class="astro-RSE2NWEF"
+                          >
+                            startSession
+                          </a>
+                        </li>
+                        <li class="astro-RSE2NWEF">
+                          <a
+                            href="/en/v1.8.1/rn-sdk/inputs/"
+                            class="astro-RSE2NWEF"
+                          >
+                            Capturing Inputs
+                          </a>
+                        </li>
+                        <li class="astro-RSE2NWEF">
+                          <a
+                            href="/en/v1.8.1/rn-sdk/event/"
+                            class="astro-RSE2NWEF"
+                          >
+                            Events
+                          </a>
+                        </li>
+                        <li class="astro-RSE2NWEF">
+                          <a
+                            href="/en/v1.8.1/rn-sdk/analytics/"
+                            class="astro-RSE2NWEF"
+                          >
+                            Analytics
+                          </a>
+                        </li>
+                        <li class="astro-RSE2NWEF">
+                          <a
+                            href="/en/v1.8.1/rn-sdk/sanitization/"
+                            class="astro-RSE2NWEF"
+                          >
+                            Sanitization
+                          </a>
+                        </li>
+                        <li class="astro-RSE2NWEF">
+                          <a
+                            href="/en/v1.8.1/rn-sdk/set-user-id/"
+                            class="astro-RSE2NWEF"
+                          >
+                            setUserID
+                          </a>
+                        </li>
+                        <li class="astro-RSE2NWEF">
+                          <a
+                            href="/en/v1.8.1/rn-sdk/set-metadata/"
+                            class="astro-RSE2NWEF"
+                          >
+                            setMetadata
+                          </a>
+                        </li>
+                      </ul>
+                    </li>
+                    <li class="menu-item astro-RSE2NWEF">
+                      <a
+                        href="/en/v1.8.1/cli/"
+                        class="flex items-center justify-between uppercase font-bold astro-RSE2NWEF"
+                        style="display: flex"
+                      >
+                        <div class="flex items-center astro-RSE2NWEF">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            fill="currentColor"
+                            viewBox="0 0 16 16"
+                            class="bi bi-terminal"
+                          >
+                            <path
+                              d="M6 9a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3A.5.5 0 0 1 6 9zM3.854 4.146a.5.5 0 1 0-.708.708L4.793 6.5 3.146 8.146a.5.5 0 1 0 .708.708l2-2a.5.5 0 0 0 0-.708l-2-2z"
+                            ></path>
+                            <path
+                              d="M2 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2H2zm12 1a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h12z"
+                            ></path>
+                          </svg>
+                          <span class="ml-2 astro-RSE2NWEF"
+                            >OpenReplay CLI</span
+                          >
+                        </div>
+                        <div class="toggle px-2 astro-RSE2NWEF"></div>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+              <li class="astro-54DZ2EUX">
+                <div class="py-5 xl:hidden border-t astro-54DZ2EUX">
+                  <div class="items flex flex-col gap-1 astro-54DZ2EUX">
+                    <div class="nav-link astro-54DZ2EUX">
+                      <a
+                        class="flex gap-2 no-underline astro-54DZ2EUX"
+                        href="https://slack.openreplay.com"
+                        target="_blank"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="13"
+                          height="13"
+                          fill="currentColor"
+                          class="bi bi-slack astro-54DZ2EUX"
+                          viewBox="0 0 16 16"
+                        >
+                          <path
+                            d="M3.362 10.11c0 .926-.756 1.681-1.681 1.681S0 11.036 0 10.111C0 9.186.756 8.43 1.68 8.43h1.682v1.68zm.846 0c0-.924.756-1.68 1.681-1.68s1.681.756 1.681 1.68v4.21c0 .924-.756 1.68-1.68 1.68a1.685 1.685 0 0 1-1.682-1.68v-4.21zM5.89 3.362c-.926 0-1.682-.756-1.682-1.681S4.964 0 5.89 0s1.68.756 1.68 1.68v1.682H5.89zm0 .846c.924 0 1.68.756 1.68 1.681S6.814 7.57 5.89 7.57H1.68C.757 7.57 0 6.814 0 5.89c0-.926.756-1.682 1.68-1.682h4.21zm6.749 1.682c0-.926.755-1.682 1.68-1.682.925 0 1.681.756 1.681 1.681s-.756 1.681-1.68 1.681h-1.681V5.89zm-.848 0c0 .924-.755 1.68-1.68 1.68A1.685 1.685 0 0 1 8.43 5.89V1.68C8.43.757 9.186 0 10.11 0c.926 0 1.681.756 1.681 1.68v4.21zm-1.681 6.748c.926 0 1.682.756 1.682 1.681S11.036 16 10.11 16s-1.681-.756-1.681-1.68v-1.682h1.68zm0-.847c-.924 0-1.68-.755-1.68-1.68 0-.925.756-1.681 1.68-1.681h4.21c.924 0 1.68.756 1.68 1.68 0 .926-.756 1.681-1.68 1.681h-4.21z"
+                            class="astro-54DZ2EUX"
+                          ></path>
+                        </svg>
+                        <span class="astro-54DZ2EUX"
+                          >Join Slack Community
+                        </span>
+                      </a>
+                    </div>
+                    <div class="nav-link astro-54DZ2EUX">
+                      <a
+                        class="flex gap-2 no-underline astro-54DZ2EUX"
+                        href="https://blog.openreplay.com"
+                        target="_blank"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="13"
+                          height="13"
+                          fill="currentColor"
+                          class="bi bi-chat-right-text astro-54DZ2EUX"
+                          viewBox="0 0 16 16"
+                        >
+                          <path
+                            d="M2 1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h9.586a2 2 0 0 1 1.414.586l2 2V2a1 1 0 0 0-1-1H2zm12-1a2 2 0 0 1 2 2v12.793a.5.5 0 0 1-.854.353l-2.853-2.853a1 1 0 0 0-.707-.293H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12z"
+                            class="astro-54DZ2EUX"
+                          ></path>
+                          <path
+                            d="M3 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM3 6a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 6zm0 2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z"
+                            class="astro-54DZ2EUX"
+                          ></path>
+                        </svg>
+                        <span class="astro-54DZ2EUX">Blog </span>
+                      </a>
+                    </div>
+
+                    <div class="nav-link pb-5 astro-54DZ2EUX">
+                      <a
+                        class="flex gap-2 no-underline astro-54DZ2EUX"
+                        href="https://github.com/openreplay/openreplay"
+                        target="_blank"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          focusable="false"
+                          data-prefix="fas"
+                          data-icon="github"
+                          class="svg-inline--fa fa-brands fa-github fa-w-16 astro-54DZ2EUX"
+                          role="img"
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 496 512"
+                          width="13"
+                          height="13"
+                          fill="currentColor"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            fill="inherit"
+                            d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"
+                            class="astro-54DZ2EUX"
+                          ></path>
+                        </svg>
+                        <span class="astro-54DZ2EUX">Browse GitHub </span>
+                      </a>
+                    </div>
+                  </div>
+                  <div
+                    class="items flex pt-5 border-t pb-3 gap-4 items-center pb-6 astro-54DZ2EUX"
+                  >
+                    <astro-island
+                      uid="ZKn5Dp"
+                      component-url="/ThemeToggleButton.d8c74c74.js"
+                      component-export="default"
+                      renderer-url="/client.c4386747.js"
+                      props='{"labels":[0,{"useLight":[0,"Use light theme"],"useDark":[0,"Use dark theme"]}],"class":[0,"astro-54DZ2EUX"]}'
+                      ssr=""
+                      client="visible"
+                      opts='{"name":"ThemeToggleButton","value":true}'
+                      await-children=""
+                      ><div class="theme-toggle">
+                        <label
+                          ><svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="20"
+                            height="20"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+                              clip-rule="evenodd"
+                            ></path></svg
+                          ><input
+                            type="radio"
+                            name="theme-toggle"
+                            value="light" /></label
+                        ><label
+                          ><svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="20"
+                            height="20"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                          >
+                            <path
+                              d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"
+                            ></path></svg
+                          ><input type="radio" name="theme-toggle" value="dark"
+                        /></label></div
+                    ></astro-island>
+
+                    <div
+                      class="flex nav-link xl:hidden justify-end gap-1 astro-54DZ2EUX"
+                    >
+                      <div dir="ltr" lang="en" class="astro-54DZ2EUX">
+                        <astro-island
+                          uid="2nSwzP"
+                          component-url="/LanguageSelect.ea145bcf.js"
+                          component-export="default"
+                          renderer-url="/client.c4386747.js"
+                          props='{"lang":[0,"en"],"class":[0,"astro-54DZ2EUX"]}'
+                          ssr=""
+                          client="idle"
+                          opts='{"name":"LanguageSelect","value":true}'
+                          await-children=""
+                          ><div
+                            class="language-select-wrapper flex items-center"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="16"
+                              height="16"
+                              fill="currentColor"
+                              viewBox="0 0 16 16"
+                              class="bi bi-translate relative"
+                            >
+                              <path
+                                d="M4.545 6.714 4.11 8H3l1.862-5h1.284L8 8H6.833l-.435-1.286H4.545zm1.634-.736L5.5 3.956h-.049l-.679 2.022H6.18z"
+                              ></path>
+                              <path
+                                d="M0 2a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v3h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-3H2a2 2 0 0 1-2-2V2zm2-1a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H2zm7.138 9.995c.193.301.402.583.63.846-.748.575-1.673 1.001-2.768 1.292.178.217.451.635.555.867 1.125-.359 2.08-.844 2.886-1.494.777.665 1.739 1.165 2.93 1.472.133-.254.414-.673.629-.89-1.125-.253-2.057-.694-2.82-1.284.681-.747 1.222-1.651 1.621-2.757H14V8h-3v1.047h.765c-.318.844-.74 1.546-1.272 2.13a6.066 6.066 0 0 1-.415-.492 1.988 1.988 0 0 1-.94.31z"
+                              ></path></svg
+                            ><select
+                              aria-label="Select language"
+                              class="header-button language-select"
+                            >
+                              <option selected value="en">
+                                <span>English   </span>
+                              </option>
+                              <option value="es">
+                                <span>Español   </span>
+                              </option>
+                              <option value="fr">
+                                <span>Français   </span>
+                              </option>
+                              <option value="ru">
+                                <span>Русский   </span>
+                              </option>
+                              <option value="zh"><span>中國人   </span></option>
+                              <option value="ar-ae">
+                                <span>العربية   </span>
+                              </option>
+                            </select>
+                          </div></astro-island
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </aside>
+      <div
+        id="main-content"
+        class="main-column w-11/12 lg:w-3/5 mx-auto astro-TMOCKCVF"
+      >
+        <script>
+          ((self.Astro = self.Astro || {}).media = (s, a) => {
+            const t = async () => {
+              await (
+                await s()
+              )();
+            };
+            if (a.value) {
+              const e = matchMedia(a.value);
+              e.matches ? t() : e.addEventListener("change", t, { once: !0 });
+            }
+          }),
+            window.dispatchEvent(new Event("astro:media"));
+        </script>
+        <div dir="ltr" class="astro-N5D7BVTW">
+          <div class="fixed-mobile-bar astro-N5D7BVTW" dir="ltr">
+            <nav>
+              <astro-island
+                uid="1GHUrx"
+                component-url="/TableOfContents.c26772f0.js"
+                component-export="default"
+                renderer-url="/client.c4386747.js"
+                props='{"headings":[1,"[[0,{\"depth\":[0,2],\"slug\":[0,\"1-create-a-new-api-key\"],\"text\":[0,\"1. Create a new API key\"]}],[0,{\"depth\":[0,2],\"slug\":[0,\"2-enable-elasticsearch-in-openreplay\"],\"text\":[0,\"2. Enable Elasticsearch in OpenReplay\"]}],[0,{\"depth\":[0,2],\"slug\":[0,\"3-propagate-openreplaysessiontoken\"],\"text\":[0,\"3. Propagate openReplaySessionToken\"]}],[0,{\"depth\":[0,2],\"slug\":[0,\"special-considerations\"],\"text\":[0,\"Special Considerations\"]}],[0,{\"depth\":[0,2],\"slug\":[0,\"have-questions\"],\"text\":[0,\"Have questions?\"]}]]"],"labels":[0,{"onThisPage":[0,"On this page"],"overview":[0,"Overview"]}],"isMobile":[0,true]}'
+                ssr=""
+                client="media"
+                opts='{"name":"TableOfContents","value":"(max-width: 72em)"}'
+                await-children=""
+                ><details class="toc-mobile-container">
+                  <summary class="toc-mobile-header">
+                    <div class="toc-mobile-header-content">
+                      <div class="toc-toggle">
+                        <h2 id="on-this-page-heading" class="heading">
+                          On this page
+                        </h2>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 1 16 16"
+                          width="16"
+                          height="16"
+                          aria-hidden="true"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            d="M6.22 3.22a.75.75 0 011.06 0l4.25 4.25a.75.75 0 010 1.06l-4.25 4.25a.75.75 0 01-1.06-1.06L9.94 8 6.22 4.28a.75.75 0 010-1.06z"
+                          ></path>
+                        </svg>
+                      </div>
+                    </div>
+                  </summary>
+                  <ul>
+                    <li class="header-link depth-2 current-header-link">
+                      <a href="#overview">Overview</a>
+                    </li>
+                    <li class="header-link depth-2">
+                      <a href="#1-create-a-new-api-key"
+                        >1. Create a new API key</a
+                      >
+                    </li>
+                    <li class="header-link depth-2">
+                      <a href="#2-enable-elasticsearch-in-openreplay"
+                        >2. Enable Elasticsearch in OpenReplay</a
+                      >
+                    </li>
+                    <li class="header-link depth-2">
+                      <a href="#3-propagate-openreplaysessiontoken"
+                        >3. Propagate openReplaySessionToken</a
+                      >
+                    </li>
+                    <li class="header-link depth-2">
+                      <a href="#special-considerations"
+                        >Special Considerations</a
+                      >
+                    </li>
+                    <li class="header-link depth-2">
+                      <a href="#have-questions">Have questions?</a>
+                    </li>
+                  </ul>
+                </details></astro-island
+              >
+            </nav>
+          </div>
+          <article id="article" class="content full astro-N5D7BVTW">
+            <section class="main-section astro-N5D7BVTW">
+              <header class="astro-N5D7BVTW">
+                <h1 class="content-title astro-N5D7BVTW" id="overview">
+                  Elastic
+                </h1>
+              </header>
+
+              <p>
+                How to integrate Elasticsearch with OpenReplay and see backend
+                errors alongside session recordings.
+              </p>
+              <div class="heading-wrapper level-h2" tabindex="-1">
+                <h2 id="1-create-a-new-api-key">1. Create a new API key</h2>
+                <a class="anchor-link" href="#1-create-a-new-api-key"
+                  ><span class="anchor-icon" aria-hidden="true"
+                    ><svg
+                      width="16"
+                      height="16"
+                      version="1.1"
+                      viewBox="0 0 16 16"
+                      xlmns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        fill="currentcolor"
+                        d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+                      ></path></svg></span
+                  ><span class="sr-only" is:raw="true"
+                    >Section titled 1. Create a new API key</span
+                  ></a
+                >
+              </div>
+              <p>If you are using Kibana dashboard:</p>
+              <ol>
+                <li>Login to your Kibana dashboard.</li>
+                <li>Go to Dev <em>Tools &gt; Console</em>.</li>
+                <li>
+                  Copy the following console code to your console and run it.
+                </li>
+              </ol>
+              <p>If you are using CURL commands:</p>
+              <ol>
+                <li>Execute the following cURL command in your terminal.</li>
+              </ol>
+              <p>
+                <strong>Note:</strong> by default, this integration will search
+                for logs inside any index that matches <code>*log*</code>, if
+                you have a specific index for logs that doesn’t match this
+                pattern, please change the name of the index in line 12 in the
+                following command. If you want to specify more than 1 index, you
+                can separate the names with <code>,</code>.
+              </p>
+              <codesnippet lang="shell">
+                <pre
+                  class="astro-code"
+                  style="background-color: #222222; overflow-x: auto"
+                ><code><span class="line"><span style="color:#E6E6E6">POST /_security/api_key</span></span>
+<span class="line"><span style="color:#E6E6E6">{</span></span>
+<span class="line"><span style="color:#E6E6E6">  </span><span style="color:#CE9178">&quot;name&quot;</span><span style="color:#E6E6E6">: </span><span style="color:#CE9178">&quot;openreplay-api-key&quot;</span><span style="color:#E6E6E6">,</span></span>
+<span class="line"><span style="color:#E6E6E6">  </span><span style="color:#CE9178">&quot;role_descriptors&quot;</span><span style="color:#E6E6E6">: {</span></span>
+<span class="line"><span style="color:#E6E6E6">    </span><span style="color:#CE9178">&quot;openreplay-role&quot;</span><span style="color:#E6E6E6">: {</span></span>
+<span class="line"><span style="color:#E6E6E6">      </span><span style="color:#CE9178">&quot;cluster&quot;</span><span style="color:#E6E6E6">: [</span></span>
+<span class="line"><span style="color:#E6E6E6">        </span><span style="color:#CE9178">&quot;all&quot;</span></span>
+<span class="line"><span style="color:#E6E6E6">      ],</span></span>
+<span class="line"><span style="color:#E6E6E6">      </span><span style="color:#CE9178">&quot;index&quot;</span><span style="color:#E6E6E6">: [</span></span>
+<span class="line"><span style="color:#E6E6E6">        {</span></span>
+<span class="line"><span style="color:#E6E6E6">          </span><span style="color:#CE9178">&quot;names&quot;</span><span style="color:#E6E6E6">: [</span></span>
+<span class="line"><span style="color:#E6E6E6">            </span><span style="color:#CE9178">&quot;*log*&quot;</span></span>
+<span class="line"><span style="color:#E6E6E6">          ],</span></span>
+<span class="line"><span style="color:#E6E6E6">          </span><span style="color:#CE9178">&quot;privileges&quot;</span><span style="color:#E6E6E6">: [</span></span>
+<span class="line"><span style="color:#E6E6E6">            </span><span style="color:#CE9178">&quot;read&quot;</span></span>
+<span class="line"><span style="color:#E6E6E6">          ]</span></span>
+<span class="line"><span style="color:#E6E6E6">        }</span></span>
+<span class="line"><span style="color:#E6E6E6">      ]</span></span>
+<span class="line"><span style="color:#E6E6E6">    }</span></span>
+<span class="line"><span style="color:#E6E6E6">  }</span></span>
+<span class="line"><span style="color:#E6E6E6">}</span></span></code></pre>
+              </codesnippet>
+              <p>
+                If you used any of the previous methods to generate an API key,
+                you will get a result as the following:
+              </p>
+              <codesnippet lang="json">
+                <pre
+                  class="astro-code"
+                  style="background-color: #222222; overflow-x: auto"
+                ><code><span class="line"><span style="color:#E6E6E6">{</span></span>
+<span class="line"><span style="color:#E6E6E6">  </span><span style="color:#9CDCFE">&quot;id&quot;</span><span style="color:#E6E6E6"> : </span><span style="color:#CE9178">&quot;eQWAIG0Bo0VqB8HXFH9-&quot;</span><span style="color:#E6E6E6">,</span></span>
+<span class="line"><span style="color:#E6E6E6">  </span><span style="color:#9CDCFE">&quot;name&quot;</span><span style="color:#E6E6E6"> : </span><span style="color:#CE9178">&quot;openreplay-api-key&quot;</span><span style="color:#E6E6E6">,</span></span>
+<span class="line"><span style="color:#E6E6E6">  </span><span style="color:#9CDCFE">&quot;api_key&quot;</span><span style="color:#E6E6E6"> : </span><span style="color:#CE9178">&quot;dZ5ycVRJTU-5UW_RYfi1_w&quot;</span></span>
+<span class="line"><span style="color:#E6E6E6">}</span></span></code></pre>
+              </codesnippet>
+              <p>
+                Make sure to copy the <code>id</code> and the
+                <code>api_key</code> as we need them for our integration. For
+                more information about creating an API key, please refer to this
+                <a
+                  href="https://www.elastic.co/guide/en/elasticsearch/reference/master/security-api-create-api-key.html"
+                  >documentation</a
+                >.
+              </p>
+              <div class="heading-wrapper level-h2" tabindex="-1">
+                <h2 id="2-enable-elasticsearch-in-openreplay">
+                  2. Enable Elasticsearch in OpenReplay
+                </h2>
+                <a
+                  class="anchor-link"
+                  href="#2-enable-elasticsearch-in-openreplay"
+                  ><span class="anchor-icon" aria-hidden="true"
+                    ><svg
+                      width="16"
+                      height="16"
+                      version="1.1"
+                      viewBox="0 0 16 16"
+                      xlmns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        fill="currentcolor"
+                        d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+                      ></path></svg></span
+                  ><span class="sr-only" is:raw="true"
+                    >Section titled 2. Enable Elasticsearch in OpenReplay</span
+                  ></a
+                >
+              </div>
+              <p>
+                Put your <code>host</code> address, <code>port</code>,
+                <code>id</code> and <code>api_key</code> in OpenReplay dashboard
+                under ‘Preferences &gt; Integration’. If you changed the index
+                when generating the <code>api_key</code>, please specify the
+                name in <code>indexes</code>.
+              </p>
+              <p>
+                <img
+                  src="/static/elastic-1.png#center"
+                  alt="Elasticsearch Integration in OpenReplay"
+                />
+              </p>
+              <div class="heading-wrapper level-h2" tabindex="-1">
+                <h2 id="3-propagate-openreplaysessiontoken">
+                  3. Propagate openReplaySessionToken
+                </h2>
+                <a
+                  class="anchor-link"
+                  href="#3-propagate-openreplaysessiontoken"
+                  ><span class="anchor-icon" aria-hidden="true"
+                    ><svg
+                      width="16"
+                      height="16"
+                      version="1.1"
+                      viewBox="0 0 16 16"
+                      xlmns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        fill="currentcolor"
+                        d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+                      ></path></svg></span
+                  ><span class="sr-only" is:raw="true"
+                    >Section titled 3. Propagate openReplaySessionToken</span
+                  ></a
+                >
+              </div>
+              <p>
+                To link a Elasticsearch event with the recorded user session, a
+                unique token has to be propagated from your frontend to your
+                backend on each request you want to track. This can be done
+                using a custom HTTP header. In the below example, we use the
+                <code>fetch</code> function to send that header.
+              </p>
+              <codesnippet lang="javascript">
+                <pre
+                  class="astro-code"
+                  style="background-color: #222222; overflow-x: auto"
+                ><code><span class="line"><span style="color:#569CD6">const</span><span style="color:#E6E6E6"> </span><span style="color:#9CDCFE">headers</span><span style="color:#E6E6E6"> </span><span style="color:#D4D4D4">=</span><span style="color:#E6E6E6"> {</span></span>
+<span class="line"><span style="color:#E6E6E6">  </span><span style="color:#9CDCFE">Accept:</span><span style="color:#E6E6E6"> </span><span style="color:#CE9178">&#39;application/json&#39;</span><span style="color:#E6E6E6">,</span></span>
+<span class="line"><span style="color:#E6E6E6">  </span><span style="color:#CE9178">&#39;Content-Type&#39;</span><span style="color:#9CDCFE">:</span><span style="color:#E6E6E6"> </span><span style="color:#CE9178">&#39;application/json&#39;</span><span style="color:#E6E6E6">,</span></span>
+<span class="line"><span style="color:#E6E6E6">};</span></span>
+<span class="line"><span style="color:#C586C0">if</span><span style="color:#E6E6E6"> (</span><span style="color:#9CDCFE">tracker</span><span style="color:#E6E6E6">.</span><span style="color:#DCDCAA">getSessionToken</span><span style="color:#E6E6E6">()) { </span><span style="color:#6A9955">// or window.OpenReplay instead of tracker if you&#39;re using the snippet</span></span>
+<span class="line"><span style="color:#E6E6E6">  </span><span style="color:#9CDCFE">headers</span><span style="color:#E6E6E6">[</span><span style="color:#CE9178">&#39;X-OpenReplay-SessionToken&#39;</span><span style="color:#E6E6E6">] </span><span style="color:#D4D4D4">=</span><span style="color:#E6E6E6"> </span><span style="color:#9CDCFE">tracker</span><span style="color:#E6E6E6">.</span><span style="color:#DCDCAA">getSessionToken</span><span style="color:#E6E6E6">(); </span><span style="color:#6A9955">// Inject openReplaySessionToken</span></span>
+<span class="line"><span style="color:#E6E6E6">}</span></span>
+<span class="line"><span style="color:#DCDCAA">fetch</span><span style="color:#E6E6E6">(</span><span style="color:#CE9178">&#39;www.your-backend.com&#39;</span><span style="color:#E6E6E6">, {</span></span>
+<span class="line"><span style="color:#E6E6E6">  </span><span style="color:#CE9178">&#39;GET&#39;</span><span style="color:#E6E6E6">,</span></span>
+<span class="line"><span style="color:#E6E6E6">  </span><span style="color:#9CDCFE">headers</span><span style="color:#E6E6E6">,</span></span>
+<span class="line"><span style="color:#E6E6E6">});</span></span></code></pre>
+              </codesnippet>
+              <p>
+                In order for OpenReplay to associate a Elasticsearch log entry
+                with the recorded user session, a unique token has to be
+                propagated as part of each backend error you wish to track.
+              </p>
+              <p>Below is an example in Python using Monkey Patching.</p>
+              <codesnippet lang="python">
+                <pre
+                  class="astro-code"
+                  style="background-color: #222222; overflow-x: auto"
+                ><code><span class="line"><span style="color:#C586C0">import</span><span style="color:#E6E6E6"> sys</span></span>
+<span class="line"><span style="color:#C586C0">import</span><span style="color:#E6E6E6"> traceback</span></span>
+<span class="line"><span style="color:#6A9955">#...</span></span>
+<span class="line"><span style="color:#E6E6E6">old_tb </span><span style="color:#D4D4D4">=</span><span style="color:#E6E6E6"> traceback.print_exception</span></span>
+<span class="line"><span style="color:#E6E6E6">old_f </span><span style="color:#D4D4D4">=</span><span style="color:#E6E6E6"> sys.stdout</span></span>
+<span class="line"><span style="color:#E6E6E6">old_e </span><span style="color:#D4D4D4">=</span><span style="color:#E6E6E6"> sys.stderr</span></span>
+<span class="line"><span style="color:#E6E6E6">OPENREPLAY_SESSION_TOKEN </span><span style="color:#D4D4D4">=</span><span style="color:#E6E6E6"> </span><span style="color:#569CD6">None</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#569CD6">class</span><span style="color:#E6E6E6"> </span><span style="color:#4EC9B0">F</span><span style="color:#E6E6E6">:</span></span>
+<span class="line"><span style="color:#E6E6E6">    </span><span style="color:#569CD6">def</span><span style="color:#E6E6E6"> </span><span style="color:#DCDCAA">write</span><span style="color:#E6E6E6">(</span><span style="color:#9CDCFE">self</span><span style="color:#E6E6E6">, </span><span style="color:#9CDCFE">x</span><span style="color:#E6E6E6">):</span></span>
+<span class="line"><span style="color:#E6E6E6">        </span><span style="color:#C586C0">if</span><span style="color:#E6E6E6"> OPENREPLAY_SESSION_TOKEN </span><span style="color:#569CD6">is</span><span style="color:#E6E6E6"> </span><span style="color:#569CD6">not</span><span style="color:#E6E6E6"> </span><span style="color:#569CD6">None</span><span style="color:#E6E6E6"> </span><span style="color:#569CD6">and</span><span style="color:#E6E6E6"> x </span><span style="color:#D4D4D4">!=</span><span style="color:#E6E6E6"> </span><span style="color:#CE9178">&#39;</span><span style="color:#D7BA7D">\n</span><span style="color:#CE9178">&#39;</span><span style="color:#E6E6E6">:</span></span>
+<span class="line"><span style="color:#E6E6E6">            old_f.write(</span><span style="color:#569CD6">f</span><span style="color:#CE9178">&quot;[openReplaySessionToken=</span><span style="color:#569CD6">{</span><span style="color:#E6E6E6">OPENREPLAY_SESSION_TOKEN</span><span style="color:#569CD6">}</span><span style="color:#CE9178">] </span><span style="color:#569CD6">{</span><span style="color:#E6E6E6">x</span><span style="color:#569CD6">}</span><span style="color:#CE9178">&quot;</span><span style="color:#E6E6E6">)</span></span>
+<span class="line"><span style="color:#E6E6E6">        </span><span style="color:#C586C0">else</span><span style="color:#E6E6E6">:</span></span>
+<span class="line"><span style="color:#E6E6E6">            old_f.write(x)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E6E6E6">    </span><span style="color:#569CD6">def</span><span style="color:#E6E6E6"> </span><span style="color:#DCDCAA">flush</span><span style="color:#E6E6E6">(</span><span style="color:#9CDCFE">self</span><span style="color:#E6E6E6">):</span></span>
+<span class="line"><span style="color:#E6E6E6">        </span><span style="color:#C586C0">pass</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#569CD6">def</span><span style="color:#E6E6E6"> </span><span style="color:#DCDCAA">tb_print_exception</span><span style="color:#E6E6E6">(</span><span style="color:#9CDCFE">etype</span><span style="color:#E6E6E6">, </span><span style="color:#9CDCFE">value</span><span style="color:#E6E6E6">, </span><span style="color:#9CDCFE">tb</span><span style="color:#E6E6E6">, </span><span style="color:#9CDCFE">limit</span><span style="color:#D4D4D4">=</span><span style="color:#569CD6">None</span><span style="color:#E6E6E6">, </span><span style="color:#9CDCFE">file</span><span style="color:#D4D4D4">=</span><span style="color:#569CD6">None</span><span style="color:#E6E6E6">, </span><span style="color:#9CDCFE">chain</span><span style="color:#D4D4D4">=</span><span style="color:#569CD6">True</span><span style="color:#E6E6E6">):</span></span>
+<span class="line"><span style="color:#E6E6E6">    </span><span style="color:#C586C0">if</span><span style="color:#E6E6E6"> OPENREPLAY_SESSION_TOKEN </span><span style="color:#569CD6">is</span><span style="color:#E6E6E6"> </span><span style="color:#569CD6">not</span><span style="color:#E6E6E6"> </span><span style="color:#569CD6">None</span><span style="color:#E6E6E6">:</span></span>
+<span class="line"><span style="color:#E6E6E6">        value </span><span style="color:#D4D4D4">=</span><span style="color:#E6E6E6"> </span><span style="color:#4EC9B0">type</span><span style="color:#E6E6E6">(value)(</span><span style="color:#569CD6">f</span><span style="color:#CE9178">&quot;[openReplaySessionToken=</span><span style="color:#569CD6">{</span><span style="color:#E6E6E6">OPENREPLAY_SESSION_TOKEN</span><span style="color:#569CD6">}</span><span style="color:#CE9178">] &quot;</span><span style="color:#E6E6E6"> </span><span style="color:#D4D4D4">+</span><span style="color:#E6E6E6"> </span><span style="color:#4EC9B0">str</span><span style="color:#E6E6E6">(value))</span></span>
+<span class="line"><span style="color:#E6E6E6">    old_tb(etype, value, tb, limit, </span><span style="color:#9CDCFE">file</span><span style="color:#E6E6E6">, chain)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E6E6E6">traceback.print_exception </span><span style="color:#D4D4D4">=</span><span style="color:#E6E6E6"> tb_print_exception</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E6E6E6">sys.stderr </span><span style="color:#D4D4D4">=</span><span style="color:#E6E6E6"> F()</span></span></code></pre>
+              </codesnippet>
+              <p>
+                The name of the tag <code>openReplaySessionToken</code> is case
+                sensitive.
+              </p>
+              <div class="heading-wrapper level-h2" tabindex="-1">
+                <h2 id="special-considerations">Special Considerations</h2>
+                <a class="anchor-link" href="#special-considerations"
+                  ><span class="anchor-icon" aria-hidden="true"
+                    ><svg
+                      width="16"
+                      height="16"
+                      version="1.1"
+                      viewBox="0 0 16 16"
+                      xlmns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        fill="currentcolor"
+                        d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+                      ></path></svg></span
+                  ><span class="sr-only" is:raw="true"
+                    >Section titled Special Considerations</span
+                  ></a
+                >
+              </div>
+              <p>
+                By default, we look for each log associated to an OpenReplay
+                session using the attributes <code>message</code> and
+                <code>utc_time</code>, we are only interested in error logs, to
+                identify error logs we check the attribute <code>tags</code> to
+                contain the value <code>error</code>.
+              </p>
+              <div class="heading-wrapper level-h2" tabindex="-1">
+                <h2 id="have-questions">Have questions?</h2>
+                <a class="anchor-link" href="#have-questions"
+                  ><span class="anchor-icon" aria-hidden="true"
+                    ><svg
+                      width="16"
+                      height="16"
+                      version="1.1"
+                      viewBox="0 0 16 16"
+                      xlmns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        fill="currentcolor"
+                        d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+                      ></path></svg></span
+                  ><span class="sr-only" is:raw="true"
+                    >Section titled Have questions?</span
+                  ></a
+                >
+              </div>
+              <p>
+                If you encounter any issues, connect to our
+                <a href="https://slack.openreplay.com">Slack</a> and get help
+                from our community.
+              </p>
+            </section>
+          </article>
+        </div>
+      </div>
+      <aside id="right-sidebar" class="hidden xl:block xl:w-1/6 astro-TMOCKCVF">
+        <nav class="astro-SKWYZKS5" aria-label="Secondary">
+          <div class="static astro-SKWYZKS5">
+            <astro-island
+              uid="Z24XTDn"
+              component-url="/TableOfContents.c26772f0.js"
+              component-export="default"
+              renderer-url="/client.c4386747.js"
+              props='{"headings":[1,"[[0,{\"depth\":[0,2],\"slug\":[0,\"1-create-a-new-api-key\"],\"text\":[0,\"1. Create a new API key\"]}],[0,{\"depth\":[0,2],\"slug\":[0,\"2-enable-elasticsearch-in-openreplay\"],\"text\":[0,\"2. Enable Elasticsearch in OpenReplay\"]}],[0,{\"depth\":[0,2],\"slug\":[0,\"3-propagate-openreplaysessiontoken\"],\"text\":[0,\"3. Propagate openReplaySessionToken\"]}],[0,{\"depth\":[0,2],\"slug\":[0,\"special-considerations\"],\"text\":[0,\"Special Considerations\"]}],[0,{\"depth\":[0,2],\"slug\":[0,\"have-questions\"],\"text\":[0,\"Have questions?\"]}]]"],"labels":[0,{"onThisPage":[0,"On this page"],"overview":[0,"Overview"]}],"isMobile":[0,false],"class":[0,"astro-SKWYZKS5"]}'
+              ssr=""
+              client="media"
+              opts='{"name":"TableOfContents","value":"(min-width: 50em)"}'
+              await-children=""
+              ><h2 id="on-this-page-heading" class="heading">On this page</h2>
+              <ul>
+                <li class="header-link depth-2 current-header-link">
+                  <a href="#overview">Overview</a>
+                </li>
+                <li class="header-link depth-2">
+                  <a href="#1-create-a-new-api-key">1. Create a new API key</a>
+                </li>
+                <li class="header-link depth-2">
+                  <a href="#2-enable-elasticsearch-in-openreplay"
+                    >2. Enable Elasticsearch in OpenReplay</a
+                  >
+                </li>
+                <li class="header-link depth-2">
+                  <a href="#3-propagate-openreplaysessiontoken"
+                    >3. Propagate openReplaySessionToken</a
+                  >
+                </li>
+                <li class="header-link depth-2">
+                  <a href="#special-considerations">Special Considerations</a>
+                </li>
+                <li class="header-link depth-2">
+                  <a href="#have-questions">Have questions?</a>
+                </li>
+              </ul></astro-island
+            >
+            <div class="com-contribute m-3 ml-0 pt-5 astro-SKWYZKS5">
+              <!-- <h2 class="heading"><UIString key="rightSidebar.contribute" /></h2> -->
+              <ul>
+                <li
+                  class="header-link depth-2"
+                  title="Contribute"
+                  data-tooltip-placement="top"
+                >
+                  <a
+                    class="edit-on-github astro-LDO4PQH7"
+                    href="https://github.com/openreplay/documentation/blob/main/src/pages/en/v1.8.1/integrations/elastic.mdx"
+                    target="_blank"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                      class="bi bi-pencil astro-LDO4PQH7"
+                      viewBox="0 0 16 16"
+                    >
+                      <path
+                        d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"
+                        class="astro-LDO4PQH7"
+                      ></path>
+                    </svg>
+                    <!-- <span><UIString key="rightSidebar.editPage" /></span> -->
+                  </a>
+                </li>
+                <!-- {
+		isTranslatable && (
+			<li class={`header-link depth-2`}>
+				<a href="https://github.com/withastro/docs/blob/main/TRANSLATING.md" target="_blank">
+					<svg
+						aria-hidden="true"
+						focusable="false"
+						role="img"
+						xmlns="http://www.w3.org/2000/svg"
+						viewBox="0 0 88.6 77.3"
+						height="1.24em"
+						width="1.24em"
+						style="margin: -2px;"
+					>
+						<path
+							fill="currentColor"
+							d="M61,24.6h7.9l18.7,51.6h-7.7l-5.4-15.5H54.3l-5.6,15.5h-7.2L61,24.6z M72.6,55l-8-22.8L56.3,55H72.6z"
+						/>
+						<path
+							fill="currentColor"
+							d="M53.6,60.6c-10-4-16-9-22-14c0,0,1.3,1.3,0,0c-6,5-20,13-20,13l-4-6c8-5,10-6,19-13c-2.1-1.9-12-13-13-19h8          c4,9,10,14,10,14c10-8,10-19,10-19h8c0,0-1,13-12,24l0,0c5,5,10,9,19,13L53.6,60.6z M1.6,16.6h56v-8h-23v-7h-9v7h-24V16.6z"
+						/>
+					</svg>
+				</a>
+			</li>
+		)
+	}-->
+              </ul>
+              <div class="astro-Z2QUCQFP">
+                <div class="astro-Z2QUCQFP"></div>
+                <ul class="items astro-Z2QUCQFP">
+                  <li
+                    class="header-link astro-Z2QUCQFP"
+                    title="Join Community"
+                    data-tooltip-placement="top"
+                  >
+                    <a
+                      href="https://slack.openreplay.com"
+                      target="_blank"
+                      class="astro-Z2QUCQFP"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20"
+                        height="20"
+                        fill="currentColor"
+                        class="bi bi-slack astro-Z2QUCQFP"
+                        viewBox="0 0 16 16"
+                      >
+                        <path
+                          d="M3.362 10.11c0 .926-.756 1.681-1.681 1.681S0 11.036 0 10.111C0 9.186.756 8.43 1.68 8.43h1.682v1.68zm.846 0c0-.924.756-1.68 1.681-1.68s1.681.756 1.681 1.68v4.21c0 .924-.756 1.68-1.68 1.68a1.685 1.685 0 0 1-1.682-1.68v-4.21zM5.89 3.362c-.926 0-1.682-.756-1.682-1.681S4.964 0 5.89 0s1.68.756 1.68 1.68v1.682H5.89zm0 .846c.924 0 1.68.756 1.68 1.681S6.814 7.57 5.89 7.57H1.68C.757 7.57 0 6.814 0 5.89c0-.926.756-1.682 1.68-1.682h4.21zm6.749 1.682c0-.926.755-1.682 1.68-1.682.925 0 1.681.756 1.681 1.681s-.756 1.681-1.68 1.681h-1.681V5.89zm-.848 0c0 .924-.755 1.68-1.68 1.68A1.685 1.685 0 0 1 8.43 5.89V1.68C8.43.757 9.186 0 10.11 0c.926 0 1.681.756 1.681 1.68v4.21zm-1.681 6.748c.926 0 1.682.756 1.682 1.681S11.036 16 10.11 16s-1.681-.756-1.681-1.68v-1.682h1.68zm0-.847c-.924 0-1.68-.755-1.68-1.68 0-.925.756-1.681 1.68-1.681h4.21c.924 0 1.68.756 1.68 1.68 0 .926-.756 1.681-1.68 1.681h-4.21z"
+                          class="astro-Z2QUCQFP"
+                        ></path>
+                      </svg>
+                      <!-- <span><UIString key="rightSidebar.joinSlack" /></span> -->
+                    </a>
+                  </li>
+                  <li
+                    class="header-link astro-Z2QUCQFP"
+                    title="Read Our Blog"
+                    data-tooltip-placement="top"
+                  >
+                    <a
+                      href="https://blog.openreplay.com"
+                      target="_blank"
+                      class="astro-Z2QUCQFP"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20"
+                        height="20"
+                        fill="currentColor"
+                        class="bi bi-chat-right-text astro-Z2QUCQFP"
+                        viewBox="0 0 16 16"
+                      >
+                        <path
+                          d="M2 1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h9.586a2 2 0 0 1 1.414.586l2 2V2a1 1 0 0 0-1-1H2zm12-1a2 2 0 0 1 2 2v12.793a.5.5 0 0 1-.854.353l-2.853-2.853a1 1 0 0 0-.707-.293H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12z"
+                          class="astro-Z2QUCQFP"
+                        ></path>
+                        <path
+                          d="M3 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM3 6a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 6zm0 2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z"
+                          class="astro-Z2QUCQFP"
+                        ></path>
+                      </svg>
+                      <!-- <span><UIString key="rightSidebar.readBlog" /></span> -->
+                    </a>
+                  </li>
+                  <li
+                    class="header-link astro-Z2QUCQFP"
+                    title="Browse Github"
+                    data-tooltip-placement="top"
+                  >
+                    <a
+                      href="https://github.com/openreplay/openreplay"
+                      target="_blank"
+                      class="astro-Z2QUCQFP"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        focusable="false"
+                        data-prefix="fas"
+                        data-icon="github"
+                        class="svg-inline--fa fa-brands fa-github fa-w-16 astro-Z2QUCQFP"
+                        role="img"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 496 512"
+                        height="20px"
+                        width="20px"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fill="currentColor"
+                          d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"
+                          class="astro-Z2QUCQFP"
+                        ></path>
+                      </svg>
+                      <!-- <span><UIString key="rightSidebar.github" /></span> -->
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </nav>
+      </aside>
+    </main>
+    <div class="main-column astro-TMOCKCVF">
+      <footer class="text-center p-5 astro-G32J2V2B">
+        <ul
+          class="footer-links flex flex-row justify-center text-center p-0 gap-x-6 list-none no-underline astro-G32J2V2B"
+        >
+          <li class="astro-G32J2V2B">
+            <a
+              href="https://openreplay.com"
+              class="no-underline astro-G32J2V2B"
+            >
+              OpenReplay
+            </a>
+          </li>
+          <li class="astro-G32J2V2B">&#46;</li>
+          <li class="astro-G32J2V2B">
+            <a
+              href="https://openreplay.com/legal/privacy.html"
+              class="no-underline astro-G32J2V2B"
+            >
+              Privacy Policy
+            </a>
+          </li>
+          <li class="astro-G32J2V2B">&#46;</li>
+          <li class="astro-G32J2V2B">
+            <a
+              href="https://openreplay.com/legal/terms.html"
+              class="no-underline astro-G32J2V2B"
+            >
+              Terms
+            </a>
+          </li>
+        </ul>
+      </footer>
+    </div>
+  </body>
+</html>

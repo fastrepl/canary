@@ -48,4 +48,11 @@ defmodule Canary.Test.Scraper do
     assert Enum.at(items, 0).id == nil
     assert Enum.at(items, 0).title == "LiteLLM - Getting Started"
   end
+
+  test "openreplay-1" do
+    html = File.read!("test/fixtures/openreplay-1.html")
+
+    items = Scraper.run(html)
+    assert length(items) == 6
+  end
 end

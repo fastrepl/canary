@@ -1,3 +1,4 @@
 - `canary-1`: https://getcanary.dev/docs/local/intro
 - `litellm-1`: https://docs.litellm.ai/docs
 - `hono-1`: https://hono.dev/docs/middleware/builtin/bearer-auth
+- `openreplay-1`: https://docs.openreplay.com/en/v1.8.1/integrations/elastic/
