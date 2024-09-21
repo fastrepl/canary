@@ -132,32 +132,27 @@ defmodule Canary.Crawler.Fallback do
   def run(%Config{} = config) do
     {:ok, store_pid} = Agent.start_link(fn -> %{} end)
 
-    url = config.start_urls |> Enum.at(0)
+    shared = [
+      workers: 20,
+      interval: 0,
+      max_pages: 2000,
+      max_depths: 20,
+      url_filter: Filter,
+      scraper: Scraper,
+      store_pid: store_pid,
+      user_agent: "Canary (github.com/fastrepl/canary)",
+      config: config
+    ]
 
-    crawler =
-      Crawler.crawl(
-        url,
-        host: URI.new!(url).host,
-        workers: 20,
-        interval: 0,
-        max_pages: 2000,
-        max_depths: 20,
-        url_filter: Filter,
-        scraper: Scraper,
-        store_pid: store_pid,
-        user_agent: "Canary (github.com/fastrepl/canary)",
-        config: config
-      )
+    config.start_urls
+    |> Enum.map(&Crawler.crawl(&1, Keyword.merge(shared, host: URI.new!(&1).host)))
+    |> Enum.each(fn
+      {:ok, opts} -> wait(opts)
+      _ -> {:error, :failed}
+    end)
 
-    case crawler do
-      {:ok, opts} ->
-        wait(opts)
-        result = store_pid |> Agent.get(fn store -> store end)
-        {:ok, result}
-
-      _ ->
-        {:error, :failed}
-    end
+    result = store_pid |> Agent.get(fn store -> store end)
+    {:ok, result}
   end
 
   defp wait(opts, seconds_left \\ 20) do
