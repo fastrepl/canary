@@ -2,6 +2,8 @@ defmodule CanaryWeb.SourceLive.Detail do
   use CanaryWeb, :live_component
   alias PrimerLive.Component, as: Primer
 
+  require Ecto.Query
+
   @impl true
   def render(assigns) do
     ~H"""
@@ -189,7 +191,12 @@ defmodule CanaryWeb.SourceLive.Detail do
 
           <%= cond do %>
             <% @tab == Enum.at(@tabs, 0) -> %>
-              <.status myself={@myself} source={@source} />
+              <.status
+                myself={@myself}
+                source={@source}
+                action_msg={@action_msg}
+                action_name={@action_name}
+              />
             <% @tab == Enum.at(@tabs, 1) -> %>
               <%= if @source.config.type == :webpage do %>
                 <.live_component
@@ -207,6 +214,8 @@ defmodule CanaryWeb.SourceLive.Detail do
 
   attr :source, :any, default: nil
   attr :myself, :any, default: nil
+  attr :action_msg, :string, default: "Fetch"
+  attr :action_name, :string, default: "fetch"
 
   def status(assigns) do
     ~H"""
@@ -220,8 +229,8 @@ defmodule CanaryWeb.SourceLive.Detail do
           <span>
             documents indexed
           </span>
-          <Primer.button phx-click="fetch" phx-target={@myself} is_small>
-            Refresh
+          <Primer.button phx-click={@action_name} phx-target={@myself} is_small>
+            <%= @action_msg %>
           </Primer.button>
           <pre><%= String.upcase(to_string(@source.state)) %></pre>
         </div>
@@ -249,17 +258,18 @@ defmodule CanaryWeb.SourceLive.Detail do
   @impl true
   def update(assigns, socket) do
     socket = assign(socket, assigns)
+    source = socket.assigns.source
 
     form =
-      socket.assigns.source
+      source
       |> AshPhoenix.Form.for_update(:update, forms: [auto?: true])
       |> to_form()
 
     socket =
       socket
       |> assign(form: form)
-      |> assign(source: socket.assigns.source)
-      |> assign(tabs: ["Status", "Documents"])
+      |> assign(source: source)
+      |> assign(tabs: ["Status", "Preview"])
       |> assign(:tab, "Status")
       |> assign_new(:current_config, fn ->
         %Ash.Union{value: config} = form.data.config
@@ -267,6 +277,8 @@ defmodule CanaryWeb.SourceLive.Detail do
         Map.from_struct(config)
         |> Map.new(fn {k, v} -> {to_string(k), v} end)
       end)
+      |> assign(action_msg: if(source.state == :running, do: "Cancel", else: "Fetch"))
+      |> assign(action_name: if(source.state == :running, do: "cancel", else: "fetch"))
 
     {:ok, socket}
   end
@@ -329,6 +341,24 @@ defmodule CanaryWeb.SourceLive.Detail do
         IO.inspect(error)
         {:noreply, socket}
     end
+  end
+
+  @impl true
+  def handle_event("cancel", _, socket) do
+    worker =
+      case socket.assigns.source.config.type do
+        :webpage -> Canary.Workers.WebpageProcessor
+        :github_issue -> Canary.Workers.GithubIssueProcessor
+        :github_discussion -> Canary.Workers.GithubDiscussionProcessor
+      end
+      |> to_string()
+      |> String.trim_leading("Elixir.")
+
+    Oban.Job
+    |> Ecto.Query.where(worker: ^worker)
+    |> Oban.cancel_all_jobs()
+
+    {:noreply, socket}
   end
 
   defp transform_params(params) do
