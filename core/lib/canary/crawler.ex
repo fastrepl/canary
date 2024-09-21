@@ -1,10 +1,3 @@
-# TODO: to support multi-start-urls, we need to provide store PID from the outside
-# Not sure how to handle "Sitemap" and "Fallback" in the same time
-
-# one clever way of doing it is to pass Store to Sitemap based thing? do not do dupliates.
-# To support forum use-case, we need lot more config. (split sitepap <> start-urls..?)
-# Do not over-complicate it for now
-
 defmodule Canary.Crawler do
   @callback run(String.t(), opts :: keyword()) :: {:ok, map()} | {:error, any()}
   @modules [Canary.Crawler.Sitemap, Canary.Crawler.Fallback]
@@ -40,6 +33,15 @@ defmodule Canary.Crawler do
         Enum.any?(include_patterns, &Canary.Native.glob_match(&1, url))
     end
   end
+
+  def normalize_url(url) do
+    url
+    |> URI.parse()
+    |> Map.put(:query, nil)
+    |> Map.put(:fragment, nil)
+    |> URI.to_string()
+    |> String.replace_trailing("/", "")
+  end
 end
 
 defmodule Canary.Crawler.Sitemap do
@@ -53,7 +55,13 @@ defmodule Canary.Crawler.Sitemap do
     if urls == [] do
       {:error, :not_found}
     else
-      map = urls |> Enum.reduce(%{}, &Map.put(&2, &1, fetch_url(&1)))
+      map =
+        urls
+        |> Task.async_stream(&{&1, fetch_url(&1)}, max_concurrency: 10)
+        |> Enum.reduce(%{}, fn {:ok, {url, body}}, acc ->
+          acc |> Map.put(Canary.Crawler.normalize_url(url), body)
+        end)
+
       {:ok, map}
     end
   end
@@ -87,7 +95,9 @@ defmodule Canary.Crawler.Sitemap do
   end
 
   defp fetch_url(url) do
-    case Req.get(url: url) do
+    case Req.new()
+         |> Req.Request.append_response_steps(meta_refresh: &Canary.Req.MetaRefresh.handle/1)
+         |> Req.get(url: url) do
       {:ok, %{status: 200, body: body}} -> body
       _ -> nil
     end
@@ -108,17 +118,12 @@ defmodule Canary.Crawler.Fallback do
     @behaviour Crawler.Scraper.Spec
 
     def scrape(%Crawler.Store.Page{url: url, body: body, opts: opts} = page) do
-      opts.store_pid |> Agent.update(&Map.put(&1, normalize(url), body))
-      {:ok, page}
-    end
+      Agent.update(opts.store_pid, fn store ->
+        store
+        |> Map.put(Canary.Crawler.normalize_url(url), body)
+      end)
 
-    defp normalize(url) do
-      url
-      |> URI.parse()
-      |> Map.put(:query, nil)
-      |> Map.put(:fragment, nil)
-      |> URI.to_string()
-      |> String.replace_trailing("/", "")
+      {:ok, page}
     end
   end
 
@@ -130,7 +135,7 @@ defmodule Canary.Crawler.Fallback do
         url,
         host: URI.new!(url).host,
         workers: 20,
-        interval: 5,
+        interval: 0,
         max_pages: 2000,
         max_depths: 20,
         url_filter: Filter,
