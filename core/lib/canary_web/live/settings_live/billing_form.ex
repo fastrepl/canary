@@ -96,12 +96,21 @@ defmodule CanaryWeb.SettingsLive.BillingForm do
     subscription = billing.stripe_subscription
 
     socket
-    |> assign(:plan, if(subscription, do: "Starter", else: "Free"))
+    |> assign(:plan, subscription_plan(subscription))
     |> assign(:status, subscription_status(subscription))
     |> assign(:cancel_at_period_end, subscription_cancel_at_period_end(subscription))
     |> assign(:canceled_at, format_date(subscription["canceled_at"]))
     |> assign(:start_date, format_date(subscription["start_date"]))
     |> assign(:current_period_end, format_date(subscription["current_period_end"]))
+  end
+
+  defp subscription_plan(nil), do: "Trial"
+
+  defp subscription_plan(subscription) do
+    subscription
+    |> get_in(["items", "data"])
+    |> Enum.any?(&(&1["plan"]["id"] == stripe_starter_price_id()))
+    |> then(fn starter? -> if(starter?, do: "Starter", else: "Trial") end)
   end
 
   defp subscription_status(nil), do: nil
@@ -112,6 +121,11 @@ defmodule CanaryWeb.SettingsLive.BillingForm do
 
   defp format_date(nil), do: "none"
 
-  defp format_date(timestamp),
-    do: DateTime.from_unix!(timestamp) |> Calendar.strftime("%B %d, %Y")
+  defp format_date(timestamp) do
+    DateTime.from_unix!(timestamp) |> Calendar.strftime("%B %d, %Y")
+  end
+
+  defp stripe_starter_price_id() do
+    Application.get_env(:canary, :stripe) |> Keyword.fetch!(:starter_price_id)
+  end
 end

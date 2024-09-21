@@ -82,7 +82,7 @@ defmodule CanaryWeb.SettingsLive.KeyForm do
                     is_full_width
                     form={fc}
                     field={:allowed_host}
-                    placeholder="Allowed host"
+                    placeholder="Allowed host (e.g. example.com)"
                   />
               <% end %>
             </.inputs_for>
