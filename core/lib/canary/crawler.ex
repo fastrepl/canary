@@ -2,35 +2,33 @@ defmodule Canary.Crawler do
   @callback run(String.t(), opts :: keyword()) :: {:ok, map()} | {:error, any()}
   @modules [Canary.Crawler.Sitemap, Canary.Crawler.Fallback]
 
-  def run(url, config \\ []) do
+  alias Canary.Sources.Webpage.Config
+
+  def run(%Config{} = config) do
     @modules
     |> Enum.reduce_while({:error, :failed}, fn module, _acc ->
-      case module.run(url, config) do
+      case module.run(config) do
         {:ok, result} -> {:halt, {:ok, result}}
         _ -> {:cont, {:error, :failed}}
       end
     end)
   end
 
-  def run!(url, config \\ []) do
-    {:ok, result} = run(url, config)
+  def run!(config) do
+    {:ok, result} = run(config)
     result
   end
 
-  def include?(url, config \\ []) do
-    base = url |> URI.parse() |> Map.put(:path, "") |> to_string()
-    include_patterns = Keyword.get(config, :include_patterns, ["#{base}/**"])
-    exclude_patterns = Keyword.get(config, :exclude_patterns, ["#{base}/**/*.json"])
-
+  def include?(url, %Config{} = config) do
     cond do
-      Enum.any?(exclude_patterns, &Canary.Native.glob_match(&1, url)) ->
+      Enum.any?(config.url_exclude_patterns, &Canary.Native.glob_match(&1, url)) ->
         false
 
-      Enum.empty?(include_patterns) ->
+      Enum.empty?(config.url_include_patterns) ->
         true
 
       true ->
-        Enum.any?(include_patterns, &Canary.Native.glob_match(&1, url))
+        Enum.any?(config.url_include_patterns, &Canary.Native.glob_match(&1, url))
     end
   end
 
@@ -45,10 +43,12 @@ defmodule Canary.Crawler do
 end
 
 defmodule Canary.Crawler.Sitemap do
-  def run(given_url, config) do
+  alias Canary.Sources.Webpage.Config
+
+  def run(%Config{} = config) do
     urls =
-      given_url
-      |> list_sitemaps()
+      config.start_urls
+      |> Enum.flat_map(&list_sitemaps/1)
       |> Enum.flat_map(&parse_sitemap/1)
       |> Enum.filter(&Canary.Crawler.include?(&1, config))
 
@@ -105,6 +105,8 @@ defmodule Canary.Crawler.Sitemap do
 end
 
 defmodule Canary.Crawler.Fallback do
+  alias Canary.Sources.Webpage.Config
+
   defmodule Filter do
     @behaviour Crawler.Fetcher.UrlFilter.Spec
 
@@ -127,8 +129,10 @@ defmodule Canary.Crawler.Fallback do
     end
   end
 
-  def run(url, config) do
+  def run(%Config{} = config) do
     {:ok, store_pid} = Agent.start_link(fn -> %{} end)
+
+    url = config.start_urls |> Enum.at(0)
 
     crawler =
       Crawler.crawl(

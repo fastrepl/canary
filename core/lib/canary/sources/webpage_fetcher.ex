@@ -11,12 +11,7 @@ defmodule Canary.Sources.Webpage.Fetcher do
   alias Canary.Sources.Webpage.Config
 
   def run(%Source{config: %Ash.Union{type: :webpage, value: %Config{} = config}}) do
-    url = config.start_urls |> Enum.at(0)
-
-    case Canary.Crawler.run(url,
-           include_patterns: config.url_include_patterns,
-           exclude_patterns: config.url_exclude_patterns
-         ) do
+    case Canary.Crawler.run(config) do
       {:ok, results} ->
         results =
           results
