@@ -2,7 +2,6 @@ defmodule Canary.AccountsFixtures do
   def account_fixture() do
     email = "#{random_string()}@example.com"
     password = random_string(12)
-    account_name = random_string(8)
 
     user =
       Canary.Accounts.User
@@ -10,7 +9,7 @@ defmodule Canary.AccountsFixtures do
       |> Ash.create!()
 
     Canary.Accounts.Account
-    |> Ash.Changeset.for_create(:create, %{name: account_name, user_id: user.id})
+    |> Ash.Changeset.for_create(:create, %{user_id: user.id})
     |> Ash.create!()
   end
 

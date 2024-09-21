@@ -26,11 +26,10 @@ defmodule Canary.Accounts.Account do
     defaults [:read, :destroy]
 
     create :create do
+      primary? true
       argument :user_id, :uuid, allow_nil?: false
-      argument :name, :string, allow_nil?: false
-
       change manage_relationship(:user_id, :users, type: :append)
-      change set_attribute(:name, expr(^arg(:name)))
+      change set_attribute(:name, "account_#{Ash.UUID.generate() |> String.slice(0..7)}")
     end
 
     update :add_member do
