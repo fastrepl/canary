@@ -33,9 +33,24 @@ defmodule Canary.Query.Understander.LLM do
       }
     ]
 
-    case Canary.AI.chat(%{model: chat_model, messages: messages}, timeout: 2_000) do
-      {:ok, completion} -> {:ok, parse(completion)}
-      error -> error
+    args = %{model: chat_model, messages: messages}
+
+    case Canary.AI.chat(args, timeout: 2_000) do
+      {:ok, completion} ->
+        parsed = parse(completion)
+
+        Honeybadger.event("llm", %{
+          task: "understander",
+          query: query,
+          messages: messages,
+          completion: completion,
+          parsed: parsed
+        })
+
+        {:ok, parsed}
+
+      error ->
+        error
     end
   end
 
