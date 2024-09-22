@@ -1,5 +1,6 @@
 import { fileURLToPath, URL } from "node:url";
 import { defineConfig } from "vitepress";
+import unocss from "unocss/vite";
 
 const sidebar = [
   {
@@ -157,6 +158,7 @@ export default defineConfig({
     },
   },
   vite: {
+    plugins: [unocss()],
     resolve: {
       alias: [
         {

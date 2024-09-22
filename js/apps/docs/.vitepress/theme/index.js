@@ -1,6 +1,7 @@
 import { h } from "vue";
 import { useRoute } from "vitepress";
 import DefaultTheme from "vitepress/theme";
+import "virtual:uno.css";
 import "./global.css";
 
 import { inject } from "@vercel/analytics";
