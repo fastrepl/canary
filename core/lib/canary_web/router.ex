@@ -84,6 +84,8 @@ defmodule CanaryWeb.Router do
 
       live_session :dev, layout: {CanaryWeb.Layouts, :dev} do
         live "/reader", CanaryWeb.Dev.ReaderLive, :none
+        live "/keywords", CanaryWeb.Dev.KeywordsLive, :none
+        live "/understander", CanaryWeb.Dev.UnderstanderLive, :none
       end
     end
   end
