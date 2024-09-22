@@ -1,4 +1,4 @@
-defmodule CanaryWeb.SettingsLive.AccountForm do
+defmodule CanaryWeb.SettingsLive.UserForm do
   use CanaryWeb, :live_component
   alias PrimerLive.Component, as: Primer
 
@@ -6,10 +6,15 @@ defmodule CanaryWeb.SettingsLive.AccountForm do
   def render(assigns) do
     ~H"""
     <div>
-      <Primer.subhead>Account</Primer.subhead>
-
       <.form :let={f} for={@form} phx-submit="submit" phx-target={@myself} class="flex flex-col gap-4">
-        <Primer.text_input form={f} field={:name} form_control={%{label: "Name"}} />
+        <Primer.text_input
+          form={f}
+          field={:email}
+          type="email"
+          form_control={%{label: "Email"}}
+          is_large
+          is_full_width
+        />
 
         <div class="flex flex-row gap-2 justify-end">
           <Primer.button type="button" phx-click="destroy" phx-target={@myself} is_danger>
@@ -36,7 +41,7 @@ defmodule CanaryWeb.SettingsLive.AccountForm do
 
   defp assign_form(socket) do
     form =
-      socket.assigns.current_account
+      socket.assigns.current_user
       |> AshPhoenix.Form.for_update(:update)
       |> to_form()
 
@@ -59,11 +64,13 @@ defmodule CanaryWeb.SettingsLive.AccountForm do
 
   @impl true
   def handle_event("destroy", _, socket) do
-    case Ash.destroy(socket.assigns.current_account) do
+    case Ash.destroy(socket.assigns.current_user) do
       :ok ->
         {:noreply, socket |> redirect(to: ~p"/")}
 
-      {:error, _} ->
+      {:error, e} ->
+        IO.inspect(e)
+
         {:noreply,
          socket
          |> put_flash(:error, "Failed to delete account")

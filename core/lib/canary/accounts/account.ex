@@ -48,7 +48,7 @@ defmodule Canary.Accounts.Account do
       change Canary.Accounts.Changes.StripeReportSeat
     end
 
-    update :update_name do
+    update :update do
       accept [:name]
     end
   end
@@ -58,7 +58,7 @@ defmodule Canary.Accounts.Account do
   end
 
   code_interface do
-    define :update_name, args: [:name], action: :update_name
+    define :update, args: [:name], action: :update
     define :add_member, args: [:user_id], action: :add_member
     define :remove_member, args: [:user_id], action: :remove_member
   end

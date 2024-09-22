@@ -12,7 +12,7 @@ defmodule Canary.Accounts.User do
   end
 
   actions do
-    defaults [:read]
+    defaults [:read, :destroy]
 
     if Application.compile_env(:canary, :env) != :prod do
       create :mock, accept: [:email, :hashed_password]
@@ -32,6 +32,12 @@ defmodule Canary.Accounts.User do
         user_info = Ash.Changeset.get_argument(changeset, :user_info)
         Ash.Changeset.change_attributes(changeset, Map.take(user_info, ["email"]))
       end
+    end
+
+    update :update do
+      primary? true
+      require_atomic? false
+      accept [:email]
     end
   end
 
@@ -72,7 +78,7 @@ defmodule Canary.Accounts.User do
       confirmation :confirm_new_user do
         monitor_fields [:email]
         confirm_on_create? true
-        confirm_on_update? false
+        confirm_on_update? true
         confirm_action_name :confirm_new_user
         sender Canary.UserNotifier.NewUserEmailConfirmation
       end

@@ -177,15 +177,13 @@ defmodule CanaryWeb.SourceLive.Detail do
 
         <div class="basis-3/5">
           <Primer.tabnav aria_label="Tabs">
-            <:item is_selected={Enum.at(@tabs, 0) == @tab}>
-              <span phx-click="set-tab" phx-target={@myself} phx-value-tab={Enum.at(@tabs, 0)}>
-                <%= Enum.at(@tabs, 0) %>
-              </span>
-            </:item>
-            <:item is_selected={Enum.at(@tabs, 1) == @tab}>
-              <span phx-click="set-tab" phx-target={@myself} phx-value-tab={Enum.at(@tabs, 1)}>
-                <%= Enum.at(@tabs, 1) %>
-              </span>
+            <:item
+              :for={tab <- @tabs}
+              is_selected={tab == @tab}
+              phx-click="set-tab"
+              phx-value-item={tab}
+            >
+              <%= tab %>
             </:item>
           </Primer.tabnav>
 

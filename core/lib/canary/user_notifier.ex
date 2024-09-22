@@ -102,8 +102,15 @@ defmodule Canary.UserNotifier.NewUserEmailConfirmation do
   use AshAuthentication.Sender
 
   @impl AshAuthentication.Sender
-  def send(%Canary.Accounts.User{} = user, token, _opts) do
-    assigns = %{user: user, url: url(~p"/auth/user/confirm_new_user?#{[confirm: token]}")}
+  def send(%Canary.Accounts.User{} = user, token, opts) do
+    action_type = opts[:changeset] |> Map.get(:action_type)
+
+    assigns = %{
+      user: user,
+      url: url(~p"/auth/user/confirm_new_user?#{[confirm: token]}"),
+      action_type: action_type
+    }
+
     {html, text} = render_content(&tpl/1, assigns)
 
     deliver(%{
@@ -121,11 +128,6 @@ defmodule Canary.UserNotifier.NewUserEmailConfirmation do
     <.default_layout>
       <p>
         Hi <%= @user.email %>,
-      </p>
-
-      <p>
-        Someone has tried to register a new account using this email address.
-        If it was you, then please click the link below to confirm your identity. If you did not initiate this request then please ignore this email.
       </p>
 
       <p>
