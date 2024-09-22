@@ -4,12 +4,12 @@ import type { Meta, StoryObj } from "@storybook/web-components";
 import { userEvent } from "@storybook/test";
 import { getAllByShadowRole } from "shadow-dom-testing-library";
 
-import "./canary-content";
 import "./canary-input";
+import "./canary-content";
+import "./canary-filter-tabs-glob";
 
 import "./canary-search";
 import "./canary-search-results";
-import "./canary-filter-tabs-glob";
 
 import "./canary-ask";
 import "./canary-ask-results";
@@ -18,6 +18,7 @@ enum Kind {
   Search,
   SearchCustomSize,
   SearchWithGlobFilter,
+  SearchWithAsk,
 }
 
 const type = (text: string): StoryObj["play"] => {
@@ -38,9 +39,6 @@ export default {
           <canary-search slot="mode">
             <canary-search-results slot="body"></canary-search-results>
           </canary-search>
-          <canary-ask slot="mode">
-            <canary-ask-results slot="body"></canary-ask-results>
-          </canary-ask>
         </canary-content>
       `;
     }
@@ -59,9 +57,6 @@ export default {
             ></canary-filter-tabs-glob>
             <canary-search-results slot="body"></canary-search-results>
           </canary-search>
-          <canary-ask slot="mode">
-            <canary-ask-results slot="body"></canary-ask-results>
-          </canary-ask>
         </canary-content>
       `;
     }
@@ -73,6 +68,19 @@ export default {
           <canary-search slot="mode">
             <canary-search-results group slot="body"></canary-search-results>
           </canary-search>
+        </canary-content>
+      `;
+    }
+    if (kind === Kind.SearchWithAsk) {
+      return html`
+        <canary-content>
+          <canary-input slot="input"></canary-input>
+          <canary-search slot="mode">
+            <canary-search-results slot="body"></canary-search-results>
+          </canary-search>
+          <canary-ask slot="mode">
+            <canary-ask-results slot="body"></canary-ask-results>
+          </canary-ask>
         </canary-content>
       `;
     }
@@ -100,4 +108,9 @@ export const SearchWithCustomSize: StoryObj = {
       "canary-content-max-height": { value: "400px" },
     },
   },
+};
+
+export const SearchWithAsk: StoryObj = {
+  args: { kind: Kind.SearchWithAsk },
+  play: type("20hi"),
 };
