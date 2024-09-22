@@ -6,7 +6,6 @@ import pm from "picomatch";
 
 import { createEvent } from "../store";
 import type { TabDefinitions } from "../types";
-import { parseURL } from "../utils";
 
 const NAME = "canary-filter-tabs-glob";
 
@@ -35,8 +34,16 @@ export class CanaryFilterTabsGlob extends LitElement {
               const matcher = pm(pattern);
 
               return matches.filter((m) => {
-                const { pathname } = parseURL(m.url);
-                return matcher(pathname);
+                let target = "";
+
+                try {
+                  const { hostname, pathname } = new URL(m.url);
+                  target = `${hostname}${pathname}`;
+                } catch (e) {
+                  target = m.url;
+                }
+
+                return matcher(target);
               });
             },
           },
