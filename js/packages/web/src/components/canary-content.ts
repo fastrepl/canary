@@ -40,8 +40,7 @@ export class CanaryContent extends LitElement {
     wrapper,
     css`
       .container {
-        width: 100%;
-        max-width: var(--canary-content-max-width, 550px);
+        width: 300px;
 
         outline: none;
         padding-top: 6px;
@@ -56,7 +55,7 @@ export class CanaryContent extends LitElement {
         background-color: var(--canary-color-gray-100);
       }
 
-      @media (min-width: 50rem) {
+      @media (min-width: 40rem) {
         .container {
           width: var(--canary-content-max-width, 550px);
         }
