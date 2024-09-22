@@ -3,7 +3,7 @@ defmodule Canary.Workers.WebpageProcessor do
     queue: :webpage_processor,
     max_attempts: 1,
     unique: [
-      period: 120,
+      period: if(Application.get_env(:canary, :env) == :prod, do: 24*60*60, else: 10),
       fields: [:worker, :queue, :args],
       states: Oban.Job.states() -- [:discarded, :cancelled],
       timestamp: :scheduled_at
