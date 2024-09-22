@@ -57,12 +57,10 @@ config :canary, :root, File.cwd!()
 config :canary, Oban,
   engine: Oban.Engines.Basic,
   queues: [
-    github_processor: 20,
+    default: 10,
+    github_processor: 2,
     webpage_processor: 10,
-    email: 2,
-    updater: 5,
-    stripe: 50,
-    summary: 20
+    email: 10
   ],
   repo: Canary.Repo,
   plugins: [
@@ -70,7 +68,7 @@ config :canary, Oban,
     {Oban.Plugins.Lifeline, rescue_after: :timer.minutes(5)},
     {Oban.Plugins.Cron,
      crontab: [
-       {"0 * * * *", Canary.Workers.StripeReport}
+       {"0 0 * * *", Canary.Workers.SourceProcessor}
      ]}
   ]
 
