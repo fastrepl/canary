@@ -1,7 +1,7 @@
 defmodule Canary.Workers.GithubIssueProcessor do
   use Oban.Worker,
     queue: :github_processor,
-    max_attempts: 1,
+    max_attempts: 2,
     unique: [
       period: if(Application.get_env(:canary, :env) == :prod, do: 24 * 60 * 60, else: 10),
       fields: [:worker, :queue, :args],

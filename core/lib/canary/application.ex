@@ -70,7 +70,7 @@ defmodule Canary.Application do
         [:oban, :job, :stop],
         [:oban, :job, :exception]
       ],
-      &Canary.Workers.Reporter.handle_job/4,
+      &Canary.Workers.JobReporter.handle_job/4,
       nil
     )
   end
