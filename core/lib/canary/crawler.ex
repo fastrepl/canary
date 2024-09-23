@@ -41,14 +41,10 @@ defmodule Canary.Crawler do
     |> String.replace_trailing("/", "")
   end
 
-  def fetch_url(url) do
-    case Req.new()
-         |> Canary.Req.MetaRefresh.attach()
-         |> Canary.Req.Cache.attach(cachex: :cache, ttl: :timer.minutes(30))
-         |> Req.get(url: url) do
-      {:ok, %{status: 200, body: body}} -> body
-      _ -> nil
-    end
+  def req() do
+    Req.new()
+    |> Canary.Req.MetaRefresh.attach()
+    |> Canary.Req.Cache.attach(cachex: :cache, ttl: :timer.minutes(30))
   end
 end
 
@@ -65,13 +61,22 @@ defmodule Canary.Crawler.Sitemap do
     if urls == [] do
       {:error, :not_found}
     else
+      async_opts = [ordered: false, max_concurrency: 10, timeout: 10_000]
+
       stream =
         urls
         |> Stream.filter(&Canary.Crawler.include?(&1, config))
-        |> Task.async_stream(fn url -> {Crawler.normalize_url(url), Crawler.fetch_url(url)} end,
-          ordered: false,
-          max_concurrency: 10,
-          timeout: 10_000
+        |> Task.async_stream(
+          fn url ->
+            html =
+              case Crawler.req() |> Req.get(url: url) do
+                {:ok, %{status: 200, body: body}} -> body
+                _ -> nil
+              end
+
+            {Crawler.normalize_url(url), html}
+          end,
+          async_opts
         )
         |> Stream.filter(&match?({:ok, _}, &1))
         |> Stream.map(fn {:ok, result} -> result end)
@@ -116,7 +121,7 @@ defmodule Canary.Crawler.Visitor do
   def run(%Config{} = config) do
     stream =
       config.start_urls
-      |> Enum.map(fn url -> Hop.new(url) |> Hop.stream() end)
+      |> Enum.map(&stream/1)
       |> Stream.concat()
       |> Stream.map(fn {url, %Req.Response{} = respense, _state} ->
         {Crawler.normalize_url(url), respense.body}
@@ -125,4 +130,35 @@ defmodule Canary.Crawler.Visitor do
 
     {:ok, stream}
   end
+
+  def stream(url) do
+    url
+    |> Hop.new()
+    |> Hop.fetch(&fetch/3)
+    |> Hop.prefetch(&prefetch/3)
+    |> Hop.stream()
+  end
+
+  defp fetch(url, state, _opts) do
+    with {:ok, response} <- Crawler.req() |> Req.get(url: url) do
+      {:ok, response, state}
+    end
+  end
+
+  defp prefetch(url, state, opts) do
+    {:ok, url}
+    |> Hop.validate_hostname(state, opts)
+    |> Hop.validate_scheme(state, opts)
+    |> Hop.validate_content(state, opts)
+    |> validate_status(state, opts)
+  end
+
+  defp validate_status({:ok, url}, _state, _opts) do
+    case Req.get(url) do
+      {:ok, %{status: status}} when status in 200..299 -> {:ok, url}
+      _error -> {:error, :invalid_status}
+    end
+  end
+
+  defp validate_status(value, _state, _opts), do: value
 end
