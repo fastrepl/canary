@@ -8,9 +8,9 @@ defmodule CanaryWeb.SourceLive.WebpageCrawlerPreview do
     <div>
       <Primer.box is_condensed is_scrollable style="max-height: 400px">
         <:header_title class="flex-auto">
-          <div class="flex items-center gap-2">
+          <div class="flex items-center gap-1">
             <span><%= length(@urls) %> found</span>
-            <canary-loading-dots :if={@loading} />
+            <span :if={@loading}>...</span>
           </div>
         </:header_title>
         <:header class="d-flex flex-items-center">
