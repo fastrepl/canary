@@ -35,11 +35,13 @@ defmodule Canary.Sources.Document.CreateGithubDiscussion do
 
       chunks_create_result =
         fetcher_results
-        |> Enum.map(fn %GithubDiscussion.FetcherResult{} = item ->
+        |> Enum.with_index(0)
+        |> Enum.map(fn {%GithubDiscussion.FetcherResult{} = item, index} ->
           %{
             source_id: source_id,
             document_id: record.id,
             node_id: item.node_id,
+            is_parent: index == 0,
             title: item.title,
             content: item.content,
             url: item.url,

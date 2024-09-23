@@ -87,16 +87,14 @@ defmodule Canary.Searcher.Default do
         doc_id = chunks |> Enum.at(0) |> Map.get(:document_id)
         doc = docs |> Enum.find(&(&1.id == doc_id))
 
-        chunk =
+        parent_chunk =
           chunks
-          |> Enum.find(fn chunk ->
-            title =
-              chunk.title
-              |> String.replace("<mark>", "")
-              |> String.replace("</mark>", "")
+          |> Enum.find(fn chunk -> chunk.is_parent end)
 
-            title == doc.meta.value.title
-          end)
+        non_parent_chunks =
+          chunks
+          |> Enum.reject(fn chunk -> chunk.is_parent end)
+          |> Enum.slice(0, 3)
 
         meta =
           case type do
@@ -115,11 +113,8 @@ defmodule Canary.Searcher.Default do
           meta: meta,
           url: doc.meta.value.url,
           title: doc.meta.value.title,
-          excerpt: if(chunk, do: chunk.excerpt, else: nil),
-          sub_results:
-            chunks
-            |> Enum.reject(&(&1.id == if(chunk, do: chunk.id, else: nil)))
-            |> Enum.slice(0, 3)
+          excerpt: if(parent_chunk, do: parent_chunk.excerpt, else: nil),
+          sub_results: non_parent_chunks
         }
       end)
     end)

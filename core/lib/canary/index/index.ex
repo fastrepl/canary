@@ -10,7 +10,8 @@ defmodule Canary.Index do
   def insert_document(%Webpage.Chunk{} = chunk) do
     meta = %Document.Webpage.Meta{
       url: chunk.url,
-      document_id: chunk.document_id
+      document_id: chunk.document_id,
+      is_parent: chunk.is_parent
     }
 
     doc = %Document.Webpage{
@@ -28,7 +29,8 @@ defmodule Canary.Index do
   def insert_document(%GithubIssue.Chunk{} = chunk) do
     meta = %Document.GithubIssue.Meta{
       url: chunk.url,
-      document_id: chunk.document_id
+      document_id: chunk.document_id,
+      is_parent: chunk.is_parent
     }
 
     doc = %Document.GithubIssue{
@@ -46,7 +48,8 @@ defmodule Canary.Index do
   def insert_document(%GithubDiscussion.Chunk{} = chunk) do
     meta = %Document.GithubDiscussion.Meta{
       url: chunk.url,
-      document_id: chunk.document_id
+      document_id: chunk.document_id,
+      is_parent: chunk.is_parent
     }
 
     doc = %Document.GithubDiscussion{
@@ -71,53 +74,7 @@ defmodule Canary.Index do
   end
 
   def search(sources, queries, opts \\ []) when is_list(queries) do
-    tags = opts[:tags]
-    embedding = opts[:embedding]
-    embedding_alpha = opts[:embedding_alpha] || 0.3
-
-    args =
-      for(source <- sources, query <- queries, do: {source, query})
-      |> Enum.map(fn {%Source{id: source_id, config: %Ash.Union{type: type}}, query} ->
-        filter_by =
-          [
-            "source_id:=[#{source_id}]",
-            if(tags != nil and tags != []) do
-              "tags:=[#{Enum.join(tags, ",")}]"
-            end
-          ]
-          |> Enum.reject(&is_nil/1)
-          |> Enum.join(" && ")
-
-        query_by = ["title", "content"] |> Enum.join(",")
-        query_by_weights = [3, 1] |> Enum.join(",")
-
-        arg = %{
-          collection: to_string(type),
-          q: query,
-          query_by: query_by,
-          query_by_weights: query_by_weights,
-          filter_by: filter_by,
-          sort_by: "_text_match:desc",
-          exclude_fields: "embedding",
-          prefix: true,
-          prioritize_exact_match: false,
-          prioritize_token_position: false,
-          prioritize_num_matching_fields: true,
-          stopwords: Canary.Index.Stopword.id()
-        }
-
-        if embedding do
-          arg
-          |> Map.put(
-            :vector_query,
-            "embedding:([#{Enum.join(embedding, ",")}], alpha: #{embedding_alpha})"
-          )
-        else
-          arg
-        end
-      end)
-
-    case Canary.Index.Client.multi_search(args) do
+    case build_args(sources, queries, opts) |> Canary.Index.Client.multi_search() do
       {:ok, %Req.Response{status: 200, body: %{"results" => results}}} ->
         ret =
           results
@@ -143,15 +100,67 @@ defmodule Canary.Index do
     end
   end
 
+  defp build_args(sources, queries, opts) do
+    tags = opts[:tags]
+
+    for(source <- sources, query <- queries, do: {source, query})
+    |> Enum.map(fn {%Source{id: source_id, config: %Ash.Union{type: type}}, query} ->
+      filter_by =
+        [
+          "source_id:=[#{source_id}]",
+          if(tags != nil and tags != []) do
+            "tags:=[#{Enum.join(tags, ",")}]"
+          end
+        ]
+        |> Enum.reject(&is_nil/1)
+        |> Enum.join(" && ")
+
+      query_by = ["title", "content"] |> Enum.join(",")
+      query_by_weights = [3, 1] |> Enum.join(",")
+
+      %{
+        collection: to_string(type),
+        q: query,
+        query_by: query_by,
+        query_by_weights: query_by_weights,
+        filter_by: filter_by,
+        sort_by: "_text_match:desc",
+        highlight_fields: "content",
+        stopwords: Canary.Index.Stopword.id(),
+        prefix: true,
+        prioritize_exact_match: false,
+        prioritize_token_position: false,
+        prioritize_num_matching_fields: true
+      }
+      |> add_embedding_args(opts)
+    end)
+  end
+
+  defp add_embedding_args(args, opts) do
+    embedding = opts[:embedding]
+    embedding_alpha = opts[:embedding_alpha] || 0.3
+
+    if embedding do
+      args
+      |> Map.put(
+        :vector_query,
+        "embedding:([#{Enum.join(embedding, ",")}], alpha: #{embedding_alpha})"
+      )
+    else
+      args
+    end
+  end
+
   defp transform_hit(hit) do
     %{
       id: hit["document"]["id"],
       document_id: hit["document"]["meta"]["document_id"],
       source_id: hit["document"]["source_id"],
       url: hit["document"]["meta"]["url"],
-      title: hit["highlight"]["title"]["snippet"] || hit["document"]["title"],
+      title: hit["document"]["title"],
       excerpt: hit["highlight"]["content"]["snippet"] || hit["document"]["content"],
-      tags: hit["document"]["tags"]
+      tags: hit["document"]["tags"],
+      is_parent: hit["document"]["meta"]["is_parent"]
     }
   end
 end

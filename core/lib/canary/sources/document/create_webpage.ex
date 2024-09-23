@@ -38,10 +38,12 @@ defmodule Canary.Sources.Document.CreateWebpage do
 
       chunks_create_result =
         items
-        |> Enum.map(fn %Canary.Scraper.Item{} = item ->
+        |> Enum.with_index(0)
+        |> Enum.map(fn {%Canary.Scraper.Item{} = item, index} ->
           %{
             source_id: source_id,
             document_id: record.id,
+            is_parent: index == 0,
             title: item.title,
             content: item.content,
             url: URI.parse(url) |> Map.put(:fragment, item.id) |> to_string()

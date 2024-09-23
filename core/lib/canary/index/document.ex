@@ -12,7 +12,8 @@ defmodule Canary.Index.Document.Shared do
   def meta_fields() do
     [
       :url,
-      :document_id
+      :document_id,
+      :is_parent
     ]
   end
 end

@@ -6,6 +6,7 @@ defmodule Canary.Sources.GithubDiscussion.Chunk do
     attribute :source_id, :uuid, allow_nil?: false
     attribute :document_id, :string, allow_nil?: false
     attribute :node_id, :string, allow_nil?: false
+    attribute :is_parent, :boolean, allow_nil?: false
 
     attribute :url, :string
     attribute :title, :string, constraints: [allow_empty?: true]
@@ -26,6 +27,7 @@ defmodule Canary.Sources.GithubDiscussion.Chunk do
         :source_id,
         :document_id,
         :node_id,
+        :is_parent,
         :url,
         :title,
         :content,

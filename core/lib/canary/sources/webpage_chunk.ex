@@ -5,10 +5,11 @@ defmodule Canary.Sources.Webpage.Chunk do
     attribute :index_id, :uuid, allow_nil?: false
     attribute :source_id, :uuid, allow_nil?: false
     attribute :document_id, :string, allow_nil?: false
+    attribute :is_parent, :boolean, allow_nil?: false
 
+    attribute :url, :string, allow_nil?: false
     attribute :title, :string, allow_nil?: false, constraints: [allow_empty?: true]
     attribute :content, :string, allow_nil?: false
-    attribute :url, :string, allow_nil?: false
     attribute :keywords, {:array, :string}, default: []
   end
 
@@ -21,6 +22,7 @@ defmodule Canary.Sources.Webpage.Chunk do
       accept [
         :source_id,
         :document_id,
+        :is_parent,
         :url,
         :title,
         :content,
