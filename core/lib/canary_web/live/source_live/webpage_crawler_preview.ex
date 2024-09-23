@@ -70,6 +70,7 @@ defmodule CanaryWeb.SourceLive.WebpageCrawlerPreview do
       socket
       |> assign(:urls, [])
       |> assign(:loading, true)
+      |> cancel_async(:task, :rerun)
       |> start_async(:task, fn ->
         {:ok, stream} = Canary.Crawler.run(config)
 
@@ -94,7 +95,9 @@ defmodule CanaryWeb.SourceLive.WebpageCrawlerPreview do
 
   @impl true
   def handle_async(:task, {:exit, reason}, socket) do
-    IO.inspect(reason)
+    if reason != :rerun do
+      IO.inspect(reason)
+    end
 
     socket =
       socket
