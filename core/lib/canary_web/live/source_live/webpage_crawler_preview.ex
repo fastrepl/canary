@@ -10,7 +10,7 @@ defmodule CanaryWeb.SourceLive.WebpageCrawlerPreview do
         <:header_title class="flex-auto">
           <div class="flex items-center gap-1">
             <span><%= length(@urls) %> found</span>
-            <span :if={@loading}>...</span>
+            <Primer.animated_ellipsis :if={@loading} />
           </div>
         </:header_title>
         <:header class="d-flex flex-items-center">
@@ -22,10 +22,8 @@ defmodule CanaryWeb.SourceLive.WebpageCrawlerPreview do
         <%= if length(@urls) == 0 do %>
           <Primer.blankslate></Primer.blankslate>
         <% end %>
-        <:row :for={url <- @urls}>
-          <.link href={url}>
-            <%= url %>
-          </.link>
+        <:row :for={url <- Enum.sort(@urls)}>
+          <.render_url url={url} />
         </:row>
       </Primer.box>
     </div>
@@ -104,5 +102,14 @@ defmodule CanaryWeb.SourceLive.WebpageCrawlerPreview do
       |> assign(:loading, false)
 
     {:noreply, socket}
+  end
+
+  defp render_url(assigns) do
+    ~H"""
+    <.link href={@url}>
+      <span class="opacity-40"><%= URI.parse(@url).host %></span>
+      <span><%= URI.parse(@url).path %></span>
+    </.link>
+    """
   end
 end
