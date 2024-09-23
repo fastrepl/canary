@@ -9,15 +9,11 @@ defmodule CanaryWeb.HomeLive do
       <Primer.box>
         <Primer.blankslate is_spacious>
           <:heading>
-            <%= @message %>
+            <%= @action_message %>
           </:heading>
           <:action>
-            <Primer.button is_primary>New project</Primer.button>
+            <Primer.button is_primary href={@action_url}>Create</Primer.button>
           </:action>
-          <:action>
-            <Primer.button is_link>Learn more</Primer.button>
-          </:action>
-          <p>Use it to provide information when no dynamic content exists.</p>
         </Primer.blankslate>
       </Primer.box>
     <% else %>
@@ -27,12 +23,15 @@ defmodule CanaryWeb.HomeLive do
             api-key={Enum.at(@current_account.keys, 0).value}
             api-base={CanaryWeb.Endpoint.url()}
           >
-            <canary-content>
-              <canary-input slot="input"></canary-input>
-              <canary-search slot="mode">
-                <canary-search-results slot="body"></canary-search-results>
-              </canary-search>
-            </canary-content>
+            <canary-modal>
+              <canary-trigger-searchbar slot="trigger"></canary-trigger-searchbar>
+              <canary-content slot="content">
+                <canary-input slot="input"></canary-input>
+                <canary-search slot="mode">
+                  <canary-search-results slot="body"></canary-search-results>
+                </canary-search>
+              </canary-content>
+            </canary-modal>
           </canary-provider-cloud>
         </canary-root>
       </div>
@@ -48,21 +47,26 @@ defmodule CanaryWeb.HomeLive do
 
     socket =
       socket
+      |> assign(current_account: account)
       |> assign(valid: Enum.count(account.keys) > 0 && Enum.count(account.sources) > 0)
       |> assign(
-        message:
-          cond do
-            Enum.count(account.keys) == 0 ->
-              "You don't have any keys yet. Please create one."
+        cond do
+          Enum.count(account.keys) == 0 ->
+            [
+              action_message: "You don't have any keys yet. Please create one.",
+              action_url: "/settings"
+            ]
 
-            Enum.count(account.sources) == 0 ->
-              "You don't have any sources yet. Please create one."
+          Enum.count(account.sources) == 0 ->
+            [
+              action_message: "You don't have any sources yet. Please create one.",
+              action_url: "/source"
+            ]
 
-            true ->
-              nil
-          end
+          true ->
+            []
+        end
       )
-      |> assign(current_account: account)
 
     {:ok, socket}
   end

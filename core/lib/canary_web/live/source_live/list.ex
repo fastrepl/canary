@@ -7,7 +7,7 @@ defmodule CanaryWeb.SourceLive.List do
     ~H"""
     <div>
       <Primer.subhead>
-        Sources
+        Source
         <:actions :if={length(@sources) > 0}>
           <Primer.button is_primary onclick="Prompt.show('#source-form')">
             New
