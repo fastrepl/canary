@@ -181,6 +181,7 @@ defmodule CanaryWeb.SourceLive.Detail do
               :for={tab <- @tabs}
               is_selected={tab == @tab}
               phx-click="set-tab"
+              phx-target={@myself}
               phx-value-item={tab}
             >
               <%= tab %>
@@ -267,7 +268,9 @@ defmodule CanaryWeb.SourceLive.Detail do
       socket
       |> assign(form: form)
       |> assign(source: source)
-      |> assign(tabs: ["Status", "Preview"])
+      |> assign(
+        tabs: if(source.config.type == :webpage, do: ["Status", "Preview"], else: ["Status"])
+      )
       |> assign(:tab, "Status")
       |> assign_new(:current_config, fn ->
         %Ash.Union{value: config} = form.data.config
@@ -282,7 +285,7 @@ defmodule CanaryWeb.SourceLive.Detail do
   end
 
   @impl true
-  def handle_event("set-tab", %{"tab" => tab}, socket) do
+  def handle_event("set-tab", %{"item" => tab}, socket) do
     {:noreply, assign(socket, :tab, tab)}
   end
 
