@@ -121,21 +121,23 @@ defmodule Canary.Crawler.Visitor do
   def run(%Config{} = config) do
     stream =
       config.start_urls
-      |> Enum.map(&stream/1)
+      |> Enum.map(&crawl/1)
       |> Stream.concat()
       |> Stream.map(fn {url, %Req.Response{} = respense, _state} ->
         {Crawler.normalize_url(url), respense.body}
       end)
       |> Stream.filter(fn {url, _body} -> Canary.Crawler.include?(url, config) end)
+      |> Stream.uniq_by(fn {url, _body} -> url end)
 
     {:ok, stream}
   end
 
-  def stream(url) do
+  def crawl(url) do
     url
     |> Hop.new()
-    |> Hop.fetch(&fetch/3)
     |> Hop.prefetch(&prefetch/3)
+    |> Hop.fetch(&fetch/3)
+    |> Hop.next(&next/4)
     |> Hop.stream()
   end
 
@@ -151,6 +153,29 @@ defmodule Canary.Crawler.Visitor do
     |> Hop.validate_scheme(state, opts)
     |> Hop.validate_content(state, opts)
     |> validate_status(state, opts)
+  end
+
+  defp next(url, %{body: body}, state, _opts) do
+    links =
+      case Floki.parse_document(body) do
+        {:ok, doc} ->
+          doc
+          |> Floki.find("a")
+          |> Floki.attribute("href")
+          |> Enum.map(fn href ->
+            URI.merge(url, href)
+            |> Map.put(:query, nil)
+            |> Map.put(:fragment, nil)
+            |> URI.to_string()
+          end)
+          |> Enum.reject(&(URI.parse(&1).host != URI.parse(url).host))
+          |> Enum.uniq()
+
+        _error ->
+          []
+      end
+
+    {:ok, links, state}
   end
 
   defp validate_status({:ok, url}, _state, _opts) do

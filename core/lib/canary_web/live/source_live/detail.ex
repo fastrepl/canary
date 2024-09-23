@@ -231,7 +231,12 @@ defmodule CanaryWeb.SourceLive.Detail do
           <Primer.button phx-click={@action_name} phx-target={@myself} is_small>
             <%= @action_msg %>
           </Primer.button>
-          <pre><%= String.upcase(to_string(@source.state)) %></pre>
+          <PrimerLive.Component.label
+            is_accent={@source.state == :running}
+            is_attention={@source.state == :error}
+          >
+            <%= String.upcase(to_string(@source.state)) %>
+          </PrimerLive.Component.label>
         </div>
       </Primer.timeline_item>
 
