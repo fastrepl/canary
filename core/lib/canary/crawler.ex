@@ -1,6 +1,6 @@
 defmodule Canary.Crawler do
   @callback run(String.t(), opts :: keyword()) :: {:ok, map()} | {:error, any()}
-  @modules [Canary.Crawler.Sitemap, Canary.Crawler.Fallback]
+  @modules [Canary.Crawler.Visitor, Canary.Crawler.Sitemap]
 
   alias Canary.Sources.Webpage.Config
 
@@ -8,7 +8,7 @@ defmodule Canary.Crawler do
     @modules
     |> Enum.reduce_while({:error, :failed}, fn module, _acc ->
       case module.run(config) do
-        {:ok, result} -> {:halt, {:ok, result}}
+        {:ok, stream} -> {:halt, {:ok, stream}}
         _ -> {:cont, {:error, :failed}}
       end
     end)
@@ -40,9 +40,20 @@ defmodule Canary.Crawler do
     |> URI.to_string()
     |> String.replace_trailing("/", "")
   end
+
+  def fetch_url(url) do
+    case Req.new()
+         |> Canary.Req.MetaRefresh.attach()
+         |> Canary.Req.Cache.attach(cachex: :cache, ttl: :timer.minutes(30))
+         |> Req.get(url: url) do
+      {:ok, %{status: 200, body: body}} -> body
+      _ -> nil
+    end
+  end
 end
 
 defmodule Canary.Crawler.Sitemap do
+  alias Canary.Crawler
   alias Canary.Sources.Webpage.Config
 
   def run(%Config{} = config) do
@@ -50,19 +61,22 @@ defmodule Canary.Crawler.Sitemap do
       config.start_urls
       |> Enum.flat_map(&list_sitemaps/1)
       |> Enum.flat_map(&parse_sitemap/1)
-      |> Enum.filter(&Canary.Crawler.include?(&1, config))
 
     if urls == [] do
       {:error, :not_found}
     else
-      map =
+      stream =
         urls
-        |> Task.async_stream(&{&1, fetch_url(&1)}, max_concurrency: 10)
-        |> Enum.reduce(%{}, fn {:ok, {url, body}}, acc ->
-          acc |> Map.put(Canary.Crawler.normalize_url(url), body)
-        end)
+        |> Stream.filter(&Canary.Crawler.include?(&1, config))
+        |> Task.async_stream(fn url -> {Crawler.normalize_url(url), Crawler.fetch_url(url)} end,
+          ordered: false,
+          max_concurrency: 10,
+          timeout: 10_000
+        )
+        |> Stream.filter(&match?({:ok, _}, &1))
+        |> Stream.map(fn {:ok, result} -> result end)
 
-      {:ok, map}
+      {:ok, stream}
     end
   end
 
@@ -93,81 +107,22 @@ defmodule Canary.Crawler.Sitemap do
       end
     end)
   end
-
-  defp fetch_url(url) do
-    case Req.new()
-         |> Canary.Req.MetaRefresh.attach()
-         |> Canary.Req.Cache.attach(cachex: :cache, ttl: :timer.minutes(30))
-         |> Req.get(url: url) do
-      {:ok, %{status: 200, body: body}} -> body
-      _ -> nil
-    end
-  end
 end
 
-defmodule Canary.Crawler.Fallback do
+defmodule Canary.Crawler.Visitor do
+  alias Canary.Crawler
   alias Canary.Sources.Webpage.Config
 
-  defmodule Filter do
-    @behaviour Crawler.Fetcher.UrlFilter.Spec
-
-    def filter(url, opts) do
-      boolean = URI.new!(url).host == opts.host && Canary.Crawler.include?(url, opts.config)
-      {:ok, boolean}
-    end
-  end
-
-  defmodule Scraper do
-    @behaviour Crawler.Scraper.Spec
-
-    def scrape(%Crawler.Store.Page{url: url, body: body, opts: opts} = page) do
-      Agent.update(opts.store_pid, fn store ->
-        store
-        |> Map.put(Canary.Crawler.normalize_url(url), body)
-      end)
-
-      {:ok, page}
-    end
-  end
-
   def run(%Config{} = config) do
-    {:ok, store_pid} = Agent.start_link(fn -> %{} end)
+    stream =
+      config.start_urls
+      |> Enum.map(fn url -> Hop.new(url) |> Hop.stream() end)
+      |> Stream.concat()
+      |> Stream.map(fn {url, %Req.Response{} = respense, _state} ->
+        {Crawler.normalize_url(url), respense.body}
+      end)
+      |> Stream.filter(fn {url, _body} -> Canary.Crawler.include?(url, config) end)
 
-    shared = [
-      workers: 20,
-      interval: 0,
-      max_pages: 2000,
-      max_depths: 20,
-      url_filter: Filter,
-      scraper: Scraper,
-      store_pid: store_pid,
-      user_agent: "Canary (github.com/fastrepl/canary)",
-      config: config
-    ]
-
-    config.start_urls
-    |> Enum.map(&Crawler.crawl(&1, Keyword.merge(shared, host: URI.new!(&1).host)))
-    |> Enum.each(fn
-      {:ok, opts} -> wait(opts)
-      _ -> {:error, :failed}
-    end)
-
-    result = store_pid |> Agent.get(fn store -> store end)
-    {:ok, result}
-  end
-
-  defp wait(opts, seconds_left \\ 20) do
-    cond do
-      seconds_left < 0 ->
-        Crawler.stop(opts)
-        :error
-
-      Crawler.running?(opts) ->
-        Process.sleep(1000)
-        wait(opts, seconds_left - 1)
-
-      true ->
-        :ok
-    end
+    {:ok, stream}
   end
 end

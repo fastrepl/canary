@@ -42,6 +42,7 @@ defmodule Canary.MixProject do
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:phoenix_live_view, "~> 0.20.2"},
       {:floki, ">= 0.30.0"},
+      {:html5ever, "~> 0.16.0"},
       {:tailwind, "~> 0.2", runtime: Mix.env() == :dev},
       {:heroicons,
        github: "tailwindlabs/heroicons",
@@ -80,9 +81,6 @@ defmodule Canary.MixProject do
       {:stripity_stripe, "~> 3.2"},
       {:oapi_github, "~> 0.3.3"},
       {:httpoison, "~> 2.2"},
-      {:crawler,
-       git: "https://github.com/fredwu/crawler.git",
-       ref: "6866bbe287c760b7e4bba1925e80f2a4494d7af3"},
       {:resend, "~> 0.4.2"},
       {:cachex, "~> 3.6"},
       {:bumblebee, "~> 0.5.3"},
@@ -90,7 +88,8 @@ defmodule Canary.MixProject do
       {:cloak, "~> 1.1"},
       {:ash_cloak, "~> 0.1.2"},
       {:primer_live, "~> 0.7"},
-      {:honeybadger, "~> 0.16"}
+      {:honeybadger, "~> 0.16"},
+      {:hop, "~> 0.1"}
     ] ++ deps_eval()
   end
 

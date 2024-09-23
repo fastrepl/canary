@@ -12,10 +12,10 @@ defmodule Canary.Sources.Webpage.Fetcher do
 
   def run(%Source{config: %Ash.Union{type: :webpage, value: %Config{} = config}}) do
     case Canary.Crawler.run(config) do
-      {:ok, results} ->
+      {:ok, stream} ->
         results =
-          results
-          |> Enum.map(fn {url, html} ->
+          stream
+          |> Stream.map(fn {url, html} ->
             items = Canary.Scraper.run(html)
 
             if(length(items) == 0,
@@ -23,7 +23,8 @@ defmodule Canary.Sources.Webpage.Fetcher do
               else: %FetcherResult{url: url, html: html, items: items}
             )
           end)
-          |> Enum.reject(&is_nil/1)
+          |> Stream.reject(&is_nil/1)
+          |> Enum.to_list()
 
         {:ok, results}
 

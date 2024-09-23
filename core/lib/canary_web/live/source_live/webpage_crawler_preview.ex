@@ -92,8 +92,9 @@ defmodule CanaryWeb.SourceLive.WebpageCrawlerPreview do
       socket
       |> assign(:task_result, AsyncResult.loading())
       |> start_async(:task, fn ->
-        {:ok, pairs} = Canary.Crawler.run(config)
-        {:ok, Enum.map(pairs, &elem(&1, 0))}
+        {:ok, stream} = Canary.Crawler.run(config)
+        urls = stream |> Stream.map(&elem(&1, 0)) |> Enum.to_list()
+        {:ok, urls}
       end)
 
     {:noreply, socket}
