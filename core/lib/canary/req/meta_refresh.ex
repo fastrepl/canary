@@ -1,4 +1,9 @@
 defmodule Canary.Req.MetaRefresh do
+  def attach(%Req.Request{} = request, _opts \\ []) do
+    request
+    |> Req.Request.append_response_steps(meta_refresh: &handle/1)
+  end
+
   def handle({request, response}) do
     with true <- html_response?(response),
          {:ok, {delay, url}} <- extract_meta_refresh(response.body) do

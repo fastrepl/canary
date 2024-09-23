@@ -96,7 +96,8 @@ defmodule Canary.Crawler.Sitemap do
 
   defp fetch_url(url) do
     case Req.new()
-         |> Req.Request.append_response_steps(meta_refresh: &Canary.Req.MetaRefresh.handle/1)
+         |> Canary.Req.MetaRefresh.attach()
+         |> Canary.Req.Cache.attach(cachex: :cache, ttl: :timer.minutes(30))
          |> Req.get(url: url) do
       {:ok, %{status: 200, body: body}} -> body
       _ -> nil
