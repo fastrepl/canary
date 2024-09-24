@@ -82,6 +82,7 @@ defmodule CanaryWeb.SourceLive.List do
     sources =
       socket.assigns.sources
       |> Ash.load!([:lastest_event_at])
+      |> Enum.sort_by(& &1.name)
 
     {:ok, socket |> assign(sources: sources)}
   end
