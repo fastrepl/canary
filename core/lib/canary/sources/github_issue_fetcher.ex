@@ -48,6 +48,11 @@ defmodule Canary.Sources.GithubIssue.Fetcher do
               login
               avatarUrl
             }
+            labels(first: 10) {
+              nodes {
+                name
+              }
+            }
             title
             body
             closed
