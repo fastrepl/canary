@@ -29,7 +29,9 @@ export class CanaryContent extends LitElement {
             hide: !this._query || this._footers.length === 0,
           })}
         >
-          <slot name="footer"></slot>
+          <div class="footer">
+            <slot name="footer"></slot>
+          </div>
         </div>
       </div>
     `;
@@ -63,7 +65,8 @@ export class CanaryContent extends LitElement {
     `,
     css`
       .footer {
-        padding: 6px 0 2px 12px;
+        padding-top: 2px;
+        padding-right: 6px;
       }
 
       .hide {

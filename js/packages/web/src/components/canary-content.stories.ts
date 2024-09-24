@@ -13,9 +13,11 @@ import "./canary-search-results";
 
 import "./canary-ask";
 import "./canary-ask-results";
+import "./canary-footer";
 
 enum Kind {
   Search,
+  SearchWithFooter,
   SearchCustomSize,
   SearchWithGlobFilter,
   SearchWithAsk,
@@ -71,6 +73,7 @@ export default {
         </canary-content>
       `;
     }
+
     if (kind === Kind.SearchWithAsk) {
       return html`
         <canary-content>
@@ -85,12 +88,29 @@ export default {
       `;
     }
 
+    if (kind === Kind.SearchWithFooter) {
+      return html`
+        <canary-content>
+          <canary-input slot="input"></canary-input>
+          <canary-search slot="mode">
+            <canary-search-results slot="body"></canary-search-results>
+          </canary-search>
+          <canary-footer slot="footer"></canary-footer>
+        </canary-content>
+      `;
+    }
+
     throw new Error();
   },
 } satisfies Meta<{ kind: Kind }>;
 
 export const Search: StoryObj = {
   args: { kind: Kind.Search },
+  play: type("20hi"),
+};
+
+export const SearchWithFooter: StoryObj = {
+  args: { kind: Kind.SearchWithFooter },
   play: type("20hi"),
 };
 
