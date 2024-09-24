@@ -3,6 +3,7 @@ defmodule Canary.Sources.Source do
     domain: Canary.Sources,
     data_layer: AshPostgres.DataLayer
 
+  alias Canary.Sources.Document
   require Ash.Query
 
   attributes do
@@ -57,25 +58,36 @@ defmodule Canary.Sources.Source do
         id = Ash.Changeset.get_data(changeset, :id)
 
         documents =
-          Canary.Sources.Document
+          Document
           |> Ash.Query.filter(source_id == ^id)
           |> Ash.read!()
 
         chunks =
           documents
-          |> Enum.flat_map(fn %Canary.Sources.Document{chunks: chunks} ->
+          |> Enum.flat_map(fn %Document{chunks: chunks} ->
             Enum.map(chunks, fn %Ash.Union{value: value} -> value end)
           end)
 
         keywords =
           documents
-          |> Enum.flat_map(fn %Canary.Sources.Document{chunks: chunks} ->
+          |> Enum.flat_map(fn %Document{meta: %Ash.Union{type: type}, chunks: chunks} ->
             chunks
             |> Enum.map(fn %Ash.Union{value: value} -> value.content end)
             |> Enum.join("\n")
-            |> then(&Canary.Native.extract_keywords(&1, max(5, floor(500 / length(documents)))))
+            |> then(fn text ->
+              case type do
+                :webpage ->
+                  Canary.Native.extract_keywords(text, max(5, floor(500 / length(documents))))
+
+                :github_issue ->
+                  Canary.Native.extract_keywords(text, max(2, floor(500 / length(documents))))
+
+                :github_discussion ->
+                  Canary.Native.extract_keywords(text, max(2, floor(500 / length(documents))))
+              end
+            end)
+            |> Enum.uniq()
           end)
-          |> Enum.uniq()
 
         overview = %Canary.Sources.SourceOverview{keywords: keywords}
 

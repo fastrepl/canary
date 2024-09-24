@@ -1,26 +1,27 @@
 defmodule Canary.Query.Understander do
   @callback run(list(any()), String.t()) :: {:ok, list(String.t())} | {:error, any()}
 
-  def run(sources, query), do: impl().run(sources, query)
+  alias Canary.Sources.Source
+  alias Canary.Sources.SourceOverview
+
+  def run(query, keywords), do: impl().run(query, keywords)
   defp impl(), do: Canary.Query.Understander.LLM
+
+  def keywords(sources) do
+    sources
+    |> Enum.flat_map(fn
+      %Source{overview: nil} -> []
+      %Source{overview: %SourceOverview{} = overview} -> overview.keywords
+    end)
+    |> Enum.uniq()
+  end
 end
 
 defmodule Canary.Query.Understander.LLM do
   @behaviour Canary.Query.Understander
 
-  alias Canary.Sources.Source
-  alias Canary.Sources.SourceOverview
-
-  def run(sources, query) do
+  def run(query, keywords) do
     chat_model = Application.fetch_env!(:canary, :chat_completion_model)
-
-    keywords =
-      sources
-      |> Enum.flat_map(fn
-        %Source{overview: nil} -> []
-        %Source{overview: %SourceOverview{} = overview} -> overview.keywords
-      end)
-      |> Enum.uniq()
 
     messages = [
       %{

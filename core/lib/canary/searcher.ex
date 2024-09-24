@@ -53,7 +53,9 @@ defmodule Canary.Searcher.Default do
   end
 
   defp ai_search(sources, query) do
-    with {:ok, queries} = Canary.Query.Understander.run(sources, query),
+    keywords = Canary.Query.Understander.keywords(sources)
+
+    with {:ok, queries} = Canary.Query.Understander.run(query, keywords),
          {:ok, results} <- Canary.Index.search(sources, queries) do
       {:ok, transform(sources, results)}
     end

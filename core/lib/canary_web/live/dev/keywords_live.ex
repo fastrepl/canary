@@ -9,26 +9,32 @@ defmodule CanaryWeb.Dev.KeywordsLive do
     ~H"""
     <div>
       <form phx-change="source">
-        <Primer.select name="Source" options={@source_names} is_form_control />
+        <Primer.select
+          name="source[]"
+          options={Enum.map(@sources, & &1.name)}
+          is_form_control
+          is_multiple
+          is_auto_height
+        />
       </form>
 
-      <Primer.box :if={@current_source} is_scrollable style="max-height: 600px; margin-top: 18px">
+      <Primer.box is_scrollable style="max-height: 600px; margin-top: 18px">
         <:header>
           <div class="flex items-center justify-between">
-            <span><%= length(@current_source.overview.keywords) %> Keywords</span>
+            <span><%= length(@keywords) %> Keywords</span>
 
             <Primer.button
               is_small
+              id="copy-keywords"
               aria-label="Copy"
-              id={"key-#{@current_source.id}"}
               phx-hook="Clipboard"
-              data-clipboard-text={keywords_for_copy(@current_source.overview.keywords)}
+              data-clipboard-text={render_keywords(@keywords)}
             >
               <Primer.octicon name="paste-16" />
             </Primer.button>
           </div>
         </:header>
-        <:row :for={word <- @current_source.overview.keywords}>
+        <:row :for={word <- @keywords}>
           <span><%= word %></span>
         </:row>
       </Primer.box>
@@ -43,31 +49,30 @@ defmodule CanaryWeb.Dev.KeywordsLive do
       |> Ash.Query.filter(not is_nil(overview))
       |> Ash.read!()
 
-    source_names = sources |> Enum.map(& &1.name)
-
     socket =
       socket
       |> assign(sources: sources)
-      |> assign(source_names: source_names)
-      |> assign(current_source: nil)
+      |> assign(keywords: [])
 
     {:ok, socket}
   end
 
   @impl true
-  def handle_event("source", %{"Source" => source_name}, socket) do
-    current_source =
+  def handle_event("source", %{"source" => sources}, socket) do
+    sources =
       socket.assigns.sources
-      |> Enum.find(&(&1.name == source_name))
+      |> Enum.filter(&(&1.name in sources))
+
+    keywords = Canary.Query.Understander.keywords(sources)
 
     socket =
       socket
-      |> assign(current_source: current_source)
+      |> assign(keywords: keywords)
 
     {:noreply, socket}
   end
 
-  defp keywords_for_copy(keywords) do
+  defp render_keywords(keywords) do
     rendered = keywords |> Enum.map(&"\"#{&1}\"") |> Enum.join(",")
     "[#{rendered}]"
   end
