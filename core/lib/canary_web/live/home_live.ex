@@ -17,7 +17,8 @@ defmodule CanaryWeb.HomeLive do
         </Primer.blankslate>
       </Primer.box>
     <% else %>
-      <div class="flex flex-col">
+      <div class="flex flex-col gap-4">
+        <pre class="text-lg">try our search here: </pre>
         <canary-root>
           <canary-provider-cloud
             api-key={Enum.at(@current_account.keys, 0).value}
@@ -34,6 +35,8 @@ defmodule CanaryWeb.HomeLive do
             </canary-modal>
           </canary-provider-cloud>
         </canary-root>
+
+        <pre class="text-lg">For more information, please visit our <a href="https://getcanary.dev" target="_blank">documentation</a>.</pre>
       </div>
     <% end %>
     """
