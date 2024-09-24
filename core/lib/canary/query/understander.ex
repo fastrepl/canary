@@ -8,10 +8,21 @@ defmodule Canary.Query.Understander do
   defp impl(), do: Canary.Query.Understander.LLM
 
   def keywords(sources) do
+    sources =
+      sources
+      |> Enum.filter(fn
+        %Source{overview: nil} -> false
+        _ -> true
+      end)
+
+    limit =
+      sources
+      |> Enum.map(fn %Source{overview: overview} -> length(overview.keywords) end)
+      |> Enum.min()
+
     sources
-    |> Enum.flat_map(fn
-      %Source{overview: nil} -> []
-      %Source{overview: %SourceOverview{} = overview} -> overview.keywords
+    |> Enum.flat_map(fn %Source{overview: %SourceOverview{} = overview} ->
+      Enum.take(overview.keywords, limit)
     end)
     |> Enum.uniq()
   end
