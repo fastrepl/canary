@@ -21,7 +21,39 @@ fn to_md() {
     *   Retry/fallback logic across multiple deployments (e.g. Azure/OpenAI) - [Router](https://docs.litellm.ai/docs/routing)
     *   Track spend & set budgets per project [LiteLLM Proxy Server](https://docs.litellm.ai/docs/simple_proxy)
 
-    ## Basic usage
+    ## How to use LiteLLM
+
+    You can use litellm through either:
+
+    1.  - Server (LLM Gateway) to call 100+ LLMs, load balance, cost tracking across projects
+    2.  - Python Client to call 100+ LLMs, load balance, cost tracking
+
+    ### **When to use LiteLLM Proxy Server (LLM Gateway)**
+
+    tip
+
+    Use LiteLLM Proxy Server if you want a **central service (LLM Gateway) to access multiple LLMs**
+
+    Typically used by Gen AI Enablement / ML PLatform Teams
+
+    *   LiteLLM Proxy gives you a unified interface to access multiple LLMs (100+ LLMs)
+    *   Track LLM Usage and setup guardrails
+    *   Customize Logging, Guardrails, Caching per project
+
+    ### **When to use LiteLLM Python SDK**
+
+    tip
+
+    Use LiteLLM Python SDK if you want to use LiteLLM in your **python code**
+
+    Typically used by developers building llm projects
+
+    *   LiteLLM SDK gives you a unified interface to access multiple LLMs (100+ LLMs)
+    *   Retry/fallback logic across multiple deployments (e.g. Azure/OpenAI) - [Router](https://docs.litellm.ai/docs/routing)
+
+    ## **LiteLLM Python SDK**
+
+    ### Basic usage
 
     [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/BerriAI/litellm/blob/main/cookbook/liteLLM_Getting_Started.ipynb)
 
@@ -132,9 +164,9 @@ fn to_md() {
     )  
     ```
 
-    ## Streaming
+    ### Streaming
 
-    Set `stream=True` in the `completion` args.
+    Set `stream=True` in the `completion` args. 
 
     *   OpenAI
     *   Anthropic
@@ -246,7 +278,7 @@ fn to_md() {
     )  
     ```
 
-    ## Exception handling
+    ### Exception handling
 
     LiteLLM maps exceptions across all supported providers to the OpenAI exceptions. All our exceptions inherit from OpenAI's exception types, so any error-handling you have for that, should work out of the box with LiteLLM.
 
@@ -262,7 +294,7 @@ fn to_md() {
         print(e)  
     ```
 
-    ## Logging Observability - Log LLM Input/Output ([Docs](https://docs.litellm.ai/docs/observability/callbacks))
+    ### Logging Observability - Log LLM Input/Output ([Docs](https://docs.litellm.ai/docs/observability/callbacks))
 
     LiteLLM exposes pre defined callbacks to send data to Lunary, Langfuse, Helicone, Promptlayer, Traceloop, Slack
 
@@ -278,13 +310,13 @@ fn to_md() {
     os.environ["OPENAI_API_KEY"]  
       
     # set callbacks  
-    litellm.success_callback = ["langfuse", "lunary"] # log input/output to lunary, langfuse, supabase  
+    litellm.success_callback = ["lunary", "langfuse", "helicone"] # log input/output to lunary, langfuse, supabase, helicone  
       
     #openai call  
     response = completion(model="gpt-3.5-turbo", messages=[{"role": "user", "content": "Hi 👋 - i'm openai"}])  
     ```
 
-    ## Track Costs, Usage, Latency for streaming
+    ### Track Costs, Usage, Latency for streaming
 
     Use a callback function for this - more info on custom callbacks: [https://docs.litellm.ai/docs/observability/custom\_callback](https://docs.litellm.ai/docs/observability/custom_callback)
 
@@ -318,7 +350,7 @@ fn to_md() {
     )  
     ```
 
-    ## OpenAI Proxy
+    ## **LiteLLM Proxy Server (LLM Gateway)**
 
     Track spend across multiple projects/people
 
@@ -333,6 +365,8 @@ fn to_md() {
 
     ### 📖 Proxy Endpoints - [Swagger Docs](https://litellm-api.up.railway.app/)
 
+    Go here for a complete tutorial with keys + rate limits - [**here**](/proxy/docker_quick_start.md)
+
     ### Quick Start Proxy - CLI
 
     ```shell
@@ -341,17 +375,46 @@ fn to_md() {
 
     #### Step 1: Start litellm proxy
 
+    *   pip package
+    *   Docker container
+
     ```shell
     $ litellm --model huggingface/bigcode/starcoder  
       
-    #INFO: Proxy running on http://0.0.0.0:8000  
+    #INFO: Proxy running on http://0.0.0.0:4000  
+    ```
+
+    ### Step 1. CREATE config.yaml
+
+    Example `litellm_config.yaml` 
+
+    ```yaml
+    model_list:  
+      - model_name: gpt-3.5-turbo  
+        litellm_params:  
+          model: azure/<your-azure-model-deployment>  
+          api_base: os.environ/AZURE_API_BASE # runs os.getenv("AZURE_API_BASE")  
+          api_key: os.environ/AZURE_API_KEY # runs os.getenv("AZURE_API_KEY")  
+          api_version: "2023-07-01-preview"  
+    ```
+
+    ### Step 2. RUN Docker Image
+
+    ```shell
+    docker run \  
+        -v $(pwd)/litellm_config.yaml:/app/config.yaml \  
+        -e AZURE_API_KEY=d6*********** \  
+        -e AZURE_API_BASE=https://openai-***********/ \  
+        -p 4000:4000 \  
+        ghcr.io/berriai/litellm:main-latest \  
+        --config /app/config.yaml --detailed_debug  
     ```
 
     #### Step 2: Make ChatCompletions Request to Proxy
 
     ```python
     import openai # openai v1.0.0+  
-    client = openai.OpenAI(api_key="anything",base_url="http://0.0.0.0:8000") # set proxy to base_url  
+    client = openai.OpenAI(api_key="anything",base_url="http://0.0.0.0:4000") # set proxy to base_url  
     # request sent to model set on litellm proxy, `litellm --model`  
     response = client.chat.completions.create(model="gpt-3.5-turbo", messages = [  
         {  
@@ -365,17 +428,21 @@ fn to_md() {
 
     ## More details
 
-    *   [exception mapping](/exception_mapping.md)
-    *   [retries + model fallbacks for completion()](/completion/reliable_completions.md)
-    *   [proxy virtual keys & spend management](/tutorials/fallbacks.md)
+    *   [exception mapping](/docs/exception_mapping)
+    *   [E2E Tutorial for LiteLLM Proxy Server](/docs/proxy/docker_quick_start)
+    *   [proxy virtual keys & spend management](/docs/proxy/virtual_keys)
 
     *   
-    *   
-    *   
-    *   
-    *   
-    *   
     *   *
+        *
+    *   *
+        *
+        *
+        *
+        *
+    *   *
+        *
+        *
         *
     *
     "###);

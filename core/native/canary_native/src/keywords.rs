@@ -19,12 +19,18 @@ pub fn extract<'a>(text: &'a str, n: usize) -> anyhow::Result<Vec<String>> {
         .map(|word| remove_emoji(&word))
         .map(|word| bert_normalize(&word))
         .filter(|word| word.len() >= 3 && word.len() <= 18)
-        .filter(|word| count_numbers(word) < count_letters(word) * 3)
+        .filter(|word| count_numbers(word) < count_letters(word))
+        .filter(|word| is_latin(word))
         .collect::<HashSet<String>>()
         .into_iter()
         .collect::<Vec<String>>();
 
     Ok(ret)
+}
+
+fn is_latin(word: &str) -> bool {
+    word.chars()
+        .all(|c| c.is_ascii_alphabetic() || c.is_ascii_digit() || c.is_ascii_punctuation())
 }
 
 fn remove_emoji(string: &str) -> String {
