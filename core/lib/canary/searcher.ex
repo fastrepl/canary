@@ -87,36 +87,41 @@ defmodule Canary.Searcher.Default do
         doc_id = chunks |> Enum.at(0) |> Map.get(:document_id)
         doc = docs |> Enum.find(&(&1.id == doc_id))
 
-        parent_chunk =
-          chunks
-          |> Enum.find(fn chunk -> chunk.is_parent end)
+        if not is_nil(doc) do
+          parent_chunk =
+            chunks
+            |> Enum.find(fn chunk -> chunk.is_parent end)
 
-        non_parent_chunks =
-          chunks
-          |> Enum.reject(fn chunk -> chunk.is_parent end)
-          |> Enum.slice(0, 3)
+          non_parent_chunks =
+            chunks
+            |> Enum.reject(fn chunk -> chunk.is_parent end)
+            |> Enum.slice(0, 3)
 
-        meta =
-          case type do
-            :webpage ->
-              %{}
+          meta =
+            case type do
+              :webpage ->
+                %{}
 
-            :github_issue ->
-              %{closed: doc.meta.value.closed}
+              :github_issue ->
+                %{closed: doc.meta.value.closed}
 
-            :github_discussion ->
-              %{closed: doc.meta.value.closed, answered: doc.meta.value.answered}
-          end
+              :github_discussion ->
+                %{closed: doc.meta.value.closed, answered: doc.meta.value.answered}
+            end
 
-        %{
-          type: type,
-          meta: meta,
-          url: doc.meta.value.url,
-          title: doc.meta.value.title,
-          excerpt: if(parent_chunk, do: parent_chunk.excerpt, else: nil),
-          sub_results: non_parent_chunks
-        }
+          %{
+            type: type,
+            meta: meta,
+            url: doc.meta.value.url,
+            title: doc.meta.value.title,
+            excerpt: if(parent_chunk, do: parent_chunk.excerpt, else: nil),
+            sub_results: non_parent_chunks
+          }
+        else
+          nil
+        end
       end)
+      |> Enum.reject(&is_nil/1)
     end)
   end
 end
