@@ -42,7 +42,7 @@ defmodule Canary.Crawler do
   end
 
   def req() do
-    Req.new()
+    Req.new(user_agent: "Canary (github.com/fastrepl/canary)")
     |> Canary.Req.MetaRefresh.attach()
     |> Canary.Req.Cache.attach(cachex: :cache, ttl: :timer.minutes(30))
   end
@@ -142,7 +142,7 @@ defmodule Canary.Crawler.Visitor do
   end
 
   defp fetch(url, state, _opts) do
-    with {:ok, response} <- Crawler.req() |> Req.get(url: url) do
+    with {:ok, response} <- Crawler.req() |> Req.get(url: url, receive_timeout: 7_000) do
       {:ok, response, state}
     end
   end
@@ -179,7 +179,7 @@ defmodule Canary.Crawler.Visitor do
   end
 
   defp validate_status({:ok, url}, _state, _opts) do
-    case Req.get(url) do
+    case Crawler.req() |> Req.get(url: url, receive_timeout: 7_000) do
       {:ok, %{status: status}} when status in 200..299 -> {:ok, url}
       _error -> {:error, :invalid_status}
     end
