@@ -16,7 +16,7 @@ export class CanaryModeBreadcrumb extends LitElement {
 
   @consume({ context: modeContext, subscribe: true })
   @state()
-  private _mode!: ModeContext;
+  private _mode?: ModeContext;
 
   render() {
     return html`
@@ -39,10 +39,12 @@ export class CanaryModeBreadcrumb extends LitElement {
   }
 
   private _handleClick() {
-    const mode =
-      this._mode.default ??
-      (this._mode.options.values().next().value as string);
-    this.dispatchEvent(createEvent({ type: "set_mode", data: mode }));
+    if (this._mode) {
+      const mode =
+        this._mode.default ??
+        (this._mode.options.values().next().value as string);
+      this.dispatchEvent(createEvent({ type: "set_mode", data: mode }));
+    }
   }
 
   static styles = [

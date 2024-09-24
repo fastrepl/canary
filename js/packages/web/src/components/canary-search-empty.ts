@@ -13,13 +13,15 @@ const NAME = "canary-search-empty";
 @customElement(NAME)
 export class CanarySearchEmpty extends LitElement {
   @consume({ context: queryContext, subscribe: true })
-  private _query!: QueryContext;
+  private _query?: QueryContext;
 
   @consume({ context: executionContext, subscribe: true })
-  private _execution!: ExecutionContext;
+  private _execution?: ExecutionContext;
 
   render() {
     if (
+      !this._query ||
+      !this._execution ||
       this._execution.status !== TaskStatus.COMPLETE ||
       this._execution.search.matches.length !== 0 ||
       this._query.length === 0

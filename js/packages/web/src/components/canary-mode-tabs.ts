@@ -14,21 +14,26 @@ const NAME = "canary-mode-tabs";
 export class CanaryModeTabs extends LitElement {
   @consume({ context: modeContext, subscribe: true })
   @property({ attribute: false })
-  mode!: ModeContext;
+  mode?: ModeContext;
 
   render() {
+    const mode = this.mode;
+    if (!mode) {
+      return nothing;
+    }
+
     return html`
-      ${!this.mode.options || this.mode.options.size < 2
+      ${!mode.options || mode.options.size < 2
         ? nothing
         : html` <div class="tabs">
-            ${Array.from(this.mode.options).map(
+            ${Array.from(mode.options).map(
               (option, index) =>
                 html`<div
                   class=${classMap({
                     tab: true,
-                    selected: option === this.mode.current,
+                    selected: option === mode.current,
                     left: index === 0,
-                    right: index === this.mode.options.size - 1,
+                    right: index === mode.options.size - 1,
                   })}
                   @click=${() => this._handleClick(option)}
                 >
@@ -37,7 +42,7 @@ export class CanaryModeTabs extends LitElement {
                     name="mode"
                     .id=${option}
                     .value=${option}
-                    ?checked=${option === this.mode.current}
+                    ?checked=${option === mode.current}
                   />
                   <label>${option}</label>
                 </div>`,

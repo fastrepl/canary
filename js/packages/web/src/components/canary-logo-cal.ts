@@ -1,4 +1,4 @@
-import { LitElement, html } from "lit";
+import { LitElement, html, nothing } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import { unsafeSVG } from "lit/directives/unsafe-svg.js";
 
@@ -17,9 +17,13 @@ const NAME = "canary-logo-cal";
 export class CanaryLogoCal extends LitElement {
   @consume({ context: themeContext, subscribe: true })
   @state()
-  theme!: ThemeContext;
+  theme?: ThemeContext;
 
   render() {
+    if (!this.theme) {
+      return nothing;
+    }
+
     return html`${unsafeSVG(this.theme === "light" ? LIGHT : DARK)}`;
   }
 

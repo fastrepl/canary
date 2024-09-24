@@ -18,7 +18,7 @@ export class CanarySearch extends LitElement {
 
   @consume({ context: modeContext, subscribe: true })
   @state()
-  private _mode!: ModeContext;
+  private _mode?: ModeContext;
 
   private _containerRef = createRef<HTMLElement>();
 
@@ -28,7 +28,7 @@ export class CanarySearch extends LitElement {
   }
 
   render() {
-    return this._mode.current !== this.MODE
+    return !this._mode || this._mode.current !== this.MODE
       ? nothing
       : html`
           <div class="container" part="container">
