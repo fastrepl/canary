@@ -121,7 +121,7 @@ defmodule Canary.Crawler.Visitor do
   def run(%Config{} = config) do
     stream =
       config.start_urls
-      |> Enum.map(&crawl/1)
+      |> Enum.map(&crawl(&1, config))
       |> Stream.concat()
       |> Stream.map(fn {url, %Req.Response{} = respense, _state} ->
         {Crawler.normalize_url(url), respense.body}
@@ -132,9 +132,11 @@ defmodule Canary.Crawler.Visitor do
     {:ok, stream}
   end
 
-  def crawl(url) do
+  def crawl(url, crawler_config) do
+    config = url |> Hop.new() |> Map.get(:config) |> Keyword.put(:crawler_config, crawler_config)
+
     url
-    |> Hop.new()
+    |> Hop.new(config: config)
     |> Hop.prefetch(&prefetch/3)
     |> Hop.fetch(&fetch/3)
     |> Hop.next(&next/4)
@@ -155,32 +157,48 @@ defmodule Canary.Crawler.Visitor do
     |> validate_status(state, opts)
   end
 
-  defp next(url, %{body: body}, state, _opts) do
-    links =
-      case Floki.parse_document(body) do
-        {:ok, doc} ->
-          doc
-          |> Floki.find("a")
-          |> Floki.attribute("href")
-          |> Enum.map(fn href ->
-            URI.merge(url, href)
-            |> Map.put(:query, nil)
-            |> Map.put(:fragment, nil)
-            |> URI.to_string()
-          end)
-          |> Enum.reject(&(URI.parse(&1).host != URI.parse(url).host))
-          |> Enum.uniq()
+  defp next(url, %Req.Response{body: body} = resp, state, opts) do
+    is_html =
+      resp
+      |> Req.Response.get_header("content-type")
+      |> Enum.any?(&String.contains?(&1, "text/html"))
 
-        _error ->
-          []
-      end
+    if is_html do
+      crawler_config = opts[:crawler_config]
 
-    {:ok, links, state}
+      links =
+        find_links(url, body)
+        |> Enum.filter(&Crawler.include?(&1, crawler_config))
+
+      {:ok, links, state}
+    else
+      {:ok, [], state}
+    end
+  end
+
+  defp find_links(url, html) do
+    case Floki.parse_document(html) do
+      {:ok, doc} ->
+        doc
+        |> Floki.find("a")
+        |> Floki.attribute("href")
+        |> Enum.map(fn href ->
+          URI.merge(url, href)
+          |> Map.put(:query, nil)
+          |> Map.put(:fragment, nil)
+          |> URI.to_string()
+        end)
+        |> Enum.reject(&(URI.parse(&1).host != URI.parse(url).host))
+        |> Enum.uniq()
+
+      _error ->
+        []
+    end
   end
 
   defp validate_status({:ok, url}, _state, _opts) do
     case Crawler.req() |> Req.get(url: url, receive_timeout: 7_000) do
-      {:ok, %{status: status}} when status in 200..299 -> {:ok, url}
+      {:ok, %Req.Response{status: status}} when status in 200..299 -> {:ok, url}
       _error -> {:error, :invalid_status}
     end
   end
