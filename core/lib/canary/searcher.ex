@@ -83,10 +83,11 @@ defmodule Canary.Searcher.Default do
         config: %Ash.Union{type: type}
       } = sources |> Enum.find(&(&1.id == source_id))
 
+      original_docs_ids = hits |> Enum.map(& &1.document_id)
+
       hits
       |> Enum.group_by(& &1.document_id)
-      |> Enum.map(fn {_, chunks} ->
-        doc_id = chunks |> Enum.at(0) |> Map.get(:document_id)
+      |> Enum.map(fn {doc_id, chunks} ->
         doc = docs |> Enum.find(&(&1.id == doc_id))
 
         if not is_nil(doc) do
@@ -117,13 +118,15 @@ defmodule Canary.Searcher.Default do
             url: doc.meta.value.url,
             title: doc.meta.value.title,
             excerpt: if(parent_chunk, do: parent_chunk.excerpt, else: nil),
-            sub_results: non_parent_chunks
+            sub_results: non_parent_chunks,
+            document_id: doc_id
           }
         else
           nil
         end
       end)
       |> Enum.reject(&is_nil/1)
+      |> Enum.sort_by(&Enum.find_index(original_docs_ids, fn id -> id == &1.document_id end))
     end)
   end
 end
