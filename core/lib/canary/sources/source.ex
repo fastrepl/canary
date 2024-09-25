@@ -3,8 +3,10 @@ defmodule Canary.Sources.Source do
     domain: Canary.Sources,
     data_layer: AshPostgres.DataLayer
 
-  alias Canary.Sources.Document
   require Ash.Query
+  require Ecto.Query
+
+  alias Canary.Sources.Document
 
   attributes do
     uuid_primary_key :id
@@ -103,8 +105,48 @@ defmodule Canary.Sources.Source do
       change {Ash.Resource.Change.CascadeDestroy, relationship: :events, action: :destroy}
     end
 
+    update :cancel_fetch do
+      require_atomic? false
+
+      change set_attribute(:state, :idle)
+
+      change fn changeset, _ctx ->
+        %{id: source_id, config: %Ash.Union{type: type}} = changeset.data
+
+        worker =
+          case type do
+            :webpage -> Canary.Workers.WebpageProcessor
+            :github_issue -> Canary.Workers.GithubIssueProcessor
+            :github_discussion -> Canary.Workers.GithubDiscussionProcessor
+          end
+          |> to_string()
+          |> String.trim_leading("Elixir.")
+
+        changeset
+        |> Ash.Changeset.after_action(fn _, record ->
+          result =
+            Oban.Job
+            |> Ecto.Query.where(worker: ^worker)
+            |> Ecto.Query.where([j], json_extract_path(j.args, ["source_id"]) == ^source_id)
+            |> Oban.cancel_all_jobs()
+
+          case result do
+            {:ok, _} ->
+              {:ok, record}
+
+            {:error, error} ->
+              IO.inspect(error)
+              {:ok, record}
+          end
+        end)
+      end
+    end
+
     update :fetch do
       require_atomic? false
+
+      change set_attribute(:state, :running)
+      change set_attribute(:last_fetched_at, &DateTime.utc_now/0)
 
       change fn changeset, _ctx ->
         %{id: source_id, config: config} = changeset.data

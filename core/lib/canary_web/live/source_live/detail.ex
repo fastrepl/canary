@@ -2,8 +2,6 @@ defmodule CanaryWeb.SourceLive.Detail do
   use CanaryWeb, :live_component
   alias PrimerLive.Component, as: Primer
 
-  require Ecto.Query
-
   @impl true
   def render(assigns) do
     ~H"""
@@ -351,20 +349,19 @@ defmodule CanaryWeb.SourceLive.Detail do
 
   @impl true
   def handle_event("cancel", _, socket) do
-    worker =
-      case socket.assigns.source.config.type do
-        :webpage -> Canary.Workers.WebpageProcessor
-        :github_issue -> Canary.Workers.GithubIssueProcessor
-        :github_discussion -> Canary.Workers.GithubDiscussionProcessor
-      end
-      |> to_string()
-      |> String.trim_leading("Elixir.")
+    result =
+      socket.assigns.source
+      |> Ash.Changeset.for_update(:cancel_fetch, %{})
+      |> Ash.update()
 
-    Oban.Job
-    |> Ecto.Query.where(worker: ^worker)
-    |> Oban.cancel_all_jobs()
+    case result do
+      {:ok, _} ->
+        {:noreply, socket}
 
-    {:noreply, socket}
+      {:error, error} ->
+        IO.inspect(error)
+        {:noreply, socket}
+    end
   end
 
   defp transform_params(params) do
