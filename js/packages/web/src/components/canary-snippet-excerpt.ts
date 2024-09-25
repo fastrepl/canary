@@ -1,4 +1,4 @@
-import { LitElement, html, css } from "lit";
+import { LitElement, html, css, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
 
@@ -13,6 +13,10 @@ export class CanarySnippetExcerpt extends LitElement {
   private _maxLength = 110;
 
   render() {
+    if (!this.value) {
+      return nothing;
+    }
+    
     const content = this._strip(this._sanitize(this.value), this._maxLength);
     return html` <span class="excerpt">${unsafeHTML(content)}</span> `;
   }
@@ -26,6 +30,7 @@ export class CanarySnippetExcerpt extends LitElement {
         color: var(--canary-color-gray-20);
         font-size: 0.875rem;
         font-weight: normal;
+        opacity: 0.8;
       }
 
       mark {

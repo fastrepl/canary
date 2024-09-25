@@ -1,4 +1,4 @@
-import { LitElement, html, css } from "lit";
+import { LitElement, html, css, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
 
@@ -11,6 +11,10 @@ export class CanarySnippetTitle extends LitElement {
   @property({ type: String }) value = "";
 
   render() {
+    if (!this.value) {
+      return nothing;
+    }
+    
     return html`
       <span class="title">${unsafeHTML(this._sanitize(this.value))}</span>
     `;
@@ -21,7 +25,7 @@ export class CanarySnippetTitle extends LitElement {
     css`
       span {
         color: var(--canary-color-gray-20);
-        font-size: 0.875rem;
+        font-size: 1rem;
         font-weight: normal;
         line-height: 1;
 

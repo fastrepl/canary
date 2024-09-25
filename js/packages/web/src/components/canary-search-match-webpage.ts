@@ -77,6 +77,10 @@ export class CanarySearchMatchWebpage extends LitElement {
         flex-direction: column;
         gap: 4px;
       }
+
+      .i-heroicons-bookmark {
+        opacity: 0.4;
+      }
     `,
   ];
 }
