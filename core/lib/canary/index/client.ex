@@ -56,7 +56,7 @@ defmodule Canary.Index.Client do
     |> wrap()
   end
 
-  def multi_search(data) when is_list(data) do
+  def multi_search(data) when is_list(data) and length(data) > 0 do
     base()
     |> Req.post(
       url: "/multi_search",
