@@ -1,0 +1,49 @@
+{
+    "type": "object",
+    "properties": {
+      "response": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["text", "reference"]
+            }
+          },
+          "required": ["type"],
+          "oneOf": [
+            {
+              "properties": {
+                "type": {
+                  "const": "text"
+                },
+                "text": {
+                  "type": "string"
+                }
+              },
+              "required": ["text"]
+            },
+            {
+              "properties": {
+                "type": {
+                  "const": "reference"
+                },
+                "url": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "excerpt": {
+                  "type": "string"
+                }
+              },
+              "required": ["url", "title", "excerpt"]
+            }
+          ]
+        }
+      }
+    },
+    "required": ["response"]
+  }
