@@ -123,16 +123,17 @@ defmodule Canary.Index do
       %{
         collection: to_string(type),
         q: query,
+        prefix: true,
         query_by: query_by,
         query_by_weights: query_by_weights,
         filter_by: filter_by,
         sort_by: "_text_match:desc",
         highlight_fields: "content",
         stopwords: Canary.Index.Stopword.id(),
-        prefix: true,
-        prioritize_exact_match: false,
+        prioritize_exact_match: true,
         prioritize_token_position: false,
-        prioritize_num_matching_fields: true
+        prioritize_num_matching_fields: false,
+        exhaustive_search: true
       }
       |> add_embedding_args(opts)
     end)
