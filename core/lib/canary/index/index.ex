@@ -74,7 +74,9 @@ defmodule Canary.Index do
   end
 
   def search(sources, queries, opts \\ []) when is_list(queries) do
-    case build_args(sources, queries, opts) |> Canary.Index.Client.multi_search() do
+    args = build_args(sources, queries, opts)
+
+    case Canary.Index.Client.multi_search(args) do
       {:ok, %Req.Response{status: 200, body: %{"results" => results}}} ->
         ret =
           results
