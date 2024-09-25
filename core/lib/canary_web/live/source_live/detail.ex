@@ -247,7 +247,7 @@ defmodule CanaryWeb.SourceLive.Detail do
           <:badge><Primer.octicon name="git-commit-16" /></:badge>
           <div class="flex flex-row justify-between">
             <span><%= event.meta.message %></span>
-            <span id={"event-#{event.id}"} phx-hook="TimeAgo" class="badge">
+            <span id={"event-#{event.id}"} phx-hook="TimeAgo" class="invisible">
               <%= event.created_at %>
             </span>
           </div>

@@ -20,10 +20,15 @@ defmodule Canary.Change.CascadeDestroy do
       |> Enum.flat_map(fn {_, record} -> Map.get(record, opts[:attribute]) end)
       |> transform()
 
-    %Ash.BulkResult{status: :success} = Ash.bulk_destroy(chunks, :destroy, %{})
+    case Ash.bulk_destroy(chunks, :destroy, %{}, return_errors?: true) do
+      %Ash.BulkResult{status: :success} ->
+        changesets_and_results
+        |> Enum.map(fn {_, record} -> {:ok, record} end)
 
-    changesets_and_results
-    |> Enum.map(fn {_, record} -> {:ok, record} end)
+      %Ash.BulkResult{errors: errors} ->
+        changesets_and_results
+        |> Enum.map(fn {_, _record} -> {:error, errors} end)
+    end
   end
 
   @impl true

@@ -43,7 +43,7 @@ defmodule CanaryWeb.SourceLive.List do
               <div class="flex flex-row gap-2 items-center">
                 <span class="text-gray-700 font-light text-xs">
                   Updated
-                  <span id={"event-#{source.id}"} phx-hook="TimeAgo">
+                  <span id={"event-#{source.id}"} phx-hook="TimeAgo" class="invisible">
                     <%= source.lastest_event_at %>
                   </span>
                 </span>

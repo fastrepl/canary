@@ -7,6 +7,8 @@ defmodule Canary.Query.Understander do
   def run(query, keywords), do: impl().run(query, keywords)
   defp impl(), do: Canary.Query.Understander.LLM
 
+  def keywords(sources) when length(sources) == 0, do: []
+
   def keywords(sources) do
     sources =
       sources
