@@ -85,7 +85,11 @@ defmodule Canary.Interactions.Responder.Default do
     |> Ash.Query.filter(id in ^doc_ids)
     |> Ash.read!()
     |> Enum.map(fn %Document{meta: %Ash.Union{value: meta}, chunks: chunks} ->
-      %{title: meta.title, content: chunks |> Enum.map(& &1.value.content) |> Enum.join("\n")}
+      %{
+        url: meta.url,
+        title: meta.title,
+        content: chunks |> Enum.map(& &1.value.content) |> Enum.join("\n")
+      }
     end)
   end
 

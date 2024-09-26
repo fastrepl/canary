@@ -38,16 +38,18 @@
             }
           }
         },
-        "required": ["title", "url", "sections"],
+        "required": ["title", "url"],
         "oneOf": [
           {
-            "required": ["content"]
+            "required": ["content"],
+            "not": {
+              "required": ["sections"]
+            }
           },
           {
-            "properties": {
-              "sections": {
-                "minItems": 1
-              }
+            "required": ["sections"],
+            "not": {
+              "required": ["content"]
             }
           }
         ]

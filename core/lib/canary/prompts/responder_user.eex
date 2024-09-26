@@ -1,42 +1,56 @@
 <%
-  defmodule Renderer do
-    def render_docs([]), do: "<retrieved_documents>\nNo relevant documents found.\n</retrieved_documents>"
+  render_query = fn query -> """
+  <user_question>
+  #{query}
+  </user_question>
+  """
+  end
 
-    def render_docs(docs) do
+  render_docs = fn
+    [] -> """
+    <retrieved_documents>
+    No relevant documents found.
+    </retrieved_documents>
+    """
+    docs ->
       body =
         docs
-        |> Enum.map(&render_doc/1)
+        |> Enum.map(fn doc ->
+          case doc do
+            %{title: title, content: nil, sections: sections} when sections != [] ->
+              sections_content =
+                sections
+                |> Enum.map(fn section ->
+                  case section do
+                    %{title: nil, content: content} -> "section_content: #{content}"
+                    %{title: title, content: content} -> "section_title: #{title}\nsection_content: #{content}"
+                  end
+                end)
+                |> Enum.join("\n")
+
+              "title: #{title}\n\n#{sections_content}"
+
+            %{title: title, content: content} ->
+              "title: #{title}\n\ncontent: #{content}"
+          end
+        end)
         |> Enum.join("\n-------\n")
 
-      "<retrieved_documents>\n#{body}\n</retrieved_documents>"
-    end
-
-    defp render_doc(%{title: title, content: nil, sections: sections}) when length(sections) > 0 do
-      sections_content =
-        sections
-        |> Enum.map(&render_section/1)
-        |> Enum.join("\n")
-
-      "title: #{title}\n\n#{sections_content}"
-    end
-
-    defp render_doc(%{title: title, content: content}) do
-      "title: #{title}\n\ncontent: #{content}"
-    end
-
-    defp render_section(%{title: nil, content: content}), do: "section_content: #{content}"
-    defp render_section(%{title: title, content: content}), do: "section_title: #{title}\nsection_content: #{content}"
+      """
+      <retrieved_documents>
+      #{body}
+      </retrieved_documents>
+      """
   end
 %>
 
-<%= Renderer.render_docs(@docs) %>
+<%= render_docs.(@docs) %>
 
-<user_question>
-<%= @query %>
-</user_question>
+<%= render_query.(@query) %>
 
 <instruction>
 Based on the retrieved documents, answer the user's question within 5 sentences. Note that user's question might contains some typos.
 Go straight to the point, give answer first, then go through the details. Each sentence should be short, and paragraph should only contain few sentences.
 
 If user is asking for nonsense, or the retrieved documents are not relevant, just transparently say it.
+</instruction>

@@ -89,7 +89,8 @@ defmodule Canary.MixProject do
       {:ash_cloak, "~> 0.1.2"},
       {:primer_live, "~> 0.7"},
       {:honeybadger, "~> 0.16"},
-      {:hop, "~> 0.1"}
+      {:hop, "~> 0.1"},
+      {:ex_json_schema, "~> 0.10"}
     ] ++ deps_eval()
   end
 
