@@ -51,7 +51,7 @@ defmodule Canary.Query.Understander.LLM do
 
     case Canary.AI.chat(args, timeout: 2_000) do
       {:ok, completion} ->
-        parsed = parse(completion)
+        parsed = parse(completion, max: 5)
 
         Honeybadger.event("llm", %{
           task: "understander",
@@ -68,13 +68,14 @@ defmodule Canary.Query.Understander.LLM do
     end
   end
 
-  defp parse(completion) do
+  defp parse(completion, opts) do
     case Regex.run(~r/<keywords>(.*?)<\/keywords>/s, completion) do
       [_, match] ->
         match
         |> String.split(",")
         |> Enum.map(&String.trim/1)
         |> Enum.reject(&(&1 == ""))
+        |> Enum.take(opts[:max] || 5)
 
       nil ->
         []

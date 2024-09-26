@@ -3,10 +3,12 @@
   "title": "AskResponse",
   "properties": {
     "scratchpad": {
-      "type": "string"
+      "type": "string",
+      "description": "A space for planning how to respond. Must come before the blocks."
     },
     "blocks": {
       "type": "array",
+      "minItems": 1,
       "items": {
         "type": "object",
         "properties": {
@@ -19,12 +21,14 @@
         "oneOf": [
           {
             "title": "AskResponseTextBlock",
+            "description": "A block containing markdown-formatted text. MUST followed by one or several reference blocks. At least one text block is required since you should answer the user's question anyway.",
             "properties": {
               "type": {
                 "const": "text"
               },
               "text": {
-                "type": "string"
+                "type": "string",
+                "description": "Markdown-formatted text."
               }
             },
             "required": ["type", "text"],
@@ -32,32 +36,40 @@
           },
           {
             "title": "AskResponseReferenceBlock",
+            "description": "A block containing a reference to a source.",
             "properties": {
               "type": {
                 "const": "reference"
               },
               "title": {
-                "type": "string"
+                "type": "string",
+                "description": "Title copied from the document."
               },
               "url": {
-                "type": "string"
+                "type": "string",
+                "description": "URL copied from the document."
               },
               "sections": {
                 "type": "array",
+                "description": "An array of relevant sections inside a single document.",
                 "items": {
                   "type": "object",
                   "properties": {
                     "title": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "Title copied from the document. Can be omitted or empty."
                     },
                     "url": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "URL copied from the document. Can be omitted or empty."
                     },
                     "excerpt": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "A relevant excerpt from the section. Since scraped source can be messy, it is encouraged to fix formatting or remove odd words as you transcribe, but you should not change the content."
                     },
                     "explanation": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "An explanation of how the excerpt relates to the query. Should be concise and strictly fact-based."
                     }
                   },
                   "required": ["excerpt", "explanation"],

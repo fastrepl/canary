@@ -28,8 +28,8 @@ defmodule Canary.Interactions.Responder.Default do
       results
       |> search_results_to_docs()
       |> then(fn docs ->
-        opts = [threshold: 0.01, renderer: fn doc -> doc.content end]
-        Canary.Reranker.run!(query, docs, opts) |> Enum.take(3)
+        opts = [threshold: 0, renderer: fn doc -> doc.content end]
+        Canary.Reranker.run!(query, docs, opts) |> Enum.take(5)
       end)
 
     messages = [
@@ -78,12 +78,13 @@ defmodule Canary.Interactions.Responder.Default do
   defp search_results_to_docs(results) do
     doc_ids =
       results
-      |> Enum.flat_map(fn result -> Enum.map(result.sub_results, & &1.document_id) end)
+      |> Enum.map(fn result -> result.document_id end)
       |> Enum.uniq()
 
     Canary.Sources.Document
     |> Ash.Query.filter(id in ^doc_ids)
     |> Ash.read!()
+    |> Enum.sort_by(&Enum.find_index(doc_ids, fn id -> id == &1.id end))
     |> Enum.map(fn %Document{meta: %Ash.Union{value: meta}, chunks: chunks} ->
       %{
         url: meta.url,

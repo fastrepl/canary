@@ -1,7 +1,7 @@
 <%
   render_query = fn query -> """
   <user_question>
-  #{query}
+    #{query}
   </user_question>
   """
   end
@@ -9,7 +9,7 @@
   render_docs = fn
     [] -> """
     <retrieved_documents>
-    No relevant documents found.
+      No relevant documents found.
     </retrieved_documents>
     """
     docs ->
@@ -17,21 +17,36 @@
         docs
         |> Enum.map(fn doc ->
           case doc do
-            %{title: title, content: nil, sections: sections} when sections != [] ->
+            %{title: title,  url: url,content: nil, sections: sections} ->
               sections_content =
                 sections
                 |> Enum.map(fn section ->
-                  case section do
-                    %{title: nil, content: content} -> "section_content: #{content}"
-                    %{title: title, content: content} -> "section_title: #{title}\nsection_content: #{content}"
-                  end
+                """
+                <section>
+                  #{if(section.title, do: "<title>#{section.title}</title>")}
+                  #{if(section.url, do: "<url>#{section.url}</url>")}
+                  <content>#{section.content}</content>
+                </section>
+                """
                 end)
                 |> Enum.join("\n")
 
-              "title: #{title}\n\n#{sections_content}"
+              """
+              <document>
+                <title>#{title}</title>
+                <url>#{url}</url>
+                #{sections_content}
+              </document>
+              """
 
-            %{title: title, content: content} ->
-              "title: #{title}\n\ncontent: #{content}"
+            %{title: title, url: url, content: content} ->
+              """
+              <document>
+                <title>#{title}</title>
+                <url>#{url}</url>
+                <content>#{content}</content>
+              </document>
+              """
           end
         end)
         |> Enum.join("\n-------\n")
@@ -49,8 +64,7 @@
 <%= render_query.(@query) %>
 
 <instruction>
-Based on the retrieved documents, answer the user's question within 5 sentences. Note that user's question might contains some typos.
-Go straight to the point, give answer first, then go through the details. Each sentence should be short, and paragraph should only contain few sentences.
-
+Based on the retrieved documents, answer the user's question.
 If user is asking for nonsense, or the retrieved documents are not relevant, just transparently say it.
+Show references first before answering the question.
 </instruction>
