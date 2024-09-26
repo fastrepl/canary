@@ -22,7 +22,9 @@
     "test": "npm run test-utils && npm run test-storybook",
     "test-utils": "vitest run",
     "test-storybook": "test-storybook",
-    "typegen": "npx json2ts 'src/types/schema/*.json' src/types/schema"
+    "typegen": "npm run typegen:internal && npm run typegen:external",
+    "typegen:internal": "npx json2ts 'src/types/schema/*.json' src/types/schema",
+    "typegen:external": "npx json2ts '../../../core/lib/canary/prompts/responder_assistant_schema.json' src/types/schema/responder.d.ts"
   },
   "dependencies": {
     "@floating-ui/dom": "^1.6.8",

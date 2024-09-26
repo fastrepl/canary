@@ -1,22 +1,35 @@
 <%
-  render_context = fn docs ->
-    if length(docs) > 0 do
+  defmodule Renderer do
+    def render_docs([]), do: "<retrieved_documents>\nNo relevant documents found.\n</retrieved_documents>"
+
+    def render_docs(docs) do
       body =
         docs
-        |> Enum.with_index(1)
-        |> Enum.map(fn {%{title: title, content: content}, index} ->
-          "index: #{index}\n\ntitle: #{title}\n\ncontent: #{content}\n"
-        end)
+        |> Enum.map(&render_doc/1)
         |> Enum.join("\n-------\n")
 
       "<retrieved_documents>\n#{body}\n</retrieved_documents>"
-    else
-      "<retrieved_documents>\nNo relevant documents found.\n</retrieved_documents>"
     end
+
+    defp render_doc(%{title: title, content: nil, sections: sections}) when length(sections) > 0 do
+      sections_content =
+        sections
+        |> Enum.map(&render_section/1)
+        |> Enum.join("\n")
+
+      "title: #{title}\n\n#{sections_content}"
+    end
+
+    defp render_doc(%{title: title, content: content}) do
+      "title: #{title}\n\ncontent: #{content}"
+    end
+
+    defp render_section(%{title: nil, content: content}), do: "section_content: #{content}"
+    defp render_section(%{title: title, content: content}), do: "section_title: #{title}\nsection_content: #{content}"
   end
 %>
 
-<%= render_context.(@docs) %>
+<%= Renderer.render_docs(@docs) %>
 
 <user_question>
 <%= @query %>
@@ -27,30 +40,3 @@ Based on the retrieved documents, answer the user's question within 5 sentences.
 Go straight to the point, give answer first, then go through the details. Each sentence should be short, and paragraph should only contain few sentences.
 
 If user is asking for nonsense, or the retrieved documents are not relevant, just transparently say it.
-
-##
-You should talk less, and reference/point more in your response.
-If answer is already in the document, you should just point to it rather than rephrase it.
-
-When doing so, follow this format:
-
-<canary-reference title="<TITLE>" excerpt="<QUOTED_CONTENT"></canary-reference>
-
-Note that above is HTML, but HTML is valid in Markdown.
-
-##
-If you reference something, do not say like "you can refer to the sections on seamless integrations and specific framework support.".
-Referencing should be only done with `<canary-reference>` tag, because otherwise user can not be able to see the content.
-
-</instruction>
-
-<notes>
-This answer is really bad.
-
-Q: Can you tell me about 'Vitepress'?
-A: """
-Yes.
-
-VitePress is a static site generator powered by Vite and Vue. It uses Minisearch as its default local search. You can integrate Canary with VitePress using the canary-provider-vitepress-minisearch. To set it up, you need to install @getcanary/web and configure your VitePress project accordingly. Additionally, Canary Cloud is in active development and not ready for production use yet.
-"""
-</notes>

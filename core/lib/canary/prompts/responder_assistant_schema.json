@@ -1,52 +1,77 @@
 {
-    "type": "object",
-    "properties": {
-      "thinking": {
-        "type": "string"
-      },
-      "response": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "type": {
-              "type": "string",
-              "enum": ["text", "reference"]
-            }
-          },
-          "required": ["type"],
-          "oneOf": [
-            {
-              "properties": {
-                "type": {
-                  "const": "text"
-                },
-                "text": {
-                  "type": "string"
-                }
-              },
-              "required": ["text"]
-            },
-            {
-              "properties": {
-                "type": {
-                  "const": "reference"
-                },
-                "url": {
-                  "type": "string"
-                },
-                "title": {
-                  "type": "string"
-                },
-                "excerpt": {
-                  "type": "string"
-                }
-              },
-              "required": ["url", "title", "excerpt"]
-            }
-          ]
-        }
-      }
+  "type": "object",
+  "title": "AskResponse",
+  "properties": {
+    "scratchpad": {
+      "type": "string"
     },
-    "required": ["thinking", "response"]
-  }
+    "blocks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["text", "reference"]
+          }
+        },
+        "required": ["type"],
+        "oneOf": [
+          {
+            "title": "AskResponseTextBlock",
+            "properties": {
+              "type": {
+                "const": "text"
+              },
+              "text": {
+                "type": "string"
+              }
+            },
+            "required": ["type", "text"],
+            "additionalProperties": false
+          },
+          {
+            "title": "AskResponseReferenceBlock",
+            "properties": {
+              "type": {
+                "const": "reference"
+              },
+              "title": {
+                "type": "string"
+              },
+              "url": {
+                "type": "string"
+              },
+              "sections": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string"
+                    },
+                    "url": {
+                      "type": "string"
+                    },
+                    "excerpt": {
+                      "type": "string"
+                    },
+                    "explanation": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["excerpt", "explanation"],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": ["type", "title", "url", "sections"],
+            "additionalProperties": false
+          }
+        ]
+      }
+    }
+  },
+  "required": ["blocks"],
+  "additionalProperties": false
+}
