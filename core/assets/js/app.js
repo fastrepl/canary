@@ -27,6 +27,7 @@ import * as Components from "../svelte/**/*.svelte";
 import { format } from "timeago.js";
 import ClipboardJS from "clipboard";
 import Chart from "chart.js/auto";
+import { parse } from 'best-effort-json-parser'
 
 import "@getcanary/web/components/canary-root.js";
 import "@getcanary/web/components/canary-provider-cloud.js";
@@ -149,6 +150,18 @@ let hooks = {
       this.clipboard.on("success", (e) => {
         this.el.textContent = "Copied!";
       });
+    },
+  },
+  PartialJSON: {
+    mounted() {
+      this.fn();
+    },
+    updated() {
+      this.fn();
+    },
+    fn() {
+      const parsed = parse(this.el.textContent);
+      this.el.textContent = JSON.stringify(parsed, null, 2);
     },
   },
 };

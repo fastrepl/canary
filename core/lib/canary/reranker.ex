@@ -35,9 +35,9 @@ defmodule Canary.Reranker.Cohere do
       end
 
     case result do
-      {:ok, %{status: 200, body: body}} ->
+      {:ok, %{status: 200, body: %{"results" => results}}} ->
         reranked =
-          body["results"]
+          results
           |> Enum.sort_by(& &1["relevance_score"], :asc)
           |> Enum.filter(fn %{"relevance_score" => score} -> score > threshold end)
           |> Enum.map(fn %{"index" => i} -> i end)
@@ -79,8 +79,8 @@ defmodule Canary.Reranker.Jina do
   use Retry
 
   def run(query, docs, opts) do
-    threshold = opts[:threshold] || 0
     renderer = opts[:renderer] || fn doc -> doc end
+    threshold = opts[:threshold] || 0
 
     result =
       retry with: exponential_backoff() |> randomize |> expiry(4_000) do
@@ -88,9 +88,9 @@ defmodule Canary.Reranker.Jina do
       end
 
     case result do
-      {:ok, %{status: 200, body: body}} ->
+      {:ok, %{status: 200, body: %{"results" => results}}} ->
         reranked =
-          body["results"]
+          results
           |> Enum.sort_by(& &1["relevance_score"], :asc)
           |> Enum.filter(fn %{"relevance_score" => score} -> score > threshold end)
           |> Enum.map(fn %{"index" => i} -> i end)

@@ -39,7 +39,7 @@ defmodule CanaryWeb.Dev.ResponderLive do
         >
           <Primer.octicon name="paste-16" />
         </Primer.button>
-        <pre class=" text-lg"><%= @response %></pre>
+        <pre id="response-json" phx-hook="PartialJSON" class="text-lg"><%= @response %></pre>
 
         <Primer.button
           is_small
@@ -89,20 +89,53 @@ defmodule CanaryWeb.Dev.ResponderLive do
 
   @impl true
   def handle_event("submit", %{"query" => query}, socket) do
-    now = System.monotonic_time()
-
-    {:ok, %{response: response, docs: docs}} =
-      Canary.Interactions.Responder.run(socket.assigns.selected, query, fn _ -> :ok end)
-
-    delta = System.monotonic_time() - now
+    self = self()
+    selected = socket.assigns.selected
 
     socket =
       socket
       |> assign(query: query)
-      |> assign(response: response)
-      |> assign(docs: docs)
-      |> assign(latency: System.convert_time_unit(delta, :native, :millisecond))
+      |> assign(response: "")
+      |> assign(docs: [])
+      |> assign(latency: 0)
+      |> assign(started_at: System.monotonic_time())
+      |> start_async(:task, fn ->
+        {:ok, %{docs: docs}} = Canary.Interactions.Responder.run(selected, query, &send(self, &1))
+        docs
+      end)
 
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_info(%{type: :progress, content: content}, socket) do
+    socket = socket |> assign(response: socket.assigns.response <> content)
+
+    socket =
+      if socket.assigns.latency == 0 do
+        delta = System.monotonic_time() - socket.assigns.started_at
+        socket |> assign(latency: System.convert_time_unit(delta, :native, :millisecond))
+      else
+        socket
+      end
+
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_info(%{type: :complete, content: content}, socket) do
+    socket = socket |> assign(response: content)
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_async(:task, {:ok, docs}, socket) do
+    socket = socket |> assign(docs: docs)
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_async(:task, _result, socket) do
     {:noreply, socket}
   end
 end

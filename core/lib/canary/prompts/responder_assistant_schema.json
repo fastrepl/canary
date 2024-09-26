@@ -1,6 +1,9 @@
 {
     "type": "object",
     "properties": {
+      "thinking": {
+        "type": "string"
+      },
       "response": {
         "type": "array",
         "items": {
@@ -45,5 +48,5 @@
         }
       }
     },
-    "required": ["response"]
+    "required": ["thinking", "response"]
   }

@@ -19,15 +19,18 @@ defmodule Canary.Interactions.Responder.Default do
   @behaviour Canary.Interactions.Responder
   require Ash.Query
 
+  alias Canary.Sources.Document
+
   def run(sources, query, handle_delta, opts) do
     {:ok, results} = Canary.Searcher.run(sources, query, cache: opts[:cache])
 
     docs =
       results
       |> search_results_to_docs()
-      |> then(
-        &Canary.Reranker.run!(query, &1, threshold: 0.05, renderer: fn doc -> doc.content end)
-      )
+      |> then(fn docs ->
+        opts = [threshold: 0.01, renderer: fn doc -> doc.content end]
+        Canary.Reranker.run!(query, docs, opts) |> Enum.take(3)
+      end)
 
     messages = [
       %{
@@ -47,9 +50,10 @@ defmodule Canary.Interactions.Responder.Default do
         %{
           model: Application.fetch_env!(:canary, :chat_completion_model),
           messages: messages,
-          temperature: 0.2,
+          temperature: 0,
           frequency_penalty: 0.02,
           max_tokens: 5000,
+          response_format: %{type: "json_object"},
           stream: handle_delta != nil
         },
         callback: fn data ->
@@ -68,7 +72,7 @@ defmodule Canary.Interactions.Responder.Default do
     completion = if completion == "", do: Agent.get(pid, & &1), else: completion
     safe(handle_delta, %{type: :complete, content: completion})
 
-    {:ok, %{response: completion, references: []}}
+    {:ok, %{response: completion, references: [], docs: docs}}
   end
 
   defp search_results_to_docs(results) do
@@ -80,8 +84,9 @@ defmodule Canary.Interactions.Responder.Default do
     Canary.Sources.Document
     |> Ash.Query.filter(id in ^doc_ids)
     |> Ash.read!()
-    |> Enum.flat_map(fn %{chunks: chunks} -> chunks end)
-    |> Enum.map(fn chunk -> %{title: chunk.value.title, content: chunk.value.content} end)
+    |> Enum.map(fn %Document{meta: %Ash.Union{value: meta}, chunks: chunks} ->
+      %{title: meta.title, content: chunks |> Enum.map(& &1.value.content) |> Enum.join("\n")}
+    end)
   end
 
   defp safe(func, arg) do
