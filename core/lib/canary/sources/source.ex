@@ -72,24 +72,19 @@ defmodule Canary.Sources.Source do
 
         keywords =
           documents
-          |> Enum.flat_map(fn %Document{meta: %Ash.Union{type: type}, chunks: chunks} ->
-            chunks
-            |> Enum.map(fn %Ash.Union{value: value} -> value.content end)
-            |> Enum.join("\n")
-            |> then(fn text ->
-              case type do
-                :webpage ->
-                  Canary.Native.extract_keywords(text, max(5, floor(500 / length(documents))))
+          |> Enum.flat_map(fn %Document{meta: %Ash.Union{type: type}, chunks: chunks} = doc ->
+            case type do
+              :webpage ->
+                Canary.Keywords.extract(doc, max: max(5, floor(500 / length(documents))))
 
-                :github_issue ->
-                  Canary.Native.extract_keywords(text, max(2, floor(500 / length(documents))))
+              :github_issue ->
+                Canary.Keywords.extract(doc, max: max(2, floor(500 / length(documents))))
 
-                :github_discussion ->
-                  Canary.Native.extract_keywords(text, max(2, floor(500 / length(documents))))
-              end
-            end)
-            |> Enum.uniq()
+              :github_discussion ->
+                Canary.Keywords.extract(doc, max: max(2, floor(500 / length(documents))))
+            end
           end)
+          |> Enum.uniq()
 
         overview = %Canary.Sources.SourceOverview{keywords: keywords}
 
