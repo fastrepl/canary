@@ -1,4 +1,4 @@
-import { LitElement, html, css } from "lit";
+import { LitElement, html, css, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
 import { urlToParts } from "../utils";
@@ -13,22 +13,41 @@ export class CanaryURLPaths extends LitElement {
 
   render() {
     const parts = urlToParts(this.url);
-    const host = new URL(this.url).host;
 
-    return html`
-      ${parts.length == 0
-        ? html`<span class="path">${host}</span>`
-        : html`<div class="paths">
-            ${parts.map((part, i) =>
-              i < parts.length - 1
-                ? html`
-                    <span class="path">${part}</span>
-                    <span class="icon i-heroicons-chevron-right"></span>
-                  `
-                : html`<span class="path">${part}</span>`,
-            )}
-          </div>`}
-    `;
+    if (parts.length == 0) {
+      return this._render_url();
+    } else {
+      return this._render_parts(parts);
+    }
+  }
+
+  private _render_parts(parts: string[]) {
+    return html`<div class="paths">
+      ${parts.map((part, i) =>
+        i < parts.length - 1
+          ? html`
+              <span class="path">${part}</span>
+              <span class="icon i-heroicons-chevron-right"></span>
+            `
+          : html`<span class="path">${part}</span>`,
+      )}
+    </div>`;
+  }
+
+  private _render_url() {
+    let host = null;
+
+    try {
+      host = new URL(this.url).host;
+    } catch (e) {
+      host = null;
+    }
+
+    if (!host) {
+      return nothing;
+    }
+
+    return html`<span class="path">${host}</span>`;
   }
 
   static styles = [
