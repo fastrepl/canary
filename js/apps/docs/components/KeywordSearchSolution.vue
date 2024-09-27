@@ -17,6 +17,7 @@ onMounted(() => {
   });
 });
 
+const sources = ["canary_webpage"];
 const questions = ["provider", "how to switch provider"];
 
 const question = ref(questions[0]);
@@ -47,7 +48,11 @@ const handleSelect = (q: string) => {
       :key="counter"
       :query="question"
     >
-      <canary-provider-cloud :api-key="data.key" :api-base="data.base">
+      <canary-provider-cloud
+        :api-key="data.key"
+        :api-base="data.base"
+        :sources="sources"
+      >
         <canary-content>
           <canary-input slot="input"></canary-input>
           <canary-search slot="mode">

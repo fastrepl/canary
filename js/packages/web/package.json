@@ -1,6 +1,6 @@
 {
   "name": "@getcanary/web",
-  "version": "1.0.0-rc.4",
+  "version": "1.0.0-rc.5",
   "license": "MIT",
   "type": "module",
   "main": "dist/components/canary-root.js",
@@ -22,9 +22,9 @@
     "test": "npm run test-utils && npm run test-storybook",
     "test-utils": "vitest run",
     "test-storybook": "test-storybook",
-    "typegen": "npm run typegen:internal && npm run typegen:external",
-    "typegen:internal": "npx json2ts 'src/types/schema/*.json' src/types/schema",
-    "typegen:external": "npx json2ts '../../../core/lib/canary/prompts/responder_assistant_schema.json' src/types/schema/responder.d.ts"
+    "typegen": "npm run typegen:tabs && npm run typegen:responder",
+    "typegen:tabs": "npx json2ts 'src/types/schema/tabs.json' src/types/schema/generated/tabs.ts",
+    "typegen:responder": "npx json2ts '../../../core/lib/canary/prompts/responder_assistant_schema.json' src/types/schema/generated/responder.ts"
   },
   "dependencies": {
     "@floating-ui/dom": "^1.6.8",
@@ -33,6 +33,7 @@
     "@lit/context": "^1.1.2",
     "@lit/task": "^1.0.1",
     "@xstate/store": "^2.5.0",
+    "best-effort-json-parser": "^1.1.2",
     "lit": "^3.1.4",
     "marked": "^14.0.0",
     "marked-footnote": "^1.2.2",

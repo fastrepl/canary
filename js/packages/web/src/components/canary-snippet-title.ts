@@ -14,7 +14,7 @@ export class CanarySnippetTitle extends LitElement {
     if (!this.value) {
       return nothing;
     }
-    
+
     return html`
       <span class="title">${unsafeHTML(this._sanitize(this.value))}</span>
     `;

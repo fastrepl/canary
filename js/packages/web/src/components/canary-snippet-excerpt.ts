@@ -16,7 +16,7 @@ export class CanarySnippetExcerpt extends LitElement {
     if (!this.value) {
       return nothing;
     }
-    
+
     const content = this._strip(this._sanitize(this.value), this._maxLength);
     return html` <span class="excerpt">${unsafeHTML(content)}</span> `;
   }

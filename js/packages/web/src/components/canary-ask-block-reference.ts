@@ -1,0 +1,104 @@
+import { LitElement, html, css } from "lit";
+import { customElement, property } from "lit/decorators.js";
+
+import type { AskResponseReferenceBlock } from "../types";
+import { global } from "../styles";
+
+const NAME = "canary-ask-block-reference";
+
+@customElement(NAME)
+export class CanaryAskBlockReference extends LitElement {
+  @property({ type: Object })
+  block!: AskResponseReferenceBlock;
+
+  render() {
+    return html`
+      <div class="container" @click=${() => this._handleClick(this.block.url)}>
+        <div class="block-title">${this.block.title}</div>
+        ${this.block.sections.map(
+          (section) => html`
+            <div
+              class="section"
+              @click=${() => this._handleClick(section.url || this.block.url)}
+            >
+              <div class="section-title">${section.title}</div>
+              <div class="section-excerpt">${section.excerpt}</div>
+              <div class="section-explanation">
+                <span class="i-heroicons-arrow-right-20-solid"></span>
+                <span>${section.explanation}</span>
+              </div>
+            </div>
+          `,
+        )}
+      </div>
+    `;
+  }
+
+  private _handleClick(url: string) {
+    window.location.href = url;
+  }
+
+  static styles = [
+    global,
+    css`
+      @unocss-placeholder;
+    `,
+    css`
+      .container {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        padding: 1rem;
+        cursor: pointer;
+        border: 1px solid var(--canary-color-gray-90);
+        background-color: var(--canary-color-gray-100);
+        border-radius: 0.5rem;
+        padding: 1.5rem;
+      }
+
+      .container:hover {
+        background-color: var(--canary-color-gray-95);
+      }
+
+      .block-title {
+        font-size: 1.2rem;
+      }
+
+      .section {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .section-title {
+        font-size: 1rem;
+      }
+
+      .section-excerpt {
+        padding-left: 0.5rem;
+        border-left: 2px solid var(--canary-color-primary-50);
+        font-size: 0.875rem;
+      }
+
+      .section-explanation {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        padding-left: 0.5rem;
+        font-size: 0.875rem;
+        font-style: italic;
+      }
+    `,
+  ];
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    [NAME]: CanaryAskBlockReference;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      [NAME]: any;
+    }
+  }
+}

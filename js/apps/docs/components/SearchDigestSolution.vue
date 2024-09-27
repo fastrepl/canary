@@ -21,6 +21,8 @@ onMounted(() => {
   });
 });
 
+const sources = ["canary_webpage", "canary_issue"];
+
 const tabs = JSON.stringify([
   { name: "All", pattern: "**/*" },
   { name: "Local", pattern: "**/local/**" },
@@ -60,7 +62,11 @@ const handleSelect = (q: string) => {
       :key="counter"
       :query="question"
     >
-      <canary-provider-cloud :api-key="data.key" :api-base="data.base">
+      <canary-provider-cloud
+        :api-key="data.key"
+        :api-base="data.base"
+        :sources="sources"
+      >
         <canary-content>
           <canary-input slot="input"></canary-input>
           <canary-search slot="mode">

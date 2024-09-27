@@ -30,12 +30,17 @@ const tabs = JSON.stringify([
   { name: "Local", pattern: "**/local/**" },
   { name: "Cloud", pattern: "**/cloud/**" },
 ]);
+const sources = ["canary_webpage", "canary_issue"];
 </script>
 
 <template>
   <div class="w-full max-w-[230px] pl-4 mr-auto" v-if="loaded">
     <canary-root framework="vitepress">
-      <canary-provider-cloud :api-key="data.key" :api-base="data.base">
+      <canary-provider-cloud
+        :api-key="data.key"
+        :api-base="data.base"
+        :sources="sources"
+      >
         <canary-modal>
           <canary-trigger-searchbar slot="trigger"></canary-trigger-searchbar>
           <canary-content slot="content">

@@ -1,2 +1,2 @@
-export * from "./tabs";
-export * from "./responder";
+export * from "./generated/tabs";
+export * from "./generated/responder";
