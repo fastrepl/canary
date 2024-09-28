@@ -42,6 +42,8 @@ import "@getcanary/web/components/canary-ask-results.js";
 import "@getcanary/web/components/canary-mode-breadcrumb.js";
 import "@getcanary/web/components/canary-search-suggestions.js";
 import "@getcanary/web/components/canary-search-empty.js";
+import "@getcanary/web/components/canary-ask.js";
+import "@getcanary/web/components/canary-ask-results.js";
 
 let csrfToken = document
   .querySelector("meta[name='csrf-token']")

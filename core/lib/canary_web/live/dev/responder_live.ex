@@ -108,7 +108,7 @@ defmodule CanaryWeb.Dev.ResponderLive do
   end
 
   @impl true
-  def handle_info(%{type: :progress, content: content}, socket) do
+  def handle_info({:delta, content}, socket) do
     socket = socket |> assign(response: socket.assigns.response <> content)
 
     socket =
@@ -123,10 +123,7 @@ defmodule CanaryWeb.Dev.ResponderLive do
   end
 
   @impl true
-  def handle_info(%{type: :complete, content: content}, socket) do
-    socket = socket |> assign(response: content)
-    {:noreply, socket}
-  end
+  def handle_info(_, socket), do: {:noreply, socket}
 
   @impl true
   def handle_async(:task, {:ok, docs}, socket) do

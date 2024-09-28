@@ -23,6 +23,7 @@ defmodule CanaryWeb.HomeLive do
           <canary-provider-cloud
             api-key={Enum.at(@current_account.keys, 0).value}
             api-base={CanaryWeb.Endpoint.url()}
+            sources={@sources}
           >
             <canary-modal>
               <canary-trigger-searchbar slot="trigger"></canary-trigger-searchbar>
@@ -31,6 +32,9 @@ defmodule CanaryWeb.HomeLive do
                 <canary-search slot="mode">
                   <canary-search-results slot="body"></canary-search-results>
                 </canary-search>
+                <canary-ask slot="mode">
+                  <canary-ask-results slot="body"></canary-ask-results>
+                </canary-ask>
               </canary-content>
             </canary-modal>
           </canary-provider-cloud>
@@ -50,6 +54,7 @@ defmodule CanaryWeb.HomeLive do
 
     socket =
       socket
+      |> assign(sources: ["litellm"])
       |> assign(current_account: account)
       |> assign(valid: Enum.count(account.keys) > 0 && Enum.count(account.sources) > 0)
       |> assign(

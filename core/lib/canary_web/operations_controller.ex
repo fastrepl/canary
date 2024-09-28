@@ -99,19 +99,16 @@ defmodule CanaryWeb.OperationsController do
   end
 
   defp receive_and_send(conn) do
-    Enum.reduce_while(Stream.repeatedly(fn -> receive_event() end), conn, fn
-      %{type: :references} = data, conn ->
+    Stream.repeatedly(fn -> receive_event() end)
+    |> Enum.reduce_while(conn, fn
+      {:delta, data}, conn when is_binary(data) ->
         chunk(conn, sse_encode(data))
         {:cont, conn}
 
-      %{type: :progress} = data, conn ->
-        case chunk(conn, sse_encode(data)) do
-          {:ok, conn} -> {:cont, conn}
-          {:error, _} -> {:halt, conn}
-        end
+      {:done, _data}, conn ->
+        {:halt, conn}
 
-      %{type: :complete} = data, conn ->
-        chunk(conn, sse_encode(data))
+      {:error, _data}, conn ->
         {:halt, conn}
 
       _, conn ->
@@ -128,7 +125,7 @@ defmodule CanaryWeb.OperationsController do
   end
 
   defp sse_encode(data) do
-    "data: #{Jason.encode!(data)}\n\n"
+    "data: #{data}\r\n\r\n"
   end
 
   defp cache?(), do: Application.get_env(:canary, :env) == :prod

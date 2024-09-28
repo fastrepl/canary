@@ -63,14 +63,14 @@ defmodule Canary.Interactions.Responder.Default do
               :ok
 
             %{"choices" => [%{"delta" => %{"content" => content}}]} ->
-              safe(handle_delta, %{type: :progress, content: content})
+              safe(handle_delta, {:delta, content})
               Agent.update(pid, &(&1 <> content))
           end
         end
       )
 
     completion = if completion == "", do: Agent.get(pid, & &1), else: completion
-    safe(handle_delta, %{type: :complete, content: completion})
+    safe(handle_delta, {:done, completion})
 
     {:ok, %{response: completion, references: [], docs: docs}}
   end

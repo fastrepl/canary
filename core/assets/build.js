@@ -11,7 +11,7 @@ let optsClient = {
   entryPoints: ["js/app.js"],
   bundle: true,
   minify: deploy,
-  target: "es2017",
+  target: "es2020",
   conditions: ["svelte", "browser"],
   outdir: "../priv/static/assets",
   logLevel: "info",

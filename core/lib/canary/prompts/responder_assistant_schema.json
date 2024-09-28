@@ -20,14 +20,12 @@
         "oneOf": [
           {
             "title": "AskResponseTextBlock",
-            "description": "A block containing markdown-formatted text. MUST followed by one or several reference blocks. At least one text block is required since you should answer the user's question anyway.",
             "properties": {
               "type": {
                 "const": "text"
               },
               "text": {
-                "type": "string",
-                "description": "Markdown-formatted text."
+                "type": "string"
               }
             },
             "required": ["type", "text"],
@@ -35,40 +33,33 @@
           },
           {
             "title": "AskResponseReferenceBlock",
-            "description": "A block containing a reference to a source.",
             "properties": {
               "type": {
                 "const": "reference"
               },
               "title": {
-                "type": "string",
-                "description": "Title copied from the document."
+                "type": "string"
               },
               "url": {
-                "type": "string",
-                "description": "URL copied from the document."
+                "type": "string"
               },
               "sections": {
                 "type": "array",
-                "description": "An array of relevant sections inside a single document.",
+                "minItems": 1,
                 "items": {
                   "type": "object",
                   "properties": {
                     "title": {
-                      "type": "string",
-                      "description": "Title copied from the document. Can be omitted or empty."
+                      "type": "string"
                     },
                     "url": {
-                      "type": "string",
-                      "description": "URL copied from the document. Can be omitted or empty."
+                      "type": "string"
                     },
                     "excerpt": {
-                      "type": "string",
-                      "description": "A relevant excerpt from the section. Since scraped source can be messy, it is encouraged to fix formatting or remove odd words as you transcribe, but you should not change the content."
+                      "type": "string"
                     },
                     "explanation": {
-                      "type": "string",
-                      "description": "An explanation of how the excerpt relates to the query. Should be concise and strictly fact-based."
+                      "type": "string"
                     }
                   },
                   "required": ["excerpt", "explanation"],
