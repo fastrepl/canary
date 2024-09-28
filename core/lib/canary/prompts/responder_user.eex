@@ -1,11 +1,4 @@
 <%
-  render_query = fn query -> """
-  <user_question>
-    #{query}
-  </user_question>
-  """
-  end
-
   render_docs = fn
     [] -> """
     <retrieved_documents>
@@ -61,10 +54,6 @@
 
 <%= render_docs.(@docs) %>
 
-<%= render_query.(@query) %>
-
-<instruction>
-Based on the retrieved documents, answer the user's question.
-If user is asking for nonsense, or the retrieved documents are not relevant, just transparently say it.
-Show references first before answering the question.
-</instruction>
+<user_question>
+  <%= @query %>
+</user_question>
