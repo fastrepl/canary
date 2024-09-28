@@ -73,6 +73,8 @@ defmodule CanaryWeb.OperationsController do
       |> put_resp_content_type("text/event-stream")
       |> put_resp_header("cache-control", "no-cache")
       |> put_resp_header("connection", "keep-alive")
+      # https://serverfault.com/a/801629
+      |> put_resp_header("x-accel-buffering", "no")
       |> send_chunked(200)
 
     here = self()
