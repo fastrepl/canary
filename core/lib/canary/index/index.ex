@@ -133,7 +133,7 @@ defmodule Canary.Index do
         prioritize_exact_match: true,
         prioritize_token_position: false,
         prioritize_num_matching_fields: false,
-        exhaustive_search: true
+        max_candidates: 4 * 4
       }
       |> add_embedding_args(opts)
     end)
