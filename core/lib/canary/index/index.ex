@@ -73,7 +73,10 @@ defmodule Canary.Index do
     Client.delete_document(source_type, id)
   end
 
-  def search(sources, queries, opts \\ []) when is_list(queries) do
+  def search(_, _, _ \\ [])
+  def search([], _, _), do: {:ok, []}
+
+  def search(sources, queries, opts) when is_list(queries) do
     args = build_args(sources, queries, opts)
 
     case Canary.Index.Client.multi_search(args) do

@@ -48,9 +48,7 @@ defmodule Canary.Searcher.Default do
   end
 
   defp ai?(query) do
-    query
-    |> String.split(" ", trim: true)
-    |> Enum.count() > 2
+    String.ends_with?(query, "?") or String.split(query, " ", trim: true) |> Enum.count() > 2
   end
 
   defp ai_search(sources, query) do
