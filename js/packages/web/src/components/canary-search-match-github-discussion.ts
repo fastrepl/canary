@@ -7,6 +7,7 @@ import "./canary-badge";
 import "./canary-snippet-title";
 import "./canary-snippet-excerpt";
 
+import { MODAL_CLOSE_EVENT } from "./canary-modal";
 import { SearchResult } from "../types";
 import { global } from "../styles";
 
@@ -44,34 +45,35 @@ export class CanarySearchMatchGithubDiscussion extends LitElement {
           </canary-badge>
           <canary-snippet-excerpt slot="excerpt" .value=${this.match.excerpt}>
           </canary-snippet-excerpt>
+          ${this._render_subs()}
         </canary-search-match-base>
-        ${this.match.sub_results.map(
-          (sub_result, i) => html`
-            <canary-search-match-base
-              url=${sub_result.url}
-              exportparts="container:match-item"
-            >
-              <canary-icon-tree
-                slot="content-before"
-                .last=${i === this.match.sub_results.length - 1}
-              >
-              </canary-icon-tree>
-              <canary-snippet-title
-                slot="title"
-                class="title"
-                .value=${sub_result.title}
-              >
-              </canary-snippet-title>
-              <canary-snippet-excerpt
-                slot="excerpt"
-                class="excerpt"
-                .value=${sub_result.excerpt}
-              ></canary-snippet-excerpt>
-            </canary-search-match-base>
-          `,
-        )}
       </div>
     `;
+  }
+
+  private _render_subs() {
+    return html` <div class="sub-results" slot="sub-results">
+      ${this.match.sub_results.map(
+        (result) =>
+          html`<div
+            class="sub-result"
+            @click=${(e: MouseEvent) => this._handleClickSub(e, result.url)}
+          >
+            <span class="i-heroicons-arrow-turn-down-right-solid"></span>
+            <canary-snippet-excerpt
+              .value=${result.excerpt}
+            ></canary-snippet-excerpt>
+          </div>`,
+      )}
+    </div>`;
+  }
+
+  private _handleClickSub(e: MouseEvent, url: string) {
+    e.stopPropagation();
+    this.dispatchEvent(
+      new CustomEvent(MODAL_CLOSE_EVENT, { bubbles: true, composed: true }),
+    );
+    window.location.href = url;
   }
 
   static styles = [
@@ -87,8 +89,26 @@ export class CanarySearchMatchGithubDiscussion extends LitElement {
       }
     `,
     css`
-      canary-logo-github::part(svg) {
-        width: 0.875em;
+      .container {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .sub-results {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        margin-top: 4px;
+      }
+
+      .sub-result {
+        display: flex;
+        gap: 4px;
+        align-items: center;
+      }
+      .sub-result:hover {
+        text-decoration: underline;
       }
     `,
   ];

@@ -53,6 +53,11 @@ export default {
             url: "https://example.com/a#sub-1",
             excerpt: "this is <mark>a match</mark>.",
           },
+          {
+            title: "Page sub title 1",
+            url: "https://example.com/a#sub-1",
+            excerpt: "this is <mark>a match</mark>.",
+          },
         ],
       };
 
@@ -74,6 +79,11 @@ export default {
         title: "Title",
         excerpt: "This is a mock excerpt for webpage.",
         sub_results: [
+          {
+            title: "Page sub title 1",
+            url: "https://example.com/a#sub-1",
+            excerpt: "this is <mark>a match</mark>.",
+          },
           {
             title: "Page sub title 1",
             url: "https://example.com/a#sub-1",

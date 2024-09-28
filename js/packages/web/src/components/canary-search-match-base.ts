@@ -23,6 +23,7 @@ export class CanarySearchMatchBase extends LitElement {
             <slot name="title-badge"></slot>
           </div>
           <slot name="excerpt"></slot>
+          <slot name="sub-results"></slot>
         </div>
         <div class="arrow">
           <div class="i-heroicons-chevron-right"></div>
