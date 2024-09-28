@@ -7,6 +7,7 @@ import type {
 import type { AskFunction } from "./ask";
 import type { FeedbackFunction } from "./feedback";
 import { TaskStatus } from "../store/managers";
+import { AskResponse } from "./schema";
 
 export type QueryContext = string;
 
@@ -18,9 +19,7 @@ export type ModeContext = {
 
 export type ExecutionContext = {
   status: TaskStatus;
-  ask: {
-    response: string;
-  };
+  ask: AskResponse;
   search: SearchFunctionResult;
   _search: SearchFunctionResult;
 };

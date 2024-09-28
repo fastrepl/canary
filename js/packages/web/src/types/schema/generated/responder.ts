@@ -10,10 +10,7 @@ export interface AskResponse {
    * A space for planning how to respond. Must come before the blocks.
    */
   scratchpad?: string;
-  /**
-   * @minItems 1
-   */
-  blocks: [AskResponseTextBlock | AskResponseReferenceBlock, ...(AskResponseTextBlock | AskResponseReferenceBlock)[]];
+  blocks: (AskResponseTextBlock | AskResponseReferenceBlock)[];
 }
 /**
  * A block containing markdown-formatted text. MUST followed by one or several reference blocks. At least one text block is required since you should answer the user's question anyway.

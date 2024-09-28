@@ -1,6 +1,16 @@
-import { describe, test, expect } from "vitest";
+import { describe, test, expect, beforeAll, afterAll, afterEach } from "vitest";
 
-import { stripURL, urlToParts } from "./utils";
+import { setupServer } from "msw/node";
+import { stripURL, urlToParts, sseIterator } from "./utils";
+
+import { askHandler } from "./msw";
+
+const handlers = [askHandler];
+const server = setupServer(...handlers);
+
+beforeAll(() => server.listen());
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());
 
 describe("urlToParts", () => {
   test("with host", () => {
@@ -30,5 +40,18 @@ describe("stripURL", () => {
     ["/?name=Jonathan%20Smith&age=18", "/?name=Jonathan%20Smith&age=18"],
   ])("%s", (input, expected) => {
     expect(stripURL(input)).toEqual(expected);
+  });
+});
+
+describe("sse", () => {
+  test("it works", async () => {
+    const req = new Request("http://localhost/api/v1/ask", { method: "POST" });
+
+    const receivedData = [];
+    for await (const data of sseIterator(req)) {
+      receivedData.push(data);
+    }
+
+    expect(receivedData.length).toBeGreaterThan(0);
   });
 });

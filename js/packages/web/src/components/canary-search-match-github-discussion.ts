@@ -110,6 +110,10 @@ export class CanarySearchMatchGithubDiscussion extends LitElement {
       .sub-result:hover {
         text-decoration: underline;
       }
+
+      .i-heroicons-arrow-turn-down-right-solid {
+        opacity: 0.4;
+      }
     `,
   ];
 }

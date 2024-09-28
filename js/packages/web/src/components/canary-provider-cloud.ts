@@ -1,12 +1,14 @@
 import { LitElement, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
+import { parse as safeParse } from "best-effort-json-parser";
 
-import type { AskFunction, Delta, SearchFunction } from "../types";
+import type { AskFunction, SearchFunction } from "../types";
 
 import { wrapper } from "../styles";
 import { createEvent } from "../store";
 import { cache } from "../decorators";
 import { StringArray } from "../converters";
+import { sseIterator } from "../utils";
 
 const NAME = "canary-provider-cloud";
 
@@ -66,7 +68,7 @@ export class CanaryProviderCloud extends LitElement {
 
   ask: AskFunction = async (payload, handleDelta, signal) => {
     const url = `${this.apiBase}/api/v1/ask`;
-    const params = {
+    const req = new Request(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -74,39 +76,13 @@ export class CanaryProviderCloud extends LitElement {
       },
       body: JSON.stringify({ ...payload, sources: this.sources }),
       signal,
-    };
+    });
 
-    const res = await fetch(url, params);
-    if (!res.ok) {
-      throw new Error(res.statusText);
-    }
+    let buffer = "";
 
-    const reader = res.body?.pipeThrough(new TextDecoderStream()).getReader();
-
-    if (!reader) {
-      throw new Error();
-    }
-
-    while (true) {
-      try {
-        const { done, value } = await reader.read();
-        if (done) {
-          break;
-        }
-
-        value
-          .split("\n\n")
-          .flatMap((s) => s.split("data: "))
-          .filter(Boolean)
-          .map((s) => JSON.parse(s) as Delta)
-          .forEach(handleDelta);
-      } catch (error) {
-        if (error instanceof Error && error.name !== "AbortError") {
-          console.error(error);
-        }
-
-        break;
-      }
+    for await (const { data } of sseIterator(req)) {
+      buffer += data;
+      handleDelta(safeParse(buffer));
     }
 
     return null;

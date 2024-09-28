@@ -1,9 +1,12 @@
 import { LitElement, html } from "lit";
 import { customElement } from "lit/decorators.js";
+import { parse as safeParse } from "best-effort-json-parser";
 
 import type { AskFunction, SearchFunction, SearchResult } from "../types";
+import { mockAskResponse } from "../msw";
 import { wrapper } from "../styles";
 import { createEvent } from "../store";
+import { asyncSleep } from "../utils";
 
 const NAME = "canary-provider-mock";
 
@@ -94,13 +97,25 @@ export class CanaryProviderMock extends LitElement {
     return { matches };
   };
 
-  ask: AskFunction = async (_payload, handleDelta, _signal) => {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    handleDelta({ type: "progress", content: "hello" });
-    await new Promise((resolve) => setTimeout(resolve, 100));
-    handleDelta({ type: "progress", content: " world" });
-    await new Promise((resolve) => setTimeout(resolve, 200));
-    handleDelta({ type: "progress", content: " !" });
+  ask: AskFunction = async (_payload, handleDelta, signal) => {
+    let buffer = "";
+    let index = 0;
+    const totalLength = mockAskResponse.length;
+
+    while (index < totalLength) {
+      signal.throwIfAborted();
+
+      const chunkSize = Math.floor(Math.random() * 3) + 10;
+      const chunk = mockAskResponse.slice(index, index + chunkSize);
+      buffer += chunk;
+
+      const parsedData = safeParse(buffer);
+      handleDelta(parsedData);
+      await asyncSleep(Math.random() * 50 + 20);
+
+      index += chunkSize;
+    }
+
     return null;
   };
 }

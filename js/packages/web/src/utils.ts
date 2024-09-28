@@ -59,3 +59,50 @@ export const applyFilters = (
     matches,
   );
 };
+
+export async function* sseIterator(req: Request) {
+  const res = await fetch(req);
+
+  if (!res.ok) {
+    throw new Error(res.statusText);
+  }
+
+  const reader = res.body?.pipeThrough(new TextDecoderStream()).getReader();
+
+  if (!reader) {
+    throw new Error("empty body");
+  }
+
+  let buffer = "";
+
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) {
+        break;
+      }
+
+      buffer += value;
+
+      let events = buffer.split(/\r?\n\r?\n/);
+      buffer = events.pop() || "";
+
+      for (const event of events) {
+        if (!event.trim()) {
+          continue;
+        }
+
+        const dataLines = event
+          .split(/\r?\n/)
+          .filter((line) => line.startsWith("data: "));
+
+        for (const line of dataLines) {
+          const dataContent = line.slice(6);
+          yield { data: dataContent };
+        }
+      }
+    }
+  } finally {
+    reader.releaseLock();
+  }
+}

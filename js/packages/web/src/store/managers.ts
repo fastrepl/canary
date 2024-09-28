@@ -3,8 +3,8 @@ import { ContextProvider } from "@lit/context";
 import type {
   OperationContext,
   ExecutionContext,
-  Delta,
   FiltersContext,
+  AskResponse,
 } from "../types";
 import { applyFilters, asyncSleep } from "../utils";
 import { executionContext } from "../contexts";
@@ -34,7 +34,7 @@ export class ExecutionManager {
 
   private _initialState: ExecutionContext = {
     status: TaskStatus.INITIAL,
-    ask: { response: "" },
+    ask: { scratchpad: "", blocks: [] },
     search: { matches: [], suggestion: { questions: [] } },
     _search: { matches: [], suggestion: { questions: [] } },
   };
@@ -148,14 +148,7 @@ export class ExecutionManager {
     }
   }
 
-  private _handleDelta(delta: Delta) {
-    if (delta.type === "progress") {
-      const response = this.ctx.ask.response + delta.content;
-      this.transition({ ask: { response } });
-    }
-
-    if (delta.type === "complete") {
-      this.transition({ ask: { response: delta.content } });
-    }
+  private _handleDelta(ask: AskResponse) {
+    this.transition({ ask });
   }
 }

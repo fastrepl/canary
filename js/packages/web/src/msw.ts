@@ -1,21 +1,58 @@
 import { http, HttpResponse, delay } from "msw";
 
-import type { AskReference, SearchResult, SearchFunctionResult } from "./types";
+import type { SearchResult, SearchFunctionResult, AskResponse } from "./types";
 
-const MOCK_RESPONSE = `
-**Yes.**
-
-Here's some references:
-
-<canary-reference url="https://example.com/docs/a/b" title="title" excerpt="this is a match."></canary-reference>
-<canary-reference url="https://example.com/docs/a/c" title="title" excerpt="this is a match."></canary-reference>
-
-Please let me know if you have any questions.
-
-Please let me know if you have any questions.
-
-Please let me know if you have any questions.
-`.trim();
+export const mockAskResponse = JSON.stringify({
+  scratchpad: "thinking",
+  blocks: [
+    {
+      type: "text",
+      text: "**Yes.**",
+    },
+    {
+      type: "reference",
+      title: "title",
+      url: "https://example.com/docs/a/b",
+      sections: [
+        {
+          title: "title",
+          url: "https://example.com/docs/a/b",
+          excerpt: "this is a match.",
+          explanation: "this is an explanation.",
+        },
+      ],
+    },
+    {
+      type: "reference",
+      title: "title",
+      url: "https://example.com/docs/a/b",
+      sections: [
+        {
+          title: "title",
+          url: "https://example.com/docs/a/b",
+          excerpt: "this is a match.",
+          explanation: "this is an explanation.",
+        },
+        {
+          title: "title",
+          url: "https://example.com/docs/a/b",
+          excerpt: "this is a match.",
+          explanation: "this is an explanation.",
+        },
+        {
+          title: "title",
+          url: "https://example.com/docs/a/b",
+          excerpt: "this is a match.",
+          explanation: "this is an explanation.",
+        },
+      ],
+    },
+    {
+      type: "text",
+      text: "**Yes.**",
+    },
+  ],
+} satisfies AskResponse);
 
 const mockSearchReferences = (type: string, query: string): SearchResult[] => {
   const getN = (q: string) => {
@@ -91,13 +128,6 @@ const mockSearchReferences = (type: string, query: string): SearchResult[] => {
     });
 };
 
-const mockAskReference = (): AskReference => {
-  return {
-    title: "456",
-    url: "https://example.com/a/b",
-  };
-};
-
 export const searchHandler = http.post(
   /.*\/api\/v1\/search/,
   async ({ request }) => {
@@ -121,7 +151,7 @@ export const searchHandler = http.post(
 );
 
 export const askHandler = http.post(/.*\/api\/v1\/ask/, async () => {
-  await delay(Math.random() * 2000);
+  await delay(Math.random() * 1400);
 
   const encoder = new TextEncoder();
   const stream = new ReadableStream({
@@ -129,9 +159,9 @@ export const askHandler = http.post(/.*\/api\/v1\/ask/, async () => {
       const chunkSize = Math.floor(Math.random() * 3) + 10; // 10 characters
       let index = 0;
 
-      while (index < MOCK_RESPONSE.length) {
-        const chunk = MOCK_RESPONSE.slice(index, index + chunkSize);
-        const data = `data: ${JSON.stringify({ type: "progress", content: chunk })}\n\n`;
+      while (index < mockAskResponse.length) {
+        const chunk = mockAskResponse.slice(index, index + chunkSize);
+        const data = `data: ${chunk}\r\n\r\n`;
 
         controller.enqueue(encoder.encode(data));
         index += chunkSize;
@@ -139,8 +169,6 @@ export const askHandler = http.post(/.*\/api\/v1\/ask/, async () => {
         await delay(Math.random() * 50 + 20);
       }
 
-      const references = `data: ${JSON.stringify({ type: "references", items: [mockAskReference()] })}\n\n`;
-      controller.enqueue(encoder.encode(references));
       controller.close();
     },
   });

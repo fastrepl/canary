@@ -3,6 +3,7 @@ import { customElement, property } from "lit/decorators.js";
 
 import type { AskResponse } from "../types";
 
+import { global } from "../styles";
 import "./canary-markdown";
 import "./canary-ask-block-reference";
 
@@ -32,6 +33,7 @@ export class CanaryAskResponse extends LitElement {
   }
 
   static styles = [
+    global,
     css`
       @unocss-placeholder;
     `,
