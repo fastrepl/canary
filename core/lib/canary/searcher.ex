@@ -1,5 +1,6 @@
 defmodule Canary.Searcher do
   @callback run(list(any()), String.t()) :: {:ok, list(map())} | {:error, any()}
+
   def run(sources, query, opts \\ []) do
     if opts[:cache] do
       with {:error, _} <- get_cache(sources, query),
@@ -55,9 +56,13 @@ defmodule Canary.Searcher.Default do
   defp ai_search(sources, query) do
     keywords = Canary.Query.Understander.keywords(sources)
 
-    with {:ok, queries} = Canary.Query.Understander.run(query, keywords),
-         {:ok, results} <- Canary.Index.search(sources, queries) do
-      {:ok, transform(sources, results)}
+    if keywords == [] do
+      {:ok, []}
+    else
+      with {:ok, queries} = Canary.Query.Understander.run(query, keywords),
+           {:ok, hits} <- Canary.Index.search(sources, queries) do
+        {:ok, transform(sources, hits)}
+      end
     end
   end
 
@@ -70,6 +75,7 @@ defmodule Canary.Searcher.Default do
     document_ids =
       search_results
       |> Enum.flat_map(fn %{hits: hits} -> Enum.map(hits, & &1.document_id) end)
+      |> Enum.uniq()
 
     docs =
       Canary.Sources.Document
