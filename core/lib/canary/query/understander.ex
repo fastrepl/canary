@@ -4,6 +4,7 @@ defmodule Canary.Query.Understander do
   alias Canary.Sources.Source
   alias Canary.Sources.SourceOverview
 
+  def run(_, []), do: {:ok, []}
   def run(query, keywords), do: impl().run(query, keywords)
   defp impl(), do: Canary.Query.Understander.LLM
 

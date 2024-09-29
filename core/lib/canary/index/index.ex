@@ -75,6 +75,7 @@ defmodule Canary.Index do
 
   def search(_, _, _ \\ [])
   def search([], _, _), do: {:ok, []}
+  def search(_, [], _), do: {:ok, []}
 
   def search(sources, queries, opts) when is_list(queries) do
     args = build_args(sources, queries, opts)

@@ -54,13 +54,9 @@ defmodule Canary.Searcher.Default do
   defp ai_search(sources, query) do
     keywords = Canary.Query.Understander.keywords(sources)
 
-    if keywords == [] do
-      {:ok, []}
-    else
-      with {:ok, queries} = Canary.Query.Understander.run(query, keywords),
-           {:ok, hits} <- Canary.Index.search(sources, queries) do
-        {:ok, transform(sources, hits)}
-      end
+    with {:ok, queries} = Canary.Query.Understander.run(query, keywords),
+         {:ok, hits} <- Canary.Index.search(sources, queries) do
+      {:ok, transform(sources, hits)}
     end
   end
 
