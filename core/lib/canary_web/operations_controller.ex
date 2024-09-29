@@ -79,7 +79,7 @@ defmodule CanaryWeb.OperationsController do
 
     here = self()
 
-    Task.Supervisor.start_child(Canary.TaskSupervisor, fn ->
+    Task.start_link(fn ->
       Canary.Interactions.Responder.run(
         sources,
         query,
@@ -108,7 +108,7 @@ defmodule CanaryWeb.OperationsController do
       {:done, _data}, conn ->
         {:halt, conn}
 
-      {:error, _data}, conn ->
+      {:error, _}, conn ->
         {:halt, conn}
 
       _, conn ->
