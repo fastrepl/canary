@@ -18,7 +18,18 @@ defmodule CanaryWeb.HomeLive do
       </Primer.box>
     <% else %>
       <div class="flex flex-col gap-4">
-        <pre class="text-lg">try our search here: </pre>
+
+      <pre class="text-lg">Select sources: </pre>
+      <form phx-change="form">
+        <Primer.select
+          name="source[]"
+          options={Enum.map(@current_account.sources, & &1.name)}
+          is_multiple
+          is_auto_height
+        />
+      </form>
+
+        <pre class="text-lg">try search here: </pre>
         <canary-root>
           <canary-provider-cloud
             api-key={Enum.at(@current_account.keys, 0).value}
@@ -54,7 +65,7 @@ defmodule CanaryWeb.HomeLive do
 
     socket =
       socket
-      |> assign(sources: ["litellm"])
+      |> assign(sources: [])
       |> assign(current_account: account)
       |> assign(valid: Enum.count(account.keys) > 0 && Enum.count(account.sources) > 0)
       |> assign(
@@ -77,5 +88,11 @@ defmodule CanaryWeb.HomeLive do
       )
 
     {:ok, socket}
+  end
+
+  @impl true
+  def handle_event("form", %{"source" => sources}, socket) do
+    socket = socket |> assign(sources: sources)
+    {:noreply, socket}
   end
 end
