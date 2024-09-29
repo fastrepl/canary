@@ -98,7 +98,10 @@ export class ExecutionManager {
         _search: { ...result, matches: result.matches },
       });
     } catch (e) {
-      if (e === ABORT_REASON_MANAGER) {
+      if (
+        e === ABORT_REASON_MANAGER ||
+        (e instanceof Error && e.name === "AbortError")
+      ) {
         this.transition({ status: TaskStatus.INITIAL });
         return;
       }
@@ -139,7 +142,11 @@ export class ExecutionManager {
 
       this.transition({ status: TaskStatus.COMPLETE });
     } catch (e) {
-      if (e === ABORT_REASON_MANAGER) {
+      if (
+        e === ABORT_REASON_MANAGER ||
+        (e instanceof Error && e.name === "AbortError")
+      ) {
+        this.transition({ status: TaskStatus.INITIAL });
         return;
       }
 
