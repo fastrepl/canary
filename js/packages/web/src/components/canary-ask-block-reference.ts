@@ -1,8 +1,11 @@
-import { LitElement, html, css } from "lit";
+import { LitElement, html, css, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
 import type { AskResponseReferenceBlock } from "../types";
 import { global } from "../styles";
+
+import "./canary-url-paths";
+import "./canary-markdown";
 
 const NAME = "canary-ask-block-reference";
 
@@ -12,8 +15,13 @@ export class CanaryAskBlockReference extends LitElement {
   block!: AskResponseReferenceBlock;
 
   render() {
+    if (!this.block || !this.block?.sections || !this.block.sections.length) {
+      return nothing;
+    }
+
     return html`
       <div class="container" @click=${() => this._handleClick(this.block.url)}>
+        <canary-url-paths .url=${this.block.url}></canary-url-paths>
         <div class="block-title">${this.block.title}</div>
         ${this.block.sections.map(
           (section) => html`
@@ -22,7 +30,9 @@ export class CanaryAskBlockReference extends LitElement {
               @click=${() => this._handleClick(section.url || this.block.url)}
             >
               <div class="section-title">${section.title}</div>
-              <div class="section-excerpt">${section.excerpt}</div>
+              <div class="section-excerpt">
+                <canary-markdown .content=${section.excerpt}></canary-markdown>
+              </div>
               <div class="section-explanation">
                 <span class="i-heroicons-arrow-right-20-solid"></span>
                 <span>${section.explanation}</span>
@@ -51,9 +61,9 @@ export class CanaryAskBlockReference extends LitElement {
         padding: 1rem;
         cursor: pointer;
         border: 1px solid var(--canary-color-gray-90);
-        background-color: var(--canary-color-gray-100);
         border-radius: 0.5rem;
-        padding: 1.5rem;
+        background-color: var(--canary-color-gray-100);
+        color: var(--canary-color-gray-10);
       }
 
       .container:hover {
@@ -61,7 +71,7 @@ export class CanaryAskBlockReference extends LitElement {
       }
 
       .block-title {
-        font-size: 1.2rem;
+        font-size: 1rem;
       }
 
       .section {
@@ -71,13 +81,13 @@ export class CanaryAskBlockReference extends LitElement {
       }
 
       .section-title {
-        font-size: 1rem;
+        font-size: 0.875rem;
       }
 
       .section-excerpt {
         padding-left: 0.5rem;
         border-left: 2px solid var(--canary-color-primary-50);
-        font-size: 0.875rem;
+        font-size: 0.825rem;
       }
 
       .section-explanation {
@@ -85,7 +95,7 @@ export class CanaryAskBlockReference extends LitElement {
         gap: 8px;
         align-items: center;
         padding-left: 0.5rem;
-        font-size: 0.875rem;
+        font-size: 0.825rem;
         font-style: italic;
       }
     `,

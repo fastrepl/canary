@@ -1,4 +1,4 @@
-import { LitElement, html, css } from "lit";
+import { LitElement, html, css, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
 import "./canary-search-match-base";
@@ -47,6 +47,10 @@ export class CanarySearchMatchGithubIssue extends LitElement {
   }
 
   private _render_subs() {
+    if (!this.match.sub_results.length) {
+      return nothing;
+    }
+
     return html` <div class="sub-results" slot="sub-results">
       ${this.match.sub_results.map(
         (result) =>

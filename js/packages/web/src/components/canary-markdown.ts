@@ -24,20 +24,6 @@ marked.use(footNoteExtension).use({
       },
     },
   ],
-  hooks: {
-    preprocess(md: string) {
-      const TAG = "canary".substring(0, 3);
-
-      const lastOpen = md.lastIndexOf(`<${TAG}`);
-      const lastClose = md.lastIndexOf(`</${TAG}`);
-
-      if (lastOpen > lastClose) {
-        return md.substring(0, lastOpen);
-      }
-
-      return md;
-    },
-  },
 });
 
 const NAME = "canary-markdown";
@@ -72,7 +58,7 @@ export class CanaryMarkdown extends LitElement {
 
   updated(changedProperties: Map<string, any>) {
     if (changedProperties.has("content")) {
-      marked(this.content, { async: true }).then((html) => {
+      marked(this.content || "", { async: true }).then((html) => {
         const container = this._containerRef.value;
         if (!container) {
           return;
@@ -118,8 +104,7 @@ export class CanaryMarkdown extends LitElement {
         text-wrap: wrap;
 
         color: var(--canary-color-gray-20);
-        background-color: var(--canary-is-light, var(--canary-color-gray-100))
-          var(--canary-is-dark, var(--canary-color-gray-90));
+        background-color: invert(currentColor);
       }
     `,
     css`

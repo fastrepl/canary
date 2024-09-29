@@ -6,10 +6,6 @@ export const mockAskResponse = JSON.stringify({
   scratchpad: "thinking",
   blocks: [
     {
-      type: "text",
-      text: "**Yes.**",
-    },
-    {
       type: "reference",
       title: "title",
       url: "https://example.com/docs/a/b",

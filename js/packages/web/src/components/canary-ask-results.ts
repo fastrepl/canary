@@ -6,7 +6,6 @@ import type { ExecutionContext } from "../types";
 import { executionContext } from "../contexts";
 
 import "./canary-markdown";
-import "./canary-loading-dots";
 import "./canary-ask-response";
 
 const NAME = "canary-ask-results";

@@ -95,31 +95,37 @@ export const createStore = (host: HTMLElement) =>
       },
       set_mode: (context, { data }: { data: string }) => {
         context.mode.setValue({ ...context.mode.value, current: data });
+
+        if (data === MODE_SEARCH) {
+          context.executionManager.search(
+            context.query.value,
+            context.operation.value,
+            context.filters.value,
+          );
+        }
+        if (data === MODE_ASK) {
+          context.executionManager.ask(
+            context.query.value,
+            context.operation.value,
+            context.filters.value,
+          );
+        }
+
         return {
           mode: context.mode,
         };
       },
       set_query: (context, { data }: { data: string }) => {
         context.query.setValue(data, true);
-        const next =
-          context.mode.value.options.has(MODE_ASK) &&
-          data
-            .split(" ")
-            .map((s) => s.trim())
-            .filter(Boolean).length > 2
-            ? MODE_ASK
-            : MODE_SEARCH;
 
-        context.mode.setValue({ ...context.mode.value, current: next });
-
-        if (next === MODE_SEARCH) {
+        if (context.mode.value.current === MODE_SEARCH) {
           context.executionManager.search(
             data,
             context.operation.value,
             context.filters.value,
           );
         }
-        if (next === MODE_ASK) {
+        if (context.mode.value.current === MODE_ASK) {
           context.executionManager.ask(
             data,
             context.operation.value,

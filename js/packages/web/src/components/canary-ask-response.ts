@@ -4,8 +4,10 @@ import { customElement, property } from "lit/decorators.js";
 import type { AskResponse } from "../types";
 
 import { global } from "../styles";
+
 import "./canary-markdown";
 import "./canary-ask-block-reference";
+import "./canary-reference-skeleton";
 
 const NAME = "canary-ask-response";
 
@@ -15,6 +17,19 @@ export class CanaryAskResponse extends LitElement {
   response!: AskResponse;
 
   render() {
+    if (
+      !this.response ||
+      !this.response?.blocks ||
+      !this.response?.blocks?.length
+    ) {
+      return html`
+        <div class="container">
+          <canary-reference-skeleton></canary-reference-skeleton>
+          <canary-reference-skeleton></canary-reference-skeleton>
+        </div>
+      `;
+    }
+
     return html`
       <div class="container">
         ${this.response.blocks.map((block) => {
@@ -25,7 +40,9 @@ export class CanaryAskResponse extends LitElement {
               ></canary-ask-block-reference>
             `;
           } else {
-            return html`<div>${block.text}</div>`;
+            return html`<canary-markdown
+              .content=${block.text}
+            ></canary-markdown>`;
           }
         })}
       </div>
@@ -42,8 +59,8 @@ export class CanaryAskResponse extends LitElement {
         display: flex;
         flex-direction: column;
         gap: 12px;
-        padding: 1rem;
         background-color: var(--canary-color-gray-100);
+        margin-bottom: 6px;
       }
     `,
   ];

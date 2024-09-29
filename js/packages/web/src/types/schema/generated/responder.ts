@@ -12,48 +12,29 @@ export interface AskResponse {
   scratchpad?: string;
   blocks: (AskResponseTextBlock | AskResponseReferenceBlock)[];
 }
-/**
- * A block containing markdown-formatted text. MUST followed by one or several reference blocks. At least one text block is required since you should answer the user's question anyway.
- */
 export interface AskResponseTextBlock {
   type: "text";
-  /**
-   * Markdown-formatted text.
-   */
   text: string;
 }
-/**
- * A block containing a reference to a source.
- */
 export interface AskResponseReferenceBlock {
   type: "reference";
-  /**
-   * Title copied from the document.
-   */
   title: string;
-  /**
-   * URL copied from the document.
-   */
   url: string;
   /**
-   * An array of relevant sections inside a single document.
+   * @minItems 1
    */
-  sections: {
-    /**
-     * Title copied from the document. Can be omitted or empty.
-     */
-    title?: string;
-    /**
-     * URL copied from the document. Can be omitted or empty.
-     */
-    url?: string;
-    /**
-     * A relevant excerpt from the section. Since scraped source can be messy, it is encouraged to fix formatting or remove odd words as you transcribe, but you should not change the content.
-     */
-    excerpt: string;
-    /**
-     * An explanation of how the excerpt relates to the query. Should be concise and strictly fact-based.
-     */
-    explanation: string;
-  }[];
+  sections: [
+    {
+      title?: string;
+      url?: string;
+      excerpt: string;
+      explanation: string;
+    },
+    ...{
+      title?: string;
+      url?: string;
+      excerpt: string;
+      explanation: string;
+    }[]
+  ];
 }

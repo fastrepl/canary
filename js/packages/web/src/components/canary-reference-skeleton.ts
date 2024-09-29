@@ -11,7 +11,7 @@ export class CanaryReferenceSkeleton extends LitElement {
 
   static styles = css`
     .skeleton {
-      height: 50px;
+      height: 100px;
       border: none;
       border-radius: 8px;
       padding: 12px 16px;
