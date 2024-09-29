@@ -9,9 +9,10 @@ export function cache<T extends (...args: any[]) => any>(fn: T): T {
     }
 
     const result = fn(...args);
-    if (result) {
-      _cache.set(key, result);
-    }
+    _cache.set(key, result);
+    Promise.resolve(result).catch(() => {
+      _cache.delete(key);
+    });
 
     return result;
   }) as T;
