@@ -50,7 +50,7 @@ defmodule Canary.Query.Understander.LLM do
 
     args = %{model: chat_model, messages: messages, temperature: 0}
 
-    case Canary.AI.chat(args, timeout: 2_000) do
+    case Canary.AI.chat(args, timeout: 3_000) do
       {:ok, completion} ->
         parsed = parse(completion, max: 5)
 

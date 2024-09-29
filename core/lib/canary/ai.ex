@@ -67,7 +67,7 @@ defmodule Canary.AI.OpenAI do
       retry with: exponential_backoff() |> randomize |> cap(1_000) |> expiry(4_000) do
         client()
         |> Req.post(
-          url: "/v1/chat/completions",
+          url: "/chat/completions",
           json: request,
           into: into,
           receive_timeout: opts[:timeout] || 15_000

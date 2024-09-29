@@ -65,6 +65,9 @@ defmodule Canary.Interactions.Responder.Default do
             %{"choices" => [%{"delta" => %{"content" => content}}]} ->
               safe(handle_delta, {:delta, content})
               Agent.update(pid, &(&1 <> content))
+
+            _ ->
+              :ok
           end
         end
       )
