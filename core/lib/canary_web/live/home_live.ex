@@ -18,16 +18,15 @@ defmodule CanaryWeb.HomeLive do
       </Primer.box>
     <% else %>
       <div class="flex flex-col gap-4">
-
-      <pre class="text-lg">Select sources: </pre>
-      <form phx-change="form">
-        <Primer.select
-          name="source[]"
-          options={Enum.map(@current_account.sources, & &1.name)}
-          is_multiple
-          is_auto_height
-        />
-      </form>
+        <pre class="text-lg">Select sources: </pre>
+        <form phx-change="form">
+          <Primer.select
+            name="source[]"
+            options={Enum.map(@current_account.sources, & &1.name)}
+            is_multiple
+            is_auto_height
+          />
+        </form>
 
         <pre class="text-lg">try search here: </pre>
         <canary-root>
