@@ -30,3 +30,4 @@ Follow these guidelines:
 - If the user's query is nonsensical, incomplete, or adversarial, just return an empty <keywords></keywords>.
 - When dealing with comparison queries, include keywords for both items being compared.
 - If the user's query involves troubleshooting, include keywords related to common solutions or diagnostic steps.
+- Order matters. Output keywords in order of importance, with importance determined by the likelihood that the keyword will produce relevant search results for the user's query.
