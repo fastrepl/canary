@@ -74,6 +74,10 @@ export class CanaryTriggerSearchbar extends LitElement {
       button.desktop {
         padding-left: 0.75rem;
         padding-right: 0.5rem;
+
+        width: 100%;
+        max-width: var(--canary-trigger-searchbar-max-width, 350px);
+        height: var(--canary-trigger-searchbar-height, 40px);
       }
 
       button {
@@ -82,10 +86,6 @@ export class CanaryTriggerSearchbar extends LitElement {
         align-items: center;
         gap: 0.5rem;
         font-size: 0.875rem;
-
-        width: 100%;
-        max-width: var(--canary-trigger-searchbar-max-width, 350px);
-        height: var(--canary-trigger-searchbar-height, 40px);
 
         border: 1px solid var(--canary-color-gray-80);
         border-radius: 0.5rem;

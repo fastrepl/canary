@@ -11,6 +11,8 @@ enum Kind {
   Searchbar_Cmdk,
   Searchbar_Slash,
   Searchbar_Placements,
+  Searchbar_Desktop,
+  Searchbar_Mobile,
 }
 
 export default {
@@ -65,6 +67,12 @@ export default {
       `;
     }
 
+    if (kind === Kind.Searchbar_Desktop || kind === Kind.Searchbar_Mobile) {
+      return html`
+        <canary-trigger-searchbar shortcut="slash"></canary-trigger-searchbar>
+      `;
+    }
+
     throw new Error();
   },
 } satisfies Meta<{ kind: Kind }>;
@@ -98,4 +106,14 @@ export const Searchbar_Placements: StoryObj = {
       "canary-trigger-searchbar-max-width": { value: "300px" },
     },
   },
+};
+
+export const Searchbar_Desktop: StoryObj = {
+  args: { kind: Kind.Searchbar_Desktop },
+  parameters: { viewport: { defaultViewport: "desktop", disable: false } },
+};
+
+export const Searchbar_Mobile: StoryObj = {
+  args: { kind: Kind.Searchbar_Mobile },
+  parameters: { viewport: { defaultViewport: "mobile1", disable: false } },
 };
