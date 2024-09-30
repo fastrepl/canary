@@ -4,18 +4,21 @@ export default function Canary({ options }) {
   const [loaded, setLoaded] = React.useState(false);
 
   React.useEffect(() => {
-    Promise.all([
-      import("@getcanary/web/components/canary-root"),
-      import("@getcanary/web/components/canary-provider-pagefind"),
-      import("@getcanary/web/components/canary-modal"),
-      import("@getcanary/web/components/canary-trigger-searchbar"),
-      import("@getcanary/web/components/canary-content"),
-      import("@getcanary/web/components/canary-search"),
-      import("@getcanary/web/components/canary-search-input"),
-      options?.tabs?.length
-        ? import("@getcanary/web/components/canary-search-results-tabs")
-        : import("@getcanary/web/components/canary-search-results"),
-    ])
+    Promise.all(
+      [
+        import("@getcanary/web/components/canary-root"),
+        import("@getcanary/web/components/canary-provider-pagefind"),
+        import("@getcanary/web/components/canary-modal"),
+        import("@getcanary/web/components/canary-trigger-searchbar"),
+        import("@getcanary/web/components/canary-input"),
+        import("@getcanary/web/components/canary-content"),
+        import("@getcanary/web/components/canary-search"),
+        import("@getcanary/web/components/canary-search-results"),
+        options?.tabs?.length
+          ? import("@getcanary/web/components/canary-filter-tabs-glob")
+          : null,
+      ].filter(Boolean),
+    )
       .then(() => setLoaded(true))
       .catch((e) =>
         console.error("Maybe you forgot to install '@getcanary/web'?", e),
@@ -32,29 +35,15 @@ export default function Canary({ options }) {
         <canary-modal>
           <canary-trigger-searchbar slot="trigger"></canary-trigger-searchbar>
           <canary-content slot="content">
+            <canary-input slot="input"></canary-input>
             <canary-search slot="mode">
-              <canary-search-input slot="input"></canary-search-input>
               {options?.tabs?.length ? (
-                options?.group ? (
-                  <canary-search-results-tabs
-                    slot="body"
-                    tabs={JSON.stringify(options.tabs)}
-                    group
-                  ></canary-search-results-tabs>
-                ) : (
-                  <canary-search-results-tabs
-                    slot="body"
-                    tabs={JSON.stringify(options.tabs)}
-                  ></canary-search-results-tabs>
-                )
-              ) : options?.group ? (
-                <canary-search-results
-                  slot="body"
-                  group
-                ></canary-search-results>
-              ) : (
-                <canary-search-results slot="body"></canary-search-results>
-              )}
+                <canary-filter-tabs-glob
+                  slot="head"
+                  tabs={JSON.stringify(options.tabs)}
+                ></canary-filter-tabs-glob>
+              ) : null}
+              <canary-search-results slot="body"></canary-search-results>
             </canary-search>
           </canary-content>
         </canary-modal>

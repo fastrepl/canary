@@ -4,9 +4,17 @@ import path from "path";
 import { getFilePaths } from "./utils";
 import { buildIndex } from "./pagefind";
 
+/**
+ * @typedef {import("@docusaurus/types").Plugin} Plugin
+ * @typedef {import("webpack").Configuration} WebpackConfiguration
+ */
+
 export default function plugin(context, options) {
   const { indexOnly = false } = options;
 
+  /**
+   * @type {Plugin}
+   */
   const config = {
     name: "docusaurus-theme-search-pagefind",
     async contentLoaded({ actions }) {
@@ -16,6 +24,9 @@ export default function plugin(context, options) {
       const docs = getFilePaths(routesPaths, outDir, baseUrl, options);
       await buildIndex(outDir, docs);
     },
+    /**
+     * @returns {WebpackConfiguration}
+     */
     configureWebpack(config, isServer, utils) {
       return {
         devServer: {
