@@ -128,6 +128,32 @@ watch(sourceGroup, () => {
       </canary-content>
     </canary-provider-cloud>
   </canary-root>
+
+
+  <template v-if="tab === 'Code'">
+
+  <Markdown>
+
+```html-vue{5-11}
+<canary-root framework="vitepress">
+  <canary-provider-cloud api-base="<API_BASE>" api-key="<API_KEY>">
+    <canary-content>
+      <canary-input slot="input"></canary-input>
+      <canary-search slot="mode">
+        <canary-filter-tabs-glob slot="head" tabs={JSON.stringify(tabs)}></canary-filter-tabs-glob>
+        <canary-search-results slot="body"></canary-search-results>
+      </canary-search>
+      <canary-ask slot="mode">
+        <canary-ask-results slot="body"></canary-ask-results>
+      </canary-ask>
+    </canary-content>
+  </canary-provider-cloud>
+</canary-root>
+```
+
+  </Markdown>
+
+  </template>
 </div>
 
 <style scoped>

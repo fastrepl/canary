@@ -1,6 +1,6 @@
-# Not everyone needs a hosted service.
+# Using Canary with local search index
 
-You can just use keyword-based search locally, and **still benefit from our composable components.**
+If you're working on a small side project or documentation, a local search index like `Pagefind` may suffice. You can run keyword-based searches locally and **still benefit from our composable components.**
 
 | Feature  |            Local            |           Cloud            |
 | -------- | :-------------------------: | :------------------------: |

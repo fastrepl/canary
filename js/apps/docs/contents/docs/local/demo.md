@@ -124,24 +124,6 @@ watch(source, () => {
 
 :::
 
-::: details Where did the source come from?
-
-- [docs.litellm.ai](https://docs.litellm.ai)
-- [docs.mistral.ai](https://docs.mistral.ai)
-- [prisma.io/docs](https://prisma.io/docs)
-
-:::
-
-::: details What is `provider`?
-
-`Provider` registers operations like `search`.
-
-You can swap out the provider and keep the same UI.
-
-Click **Code** tab to read the code.
-
-:::
-
 <div class="mt-6 flex flex-col gap-2">
   <hr class="my-1" />
   <div class="flex flex-row gap-4 items-center">
@@ -159,7 +141,7 @@ Click **Code** tab to read the code.
 <div class="container flex flex-col gap-2 mt-4" v-if="loaded">
   <Tabs :values="tabs" :selected="tab" @update:selected="tab = $event" />
 
-  <canary-root framework="vitepress" :key="question" :query="question">
+  <canary-root framework="vitepress" :key="question" :query="question" v-show="tab === 'UI'">
     <canary-provider-pagefind :options="pagefindOptions">
       <canary-content>
         <canary-input slot="input"></canary-input>
@@ -172,16 +154,17 @@ Click **Code** tab to read the code.
     </canary-provider-pagefind>
   </canary-root>
 
-  <template v-if="mode === 'Code'">
+  <template v-if="tab === 'Code'">
 
   <Markdown>
 
-```html-vue{4-7}
+```html-vue{5-8}
 <canary-root framework="vitepress">
   <canary-provider-pagefind options={JSON.stringify(options)}>
     <canary-content>
       <canary-input slot="input"></canary-input>
       <canary-search slot="mode">
+        <canary-filter-tabs-glob slot="head" tabs={JSON.stringify(tabs)}></canary-filter-tabs-glob>
         <canary-search-results slot="body"></canary-search-results>
       </canary-search>
     </canary-content>

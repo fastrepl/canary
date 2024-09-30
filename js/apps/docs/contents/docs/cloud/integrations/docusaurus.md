@@ -1,7 +1,5 @@
 # Docusaurus
 
-<!--@include: ../callout.md-->
-
 ## Installation
 
 ::: tip

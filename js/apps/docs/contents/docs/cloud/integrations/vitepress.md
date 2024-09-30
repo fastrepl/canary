@@ -1,7 +1,5 @@
 # VitePress
 
-<!--@include: ../callout.md-->
-
 ## Three steps to integrate
 
 ### Step 1: Install `@getcanary/web`
