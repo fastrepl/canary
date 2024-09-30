@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { data } from "../data/url_cloud.data.js";
+import ButtonGroup from "../components/ButtonGroup.vue";
 
 const loaded = ref(false);
 
@@ -18,7 +19,7 @@ onMounted(() => {
 });
 
 const sources = ["canary_webpage"];
-const questions = ["provider", "how to switch provider"];
+const questions = ["how to change overall mood?", "dddoccsarusaurs supported?"];
 
 const question = ref(questions[0]);
 const counter = ref(0);
@@ -31,15 +32,8 @@ const handleSelect = (q: string) => {
 
 <template>
   <div class="my-2">
-    <div class="flex flex-row gap-2 mb-4 text-xs">
-      <button
-        class="btn"
-        v-on:click="handleSelect(q)"
-        :key="q"
-        v-for="q in questions"
-      >
-        {{ q }}
-      </button>
+    <div class="my-2">
+      <ButtonGroup :values="questions" @update:selected="handleSelect" />
     </div>
 
     <canary-root
@@ -65,22 +59,6 @@ const handleSelect = (q: string) => {
 </template>
 
 <style scoped>
-.btn {
-  padding: 2px 8px;
-  border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
-  background-color: var(--vp-c-bg);
-  color: var(--vp-c-text-1);
-
-  max-width: 130px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.btn:hover {
-  background-color: var(--vp-c-brand-soft);
-}
-
 canary-root {
   --canary-content-max-width: 650px;
   --canary-content-max-height: 300px;

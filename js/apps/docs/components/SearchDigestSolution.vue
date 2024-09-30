@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { data } from "../data/url_cloud.data.js";
+import ButtonGroup from "../components/ButtonGroup.vue";
 
 const loaded = ref(false);
 
@@ -30,8 +31,8 @@ const tabs = JSON.stringify([
 ]);
 
 const questions = [
-  "docusaurus integration",
-  "how to use canary local search this with vitepress",
+  "css variable for changing hue?",
+  "how to generate pagefind index in docusaurus?",
 ];
 
 const question = ref(questions[0]);
@@ -45,15 +46,8 @@ const handleSelect = (q: string) => {
 
 <template>
   <div class="my-2">
-    <div class="flex flex-row gap-2 mb-4 text-xs">
-      <button
-        class="btn"
-        v-on:click="handleSelect(q)"
-        :key="q"
-        v-for="q in questions"
-      >
-        {{ q }}
-      </button>
+    <div class="my-2">
+      <ButtonGroup :values="questions" @update:selected="handleSelect" />
     </div>
 
     <canary-root

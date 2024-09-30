@@ -1,0 +1,29 @@
+- `canary-ask-results`
+  - `container`
+- `canary-content`
+  - `container`
+- `canary-filter-tabs-glob`
+  - `container`
+- `canary-input`
+  - `container`
+  - `input`
+- `canary-search`
+  - `body`
+  - `container`
+  - `head`
+  - `scroll-container`
+- `canary-search-match`
+  - `match-group`
+- `canary-search-match-base`
+  - `container`
+- `canary-search-match-github-discussion`
+  - `container`
+- `canary-search-match-github-issue`
+  - `container`
+- `canary-search-match-webpage`
+  - `container`
+- `canary-trigger-searchbar`
+  - `button`
+  - `icon`
+  - `kbd`
+  - `text`

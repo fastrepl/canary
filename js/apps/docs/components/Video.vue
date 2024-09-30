@@ -1,6 +1,7 @@
 <script>
 import "@mux/mux-player";
 import { data } from "../data/mux_video.data.js";
+import "@getcanary/web/components/canary-styles.js";
 
 export default {
   name: "Video",
@@ -28,11 +29,21 @@ export default {
 </script>
 
 <template>
-  <mux-player
-    controls
-    :playback-id="id"
-    :style="{ 'aspect-ratio': videoData.aspectRatio }"
-  >
-    <img slot="poster" :src="videoData.posterUrl" :style="posterStyle" />
-  </mux-player>
+  <canary-styles>
+    <mux-player
+      controls
+      :playback-id="id"
+      :style="{ 'aspect-ratio': videoData.aspectRatio }"
+      accent-color="var(--canary-color-primary-80)"
+    >
+      <img slot="poster" :src="videoData.posterUrl" :style="posterStyle" />
+    </mux-player>
+  </canary-styles>
 </template>
+
+<style scoped>
+canary-styles {
+  --canary-color-primary-c: 0.05;
+  --canary-color-primary-h: 90;
+}
+</style>

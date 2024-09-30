@@ -70,7 +70,7 @@ And this leads to bunch of support questions like:
   right="we <strong>already have docs</strong> for that. (readthemanual.com/<strong>budget</strong>-and-rate-limits) 👤"
 />
 
-::: warning With Canary ↓
+::: warning With Canary, keywords are "inferred" ↓
 
 <KeywordSearchSolution />
 
@@ -83,7 +83,7 @@ This can be very time-consuming and frustrating.
 
 <SearchDigestProblem v-bind="searchDisgestProblemExample" />
 
-::: warning With Canary ↓
+::: warning With Canary question is "answered" with reference ↓
 
 <SearchDigestSolution />
 

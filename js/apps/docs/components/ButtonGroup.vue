@@ -13,7 +13,6 @@ const emit = defineEmits<{
     <button
       v-for="current in values"
       :key="current"
-      class="tag"
       @click="$emit('update:selected', current)"
     >
       {{ current }}
@@ -22,18 +21,19 @@ const emit = defineEmits<{
 </template>
 
 <style scoped>
-button.tag {
+button {
   font-size: 0.875rem;
   border: 1px solid var(--vp-c-divider);
   padding: 4px 12px;
   border-radius: 1rem;
+  background-color: var(--vp-c-bg);
 
   max-width: 210px;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
 }
-button.tag:hover {
+button:hover {
   background-color: var(--vp-c-brand-soft);
   opacity: 0.8;
 }

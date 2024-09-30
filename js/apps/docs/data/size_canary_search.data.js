@@ -4,9 +4,9 @@ const components = [
   "@getcanary/web@latest/components/canary-provider-cloud.js",
   "@getcanary/web@latest/components/canary-modal.js",
   "@getcanary/web@latest/components/canary-trigger-searchbar.js",
+  "@getcanary/web@latest/components/canary-input.js",
   "@getcanary/web@latest/components/canary-content.js",
   "@getcanary/web@latest/components/canary-search.js",
-  "@getcanary/web@latest/components/canary-input.js",
   "@getcanary/web@latest/components/canary-search-results.js",
 ];
 

@@ -185,5 +185,7 @@ watch(sourceGroup, () => {
 canary-root {
   --canary-content-max-width: 690px;
   --canary-content-max-height: 500px;
+  --canary-color-primary-c: 0.05;
+  --canary-color-primary-h: 90;
 }
 </style>
