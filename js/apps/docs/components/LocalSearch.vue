@@ -14,6 +14,7 @@ onMounted(() => {
     import("@getcanary/web/components/canary-input.js"),
     import("@getcanary/web/components/canary-search.js"),
     import("@getcanary/web/components/canary-search-results.js"),
+    import("@getcanary/web/components/canary-filter-tabs-glob.js"),
   ]).then(() => {
     loaded.value = true;
   });
@@ -37,6 +38,10 @@ const tabs = JSON.stringify([
           <canary-content slot="content">
             <canary-input slot="input" autofocus></canary-input>
             <canary-search slot="mode">
+              <canary-filter-tabs-glob
+                slot="head"
+                :tabs="tabs"
+              ></canary-filter-tabs-glob>
               <canary-search-results slot="body"></canary-search-results>
             </canary-search>
           </canary-content>

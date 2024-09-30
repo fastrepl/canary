@@ -14,7 +14,6 @@ onMounted(() => {
     import("@getcanary/web/components/canary-input.js"),
     import("@getcanary/web/components/canary-search.js"),
     import("@getcanary/web/components/canary-search-results.js"),
-    import("@getcanary/web/components/canary-search-suggestions.js"),
     import("@getcanary/web/components/canary-callout-discord.js"),
     import("@getcanary/web/components/canary-ask.js"),
     import("@getcanary/web/components/canary-ask-results.js"),
@@ -26,9 +25,10 @@ onMounted(() => {
 });
 
 const tabs = JSON.stringify([
-  { name: "All", pattern: "**/*" },
+  { name: "Docs", pattern: "**/*" },
   { name: "Local", pattern: "**/local/**" },
   { name: "Cloud", pattern: "**/cloud/**" },
+  { name: "Github", pattern: "**/github.com/**" },
 ]);
 const sources = ["canary_webpage", "canary_issue"];
 </script>
@@ -47,21 +47,21 @@ const sources = ["canary_webpage", "canary_issue"];
             <canary-input slot="input" autofocus></canary-input>
             <canary-search slot="mode">
               <canary-callout-discord
-                slot="body"
+                slot="head"
                 url="https://discord.gg/Y8bJkzuQZU"
               ></canary-callout-discord>
               <canary-filter-tabs-glob
-                slot="body"
+                slot="head"
                 :tabs="tabs"
               ></canary-filter-tabs-glob>
-              <canary-search-suggestions
-                slot="body"
-              ></canary-search-suggestions>
               <canary-search-results
                 slot="body"
                 :tabs="tabs"
               ></canary-search-results>
             </canary-search>
+            <canary-ask slot="mode">
+              <canary-ask-results slot="body"></canary-ask-results>
+            </canary-ask>
           </canary-content>
         </canary-modal>
       </canary-provider-cloud>

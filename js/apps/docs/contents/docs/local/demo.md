@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { onMounted, computed, ref, watch } from "vue";
 
+import Radio from "../../../components/Radio.vue";
+import Tabs from "../../../components/Tabs.vue";
+import ButtonGroup from "../../../components/ButtonGroup.vue";
 import Markdown from "../../../components/Markdown.vue";
 
 const sources = ["litellm", "mistral", "prisma"] as const;
@@ -44,8 +47,6 @@ const globs = computed(() => {
       { name: "Pulse", pattern: "**/pulse/**" }
     ];
   }
-
-  throw new Error();
 });
 
 
@@ -78,17 +79,40 @@ onMounted(() => {
     loaded.value = true;
   });
 });
+
+const question = ref("");
+const questions = ref([]);
+
+watch(source, () => {
+  if (source.value === "litellm") {
+    question.value = "litellm";
+    questions.value = [
+      "litellm",
+      "rate"
+    ];
+  }
+
+  if (source.value === "mistral") {
+    question.value = "mistral";
+    questions.value = [
+      "mistral"
+    ];
+  }
+
+  if (source.value === "prisma") {
+    question.value = "prisma";
+    questions.value = [
+      "prisma"
+    ];
+  }
+}, { immediate: true });
 </script>
 
 # Local Search Demo
 
-`🐤 Canary X Pagefind` for `Litellm`, `Mistral`, and `Prisma`.
-
-::: warning
+::: tip INFO
 
 **We are not affiliated** with any of the projects listed here, and the list might change over time.
-
-This is only for demo purposes.
 
 :::
 
@@ -118,31 +142,24 @@ Click **Code** tab to read the code.
 
 :::
 
-<div class="flex flex-col gap-4 mt-6">
-  <div class="flex gap-2 items-center">
-    <button
-      v-for="current in sources"
-      :class="{ tag: true, selected: source === current }"
-      @click="source = current"
-    >
-      {{ current }}
-    </button>
+<div class="mt-6 flex flex-col gap-2">
+  <hr class="my-1" />
+  <div class="flex flex-row gap-4 items-center">
+    <span class="text-sm font-semibold">Sources</span>
+    <Radio :values="sources" :selected="source" @update:selected="source = $event" />
   </div>
+  <hr class="my-1" />
+  <div class="flex flex-row gap-4 items-center">
+    <span class="text-sm font-semibold">Examples</span>
+    <ButtonGroup :values="questions" @update:selected="question = $event" />
+  </div>
+  <hr class="my-1" />
 </div>
 
-<div class="container flex flex-col gap-2 mt-6" v-if="loaded">
-  <div class="flex gap-2 text-sm font-semibold">
-    <button
-      v-for="current in tabs"
-      class="hover:underline"
-      :class="{ underline: tab === current }"
-      @click="tab = current"
-    >
-      {{ current }}
-    </button>
-  </div>
+<div class="container flex flex-col gap-2 mt-4" v-if="loaded">
+  <Tabs :values="tabs" :selected="tab" @update:selected="tab = $event" />
 
-  <canary-root framework="vitepress" :key="source" :query="source" v-show="tab === 'UI'">
+  <canary-root framework="vitepress" :key="question" :query="question">
     <canary-provider-pagefind :options="pagefindOptions">
       <canary-content>
         <canary-input slot="input"></canary-input>
@@ -180,21 +197,6 @@ Click **Code** tab to read the code.
 <style scoped>
 .container {
   height: 500px;
-}
-
-button.tag {
-  font-size: 0.875rem;
-  border: 1px solid var(--vp-c-divider);
-  padding: 4px 12px;
-  border-radius: 1rem;
-}
-button.tag:hover {
-  background-color: var(--vp-c-brand-soft);
-  opacity: 0.8;
-}
-
-button.tag.selected {
-  background-color: var(--vp-c-brand-soft);
 }
 
 canary-root {

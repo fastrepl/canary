@@ -123,10 +123,6 @@ const sidebar = [
     collapsed: false,
     items: [
       {
-        text: "API",
-        link: "/docs/reference/api",
-      },
-      {
         text: "Packages",
         link: "/docs/reference/packages",
       },
