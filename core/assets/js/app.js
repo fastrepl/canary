@@ -27,7 +27,7 @@ import * as Components from "../svelte/**/*.svelte";
 import { format } from "timeago.js";
 import ClipboardJS from "clipboard";
 import Chart from "chart.js/auto";
-import { parse } from 'best-effort-json-parser'
+import { parse } from "best-effort-json-parser";
 
 import "@getcanary/web/components/canary-root.js";
 import "@getcanary/web/components/canary-provider-cloud.js";

@@ -118,6 +118,7 @@ export class CanaryInput extends LitElement {
     if (
       e.key === "Tab" &&
       this._mode?.current === MODE_SEARCH &&
+      this._mode?.options.has(MODE_ASK) &&
       this._is_question(this._query)
     ) {
       e.preventDefault();
