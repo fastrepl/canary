@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { defineProps, defineEmits } from "vue";
-
 const props = defineProps<{
   values: readonly string[];
   selected: string;

@@ -1,7 +1,18 @@
 <script>
-import "@mux/mux-player";
+import { onMounted, ref } from "vue";
 import { data } from "../data/mux_video.data.js";
-import "@getcanary/web/components/canary-styles.js";
+
+import "@mux/mux-player";
+
+const loaded = ref(false);
+
+onMounted(() => {
+  Promise.all([import("@getcanary/web/components/canary-styles.js")]).then(
+    () => {
+      loaded.value = true;
+    },
+  );
+});
 
 export default {
   name: "Video",
@@ -29,7 +40,7 @@ export default {
 </script>
 
 <template>
-  <canary-styles>
+  <canary-styles v-if="loaded">
     <mux-player
       controls
       :playback-id="id"
