@@ -87,7 +87,7 @@ defmodule Canary.MixProject do
       {:absinthe_client, "~> 0.1.0"},
       {:cloak, "~> 1.1"},
       {:ash_cloak, "~> 0.1.2"},
-      {:primer_live, "~> 0.7"},
+      {:primer_live, "~> 0.8"},
       {:honeybadger, "~> 0.16"},
       {:hop, "~> 0.1"},
       {:ex_json_schema, "~> 0.10"}
