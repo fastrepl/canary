@@ -8,7 +8,7 @@ You can just use keyword-based search locally, and **still benefit from our comp
 | `Ask AI` |             `X`             |            `O`             |
 
 ::: tip
-Wanna try it out? We made a [playground](/docs/local/playground) for you!
+Wanna try it out? We made a [demo](/docs/local/demo) for you!
 :::
 
 ## Any documentation & Any search index

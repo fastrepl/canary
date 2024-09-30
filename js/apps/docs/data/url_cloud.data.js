@@ -6,8 +6,8 @@ export default {
           key: process.env.CANARY_API_KEY,
         }
       : {
-          base: "http://localhost:4000",
-          key: process.env.CANARY_API_KEY,
+          base: "https://cloud.getcanary.dev",
+          key: "uHH8gCOBQxBW_LYBq59DtGetN9ivlNo-",
         };
   },
 };

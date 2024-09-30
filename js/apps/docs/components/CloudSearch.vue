@@ -34,7 +34,7 @@ const sources = ["canary_webpage", "canary_issue"];
 </script>
 
 <template>
-  <div class="w-full max-w-[230px] pl-4 mr-auto" v-if="loaded">
+  <div class="w-full max-w-[300px] pl-4 mr-auto" v-if="loaded">
     <canary-root framework="vitepress">
       <canary-provider-cloud
         :api-key="data.key"

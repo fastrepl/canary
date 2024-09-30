@@ -36,14 +36,14 @@ const hue = ref(250);
 const match = {
   type: "webpage",
   meta: {},
-  url: "https://example.com",
-  title: "Title",
-  excerpt: "This is a mock excerpt for webpage.",
+  url: "https://example.com/demo/styling",
+  title: "Page Title",
+  excerpt: "This is <mark>a match</mark>..",
   sub_results: [
     {
-      title: "Page sub title 1",
+      title: "Page Subtitle",
       url: "https://example.com/a#sub-1",
-      excerpt: "this is <mark>a match</mark>.",
+      excerpt: "This is <mark>a match</mark>.",
     },
   ],
 };
@@ -75,7 +75,7 @@ const match = {
     </div>
 
     <canary-root framework="vitepress">
-      <canary-search-match match="match"></canary-search-match>
+      <canary-search-match :match="match"></canary-search-match>
     </canary-root>
   </div>
 </template>

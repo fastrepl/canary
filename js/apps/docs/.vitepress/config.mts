@@ -52,12 +52,12 @@ const sidebar = [
     text: "Local",
     items: [
       {
-        text: "Introduction",
-        link: "/docs/local/intro",
+        text: "Demo",
+        link: "/docs/local/demo",
       },
       {
-        text: "Playground",
-        link: "/docs/local/playground",
+        text: "Introduction",
+        link: "/docs/local/intro",
       },
       {
         text: "Integrations",
@@ -87,12 +87,12 @@ const sidebar = [
     text: "Cloud",
     items: [
       {
-        text: "Introduction",
-        link: "/docs/cloud/intro",
+        text: "Demo",
+        link: "/docs/cloud/demo",
       },
       {
-        text: "Playground",
-        link: "/docs/cloud/playground",
+        text: "Introduction",
+        link: "/docs/cloud/intro",
       },
       {
         text: "Integrations",
@@ -183,10 +183,6 @@ export default defineConfig({
       {
         text: "Discord",
         link: "https://discord.gg/Y8bJkzuQZU",
-      },
-      {
-        text: "Status",
-        link: "https://status.getcanary.dev",
       },
     ],
     sidebar: {

@@ -75,7 +75,7 @@ const config = {
         indexOnly: false, // [!code ++]
         includeRoutes: ["**/*"], // [!code ++]
         excludeRoutes: ['/api/**'], // [!code ++]
-        // https://getcanary.dev/docs/local/playground // [!code ++]
+        // https://getcanary.dev/docs/local/demo // [!code ++]
         group: false, // [!code ++]
         tabs: [], // [!code ++]
       },

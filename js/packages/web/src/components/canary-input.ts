@@ -110,7 +110,7 @@ export class CanaryInput extends LitElement {
   }
 
   private _handleKeyDown(e: KeyboardEvent) {
-    if (e.key === "Backspace" && this._mode?.current === MODE_ASK) {
+    if (this._mode?.current === MODE_ASK) {
       e.preventDefault();
       this.dispatchEvent(createEvent({ type: "set_mode", data: MODE_SEARCH }));
     }
@@ -175,6 +175,7 @@ export class CanaryInput extends LitElement {
         align-items: center;
         gap: 4px;
         font-size: 0.7rem;
+        line-height: 1;
       }
       .action span {
         line-height: 1;

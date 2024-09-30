@@ -1,7 +1,17 @@
-import { defineConfig, presetUno } from "unocss";
+import { defineConfig } from "unocss";
+import presetWind from "@unocss/preset-wind";
+import presetIcons from "@unocss/preset-icons";
 
 export default defineConfig({
-  presets: [presetUno()],
+  presets: [
+    presetWind({ important: true }),
+    presetIcons({
+      collections: {
+        heroicons: () =>
+          import("@iconify-json/heroicons/icons.json").then((i) => i.default),
+      },
+    }),
+  ],
   theme: {
     colors: {
       primary: {

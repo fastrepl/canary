@@ -1,11 +1,7 @@
 <script setup lang="ts">
 import { onMounted, computed, ref, watch } from "vue";
 
-import StyleController from "../../../components/StyleController.vue";
 import Markdown from "../../../components/Markdown.vue";
-
-const modes = ["UI", "Code"] as const;
-const mode = ref(modes[0]);
 
 const sources = ["litellm", "mistral", "prisma"] as const;
 const source = ref<(typeof sources)[number]>(sources[0]);
@@ -25,7 +21,7 @@ const sourceData: Record<typeof sources, any> = {
   },
 };
 
-const tabs = computed(() => {
+const globs = computed(() => {
   if (source.value === "litellm") {
     return [
       { name: "All", pattern: "**/*" },
@@ -52,10 +48,6 @@ const tabs = computed(() => {
   throw new Error();
 });
 
-const variants = ref({
-  group: false,
-  split: false,
-});
 
 const pagefindOptions = computed(() => ({
   _base: sourceData[source.value].base,
@@ -63,8 +55,12 @@ const pagefindOptions = computed(() => ({
   path: `https://hosted-pagefind.pages.dev/static/${source.value}/pagefind/pagefind.js`,
 }));
 
+
+const tabs = ["UI", "Code"] as const;
+const tab = ref(tabs[0]);
+
 watch(source, () => {
-  mode.value = modes[0];
+  tab.value = tabs[0];
 });
 
 const loaded = ref(false);
@@ -73,10 +69,9 @@ onMounted(() => {
   Promise.all([
     import("@getcanary/web/components/canary-root.js"),
     import("@getcanary/web/components/canary-provider-pagefind.js"),
+    import("@getcanary/web/components/canary-input.js"),
     import("@getcanary/web/components/canary-content.js"),
     import("@getcanary/web/components/canary-search.js"),
-    import("@getcanary/web/components/canary-input.js"),
-    import("@getcanary/web/components/canary-search-results.js"),
     import("@getcanary/web/components/canary-search-results.js"),
     import("@getcanary/web/components/canary-filter-tabs-glob.js"),
   ]).then(() => {
@@ -85,9 +80,17 @@ onMounted(() => {
 });
 </script>
 
-# Local Search Playground
+# Local Search Demo
 
 `🐤 Canary X Pagefind` for `Litellm`, `Mistral`, and `Prisma`.
+
+::: warning
+
+**We are not affiliated** with any of the projects listed here, and the list might change over time.
+
+This is only for demo purposes.
+
+:::
 
 ::: details How does it work?
 
@@ -117,7 +120,6 @@ Click **Code** tab to read the code.
 
 <div class="flex flex-col gap-4 mt-6">
   <div class="flex gap-2 items-center">
-    <span class="text-sm">Source</span>
     <button
       v-for="current in sources"
       :class="{ tag: true, selected: source === current }"
@@ -126,46 +128,28 @@ Click **Code** tab to read the code.
       {{ current }}
     </button>
   </div>
-
-  <div class="flex gap-2 items-center">
-    <span class="text-sm">Variant</span>
-    <button
-      v-for="current in Object.keys(variants)"
-      :class="{ tag: true, selected: variants[current] }"
-      @click="variants[current] = !variants[current]"
-    >
-      {{ current }}
-    </button>
-  </div>
-
-  <div class="flex gap-2">
-    <span class="text-sm">Color</span>
-    <StyleController :selector="`canary-root`" />
-  </div>
 </div>
 
 <div class="container flex flex-col gap-2 mt-6" v-if="loaded">
   <div class="flex gap-2 text-sm font-semibold">
     <button
-      v-for="current in modes"
+      v-for="current in tabs"
       class="hover:underline"
-      :class="{ underline: mode === current }"
-      @click="mode = current"
+      :class="{ underline: tab === current }"
+      @click="tab = current"
     >
       {{ current }}
     </button>
   </div>
 
-  <canary-root framework="vitepress" :key="source" :query="source" v-show="mode === 'UI'">
+  <canary-root framework="vitepress" :key="source" :query="source" v-show="tab === 'UI'">
     <canary-provider-pagefind :options="pagefindOptions">
       <canary-content>
         <canary-input slot="input"></canary-input>
         <canary-search slot="mode">
-          <canary-callout-discord slot="body" url="https://discord.gg/Y8bJkzuQZU" v-if="variants.callout"></canary-callout-discord>
-          <canary-search-results slot="body" v-if="!variants.split" :group="variants.group">
+          <canary-filter-tabs-glob slot="head" :tabs="globs"></canary-filter-tabs-glob>
+          <canary-search-results slot="body">
           </canary-search-results>
-          <canary-search-results-tabs slot="body" v-if="variants.split" :tabs="tabs" :group="variants.group">
-          </canary-search-results-tabs>
         </canary-search>
       </canary-content>
     </canary-provider-pagefind>
@@ -173,7 +157,7 @@ Click **Code** tab to read the code.
 
   <template v-if="mode === 'Code'">
 
-  <Markdown v-if="!variants.group && !variants.split">
+  <Markdown>
 
 ```html-vue{4-7}
 <canary-root framework="vitepress">
@@ -189,60 +173,6 @@ Click **Code** tab to read the code.
 ```
 
   </Markdown>
-
-  <Markdown v-if="variants.group && variants.split">
-
-```html-vue{4-7}
-<canary-root framework="vitepress">
-  <canary-provider-pagefind options={JSON.stringify(options)}>
-    <canary-content>
-      <canary-input slot="input"></canary-input>
-      <canary-search slot="mode">
-        <canary-search-results slot="body"></canary-search-results>  // [!code --]
-        <canary-search-results-tabs group tabs="{{ JSON.stringify(tabs) }}" slot="body"></canary-search-results-tabs>  // [!code ++]
-      </canary-search>
-    </canary-content>
-  </canary-provider-pagefind>
-</canary-root>
-```
-
-  </Markdown>
-
-  <Markdown v-if="variants.group && !variants.split">
-
-```html-vue{4-7}
-<canary-root framework="vitepress">
-  <canary-provider-pagefind options={JSON.stringify(options)}>
-    <canary-content>
-      <canary-input slot="input"></canary-input>
-        <canary-search slot="mode">
-          <canary-search-results slot="body"></canary-search-results>  // [!code --]
-        <canary-search-results slot="body" group></canary-search-results> // [!code ++]
-      </canary-search>
-    </canary-content>
-  </canary-provider-pagefind>
-</canary-root>
-```
-
-   </Markdown>
-
-  <Markdown v-if="variants.split && !variants.group">
-
-```html-vue{4-7}
-<canary-root framework="vitepress">
-  <canary-provider-pagefind options={JSON.stringify(options)}>
-    <canary-content>
-      <canary-input slot="input"></canary-input>
-        <canary-search slot="mode">
-          <canary-search-results slot="body"></canary-search-results>  // [!code --]
-        <canary-search-results-tabs tabs={{ JSON.stringify(tabs) }} slot="body"></canary-search-results-tabs>  // [!code ++]
-      </canary-search>
-    </canary-content>
-   </canary-provider-pagefind>
-</canary-root>
-```
-
-   </Markdown>
 
   </template>
 </div>

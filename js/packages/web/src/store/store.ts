@@ -97,6 +97,7 @@ export const createStore = (host: HTMLElement) =>
         context.mode.setValue({ ...context.mode.value, current: data });
 
         if (data === MODE_SEARCH) {
+          context.executionManager.abort();
           context.executionManager.search(
             context.query.value,
             context.operation.value,
@@ -104,6 +105,7 @@ export const createStore = (host: HTMLElement) =>
           );
         }
         if (data === MODE_ASK) {
+          context.executionManager.abort();
           context.executionManager.ask(
             context.query.value,
             context.operation.value,

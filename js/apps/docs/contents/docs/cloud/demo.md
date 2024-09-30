@@ -15,10 +15,12 @@ onMounted(() => {
 });
 </script>
 
-# Cloud Search Playground
+# Cloud Search Demo
 
-::: info How does it work?
+::: warning
 
-TODO
+**We are not affiliated** with any of the projects listed here, and the list might change over time.
+
+This is only for demo purposes.
 
 :::

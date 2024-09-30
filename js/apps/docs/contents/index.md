@@ -55,7 +55,7 @@ const searchDisgestProblemExample = {
 
 <Headline />
 
-> 🐤Canary is [open-source](https://github.com/fastrepl/canary) project just for that!
+> 🐤Canary is [open-source](https://github.com/fastrepl/canary)! Give us a ⭐️ if you like it.
 
 ## Search works, only when users know the <ins>"keyword"</ins>
 

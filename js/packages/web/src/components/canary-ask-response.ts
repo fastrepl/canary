@@ -25,7 +25,6 @@ export class CanaryAskResponse extends LitElement {
       return html`
         <div class="container">
           <canary-reference-skeleton></canary-reference-skeleton>
-          <canary-reference-skeleton></canary-reference-skeleton>
         </div>
       `;
     }
@@ -61,6 +60,7 @@ export class CanaryAskResponse extends LitElement {
         gap: 12px;
         background-color: var(--canary-color-gray-100);
         margin-bottom: 6px;
+        min-height: 200px;
       }
     `,
   ];
