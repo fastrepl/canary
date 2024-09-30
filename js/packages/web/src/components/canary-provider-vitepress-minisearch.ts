@@ -101,12 +101,7 @@ export class CanaryProviderVitepressMinisearch extends LitElement {
           meta: {},
           url: new URL(result.id, window.location.origin).toString(),
           title: result.title,
-          sub_results: [
-            {
-              url: new URL(result.id, window.location.origin).toString(),
-              title: result.title,
-            },
-          ],
+          sub_results: [],
         }));
 
       resolve({ matches });

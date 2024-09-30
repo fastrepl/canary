@@ -135,7 +135,8 @@ export class CanaryProviderPagefind extends LitElement {
             url: transformURL(subResult.url),
             title: subResult.title,
             excerpt: subResult.excerpt,
-          }));
+          }))
+          .filter(({ title }, i) => !(i == 0 && title == result.meta.title));
 
         return {
           type: "webpage",
