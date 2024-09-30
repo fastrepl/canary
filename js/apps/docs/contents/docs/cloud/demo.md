@@ -27,7 +27,7 @@ onMounted(() => {
   });
 });
 
-const sourceGroups = ["canary", "dspy"] as const;
+const sourceGroups = ["canary", "dspy", "hono"] as const;
 const sourceGroup = ref<(typeof sourceGroups)[number]>(sourceGroups[0]);
 
 const sourceNames = computed(() => {
@@ -37,6 +37,10 @@ const sourceNames = computed(() => {
 
   if (sourceGroup.value === "dspy") {
     return ["dspy_webpage", "dspy_issue", "dspy_discussion"];
+  }
+
+  if (sourceGroup.value === "hono") {
+    return ["hono_webpage", "hono_issue"];
   }
 
   throw new Error();
@@ -64,6 +68,14 @@ const globs = computed(() => {
       { name: "Github", pattern: "**/github.com/**" },
     ]);
   }
+
+  if (sourceGroup.value === "hono") {
+    return JSON.stringify([
+      { name: "Docs", pattern: "**/docs/**/!(api)/**/*" },
+      { name: "API", pattern: "**/docs/api/**" },
+      { name: "Github", pattern: "**/github.com/**" },
+    ]);
+  }
 });
 
 const question = ref("");
@@ -75,15 +87,26 @@ watch(sourceGroup, () => {
     questions.value = [
       "api-base",
       "vitepress supported?",
-      "how to change overall mood?",
-      "code example for changing hue?",
+      "css variable for changing hue?",
     ];
   }
 
   if (sourceGroup.value === "dspy") {
     question.value = "dspy";
     questions.value = [
-      "dspy"
+      "colbert",
+      "filtering in retrieval?",
+      "what is mi..ppro?",
+      "built-in datasets list"
+    ];
+  }
+
+    if (sourceGroup.value === "hono") {
+    question.value = "hono";
+    questions.value = [
+      "middleware",
+      "can i deploy to cloudflare?",
+      "validate Content-Type not supported? not working",
     ];
   }
 }, { immediate: true });
@@ -129,7 +152,6 @@ watch(sourceGroup, () => {
     </canary-provider-cloud>
   </canary-root>
 
-
   <template v-if="tab === 'Code'">
 
   <Markdown>
@@ -159,6 +181,6 @@ watch(sourceGroup, () => {
 <style scoped>
 canary-root {
   --canary-content-max-width: 690px;
-  --canary-content-max-height: 400px;
+  --canary-content-max-height: 500px;
 }
 </style>

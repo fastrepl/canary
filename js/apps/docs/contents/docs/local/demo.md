@@ -87,22 +87,27 @@ watch(source, () => {
   if (source.value === "litellm") {
     question.value = "litellm";
     questions.value = [
-      "litellm",
-      "rate"
+      "anthropic",
+      "load balancing",
+      "how to cache response"
     ];
   }
 
   if (source.value === "mistral") {
     question.value = "mistral";
     questions.value = [
-      "mistral"
+      "rag",
+      "mistral-nemo",
+      "code generation",
     ];
   }
 
   if (source.value === "prisma") {
     question.value = "prisma";
     questions.value = [
-      "prisma"
+      "mysql",
+      "cache ttl",
+      "tinyblob"
     ];
   }
 }, { immediate: true });

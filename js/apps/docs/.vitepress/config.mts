@@ -7,7 +7,7 @@ const sidebar = [
     text: "Start Here",
     items: [
       { text: "What is Canary?", link: "/" },
-      { text: "Why use Canary?", link: "/docs/why" }
+      { text: "Why use Canary?", link: "/docs/why" },
     ],
   },
   {
