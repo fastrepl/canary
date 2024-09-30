@@ -2,7 +2,7 @@ import { createBlurUp } from "@mux/blurup";
 
 export default {
   async load() {
-    const IDs = [];
+    const IDs = ["hQVTgrdDzmoDOvrbpQdivP8IRUe5pqaXmnqgnTudGOQ"];
 
     return Promise.all(
       IDs.map((id) => createBlurUp(id, {}).then((data) => ({ id, data }))),

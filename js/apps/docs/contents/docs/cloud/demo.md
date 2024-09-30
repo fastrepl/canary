@@ -7,6 +7,7 @@ import Radio from "../../../components/Radio.vue";
 import Tabs from "../../../components/Tabs.vue";
 import ButtonGroup from "../../../components/ButtonGroup.vue";
 import Markdown from "../../../components/Markdown.vue";
+import Video from "../../../components/Video.vue";
 
 const loaded = ref(false);
 
@@ -119,6 +120,8 @@ watch(sourceGroup, () => {
 **We are not affiliated** with any of the projects listed here, and the list might change over time.
 
 :::
+
+<Video id="hQVTgrdDzmoDOvrbpQdivP8IRUe5pqaXmnqgnTudGOQ" />
 
 <div class="mt-6 flex flex-col gap-2">
   <hr class="my-1" />
