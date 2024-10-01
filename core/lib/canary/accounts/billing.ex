@@ -31,22 +31,22 @@ defmodule Canary.Accounts.Billing do
       argument :stripe_subscription, :map, allow_nil?: true
 
       change manage_relationship(:account, :account, type: :append)
-      change set_attribute(:stripe_customer, expr(^arg(:stripe_customer)))
-      change set_attribute(:stripe_subscription, expr(^arg(:stripe_subscription)))
+      change set_attribute(:stripe_customer, arg(:stripe_customer))
+      change set_attribute(:stripe_subscription, arg(:stripe_subscription))
     end
 
     update :update_stripe_customer do
       argument :stripe_customer, :map, allow_nil?: true
 
       change {Canary.Accounts.Changes.StructToMap, argument: :stripe_customer}
-      change set_attribute(:stripe_customer, expr(^arg(:stripe_customer)))
+      change set_attribute(:stripe_customer, arg(:stripe_customer))
     end
 
     update :update_stripe_subscription do
       argument :stripe_subscription, :map, allow_nil?: true
 
       change {Canary.Accounts.Changes.StructToMap, argument: :stripe_subscription}
-      change set_attribute(:stripe_subscription, expr(^arg(:stripe_subscription)))
+      change set_attribute(:stripe_subscription, arg(:stripe_subscription))
     end
 
     update :increment_ask do

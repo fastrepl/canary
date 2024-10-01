@@ -30,7 +30,7 @@ defmodule Canary.Github.Repo do
       argument :full_name, :string, allow_nil?: false
 
       change manage_relationship(:app, :app, type: :append)
-      change set_attribute(:full_name, expr(^arg(:full_name)))
+      change set_attribute(:full_name, arg(:full_name))
     end
 
     action :delete do

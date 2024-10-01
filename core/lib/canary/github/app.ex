@@ -48,7 +48,7 @@ defmodule Canary.Github.App do
       argument :repos, {:array, :string}, allow_nil?: true
       argument :account, :map, allow_nil?: true
 
-      change set_attribute(:installation_id, expr(^arg(:installation_id)))
+      change set_attribute(:installation_id, arg(:installation_id))
       change manage_relationship(:account, :account, type: :append)
       change Canary.Github.Changes.CreateRepos
     end

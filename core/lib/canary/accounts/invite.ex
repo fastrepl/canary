@@ -36,7 +36,7 @@ defmodule Canary.Accounts.Invite do
       argument :account, :map, allow_nil?: false
       argument :email, :string, allow_nil?: false
 
-      change set_attribute(:email, expr(^arg(:email)))
+      change set_attribute(:email, arg(:email))
       change manage_relationship(:user, :user, type: :append)
       change manage_relationship(:account, :account, type: :append)
       change load [:user, :account]
