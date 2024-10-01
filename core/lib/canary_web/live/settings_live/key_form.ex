@@ -49,7 +49,7 @@ defmodule CanaryWeb.SettingsLive.KeyForm do
         </ul>
 
         <div class="flex justify-end">
-          <Primer.button is_primary onclick="Prompt.show('#key-form')">
+          <Primer.button is_primary phx-click={Primer.open_dialog("key-form")}>
             Create
           </Primer.button>
         </div>

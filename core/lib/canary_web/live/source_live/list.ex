@@ -9,7 +9,7 @@ defmodule CanaryWeb.SourceLive.List do
       <Primer.subhead>
         Source
         <:actions :if={length(@sources) > 0}>
-          <Primer.button is_primary onclick="Prompt.show('#source-form')">
+          <Primer.button is_primary phx-click={Primer.open_dialog("source-form")}>
             New
           </Primer.button>
         </:actions>
@@ -61,7 +61,7 @@ defmodule CanaryWeb.SourceLive.List do
             <p>Use it to provide information when no dynamic content exists.</p>
 
             <:action>
-              <Primer.button is_primary onclick="Prompt.show('#source-form')">
+              <Primer.button is_primary phx-click={Primer.open_dialog("source-form")}>
                 Create source
               </Primer.button>
             </:action>
