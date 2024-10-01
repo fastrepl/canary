@@ -13,11 +13,11 @@ export default defineConfig({
     environmentMatchGlobs: [["./src/store/*.test.ts", "happy-dom"]],
   },
   plugins: [
-    partsReportPlugin(),
-    cssVariablesReportPlugin(),
+    process.env.GENERATE_DOCS === "1" && partsReportPlugin(),
+    process.env.GENERATE_DOCS === "1" && cssVariablesReportPlugin(),
     unocss({ mode: "shadow-dom" }),
     dts({ exclude: ["**/*.stories.*"] }),
-  ],
+  ].filter(Boolean),
   build: {
     minify: "terser",
     terserOptions: {

@@ -1,5 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
+import { execSync } from "child_process";
+
 import type { Plugin } from "vite";
 
 export const cssVariablesReportPlugin = (): Plugin => {
@@ -92,7 +94,12 @@ export const partsReportPlugin = (): Plugin => {
         })
         .join("\n");
 
-      fs.writeFileSync(outfile, content);
+      try {
+        fs.writeFileSync(outfile, content);
+        execSync(`npm run format -w=@getcanary/web`, { stdio: "inherit" });
+      } catch (e) {
+        console.error(e);
+      }
     },
   };
 };
