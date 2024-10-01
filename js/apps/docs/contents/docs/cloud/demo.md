@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { onMounted, computed, ref, watch } from "vue";
 
-import { data } from "../../../data/url_cloud.data.js";
+import { data as cloud } from "../../../data/url_cloud.data.js";
+import { data as demoForm } from "../../../data/demo_form.data.js";
 
 import Radio from "../../../components/Radio.vue";
 import Tabs from "../../../components/Tabs.vue";
@@ -141,7 +142,7 @@ watch(sourceGroup, () => {
   <Tabs :values="tabs" :selected="tab" @update:selected="tab = $event" />
 
   <canary-root framework="vitepress" :key="question" :query="question" v-show="tab === 'UI'">
-    <canary-provider-cloud :api-base="data.base" :api-key="data.key" :sources="sourceNames">
+    <canary-provider-cloud :api-base="cloud.base" :api-key="cloud.key" :sources="sourceNames">
       <canary-content>
         <canary-input slot="input"></canary-input>
         <canary-search slot="mode">
@@ -180,6 +181,12 @@ watch(sourceGroup, () => {
 
   </template>
 </div>
+
+::: tip Wanna try it out with your project?
+
+<a :href="demoForm.url" target="_blank">Fill out the form</a>, and we'll send you a link. No strings attached.
+
+:::
 
 <style scoped>
 canary-root {
