@@ -81,7 +81,7 @@ defmodule Canary.Index do
     args = build_args(sources, queries, opts)
 
     case Canary.Index.Client.multi_search(args) do
-      {:ok, %Req.Response{status: 200, body: %{"results" => results}}} ->
+      {:ok, %{"results" => results}} ->
         ret =
           results
           |> Enum.reject(fn %{"hits" => hits} -> length(hits) == 0 end)

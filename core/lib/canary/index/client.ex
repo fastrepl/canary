@@ -8,9 +8,12 @@ defmodule Canary.Index.Client do
     )
   end
 
-  defp wrap({:error, %Req.Response{} = resp}), do: {:error, resp}
-  defp wrap({:ok, %Req.Response{status: status} = resp}) when status in 200..299, do: {:ok, resp}
-  defp wrap({:ok, %Req.Response{} = resp}), do: {:error, resp}
+  defp wrap({:ok, %Req.Response{status: status, body: body}}) when status in 200..299 do
+    {:ok, body}
+  end
+
+  defp wrap({:ok, %Req.Response{body: body}}), do: {:error, body}
+  defp wrap({:error, %Req.Response{body: body}}), do: {:error, body}
 
   def get_collection(name) do
     base()

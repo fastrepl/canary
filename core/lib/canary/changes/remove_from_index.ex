@@ -17,8 +17,18 @@ defmodule Canary.Change.RemoveFromIndex do
       index_id = Map.get(record, opts[:index_id_attribute])
 
       case Canary.Index.delete_document(opts[:source_type], index_id) do
-        {:ok, _} -> {:ok, record}
-        error -> error
+        {:ok, _} ->
+          {:ok, record}
+
+        {:error, %{"message" => message}} ->
+          if message =~ "Could not find" do
+            {:ok, record}
+          else
+            {:error, message}
+          end
+
+        error ->
+          error
       end
     end)
   end
