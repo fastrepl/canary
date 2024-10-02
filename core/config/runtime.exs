@@ -32,7 +32,8 @@ if config_env() == :prod do
 
   config :canary, Canary.Repo,
     url: database_url,
-    pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
+    timeout: String.to_integer(System.get_env("DATABASE_TIMEOUT") || "15000"),
+    pool_size: String.to_integer(System.get_env("DATABASE_POOL_SIZE") || "10"),
     socket_options: maybe_ipv6,
     ssl: [cacerts: :public_key.cacerts_get()]
 
