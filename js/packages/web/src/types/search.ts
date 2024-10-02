@@ -1,3 +1,5 @@
+import type { QueryContext } from "./context";
+
 export type SearchResult = SearchResultBase & {
   sub_results: SearchSubResult[];
 } & (
@@ -36,8 +38,8 @@ export type SearchFunctionResult = {
 };
 
 export type SearchFunction = (
-  payload: { query: string },
+  payload: QueryContext,
   signal: AbortSignal,
 ) => Promise<SearchFunctionResult>;
 
-export type BeforeSearchFunction = (query: string) => Promise<any>;
+export type BeforeSearchFunction = (query: QueryContext) => Promise<any>;

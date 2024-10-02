@@ -87,7 +87,7 @@ export class CanaryProviderVitepressMinisearch extends LitElement {
 
   static styles = wrapper;
 
-  search: SearchFunction = async ({ query }, _signal) => {
+  search: SearchFunction = async ({ text: query }, _signal) => {
     return new Promise((resolve) => {
       if (!this.minisearch) {
         resolve({ matches: [] });

@@ -50,9 +50,9 @@ test("debounced search", async () => {
   store.send({ type: "register_operations", data: { search } });
   store.send({ type: "register_mode", data: MODE_SEARCH });
 
-  store.send({ type: "set_query", data: "tes" });
+  store.send({ type: "set_query", data: { text: "tes" } });
   await asyncSleep(30);
-  store.send({ type: "set_query", data: "test" });
+  store.send({ type: "set_query", data: { text: "test" } });
 
   await vi.waitFor(
     () => {

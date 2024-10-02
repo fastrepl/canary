@@ -1,7 +1,7 @@
-import { AskResponse } from "./schema";
+import type { QueryContext, AskResponse } from "./index";
 
 export type AskFunction = (
-  payload: { query: string },
+  payload: QueryContext,
   handleDelta: (data: AskResponse) => void,
   signal: AbortSignal,
 ) => Promise<null>;

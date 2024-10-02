@@ -5,6 +5,7 @@ import type {
   ExecutionContext,
   FiltersContext,
   AskResponse,
+  QueryContext,
 } from "../types";
 import { applyFilters, asyncSleep } from "../utils";
 import { executionContext } from "../contexts";
@@ -64,7 +65,7 @@ export class ExecutionManager {
   }
 
   async search(
-    query: string,
+    query: QueryContext,
     operations: OperationContext,
     filters: FiltersContext,
   ) {
@@ -88,7 +89,7 @@ export class ExecutionManager {
       this.transition({ status: TaskStatus.PENDING });
 
       const result = await operations.search(
-        { query },
+        query,
         this._abortController.signal,
       );
 
@@ -112,7 +113,7 @@ export class ExecutionManager {
   }
 
   async ask(
-    query: string,
+    query: QueryContext,
     operations: OperationContext,
     _filters: FiltersContext,
   ) {
@@ -135,7 +136,7 @@ export class ExecutionManager {
       this.transition({ ...this._initialState, status: TaskStatus.PENDING });
 
       await operations.ask(
-        { query },
+        query,
         this._handleDelta.bind(this),
         this._abortController.signal,
       );

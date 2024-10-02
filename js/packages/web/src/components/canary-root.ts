@@ -30,9 +30,9 @@ export class CanaryRoot extends LitElement {
 
   firstUpdated() {
     if (this.query) {
-      this._store.send({ type: "set_query", data: "..." });
+      this._store.send({ type: "set_query", data: { text: "..." } });
       setTimeout(() => {
-        this._store.send({ type: "set_query", data: this.query });
+        this._store.send({ type: "set_query", data: { text: this.query } });
       }, 200);
     }
   }

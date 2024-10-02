@@ -94,13 +94,15 @@ export class CanaryProviderPagefind extends LitElement {
     this._pagefind.preload(query);
   };
 
-  search: SearchFunction = async ({ query }, signal) => {
+  search: SearchFunction = async ({ text: query, tags }, signal) => {
     const maxPages = this.options.maxPages ?? DEFAULT_MAX_PAGES;
 
     const { results: pages } = await this._pagefind.search(query);
 
     const matches: PagefindResult[] = await Promise.all(
       pages.slice(0, maxPages).map((r: any) => r.data()),
+    ).then((results: PagefindResult[]) =>
+      results.filter(({ meta }) => !meta.tag || tags.includes(meta.tag)),
     );
 
     signal.throwIfAborted();

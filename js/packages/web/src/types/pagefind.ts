@@ -4,7 +4,7 @@ export type PagefindResult = {
   excerpt: string;
   filters: any;
   locations: number[];
-  meta: Record<string, any> & { title: string };
+  meta: Record<string, any> & { title: string; tag?: string };
   raw_content: string;
   raw_url: string;
   sub_results: PagefindSubResult[];

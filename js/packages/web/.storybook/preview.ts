@@ -36,6 +36,11 @@ const preview: Preview = {
     }),
   ],
   parameters: {
+    options: {
+      storySort: {
+        order: ["public-components", "examples", "private-components"],
+      },
+    },
     sourceLinkPrefix:
       "https://github.com/fastrepl/canary/tree/main/js/packages/web/src/",
     viewport: {

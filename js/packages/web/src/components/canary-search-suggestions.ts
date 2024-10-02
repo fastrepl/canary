@@ -38,8 +38,8 @@ export class CanarySearchSuggestions extends LitElement {
     `;
   }
 
-  private _handleClick(message: string) {
-    this.dispatchEvent(createEvent({ type: "set_query", data: message }));
+  private _handleClick(text: string) {
+    this.dispatchEvent(createEvent({ type: "set_query", data: { text } }));
     this.dispatchEvent(createEvent({ type: "set_mode", data: MODE_ASK }));
   }
 

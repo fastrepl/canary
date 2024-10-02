@@ -9,7 +9,11 @@ import type { FeedbackFunction } from "./feedback";
 import { TaskStatus } from "../store/managers";
 import { AskResponse } from "./schema";
 
-export type QueryContext = string;
+export type QueryContext = {
+  text: string;
+  tags: string[];
+  sources: string[];
+};
 
 export type ModeContext = {
   options: Set<string>;

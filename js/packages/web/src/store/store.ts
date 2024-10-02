@@ -1,7 +1,7 @@
 import { ContextProvider } from "@lit/context";
 import { createStore as store } from "@xstate/store";
 
-import type { FiltersContext, OperationContext } from "../types";
+import type { FiltersContext, OperationContext, QueryContext } from "../types";
 import {
   operationContext,
   modeContext,
@@ -33,11 +33,11 @@ export const createStore = (host: HTMLElement) =>
       }),
       query: new ContextProvider(host, {
         context: queryContext,
-        initialValue: "",
+        initialValue: { text: "", tags: [], sources: [] },
       }),
       executionManager: new ExecutionManager(host, {
-        searchDebounceMs: 150,
-        askDebounceMs: 500,
+        searchDebounceMs: 80,
+        askDebounceMs: 300,
       }),
     },
     {
@@ -117,19 +117,20 @@ export const createStore = (host: HTMLElement) =>
           mode: context.mode,
         };
       },
-      set_query: (context, { data }: { data: string }) => {
-        context.query.setValue(data, true);
+      set_query: (context, { data }: { data: Partial<QueryContext> }) => {
+        const nextQuery = { ...context.query.value, ...data };
+        context.query.setValue(nextQuery, true);
 
         if (context.mode.value.current === MODE_SEARCH) {
           context.executionManager.search(
-            data,
+            nextQuery,
             context.operation.value,
             context.filters.value,
           );
         }
         if (context.mode.value.current === MODE_ASK) {
           context.executionManager.ask(
-            data,
+            nextQuery,
             context.operation.value,
             context.filters.value,
           );

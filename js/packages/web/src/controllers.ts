@@ -73,7 +73,7 @@ export class CalloutController {
     const show =
       options?.forceShow ||
       (options?.keywords ?? []).some((keyword) =>
-        (this._query.value ?? "").includes(keyword),
+        (this._query.value?.text ?? "").includes(keyword),
       );
 
     return show ? fn() : nothing;

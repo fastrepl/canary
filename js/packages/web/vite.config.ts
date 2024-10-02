@@ -44,6 +44,7 @@ const components = [
   "canary-mode-tabs",
   "canary-mode-breadcrumb",
   "canary-filter-tabs-glob",
+  "canary-filter-tags",
 ].map((name) => `components/${name}`);
 
 export default defineConfig({

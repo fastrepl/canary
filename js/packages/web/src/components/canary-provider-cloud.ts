@@ -32,6 +32,13 @@ export class CanaryProviderCloud extends LitElement {
 
     this.dispatchEvent(
       createEvent({
+        type: "set_query",
+        data: { sources: this.sources.filter(Boolean) },
+      }),
+    );
+
+    this.dispatchEvent(
+      createEvent({
         type: "register_operations",
         data: {
           search: cache(this.search),
@@ -47,14 +54,14 @@ export class CanaryProviderCloud extends LitElement {
 
   static styles = wrapper;
 
-  search: SearchFunction = async (payload, signal) => {
+  search: SearchFunction = async (query, signal) => {
     const params = {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${this.apiKey}`,
       },
-      body: JSON.stringify({ ...payload, sources: this.sources }),
+      body: JSON.stringify({ query }),
       signal,
     };
 
@@ -66,7 +73,7 @@ export class CanaryProviderCloud extends LitElement {
     return res.json();
   };
 
-  ask: AskFunction = async (payload, handleDelta, signal) => {
+  ask: AskFunction = async (query, handleDelta, signal) => {
     const url = `${this.apiBase}/api/v1/ask`;
     const req = new Request(url, {
       method: "POST",
@@ -74,7 +81,7 @@ export class CanaryProviderCloud extends LitElement {
         "Content-Type": "application/json",
         Authorization: `Bearer ${this.apiKey}`,
       },
-      body: JSON.stringify({ ...payload, sources: this.sources }),
+      body: JSON.stringify({ query }),
       signal,
     });
 

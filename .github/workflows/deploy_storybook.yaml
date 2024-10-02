@@ -21,6 +21,8 @@ jobs:
           cache: "npm"
           cache-dependency-path: js/package-lock.json
       - run: npm ci
+      - run: npm run build
+        working-directory: js/packages/web
       - uses: chromaui/action@latest
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}

@@ -38,7 +38,7 @@ defmodule CanaryWeb.HomeLive do
             <canary-modal>
               <canary-trigger-searchbar slot="trigger"></canary-trigger-searchbar>
               <canary-content slot="content">
-                <canary-input slot="input"></canary-input>
+                <canary-input slot="input" autofocus></canary-input>
                 <canary-search slot="mode">
                   <canary-search-results slot="body"></canary-search-results>
                 </canary-search>

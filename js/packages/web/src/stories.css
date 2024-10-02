@@ -1,7 +1,7 @@
 html {
-  background-color: #f1f5f9;
+  background-color: #f4f4f5;
 }
 
 html[data-theme="dark"] {
-  background-color: #0f172a;
+  background-color: #18181b;
 }

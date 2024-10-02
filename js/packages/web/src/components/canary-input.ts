@@ -5,7 +5,7 @@ import { ifDefined } from "lit/directives/if-defined.js";
 
 import { consume } from "@lit/context";
 import { queryContext, modeContext, executionContext } from "../contexts";
-import type { ModeContext, ExecutionContext } from "../types";
+import type { ModeContext, ExecutionContext, QueryContext } from "../types";
 
 import { global, wrapper } from "../styles";
 import { TaskStatus } from "../store/managers";
@@ -23,7 +23,7 @@ export class CanaryInput extends LitElement {
 
   @consume({ context: queryContext, subscribe: true })
   @state()
-  private _query = "";
+  private _query: QueryContext = { text: "", tags: [], sources: [] };
 
   @consume({ context: modeContext, subscribe: true })
   @state()
@@ -42,7 +42,7 @@ export class CanaryInput extends LitElement {
         <input
           type="text"
           part="input"
-          .value=${this._query}
+          .value=${this._query.text}
           autocomplete="off"
           spellcheck="false"
           placeholder="Search for anything..."
@@ -66,7 +66,7 @@ export class CanaryInput extends LitElement {
             hidden: !(
               this._mode?.current === MODE_SEARCH &&
               this._execution?.status === TaskStatus.COMPLETE &&
-              this._is_question(this._query)
+              this._is_question(this._query.text)
             ),
           })}
         >
@@ -119,7 +119,7 @@ export class CanaryInput extends LitElement {
       e.key === "Tab" &&
       this._mode?.current === MODE_SEARCH &&
       this._mode?.options.has(MODE_ASK) &&
-      this._is_question(this._query)
+      this._is_question(this._query.text)
     ) {
       e.preventDefault();
       this.dispatchEvent(createEvent({ type: "set_mode", data: MODE_ASK }));
@@ -127,8 +127,8 @@ export class CanaryInput extends LitElement {
   }
 
   private _handleInput(e: KeyboardEvent) {
-    const data = (e.target as HTMLInputElement).value;
-    this.dispatchEvent(createEvent({ type: "set_query", data }));
+    const text = (e.target as HTMLInputElement).value;
+    this.dispatchEvent(createEvent({ type: "set_query", data: { text } }));
   }
 
   private _is_question(query: string) {

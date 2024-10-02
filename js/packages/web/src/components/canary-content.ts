@@ -21,6 +21,9 @@ export class CanaryContent extends LitElement {
   render() {
     return html`
       <div part="container" class="container">
+        <div class="head-container">
+          <slot name="head"></slot>
+        </div>
         <slot name="input"></slot>
         <slot name="mode"></slot>
         <div
@@ -61,6 +64,10 @@ export class CanaryContent extends LitElement {
         .container {
           width: var(--canary-content-max-width, 550px);
         }
+      }
+
+      .head-container {
+        padding-left: 12px;
       }
     `,
     css`
