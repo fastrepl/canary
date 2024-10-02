@@ -5,7 +5,7 @@ import "./canary-tooltip";
 import "./canary-callout-cal";
 
 export default {
-  title: "Public/canary-tooltip",
+  title: "public-components/canary-tooltip",
   parameters: { sourceLink: "components/canary-tooltip.stories.ts" },
   render: (_: any) => {
     return html`

@@ -8,7 +8,8 @@ enum Kind {
 }
 
 export default {
-  title: "Public/canary-badge",
+  title: "public-components/canary-badge",
+  component: "canary-badge",
   parameters: { sourceLink: "components/canary-badge.stories.ts" },
   render: ({ kind, name }) => {
     if (kind === Kind.Default) {

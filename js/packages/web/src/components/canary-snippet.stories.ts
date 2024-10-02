@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from "@storybook/web-components";
 import "./canary-snippet-excerpt";
 
 export default {
-  title: "Public/canary-snippet",
+  title: "private-components/canary-snippet",
   parameters: { sourceLink: "components/canary-snippet.stories.ts" },
   render: ({ text }: any) => {
     return html`

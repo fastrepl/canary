@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from "@storybook/web-components";
 import "./canary-markdown";
 
 export default {
-  title: "Public/canary-markdown",
+  title: "public-components/canary-markdown",
   parameters: { sourceLink: "components/canary-markdown.stories.ts" },
   render: ({ content }: any) => {
     return html`

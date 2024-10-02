@@ -13,7 +13,8 @@ import "./canary-input";
 import "./canary-search-results";
 
 export default {
-  title: "Public/canary-modal",
+  title: "public-components/canary-modal",
+  component: "canary-modal",
   parameters: { sourceLink: "components/canary-modal.stories.ts" },
   render: () => {
     return html`

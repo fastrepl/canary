@@ -31,7 +31,7 @@ const type = (text: string): StoryObj["play"] => {
 };
 
 export default {
-  title: "Public/canary-content",
+  title: "public-components/canary-content",
   parameters: { sourceLink: "components/canary-content.stories.ts" },
   render: ({ kind }: { kind: Kind }) => {
     if (kind === Kind.Search) {

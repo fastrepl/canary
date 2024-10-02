@@ -28,7 +28,7 @@ enum Kind {
 }
 
 export default {
-  title: "Public/styling",
+  title: "examples/styling",
   decorators: [
     (story, { args: { kind } }) => {
       if (kind === Kind.TriggerSearchBarBackbround) {

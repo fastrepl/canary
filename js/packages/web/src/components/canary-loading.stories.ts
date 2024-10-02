@@ -5,7 +5,7 @@ import "./canary-loading-spinner";
 import "./canary-loading-dots";
 
 const meta = {
-  title: "Public/canary-loading",
+  title: "public-components/canary-loading",
   parameters: { sourceLink: "components/canary-loading.stories.ts" },
   render: ({ kind }) => {
     if (kind === "spinner") {

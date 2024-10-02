@@ -9,7 +9,7 @@ enum Kind {
 }
 
 export default {
-  title: "Public/canary-url-paths",
+  title: "private-components/canary-url-paths",
   parameters: { sourceLink: "components/canary-url-paths.stories.ts" },
   render: ({ kind }: { kind: Kind }) => {
     if (kind === Kind.FullURL) {
@@ -22,7 +22,7 @@ export default {
       return html` <canary-url-paths url="/docs/a/b"></canary-url-paths> `;
     }
 
-    throw new Error();
+    throw new Error("");
   },
 } satisfies Meta<{ kind: Kind }>;
 

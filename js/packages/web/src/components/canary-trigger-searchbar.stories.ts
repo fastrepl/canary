@@ -1,13 +1,9 @@
 import { html } from "lit";
 import type { Meta, StoryObj } from "@storybook/web-components";
 
-import "./canary-trigger-icon";
-import "./canary-trigger-logo";
 import "./canary-trigger-searchbar";
 
 enum Kind {
-  Icon,
-  Logo,
   Searchbar_Cmdk,
   Searchbar_Slash,
   Searchbar_Placements,
@@ -16,16 +12,10 @@ enum Kind {
 }
 
 export default {
-  title: "Public/canary-trigger",
+  title: "public-components/canary-trigger-searchbar",
+  component: "canary-trigger-searchbar",
   parameters: { sourceLink: "components/canary-trigger.stories.ts" },
   render: ({ kind }: { kind: Kind }) => {
-    if (kind === Kind.Icon) {
-      return html` <canary-trigger-icon></canary-trigger-icon> `;
-    }
-    if (kind === Kind.Logo) {
-      return html` <canary-trigger-logo></canary-trigger-logo> `;
-    }
-
     if (kind === Kind.Searchbar_Cmdk) {
       return html`
         <canary-trigger-searchbar shortcut="cmdk"></canary-trigger-searchbar>
@@ -76,16 +66,6 @@ export default {
     throw new Error();
   },
 } satisfies Meta<{ kind: Kind }>;
-
-export const Icon: StoryObj = {
-  args: { kind: Kind.Icon },
-  parameters: { viewport: { disable: true } },
-};
-
-export const Logo: StoryObj = {
-  args: { kind: Kind.Logo },
-  parameters: { viewport: { disable: true } },
-};
 
 export const Searchbar_Cmdk: StoryObj = {
   args: { kind: Kind.Searchbar_Cmdk },

@@ -10,7 +10,7 @@ enum Kind {
 }
 
 export default {
-  title: "Public/canary-ask-response",
+  title: "private-components/canary-ask-response",
   parameters: { sourceLink: "components/canary-ask-response.stories.ts" },
   render: ({ kind }: { kind: Kind }) => {
     if (kind === Kind.Complete) {

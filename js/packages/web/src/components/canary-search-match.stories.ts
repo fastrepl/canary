@@ -12,7 +12,7 @@ enum Kind {
 }
 
 export default {
-  title: "Public/canary-search-match",
+  title: "public-components/canary-search-match",
   parameters: { sourceLink: "components/canary-search-match.stories.ts" },
   render: ({ kind }: { kind: Kind }) => {
     if (kind === Kind.Webpage) {

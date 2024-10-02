@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from "@storybook/web-components";
 import "./canary-media-query";
 
 export default {
-  title: "Public/canary-media-query",
+  title: "public-components/canary-media-query",
   parameters: { sourceLink: "components/canary-media-query.stories.ts" },
   render: () => {
     return html`

@@ -31,7 +31,7 @@ const render = ({ type }: any) => {
 
 export default {
   render,
-  title: "Public/canary-callout",
+  title: "public-components/canary-callout",
   parameters: {
     sourceLink: "components/canary-callout.stories.ts",
   },
