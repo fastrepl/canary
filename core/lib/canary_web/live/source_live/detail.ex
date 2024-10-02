@@ -57,7 +57,7 @@ defmodule CanaryWeb.SourceLive.Detail do
           <.inputs_for :let={fc} field={@form[:config]}>
             <%= case @source.config.type do %>
               <% :webpage -> %>
-                <Primer.form_control label="URLs">
+                <.form_group header="URLs">
                   <%= for url <- fc[:start_urls].value || [] do %>
                     <div class="flex flex-row w-full items-center gap-2">
                       <Primer.text_input
@@ -77,7 +77,6 @@ defmodule CanaryWeb.SourceLive.Detail do
                       </Primer.button> --%>
                     </div>
                   <% end %>
-                  <div class="h-1"></div>
                   <Primer.button
                     type="button"
                     phx-click={JS.dispatch("change")}
@@ -88,9 +87,9 @@ defmodule CanaryWeb.SourceLive.Detail do
                   >
                     <Primer.octicon name="plus-16" />
                   </Primer.button>
-                </Primer.form_control>
+                </.form_group>
 
-                <Primer.form_control label="Include patterns">
+                <.form_group header="Include patterns">
                   <%= for url <- fc[:url_include_patterns].value || [] do %>
                     <Primer.text_input
                       type="text"
@@ -100,7 +99,6 @@ defmodule CanaryWeb.SourceLive.Detail do
                     />
                   <% end %>
 
-                  <div class="h-1"></div>
                   <Primer.button
                     type="button"
                     phx-click={JS.dispatch("change")}
@@ -111,9 +109,9 @@ defmodule CanaryWeb.SourceLive.Detail do
                   >
                     <Primer.octicon name="plus-16" />
                   </Primer.button>
-                </Primer.form_control>
+                </.form_group>
 
-                <Primer.form_control label="Exclude patterns">
+                <.form_group header="Exclude patterns">
                   <%= for url <- fc[:url_exclude_patterns].value || [] do %>
                     <div class="flex flex-row w-full items-center gap-2">
                       <Primer.text_input
@@ -125,7 +123,6 @@ defmodule CanaryWeb.SourceLive.Detail do
                     </div>
                   <% end %>
 
-                  <div class="h-1"></div>
                   <Primer.button
                     type="button"
                     phx-click={JS.dispatch("change")}
@@ -136,7 +133,7 @@ defmodule CanaryWeb.SourceLive.Detail do
                   >
                     <Primer.octicon name="plus-16" />
                   </Primer.button>
-                </Primer.form_control>
+                </.form_group>
               <% :github_issue -> %>
                 <Primer.text_input
                   form={fc}
@@ -205,6 +202,20 @@ defmodule CanaryWeb.SourceLive.Detail do
           <% end %>
         </div>
       </div>
+    </div>
+    """
+  end
+
+  attr :header, :string, required: true
+  slot :inner_block, required: true
+
+  def form_group(assigns) do
+    ~H"""
+    <div class="flex flex-col gap-2">
+      <div class="form-group-header">
+        <span class="FormControl-label"><%= @header %></span>
+      </div>
+      <%= render_slot(@inner_block) %>
     </div>
     """
   end
