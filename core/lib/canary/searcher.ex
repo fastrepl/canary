@@ -31,7 +31,7 @@ defmodule Canary.Searcher do
     |> Enum.map(& &1.id)
     |> Enum.join(",")
     |> Kernel.<>(":" <> query)
-    |> Kernel.<>(":" <> Jason.encode!(opts))
+    |> Kernel.<>(":" <> Jason.encode!(opts[:tags]))
   end
 
   defp impl(), do: Application.get_env(:canary, :searcher, Canary.Searcher.Default)
