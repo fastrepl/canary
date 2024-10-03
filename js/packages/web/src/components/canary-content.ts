@@ -20,8 +20,8 @@ export class CanaryContent extends LitElement {
 
   render() {
     return html`
-      <div part="container" class="container">
-        <div class="head-container">
+      <div class="container" part="container" >
+        <div class="head-container" part="head-container">
           <slot name="head"></slot>
         </div>
         <slot name="input"></slot>
@@ -68,6 +68,7 @@ export class CanaryContent extends LitElement {
 
       .head-container {
         padding-left: 12px;
+        padding-right: 12px;
       }
     `,
     css`

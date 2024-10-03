@@ -19,6 +19,7 @@ onMounted(() => {
     import("@getcanary/web/components/canary-ask-results.js"),
     import("@getcanary/web/components/canary-mode-breadcrumb.js"),
     import("@getcanary/web/components/canary-filter-tabs-glob.js"),
+    import("@getcanary/web/components/canary-filter-tags.js"),
   ]).then(() => {
     loaded.value = true;
   });
@@ -26,8 +27,6 @@ onMounted(() => {
 
 const tabs = JSON.stringify([
   { name: "Docs", pattern: "**/*" },
-  { name: "Local", pattern: "**/local/**" },
-  { name: "Cloud", pattern: "**/cloud/**" },
   { name: "Github", pattern: "**/github.com/**" },
 ]);
 const sources = ["canary_webpage", "canary_issue"];
@@ -44,6 +43,7 @@ const sources = ["canary_webpage", "canary_issue"];
         <canary-modal>
           <canary-trigger-searchbar slot="trigger"></canary-trigger-searchbar>
           <canary-content slot="content">
+            <canary-filter-tags slot="head" tags="Local,Cloud"></canary-filter-tags>
             <canary-input slot="input" autofocus></canary-input>
             <canary-search slot="mode">
               <canary-callout-discord

@@ -21,6 +21,7 @@ enum Kind {
   SearchCustomSize,
   SearchWithGlobFilter,
   SearchWithAsk,
+  SearchWithTags,
 }
 
 const type = (text: string): StoryObj["play"] => {
@@ -100,6 +101,19 @@ export default {
       `;
     }
 
+    if (kind === Kind.SearchWithTags) {
+      return html`
+        <canary-content>
+          <canary-filter-tags slot="head" tags="JS,TS"></canary-filter-tags>
+          <canary-input slot="input"></canary-input>
+          <canary-search slot="mode">
+            <canary-search-results slot="body"></canary-search-results>
+          </canary-search>
+          <canary-footer slot="footer"></canary-footer>
+        </canary-content>
+      `;
+    }
+
     throw new Error();
   },
 } satisfies Meta<{ kind: Kind }>;
@@ -132,5 +146,10 @@ export const SearchWithCustomSize: StoryObj = {
 
 export const SearchWithAsk: StoryObj = {
   args: { kind: Kind.SearchWithAsk },
+  play: type("20hi"),
+};
+
+export const SearchWithTags: StoryObj = {
+  args: { kind: Kind.SearchWithTags },
   play: type("20hi"),
 };

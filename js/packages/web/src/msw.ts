@@ -1,6 +1,11 @@
 import { http, HttpResponse, delay } from "msw";
 
-import type { SearchResult, SearchFunctionResult, AskResponse } from "./types";
+import type {
+  SearchResult,
+  SearchFunctionResult,
+  AskResponse,
+  QueryContext,
+} from "./types";
 
 export const mockAskResponse = JSON.stringify({
   scratchpad: "thinking",
@@ -127,18 +132,18 @@ const mockSearchReferences = (type: string, query: string): SearchResult[] => {
 export const searchHandler = http.post(
   /.*\/api\/v1\/search/,
   async ({ request }) => {
-    const data = (await request.json()) as Record<string, string>;
-    const query = data["query"];
+    const data = (await request.json()) as Record<string, any>;
+    const query = data["query"] as QueryContext;
 
-    const isQuestion = query.trim().split(" ").length > 2;
+    const isQuestion = query.text.trim().split(" ").length > 2;
     await delay(Math.random() * (isQuestion ? 1000 : 200) + 100);
 
     const result: SearchFunctionResult = {
-      matches: mockSearchReferences("search", query),
+      matches: mockSearchReferences("search", query.text),
       suggestion: {
         questions:
-          query.startsWith("Can") || query.startsWith("What")
-            ? [query]
+          query.text.startsWith("Can") || query.text.startsWith("What")
+            ? [query.text]
             : [`Can you tell me about ${query}?`],
       },
     };
