@@ -5,6 +5,7 @@ defmodule Canary.Index.Document.Shared do
       :source_id,
       :embedding,
       :tags,
+      :is_empty_tags,
       :meta
     ]
   end

@@ -1,15 +1,16 @@
 defmodule CanaryWeb.SourceLive.WebpageCrawlerPreview do
   use CanaryWeb, :live_component
   alias PrimerLive.Component, as: Primer
+  alias Canary.Sources.Webpage
 
   @impl true
   def render(assigns) do
     ~H"""
     <div>
-      <Primer.box is_condensed is_scrollable style="max-height: 400px">
+      <Primer.box is_condensed is_scrollable style="max-height: calc(100vh - 200px)">
         <:header_title class="flex-auto">
           <div class="flex items-center gap-1">
-            <span><%= length(@urls) %> found</span>
+            <span><%= length(@items) %> found</span>
             <Primer.animated_ellipsis :if={@loading} />
           </div>
         </:header_title>
@@ -19,11 +20,18 @@ defmodule CanaryWeb.SourceLive.WebpageCrawlerPreview do
           </Primer.button>
         </:header>
 
-        <%= if length(@urls) == 0 do %>
+        <%= if length(@items) == 0 do %>
           <Primer.blankslate></Primer.blankslate>
         <% end %>
-        <:row :for={url <- Enum.sort(@urls)}>
-          <.render_url url={url} />
+        <:row :for={item <- Enum.sort(@items)}>
+          <div class="flex flex-row justify-between">
+            <.render_url url={item.url} />
+            <div class="flex flex-row gap-2">
+              <%= for tag <- item.tags do %>
+                <Primer.label is_secondary><%= tag %></Primer.label>
+              <% end %>
+            </div>
+          </div>
         </:row>
       </Primer.box>
     </div>
@@ -35,7 +43,7 @@ defmodule CanaryWeb.SourceLive.WebpageCrawlerPreview do
     socket =
       socket
       |> assign(assigns)
-      |> assign_new(:urls, fn -> [] end)
+      |> assign_new(:items, fn -> [] end)
       |> assign_new(:loading, fn -> false end)
       |> handle_internal_update(assigns)
 
@@ -43,9 +51,9 @@ defmodule CanaryWeb.SourceLive.WebpageCrawlerPreview do
   end
 
   defp handle_internal_update(socket, assigns) do
-    if assigns[:url] do
-      urls = [assigns[:url] | socket.assigns.urls]
-      socket |> assign(:urls, urls)
+    if assigns[:item] do
+      items = [assigns[:item] | socket.assigns.items]
+      socket |> assign(:items, items)
     else
       socket
     end
@@ -55,10 +63,11 @@ defmodule CanaryWeb.SourceLive.WebpageCrawlerPreview do
   def handle_event("fetch", _params, socket) do
     config = socket.assigns.config
 
-    config = %Canary.Sources.Webpage.Config{
+    config = %Webpage.Config{
       start_urls: config["start_urls"],
       url_include_patterns: config["url_include_patterns"] || [],
-      url_exclude_patterns: config["url_exclude_patterns"] || []
+      url_exclude_patterns: config["url_exclude_patterns"] || [],
+      tag_definitions: config["tag_definitions"] || []
     }
 
     self = self()
@@ -70,11 +79,11 @@ defmodule CanaryWeb.SourceLive.WebpageCrawlerPreview do
       |> assign(:loading, true)
       |> cancel_async(:task, :rerun)
       |> start_async(:task, fn ->
-        {:ok, stream} = Canary.Crawler.run(config)
+        {:ok, stream} = Webpage.Fetcher.run(config)
 
         stream
-        |> Stream.map(&elem(&1, 0))
-        |> Stream.each(fn url -> send_update(self, myself, url: url) end)
+        |> Stream.map(fn %Webpage.FetcherResult{} = item -> %{url: item.url, tags: item.tags} end)
+        |> Stream.each(fn item -> send_update(self, myself, item: item) end)
         |> Enum.to_list()
       end)
 

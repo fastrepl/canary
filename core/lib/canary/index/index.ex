@@ -14,12 +14,15 @@ defmodule Canary.Index do
       is_parent: chunk.is_parent
     }
 
+    tags = chunk.tags || []
+
     doc = %Document.Webpage{
       id: chunk.index_id,
       source_id: chunk.source_id,
       title: chunk.title || "",
       content: chunk.content || "",
-      tags: [],
+      tags: tags,
+      is_empty_tags: tags == [],
       meta: meta
     }
 
@@ -39,6 +42,7 @@ defmodule Canary.Index do
       title: chunk.title || "",
       content: chunk.content || "",
       tags: [],
+      is_empty_tags: true,
       meta: meta
     }
 
@@ -58,6 +62,7 @@ defmodule Canary.Index do
       title: chunk.title || "",
       content: chunk.content || "",
       tags: [],
+      is_empty_tags: true,
       meta: meta
     }
 
@@ -115,7 +120,7 @@ defmodule Canary.Index do
         [
           "source_id:=[#{source_id}]",
           if(tags != nil and tags != []) do
-            "tags:=[#{Enum.join(tags, ",")}]"
+            "(tags:=[#{Enum.join(tags, ",")}] || is_empty_tags:=true)"
           end
         ]
         |> Enum.reject(&is_nil/1)

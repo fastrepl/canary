@@ -1,34 +1,37 @@
 defmodule Canary.Searcher do
-  @callback run(list(any()), String.t()) :: {:ok, list(map())} | {:error, any()}
+  @callback run(list(any()), String.t(), keyword()) :: {:ok, list(map())} | {:error, any()}
 
   def run(sources, query, opts \\ []) do
-    if opts[:cache] do
-      with {:error, _} <- get_cache(sources, query),
-           {:ok, result} <- impl().run(sources, query) do
-        set_cache(sources, query, result)
+    {cache, opts} = Keyword.pop(opts, :cache, false)
+
+    if cache do
+      with {:error, _} <- get_cache(sources, query, opts),
+           {:ok, result} <- impl().run(sources, query, opts) do
+        set_cache(sources, query, opts, result)
         {:ok, result}
       end
     else
-      impl().run(sources, query)
+      impl().run(sources, query, opts)
     end
   end
 
-  defp set_cache(sources, query, result) do
-    Cachex.put(:cache, key(sources, query), result, ttl: :timer.minutes(3))
+  defp set_cache(sources, query, opts, result) do
+    Cachex.put(:cache, key(sources, query, opts), result, ttl: :timer.minutes(3))
   end
 
-  defp get_cache(sources, query) do
-    case Cachex.get(:cache, key(sources, query)) do
+  defp get_cache(sources, query, opts) do
+    case Cachex.get(:cache, key(sources, query, opts)) do
       {:ok, nil} -> {:error, :not_found}
       {:ok, hit} -> {:ok, hit}
     end
   end
 
-  defp key(sources, query) do
+  defp key(sources, query, opts) do
     sources
     |> Enum.map(& &1.id)
     |> Enum.join(",")
     |> Kernel.<>(":" <> query)
+    |> Kernel.<>(":" <> Jason.encode!(opts))
   end
 
   defp impl(), do: Application.get_env(:canary, :searcher, Canary.Searcher.Default)
@@ -39,11 +42,11 @@ defmodule Canary.Searcher.Default do
 
   require Ash.Query
 
-  def run(sources, query) do
+  def run(sources, query, opts) do
     if ai?(query) do
-      ai_search(sources, query)
+      ai_search(sources, query, opts)
     else
-      normal_search(sources, query)
+      normal_search(sources, query, opts)
     end
   end
 
@@ -51,17 +54,17 @@ defmodule Canary.Searcher.Default do
     String.ends_with?(query, "?") or String.split(query, " ", trim: true) |> Enum.count() > 2
   end
 
-  defp ai_search(sources, query) do
+  defp ai_search(sources, query, opts) do
     keywords = Canary.Query.Understander.keywords(sources)
 
     with {:ok, queries} = Canary.Query.Understander.run(query, keywords),
-         {:ok, hits} <- Canary.Index.search(sources, queries) do
+         {:ok, hits} <- Canary.Index.search(sources, queries, tags: opts[:tags]) do
       {:ok, transform(sources, hits)}
     end
   end
 
-  defp normal_search(sources, query) do
-    {:ok, results} = Canary.Index.search(sources, [query])
+  defp normal_search(sources, query, opts) do
+    {:ok, results} = Canary.Index.search(sources, [query], tags: opts[:tags])
     {:ok, transform(sources, results)}
   end
 

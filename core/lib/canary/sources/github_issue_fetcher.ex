@@ -80,11 +80,14 @@ defmodule Canary.Sources.GithubIssue.Fetcher do
       issue_n: @default_issue_n,
       comment_n: @default_comment_n,
       cursor: nil,
-      since: DateTime.utc_now() |> DateTime.add(-365, :day) |> DateTime.to_iso8601()
+      since: DateTime.utc_now() |> DateTime.add(-180, :day) |> DateTime.to_iso8601()
     }
 
-    nodes = GithubFetcher.run_all(query, variables)
-    {:ok, Enum.map(nodes, &transform_issue_node/1)}
+    stream =
+      GithubFetcher.run_all(query, variables)
+      |> Stream.map(&transform_issue_node/1)
+
+    {:ok, stream}
   end
 
   defp transform_issue_node(issue) do

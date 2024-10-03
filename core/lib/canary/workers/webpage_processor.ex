@@ -20,9 +20,9 @@ defmodule Canary.Workers.WebpageProcessor do
     end
   end
 
-  defp process(%Source{id: source_id} = source) do
-    with {:ok, incomings} = Webpage.Fetcher.run(source),
-         :ok <- Webpage.Syncer.run(source_id, incomings) do
+  defp process(%Source{id: source_id, config: %Ash.Union{type: :webpage, value: config}} = source) do
+    with {:ok, incomings} = Webpage.Fetcher.run(config),
+         :ok <- Webpage.Syncer.run(source_id, Enum.to_list(incomings)) do
       Source.update_overview(source)
     end
   end

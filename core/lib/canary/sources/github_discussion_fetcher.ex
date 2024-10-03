@@ -83,8 +83,11 @@ defmodule Canary.Sources.GithubDiscussion.Fetcher do
       cursor: nil
     }
 
-    nodes = GithubFetcher.run_all(query, variables)
-    {:ok, Enum.map(nodes, &transform_discussion_node/1)}
+    stream =
+      GithubFetcher.run_all(query, variables)
+      |> Stream.map(&transform_discussion_node/1)
+
+    {:ok, stream}
   end
 
   defp transform_discussion_node(discussion) do

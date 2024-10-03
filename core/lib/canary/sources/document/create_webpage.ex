@@ -28,7 +28,7 @@ defmodule Canary.Sources.Document.CreateWebpage do
     |> Ash.Changeset.change_attribute(opts[:meta_attribute], wrap_union(%Webpage.DocumentMeta{}))
     |> Ash.Changeset.change_attribute(opts[:chunks_attribute], [])
     |> Ash.Changeset.after_action(fn _, record ->
-      %Webpage.FetcherResult{url: url, html: html, items: items} = fetcher_result
+      %Webpage.FetcherResult{url: url, html: html, items: items, tags: tags} = fetcher_result
       top_level_item = items |> Enum.at(0)
 
       hash =
@@ -46,6 +46,7 @@ defmodule Canary.Sources.Document.CreateWebpage do
             is_parent: index == 0,
             title: item.title,
             content: item.content,
+            tags: tags,
             url: URI.parse(url) |> Map.put(:fragment, item.id) |> to_string()
           }
         end)

@@ -2,7 +2,7 @@ defmodule Canary.Accounts.PublicKeyConfig do
   use Ash.Resource, data_layer: :embedded
 
   attributes do
-    attribute :allowed_host, :string, allow_nil?: true
+    attribute :allowed_host, :string, allow_nil?: false
   end
 
   actions do

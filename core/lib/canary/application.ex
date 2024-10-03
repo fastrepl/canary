@@ -9,10 +9,10 @@ defmodule Canary.Application do
   def start(_type, _args) do
     attach_oban_telemetry()
 
-    Canary.Index.Collection.ensure(:webpage)
-    Canary.Index.Collection.ensure(:github_issue)
-    Canary.Index.Collection.ensure(:github_discussion)
-    Canary.Index.Stopword.ensure()
+    :ok = Canary.Index.Collection.ensure(:webpage)
+    :ok = Canary.Index.Collection.ensure(:github_issue)
+    :ok = Canary.Index.Collection.ensure(:github_discussion)
+    :ok = Canary.Index.Stopword.ensure()
 
     children =
       [

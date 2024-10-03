@@ -10,7 +10,7 @@ defmodule Canary.Test.Index do
     :ok = Index.Collection.ensure(:webpage)
     :ok = Index.Collection.ensure(:github_issue)
     :ok = Index.Collection.ensure(:github_discussion)
-    {:ok, _} = Index.Stopword.ensure()
+    :ok = Index.Stopword.ensure()
   end
 
   test "insert and search" do

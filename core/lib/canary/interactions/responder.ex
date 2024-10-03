@@ -22,7 +22,7 @@ defmodule Canary.Interactions.Responder.Default do
   alias Canary.Sources.Document
 
   def run(sources, query, handle_delta, opts) do
-    {:ok, results} = Canary.Searcher.run(sources, query, cache: opts[:cache])
+    {:ok, results} = Canary.Searcher.run(sources, query, opts)
 
     docs =
       results

@@ -34,7 +34,6 @@ defmodule Canary.Sources.GithubFetcher do
         end
     end)
     |> Stream.flat_map(& &1)
-    |> Enum.to_list()
   end
 
   def run(query, variables) do

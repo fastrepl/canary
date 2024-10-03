@@ -39,12 +39,12 @@ defmodule CanaryWeb.OperationsController do
     end
   end
 
-  def search(conn, %{"query" => %{"text" => query, "tags" => _tags, "sources" => sources}}) do
+  def search(conn, %{"query" => %{"text" => query, "tags" => tags, "sources" => sources}}) do
     Honeybadger.event("search", %{account_id: conn.assigns.current_account.id})
 
     sources = find_sources(conn, sources)
 
-    case Canary.Searcher.run(sources, query, cache: cache?()) do
+    case Canary.Searcher.run(sources, query, tags: tags, cache: cache?()) do
       {:ok, matches} ->
         data = %{
           matches: matches,
@@ -63,7 +63,7 @@ defmodule CanaryWeb.OperationsController do
     end
   end
 
-  def ask(conn, %{"query" => %{"text" => query, "tags" => _tags, "sources" => sources}}) do
+  def ask(conn, %{"query" => %{"text" => query, "tags" => tags, "sources" => sources}}) do
     Honeybadger.event("ask", %{account_id: conn.assigns.current_account.id})
 
     sources = find_sources(conn, sources)
@@ -84,6 +84,7 @@ defmodule CanaryWeb.OperationsController do
         sources,
         query,
         fn data -> send(here, data) end,
+        tags: tags,
         cache: cache?()
       )
     end)

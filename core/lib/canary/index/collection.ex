@@ -14,6 +14,7 @@ defmodule Canary.Index.Collection do
       %{name: "source_id", type: "string"},
       %{name: "embedding", type: "float[]", num_dim: 384, optional: true},
       %{name: "tags", type: "string[]"},
+      %{name: "is_empty_tags", type: "bool"},
       %{name: "meta", type: "object", index: false, optional: true}
     ]
 

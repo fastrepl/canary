@@ -66,15 +66,6 @@ defmodule CanaryWeb.SourceLive.Detail do
                         value={url}
                         is_full_width
                       />
-                      <%!-- <Primer.button
-                        type="button"
-                        phx-click={JS.dispatch("change")}
-                        phx-target={@myself}
-                        is_small
-                        is_icon_button
-                      >
-                        <Primer.octicon name="x-16" />
-                      </Primer.button> --%>
                     </div>
                   <% end %>
                   <Primer.button
@@ -98,7 +89,6 @@ defmodule CanaryWeb.SourceLive.Detail do
                       is_full_width
                     />
                   <% end %>
-
                   <Primer.button
                     type="button"
                     phx-click={JS.dispatch("change")}
@@ -127,6 +117,40 @@ defmodule CanaryWeb.SourceLive.Detail do
                     type="button"
                     phx-click={JS.dispatch("change")}
                     name={fc[:url_exclude_patterns].name <> "[]"}
+                    phx-target={@myself}
+                    is_small
+                    is_full_width
+                  >
+                    <Primer.octicon name="plus-16" />
+                  </Primer.button>
+                </.form_group>
+
+                <.form_group header="Tags">
+                  <div class="flex flex-col gap-6">
+                    <%= for tag_def <- fc[:tag_definitions].value || [] do %>
+                      <div class="flex flex-col w-full gap-2 pl-2">
+                        <Primer.text_input
+                          type="text"
+                          name={tag_def[:name].name}
+                          value={tag_def[:name].value}
+                          is_full_width
+                          form_control={%{label: "Name"}}
+                        />
+                        <Primer.text_input
+                          type="text"
+                          name={tag_def[:url_include_patterns].name <> "[]"}
+                          value={tag_def[:url_include_patterns].value |> Enum.join(",")}
+                          is_full_width
+                          form_control={%{label: "Include patterns"}}
+                        />
+                      </div>
+                    <% end %>
+                  </div>
+
+                  <Primer.button
+                    type="button"
+                    phx-click={JS.dispatch("change")}
+                    name={fc[:tag_definitions].name <> "[#{Enum.count(fc[:tag_definitions].value || [])}]"}
                     phx-target={@myself}
                     is_small
                     is_full_width
@@ -305,6 +329,17 @@ defmodule CanaryWeb.SourceLive.Detail do
 
   @impl true
   def handle_event("validate", %{"form" => params}, socket) do
+    params =
+      if get_in(params, ["config", "tag_definitions"]) do
+        params
+        |> update_in(
+          ["config", "tag_definitions"],
+          &TagDefinitionForm.transform(&1)
+        )
+      else
+        params
+      end
+
     form = AshPhoenix.Form.validate(socket.assigns.form, params)
 
     socket =
@@ -317,7 +352,7 @@ defmodule CanaryWeb.SourceLive.Detail do
 
   @impl true
   def handle_event("submit", %{"form" => params}, socket) do
-    params = transform_params(params)
+    params = drop_empty(params)
 
     case AshPhoenix.Form.submit(socket.assigns.form, params: params) do
       {:ok, _} ->
@@ -375,7 +410,7 @@ defmodule CanaryWeb.SourceLive.Detail do
     end
   end
 
-  defp transform_params(params) do
+  defp drop_empty(params) do
     [
       "start_urls",
       "url_include_patterns",
@@ -392,5 +427,49 @@ defmodule CanaryWeb.SourceLive.Detail do
         end)
       end
     end)
+  end
+end
+
+defmodule TagDefinitionForm do
+  @default_tag_definition_item %{}
+
+  def transform(value), do: transform(value, nil)
+
+  defp transform("", nil), do: @default_tag_definition_item
+  defp transform("", key) when key in ["url_include_patterns"], do: []
+  defp transform("", _key), do: ""
+
+  defp transform(list, key_context) when is_list(list) do
+    list
+    |> Enum.map(&transform(&1, key_context))
+    |> handle_context(key_context)
+  end
+
+  defp transform(map, key_context) when is_map(map) do
+    if integerish_keys?(map) do
+      map
+      |> Enum.sort_by(fn {k, _v} -> String.to_integer(k) end)
+      |> Enum.map(fn {_k, v} -> transform(v, key_context) end)
+      |> handle_context(key_context)
+    else
+      Enum.into(map, %{}, fn {k, v} ->
+        {k, transform(v, k)}
+      end)
+    end
+  end
+
+  defp transform(value, _key), do: value
+
+  defp handle_context(values, key_context) do
+    case key_context do
+      "url_include_patterns" -> List.flatten(values)
+      "url_exclude_patterns" -> List.flatten(values)
+      _ -> values
+    end
+  end
+
+  defp integerish_keys?(map) do
+    Map.keys(map)
+    |> Enum.all?(&(&1 =~ ~r/^\d+$/))
   end
 end

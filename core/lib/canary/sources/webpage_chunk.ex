@@ -7,6 +7,7 @@ defmodule Canary.Sources.Webpage.Chunk do
     attribute :document_id, :string, allow_nil?: false
     attribute :is_parent, :boolean, allow_nil?: false
 
+    attribute :tags, {:array, :string}, default: []
     attribute :url, :string, allow_nil?: false
     attribute :title, :string, allow_nil?: false, constraints: [allow_empty?: true]
     attribute :content, :string, allow_nil?: false
@@ -23,6 +24,7 @@ defmodule Canary.Sources.Webpage.Chunk do
         :source_id,
         :document_id,
         :is_parent,
+        :tags,
         :url,
         :title,
         :content,
