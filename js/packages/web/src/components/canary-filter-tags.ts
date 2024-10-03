@@ -87,7 +87,7 @@ export class CanaryFilterTags extends LitElement {
       font-size: 0.9em;
       padding: 1px 8px;
       min-width: 40px;
-      
+
       border: 1px solid;
       border-radius: 8px;
       border-color: var(--canary-is-light, var(--canary-color-gray-80))

@@ -120,24 +120,17 @@ export const createStore = (host: HTMLElement) =>
       set_query: (context, { data }: { data: Partial<QueryContext> }) => {
         const nextQuery = { ...context.query.value, ...data };
         context.query.setValue(nextQuery, true);
+        context.mode.setValue({ ...context.mode.value, current: MODE_SEARCH });
 
-        if (context.mode.value.current === MODE_SEARCH) {
-          context.executionManager.search(
-            nextQuery,
-            context.operation.value,
-            context.filters.value,
-          );
-        }
-        if (context.mode.value.current === MODE_ASK) {
-          context.executionManager.ask(
-            nextQuery,
-            context.operation.value,
-            context.filters.value,
-          );
-        }
+        context.executionManager.search(
+          nextQuery,
+          context.operation.value,
+          context.filters.value,
+        );
 
         return {
           query: context.query,
+          mode: context.mode,
         };
       },
     },

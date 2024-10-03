@@ -110,11 +110,6 @@ export class CanaryInput extends LitElement {
   }
 
   private _handleKeyDown(e: KeyboardEvent) {
-    if (this._mode?.current === MODE_ASK) {
-      e.preventDefault();
-      this.dispatchEvent(createEvent({ type: "set_mode", data: MODE_SEARCH }));
-    }
-
     if (
       e.key === "Tab" &&
       this._mode?.current === MODE_SEARCH &&

@@ -20,7 +20,7 @@ export class CanaryContent extends LitElement {
 
   render() {
     return html`
-      <div class="container" part="container" >
+      <div class="container" part="container">
         <div class="head-container" part="head-container">
           <slot name="head"></slot>
         </div>
