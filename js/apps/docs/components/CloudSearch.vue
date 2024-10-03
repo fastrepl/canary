@@ -25,6 +25,7 @@ onMounted(() => {
   });
 });
 
+const tags = ["Local", "Cloud"].join(",");
 const tabs = JSON.stringify([
   { name: "Docs", pattern: "**/*" },
   { name: "Github", pattern: "**/github.com/**" },
@@ -43,10 +44,7 @@ const sources = ["canary_webpage", "canary_issue"];
         <canary-modal>
           <canary-trigger-searchbar slot="trigger"></canary-trigger-searchbar>
           <canary-content slot="content">
-            <canary-filter-tags
-              slot="head"
-              tags="Local,Cloud"
-            ></canary-filter-tags>
+            <canary-filter-tags slot="head" :tags="tags"></canary-filter-tags>
             <canary-input slot="input" autofocus></canary-input>
             <canary-search slot="mode">
               <canary-callout-discord
