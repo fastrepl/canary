@@ -4,6 +4,7 @@ defmodule Canary.Type.DocumentChunk do
     constraints: [
       types: [
         webpage: [type: Canary.Sources.Webpage.Chunk],
+        openapi: [type: Canary.Sources.OpenAPI.Chunk],
         github_issue: [type: Canary.Sources.GithubIssue.Chunk],
         github_discussion: [type: Canary.Sources.GithubDiscussion.Chunk],
         discord_thread: [type: Canary.Sources.DiscordThread.Chunk]
