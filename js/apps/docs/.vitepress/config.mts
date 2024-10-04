@@ -78,6 +78,10 @@ const sidebar = [
             text: "Starlight",
             link: "/docs/local/integrations/starlight",
           },
+          {
+            text: "Nextra",
+            link: "/docs/local/integrations/nextra",
+          }
         ],
       },
     ],
@@ -112,6 +116,10 @@ const sidebar = [
           {
             text: "Starlight",
             link: "/docs/cloud/integrations/starlight",
+          },
+          {
+            text: "Nextra",
+            link: "/docs/cloud/integrations/nextra",
           },
         ],
       },

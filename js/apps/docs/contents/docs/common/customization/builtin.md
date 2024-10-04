@@ -20,7 +20,7 @@ Outermost wrapper component. Required for all other components.
 </canary-root>
 ```
 
-`docusaurus`, `vitepress`, and `starlight` are supported.
+`docusaurus`, `vitepress`, `starlight`, and `nextra` are supported.
 
 ## `canary-provider-*`
 
