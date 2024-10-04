@@ -103,7 +103,8 @@ defmodule Canary.Test.Document do
           created_at: DateTime.utc_now(),
           author_name: "author_name",
           author_avatar_url: "author_avatar_url",
-          comment: false
+          comment: false,
+          closed: false
         }
       ]
 

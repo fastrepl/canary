@@ -68,7 +68,7 @@ defmodule Canary.MixProject do
       {:ash_authentication_phoenix, "~> 2.1"},
       {:ash_postgres, "~> 2.3"},
       {:ash_json_api, "~> 1.0"},
-      {:open_api_spex, "~> 3.20"},
+      {:open_api_spex, "~> 3.21"},
       {:picosat_elixir, "~> 0.2.3"},
       {:req, "~> 0.5.0"},
       {:retry, "~> 0.18"},
@@ -90,15 +90,15 @@ defmodule Canary.MixProject do
       {:primer_live, "~> 0.8"},
       {:honeybadger, "~> 0.16"},
       {:hop, "~> 0.1"},
-      {:ex_json_schema, "~> 0.10"}
+      {:ex_json_schema, "~> 0.10"},
+      {:yaml_elixir, "~> 2.11"}
     ] ++ deps_eval()
   end
 
   defp deps_eval() do
     [
       {:progress_bar, "~> 3.0"},
-      {:ymlr, "~> 5.0", only: [:dev, :test]},
-      {:yaml_elixir, "~> 2.11", only: [:dev, :test]}
+      {:ymlr, "~> 5.0", only: [:dev, :test]}
     ]
   end
 
