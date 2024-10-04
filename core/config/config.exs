@@ -60,6 +60,7 @@ config :canary, Oban,
     default: 10,
     github_processor: 2,
     webpage_processor: 10,
+    openapi_processor: 10,
     email: 10
   ],
   repo: Canary.Repo,

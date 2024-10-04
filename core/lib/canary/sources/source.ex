@@ -151,6 +151,9 @@ defmodule Canary.Sources.Source do
             :webpage ->
               Canary.Workers.WebpageProcessor.new(%{source_id: source_id})
 
+            :openapi ->
+              Canary.Workers.OpenAPIProcessor.new(%{source_id: source_id})
+
             :github_issue ->
               Canary.Workers.GithubIssueProcessor.new(%{source_id: source_id})
 
