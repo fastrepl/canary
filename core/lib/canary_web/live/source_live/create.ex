@@ -4,8 +4,15 @@ defmodule CanaryWeb.SourceLive.Create do
 
   @config_types [
     {"Webpage", "webpage"},
+    {"OpenAPI", "openapi"},
     {"Github Issue", "github_issue"},
     {"Github Discussion", "github_discussion"}
+  ]
+
+  @openapi_types [
+    {"Swagger", "swagger"},
+    {"Redoc", "redoc"},
+    {"Rapi", "rapi"}
   ]
 
   @impl true
@@ -46,6 +53,28 @@ defmodule CanaryWeb.SourceLive.Create do
                 name={fc[:start_urls].name <> "[]"}
                 value={fc[:start_urls].value}
                 form_control={%{label: "URL"}}
+                is_full_width
+              />
+            <% "openapi" -> %>
+              <Primer.text_input
+                type="url"
+                name={fc[:source_url].name}
+                value={fc[:source_url].value}
+                form_control={%{label: "Source URL"}}
+                is_full_width
+              />
+              <Primer.text_input
+                type="url"
+                name={fc[:served_url].name}
+                value={fc[:served_url].value}
+                form_control={%{label: "Served URL"}}
+                is_full_width
+              />
+              <Primer.select
+                form={fc}
+                field={:served_as}
+                options={@openapi_types}
+                form_control={%{label: "Served as"}}
                 is_full_width
               />
             <% "github_issue" -> %>
@@ -92,6 +121,7 @@ defmodule CanaryWeb.SourceLive.Create do
       socket
       |> assign(assigns)
       |> assign(:config_types, @config_types)
+      |> assign(:openapi_types, @openapi_types)
 
     form =
       Canary.Sources.Source

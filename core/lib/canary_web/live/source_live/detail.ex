@@ -36,6 +36,7 @@ defmodule CanaryWeb.SourceLive.Detail do
             value={
               case @source.config.type do
                 :webpage -> "Webpage"
+                :openapi -> "OpenAPI"
                 :github_issue -> "Github Issue"
                 :github_discussion -> "Github Discussion"
               end
@@ -158,6 +159,32 @@ defmodule CanaryWeb.SourceLive.Detail do
                     <Primer.octicon name="plus-16" />
                   </Primer.button>
                 </.form_group>
+              <% :openapi -> %>
+                <Primer.text_input
+                  type="url"
+                  name={fc[:source_url].name}
+                  value={fc[:source_url].value}
+                  is_full_width
+                  form_control={%{label: "Source URL"}}
+                />
+                <Primer.text_input
+                  type="url"
+                  name={fc[:served_url].name}
+                  value={fc[:served_url].value}
+                  is_full_width
+                  form_control={%{label: "Served URL"}}
+                />
+                <Primer.select
+                  form={fc}
+                  field={:served_as}
+                  options={[
+                    {"Swagger", "swagger"},
+                    {"Redoc", "redoc"},
+                    {"Rapi", "rapi"}
+                  ]}
+                  form_control={%{label: "Served as"}}
+                  is_full_width
+                />
               <% :github_issue -> %>
                 <Primer.text_input
                   form={fc}
