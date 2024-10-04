@@ -37,7 +37,7 @@ export type FiltersContext = {
 
 export type ThemeContext = "light" | "dark";
 
-export type Framework = "starlight" | "docusaurus" | "vitepress";
+export type Framework = "starlight" | "docusaurus" | "vitepress" | "nextra";
 
 export type TriggerShortcut = "cmdk" | "slash";
 

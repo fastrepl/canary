@@ -30,7 +30,7 @@ export class CanaryStyles extends LitElement {
 
   private _handleThemeChange() {
     const [target] = document.getElementsByTagName("html");
-    const useClassList = this.framework === "vitepress";
+    const useClassList = ["vitepress", "nextra"].includes(this.framework);
 
     const extractTheme = (el: Element) => {
       if (useClassList) {
