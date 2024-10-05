@@ -55,7 +55,10 @@ export default defineConfig({
     process.env.GENERATE_DOCS === "1" && partsReportPlugin(),
     process.env.GENERATE_DOCS === "1" && cssVariablesReportPlugin(),
     unocss({ mode: "shadow-dom" }),
-    dts({ exclude: ["**/*.stories.*"] }),
+    dts({
+      include: ["src/**/*.ts"],
+      exclude: ["**/*.stories.*", "**/*.test.ts"],
+    }),
     cem({
       files: components,
       output: "custom-elements.json",
