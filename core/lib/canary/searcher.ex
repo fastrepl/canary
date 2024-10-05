@@ -108,6 +108,9 @@ defmodule Canary.Searcher.Default do
               :webpage ->
                 %{}
 
+              :openapi ->
+                %{}
+
               :github_issue ->
                 %{closed: doc.meta.value.closed}
 

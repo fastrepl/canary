@@ -6,6 +6,7 @@ defmodule Canary.Workers.JobReporter do
   @processors Enum.map(
                 [
                   Workers.WebpageProcessor,
+                  Workers.OpenAPIProcessor,
                   Workers.GithubIssueProcessor,
                   Workers.GithubDiscussionProcessor
                 ],

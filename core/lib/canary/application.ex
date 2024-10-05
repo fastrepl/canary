@@ -10,6 +10,7 @@ defmodule Canary.Application do
     attach_oban_telemetry()
 
     :ok = Canary.Index.Collection.ensure(:webpage)
+    :ok = Canary.Index.Collection.ensure(:openapi)
     :ok = Canary.Index.Collection.ensure(:github_issue)
     :ok = Canary.Index.Collection.ensure(:github_discussion)
     :ok = Canary.Index.Stopword.ensure()

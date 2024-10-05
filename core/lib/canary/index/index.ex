@@ -1,6 +1,7 @@
 defmodule Canary.Index do
   alias Canary.Sources.Source
   alias Canary.Sources.Webpage
+  alias Canary.Sources.OpenAPI
   alias Canary.Sources.GithubIssue
   alias Canary.Sources.GithubDiscussion
 
@@ -27,6 +28,29 @@ defmodule Canary.Index do
     }
 
     Client.index_document(:webpage, doc)
+  end
+
+  def insert_document(%OpenAPI.Chunk{} = chunk) do
+    meta = %Document.OpenAPI.Meta{
+      url: chunk.url,
+      document_id: chunk.document_id,
+      is_parent: false
+    }
+
+    doc = %Document.OpenAPI{
+      id: chunk.index_id,
+      source_id: chunk.source_id,
+      path: chunk.path,
+      get: chunk.get,
+      post: chunk.post,
+      put: chunk.put,
+      delete: chunk.delete,
+      tags: [],
+      is_empty_tags: true,
+      meta: meta
+    }
+
+    Client.index_document(:openapi, doc)
   end
 
   def insert_document(%GithubIssue.Chunk{} = chunk) do
@@ -72,6 +96,7 @@ defmodule Canary.Index do
   def delete_document(source_type, id)
       when source_type in [
              :webpage,
+             :openapi,
              :github_issue,
              :github_discussion
            ] do
@@ -126,29 +151,41 @@ defmodule Canary.Index do
         |> Enum.reject(&is_nil/1)
         |> Enum.join(" && ")
 
-      query_by = ["title", "content"] |> Enum.join(",")
-      query_by_weights = [3, 1] |> Enum.join(",")
-
       %{
         collection: to_string(type),
         q: query,
         prefix: true,
-        query_by: query_by,
-        query_by_weights: query_by_weights,
         filter_by: filter_by,
         sort_by: "_text_match:desc",
-        highlight_fields: "content",
         stopwords: Canary.Index.Stopword.id(),
         prioritize_exact_match: true,
         prioritize_token_position: false,
         prioritize_num_matching_fields: false,
         max_candidates: 4 * 4
       }
-      |> add_embedding_args(opts)
+      |> handle_source_type(type)
+      |> handle_embedding(opts)
     end)
   end
 
-  defp add_embedding_args(args, opts) do
+  defp handle_source_type(args, type)
+       when type in [:webpage, :github_issue, :github_discussion] do
+    args
+    |> Map.put(:highlight_fields, "content")
+    |> Map.put(:query_by, Enum.join(["title", "content"], ","))
+    |> Map.put(:query_by_weights, Enum.join([3, 1], ","))
+  end
+
+  defp handle_source_type(args, type) when type in [:openapi] do
+    ops = ["get", "post", "put", "delete"]
+
+    args
+    |> Map.put(:highlight_fields, Enum.join(ops, ","))
+    |> Map.put(:query_by, Enum.join(["path"] ++ ops, ","))
+    |> Map.put(:query_by_weights, Enum.join([1, 2, 2, 2, 2], ","))
+  end
+
+  defp handle_embedding(args, opts) do
     embedding = opts[:embedding]
     embedding_alpha = opts[:embedding_alpha] || 0.3
 

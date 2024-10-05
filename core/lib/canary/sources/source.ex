@@ -111,6 +111,7 @@ defmodule Canary.Sources.Source do
         worker =
           case type do
             :webpage -> Canary.Workers.WebpageProcessor
+            :openapi -> Canary.Workers.OpenAPIProcessor
             :github_issue -> Canary.Workers.GithubIssueProcessor
             :github_discussion -> Canary.Workers.GithubDiscussionProcessor
           end
