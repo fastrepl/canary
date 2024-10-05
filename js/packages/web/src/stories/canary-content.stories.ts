@@ -4,16 +4,16 @@ import type { Meta, StoryObj } from "@storybook/web-components";
 import { userEvent } from "@storybook/test";
 import { getAllByShadowRole } from "shadow-dom-testing-library";
 
-import "./canary-input";
-import "./canary-content";
-import "./canary-filter-tabs-glob";
+import "../components/canary-input";
+import "../components/canary-content";
+import "../components/canary-filter-tabs-glob";
 
-import "./canary-search";
-import "./canary-search-results";
+import "../components/canary-search";
+import "../components/canary-search-results";
 
-import "./canary-ask";
-import "./canary-ask-results";
-import "./canary-footer";
+import "../components/canary-ask";
+import "../components/canary-ask-results";
+import "../components/canary-footer";
 
 enum Kind {
   Search,

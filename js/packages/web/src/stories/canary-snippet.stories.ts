@@ -1,7 +1,7 @@
 import { html } from "lit";
 import type { Meta, StoryObj } from "@storybook/web-components";
 
-import "./canary-snippet-excerpt";
+import "../components/canary-snippet-excerpt";
 
 export default {
   title: "private-components/canary-snippet",

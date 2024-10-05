@@ -4,14 +4,14 @@ import type { Meta, StoryObj } from "@storybook/web-components";
 import { userEvent } from "@storybook/test";
 import { getAllByShadowRole } from "shadow-dom-testing-library";
 
-import "./canary-trigger-searchbar";
+import "../components/canary-trigger-searchbar";
 
-import "./canary-content";
-import "./canary-input";
+import "../components/canary-content";
+import "../components/canary-input";
 
-import "./canary-search";
-import "./canary-search-results";
-import "./canary-filter-tabs-glob";
+import "../components/canary-search";
+import "../components/canary-search-results";
+import "../components/canary-filter-tabs-glob";
 
 const type = (text: string): StoryObj["play"] => {
   return async ({ canvasElement }) => {

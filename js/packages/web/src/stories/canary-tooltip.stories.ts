@@ -1,8 +1,8 @@
 import { html } from "lit";
 import type { Meta, StoryObj } from "@storybook/web-components";
 
-import "./canary-tooltip";
-import "./canary-callout-cal";
+import "../components/canary-tooltip";
+import "../components/canary-callout-cal";
 
 export default {
   title: "public-components/canary-tooltip",

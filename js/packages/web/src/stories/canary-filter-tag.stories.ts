@@ -1,7 +1,7 @@
 import { html } from "lit";
 import type { Meta, StoryObj } from "@storybook/web-components";
 
-import "./canary-filter-tags";
+import "../components/canary-filter-tags";
 
 enum Kind {
   Simple,

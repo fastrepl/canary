@@ -1,7 +1,7 @@
 import { html } from "lit";
 import type { Meta, StoryObj } from "@storybook/web-components";
 
-import "./canary-markdown";
+import "../components/canary-markdown";
 
 export default {
   title: "public-components/canary-markdown",

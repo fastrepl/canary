@@ -1,10 +1,10 @@
 import { html } from "lit";
 import type { Meta, StoryObj } from "@storybook/web-components";
 
-import "./canary-callout-cal";
-import "./canary-callout-calendly";
-import "./canary-callout-slack";
-import "./canary-callout-discord";
+import "../components/canary-callout-cal";
+import "../components/canary-callout-calendly";
+import "../components/canary-callout-slack";
+import "../components/canary-callout-discord";
 
 const render = ({ type }: any) => {
   const callout = (() => {

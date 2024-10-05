@@ -1,7 +1,7 @@
 import { html } from "lit";
 import type { Meta, StoryObj } from "@storybook/web-components";
 
-import "./canary-media-query";
+import "../components/canary-media-query";
 
 export default {
   title: "public-components/canary-media-query",

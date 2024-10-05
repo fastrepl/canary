@@ -4,13 +4,13 @@ import type { Meta, StoryObj } from "@storybook/web-components";
 import { userEvent } from "@storybook/test";
 import * as shadow from "shadow-dom-testing-library";
 
-import "./canary-provider-cloud";
-import "./canary-modal";
-import "./canary-trigger-searchbar";
-import "./canary-content";
-import "./canary-search";
-import "./canary-input";
-import "./canary-search-results";
+import "../components/canary-provider-cloud";
+import "../components/canary-modal";
+import "../components/canary-trigger-searchbar";
+import "../components/canary-content";
+import "../components/canary-search";
+import "../components/canary-input";
+import "../components/canary-search-results";
 
 export default {
   title: "public-components/canary-modal",

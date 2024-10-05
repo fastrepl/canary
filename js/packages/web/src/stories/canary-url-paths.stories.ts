@@ -1,7 +1,7 @@
 import { html } from "lit";
 import type { Meta, StoryObj } from "@storybook/web-components";
 
-import "./canary-url-paths";
+import "../components/canary-url-paths";
 
 enum Kind {
   FullURL,

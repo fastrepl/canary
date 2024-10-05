@@ -61,28 +61,19 @@ const mockSearchReferences = (type: string, query: string): SearchResult[] => {
     return match ? parseInt(match[0], 10) : 0;
   };
 
-  const randomNumber = (min: number, max: number) => {
-    return Math.floor(Math.random() * (max - min + 1) + min);
-  };
-
   return Array(getN(query))
     .fill(null)
     .map((_, index) => {
-      const url =
-        Math.random() > 0.5
-          ? `https://example.com/a/b?query=${query}`
-          : `https://example.com/api/b?query=${query}`;
-
       if (index % 3 === 1) {
         return {
           type: "github_issue",
           meta: {
-            closed: Math.random() > 0.5,
+            closed: true,
           },
           title: `title ${index}`,
-          url,
+          url: `https://example.com/a/b?query=${query}`,
           excerpt: `<mark>${type}</mark> response: <mark>${query}</mark>!`,
-          sub_results: Array(randomNumber(1, 3))
+          sub_results: Array(2)
             .fill(null)
             .map((_) => ({
               title: `sub title ${index}`,
@@ -96,13 +87,13 @@ const mockSearchReferences = (type: string, query: string): SearchResult[] => {
         return {
           type: "github_discussion",
           meta: {
-            closed: Math.random() > 0.5,
-            answered: Math.random() > 0.5,
+            closed: true,
+            answered: false,
           },
           title: `title ${index}`,
-          url,
+          url: `https://example.com/api/b?query=${query}`,
           excerpt: `<mark>${type}</mark> response: <mark>${query}</mark>!`,
-          sub_results: Array(randomNumber(1, 3))
+          sub_results: Array(2)
             .fill(null)
             .map((_) => ({
               title: `sub title ${index}`,
@@ -116,9 +107,9 @@ const mockSearchReferences = (type: string, query: string): SearchResult[] => {
         type: "webpage",
         meta: {},
         title: `title ${index}`,
-        url,
+        url: `https://example.com/a/b?query=${query}`,
         excerpt: `<mark>${type}</mark> response: <mark>${query}</mark>!`,
-        sub_results: Array(randomNumber(1, 3))
+        sub_results: Array(2)
           .fill(null)
           .map((_) => ({
             title: `sub title ${index}`,

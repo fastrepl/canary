@@ -1,8 +1,8 @@
 import { html } from "lit";
 import type { Meta, StoryObj } from "@storybook/web-components";
 
-import "./canary-loading-spinner";
-import "./canary-loading-dots";
+import "../components/canary-loading-spinner";
+import "../components/canary-loading-dots";
 
 const meta = {
   title: "public-components/canary-loading",

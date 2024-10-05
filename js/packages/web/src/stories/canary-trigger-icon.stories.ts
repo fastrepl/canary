@@ -1,7 +1,7 @@
 import { html } from "lit";
 import type { Meta, StoryObj } from "@storybook/web-components";
 
-import "./canary-trigger-icon";
+import "../components/canary-trigger-icon";
 
 enum Kind {
   Icon,

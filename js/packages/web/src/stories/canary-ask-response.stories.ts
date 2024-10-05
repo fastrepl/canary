@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/web-components";
 
 import type { AskResponse } from "../types";
 
-import "./canary-ask-response";
+import "../components/canary-ask-response";
 
 enum Kind {
   Complete,
