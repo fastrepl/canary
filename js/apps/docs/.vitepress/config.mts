@@ -81,7 +81,7 @@ const sidebar = [
           {
             text: "Nextra",
             link: "/docs/local/integrations/nextra",
-          }
+          },
         ],
       },
     ],
@@ -132,6 +132,10 @@ const sidebar = [
       {
         text: "Packages",
         link: "/docs/reference/packages",
+      },
+      {
+        text: "Components",
+        link: "/docs/reference/components",
       },
       {
         text: "Storybook",

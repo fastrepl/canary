@@ -36,22 +36,25 @@ export default function CanarySearchBar() {
   if (!loaded) {
     return null;
   }
-  
+
   return (
     <canary-root framework="nextra">
-        <canary-provider-cloud api-key="KEY" api-base="https://cloud.getcanary.dev">
-            <canary-modal>
-                <canary-trigger-searchbar slot="trigger"></canary-trigger-searchbar>
-                <canary-content slot="content">
-                    <canary-input slot="input"></canary-input>
-                    <canary-search slot="mode">
-                        <canary-search-results slot="body"></canary-search-results>
-                    </canary-search>
-                </canary-content>
-            </canary-modal>
-        </canary-provider-cloud>
+      <canary-provider-cloud
+        api-key="KEY"
+        api-base="https://cloud.getcanary.dev"
+      >
+        <canary-modal>
+          <canary-trigger-searchbar slot="trigger"></canary-trigger-searchbar>
+          <canary-content slot="content">
+            <canary-input slot="input"></canary-input>
+            <canary-search slot="mode">
+              <canary-search-results slot="body"></canary-search-results>
+            </canary-search>
+          </canary-content>
+        </canary-modal>
+      </canary-provider-cloud>
     </canary-root>
-  )
+  );
 }
 ```
 
@@ -63,10 +66,10 @@ Update [theme config](https://nextra.site/docs/docs-theme/theme-configuration#se
 
 ```js [theme.config.jsx]
 export default {
-    search: {
-        component: () => <CanarySearchBar />
-    }
-}
+  search: {
+    component: () => <CanarySearchBar />,
+  },
+};
 ```
 
 :::

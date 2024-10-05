@@ -4,13 +4,18 @@ import { wrapper } from "../styles";
 
 const NAME = "canary-badge";
 
+/**
+ * @csspart container - Container
+ */
 @customElement(NAME)
 export class CanaryBadge extends LitElement {
   @property({ type: String })
   name!: string;
 
   render() {
-    return html` <span class="container"> ${this.name} </span> `;
+    return html`
+      <span class="container" part="container"> ${this.name} </span>
+    `;
   }
 
   static styles = [

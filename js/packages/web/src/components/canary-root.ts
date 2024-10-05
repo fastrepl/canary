@@ -10,6 +10,9 @@ import "./canary-styles";
 
 const NAME = "canary-root";
 
+/**
+ * @slot - Default slot
+ */
 @customElement(NAME)
 export class CanaryRoot extends LitElement {
   @property({ type: String })

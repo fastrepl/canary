@@ -10,6 +10,16 @@ import { wrapper } from "../styles";
 
 const NAME = "canary-styles";
 
+/**
+ * @slot - Default slot
+ * @cssprop --canary-color-primary-c - Chroma of primary color
+ * @cssprop --canary-color-primary-h - Hue of primary color
+ * @cssprop --canary-color-gray-c - Chroma of gray color
+ * @cssprop --canary-color-gray-h - Hue of gray color
+ * @cssprop --canary-color-backdrop-overlay - Color of backdrop overlay
+ * @cssprop --canary-font-family-base - Font family of base
+ * @cssprop --canary-font-family-mono - Font family of mono
+ */
 @customElement(NAME)
 export class CanaryStyles extends LitElement {
   @property({ type: String })

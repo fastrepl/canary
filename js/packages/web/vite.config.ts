@@ -60,7 +60,7 @@ export default defineConfig({
       exclude: ["**/*.stories.*", "**/*.test.ts"],
     }),
     cem({
-      files: components,
+      files: components.map((c) => `src/${c}.ts`),
       output: "custom-elements.json",
       lit: true,
       packageJson: true,
