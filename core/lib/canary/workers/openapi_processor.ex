@@ -20,7 +20,7 @@ defmodule Canary.Workers.OpenAPIProcessor do
     end
   end
 
-  defp process(%Source{id: source_id, config: %Ash.Union{type: :openapi, value: config}} = source) do
+  defp process(%Source{id: source_id, config: %Ash.Union{type: :openapi, value: config}}) do
     with {:ok, %OpenAPI.FetcherResult{} = incomings} = OpenAPI.Fetcher.run(config) do
       OpenAPI.Syncer.run(source_id, incomings)
     end
