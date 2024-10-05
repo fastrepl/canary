@@ -7,6 +7,9 @@
   <a href="https://storybook.getcanary.dev" target="_blank">
     <img src="https://raw.githubusercontent.com/storybooks/brand/master/badge/badge-storybook.svg" alt="Storybook">
   </a>
+  <a href="https://app.argos-ci.com/yujonglee" target="_blank">
+    <img src="https://argos-ci.com/badge.svg" alt="Argos">
+  </a>
   <a href="https://stackblitz.com/edit/canary?file=index.html" target="_blank">
     <img src="https://developer.stackblitz.com/img/open_in_stackblitz_small.svg" alt="Stackblitz">
   </a>
