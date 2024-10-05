@@ -20,6 +20,7 @@ onMounted(() => {
     import("@getcanary/web/components/canary-mode-breadcrumb.js"),
     import("@getcanary/web/components/canary-filter-tabs-glob.js"),
     import("@getcanary/web/components/canary-filter-tags.js"),
+    import("@getcanary/web/components/canary-search-match-github-issue.js"),
   ]).then(() => {
     loaded.value = true;
   });

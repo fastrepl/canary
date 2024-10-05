@@ -16,6 +16,14 @@ import "./canary-loading-spinner";
 
 const NAME = "canary-input";
 
+/**
+ * @csspart container - Container
+ * @csspart input - Input
+ * @slot before - Before
+ * @slot action-search - Action search
+ * @slot action-ask - Action ask
+ * @slot loading - Loading
+ */
 @customElement(NAME)
 export class CanaryInput extends LitElement {
   @property({ type: Boolean })

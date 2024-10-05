@@ -7,7 +7,11 @@ import unocss from "unocss/vite";
 
 import dts from "vite-plugin-dts";
 import cem from "vite-plugin-cem";
-import { partsReportPlugin, cssVariablesReportPlugin } from "./plugins";
+import {
+  partsReportPlugin,
+  cssVariablesReportPlugin,
+  canaryImportPlugin,
+} from "./plugins";
 
 const components = [
   ...["canary-root", "canary-styles"],
@@ -64,6 +68,7 @@ export default defineConfig({
       output: "custom-elements.json",
       lit: true,
       packageJson: false,
+      plugins: [canaryImportPlugin()],
     }),
   ].filter(Boolean),
   build: {

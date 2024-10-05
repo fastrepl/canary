@@ -9,6 +9,12 @@ import type { TabDefinitions } from "../types";
 
 const NAME = "canary-filter-tabs-glob";
 
+/**
+ * @csspart container - Container
+ * @csspart tab - Tab
+ * @csspart active - Active tab
+ * @csspart inactive - Inactive tab
+ */
 @customElement(NAME)
 export class CanaryFilterTabsGlob extends LitElement {
   @property({ type: Array })

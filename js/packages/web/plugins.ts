@@ -2,9 +2,10 @@ import * as fs from "fs";
 import * as path from "path";
 import { execSync } from "child_process";
 
-import type { Plugin } from "vite";
+import type { Plugin as CEMPlugin } from "@custom-elements-manifest/analyzer";
+import type { Plugin as VitePlugin } from "vite";
 
-export const cssVariablesReportPlugin = (): Plugin => {
+export const cssVariablesReportPlugin = (): VitePlugin => {
   const regex = /--canary-[\w-]+/g;
   const set = new Set<string>();
   let root = "";
@@ -45,7 +46,7 @@ export const cssVariablesReportPlugin = (): Plugin => {
   };
 };
 
-export const partsReportPlugin = (): Plugin => {
+export const partsReportPlugin = (): VitePlugin => {
   const components: Record<string, Set<string>> = {};
   let root = "";
 
@@ -100,6 +101,27 @@ export const partsReportPlugin = (): Plugin => {
       } catch (e) {
         console.error(e);
       }
+    },
+  };
+};
+
+type Import = {
+  name: string;
+  kind: string;
+  importPath: string;
+  isBareModuleSpecifier: boolean;
+  isTypeOnly: boolean;
+};
+
+export const canaryImportPlugin = (): CEMPlugin => {
+  return {
+    name: "canary-import",
+    analyzePhase({ moduleDoc, context }) {
+      const canaryImports = (context.imports as Import[])
+        .filter(({ importPath }) => importPath.includes("canary-"))
+        .map(({ importPath }) => importPath.split("/").pop());
+
+      (moduleDoc as any)["canaryImports"] = canaryImports;
     },
   };
 };

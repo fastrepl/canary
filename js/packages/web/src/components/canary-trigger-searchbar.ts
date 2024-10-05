@@ -9,6 +9,14 @@ import "./canary-media-query";
 
 const NAME = "canary-trigger-searchbar";
 
+/**
+ * @csspart button - Button
+ * @csspart icon - Icon
+ * @csspart text - Text
+ * @csspart kbd - kbd
+ * @cssprop --canary-trigger-searchbar-max-width - Max width
+ * @cssprop --canary-trigger-searchbar-height - Height
+ */
 @customElement(NAME)
 export class CanaryTriggerSearchbar extends LitElement {
   @property({ type: String })

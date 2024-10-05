@@ -12,6 +12,10 @@ const OPENAPI_ELEMENT_NAME = "canary-search-match-openapi";
 const GITHUB_ISSUE_ELEMENT_NAME = "canary-search-match-github-issue";
 const GITHUB_DISCUSSION_ELEMENT_NAME = "canary-search-match-github-discussion";
 
+/**
+ * @csspart match-group - Match group
+ * @csspart match-item - Match item
+ */
 @customElement(NAME)
 export class CanarySearchMatch extends LitElement {
   @property({ type: Object })

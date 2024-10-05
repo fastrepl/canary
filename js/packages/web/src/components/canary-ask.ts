@@ -14,6 +14,10 @@ import "./canary-mode-tabs";
 
 const NAME = "canary-ask";
 
+/**
+ * @csspart container - Container
+ * @slot body - Body
+ */
 @customElement(NAME)
 export class CanaryAsk extends LitElement {
   readonly MODE = MODE_ASK;

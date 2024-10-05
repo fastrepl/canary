@@ -9,6 +9,13 @@ import { global, wrapper } from "../styles";
 
 const NAME = "canary-content";
 
+/**
+ * @csspart container - Container
+ * @cssprop --canary-content-max-width - Max width
+ * @slot head - Head
+ * @slot body - Body
+ * @slot footer - Footer
+ */
 @customElement(NAME)
 export class CanaryContent extends LitElement {
   @consume({ context: queryContext, subscribe: true })

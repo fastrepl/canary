@@ -12,6 +12,11 @@ import { createEvent } from "../store";
 
 const NAME = "canary-search";
 
+/**
+ * @csspart container - Container
+ * @slot head - Head
+ * @slot body - Body
+ */
 @customElement(NAME)
 export class CanarySearch extends LitElement {
   readonly MODE = MODE_SEARCH;

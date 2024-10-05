@@ -4,6 +4,10 @@ import { ref, createRef, Ref } from "lit/directives/ref.js";
 
 const NAME = "canary-dialog";
 
+/**
+ * @cssprop --canary-color-backdrop-overlay - Backdrop overlay color
+ * @slot - Default slot
+ */
 @customElement(NAME)
 export class CanaryDialog extends LitElement {
   @property({ attribute: false })

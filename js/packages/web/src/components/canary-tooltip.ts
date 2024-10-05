@@ -17,6 +17,9 @@ import {
 
 const NAME = "canary-tooltip";
 
+/**
+ * @slot - Default slot
+ */
 @customElement(NAME)
 export class CanaryTooltip extends LitElement {
   @property({ type: String }) text = "";
