@@ -57,7 +57,7 @@ export default function CanarySearchBar() {
 
 ### Step 3: Replace
 
-https://nextra.site/docs/docs-theme/theme-configuration#search
+Update [theme config](https://nextra.site/docs/docs-theme/theme-configuration#search) to use `CanarySearchBar`.
 
 ::: code-group
 
