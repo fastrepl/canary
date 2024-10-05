@@ -8,6 +8,10 @@ export type SearchResult = SearchResultBase & {
         meta: {};
       }
     | {
+        type: "openapi";
+        meta: {};
+      }
+    | {
         type: "github_issue";
         meta: {
           closed: boolean;

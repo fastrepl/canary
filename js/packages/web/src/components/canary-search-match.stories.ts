@@ -4,6 +4,8 @@ import type { Meta, StoryObj } from "@storybook/web-components";
 import type { SearchResult } from "../types";
 
 import "./canary-search-match";
+import "./canary-search-match-github-issue";
+import "./canary-search-match-github-discussion";
 
 enum Kind {
   Webpage,
