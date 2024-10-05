@@ -8,11 +8,9 @@ import { ThemeContext } from "../types";
 import { global, codeBlockScrollbar } from "../styles";
 
 import { highlightElement } from "prismjs";
-import { marked, type MarkedExtension, type Tokens } from "marked";
-import footNote from "marked-footnote";
+import { marked, type Tokens } from "marked";
 
-const footNoteExtension = footNote() as MarkedExtension;
-marked.use(footNoteExtension).use({
+marked.use({
   gfm: false,
   breaks: false,
   extensions: [

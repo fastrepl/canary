@@ -1,16 +1,12 @@
 on:
   push:
-    branches:
-      - main
     paths:
       - js/packages/web/**
   pull_request:
-    branches:
-      - main
     paths:
       - js/packages/web/**
 jobs:
-  visual_tests:
+  ci:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -23,6 +19,6 @@ jobs:
           cache: "npm"
           cache-dependency-path: js/package-lock.json
       - run: npm ci -w=@getcanary/web
-      - run: npm run build-storybook -w=@getcanary/web
-      - run: npx storycap --serverCmd "npx serve packages/web/storybook-static" http://127.0.0.1:3000 --outDir ./screenshots
-      - run: npx argos upload --token ${{ secrets.ARGOS_TOKEN }} ./screenshots
+      - run: npm run build -w=@getcanary/web
+      - run: npm run format-check -w=@getcanary/web
+      - run: npm run test -w=@getcanary/web

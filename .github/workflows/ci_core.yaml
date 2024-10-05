@@ -14,7 +14,7 @@ env:
 permissions:
   contents: read
 jobs:
-  test:
+  ci:
     runs-on: ubuntu-latest
     services:
       db:
