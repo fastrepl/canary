@@ -21,4 +21,5 @@ jobs:
       - run: npm ci -w=@getcanary/web
       - run: npm run build -w=@getcanary/web
       - run: npm run format-check -w=@getcanary/web
+      - run: npx playwright install --with-deps
       - run: npm run test -w=@getcanary/web
