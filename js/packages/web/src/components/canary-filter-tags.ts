@@ -26,6 +26,7 @@ export class CanaryFilterTags extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
+    this._ensureTagsConverted();
     this._initializeSelected();
   }
 
@@ -38,6 +39,12 @@ export class CanaryFilterTags extends LitElement {
       this.dispatchEvent(
         createEvent({ type: "set_query", data: { tags: [this.selected] } }),
       );
+    }
+  }
+
+  private _ensureTagsConverted() {
+    if (typeof this.tags === "string") {
+      this.tags = StringArray.fromAttribute(this.tags, null);
     }
   }
 

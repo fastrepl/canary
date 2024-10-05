@@ -28,7 +28,7 @@ onMounted(() => {
 
 const tags = ["Local", "Cloud"].join(",");
 const tabs = JSON.stringify([
-  { name: "Docs", pattern: "**/*" },
+  { name: "Docs", pattern: "**/getcanary.dev/**" },
   { name: "Github", pattern: "**/github.com/**" },
 ]);
 const sources = ["canary_webpage", "canary_issue"];
