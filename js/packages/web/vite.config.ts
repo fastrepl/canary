@@ -63,7 +63,7 @@ export default defineConfig({
       files: components.map((c) => `src/${c}.ts`),
       output: "custom-elements.json",
       lit: true,
-      packageJson: true,
+      packageJson: false,
     }),
   ].filter(Boolean),
   build: {
