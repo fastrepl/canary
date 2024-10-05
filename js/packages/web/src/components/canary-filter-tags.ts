@@ -2,8 +2,11 @@ import { LitElement, css, html, PropertyValues } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 
+import pm from "picomatch";
+
 import { StringArray } from "../converters";
 import { createEvent } from "../store";
+import { TagUrlSyncDefinition } from "../types";
 
 const NAME = "canary-filter-tags";
 
@@ -11,6 +14,9 @@ const NAME = "canary-filter-tags";
 export class CanaryFilterTags extends LitElement {
   @property({ converter: StringArray })
   tags: string[] = [];
+
+  @property({ type: Object, attribute: "url-sync" })
+  syncURL?: TagUrlSyncDefinition;
 
   @property({ type: String, attribute: "local-storage-key" })
   localStorageKey?: string;
@@ -38,6 +44,18 @@ export class CanaryFilterTags extends LitElement {
   private _initializeSelected() {
     if (this.selected) {
       return;
+    }
+
+    if (this.syncURL) {
+      const { hostname, pathname } = new URL(window.location.href);
+      const found = this.syncURL.find(({ pattern }) =>
+        pm(pattern)(`${hostname}${pathname}`),
+      );
+
+      if (found) {
+        this.selected = found.tag;
+        return;
+      }
     }
 
     if (!this.localStorageKey) {
