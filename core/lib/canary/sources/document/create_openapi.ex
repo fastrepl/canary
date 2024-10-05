@@ -23,7 +23,7 @@ defmodule Canary.Sources.Document.CreateOpenAPI do
   def change(changeset, opts, _context) do
     source_id = Ash.Changeset.get_argument(changeset, opts[:source_id_argument])
 
-    %OpenAPI.FetcherResult{schema: %OpenApiSpex.OpenApi{} = schema} =
+    %OpenAPI.FetcherResult{schema: %OpenApiSpex.OpenApi{} = schema, served_url: served_url} =
       Ash.Changeset.get_argument(changeset, opts[:fetcher_result_argument])
 
     changeset
@@ -43,7 +43,7 @@ defmodule Canary.Sources.Document.CreateOpenAPI do
             %{
               source_id: source_id,
               document_id: record.id,
-              url: "TODO",
+              url: render_url(served_url, path),
               path: path,
               get: render_operation(get),
               post: render_operation(post),
@@ -69,6 +69,12 @@ defmodule Canary.Sources.Document.CreateOpenAPI do
           {:error, errors}
       end
     end)
+  end
+
+  defp render_url(base_url, path) do
+    URI.parse(base_url)
+    |> Map.put(:fragment, ":~:text=#{path}")
+    |> URI.to_string()
   end
 
   defp render_operation(nil), do: nil
