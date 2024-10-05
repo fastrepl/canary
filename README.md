@@ -1,8 +1,4 @@
 <h1 align="center">🐤 Canary</h1>
-<h4 align="center"> > UI primitives for building modern search-bar for docs with self-hostable infrastructure. </h4>
-
-<br/>
-
 <h4 align="center">
   <a href="https://storybook.getcanary.dev" target="_blank">
     <img src="https://raw.githubusercontent.com/storybooks/brand/master/badge/badge-storybook.svg" alt="Storybook">
@@ -18,11 +14,4 @@
   </a>
 </h4>
 
-## Links
-
-- [getcanary.dev/docs](https://getcanary.dev/docs)
-  - Documentation powered by Canary.
-- [storybook.getcanary.dev](https://storybook.getcanary.dev/)
-  - Build your own UI with our web components.
-- [yujonglee.com/canary](https://yujonglee.com/canary)
-  - My recent blog post about Canary.
+<h4 align="center"> > UI primitives for building modern search-bar for docs with self-hostable infrastructure. </h4>
