@@ -1,5 +1,8 @@
 <script setup lang="ts">
-import type { Package, CustomElementDeclaration } from "custom-elements-manifest/schema";
+import type {
+  Package,
+  CustomElementDeclaration,
+} from "custom-elements-manifest/schema";
 
 import cem from "@getcanary/web/custom-elements.json";
 
@@ -31,7 +34,7 @@ const components = (cem as Package).modules.reduce(
   >
     <h2 :id="name" class="text-3xl">{{ name }}</h2>
     <a
-      :href="`https://github.com/fastrepl/canary/blob/main/js/packages/web/${name}.ts`"
+      :href="`https://github.com/fastrepl/canary/blob/main/js/packages/web/src/components/${name}.ts`"
       target="_blank"
       class="text-sm"
     >
@@ -59,8 +62,12 @@ const components = (cem as Package).modules.reduce(
     <template v-if="declaration.attributes">
       <h3>Attributes</h3>
       <ul class="list-disc list-inside">
-        <li v-for="attr in declaration.attributes">
+        <li
+          v-for="attr in declaration.attributes"
+          class="flex flex-row gap-2 items-center"
+        >
           <code>{{ attr.name }}</code>
+          <span class="text-sm italic">{{ attr.type.text }}</span>
         </li>
       </ul>
     </template>

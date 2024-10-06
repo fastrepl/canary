@@ -1,5 +1,5 @@
 import { LitElement, css, html, PropertyValues } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { customElement, property, state } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 
 import pm from "picomatch";
@@ -12,34 +12,76 @@ const NAME = "canary-filter-tags";
 
 @customElement(NAME)
 export class CanaryFilterTags extends LitElement {
+  /**
+   * @attr {string} tags - comma separated list of tags
+   */
   @property({ converter: StringArray })
   tags: string[] = [];
 
+  /**
+   * @attr {object} url-sync - sync tags with URL
+   */
   @property({ type: Object, attribute: "url-sync" })
   syncURL?: TagUrlSyncDefinition;
 
   @property({ type: String, attribute: "local-storage-key" })
   localStorageKey?: string;
 
-  @property({ type: String })
-  selected = "";
+  @state()
+  private _selected = "";
 
   connectedCallback() {
     super.connectedCallback();
     this._ensureTagsConverted();
     this._initializeSelected();
+
+    window.addEventListener("popstate", this._handlePopState.bind(this));
+    this._patchHistory();
   }
 
-  updated(changed: PropertyValues<this>) {
-    if (changed.has("selected") && this.localStorageKey) {
-      localStorage.setItem(this.localStorageKey, this.selected);
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    window.removeEventListener("popstate", this._handlePopState.bind(this));
+  }
+
+  updated(changed: PropertyValues) {
+    if (changed.has("_selected") && this.localStorageKey) {
+      localStorage.setItem(this.localStorageKey, this._selected);
     }
 
-    if (changed.has("selected")) {
+    if (changed.has("_selected")) {
       this.dispatchEvent(
-        createEvent({ type: "set_query", data: { tags: [this.selected] } }),
+        createEvent({ type: "set_query", data: { tags: [this._selected] } }),
       );
     }
+  }
+
+  private _handlePopState() {
+    this._initializeSelected();
+  }
+
+  private _patchHistory() {
+    if (window["__history_patched__"]) {
+      return;
+    }
+
+    window["__history_patched__"] = true;
+
+    window.history.pushState = new Proxy(window.history.pushState, {
+      apply: (
+        target: History["pushState"],
+        thisArg: History,
+        argArray: Parameters<History["pushState"]>,
+      ): ReturnType<History["pushState"]> => {
+        const url =
+          typeof argArray[2] === "string"
+            ? new URL(argArray[2], window.location.href).href
+            : window.location.href;
+
+        this._initializeSelected(url);
+        return target.apply(thisArg, argArray);
+      },
+    });
   }
 
   private _ensureTagsConverted() {
@@ -48,46 +90,61 @@ export class CanaryFilterTags extends LitElement {
     }
   }
 
-  private _initializeSelected() {
-    if (this.selected) {
+  private _initializeSelected(url?: string) {
+    if (this._handleSyncURL(url)) {
       return;
     }
 
-    if (this.syncURL) {
-      const { hostname, pathname } = new URL(window.location.href);
-      const found = this.syncURL.find(({ pattern }) =>
-        pm(pattern)(`${hostname}${pathname}`),
-      );
-
-      if (found) {
-        this.selected = found.tag;
-        return;
-      }
+    if (this._applyLocalStorage()) {
+      return;
     }
 
+    this._selected = this.tags[0];
+  }
+
+  private _handleSyncURL(url?: string) {
+    if (!this.syncURL) {
+      return false;
+    }
+
+    const { hostname, pathname } = new URL(url ?? window.location.href);
+    const found = this.syncURL.find(({ pattern }) =>
+      pm(pattern)(`${hostname}${pathname}`),
+    );
+
+    if (found) {
+      this._selected = found.tag;
+      return true;
+    }
+
+    return false;
+  }
+
+  private _applyLocalStorage() {
     if (!this.localStorageKey) {
-      this.selected = this.tags[0];
-      return;
+      return false;
     }
 
     const storedValue = localStorage.getItem(this.localStorageKey);
     if (storedValue && this.tags.includes(storedValue)) {
-      this.selected = storedValue;
-    } else {
-      this.selected = this.tags[0];
+      this._selected = storedValue;
+      return true;
     }
+
+    return false;
   }
 
   render() {
     return html`
       <div class="container" part="container">
         ${this.tags.map((tag) => {
-          const selected = tag === this.selected;
+          const selected = tag === this._selected;
 
           return html`<button
-            @click=${() => (this.selected = tag)}
+            @click=${() => (this._selected = tag)}
             part=${["tag", selected ? "active" : "inactive"].join(" ")}
             class=${classMap({ tag: true, active: selected })}
+            aria-label=${`${tag}-tag`}
           >
             ${tag}
           </button>`;
@@ -134,4 +191,10 @@ export class CanaryFilterTags extends LitElement {
         var(--canary-is-dark, var(--canary-color-primary-70));
     }
   `;
+}
+
+declare global {
+  interface Window {
+    __history_patched__?: boolean;
+  }
 }

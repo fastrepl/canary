@@ -25,6 +25,8 @@ const packages = {
 
 We're fully [open-source](https://github.com/fastrepl/canary), and encourage anyone to contribute to our UI components. Also, we put a lot of effort into making the **core parts of `Canary` as modular as possible**.
 
+## Attention to detail, for technical docs
+
 ## Tiny components that works anywhere
 
 `Canary` use [Web components](https://developer.mozilla.org/en-US/docs/Web/Web_Components), so browsers know how to render it.

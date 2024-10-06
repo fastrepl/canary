@@ -6,6 +6,17 @@ import { MODAL_CLOSE_EVENT } from "./canary-modal";
 
 const NAME = "canary-search-match-base";
 
+/**
+ * @csspart container - Container of the match
+ *
+ * @slot content-before - Content before the match
+ * @slot url - URL of the match
+ * @slot title-icon - Icon for the title
+ * @slot title - Title of the match
+ * @slot title-badge - Badge displayed next to the title
+ * @slot excerpt - Excerpt of the match
+ * @slot sub-results - Sub-results related to the match
+ */
 @customElement(NAME)
 export class CanarySearchMatchBase extends LitElement {
   @property({ type: String })
