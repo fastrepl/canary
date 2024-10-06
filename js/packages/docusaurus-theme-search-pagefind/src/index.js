@@ -6,9 +6,31 @@ import { buildIndex } from "./pagefind";
 
 /**
  * @typedef {import("@docusaurus/types").Plugin} Plugin
+ * @typedef {import("@docusaurus/types").DocusaurusContext} DocusaurusContext
  * @typedef {import("webpack").Configuration} WebpackConfiguration
+ *
+ * @typedef PagefindRanking
+ * @property {number} pageLength
+ * @property {number} termFrequency
+ * @property {number} termSimilarity
+ * @property {number} termSaturation
+ *
+ * @typedef PagefindOptions
+ * @property {PagefindRanking} ranking
+ *
+ * @typedef {Object} PluginOptions
+ * @property {boolean} indexOnly
+ * @property {PagefindRanking} pagefind
+ * @property {Array<string>} includeRoutes
+ * @property {Array<string>} excludeRoutes
+ * @property {Record<string, string>} styles
+ * @property {Array<Object>} tabs
  */
 
+/**
+ * @param {DocusaurusContext} context
+ * @param {PluginOptions} options
+ */
 export default function plugin(context, options) {
   const { indexOnly = false } = options;
 

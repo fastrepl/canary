@@ -71,12 +71,12 @@ const config = {
             termSaturation: 1.5, // [!code ++]
           } // [!code ++]
         } // [!code ++]
-        disable: false, // [!code ++]
         indexOnly: false, // [!code ++]
         includeRoutes: ["**/*"], // [!code ++]
         excludeRoutes: ['/api/**'], // [!code ++]
         // https://getcanary.dev/docs/local/demo // [!code ++]
         // https://getcanary.dev/docs/common/guides/filtering // [!code ++]
+        // e.g. [{"name":"All","pattern":"**/*"}] // [!code ++]
         tabs: [], // [!code ++]
       },
     ],
@@ -87,6 +87,8 @@ const config = {
 :::
 
 ### Advanced
+
+[source](https://github.com/fastrepl/canary/blob/main/js/packages/docusaurus-theme-search-pagefind/src/index.js)
 
 When you add `@getcanary/docusaurus-theme-search-pagefind` to the `themes` list, it will override the default search component to use Canary's. To customize this search-bar further, you can [eject](https://docusaurus.io/docs/swizzling#ejecting) it and modify the code.
 
