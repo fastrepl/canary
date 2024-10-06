@@ -33,6 +33,20 @@ defmodule Canary.Index.Document.Webpage.Meta do
   defstruct Shared.meta_fields()
 end
 
+defmodule Canary.Index.Document.OpenAPI do
+  alias Canary.Index.Document.Shared
+
+  @derive Jason.Encoder
+  defstruct Shared.top_level_fields() ++ [:path, :get, :post, :put, :delete]
+end
+
+defmodule Canary.Index.Document.OpenAPI.Meta do
+  alias Canary.Index.Document.Shared
+
+  @derive Jason.Encoder
+  defstruct Shared.meta_fields()
+end
+
 defmodule Canary.Index.Document.GithubIssue do
   alias Canary.Index.Document.Shared
 

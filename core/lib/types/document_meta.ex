@@ -4,6 +4,7 @@ defmodule Canary.Type.DocumentMeta do
     constraints: [
       types: [
         webpage: [type: Canary.Sources.Webpage.DocumentMeta],
+        openapi: [type: Canary.Sources.OpenAPI.DocumentMeta],
         github_issue: [type: Canary.Sources.GithubIssue.DocumentMeta],
         github_discussion: [type: Canary.Sources.GithubDiscussion.DocumentMeta],
         discord_thread: [type: Canary.Sources.DiscordThread.DocumentMeta]

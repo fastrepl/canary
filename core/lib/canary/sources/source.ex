@@ -111,6 +111,7 @@ defmodule Canary.Sources.Source do
         worker =
           case type do
             :webpage -> Canary.Workers.WebpageProcessor
+            :openapi -> Canary.Workers.OpenAPIProcessor
             :github_issue -> Canary.Workers.GithubIssueProcessor
             :github_discussion -> Canary.Workers.GithubDiscussionProcessor
           end
@@ -150,6 +151,9 @@ defmodule Canary.Sources.Source do
           case config.type do
             :webpage ->
               Canary.Workers.WebpageProcessor.new(%{source_id: source_id})
+
+            :openapi ->
+              Canary.Workers.OpenAPIProcessor.new(%{source_id: source_id})
 
             :github_issue ->
               Canary.Workers.GithubIssueProcessor.new(%{source_id: source_id})

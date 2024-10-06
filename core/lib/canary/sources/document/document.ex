@@ -46,6 +46,21 @@ defmodule Canary.Sources.Document do
       }
     end
 
+    create :create_openapi do
+      argument :source_id, :uuid, allow_nil?: false
+      argument :fetcher_result, :map, allow_nil?: false
+
+      change manage_relationship(:source_id, :source, type: :append)
+
+      change {
+        Canary.Sources.Document.CreateOpenAPI,
+        source_id_argument: :source_id,
+        fetcher_result_argument: :fetcher_result,
+        chunks_attribute: :chunks,
+        meta_attribute: :meta
+      }
+    end
+
     create :create_github_issue do
       argument :source_id, :uuid, allow_nil?: false
       argument :fetcher_results, {:array, :map}, allow_nil?: false
