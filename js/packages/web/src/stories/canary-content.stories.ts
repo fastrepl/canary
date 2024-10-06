@@ -10,6 +10,8 @@ import "../components/canary-filter-tabs-glob";
 
 import "../components/canary-search";
 import "../components/canary-search-results";
+import "../components/canary-search-match-github-issue";
+import "../components/canary-search-match-github-discussion";
 
 import "../components/canary-ask";
 import "../components/canary-ask-results";
