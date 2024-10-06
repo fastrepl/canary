@@ -9,6 +9,7 @@ defmodule Canary.Application do
   def start(_type, _args) do
     attach_oban_telemetry()
     add_sentry_logger()
+    OpentelemetryEcto.setup([:canary, :repo])
 
     :ok = Canary.Index.Collection.ensure(:webpage)
     :ok = Canary.Index.Collection.ensure(:github_issue)

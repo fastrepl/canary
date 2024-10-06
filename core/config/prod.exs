@@ -25,6 +25,15 @@ config :canary, :github_app_url, "https://github.com/apps/getcanary/installation
 
 config :canary, :typesense, collection: "canary_prod"
 
+config :opentelemetry,
+  traces_exporter: :otlp,
+  span_processor: :batch,
+  resource: [
+    service: [name: "core", namespace: "canary"],
+    deployment: [environment: "prod"]
+  ],
+  sampler: {:parent_based, %{root: {:trace_id_ratio_based, 1.0}}}
+
 config :sentry,
   dsn:
     "https://f6f1f6ab1218132660f6bd80e8634712@o4506190168522752.ingest.us.sentry.io/4508073135833088",

@@ -177,6 +177,9 @@ config :canary, :github,
   client_secret: System.get_env("GITHUB_CLIENT_SECRET"),
   redirect_uri: System.get_env("GITHUB_REDIRECT_URI")
 
+config :canary, :fly_api_key, System.get_env("FLY_API_KEY")
+config :canary, :fly_app_name, System.get_env("FLY_APP_NAME")
+
 if config_env() == :prod do
   config :canary, :typesense,
     base_url: System.get_env("TYPESENSE_BASE_URL"),
@@ -187,5 +190,9 @@ else
     api_key: "canary"
 end
 
-config :canary, :fly_api_key, System.get_env("FLY_API_KEY")
-config :canary, :fly_app_name, System.get_env("FLY_APP_NAME")
+if config_env() == :prod do
+  config :opentelemetry_exporter,
+    otlp_protocol: :http_protobuf,
+    otlp_endpoint: System.fetch_env!("OTEL_COLLECTOR_URL"),
+    otlp_headers: [{"Authorization", "Bearer #{System.fetch_env!("OTEL_COLLECTOR_URL_AUTH")}"}]
+end

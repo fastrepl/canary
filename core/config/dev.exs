@@ -82,3 +82,5 @@ config :phoenix_live_view, :debug_heex_annotations, true
 config :swoosh, :api_client, false
 
 config :canary, :typesense, collection: "canary_dev"
+
+config :opentelemetry, traces_exporter: :none

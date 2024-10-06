@@ -10,7 +10,15 @@ defmodule Canary.MixProject do
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps(),
-      consolidate_protocols: Mix.env() == :prod
+      consolidate_protocols: Mix.env() == :prod,
+      releases: [
+        canary: [
+          applications: [
+            opentelemetry_exporter: :permanent,
+            opentelemetry: :temporary
+          ]
+        ]
+      ]
     ]
   end
 
@@ -92,7 +100,12 @@ defmodule Canary.MixProject do
       {:ex_json_schema, "~> 0.10"},
       {:yaml_elixir, "~> 2.11"},
       {:sentry, "~> 10.2.0"},
-      {:hackney, "~> 1.8"}
+      {:hackney, "~> 1.8"},
+      {:opentelemetry_exporter, "~> 1.2"},
+      {:opentelemetry, "~> 1.2"},
+      {:opentelemetry_api, "~> 1.2"},
+      {:opentelemetry_req, "~> 0.2.0"},
+      {:opentelemetry_ecto, "~> 1.0"}
     ] ++ deps_eval()
   end
 
