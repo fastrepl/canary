@@ -18,10 +18,18 @@ defmodule Canary.Sources.GithubFetcher do
             page_info = data["repository"][resource]["pageInfo"]
             nodes = data["repository"][resource]["nodes"]
 
-            if page_info["hasNextPage"] do
-              {nodes, page_info["endCursor"]}
-            else
-              {nodes, :stop}
+            cond do
+              length(nodes) == 0 ->
+                {[], :stop}
+
+              nodes |> Enum.at(0) |> Map.get("createdAt") |> more_than_six_months_ago?() ->
+                {nodes, :stop}
+
+              page_info["hasNextPage"] ->
+                {nodes, page_info["endCursor"]}
+
+              true ->
+                {nodes, :stop}
             end
 
           {:try_after_s, seconds} ->
@@ -65,6 +73,13 @@ defmodule Canary.Sources.GithubFetcher do
       Map.has_key?(data["repository"], "issues") -> "issues"
       Map.has_key?(data["repository"], "discussions") -> "discussions"
       true -> raise "Unknown resource"
+    end
+  end
+
+  defp more_than_six_months_ago?(timestamp) do
+    case DateTime.from_iso8601(timestamp) do
+      {:ok, date, _} -> DateTime.diff(DateTime.utc_now(), date) > 6 * 30 * 24 * 60 * 60
+      _ -> false
     end
   end
 end

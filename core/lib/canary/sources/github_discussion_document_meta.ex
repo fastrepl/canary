@@ -4,8 +4,8 @@ defmodule Canary.Sources.GithubDiscussion.DocumentMeta do
   attributes do
     attribute :title, :string, allow_nil?: false
     attribute :url, :string, allow_nil?: false
-    attribute :closed, :boolean, allow_nil?: false
-    attribute :answered, :boolean, allow_nil?: false
+    attribute :closed, :boolean, allow_nil?: true
+    attribute :answered, :boolean, allow_nil?: true
   end
 
   actions do

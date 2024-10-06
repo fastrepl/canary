@@ -42,7 +42,7 @@ defmodule Canary.Crawler do
   end
 
   def req() do
-    Req.new(user_agent: "Canary (github.com/fastrepl/canary)")
+    Canary.rest_client(user_agent: "Canary (github.com/fastrepl/canary)")
     |> Canary.Req.MetaRefresh.attach()
     |> Canary.Req.Cache.attach(cachex: :cache, ttl: :timer.minutes(30))
   end
