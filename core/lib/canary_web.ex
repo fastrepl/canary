@@ -52,7 +52,8 @@ defmodule CanaryWeb do
   def live_view do
     quote do
       use Phoenix.LiveView,
-        layout: {CanaryWeb.Layouts, :app}
+        layout: {CanaryWeb.Layouts, :app},
+        on_mount: Sentry.LiveViewHook
 
       unquote(html_helpers())
     end

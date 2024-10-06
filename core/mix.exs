@@ -88,10 +88,11 @@ defmodule Canary.MixProject do
       {:cloak, "~> 1.1"},
       {:ash_cloak, "~> 0.1.2"},
       {:primer_live, "~> 0.8"},
-      {:honeybadger, "~> 0.16"},
       {:hop, "~> 0.1"},
       {:ex_json_schema, "~> 0.10"},
-      {:yaml_elixir, "~> 2.11"}
+      {:yaml_elixir, "~> 2.11"},
+      {:sentry, "~> 10.2.0"},
+      {:hackney, "~> 1.8"}
     ] ++ deps_eval()
   end
 

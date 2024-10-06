@@ -25,5 +25,12 @@ config :canary, :github_app_url, "https://github.com/apps/getcanary/installation
 
 config :canary, :typesense, collection: "canary_prod"
 
+config :sentry,
+  dsn:
+    "https://f6f1f6ab1218132660f6bd80e8634712@o4506190168522752.ingest.us.sentry.io/4508073135833088",
+  environment_name: Mix.env(),
+  enable_source_code_context: true,
+  root_source_code_paths: [File.cwd!()]
+
 # Runtime production configuration, including reading
 # of environment variables, is done on config/runtime.exs.

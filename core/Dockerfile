@@ -73,6 +73,9 @@ RUN mix compile
 COPY config/runtime.exs config/
 
 COPY rel rel
+
+# https://hexdocs.pm/sentry/Mix.Tasks.Sentry.PackageSourceCode.html#module-using-in-production
+RUN mix sentry.package_source_code
 RUN mix release
 
 # start a new build stage so that the final image will only contain

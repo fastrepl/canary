@@ -50,29 +50,5 @@ defmodule Canary.Workers.JobReporter do
     end
   end
 
-  def handle_job(
-        [:oban, :job, event],
-        _measure,
-        %{job: %Oban.Job{worker: worker}, attempt: attempt} = meta,
-        _opts
-      )
-      when event in [:exception] do
-    if worker in @processors do
-      if attempt > 1 do
-        notify(meta)
-      end
-    else
-      notify(meta)
-    end
-
-    :ok
-  end
-
   def handle_job(_event, _measure, _meta, _opts), do: :ok
-
-  # https://hexdocs.pm/oban/Oban.Telemetry.html#module-examples
-  defp notify(meta) do
-    context = Map.take(meta, [:id, :args, :queue, :worker])
-    Honeybadger.notify(meta.reason, metadata: context, stacktrace: meta.stacktrace)
-  end
 end

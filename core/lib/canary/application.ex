@@ -8,6 +8,7 @@ defmodule Canary.Application do
   @impl true
   def start(_type, _args) do
     attach_oban_telemetry()
+    add_sentry_logger()
 
     :ok = Canary.Index.Collection.ensure(:webpage)
     :ok = Canary.Index.Collection.ensure(:github_issue)
@@ -73,5 +74,11 @@ defmodule Canary.Application do
       &Canary.Workers.JobReporter.handle_job/4,
       nil
     )
+  end
+
+  defp add_sentry_logger() do
+    :logger.add_handler(:sentry_handler, Sentry.LoggerHandler, %{
+      config: %{metadata: [:file, :line]}
+    })
   end
 end
