@@ -83,4 +83,20 @@ config :swoosh, :api_client, false
 
 config :canary, :typesense, collection: "canary_dev"
 
-config :opentelemetry, traces_exporter: :none
+case System.get_env("DEBUG_OTEL") do
+  "1" ->
+    config :opentelemetry,
+      span_processor: :simple,
+      traces_exporter: {:otel_exporter_stdout, []}
+
+  "2" ->
+    config :opentelemetry,
+      traces_exporter: :otlp,
+      span_processor: :simple,
+      otlp_protocol: :http_protobuf,
+      otlp_endpoint: "http://localhost:4318",
+      otlp_http_compression: :gzip
+
+  _ ->
+    config :opentelemetry, traces_exporter: :none
+end

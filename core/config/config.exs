@@ -59,7 +59,7 @@ config :canary, Oban,
   queues: [
     default: 10,
     github_processor: 2,
-    webpage_processor: 10,
+    webpage_processor: 2,
     email: 10
   ],
   repo: Canary.Repo,
