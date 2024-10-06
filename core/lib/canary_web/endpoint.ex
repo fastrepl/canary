@@ -51,6 +51,8 @@ defmodule CanaryWeb.Endpoint do
     handler: CanaryWeb.StripeWebhookHandler,
     secret: {Application, :get_env, [:canary, :stripe_webhook_secret]}
 
+  plug Plug.Telemetry, event_prefix: [:phoenix, :endpoint]
+
   plug Plug.Parsers,
     parsers: [:urlencoded, :multipart, :json],
     pass: ["*/*"],

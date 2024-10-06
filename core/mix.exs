@@ -101,11 +101,13 @@ defmodule Canary.MixProject do
       {:yaml_elixir, "~> 2.11"},
       {:sentry, "~> 10.2.0"},
       {:hackney, "~> 1.8"},
-      {:opentelemetry_exporter, "~> 1.2"},
-      {:opentelemetry, "~> 1.2"},
-      {:opentelemetry_api, "~> 1.2"},
+      {:opentelemetry_exporter, "~> 1.7"},
+      {:opentelemetry, "1.4.0"},
+      {:opentelemetry_api, "1.3.1"},
       {:opentelemetry_req, "~> 0.2.0"},
-      {:opentelemetry_ecto, "~> 1.0"}
+      {:opentelemetry_ecto, "~> 1.2"},
+      {:opentelemetry_oban, "~> 1.1"},
+      {:opentelemetry_phoenix, "~> 1.2"}
     ] ++ deps_eval()
   end
 

@@ -7,8 +7,11 @@ defmodule Canary.Application do
 
   @impl true
   def start(_type, _args) do
-    attach_oban_telemetry()
     add_sentry_logger()
+    attach_oban_telemetry()
+
+    OpentelemetryOban.setup()
+    OpentelemetryPhoenix.setup()
     OpentelemetryEcto.setup([:canary, :repo])
 
     :ok = Canary.Index.Collection.ensure(:webpage)
