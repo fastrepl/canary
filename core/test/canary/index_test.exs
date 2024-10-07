@@ -35,8 +35,7 @@ defmodule Canary.Test.Index do
         index_id: Ash.UUID.generate(),
         title: "title",
         content: "content",
-        url: "https://example.com",
-        keywords: ["keyword1", "keyword2"]
+        url: "https://example.com"
       })
 
     {:ok, _doc_2} =

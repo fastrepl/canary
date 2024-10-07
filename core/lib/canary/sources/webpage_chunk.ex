@@ -11,7 +11,6 @@ defmodule Canary.Sources.Webpage.Chunk do
     attribute :url, :string, allow_nil?: false
     attribute :title, :string, allow_nil?: false, constraints: [allow_empty?: true]
     attribute :content, :string, allow_nil?: false
-    attribute :keywords, {:array, :string}, default: []
   end
 
   actions do
@@ -27,8 +26,7 @@ defmodule Canary.Sources.Webpage.Chunk do
         :tags,
         :url,
         :title,
-        :content,
-        :keywords
+        :content
       ]
 
       change {Canary.Change.NormalizeURL, input_argument: :url, output_attribute: :url}
