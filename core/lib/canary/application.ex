@@ -12,7 +12,7 @@ defmodule Canary.Application do
 
     OpentelemetryOban.setup()
     OpentelemetryPhoenix.setup()
-    OpentelemetryEcto.setup([:canary, :repo])
+    OpentelemetryEcto.setup([:canary, :repo], db_statement: :enabled, time_unit: :millisecond)
 
     :ok = Canary.Index.Collection.ensure(:webpage)
     :ok = Canary.Index.Collection.ensure(:github_issue)
