@@ -1,4 +1,4 @@
-import { LitElement, html } from "lit";
+import { LitElement, html, type PropertyValues } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { parse as safeParse } from "best-effort-json-parser";
 
@@ -32,13 +32,6 @@ export class CanaryProviderCloud extends LitElement {
 
     this.dispatchEvent(
       createEvent({
-        type: "set_query",
-        data: { sources: this.sources.filter(Boolean) },
-      }),
-    );
-
-    this.dispatchEvent(
-      createEvent({
         type: "register_operations",
         data: {
           search: cache(this.search),
@@ -48,6 +41,17 @@ export class CanaryProviderCloud extends LitElement {
     );
   }
 
+  updated(changed: PropertyValues<this>) {
+    if (changed.get("sources")) {
+      this.dispatchEvent(
+        createEvent({
+          type: "set_query",
+          data: { sources: this.sources.filter(Boolean) },
+        }),
+      );
+    }
+  }
+
   render() {
     return html`<slot></slot>`;
   }
@@ -55,6 +59,8 @@ export class CanaryProviderCloud extends LitElement {
   static styles = wrapper;
 
   search: SearchFunction = async (query, signal) => {
+    console.log(query);
+
     const params = {
       method: "POST",
       headers: {

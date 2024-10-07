@@ -33,7 +33,7 @@ defmodule CanaryWeb.HomeLive do
           <canary-provider-cloud
             api-key={Enum.at(@current_account.keys, 0).value}
             api-base={CanaryWeb.Endpoint.url()}
-            sources={@sources}
+            sources={Enum.join(@sources, ",")}
           >
             <canary-modal>
               <canary-trigger-searchbar slot="trigger"></canary-trigger-searchbar>

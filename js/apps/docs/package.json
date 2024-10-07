@@ -1,6 +1,7 @@
 {
   "name": "@getcanary/docs",
   "type": "module",
+  "private": true,
   "scripts": {
     "dev": "vitepress dev",
     "build": "npm run build -w=@getcanary/web && vitepress build",
@@ -20,7 +21,7 @@
     "vue": "^3.4.35"
   },
   "dependencies": {
-    "@getcanary/web": "^1.0.0",
+    "@getcanary/web": "^1.0.1",
     "@mux/blurup": "^0.2.3",
     "@mux/mux-player": "^3.0.0",
     "@unocss/reset": "^0.63.3",
