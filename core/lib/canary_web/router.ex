@@ -71,8 +71,6 @@ defmodule CanaryWeb.Router do
 
     post "/search", CanaryWeb.OperationsController, :search
     post "/ask", CanaryWeb.OperationsController, :ask
-
-    forward "/", CanaryWeb.AshRouter
   end
 
   if Application.compile_env(:canary, :dev_routes) do

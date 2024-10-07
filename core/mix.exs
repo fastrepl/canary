@@ -75,7 +75,6 @@ defmodule Canary.MixProject do
       {:ash_authentication, "~> 4.0"},
       {:ash_authentication_phoenix, "~> 2.1"},
       {:ash_postgres, "~> 2.3"},
-      {:ash_json_api, "~> 1.0"},
       {:open_api_spex, "~> 3.21"},
       {:picosat_elixir, "~> 0.2.3"},
       {:req, "~> 0.5.0"},
