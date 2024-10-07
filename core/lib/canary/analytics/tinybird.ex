@@ -3,7 +3,7 @@ defmodule Canary.Analytics do
     base_url = Application.get_env(:canary, :tinybird) |> Keyword.fetch!(:base_url)
     api_key = Application.get_env(:canary, :tinybird) |> Keyword.fetch!(:api_key)
 
-    Req.new(
+    Canary.rest_client(
       base_url: base_url,
       headers: [{"Authorization", "Bearer #{api_key}"}]
     )

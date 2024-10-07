@@ -89,7 +89,7 @@ defmodule Canary.Crawler.Sitemap do
     robots_url = URI.new!(url) |> Map.put(:path, "/robots.txt") |> URI.to_string()
     maybe_sitemap = URI.new!(url) |> Map.put(:path, "/sitemap.xml") |> URI.to_string()
 
-    case Req.new() |> ReqCrawl.Robots.attach() |> Req.get(url: robots_url) do
+    case Canary.rest_client() |> ReqCrawl.Robots.attach() |> Req.get(url: robots_url) do
       {:ok, %{private: %{crawl_robots: %{sitemaps: urls}}}} -> [maybe_sitemap | urls]
       _ -> [maybe_sitemap]
     end
@@ -97,7 +97,7 @@ defmodule Canary.Crawler.Sitemap do
 
   defp parse_sitemap(sitemap_url) do
     urls =
-      case Req.new() |> ReqCrawl.Sitemap.attach() |> Req.get(url: sitemap_url) do
+      case Canary.rest_client() |> ReqCrawl.Sitemap.attach() |> Req.get(url: sitemap_url) do
         {:ok, %{private: %{crawl_sitemap: {:sitemap, list}}}} -> list
         {:ok, %{private: %{crawl_sitemap: {:sitemapindex, list}}}} -> list
         _ -> []

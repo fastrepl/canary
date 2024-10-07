@@ -2,7 +2,7 @@ defmodule Canary.Index.Client do
   defp base() do
     typesense = Application.fetch_env!(:canary, :typesense)
 
-    Req.new(
+    Canary.rest_client(
       base_url: typesense[:base_url],
       headers: [{"x-typesense-api-key", typesense[:api_key]}]
     )
