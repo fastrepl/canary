@@ -21,7 +21,7 @@ defmodule Canary.Reranker.Cohere do
   @behaviour Canary.Reranker
 
   @model "rerank-english-v3.0"
-  @timeout 2000
+  @timeout 3000
 
   use Retry
 

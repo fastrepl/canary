@@ -17,6 +17,8 @@ end
 
 defmodule Canary.Interactions.Responder.Default do
   @behaviour Canary.Interactions.Responder
+
+  require Logger
   require Ash.Query
 
   alias Canary.Sources.Document
@@ -29,7 +31,16 @@ defmodule Canary.Interactions.Responder.Default do
       |> search_results_to_docs()
       |> then(fn docs ->
         opts = [threshold: 0, renderer: fn doc -> doc.content end]
-        Canary.Reranker.run!(query, docs, opts) |> Enum.take(5)
+
+        case Canary.Reranker.run!(query, docs, opts) do
+          {:ok, docs} ->
+            docs
+
+          {:error, error} ->
+            Logger.error(%{message: "reranker failed", error: error})
+            docs
+        end
+        |> Enum.take(5)
       end)
 
     messages = [
