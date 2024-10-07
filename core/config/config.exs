@@ -97,6 +97,7 @@ config :floki, :html_parser, Floki.HTMLParser.Html5ever
 config :sentry,
   integrations: [
     oban: [
+      capture_errors: true,
       cron: [enabled: true]
     ]
   ]

@@ -99,7 +99,7 @@ defmodule Canary.MixProject do
       {:hop, "~> 0.1"},
       {:ex_json_schema, "~> 0.10"},
       {:yaml_elixir, "~> 2.11"},
-      {:sentry, "~> 10.2.0"},
+      {:sentry, "~> 10.7.0"},
       {:hackney, "~> 1.8"},
       {:opentelemetry_exporter, "~> 1.7"},
       {:opentelemetry, "1.4.0"},
