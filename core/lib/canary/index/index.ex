@@ -7,7 +7,7 @@ defmodule Canary.Index do
   alias Canary.Index.Client
   alias Canary.Index.Document
 
-  def insert_document(%Webpage.Chunk{} = chunk) do
+  def to_doc(%Webpage.Chunk{} = chunk) do
     meta = %Document.Webpage.Meta{
       url: chunk.url,
       document_id: chunk.document_id,
@@ -16,7 +16,7 @@ defmodule Canary.Index do
 
     tags = chunk.tags || []
 
-    doc = %Document.Webpage{
+    %Document.Webpage{
       id: chunk.index_id,
       source_id: chunk.source_id,
       title: chunk.title || "",
@@ -25,18 +25,16 @@ defmodule Canary.Index do
       is_empty_tags: tags == [],
       meta: meta
     }
-
-    Client.index_document(:webpage, doc)
   end
 
-  def insert_document(%GithubIssue.Chunk{} = chunk) do
+  def to_doc(%GithubIssue.Chunk{} = chunk) do
     meta = %Document.GithubIssue.Meta{
       url: chunk.url,
       document_id: chunk.document_id,
       is_parent: chunk.is_parent
     }
 
-    doc = %Document.GithubIssue{
+    %Document.GithubIssue{
       id: chunk.index_id,
       source_id: chunk.source_id,
       title: chunk.title || "",
@@ -45,18 +43,16 @@ defmodule Canary.Index do
       is_empty_tags: true,
       meta: meta
     }
-
-    Client.index_document(:github_issue, doc)
   end
 
-  def insert_document(%GithubDiscussion.Chunk{} = chunk) do
+  def to_doc(%GithubDiscussion.Chunk{} = chunk) do
     meta = %Document.GithubDiscussion.Meta{
       url: chunk.url,
       document_id: chunk.document_id,
       is_parent: chunk.is_parent
     }
 
-    doc = %Document.GithubDiscussion{
+    %Document.GithubDiscussion{
       id: chunk.index_id,
       source_id: chunk.source_id,
       title: chunk.title || "",
@@ -65,8 +61,37 @@ defmodule Canary.Index do
       is_empty_tags: true,
       meta: meta
     }
+  end
 
-    Client.index_document(:github_discussion, doc)
+  def insert_document(%Webpage.Chunk{} = chunk) do
+    chunk
+    |> to_doc()
+    |> then(&Client.index_document(:webpage, &1))
+  end
+
+  def insert_document(%GithubIssue.Chunk{} = chunk) do
+    chunk
+    |> to_doc()
+    |> then(&Client.index_document(:github_issue, &1))
+  end
+
+  def insert_document(%GithubDiscussion.Chunk{} = chunk) do
+    chunk
+    |> to_doc()
+    |> then(&Client.index_document(:github_discussion, &1))
+  end
+
+  def batch_insert_document(docs) when is_list(docs) do
+    type =
+      case Enum.at(docs, 0) do
+        %Webpage.Chunk{} -> :webpage
+        %GithubIssue.Chunk{} -> :github_issue
+        %GithubDiscussion.Chunk{} -> :github_discussion
+      end
+
+    docs
+    |> Enum.map(&to_doc/1)
+    |> then(&Client.batch_index_document(type, &1))
   end
 
   def delete_document(source_type, id)
@@ -76,6 +101,15 @@ defmodule Canary.Index do
              :github_discussion
            ] do
     Client.delete_document(source_type, id)
+  end
+
+  def batch_delete_document(source_type, ids)
+      when source_type in [
+             :webpage,
+             :github_issue,
+             :github_discussion
+           ] do
+    Client.batch_delete_document(source_type, ids)
   end
 
   def search(_, _, _ \\ [])

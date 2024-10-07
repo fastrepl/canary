@@ -11,18 +11,25 @@ defmodule Canary.Change.AddToIndex do
   end
 
   @impl true
-  def change(changeset, opts, _context) do
-    changeset
-    |> Ash.Changeset.force_change_attribute(opts[:index_id_attribute], Ash.UUID.generate())
-    |> Ash.Changeset.after_action(fn _, record ->
-      case Canary.Index.insert_document(record) do
-        {:ok, _} ->
-          {:ok, record}
+  def batch_change(changesets, opts, _context) do
+    changesets
+    |> Enum.map(
+      &Ash.Changeset.force_change_attribute(&1, opts[:index_id_attribute], Ash.UUID.generate())
+    )
+  end
 
-        error ->
-          IO.inspect(error)
-          error
-      end
-    end)
+  @impl true
+  def after_batch(changesets_and_results, _opts, _context) do
+    records =
+      changesets_and_results
+      |> Enum.map(fn {_changeset, record} -> record end)
+
+    case Canary.Index.batch_insert_document(records) do
+      {:ok, _} ->
+        records |> Enum.map(fn record -> {:ok, record} end)
+
+      {:error, error} ->
+        records |> Enum.map(fn _ -> {:error, error} end)
+    end
   end
 end

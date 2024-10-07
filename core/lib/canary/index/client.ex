@@ -53,9 +53,35 @@ defmodule Canary.Index.Client do
     |> wrap()
   end
 
+  def batch_index_document(collection, docs) when is_list(docs) do
+    jsonl_docs = docs |> Enum.map(&Jason.encode!/1) |> Enum.join("\n")
+
+    base()
+    |> Req.post(
+      url: "/collections/#{collection}/documents/import",
+      body: jsonl_docs,
+      headers: [{"Content-Type", "text/plain"}]
+    )
+    |> wrap()
+  end
+
   def delete_document(collection, id) do
     base()
-    |> Req.delete(url: "/collections/#{collection}/documents/#{id}")
+    |> Req.delete(
+      url: "/collections/#{collection}/documents/#{id}",
+      params: [ignore_not_found: true]
+    )
+    |> wrap()
+  end
+
+  def batch_delete_document(collection, ids) when is_list(ids) do
+    filter = "id:=[#{Enum.join(ids, ",")}]"
+
+    base()
+    |> Req.delete(
+      url: "/collections/#{collection}/documents",
+      params: [filter_by: filter]
+    )
     |> wrap()
   end
 
