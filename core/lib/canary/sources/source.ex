@@ -158,7 +158,7 @@ defmodule Canary.Sources.Source do
               Canary.Workers.GithubDiscussionProcessor.new(%{source_id: source_id})
           end
 
-        case Oban.insert(job) do
+        case OpentelemetryOban.insert(job) do
           {:ok, _job} ->
             changeset
 

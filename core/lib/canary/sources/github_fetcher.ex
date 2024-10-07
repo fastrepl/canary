@@ -6,7 +6,9 @@ defmodule Canary.Sources.GithubFetcher do
     )
   end
 
-  def run_all(query, variables) do
+  def run_all(query, variables, opts \\ []) do
+    since = opts |> Keyword.get(:since, DateTime.utc_now() |> DateTime.add(-6*30, :day))
+
     Stream.unfold(nil, fn
       :stop ->
         nil
@@ -16,14 +18,14 @@ defmodule Canary.Sources.GithubFetcher do
           {:ok, data} ->
             resource = get_resource(data)
             page_info = data["repository"][resource]["pageInfo"]
-            nodes = data["repository"][resource]["nodes"]
+
+            nodes =
+              data["repository"][resource]["nodes"]
+              |> Enum.reject(fn %{"createdAt" => t} -> old?(t, since) end)
 
             cond do
               length(nodes) == 0 ->
                 {[], :stop}
-
-              nodes |> Enum.at(0) |> Map.get("createdAt") |> more_than_six_months_ago?() ->
-                {nodes, :stop}
 
               page_info["hasNextPage"] ->
                 {nodes, page_info["endCursor"]}
@@ -76,9 +78,9 @@ defmodule Canary.Sources.GithubFetcher do
     end
   end
 
-  defp more_than_six_months_ago?(timestamp) do
+  defp old?(timestamp, %DateTime{} = since) do
     case DateTime.from_iso8601(timestamp) do
-      {:ok, date, _} -> DateTime.diff(DateTime.utc_now(), date) > 6 * 30 * 24 * 60 * 60
+      {:ok, target, _} -> DateTime.compare(target, since) == :le
       _ -> false
     end
   end
