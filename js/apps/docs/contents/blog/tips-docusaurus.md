@@ -1,14 +1,18 @@
 ---
-toc: false
-sidebar: false
+title: Documentation handbook for startups (Docusaurus ver.)
+date: 2024-03-21
+author: Yujong Lee
+
 next: false
+sidebar: false
 editLink: false
+lastUpdated: false
 ---
+
+# Documentation handbook for startups (Docusaurus ver.)
 
 https://docusaurus.io/community/resources
 https://github.com/webbertakken/awesome-docusaurus
-
-# Documentation handbook for startups (Docusaurus ver.)
 
 ## Page Feedback
 

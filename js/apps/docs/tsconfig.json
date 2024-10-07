@@ -1,5 +1,5 @@
 {
-  "include": [".vitepress", "./components", "shims.d.ts"],
+  "exclude": ["node_modules"],
   "compilerOptions": {
     "resolveJsonModule": true,
     "esModuleInterop": true,

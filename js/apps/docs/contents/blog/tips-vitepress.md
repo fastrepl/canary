@@ -1,8 +1,12 @@
 ---
-toc: false
-sidebar: false
+title: Documentation handbook for startups (Vitepress ver.)
+date: 2024-03-21
+author: Yujong Lee
+
 next: false
+sidebar: false
 editLink: false
+lastUpdated: false
 ---
 
 # Documentation handbook for startups (Vitepress ver.)
