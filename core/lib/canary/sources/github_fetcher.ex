@@ -48,6 +48,9 @@ defmodule Canary.Sources.GithubFetcher do
 
   def run(query, variables) do
     case client() |> Req.post(graphql: {query, variables}) do
+      {:ok, %{status: 200, body: %{"data" => nil}}} ->
+        {:try_after_s, 60}
+
       {:ok, %{status: 200, body: %{"data" => data}}} ->
         {:ok, data}
 
