@@ -32,7 +32,7 @@ defmodule Canary.Interactions.Responder.Default do
       |> then(fn docs ->
         opts = [threshold: 0, renderer: fn doc -> doc.content end]
 
-        case Canary.Reranker.run!(query, docs, opts) do
+        case Canary.Reranker.run(query, docs, opts) do
           {:ok, docs} ->
             docs
 
