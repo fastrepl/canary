@@ -59,8 +59,6 @@ export class CanaryProviderCloud extends LitElement {
   static styles = wrapper;
 
   search: SearchFunction = async (query, signal) => {
-    console.log(query);
-
     const params = {
       method: "POST",
       headers: {
