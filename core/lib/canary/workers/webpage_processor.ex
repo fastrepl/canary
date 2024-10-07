@@ -1,7 +1,7 @@
 defmodule Canary.Workers.WebpageProcessor do
   use Oban.Worker,
     queue: :webpage_processor,
-    max_attempts: 2,
+    max_attempts: 1,
     unique: [
       period: if(Application.get_env(:canary, :env) == :prod, do: 24 * 60 * 60, else: 10),
       fields: [:worker, :queue, :args],

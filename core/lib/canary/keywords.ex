@@ -16,6 +16,8 @@ defmodule Canary.Keywords do
     Enum.uniq(keywords_from_title ++ keywords_from_chunks)
   end
 
+  def extract(%{title: nil}, _opts), do: []
+
   def extract(%Webpage.DocumentMeta{title: title}, _opts) do
     Canary.Native.extract_keywords(title, 5)
   end
