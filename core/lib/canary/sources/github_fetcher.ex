@@ -7,7 +7,7 @@ defmodule Canary.Sources.GithubFetcher do
   end
 
   def run_all(query, variables, opts \\ []) do
-    since = opts |> Keyword.get(:since, DateTime.utc_now() |> DateTime.add(-6*30, :day))
+    since = opts |> Keyword.get(:since, DateTime.utc_now() |> DateTime.add(-6 * 30, :day))
 
     Stream.unfold(nil, fn
       :stop ->
