@@ -7,7 +7,7 @@ defmodule CanaryWeb.SourceLive.WebpageCrawlerPreview do
   def render(assigns) do
     ~H"""
     <div>
-      <Primer.box is_condensed is_scrollable style="max-height: calc(100vh - 200px)">
+      <Primer.box is_condensed is_scrollable style="max-height: calc(100vh - 300px)">
         <:header_title class="flex-auto">
           <div class="flex items-center gap-1">
             <span><%= length(@items) %> found</span>
