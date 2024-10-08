@@ -79,7 +79,6 @@ defmodule Canary.MixProject do
       {:picosat_elixir, "~> 0.2.3"},
       {:req, "~> 0.5.0"},
       {:retry, "~> 0.18"},
-      {:cors_plug, "~> 3.0"},
       {:mox, "~> 1.0", only: :test},
       {:req_crawl, "~> 0.2.0"},
       {:saxy, "~> 1.5"},
@@ -89,7 +88,7 @@ defmodule Canary.MixProject do
       {:oapi_github, "~> 0.3.3"},
       {:httpoison, "~> 2.2"},
       {:resend, "~> 0.4.2"},
-      {:cachex, "~> 3.6"},
+      {:cachex, "~> 4.0"},
       {:bumblebee, "~> 0.5.3"},
       {:absinthe_client, "~> 0.1.0"},
       {:cloak, "~> 1.1"},
@@ -106,7 +105,8 @@ defmodule Canary.MixProject do
       {:opentelemetry_req, "~> 0.2.0"},
       {:opentelemetry_ecto, "~> 1.2"},
       {:opentelemetry_oban, "~> 1.1"},
-      {:opentelemetry_phoenix, "~> 1.2"}
+      {:opentelemetry_phoenix, "~> 1.2"},
+      {:corsica, "~> 2.0"}
     ] ++ deps_eval()
   end
 

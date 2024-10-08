@@ -15,12 +15,22 @@ defmodule CanaryWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
-    plug CORSPlug, origin: &CanaryWeb.Router.origin/0
+
+    plug Corsica,
+      max_age: 300,
+      allow_credentials: true,
+      origins: {CanaryWeb.Router, :is_allowed_origin?, []}
   end
 
-  def origin() do
-    Cachex.fetch!(:cache, :origin, fn ->
-      {:commit, Canary.Accounts.Key.allowed_hosts!(), ttl: :timer.seconds(30)}
+  def is_allowed_origin?(_conn, origin) do
+    %URI{host: host} = URI.parse(origin)
+    host in hosts()
+  end
+
+  defp hosts() do
+    Cachex.fetch!(:cache, :origin, fn _ ->
+      hosts = Canary.Accounts.Key.allowed_hosts!()
+      {:commit, hosts, expire: :timer.seconds(15)}
     end)
   end
 
