@@ -19,6 +19,7 @@ defmodule CanaryWeb.Router do
     plug Corsica,
       max_age: 300,
       allow_credentials: true,
+      allow_headers: ["Authorization"],
       origins: {CanaryWeb.Router, :is_allowed_origin?, []}
   end
 
