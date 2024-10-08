@@ -106,7 +106,10 @@ defmodule Canary.MixProject do
       {:opentelemetry_ecto, "~> 1.2"},
       {:opentelemetry_oban, "~> 1.1"},
       {:opentelemetry_phoenix, "~> 1.2"},
-      {:corsica, "~> 2.0"}
+      {:corsica, "~> 2.0"},
+      {:ex2ms, "~> 1.7"},
+      {:recon, "~> 2.5", override: true},
+      {:recon_ex, github: "tatsuya6502/recon_ex", ref: "0ce4c5da777937a5bb57d3e68b9afcb9877c1c3b"}
     ] ++ deps_eval()
   end
 
