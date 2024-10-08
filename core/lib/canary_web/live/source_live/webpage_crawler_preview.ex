@@ -38,25 +38,24 @@ defmodule CanaryWeb.SourceLive.WebpageCrawlerPreview do
     """
   end
 
+  def update(%{action: :cancel}, socket) do
+    {:ok, socket |> cancel_async(:task, :navigate)}
+  end
+
+  def update(%{action: :update, item: item}, socket) do
+    items = [item | socket.assigns.items]
+    {:ok, socket |> assign(:items, items)}
+  end
+
   @impl true
   def update(assigns, socket) do
     socket =
       socket
       |> assign(assigns)
-      |> assign_new(:items, fn -> [] end)
-      |> assign_new(:loading, fn -> false end)
-      |> handle_internal_update(assigns)
+      |> assign(:items, [])
+      |> assign(:loading, false)
 
     {:ok, socket}
-  end
-
-  defp handle_internal_update(socket, assigns) do
-    if assigns[:item] do
-      items = [assigns[:item] | socket.assigns.items]
-      socket |> assign(:items, items)
-    else
-      socket
-    end
   end
 
   @impl true
@@ -75,7 +74,7 @@ defmodule CanaryWeb.SourceLive.WebpageCrawlerPreview do
 
     socket =
       socket
-      |> assign(:urls, [])
+      |> assign(:items, [])
       |> assign(:loading, true)
       |> cancel_async(:task, :rerun)
       |> start_async(:task, fn ->
@@ -83,7 +82,7 @@ defmodule CanaryWeb.SourceLive.WebpageCrawlerPreview do
 
         stream
         |> Stream.map(fn %Webpage.FetcherResult{} = item -> %{url: item.url, tags: item.tags} end)
-        |> Stream.each(fn item -> send_update(self, myself, item: item) end)
+        |> Stream.each(fn item -> send_update(self, myself, %{action: :update, item: item}) end)
         |> Enum.to_list()
       end)
 
@@ -102,7 +101,7 @@ defmodule CanaryWeb.SourceLive.WebpageCrawlerPreview do
 
   @impl true
   def handle_async(:task, {:exit, reason}, socket) do
-    if reason != :rerun do
+    if reason not in [:rerun, :navigate] do
       IO.inspect(reason)
     end
 

@@ -2,6 +2,8 @@ defmodule CanaryWeb.SourceLive.Detail do
   use CanaryWeb, :live_component
   alias PrimerLive.Component, as: Primer
 
+  @crawler_preview_id "webpage-crawler-preview"
+
   @impl true
   def render(assigns) do
     ~H"""
@@ -318,13 +320,19 @@ defmodule CanaryWeb.SourceLive.Detail do
       end)
       |> assign(action_msg: if(source.state == :running, do: "Cancel", else: "Fetch"))
       |> assign(action_name: if(source.state == :running, do: "cancel", else: "fetch"))
+      |> assign(crawler_preview_id: @crawler_preview_id)
 
     {:ok, socket}
   end
 
   @impl true
   def handle_event("set-tab", %{"item" => tab}, socket) do
-    {:noreply, assign(socket, :tab, tab)}
+    if socket.assigns.tab == "Preview" do
+      CanaryWeb.SourceLive.WebpageCrawlerPreview
+      |> send_update(id: @crawler_preview_id, action: :cancel)
+    end
+
+    {:noreply, socket |> assign(:tab, tab)}
   end
 
   @impl true
