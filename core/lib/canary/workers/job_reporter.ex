@@ -3,6 +3,8 @@ defmodule Canary.Workers.JobReporter do
   alias Canary.Sources.Source
   alias Canary.Sources.Event
 
+  require Logger
+
   @processors Enum.map(
                 [
                   Workers.WebpageProcessor,
@@ -21,32 +23,37 @@ defmodule Canary.Workers.JobReporter do
       when event in [:start, :stop, :exception] and worker in @processors do
     source = Ash.get!(Source, args["source_id"])
 
-    case event do
-      :start ->
-        Source.update_state(source, :running)
+    try do
+      case event do
+        :start ->
+          Source.update_state(source, :running)
 
-        Event.create(source.id, %Event.Meta{
-          level: :info,
-          message: "fetcher started"
-        })
+          Event.create(source.id, %Event.Meta{
+            level: :info,
+            message: "fetcher started"
+          })
 
-      :stop ->
-        Source.update_state(source, :idle)
-        Source.update_last_fetched_at(source)
+        :stop ->
+          Source.update_state(source, :idle)
+          Source.update_last_fetched_at(source)
 
-        Event.create(source.id, %Event.Meta{
-          level: :info,
-          message: "fetcher ended"
-        })
+          Event.create(source.id, %Event.Meta{
+            level: :info,
+            message: "fetcher ended"
+          })
 
-      :exception ->
-        Source.update_state(source, :error)
-        Source.update_last_fetched_at(source)
+        :exception ->
+          Source.update_state(source, :error)
+          Source.update_last_fetched_at(source)
 
-        Event.create(source.id, %Event.Meta{
-          level: :info,
-          message: "fetcher failed"
-        })
+          Event.create(source.id, %Event.Meta{
+            level: :info,
+            message: "fetcher failed"
+          })
+      end
+    rescue
+      e ->
+        Logger.info(Exception.format(:error, e, __STACKTRACE__))
     end
   end
 

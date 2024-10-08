@@ -10,9 +10,11 @@ defmodule Canary.Application do
     add_sentry_logger()
     attach_oban_telemetry()
 
-    OpentelemetryOban.setup()
-    OpentelemetryPhoenix.setup()
-    OpentelemetryEcto.setup([:canary, :repo], db_statement: :enabled, time_unit: :millisecond)
+    :ok = OpentelemetryOban.setup(trace: [:jobs])
+    :ok = OpentelemetryPhoenix.setup()
+
+    :ok =
+      OpentelemetryEcto.setup([:canary, :repo], db_statement: :enabled, time_unit: :millisecond)
 
     :ok = Canary.Index.Collection.ensure(:webpage)
     :ok = Canary.Index.Collection.ensure(:github_issue)
