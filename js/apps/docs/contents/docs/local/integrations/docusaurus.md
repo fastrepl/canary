@@ -114,5 +114,3 @@ export default function SearchBar() {
 > Specifying `framework="docusaurus"` is required to detect light/dark mode changes.
 
 Note that since `Canary`'s **main focus is to provide composable primitives**, ejected components will be very simple and easy to customize.
-
-For information on how to compose components to build your own search-bar UI, please refer to the [Built-in Components](/docs/common/customization/builtin) and [Custom Components](/docs/common/customization/custom) guides.

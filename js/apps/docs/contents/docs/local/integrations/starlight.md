@@ -73,8 +73,6 @@ const options = {
 
 > Specifying `framework="starlight"` is required to detect light/dark mode changes.
 
-For more information on how to compose components to build your own search-bar UI, please refer to the [Built-in Components](/docs/common/customization/builtin) and [Custom Components](/docs/common/customization/custom) guides.
-
 ### Step 3: Override default search component
 
 ::: code-group

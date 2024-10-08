@@ -22,10 +22,6 @@ const sidebar = [
             link: "/docs/common/customization/styling",
           },
           {
-            text: "Built-in components",
-            link: "/docs/common/customization/builtin",
-          },
-          {
             text: "Custom components",
             link: "/docs/common/customization/custom",
           },

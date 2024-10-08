@@ -22,7 +22,7 @@ onMounted(() => {
   });
 });
 
-const sources = ["canary_webpage", "canary_issue"];
+const sources = ["canary_webpage"];
 
 const tabs = JSON.stringify([
   { name: "All", pattern: "**/*" },
