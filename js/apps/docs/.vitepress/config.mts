@@ -157,6 +157,56 @@ export default defineConfig({
       lazyLoading: true,
     },
   },
+  transformPageData(pageData) {
+    const canonicalUrl = `https://getcanary.dev/${pageData.relativePath}`
+      .replace(/index\.md$/, "")
+      .replace(/\.md$/, ".html");
+
+    pageData.frontmatter.head ??= [];
+    pageData.frontmatter.head.push(
+      ["link", { rel: "canonical", href: canonicalUrl }],
+      [
+        "meta",
+        {
+          name: "og:title",
+          content:
+            pageData.frontmatter.layout === "home"
+              ? `Canary`
+              : `${pageData.title} | Canary`,
+        },
+      ],
+      [
+        "meta",
+        {
+          name: "og:description",
+          content:
+            pageData.frontmatter.layout === "home"
+              ? "Searchbar that your users love to use. Optimized for techincal docs with AI."
+              : pageData.frontmatter.description,
+        },
+      ],
+      [
+        "meta",
+        {
+          name: "twitter:title",
+          content:
+            pageData.frontmatter.layout === "home"
+              ? `Canary`
+              : `${pageData.title} | Canary`,
+        },
+      ],
+      [
+        "meta",
+        {
+          name: "twitter:description",
+          content:
+            pageData.frontmatter.layout === "home"
+              ? "Searchbar that your users love to use. Optimized for techincal docs with AI."
+              : pageData.frontmatter.description,
+        },
+      ],
+    );
+  },
   vue: {
     template: {
       compilerOptions: {
@@ -175,6 +225,9 @@ export default defineConfig({
           ),
         },
       ],
+    },
+    ssr: {
+      noExternal: ["@nolebase/vitepress-plugin-highlight-targeted-heading"],
     },
   },
   themeConfig: {
