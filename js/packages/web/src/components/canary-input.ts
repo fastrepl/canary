@@ -1,4 +1,4 @@
-import { LitElement, css, html, nothing } from "lit";
+import { LitElement, css, html, nothing, type PropertyValues } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 import { ifDefined } from "lit/directives/if-defined.js";
@@ -41,6 +41,32 @@ export class CanaryInput extends LitElement {
   @state()
   private _execution?: ExecutionContext;
 
+  @state()
+  private _showLoading = false;
+
+  private _loadingDebounceTimer: number | null = null;
+
+  updated(changed: PropertyValues) {
+    if (changed.has("_execution")) {
+      if (this._loadingDebounceTimer !== null) {
+        clearTimeout(this._loadingDebounceTimer);
+      }
+
+      const next =
+        this._execution?.status === TaskStatus.PENDING ||
+        this._execution?.status === TaskStatus.ERROR;
+
+      if (next) {
+        this._showLoading = true;
+        return;
+      }
+
+      this._loadingDebounceTimer = window.setTimeout(() => {
+        this._showLoading = false;
+      }, 100);
+    }
+  }
+
   render() {
     return html`
       <div class="container" part="container">
@@ -80,13 +106,7 @@ export class CanaryInput extends LitElement {
         >
           <slot name="action-ask"> ${this._renderDefaultAsk()} </slot>
         </span>
-        <span
-          class=${classMap({
-            hidden:
-              this._execution?.status !== TaskStatus.PENDING &&
-              this._execution?.status !== TaskStatus.ERROR,
-          })}
-        >
+        <span class=${classMap({ hidden: !this._showLoading })}>
           <slot name="loading">
             <canary-loading-spinner></canary-loading-spinner>
           </slot>
