@@ -15,7 +15,13 @@ defmodule CanaryWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
-    plug CORSPlug
+    plug CORSPlug, origin: &CanaryWeb.Router.origin/0
+  end
+
+  def origin() do
+    Cachex.fetch!(:cache, :origin, fn ->
+      {:commit, Canary.Accounts.Key.allowed_hosts!(), ttl: :timer.seconds(30)}
+    end)
   end
 
   scope "/" do

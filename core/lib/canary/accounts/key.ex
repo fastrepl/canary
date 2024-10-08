@@ -3,6 +3,8 @@ defmodule Canary.Accounts.Key do
     domain: Canary.Accounts,
     data_layer: AshPostgres.DataLayer
 
+  require Ash.Query
+
   attributes do
     uuid_primary_key :id
 
@@ -42,10 +44,32 @@ defmodule Canary.Accounts.Key do
         length: 32, output_attribute: :value
       }
     end
+
+    action :allowed_hosts, {:array, :string} do
+      run fn _, _ ->
+        query =
+          __MODULE__
+          |> Ash.Query.select([:config])
+
+        case Ash.read(query) do
+          {:ok, results} ->
+            hosts =
+              results
+              |> Enum.map(fn %{config: %{value: %{allowed_host: host}}} -> host end)
+              |> Enum.uniq()
+
+            {:ok, hosts}
+
+          error ->
+            error
+        end
+      end
+    end
   end
 
   code_interface do
     define :find, args: [:value], action: :find
+    define :allowed_hosts, args: [], action: :allowed_hosts
   end
 
   postgres do
