@@ -2,7 +2,7 @@
 title: Building Plugins in the DOM with Web Components
 date: 2024-10-08
 author: Yujong Lee
-draft: true
+draft: false
 
 next: false
 sidebar: false

@@ -7,11 +7,7 @@ import unocss from "unocss/vite";
 
 import dts from "vite-plugin-dts";
 import cem from "vite-plugin-cem";
-import {
-  partsReportPlugin,
-  cssVariablesReportPlugin,
-  canaryImportPlugin,
-} from "./plugins";
+import { canaryImportPlugin } from "./plugins";
 
 const components = [
   ...["canary-root", "canary-styles"],
@@ -68,8 +64,6 @@ export default defineConfig({
     environmentMatchGlobs: [["./src/store/*.test.ts", "happy-dom"]],
   },
   plugins: [
-    process.env.GENERATE_DOCS === "1" && partsReportPlugin(),
-    process.env.GENERATE_DOCS === "1" && cssVariablesReportPlugin(),
     unocss({ mode: "shadow-dom" }),
     dts({
       include: ["src/**/*.ts"],

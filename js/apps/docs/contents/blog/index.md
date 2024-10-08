@@ -11,4 +11,6 @@ import BlogPosts from "../../components/BlogPosts.vue";
 
 # Blog
 
+Things we want to share along the way.
+
 <BlogPosts />
