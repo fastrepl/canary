@@ -5,8 +5,9 @@ import { data as posts } from "../data/blog_posts.data";
 <template>
   <ul>
     <a :href="post.url" v-for="post of posts">
-      <li>
-        {{ post.title }}
+      <li class="flex flex-row items-center justify-between">
+        <span>{{ post.title }}</span>
+        <span class="text-sm">{{ post.date.string }}</span>
       </li>
     </a>
   </ul>

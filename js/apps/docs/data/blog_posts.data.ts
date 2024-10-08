@@ -18,6 +18,7 @@ export default createContentLoader(["blog/*.md"], {
   transform(raw): Post[] {
     return raw
       .filter(({ url }) => url !== "/blog/")
+      .filter(({ frontmatter }) => !frontmatter?.draft)
       .map(({ url, frontmatter, excerpt }) => ({
         title: frontmatter.title,
         url,

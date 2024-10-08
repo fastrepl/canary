@@ -2,6 +2,7 @@
 title: Documentation handbook for startups (Docusaurus ver.)
 date: 2024-03-21
 author: Yujong Lee
+draft: true
 
 next: false
 sidebar: false

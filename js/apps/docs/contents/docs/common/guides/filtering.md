@@ -2,13 +2,17 @@
 import { onMounted, ref, computed } from "vue";
 import { useData } from "vitepress";
 
+import { data } from "../../../../data/url_cloud.data.js";
+
 const loaded = ref(false);
 
-const pattern = ref([
+const tabs = ref([
   { name: "All", pattern: "**/*" },
   { name: "Local", pattern: "**/local/**" },
   { name: "Cloud", pattern: "**/cloud/**" }
 ]);
+
+const tags = ref(["Local", "Cloud"].join(","));
 
 onMounted(() => {
   Promise.all([
@@ -29,37 +33,73 @@ const { localeIndex } = useData();
 
 # Filtering
 
+If your documentation grows to a certain size, or you have multiple sources (e.g., a webpage, GitHub, etc.), you'll need to filter the results.
+
+Currently we have **two built-in components** for filtering.
+
+## `canary-filter-tabs-glob`
+
+[reference](/docs/reference/components#canary-filter-tabs-glob)
+
+All providers support this type of filtering.
+
 ```html-vue
 <canary-search slot="mode">
-  <canary-filter-tabs-glob slot="head" tabs='{{ JSON.stringify(pattern) }}'> </canary-filter-tabs-glob> // [!code ++]
+  <canary-filter-tabs-glob slot="head" tabs='{{ JSON.stringify(tabs) }}'> </canary-filter-tabs-glob> // [!code ++]
   <canary-search-results slot="body"></canary-search-results>
 </canary-search>
 ```
 
-<canary-root framework="vitepress" query="⬇️ we have tabs below" v-if="loaded" :key="pattern">
+<canary-root framework="vitepress" query="vitepress" v-if="loaded">
   <canary-provider-vitepress-minisearch :localeIndex="localeIndex">
     <canary-content>
         <canary-input slot="input"></canary-input>
         <canary-search slot="mode">
-          <canary-filter-tabs-glob slot="head" :tabs="JSON.stringify(pattern)"></canary-filter-tabs-glob>
+          <canary-filter-tabs-glob slot="head" :tabs="JSON.stringify(tabs)"></canary-filter-tabs-glob>
           <canary-search-results slot="body"></canary-search-results>
         </canary-search>
     </canary-content>
   </canary-provider-vitepress-minisearch>
 </canary-root>
 
+## `canary-filter-tags`
+
+[reference](/docs/reference/components#canary-filter-tags)
+
+Two providers support this type of filtering.
+
+- `canary-provider-cloud`
+  - `tags` should be defined in our dashboard.
+- `canary-provider-pagefind`
+  - `data-pagefind-meta="tag"` should be available. Read more about it [here](https://pagefind.app/docs/metadata/).
+
+```html-vue
+<canary-content>
+  <canary-input slot="input"></canary-input>
+  <canary-search slot="mode">
+    <canary-filter-tags slot="head" tags='{{ JSON.stringify(tags) }}'></canary-filter-tags> // [!code ++]
+    <canary-search-results slot="body"></canary-search-results>
+  </canary-search>
+</canary-content>
+```
+
+<canary-root framework="vitepress" query="vitepress" v-if="loaded">
+  <canary-provider-cloud
+    :api-key="data.key"
+    :api-base="data.base"
+    sources="canary_webpage"
+  >
+    <canary-content>
+      <canary-input slot="input"></canary-input>
+      <canary-search slot="mode">
+        <canary-filter-tags slot="head" :tags="tags"></canary-filter-tags>
+        <canary-search-results slot="body"></canary-search-results>
+      </canary-search>
+    </canary-content>
+  </canary-provider-cloud>
+</canary-root>
+
 <style scoped>
-  label {
-    padding-top: 4px;
-  }
-
-  input {
-    border: 1px solid var(--vp-c-text-3);
-    border-radius: 6px;
-    padding: 2px 4px;
-    width: 320px;
-  }
-
   canary-root {
     --canary-content-max-width: 690px;
     --canary-content-max-height: 300px;
