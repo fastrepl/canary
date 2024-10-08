@@ -15,12 +15,6 @@ defmodule CanaryWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
-
-    plug Corsica,
-      max_age: 300,
-      allow_credentials: true,
-      allow_headers: ["Authorization"],
-      origins: {CanaryWeb.Router, :is_allowed_origin?, []}
   end
 
   def is_allowed_origin?(_conn, origin) do

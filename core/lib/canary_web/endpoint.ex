@@ -65,5 +65,6 @@ defmodule CanaryWeb.Endpoint do
   plug Plug.Session, @session_options
 
   plug CanaryWeb.Plug.Subdomain, CanaryWeb.SubdomainRouter
+  plug CanaryWeb.CORSRouter
   plug CanaryWeb.Router
 end
