@@ -1,14 +1,15 @@
 import { LitElement, html, css, nothing } from "lit";
-import { customElement, state } from "lit/decorators.js";
+import { state } from "lit/decorators.js";
 import { ref, createRef } from "lit/directives/ref.js";
 
 import { consume } from "@lit/context";
 import { modeContext } from "../contexts";
 
-import type { ModeContext } from "../types";
+import { registerCustomElement } from "../decorators";
 import { MODE_SEARCH } from "../constants";
 import { global, scrollContainer } from "../styles";
 import { createEvent } from "../store";
+import type { ModeContext } from "../types";
 
 const NAME = "canary-search";
 
@@ -17,7 +18,7 @@ const NAME = "canary-search";
  * @slot head - Head
  * @slot body - Body
  */
-@customElement(NAME)
+@registerCustomElement(NAME)
 export class CanarySearch extends LitElement {
   readonly MODE = MODE_SEARCH;
 

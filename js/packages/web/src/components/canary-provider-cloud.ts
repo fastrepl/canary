@@ -1,18 +1,20 @@
 import { LitElement, html, type PropertyValues } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { property } from "lit/decorators.js";
+
+import { registerCustomElement } from "../decorators";
 import { parse as safeParse } from "best-effort-json-parser";
 
 import type { AskFunction, SearchFunction } from "../types";
 
 import { wrapper } from "../styles";
 import { createEvent } from "../store";
-import { cache } from "../decorators";
+import { cache } from "../decorators/cache";
 import { StringArray } from "../converters";
 import { sseIterator } from "../utils";
 
 const NAME = "canary-provider-cloud";
 
-@customElement(NAME)
+@registerCustomElement(NAME)
 export class CanaryProviderCloud extends LitElement {
   @property({ type: String, attribute: "api-base" })
   apiBase = "";

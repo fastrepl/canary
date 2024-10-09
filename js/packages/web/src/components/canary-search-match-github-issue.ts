@@ -1,5 +1,7 @@
 import { LitElement, html, css, nothing } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { property } from "lit/decorators.js";
+
+import { registerCustomElement } from "../decorators";
 
 import "./canary-search-match-base";
 import "./canary-icon-tree";
@@ -13,7 +15,7 @@ import { global } from "../styles";
 
 const NAME = "canary-search-match-github-issue";
 
-@customElement(NAME)
+@registerCustomElement(NAME)
 export class CanarySearchMatchGithubIssue extends LitElement {
   @property({ type: Object })
   match!: SearchResult;

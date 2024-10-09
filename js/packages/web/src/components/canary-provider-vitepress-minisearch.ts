@@ -1,9 +1,10 @@
 import { LitElement, html } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
+import { property, state } from "lit/decorators.js";
 
 import type { SearchFunction, SearchResult } from "../types";
 import { wrapper } from "../styles";
 import { createEvent } from "../store";
+import { registerCustomElement } from "../decorators";
 
 const NAME = "canary-provider-vitepress-minisearch";
 
@@ -13,7 +14,7 @@ type MinisearchResult = {
   titles: string[];
 };
 
-@customElement(NAME)
+@registerCustomElement(NAME)
 export class CanaryProviderVitepressMinisearch extends LitElement {
   @property({ type: String }) localeIndex = "root";
   @property({ type: Object }) miniSearchOptions: any = {

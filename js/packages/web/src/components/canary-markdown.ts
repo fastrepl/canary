@@ -1,6 +1,8 @@
 import { LitElement, html, css } from "lit";
 import { ref, createRef } from "lit/directives/ref.js";
-import { customElement, property } from "lit/decorators.js";
+import { property } from "lit/decorators.js";
+
+import { registerCustomElement } from "../decorators";
 
 import { consume } from "@lit/context";
 import { themeContext } from "../contexts";
@@ -26,7 +28,7 @@ marked.use({
 
 const NAME = "canary-markdown";
 
-@customElement(NAME)
+@registerCustomElement(NAME)
 export class CanaryMarkdown extends LitElement {
   @consume({ context: themeContext, subscribe: true })
   theme?: ThemeContext;

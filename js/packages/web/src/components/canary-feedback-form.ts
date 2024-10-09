@@ -1,11 +1,13 @@
 import { LitElement, html, css } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { property } from "lit/decorators.js";
+
+import { registerCustomElement } from "../decorators";
 
 import { MODAL_CLOSE_EVENT } from "./canary-modal";
 
 const NAME = "canary-feedback-form";
 
-@customElement(NAME)
+@registerCustomElement(NAME)
 export class CanaryFeedbackForm extends LitElement {
   @property({ type: String }) title = "Submit feedback";
 

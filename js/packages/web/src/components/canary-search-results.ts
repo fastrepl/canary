@@ -1,11 +1,12 @@
 import { LitElement, css, html, nothing } from "lit";
-import { customElement, state } from "lit/decorators.js";
+import { state } from "lit/decorators.js";
 
 import { consume } from "@lit/context";
 import { executionContext } from "../contexts";
 
-import type { ExecutionContext } from "../types";
+import { registerCustomElement } from "../decorators";
 import { TaskStatus } from "../store/managers";
+import type { ExecutionContext } from "../types";
 
 import "./canary-error";
 import "./canary-search-match";
@@ -17,7 +18,7 @@ const NAME = "canary-search-results";
  * @csspart match-group - Match group
  * @csspart match-item - Match item
  */
-@customElement(NAME)
+@registerCustomElement(NAME)
 export class CanarySearchResults extends LitElement {
   @consume({ context: executionContext, subscribe: true })
   @state()

@@ -1,9 +1,10 @@
 import { LitElement, css, html } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
+import { property, state } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 
 import pm from "picomatch";
 
+import { registerCustomElement } from "../decorators";
 import { createEvent } from "../store";
 import type { TabDefinitions } from "../types";
 
@@ -15,7 +16,7 @@ const NAME = "canary-filter-tabs-glob";
  * @csspart active - Active tab
  * @csspart inactive - Inactive tab
  */
-@customElement(NAME)
+@registerCustomElement(NAME)
 export class CanaryFilterTabsGlob extends LitElement {
   @property({ type: Array })
   tabs: TabDefinitions = [{ name: "All", pattern: "**/*" }];

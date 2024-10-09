@@ -1,6 +1,7 @@
 import { LitElement, html, nothing } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { property } from "lit/decorators.js";
 
+import { registerCustomElement } from "../decorators";
 import { wrapper } from "../styles";
 import type { SearchResult } from "../types";
 
@@ -16,7 +17,7 @@ const GITHUB_DISCUSSION_ELEMENT_NAME = "canary-search-match-github-discussion";
  * @csspart match-group - Match group
  * @csspart match-item - Match item
  */
-@customElement(NAME)
+@registerCustomElement(NAME)
 export class CanarySearchMatch extends LitElement {
   @property({ type: Object })
   match!: SearchResult;

@@ -1,5 +1,7 @@
 import { LitElement, html, css } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { property } from "lit/decorators.js";
+
+import { registerCustomElement } from "../decorators";
 import { Task } from "@lit/task";
 
 import { withTimeout } from "../utils";
@@ -8,7 +10,7 @@ import "./canary-loading-spinner";
 
 const NAME = "canary-feedback-page";
 
-@customElement(NAME)
+@registerCustomElement(NAME)
 export class CanaryFeedbackPage extends LitElement {
   @property({ type: String, attribute: "text-initial" })
   initialText = "Was this helpful?";

@@ -1,11 +1,12 @@
 import { LitElement, html } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
+import { property, state } from "lit/decorators.js";
 
 import { wrapper } from "../styles";
+import { registerCustomElement } from "../decorators";
 
 const NAME = "canary-media-query";
 
-@customElement(NAME)
+@registerCustomElement(NAME)
 export class CanaryMediaQuery extends LitElement {
   @property({ type: String }) query = "";
   @state() matched = false;

@@ -1,16 +1,16 @@
 import { LitElement, html, css, nothing } from "lit";
-import { customElement } from "lit/decorators.js";
 
 import { consume } from "@lit/context";
 import { queryContext, executionContext } from "../contexts";
 
 import type { QueryContext, ExecutionContext } from "../types";
+import { registerCustomElement } from "../decorators";
 import { TaskStatus } from "../store";
 import { global } from "../styles";
 
 const NAME = "canary-search-empty";
 
-@customElement(NAME)
+@registerCustomElement(NAME)
 export class CanarySearchEmpty extends LitElement {
   @consume({ context: queryContext, subscribe: true })
   private _query?: QueryContext;

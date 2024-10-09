@@ -1,5 +1,7 @@
 import { LitElement, html } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { property } from "lit/decorators.js";
+
+import { registerCustomElement } from "../decorators";
 
 import { createStore, EVENT_NAME } from "../store";
 
@@ -13,7 +15,7 @@ const NAME = "canary-root";
 /**
  * @slot - Default slot
  */
-@customElement(NAME)
+@registerCustomElement(NAME)
 export class CanaryRoot extends LitElement {
   @property({ type: String })
   framework: Framework = "starlight";

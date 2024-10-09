@@ -1,5 +1,7 @@
 import { LitElement, html, css } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { property } from "lit/decorators.js";
+
+import { registerCustomElement } from "../decorators";
 import { wrapper } from "../styles";
 
 const NAME = "canary-badge";
@@ -7,7 +9,7 @@ const NAME = "canary-badge";
 /**
  * @csspart container - Container
  */
-@customElement(NAME)
+@registerCustomElement(NAME)
 export class CanaryBadge extends LitElement {
   @property({ type: String })
   name!: string;

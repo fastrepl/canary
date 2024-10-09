@@ -1,5 +1,7 @@
 import { LitElement, css, html } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { property } from "lit/decorators.js";
+
+import { registerCustomElement } from "../decorators";
 import { createRef } from "lit/directives/ref.js";
 
 import { wrapper } from "../styles";
@@ -9,7 +11,7 @@ const NAME = "canary-modal";
 
 export const MODAL_CLOSE_EVENT = "modal-close";
 
-@customElement(NAME)
+@registerCustomElement(NAME)
 export class CanaryModal extends LitElement {
   @property({ type: Boolean }) open = false;
 

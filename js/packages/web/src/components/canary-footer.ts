@@ -1,11 +1,11 @@
 import { LitElement, html, css } from "lit";
-import { customElement } from "lit/decorators.js";
 
+import { registerCustomElement } from "../decorators";
 import { GITHUB_REPO_URL } from "../constants";
 
 const NAME = "canary-footer";
 
-@customElement(NAME)
+@registerCustomElement(NAME)
 export class CanaryFooter extends LitElement {
   render() {
     return html`

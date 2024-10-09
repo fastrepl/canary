@@ -1,15 +1,16 @@
 import { LitElement, html, css, nothing } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { property } from "lit/decorators.js";
 
-import type { AskResponseReferenceBlock } from "../types";
+import { registerCustomElement } from "../decorators";
 import { global } from "../styles";
+import type { AskResponseReferenceBlock } from "../types";
 
 import "./canary-url-paths";
 import "./canary-markdown";
 
 const NAME = "canary-ask-block-reference";
 
-@customElement(NAME)
+@registerCustomElement(NAME)
 export class CanaryAskBlockReference extends LitElement {
   @property({ type: Object })
   block!: AskResponseReferenceBlock;

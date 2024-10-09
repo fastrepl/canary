@@ -1,6 +1,7 @@
 import { LitElement, css, html } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { property } from "lit/decorators.js";
 
+import { registerCustomElement } from "../decorators";
 import { StringArray } from "../converters";
 import { CalloutController } from "../controllers";
 
@@ -8,7 +9,7 @@ import { callout } from "../styles";
 
 const NAME = "canary-callout";
 
-@customElement(NAME)
+@registerCustomElement(NAME)
 export class CanaryCallout extends LitElement {
   @property({ type: Boolean })
   forceShow = false;

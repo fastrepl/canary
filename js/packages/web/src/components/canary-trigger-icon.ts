@@ -1,5 +1,7 @@
 import { LitElement, html, css } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { property } from "lit/decorators.js";
+
+import { registerCustomElement } from "../decorators";
 
 import type { TriggerShortcut } from "../types";
 import { KeyboardTriggerController } from "../controllers";
@@ -7,7 +9,7 @@ import { wrapper } from "../styles";
 
 const NAME = "canary-trigger-icon";
 
-@customElement(NAME)
+@registerCustomElement(NAME)
 export class CanaryTriggerIcon extends LitElement {
   @property({ type: String }) shortcut: TriggerShortcut = "cmdk";
 

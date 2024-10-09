@@ -1,9 +1,11 @@
 import { LitElement, css, html, svg } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { property } from "lit/decorators.js";
+
+import { registerCustomElement } from "../decorators";
 
 const NAME = "canary-icon-tree";
 
-@customElement(NAME)
+@registerCustomElement(NAME)
 export class CanaryIconTree extends LitElement {
   @property({ type: Boolean })
   last = false;

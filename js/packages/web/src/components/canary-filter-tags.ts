@@ -1,16 +1,17 @@
 import { LitElement, css, html, PropertyValues } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
+import { property, state } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 
 import pm from "picomatch";
 
+import { registerCustomElement } from "../decorators";
 import { StringArray } from "../converters";
 import { createEvent } from "../store";
 import { TagUrlSyncDefinition } from "../types";
 
 const NAME = "canary-filter-tags";
 
-@customElement(NAME)
+@registerCustomElement(NAME)
 export class CanaryFilterTags extends LitElement {
   /**
    * @attr {string} tags - comma separated list of tags

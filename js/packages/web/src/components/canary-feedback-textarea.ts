@@ -1,9 +1,11 @@
 import { LitElement, html, css } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { property } from "lit/decorators.js";
+
+import { registerCustomElement } from "../decorators";
 
 const NAME = "canary-feedback-textarea";
 
-@customElement(NAME)
+@registerCustomElement(NAME)
 export class CanaryFeedbackTextarea extends LitElement {
   @property({ type: String }) name = "Field";
   @property({ type: String }) value = "";

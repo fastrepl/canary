@@ -1,5 +1,7 @@
 import { LitElement, css, html, nothing } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { property } from "lit/decorators.js";
+
+import { registerCustomElement } from "../decorators";
 import { classMap } from "lit/directives/class-map.js";
 
 import { consume } from "@lit/context";
@@ -10,7 +12,7 @@ import { createEvent } from "../store";
 
 const NAME = "canary-mode-tabs";
 
-@customElement(NAME)
+@registerCustomElement(NAME)
 export class CanaryModeTabs extends LitElement {
   @consume({ context: modeContext, subscribe: true })
   @property({ attribute: false })

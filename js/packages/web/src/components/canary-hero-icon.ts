@@ -1,5 +1,7 @@
 import { LitElement, html, css } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { property } from "lit/decorators.js";
+
+import { registerCustomElement } from "../decorators";
 import { unsafeSVG } from "lit/directives/unsafe-svg.js";
 
 const ICONS: Record<string, string> = {
@@ -14,7 +16,7 @@ const ICONS: Record<string, string> = {
 
 const NAME = "canary-hero-icon";
 
-@customElement(NAME)
+@registerCustomElement(NAME)
 export class CanaryHeroIcon extends LitElement {
   @property() name = "";
 

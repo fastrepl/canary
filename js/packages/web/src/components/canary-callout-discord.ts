@@ -1,6 +1,7 @@
 import { LitElement, html } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { property } from "lit/decorators.js";
 
+import { registerCustomElement } from "../decorators";
 import { StringArray } from "../converters";
 
 import "./canary-callout";
@@ -8,7 +9,7 @@ import "./canary-logo-discord";
 
 const NAME = "canary-callout-discord";
 
-@customElement(NAME)
+@registerCustomElement(NAME)
 export class CanaryCalloutDiscord extends LitElement {
   @property({ type: Boolean })
   forceShow = false;

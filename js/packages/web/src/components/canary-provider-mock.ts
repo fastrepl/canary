@@ -1,16 +1,16 @@
 import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
 import { parse as safeParse } from "best-effort-json-parser";
 
-import type { AskFunction, SearchFunction, SearchResult } from "../types";
+import { registerCustomElement } from "../decorators";
 import { mockAskResponse } from "../msw";
 import { wrapper } from "../styles";
 import { createEvent } from "../store";
 import { asyncSleep } from "../utils";
+import type { AskFunction, SearchFunction, SearchResult } from "../types";
 
 const NAME = "canary-provider-mock";
 
-@customElement(NAME)
+@registerCustomElement(NAME)
 export class CanaryProviderMock extends LitElement {
   connectedCallback() {
     super.connectedCallback();

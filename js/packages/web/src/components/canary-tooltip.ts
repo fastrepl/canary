@@ -1,10 +1,5 @@
 import { LitElement, html, css } from "lit";
-import {
-  customElement,
-  property,
-  query,
-  queryAssignedElements,
-} from "lit/decorators.js";
+import { property, query, queryAssignedElements } from "lit/decorators.js";
 
 import {
   computePosition,
@@ -15,12 +10,14 @@ import {
   type Placement,
 } from "@floating-ui/dom";
 
+import { registerCustomElement } from "../decorators";
+
 const NAME = "canary-tooltip";
 
 /**
  * @slot - Default slot
  */
-@customElement(NAME)
+@registerCustomElement(NAME)
 export class CanaryTooltip extends LitElement {
   @property({ type: String }) text = "";
   @property({ type: String }) placement: Placement = "bottom";

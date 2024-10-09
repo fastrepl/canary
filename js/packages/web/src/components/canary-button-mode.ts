@@ -1,10 +1,12 @@
 import { LitElement, css, html } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { property } from "lit/decorators.js";
+
+import { registerCustomElement } from "../decorators";
 import { createEvent } from "../store";
 
 const NAME = "canary-button-mode";
 
-@customElement(NAME)
+@registerCustomElement(NAME)
 export class CanaryModeButton extends LitElement {
   @property({ type: String }) text = "";
   @property({ type: String }) mode = "";

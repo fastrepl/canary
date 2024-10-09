@@ -1,11 +1,12 @@
 import { LitElement, html, css } from "lit";
-import { customElement } from "lit/decorators.js";
+
+import { registerCustomElement } from "../decorators";
 
 import { global } from "../styles";
 
 const NAME = "canary-error";
 
-@customElement(NAME)
+@registerCustomElement(NAME)
 export class CanaryError extends LitElement {
   render() {
     return html`

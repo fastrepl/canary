@@ -1,15 +1,16 @@
 import { LitElement, html, css } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
+import { property, state } from "lit/decorators.js";
 
 import { consume } from "@lit/context";
 import { modeContext } from "../contexts";
 
 import type { ModeContext } from "../types";
 import { createEvent } from "../store";
+import { registerCustomElement } from "../decorators";
 
 const NAME = "canary-mode-breadcrumb";
 
-@customElement(NAME)
+@registerCustomElement(NAME)
 export class CanaryModeBreadcrumb extends LitElement {
   @property({ type: String })
   text = "";

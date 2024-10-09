@@ -1,9 +1,10 @@
 import { LitElement, html, css } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { property } from "lit/decorators.js";
 
+import { registerCustomElement } from "../decorators";
 import { KeyboardTriggerController } from "../controllers";
-import type { TriggerShortcut } from "../types";
 import { wrapper } from "../styles";
+import type { TriggerShortcut } from "../types";
 
 import "./canary-media-query";
 
@@ -17,7 +18,7 @@ const NAME = "canary-trigger-searchbar";
  * @cssprop --canary-trigger-searchbar-max-width - Max width
  * @cssprop --canary-trigger-searchbar-height - Height
  */
-@customElement(NAME)
+@registerCustomElement(NAME)
 export class CanaryTriggerSearchbar extends LitElement {
   @property({ type: String })
   shortcut: TriggerShortcut = "cmdk";

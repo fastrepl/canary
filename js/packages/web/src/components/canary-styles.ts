@@ -1,5 +1,7 @@
 import { LitElement, html, css } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { property } from "lit/decorators.js";
+
+import { registerCustomElement } from "../decorators";
 import { MutationController } from "@lit-labs/observers/mutation-controller.js";
 
 import { provide } from "@lit/context";
@@ -20,7 +22,7 @@ const NAME = "canary-styles";
  * @cssprop --canary-font-family-base - Font family of base
  * @cssprop --canary-font-family-mono - Font family of mono
  */
-@customElement(NAME)
+@registerCustomElement(NAME)
 export class CanaryStyles extends LitElement {
   @property({ type: String })
   framework: Framework = "starlight";

@@ -1,11 +1,13 @@
 import { LitElement, html, css } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { property } from "lit/decorators.js";
+
+import { registerCustomElement } from "../decorators";
 
 import "./canary-tooltip";
 
 const NAME = "canary-trigger-logo";
 
-@customElement(NAME)
+@registerCustomElement(NAME)
 export class CanaryTriggerLogo extends LitElement {
   @property({ type: String }) text = "Search";
 

@@ -1,10 +1,11 @@
 import { LitElement, html, css, nothing } from "lit";
-import { customElement, state } from "lit/decorators.js";
+import { state } from "lit/decorators.js";
 import { ref, createRef } from "lit/directives/ref.js";
 
 import { consume } from "@lit/context";
 import { modeContext } from "../contexts";
 
+import { registerCustomElement } from "../decorators";
 import type { ModeContext } from "../types";
 import { MODE_ASK } from "../constants";
 import { createEvent } from "../store";
@@ -18,7 +19,7 @@ const NAME = "canary-ask";
  * @csspart container - Container
  * @slot body - Body
  */
-@customElement(NAME)
+@registerCustomElement(NAME)
 export class CanaryAsk extends LitElement {
   readonly MODE = MODE_ASK;
 

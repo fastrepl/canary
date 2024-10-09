@@ -1,12 +1,14 @@
 import { LitElement, html, css, nothing } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { property } from "lit/decorators.js";
+
+import { registerCustomElement } from "../decorators";
 
 import { urlToParts } from "../utils";
 import { global } from "../styles";
 
 const NAME = "canary-url-paths";
 
-@customElement(NAME)
+@registerCustomElement(NAME)
 export class CanaryURLPaths extends LitElement {
   @property({ type: String })
   url!: string;

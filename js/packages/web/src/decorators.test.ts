@@ -1,6 +1,6 @@
 import { describe, test, expect, vi } from "vitest";
 
-import { cache } from "./decorators";
+import { cache } from "./decorators/cache";
 
 describe("cache", () => {
   test("no hit", () => {

@@ -1,5 +1,5 @@
 import { LitElement, html } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
+import { property, state } from "lit/decorators.js";
 
 import type {
   BeforeSearchFunction,
@@ -12,7 +12,8 @@ import type {
 import { createEvent } from "../store";
 import { stripURL } from "../utils";
 import { wrapper } from "../styles";
-import { cache } from "../decorators";
+import { cache } from "../decorators/cache";
+import { registerCustomElement } from "../decorators";
 
 const NAME = "canary-provider-pagefind";
 
@@ -29,7 +30,7 @@ type Options = {
 const DEFAULT_MAX_PAGES = 20;
 const DEFAULT_MAX_SUB_RESULTS = 3;
 
-@customElement(NAME)
+@registerCustomElement(NAME)
 export class CanaryProviderPagefind extends LitElement {
   @property({ type: Object })
   options: Options = {};

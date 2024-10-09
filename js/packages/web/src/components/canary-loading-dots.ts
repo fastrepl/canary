@@ -1,9 +1,10 @@
 import { LitElement, html, css } from "lit";
-import { customElement } from "lit/decorators.js";
+
+import { registerCustomElement } from "../decorators";
 
 const NAME = "canary-loading-dots";
 
-@customElement(NAME)
+@registerCustomElement(NAME)
 export class CanaryLoadingDots extends LitElement {
   render() {
     return html`

@@ -1,17 +1,18 @@
 import { LitElement, html, css, nothing } from "lit";
-import { customElement, state } from "lit/decorators.js";
+import { state } from "lit/decorators.js";
 
 import { consume } from "@lit/context";
 import { executionContext } from "../contexts";
 
-import type { ExecutionContext } from "../types";
+import { registerCustomElement } from "../decorators";
 import { global } from "../styles";
 import { createEvent } from "../store";
 import { MODE_ASK } from "../constants";
+import type { ExecutionContext } from "../types";
 
 const NAME = "canary-search-suggestions";
 
-@customElement(NAME)
+@registerCustomElement(NAME)
 export class CanarySearchSuggestions extends LitElement {
   @consume({ context: executionContext, subscribe: true })
   @state()

@@ -1,9 +1,10 @@
 import { LitElement, html, css } from "lit";
-import { customElement } from "lit/decorators.js";
+
+import { registerCustomElement } from "../decorators";
 
 const NAME = "canary-loading-spinner";
 
-@customElement(NAME)
+@registerCustomElement(NAME)
 export class CanaryLoadingSpinner extends LitElement {
   render() {
     return html` <span class="loader"></span> `;

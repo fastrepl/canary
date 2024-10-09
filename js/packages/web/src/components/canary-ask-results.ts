@@ -1,16 +1,18 @@
 import { LitElement, html, nothing } from "lit";
-import { customElement, state } from "lit/decorators.js";
+import { state } from "lit/decorators.js";
 
 import { consume } from "@lit/context";
-import type { ExecutionContext } from "../types";
 import { executionContext } from "../contexts";
+
+import { registerCustomElement } from "../decorators";
+import type { ExecutionContext } from "../types";
 
 import "./canary-markdown";
 import "./canary-ask-response";
 
 const NAME = "canary-ask-results";
 
-@customElement(NAME)
+@registerCustomElement(NAME)
 export class CanaryAskResults extends LitElement {
   @consume({ context: executionContext, subscribe: true })
   @state()

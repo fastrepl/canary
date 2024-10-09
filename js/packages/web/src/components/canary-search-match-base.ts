@@ -1,5 +1,7 @@
 import { LitElement, html, css } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { property } from "lit/decorators.js";
+
+import { registerCustomElement } from "../decorators";
 
 import { global } from "../styles";
 import { MODAL_CLOSE_EVENT } from "./canary-modal";
@@ -17,7 +19,7 @@ const NAME = "canary-search-match-base";
  * @slot excerpt - Excerpt of the match
  * @slot sub-results - Sub-results related to the match
  */
-@customElement(NAME)
+@registerCustomElement(NAME)
 export class CanarySearchMatchBase extends LitElement {
   @property({ type: String })
   url!: string;

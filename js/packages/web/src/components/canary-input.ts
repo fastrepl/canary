@@ -1,5 +1,5 @@
 import { LitElement, css, html, nothing, type PropertyValues } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
+import { property, state } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 
@@ -7,6 +7,7 @@ import { consume } from "@lit/context";
 import { queryContext, modeContext, executionContext } from "../contexts";
 import type { ModeContext, ExecutionContext, QueryContext } from "../types";
 
+import { registerCustomElement } from "../decorators";
 import { global, wrapper } from "../styles";
 import { TaskStatus } from "../store/managers";
 import { createEvent } from "../store";
@@ -24,7 +25,7 @@ const NAME = "canary-input";
  * @slot action-ask - Action ask
  * @slot loading - Loading
  */
-@customElement(NAME)
+@registerCustomElement(NAME)
 export class CanaryInput extends LitElement {
   @property({ type: Boolean })
   autofocus = false;

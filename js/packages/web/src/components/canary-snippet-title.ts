@@ -1,12 +1,14 @@
 import { LitElement, html, css, nothing } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { property } from "lit/decorators.js";
+
+import { registerCustomElement } from "../decorators";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
 
 import { wrapper } from "../styles";
 
 const NAME = "canary-snippet-title";
 
-@customElement(NAME)
+@registerCustomElement(NAME)
 export class CanarySnippetTitle extends LitElement {
   @property({ type: String }) value = "";
 

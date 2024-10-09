@@ -1,10 +1,11 @@
 import { LitElement, css, html } from "lit";
-import { customElement, queryAssignedElements, state } from "lit/decorators.js";
+import { queryAssignedElements, state } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 
 import { consume } from "@lit/context";
 import { queryContext } from "../contexts";
 
+import { registerCustomElement } from "../decorators";
 import { global, wrapper } from "../styles";
 
 const NAME = "canary-content";
@@ -16,7 +17,7 @@ const NAME = "canary-content";
  * @slot body - Body
  * @slot footer - Footer
  */
-@customElement(NAME)
+@registerCustomElement(NAME)
 export class CanaryContent extends LitElement {
   @consume({ context: queryContext, subscribe: true })
   @state()
