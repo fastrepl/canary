@@ -1,6 +1,6 @@
 <script setup>
-import { data as web } from "../../../data/version_web.data.js";
-import { data as docusaurus } from "../../../data/version_docusaurus.data.js";
+import { data as web } from "@data/version_web.data.js";
+import { data as docusaurus } from "@data/version_docusaurus.data.js";
 </script>
 
 # Packages

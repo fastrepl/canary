@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-import { data } from "../data/url_cloud.data.js";
-import ButtonGroup from "../components/ButtonGroup.vue";
+
+import { data } from "@data/url_cloud.data";
+import ButtonGroup from "@components/ButtonGroup.vue";
 
 const loaded = ref(false);
 

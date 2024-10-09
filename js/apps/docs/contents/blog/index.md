@@ -6,7 +6,7 @@ lastUpdated: false
 ---
 
 <script setup>
-import BlogPosts from "../../components/BlogPosts.vue";
+import BlogPosts from "@components/BlogPosts.vue";
 </script>
 
 # Blog

@@ -1,16 +1,26 @@
 import fs from "node:fs";
 import { parse } from "dotenv";
 
-export default {
+import { defineLoader } from "vitepress";
+
+export interface Data {
+  base: string;
+  key: string;
+}
+
+declare const data: Data;
+export { data };
+
+export default defineLoader({
   watch: ["../.env"],
-  load([envPath]) {
+  load([envPath]): Data {
     if (process.env.NODE_ENV === "production") {
       return forProd();
     } else {
       return forDev(envPath);
     }
   },
-};
+});
 
 const forDev = (path) => {
   const { CANARY_API_BASE, CANARY_API_KEY } = parse(

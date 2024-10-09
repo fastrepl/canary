@@ -17,7 +17,7 @@ All components in Canary renders inside a [shadow DOM](https://developer.mozilla
 ```
 
 <script setup>
-import Styling from "../../../../components/Styling.vue";
+import Styling from "@components/Styling.vue";
 </script>
 
 <div class="flex flex-col items-center justify-center">

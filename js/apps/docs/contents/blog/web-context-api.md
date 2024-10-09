@@ -11,7 +11,7 @@ lastUpdated: false
 ---
 
 <script setup lang="ts">
-    import BlogPostHeader from '../../components/BlogPostHeader.vue'
+  import BlogPostHeader from '@components/BlogPostHeader.vue'
 </script>
 
 <BlogPostHeader />

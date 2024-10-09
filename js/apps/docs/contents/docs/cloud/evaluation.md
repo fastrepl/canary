@@ -1,5 +1,5 @@
 <script setup>
-import Chart from "../../../components/EvaluationChart.vue";
+import Chart from "@components/EvaluationChart.vue";
 
 const data = [
   { version: "0.1.0", timestamp: "2023-05-01T00:00:00Z", score: 0.42, metadata: { note: "This is a test" } },

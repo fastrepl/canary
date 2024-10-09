@@ -4,6 +4,11 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "module": "ESNext",
-    "moduleResolution": "Bundler"
+    "moduleResolution": "Bundler",
+    "baseUrl": ".",
+    "paths": {
+      "@components/*": ["components/*.vue"],
+      "@data/*": ["data/*"]
+    }
   }
 }

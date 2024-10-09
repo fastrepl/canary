@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import CEM from "../../../components/CEM.vue";
+    import CEM from "@components/CEM.vue";
 </script>
 
 # Components

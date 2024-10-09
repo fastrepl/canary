@@ -1,11 +1,11 @@
-<script setup>
-import Chat from '../components/Chat.vue'
-import Headline from '../components/Headline.vue'
-import KeywordSearchProblem from '../components/KeywordSearchProblem.vue'
-import KeywordSearchSolution from '../components/KeywordSearchSolution.vue'
-import SearchDigestProblem from '../components/SearchDigestProblem.vue'
-import SearchDigestSolution from '../components/SearchDigestSolution.vue'
-import QueryRankChart from '../components/QueryRankChart.vue'
+<script setup lang="ts">
+import Chat from '@components/Chat.vue'
+import Headline from '@components/Headline.vue'
+import KeywordSearchProblem from '@components/KeywordSearchProblem.vue'
+import KeywordSearchSolution from '@components/KeywordSearchSolution.vue'
+import SearchDigestProblem from '@components/SearchDigestProblem.vue'
+import SearchDigestSolution from '@components/SearchDigestSolution.vue'
+import QueryRankChart from '@components/QueryRankChart.vue'
 
 const keywordSearchProblemExample = {
   left: {

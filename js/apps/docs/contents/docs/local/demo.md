@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { onMounted, computed, ref, watch } from "vue";
 
-import Radio from "../../../components/Radio.vue";
-import Tabs from "../../../components/Tabs.vue";
-import ButtonGroup from "../../../components/ButtonGroup.vue";
-import Markdown from "../../../components/Markdown.vue";
+import Radio from "@components/Radio.vue";
+import Tabs from "@components/Tabs.vue";
+import ButtonGroup from "@components/ButtonGroup.vue";
+import Markdown from "@components/Markdown.vue";
 
 const sources = ["litellm", "mistral", "prisma"] as const;
 const source = ref<(typeof sources)[number]>(sources[0]);

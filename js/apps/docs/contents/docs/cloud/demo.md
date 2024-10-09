@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { onMounted, computed, ref, watch } from "vue";
 
-import { data as cloud } from "../../../data/url_cloud.data.js";
-import { data as demoForm } from "../../../data/demo_form.data.js";
+import { data as cloud } from "@data/url_cloud.data";
+import { data as demoForm } from "@data/demo_form.data";
 
-import Radio from "../../../components/Radio.vue";
-import Tabs from "../../../components/Tabs.vue";
-import ButtonGroup from "../../../components/ButtonGroup.vue";
-import Markdown from "../../../components/Markdown.vue";
-import Video from "../../../components/Video.vue";
+import Radio from "@components/Radio.vue";
+import Tabs from "@components/Tabs.vue";
+import ButtonGroup from "@components/ButtonGroup.vue";
+import Markdown from "@components/Markdown.vue";
+import Video from "@components/Video.vue";
 
 const loaded = ref(false);
 

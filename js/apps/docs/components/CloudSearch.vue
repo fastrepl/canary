@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-import { data } from "../data/url_cloud.data.js";
+import { data } from "@data/url_cloud.data";
 
 const loaded = ref(false);
 

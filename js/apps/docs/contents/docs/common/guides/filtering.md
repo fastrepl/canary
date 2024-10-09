@@ -2,7 +2,7 @@
 import { onMounted, ref, computed } from "vue";
 import { useData } from "vitepress";
 
-import { data } from "../../../../data/url_cloud.data.js";
+import { data } from "@data/url_cloud.data";
 
 const loaded = ref(false);
 

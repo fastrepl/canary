@@ -220,6 +220,14 @@ export default defineConfig({
             new URL("../components/Empty.vue", import.meta.url),
           ),
         },
+        {
+          find: "@components",
+          replacement: fileURLToPath(new URL("../components", import.meta.url)),
+        },
+        {
+          find: "@data",
+          replacement: fileURLToPath(new URL("../data", import.meta.url)),
+        },
       ],
     },
     ssr: {
