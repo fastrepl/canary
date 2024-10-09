@@ -2,7 +2,8 @@ defmodule Canary.Accounts.User do
   use Ash.Resource,
     domain: Canary.Accounts,
     data_layer: AshPostgres.DataLayer,
-    extensions: [AshAuthentication]
+    extensions: [AshAuthentication],
+    simple_notifiers: [Canary.Notifiers.Discord]
 
   attributes do
     uuid_primary_key :id

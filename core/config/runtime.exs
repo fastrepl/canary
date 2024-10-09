@@ -119,6 +119,8 @@ end
 
 config :nostrum, :token, System.get_env("DISCORD_BOT_TOKEN")
 
+config :canary, :discord_webhook_url, System.get_env("DISCORD_WEBHOOK_URL")
+
 config :canary, :openai_api_base, System.get_env("OPENAI_API_BASE")
 config :canary, :openai_api_key, System.get_env("OPENAI_API_KEY")
 

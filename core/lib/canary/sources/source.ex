@@ -1,7 +1,8 @@
 defmodule Canary.Sources.Source do
   use Ash.Resource,
     domain: Canary.Sources,
-    data_layer: AshPostgres.DataLayer
+    data_layer: AshPostgres.DataLayer,
+    simple_notifiers: [Canary.Notifiers.Discord]
 
   require Ash.Query
   require Ecto.Query
