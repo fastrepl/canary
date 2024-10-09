@@ -2,7 +2,9 @@ defmodule Canary.Accounts.PublicKeyConfig do
   use Ash.Resource, data_layer: :embedded
 
   attributes do
-    attribute :allowed_host, :string, allow_nil?: false
+    attribute :allowed_hosts, {:array, :string},
+      allow_nil?: false,
+      constraints: [nil_items?: false, min_length: 1, max_length: 99]
   end
 
   actions do
@@ -10,21 +12,21 @@ defmodule Canary.Accounts.PublicKeyConfig do
 
     create :create do
       primary? true
-      accept [:allowed_host]
+      accept [:allowed_hosts]
 
       change {
         Canary.Change.EnsureURLHost,
-        input_argument: :allowed_host, output_attribute: :allowed_host
+        input_argument: :allowed_hosts, output_attribute: :allowed_hosts
       }
     end
 
     update :update do
       primary? true
-      accept [:allowed_host]
+      accept [:allowed_hosts]
 
       change {
         Canary.Change.EnsureURLHost,
-        input_argument: :allowed_host, output_attribute: :allowed_host
+        input_argument: :allowed_hosts, output_attribute: :allowed_hosts
       }
     end
   end

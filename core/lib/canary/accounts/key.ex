@@ -47,15 +47,13 @@ defmodule Canary.Accounts.Key do
 
     action :allowed_hosts, {:array, :string} do
       run fn _, _ ->
-        query =
-          __MODULE__
-          |> Ash.Query.select([:config])
-
-        case Ash.read(query) do
+        case __MODULE__
+             |> Ash.Query.select([:config])
+             |> Ash.read() do
           {:ok, results} ->
             hosts =
               results
-              |> Enum.map(fn %{config: %{value: %{allowed_host: host}}} -> host end)
+              |> Enum.flat_map(fn %{config: %{value: %{allowed_hosts: hosts}}} -> hosts end)
               |> Enum.uniq()
 
             {:ok, hosts}

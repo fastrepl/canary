@@ -19,7 +19,9 @@ defmodule CanaryWeb.SettingsLive.KeyForm do
               <Primer.text_input
                 value={value}
                 disabled
-                caption={fn -> "(#{config.type}) #{config.value.allowed_host}" end}
+                caption={
+                  fn -> "(#{config.type}) #{config.value.allowed_hosts |> Enum.join(", ")}" end
+                }
               >
                 <:group_button>
                   <Primer.button
@@ -62,6 +64,7 @@ defmodule CanaryWeb.SettingsLive.KeyForm do
             :let={f}
             for={@form}
             phx-submit="submit"
+            phx-change="validate"
             phx-target={@myself}
             class="flex flex-col gap-2"
           >
@@ -78,12 +81,27 @@ defmodule CanaryWeb.SettingsLive.KeyForm do
 
               <%= case fc.params["_union_type"] do %>
                 <% "public" -> %>
-                  <Primer.text_input
-                    is_full_width
-                    form={fc}
-                    field={:allowed_host}
-                    placeholder="Allowed host (e.g. example.com)"
-                  />
+                  <.form_group header="Allowed hosts">
+                    <%= for {url, i} <- Enum.with_index(fc[:allowed_hosts].value || []) do %>
+                      <Primer.text_input
+                        type="url"
+                        id={fc[:allowed_hosts].name <> "-" <> Integer.to_string(i)}
+                        name={fc[:allowed_hosts].name <> "[]"}
+                        value={url}
+                        is_full_width
+                      />
+                    <% end %>
+                    <Primer.button
+                      type="button"
+                      phx-click={JS.dispatch("change")}
+                      name={fc[:allowed_hosts].name <> "[]"}
+                      phx-target={@myself}
+                      is_small
+                      is_full_width
+                    >
+                      <Primer.octicon name="plus-16" />
+                    </Primer.button>
+                  </.form_group>
               <% end %>
             </.inputs_for>
 
@@ -93,6 +111,20 @@ defmodule CanaryWeb.SettingsLive.KeyForm do
           </.form>
         </:body>
       </Primer.dialog>
+    </div>
+    """
+  end
+
+  attr :header, :string, required: true
+  slot :inner_block, required: true
+
+  def form_group(assigns) do
+    ~H"""
+    <div class="flex flex-col gap-2">
+      <div class="form-group-header">
+        <span class="FormControl-label"><%= @header %></span>
+      </div>
+      <%= render_slot(@inner_block) %>
     </div>
     """
   end
@@ -118,6 +150,12 @@ defmodule CanaryWeb.SettingsLive.KeyForm do
       |> to_form()
 
     {:ok, socket |> assign(:form, form)}
+  end
+
+  @impl true
+  def handle_event("validate", %{"form" => params}, socket) do
+    form = AshPhoenix.Form.validate(socket.assigns.form, params)
+    {:noreply, socket |> assign(:form, form)}
   end
 
   @impl true

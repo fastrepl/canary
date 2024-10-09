@@ -31,7 +31,7 @@ defmodule CanaryWeb.OperationsController do
     } = conn.assigns.key.config
 
     if Application.get_env(:canary, :env) == :prod and
-         conn.host not in [config.allowed_host, "getcanary.dev", "cloud.getcanary.dev"] do
+         conn.host not in (config.allowed_hosts ++ ["getcanary.dev", "cloud.getcanary.dev"]) do
       conn |> send_resp(401, err_msg) |> halt()
     else
       conn
