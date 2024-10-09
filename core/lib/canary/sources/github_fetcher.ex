@@ -21,7 +21,7 @@ defmodule Canary.Sources.GithubFetcher do
 
             nodes =
               data["repository"][resource]["nodes"]
-              |> Enum.reject(fn %{"createdAt" => t} -> old?(t, since) end)
+              |> Enum.filter(fn %{"createdAt" => t} -> after_since?(t, since) end)
 
             cond do
               length(nodes) == 0 ->
@@ -81,9 +81,9 @@ defmodule Canary.Sources.GithubFetcher do
     end
   end
 
-  defp old?(timestamp, %DateTime{} = since) do
+  defp after_since?(timestamp, %DateTime{} = since) do
     case DateTime.from_iso8601(timestamp) do
-      {:ok, target, _} -> DateTime.compare(target, since) == :le
+      {:ok, target, _} -> DateTime.compare(target, since) == :gt
       _ -> false
     end
   end
