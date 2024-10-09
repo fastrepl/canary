@@ -13,7 +13,7 @@ defmodule CanaryWeb.StripeWebhookHandler do
         biling = account |> Ash.load!(:billing) |> Map.get(:billing)
         Canary.Accounts.Billing.update_stripe_customer(biling, customer)
 
-      error ->
+      {:error, error} ->
         Logger.error(error)
         :error
     end
@@ -31,7 +31,7 @@ defmodule CanaryWeb.StripeWebhookHandler do
       biling = account |> Ash.load!(:billing) |> Map.get(:billing)
       Canary.Accounts.Billing.update_stripe_subscription(biling, subscription)
     else
-      error ->
+      {:error, error} ->
         Logger.error(error)
         :error
     end

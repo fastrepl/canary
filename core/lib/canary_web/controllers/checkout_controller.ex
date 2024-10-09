@@ -2,6 +2,8 @@ defmodule CanaryWeb.CheckoutController do
   use CanaryWeb, :controller
   require Logger
 
+  @trial_period_days 30
+
   def session(%{assigns: %{current_account: current_account}} = conn, _params) do
     url = CanaryWeb.Endpoint.url()
     price = Application.get_env(:canary, :stripe) |> Keyword.fetch!(:starter_price_id)
@@ -12,7 +14,10 @@ defmodule CanaryWeb.CheckoutController do
       line_items: [%{price: price, quantity: 1}],
       success_url: url <> "/settings",
       cancel_url: url <> "/settings",
-      metadata: %{"account_id" => current_account.id}
+      metadata: %{"account_id" => current_account.id},
+      subscription_data: %{
+        trial_period_days: @trial_period_days
+      }
     }
 
     params =
