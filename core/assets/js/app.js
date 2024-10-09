@@ -29,11 +29,16 @@ import ClipboardJS from "clipboard";
 import Chart from "chart.js/auto";
 import { parse } from "best-effort-json-parser";
 import * as Sentry from "@sentry/browser";
+import Tracker from "@openreplay/tracker";
 
 Sentry.init({
   dsn: "https://f6f1f6ab1218132660f6bd80e8634712@o4506190168522752.ingest.us.sentry.io/4508073135833088",
   integrations: [],
 });
+
+new Tracker({ projectKey: "IoR9JntfZfMHHJMHug2C" })
+  .start()
+  .catch(console.error);
 
 import "@getcanary/web/components/canary-root.js";
 import "@getcanary/web/components/canary-provider-cloud.js";

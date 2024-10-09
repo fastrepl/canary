@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "@getcanary/web": "^1.0.3",
+    "@openreplay/tracker": "^14.0.9",
     "@sentry/browser": "^8.33.1",
     "best-effort-json-parser": "^1.1.2",
     "chart.js": "^4.4.4",
