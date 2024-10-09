@@ -9,6 +9,7 @@
     "daisyui": "^4.12.10",
     "esbuild": "^0.16.17",
     "esbuild-plugin-import-glob": "^0.1.1",
+    "esbuild-plugin-replace": "^1.4.0",
     "esbuild-svelte": "^0.8.1",
     "prettier": "^3.3.1",
     "prettier-plugin-svelte": "^3.2.4",

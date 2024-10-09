@@ -31,14 +31,15 @@ import { parse } from "best-effort-json-parser";
 import * as Sentry from "@sentry/browser";
 import Tracker from "@openreplay/tracker";
 
-Sentry.init({
-  dsn: "https://f6f1f6ab1218132660f6bd80e8634712@o4506190168522752.ingest.us.sentry.io/4508073135833088",
-  integrations: [],
-});
+import { SENTRY_KEY, OPENREPLAY_KEY } from "../config";
 
-new Tracker({ projectKey: "IoR9JntfZfMHHJMHug2C" })
-  .start()
-  .catch(console.error);
+if (SENTRY_KEY) {
+  Sentry.init({ dsn: SENTRY_KEY });
+}
+
+if (OPENREPLAY_KEY) {
+  new Tracker({ projectKey: OPENREPLAY_KEY }).start().catch(console.error);
+}
 
 import "@getcanary/web/components/canary-root.js";
 import "@getcanary/web/components/canary-provider-cloud.js";

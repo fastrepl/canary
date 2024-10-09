@@ -1,7 +1,11 @@
+// https://hexdocs.pm/phoenix/asset_management.html#esbuild-plugins
+// https://github.com/woutdp/live_svelte/blob/master/lib/mix/tasks/configure_esbuild.ex
+
 const esbuild = require("esbuild");
 const sveltePlugin = require("esbuild-svelte");
 const importGlobPlugin = require("esbuild-plugin-import-glob").default;
 const sveltePreprocess = require("svelte-preprocess");
+const { replace } = require("esbuild-plugin-replace");
 
 const args = process.argv.slice(2);
 const watch = args.includes("--watch");
@@ -23,6 +27,10 @@ let optsClient = {
     sveltePlugin({
       preprocess: sveltePreprocess(),
       compilerOptions: { dev: !deploy, hydratable: true, css: "injected" },
+    }),
+    replace({
+      __SENTRY_KEY__: process.env.SENTRY_KEY ?? "",
+      __OPENREPLAY_KEY__: process.env.OPENREPLAY_KEY ?? "",
     }),
   ],
 };
