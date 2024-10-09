@@ -1,5 +1,11 @@
 # @getcanary/web
 
+## 1.0.4
+
+### Patch Changes
+
+- Replace Lit's customElement decorator with a custom one to avoid the 'Failed to execute "define" on "CustomElementRegistry"' error.
+
 ## 1.0.3
 
 ### Patch Changes
