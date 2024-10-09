@@ -30,6 +30,23 @@ export class CanaryProviderCloud extends LitElement {
       throw new Error("Endpoint and key are required");
     }
 
+    this._dispatchOperations();
+    this._dispatchSources();
+  }
+
+  updated(changed: PropertyValues<this>) {
+    if (changed.get("sources")) {
+      this._dispatchSources();
+    }
+  }
+
+  render() {
+    return html`<slot></slot>`;
+  }
+
+  static styles = wrapper;
+
+  private _dispatchOperations() {
     this.dispatchEvent(
       createEvent({
         type: "register_operations",
@@ -41,22 +58,14 @@ export class CanaryProviderCloud extends LitElement {
     );
   }
 
-  updated(changed: PropertyValues<this>) {
-    if (changed.get("sources")) {
-      this.dispatchEvent(
-        createEvent({
-          type: "set_query",
-          data: { sources: this.sources.filter(Boolean) },
-        }),
-      );
-    }
+  private _dispatchSources() {
+    this.dispatchEvent(
+      createEvent({
+        type: "set_query",
+        data: { sources: this.sources.filter(Boolean) },
+      }),
+    );
   }
-
-  render() {
-    return html`<slot></slot>`;
-  }
-
-  static styles = wrapper;
 
   search: SearchFunction = async (query, signal) => {
     const params = {
