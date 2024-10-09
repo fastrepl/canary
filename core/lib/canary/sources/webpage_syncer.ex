@@ -29,7 +29,7 @@ defmodule Canary.Sources.Webpage.Syncer do
       inputs
       |> Enum.filter(fn %FetcherResult{} = input ->
         found = docs_existing |> Enum.find(fn existing -> url_eq?(existing, input) end)
-        found && not hash_eq?(found, input)
+        found && not (hash_eq?(found, input) or tags_eq?(found, input))
       end)
 
     docs_for_update =
@@ -40,20 +40,14 @@ defmodule Canary.Sources.Webpage.Syncer do
 
     ids_for_destroy = Enum.map(docs_for_destroy, & &1.id) ++ Enum.map(docs_for_update, & &1.id)
 
-    destroy_result =
-      Document
-      |> Ash.Query.filter(id in ^ids_for_destroy)
-      |> Ash.bulk_destroy(:destroy, %{}, return_errors?: true, batch_size: 50)
-
-    create_result =
-      (inputs_for_create ++ inputs_for_update)
-      |> Enum.map(fn %FetcherResult{} = fetcher_result ->
-        %{source_id: source_id, fetcher_result: fetcher_result}
-      end)
-      |> Ash.bulk_create(Document, :create_webpage, return_errors?: true, batch_size: 50)
-
-    with %Ash.BulkResult{status: :success} <- destroy_result,
-         %Ash.BulkResult{status: :success} <- create_result do
+    with %Ash.BulkResult{status: :success} <-
+           Document
+           |> Ash.Query.filter(id in ^ids_for_destroy)
+           |> Ash.bulk_destroy(:destroy, %{}, return_errors?: true, batch_size: 50),
+         %Ash.BulkResult{status: :success} <-
+           (inputs_for_create ++ inputs_for_update)
+           |> Enum.map(&%{source_id: source_id, fetcher_result: &1})
+           |> Ash.bulk_create(Document, :create_webpage, return_errors?: true, batch_size: 50) do
       :ok
     else
       %Ash.BulkResult{errors: errors} ->
@@ -78,5 +72,12 @@ defmodule Canary.Sources.Webpage.Syncer do
       |> Base.encode16(case: :lower)
 
     hash_a == hash_b
+  end
+
+  defp tags_eq?(
+         %Document{meta: %Ash.Union{type: :webpage, value: %DocumentMeta{tags: tags_a}}},
+         %FetcherResult{tags: tags_b}
+       ) do
+    MapSet.new(tags_a) == MapSet.new(tags_b)
   end
 end

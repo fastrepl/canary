@@ -83,7 +83,7 @@ defmodule Canary.Sources.Document.CreateWebpage do
     changesets
     |> Enum.map(fn changeset ->
       fetcher_result = Ash.Changeset.get_argument(changeset, opts[:fetcher_result_argument])
-      %Webpage.FetcherResult{url: url, html: html, items: items} = fetcher_result
+      %Webpage.FetcherResult{url: url, html: html, items: items, tags: tags} = fetcher_result
       top_level_item = items |> Enum.at(0)
 
       hash =
@@ -93,7 +93,12 @@ defmodule Canary.Sources.Document.CreateWebpage do
 
       meta =
         Webpage.DocumentMeta
-        |> Ash.Changeset.for_create(:create, %{title: top_level_item.title, url: url, hash: hash})
+        |> Ash.Changeset.for_create(:create, %{
+          title: top_level_item.title,
+          url: url,
+          hash: hash,
+          tags: tags
+        })
         |> Ash.create!()
         |> then(&wrap_union/1)
 
