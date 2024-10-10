@@ -14,12 +14,21 @@ defmodule CanaryWeb.LiveProject do
     if not is_nil(socket.assigns[:current_project]) do
       {:cont, socket}
     else
-      projects = socket.assigns[:current_account] |> Ash.load!(:projects) |> Map.get(:projects)
+      account = socket.assigns[:current_account] |> Ash.load!(:projects)
+      socket = socket |> assign(:current_account, account)
+      project = account.projects |> Enum.find(& &1.selected)
 
-      if projects != [] do
-        {:cont, socket |> assign(:current_project, Enum.at(projects, 0))}
-      else
-        {:halt, Phoenix.LiveView.redirect(socket, to: ~p"/settings/projects")}
+      cond do
+        account.projects == [] ->
+          {:halt, Phoenix.LiveView.redirect(socket, to: ~p"/settings/projects")}
+
+        is_nil(project) ->
+          project = account.projects |> Enum.at(0)
+          Canary.Accounts.Project.select(project, account.id)
+          {:cont, socket |> assign(:current_project, project)}
+
+        true ->
+          {:cont, socket |> assign(:current_project, project)}
       end
     end
   end

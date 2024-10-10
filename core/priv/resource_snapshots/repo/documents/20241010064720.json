@@ -21,43 +21,13 @@
       "type": "utc_datetime_usec"
     },
     {
-      "allow_nil?": true,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "last_fetched_at",
-      "type": "utc_datetime"
-    },
-    {
-      "allow_nil?": false,
-      "default": "\"idle\"",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "state",
-      "type": "text"
-    },
-    {
       "allow_nil?": false,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "name",
-      "type": "text"
-    },
-    {
-      "allow_nil?": true,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "overview",
+      "source": "meta",
       "type": "map"
     },
     {
@@ -67,16 +37,16 @@
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "config",
-      "type": "map"
+      "source": "chunks",
+      "type": ["array", "map"]
     },
     {
-      "allow_nil?": false,
+      "allow_nil?": true,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
       "references": {
-        "deferrable": false,
+        "deferrable": "initially",
         "destination_attribute": "id",
         "destination_attribute_default": null,
         "destination_attribute_generated": null,
@@ -88,15 +58,15 @@
           "global": null,
           "strategy": null
         },
-        "name": "sources_project_id_fkey",
+        "name": "documents_source_id_fkey",
         "on_delete": null,
         "on_update": null,
         "primary_key?": true,
         "schema": "public",
-        "table": "projects"
+        "table": "sources"
       },
       "size": null,
-      "source": "project_id",
+      "source": "source_id",
       "type": "uuid"
     }
   ],
@@ -105,27 +75,8 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "DC420BDFFFD4FCDCE75DA4312FE22D80F92686C5C498F80ADB03EE7EFB1C558F",
-  "identities": [
-    {
-      "all_tenants?": false,
-      "base_filter": null,
-      "index_name": "sources_unique_name_index",
-      "keys": [
-        {
-          "type": "atom",
-          "value": "name"
-        },
-        {
-          "type": "atom",
-          "value": "project_id"
-        }
-      ],
-      "name": "unique_name",
-      "nils_distinct?": true,
-      "where": null
-    }
-  ],
+  "hash": "728C732C9ED83A7879EF3263AE9D287843768DE0C1BBC2BAA489E04EA4647B53",
+  "identities": [],
   "multitenancy": {
     "attribute": null,
     "global": null,
@@ -133,5 +84,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "sources"
+  "table": "documents"
 }

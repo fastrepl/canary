@@ -1,11 +1,28 @@
 defmodule CanaryWeb.Layouts do
   use CanaryWeb, :html
+  alias PrimerLive.Component, as: Primer
 
   embed_templates "layouts/*"
 
+  attr :projects, :any, default: []
+  attr :current_project, :any, default: nil
+
+  def app_select_project(assigns) do
+    ~H"""
+    <form phx-change="project-change">
+      <Primer.select
+        name="current-project"
+        options={Enum.map(@projects, & &1.name)}
+        selected={@current_project.name}
+        is_full_width
+      />
+    </form>
+    """
+  end
+
   attr :active_tab, :any, default: nil
-  attr :current_user, :any, default: nil
   attr :current_account, :any, default: nil
+  attr :current_project, :any, default: nil
 
   def app_side_menu(assigns) do
     ~H"""
@@ -61,10 +78,12 @@ defmodule CanaryWeb.Layouts do
           </ul>
         </li>
 
-        <li class="mt-auto mb-4">
-          <.link navigate={~p"/sign-out"}>
-            Logout
-          </.link>
+        <li class="mt-auto mb-4 flex flex-row items-center justify-between">
+          <.app_select_project
+            projects={@current_account.projects}
+            current_project={@current_project}
+          />
+          <.link navigate={~p"/sign-out"}>Logout</.link>
         </li>
       </ul>
     </nav>
@@ -72,8 +91,6 @@ defmodule CanaryWeb.Layouts do
   end
 
   attr :active_tab, :any, default: nil
-  attr :current_user, :any, default: nil
-  attr :current_account, :any, default: nil
 
   def settings_side_menu(assigns) do
     ~H"""

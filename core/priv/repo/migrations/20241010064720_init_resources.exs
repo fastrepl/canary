@@ -105,8 +105,10 @@ defmodule Canary.Repo.Migrations.InitResources do
 
     alter table(:projects) do
       add :name, :text, null: false
+      add :selected, :boolean, null: false, default: false
       add :public_key, :text, null: false
       add :account_id, :uuid, null: false
+      add :archived_at, :utc_datetime_usec
     end
 
     create table(:github_repos, primary_key: false) do
@@ -347,8 +349,10 @@ defmodule Canary.Repo.Migrations.InitResources do
     drop table(:github_repos)
 
     alter table(:projects) do
+      remove :archived_at
       remove :account_id
       remove :public_key
+      remove :selected
       remove :name
     end
 

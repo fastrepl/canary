@@ -172,7 +172,7 @@ defmodule Canary.Sources.Source do
   end
 
   code_interface do
-    define :create, args: [:account_id, :name, :config], action: :create
+    define :create, args: [:project_id, :name, :config], action: :create
     define :update_state, args: [:state], action: :update
     define :update_overview, args: [], action: :update_overview
     define :update_last_fetched_at, args: [], action: :update_last_fetched_at

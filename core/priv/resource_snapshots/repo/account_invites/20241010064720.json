@@ -27,8 +27,8 @@
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "meta",
-      "type": "map"
+      "source": "email",
+      "type": "text"
     },
     {
       "allow_nil?": false,
@@ -36,7 +36,7 @@
       "generated?": false,
       "primary_key?": false,
       "references": {
-        "deferrable": "initially",
+        "deferrable": false,
         "destination_attribute": "id",
         "destination_attribute_default": null,
         "destination_attribute_generated": null,
@@ -48,15 +48,44 @@
           "global": null,
           "strategy": null
         },
-        "name": "source_events_source_id_fkey",
+        "name": "account_invites_user_id_fkey",
         "on_delete": null,
         "on_update": null,
         "primary_key?": true,
         "schema": "public",
-        "table": "sources"
+        "table": "users"
       },
       "size": null,
-      "source": "source_id",
+      "source": "user_id",
+      "type": "uuid"
+    },
+    {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": {
+        "deferrable": false,
+        "destination_attribute": "id",
+        "destination_attribute_default": null,
+        "destination_attribute_generated": null,
+        "index?": false,
+        "match_type": null,
+        "match_with": null,
+        "multitenancy": {
+          "attribute": null,
+          "global": null,
+          "strategy": null
+        },
+        "name": "account_invites_account_id_fkey",
+        "on_delete": null,
+        "on_update": null,
+        "primary_key?": true,
+        "schema": "public",
+        "table": "accounts"
+      },
+      "size": null,
+      "source": "account_id",
       "type": "uuid"
     }
   ],
@@ -65,7 +94,7 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "9DCBA23557B80F34988798C3E5FF42F6C8F8F6CAEB59589F7E80A4415C207E22",
+  "hash": "B05E9A7B7CA5571ACD75E443437E4074814629EB6A877C9E10EEA93846C5EDF9",
   "identities": [],
   "multitenancy": {
     "attribute": null,
@@ -74,5 +103,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "source_events"
+  "table": "account_invites"
 }

@@ -35,16 +35,6 @@
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "chunks",
-      "type": ["array", "map"]
-    },
-    {
-      "allow_nil?": true,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
       "references": {
         "deferrable": "initially",
         "destination_attribute": "id",
@@ -58,7 +48,7 @@
           "global": null,
           "strategy": null
         },
-        "name": "documents_source_id_fkey",
+        "name": "source_events_source_id_fkey",
         "on_delete": null,
         "on_update": null,
         "primary_key?": true,
@@ -75,7 +65,7 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "67BFE062F41D9DE9C0878B526902778026AF95E0446A807B4179F2E06A782204",
+  "hash": "AB20AB8B64AC8077D7E8FDB35831973B8A6874A6C1DCEEB8A2F187749E95D0E7",
   "identities": [],
   "multitenancy": {
     "attribute": null,
@@ -84,5 +74,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "documents"
+  "table": "source_events"
 }

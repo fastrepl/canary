@@ -22,6 +22,16 @@
     },
     {
       "allow_nil?": false,
+      "default": "false",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "selected",
+      "type": "boolean"
+    },
+    {
+      "allow_nil?": false,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
@@ -58,6 +68,16 @@
       "size": null,
       "source": "account_id",
       "type": "uuid"
+    },
+    {
+      "allow_nil?": true,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "archived_at",
+      "type": "utc_datetime_usec"
     }
   ],
   "base_filter": null,
@@ -65,7 +85,7 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "B1893D383F051DAA1BE11FD596991B7B3524719397519F4F5CD24C6CA4D2AD40",
+  "hash": "7957B77A672EC2669B596975B759FBA1E04FC107ED445633C5D4263F822F9B50",
   "identities": [
     {
       "all_tenants?": false,

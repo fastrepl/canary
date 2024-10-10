@@ -29,7 +29,18 @@ defmodule CanaryWeb.SettingsLive.Projects do
       <%= if length(@projects) > 0 do %>
         <Primer.box is_scrollable style="max-height: 400px; margin-top: 18px">
           <:row :for={project <- @projects}>
-            <span><%= project.name %></span>
+            <div class="flex flex-row items-center justify-between">
+              <span><%= project.name %></span>
+              <Primer.button
+                type="button"
+                phx-click="destroy"
+                phx-value-item={project.id}
+                is_danger
+                is_small
+              >
+                Delete
+              </Primer.button>
+            </div>
           </:row>
         </Primer.box>
       <% else %>
@@ -91,5 +102,19 @@ defmodule CanaryWeb.SettingsLive.Projects do
     end
 
     {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("destroy", %{"item" => id}, socket) do
+    project = socket.assigns.projects |> Enum.find(&(&1.id == id))
+
+    case Ash.destroy(project) do
+      :ok ->
+        {:noreply, socket |> push_navigate(to: ~p"/settings/projects")}
+
+      error ->
+        IO.inspect(error)
+        {:noreply, socket}
+    end
   end
 end
