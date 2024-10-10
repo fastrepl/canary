@@ -31,6 +31,27 @@ defmodule CanaryWeb.SettingsLive.Projects do
           <:row :for={project <- @projects}>
             <div class="flex flex-row items-center justify-between">
               <span><%= project.name %></span>
+              <div class="flex flex-row items-center gap-2">
+                <Primer.text_input
+                  value={project.public_key}
+                  disabled
+                  caption={fn -> "project key" end}
+                  is_small
+                >
+                  <:group_button>
+                    <Primer.button
+                      aria-label="Copy"
+                      id={"project-key-#{project.public_key}"}
+                      phx-hook="Clipboard"
+                      data-clipboard-text={project.public_key}
+                      is_small
+                    >
+                      <Primer.octicon name="paste-16" />
+                    </Primer.button>
+                  </:group_button>
+                </Primer.text_input>
+              </div>
+
               <Primer.button
                 type="button"
                 phx-click="destroy"
