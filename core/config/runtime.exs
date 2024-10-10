@@ -187,6 +187,8 @@ config :canary, :github,
   client_secret: System.get_env("GITHUB_CLIENT_SECRET"),
   redirect_uri: System.get_env("GITHUB_REDIRECT_URI")
 
+config :canary, :self_host, System.get_env("SELF_HOST") in ~w(true 1)
+
 config :canary, :fly_api_key, System.get_env("FLY_API_KEY")
 config :canary, :fly_app_name, System.get_env("FLY_APP_NAME")
 

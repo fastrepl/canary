@@ -126,13 +126,17 @@ defmodule CanaryWeb.Layouts do
                     icon_inactive: "hero-cog-6-tooth",
                     icon_active: "hero-cog-6-tooth-solid"
                   },
-                  %{
-                    url: "/settings/billing",
-                    name: "Billing",
-                    tab: :billing,
-                    icon_inactive: "hero-credit-card",
-                    icon_active: "hero-credit-card-solid"
-                  }
+                  if(Application.get_env(:canary, :self_host)) do
+                    nil
+                  else
+                    %{
+                      url: "/settings/billing",
+                      name: "Billing",
+                      tab: :billing,
+                      icon_inactive: "hero-credit-card",
+                      icon_active: "hero-credit-card-solid"
+                    }
+                  end
                 ]
               }
               class={[if(@active_tab == tab, do: "bg-blue-50 text-blue-800 rounded-md", else: "")]}

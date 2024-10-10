@@ -31,36 +31,37 @@ defmodule CanaryWeb.SettingsLive.Projects do
           <:row :for={project <- @projects}>
             <div class="flex flex-row items-center justify-between">
               <span><%= project.name %></span>
-              <div class="flex flex-row items-center gap-2">
-                <Primer.text_input
-                  value={project.public_key}
-                  disabled
-                  caption={fn -> "project key" end}
+
+              <div class="flex flex-row items-center gap-12">
+                <div class="flex flex-row items-center gap-2">
+                  <span class="text-gray-500">project_key: </span>
+                  <div class="flex flex-row items-center gap-2 max-w-[150px]">
+                    <Primer.text_input value={project.public_key} disabled is_small is_full_width>
+                      <:group_button>
+                        <Primer.button
+                          aria-label="Copy"
+                          id={"project-key-#{project.public_key}"}
+                          phx-hook="Clipboard"
+                          data-clipboard-text={project.public_key}
+                          is_small
+                        >
+                          <Primer.octicon name="paste-16" />
+                        </Primer.button>
+                      </:group_button>
+                    </Primer.text_input>
+                  </div>
+                </div>
+
+                <Primer.button
+                  type="button"
+                  phx-click="destroy"
+                  phx-value-item={project.id}
+                  is_danger
                   is_small
                 >
-                  <:group_button>
-                    <Primer.button
-                      aria-label="Copy"
-                      id={"project-key-#{project.public_key}"}
-                      phx-hook="Clipboard"
-                      data-clipboard-text={project.public_key}
-                      is_small
-                    >
-                      <Primer.octicon name="paste-16" />
-                    </Primer.button>
-                  </:group_button>
-                </Primer.text_input>
+                  Delete
+                </Primer.button>
               </div>
-
-              <Primer.button
-                type="button"
-                phx-click="destroy"
-                phx-value-item={project.id}
-                is_danger
-                is_small
-              >
-                Delete
-              </Primer.button>
             </div>
           </:row>
         </Primer.box>
