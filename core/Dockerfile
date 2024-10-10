@@ -61,12 +61,13 @@ WORKDIR /app/assets
 RUN npm install
 WORKDIR /app
 
+ARG SENTRY_KEY
+ARG OPENREPLAY_KEY
+ENV SENTRY_KEY=${SENTRY_KEY}
+ENV OPENREPLAY_KEY=${OPENREPLAY_KEY}
+
 # compile assets
-RUN --mount=type=secret,id=SENTRY_KEY \
-    --mount=type=secret,id=OPENREPLAY_KEY \
-    SENTRY_KEY="$(cat /run/secrets/SENTRY_KEY)" \
-    OPENREPLAY_KEY="$(cat /run/secrets/OPENREPLAY_KEY)" \
-    mix assets.deploy
+RUN mix assets.deploy
 
 COPY --from=rust /app/target/release/libcanary_native.so priv/native/libcanary_native.so
 
