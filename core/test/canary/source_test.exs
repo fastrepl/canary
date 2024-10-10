@@ -4,31 +4,33 @@ defmodule Canary.Test.Source do
 
   test "create" do
     account = account_fixture()
+    project = Canary.Accounts.Project.create!(account.id, "project")
     config = %Ash.Union{type: :webpage, value: %Canary.Sources.Webpage.Config{}}
 
     source =
       Canary.Sources.Source
       |> Ash.Changeset.new()
       |> Ash.Changeset.for_create(:create, %{
-        account_id: account.id,
+        project_id: project.id,
         name: "Docs",
         config: config
       })
       |> Ash.create!()
 
-    assert source.account.id == account.id
+    assert source.project.id == project.id
     assert source.config.type == :webpage
   end
 
   test "destroy" do
     account = account_fixture()
+    project = Canary.Accounts.Project.create!(account.id, "project")
     config = %Ash.Union{type: :webpage, value: %Canary.Sources.Webpage.Config{}}
 
     source =
       Canary.Sources.Source
       |> Ash.Changeset.new()
       |> Ash.Changeset.for_create(:create, %{
-        account_id: account.id,
+        project_id: project.id,
         name: "Docs",
         config: config
       })

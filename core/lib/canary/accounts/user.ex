@@ -43,6 +43,8 @@ defmodule Canary.Accounts.User do
   end
 
   relationships do
+    belongs_to :account, Canary.Accounts.Account
+
     many_to_many :accounts, Canary.Accounts.Account do
       through Canary.Accounts.AccountUser
     end

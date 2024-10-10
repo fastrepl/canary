@@ -9,9 +9,6 @@ defmodule Canary.Test.Account do
   alias Canary.Accounts.Account
 
   test "add and remove member" do
-    Canary.Payment.Mock
-    |> expect(:sync_seat, 2, fn _ -> {:ok, %{}} end)
-
     account = account_fixture()
     user = user_fixture()
 

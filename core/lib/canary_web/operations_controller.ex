@@ -1,15 +1,18 @@
 defmodule CanaryWeb.OperationsController do
   use CanaryWeb, :controller
+  require Ash.Query
 
-  plug :find_key when action in [:search, :ask]
-  plug :ensure_valid_host when action in [:search, :ask]
+  plug :find_project when action in [:search, :ask]
 
-  defp find_key(conn, _opts) do
+  defp find_project(conn, _opts) do
     err_msg = "no client found with the given key"
 
     with {:ok, token} <- get_token_from_header(conn),
-         {:ok, key} <- Canary.Accounts.Key.find(token) do
-      conn |> assign(:key, key)
+         {:ok, project} <-
+           Canary.Accounts.Project
+           |> Ash.Query.for_read(:find_by_public_key, %{public_key: token})
+           |> Ash.Query.build(load: [:sources]) do
+      conn |> assign(:current_project, project)
     else
       _ -> conn |> send_resp(401, err_msg) |> halt()
     end
@@ -22,27 +25,13 @@ defmodule CanaryWeb.OperationsController do
     end
   end
 
-  defp ensure_valid_host(conn, _opts) do
-    err_msg = "invalid host"
-
-    %Ash.Union{
-      type: :public,
-      value: %Canary.Accounts.PublicKeyConfig{} = config
-    } = conn.assigns.key.config
-
-    if Application.get_env(:canary, :env) == :prod and
-         conn.host not in (config.allowed_hosts ++ ["getcanary.dev", "cloud.getcanary.dev"]) do
-      conn |> send_resp(401, err_msg) |> halt()
-    else
-      conn
-      |> assign(:current_account, conn.assigns.key.account)
-    end
-  end
-
-  def search(conn, %{"query" => %{"text" => query, "tags" => tags, "sources" => sources}}) do
-    sources = find_sources(conn, sources)
-
-    case Canary.Searcher.run(sources, query, tags: tags, cache: cache?()) do
+  def search(conn, %{"query" => %{"text" => query, "tags" => tags}}) do
+    case Canary.Searcher.run(
+           conn.assigns.current_project.sources,
+           query,
+           tags: tags,
+           cache: cache?()
+         ) do
       {:ok, matches} ->
         data = %{
           matches: matches,
@@ -61,9 +50,7 @@ defmodule CanaryWeb.OperationsController do
     end
   end
 
-  def ask(conn, %{"query" => %{"text" => query, "tags" => tags, "sources" => sources}}) do
-    sources = find_sources(conn, sources)
-
+  def ask(conn, %{"query" => %{"text" => query, "tags" => tags}}) do
     conn =
       conn
       |> put_resp_content_type("text/event-stream")
@@ -77,7 +64,7 @@ defmodule CanaryWeb.OperationsController do
 
     Task.start_link(fn ->
       Canary.Interactions.Responder.run(
-        sources,
+        conn.assigns.current_project.sources,
         query,
         fn data -> send(here, data) end,
         tags: tags,
@@ -86,13 +73,6 @@ defmodule CanaryWeb.OperationsController do
     end)
 
     receive_and_send(conn)
-  end
-
-  defp find_sources(conn, source_names) do
-    conn.assigns.current_account.sources
-    |> Enum.filter(fn source ->
-      length(source_names) == 0 || Enum.any?(source_names, &(source.name == &1))
-    end)
   end
 
   defp receive_and_send(conn) do

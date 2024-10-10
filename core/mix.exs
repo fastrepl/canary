@@ -104,7 +104,6 @@ defmodule Canary.MixProject do
       {:opentelemetry_api, "1.3.1"},
       {:opentelemetry_req, "~> 0.2.0"},
       {:opentelemetry_ecto, "~> 1.2"},
-      {:opentelemetry_oban, "~> 1.1"},
       {:opentelemetry_phoenix, "~> 1.2"},
       {:corsica, "~> 2.0"},
       {:ex2ms, "~> 1.7"},

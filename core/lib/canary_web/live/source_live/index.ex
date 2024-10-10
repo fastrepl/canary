@@ -12,6 +12,7 @@ defmodule CanaryWeb.SourceLive.Index do
             module={CanaryWeb.SourceLive.List}
             sources={@sources}
             current_account={@current_account}
+            current_project={@current_project}
           />
         <% :detail -> %>
           <.live_component id="source-detail" module={CanaryWeb.SourceLive.Detail} source={@source} />
@@ -23,7 +24,7 @@ defmodule CanaryWeb.SourceLive.Index do
   @impl true
   def mount(_, _, socket) do
     sources =
-      socket.assigns.current_account
+      socket.assigns.current_project
       |> Ash.load!([:sources])
       |> Map.get(:sources)
 

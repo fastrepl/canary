@@ -6,17 +6,13 @@ defmodule Canary.Accounts.Account do
 
   attributes do
     uuid_primary_key :id
-
-    attribute :name, :string, allow_nil?: false
   end
 
   relationships do
-    has_one :github_app, Canary.Github.App
     has_one :billing, Canary.Accounts.Billing
-    has_one :subdomain, Canary.Accounts.Subdomain
+    has_many :projects, Canary.Accounts.Project
 
-    has_many :sources, Canary.Sources.Source
-    has_many :keys, Canary.Accounts.Key
+    has_one :owner, Canary.Accounts.User
 
     many_to_many :users, Canary.Accounts.User do
       through Canary.Accounts.AccountUser
@@ -29,8 +25,9 @@ defmodule Canary.Accounts.Account do
     create :create do
       primary? true
       argument :user_id, :uuid, allow_nil?: false
+
+      change manage_relationship(:user_id, :owner, type: :append)
       change manage_relationship(:user_id, :users, type: :append)
-      change set_attribute(:name, "account_#{Ash.UUID.generate() |> String.slice(0..7)}")
     end
 
     update :add_member do
@@ -38,7 +35,6 @@ defmodule Canary.Accounts.Account do
       argument :user_id, :uuid, allow_nil?: false
 
       change manage_relationship(:user_id, :users, type: :append)
-      change Canary.Accounts.Changes.StripeReportSeat
     end
 
     update :remove_member do
@@ -46,11 +42,6 @@ defmodule Canary.Accounts.Account do
       argument :user_id, :uuid, allow_nil?: false
 
       change manage_relationship(:user_id, :users, type: :remove)
-      change Canary.Accounts.Changes.StripeReportSeat
-    end
-
-    update :update do
-      accept [:name]
     end
   end
 
@@ -59,7 +50,6 @@ defmodule Canary.Accounts.Account do
   end
 
   code_interface do
-    define :update, args: [:name], action: :update
     define :add_member, args: [:user_id], action: :add_member
     define :remove_member, args: [:user_id], action: :remove_member
   end

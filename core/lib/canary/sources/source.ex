@@ -25,11 +25,11 @@ defmodule Canary.Sources.Source do
   end
 
   identities do
-    identity :unique_name, [:name, :account_id]
+    identity :unique_name, [:name, :project_id]
   end
 
   relationships do
-    belongs_to :account, Canary.Accounts.Account, allow_nil?: false
+    belongs_to :project, Canary.Accounts.Project, allow_nil?: false
     has_many :documents, Canary.Sources.Document
     has_many :events, Canary.Sources.Event
   end
@@ -46,8 +46,8 @@ defmodule Canary.Sources.Source do
       primary? true
 
       accept [:name, :config]
-      argument :account_id, :uuid, allow_nil?: false
-      change manage_relationship(:account_id, :account, type: :append)
+      argument :project_id, :uuid, allow_nil?: false
+      change manage_relationship(:project_id, :project, type: :append)
     end
 
     update :update_last_fetched_at do
@@ -159,7 +159,7 @@ defmodule Canary.Sources.Source do
               Canary.Workers.GithubDiscussionProcessor.new(%{source_id: source_id})
           end
 
-        case OpentelemetryOban.insert(job) do
+        case Oban.insert(job) do
           {:ok, _job} ->
             changeset
 
