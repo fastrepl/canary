@@ -8,7 +8,7 @@ defmodule CanaryWeb.HomeLive do
       <pre class="text-lg">try search here: </pre>
       <canary-root>
         <canary-provider-cloud
-          project-key={Enum.at(@current_account.keys, 0).value}
+          project-key={@current_project.public_key}
           api-base={CanaryWeb.Endpoint.url()}
         >
           <canary-modal>
