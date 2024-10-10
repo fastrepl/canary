@@ -23,12 +23,6 @@ defmodule Canary.Accounts.Project do
   actions do
     defaults [:read, :destroy]
 
-    read :find_by_public_key do
-      get? true
-      argument :public_key, :string, allow_nil?: false
-      filter expr(public_key == ^arg(:public_key))
-    end
-
     create :create do
       primary? true
       accept [:account_id, :name]
@@ -43,7 +37,6 @@ defmodule Canary.Accounts.Project do
   end
 
   code_interface do
-    define :find_by_public_key, args: [:public_key], action: :find_by_public_key
     define :create, args: [:account_id, :name], action: :create
   end
 

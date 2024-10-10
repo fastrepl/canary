@@ -10,8 +10,9 @@ defmodule CanaryWeb.OperationsController do
     with {:ok, token} <- get_token_from_header(conn),
          {:ok, project} <-
            Canary.Accounts.Project
-           |> Ash.Query.for_read(:find_by_public_key, %{public_key: token})
-           |> Ash.Query.build(load: [:sources]) do
+           |> Ash.Query.filter(public_key == ^token)
+           |> Ash.Query.build(load: [:sources])
+           |> Ash.read_one() do
       conn |> assign(:current_project, project)
     else
       _ -> conn |> send_resp(401, err_msg) |> halt()
