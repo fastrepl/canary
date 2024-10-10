@@ -59,7 +59,7 @@ defmodule CanaryWeb.SourceLive.List do
             <:heading>
               You don't have any sources yet
             </:heading>
-            <p>Use it to provide information when no dynamic content exists.</p>
+            <p>Operations like search and ask are performed on sources.</p>
 
             <:action>
               <Primer.button is_primary phx-click={Primer.open_dialog("source-form")}>

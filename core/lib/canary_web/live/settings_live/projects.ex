@@ -26,11 +26,31 @@ defmodule CanaryWeb.SettingsLive.Projects do
         </:body>
       </Primer.dialog>
 
-      <Primer.box is_scrollable style="max-height: 400px; margin-top: 18px">
-        <:row :for={project <- @projects}>
-          <span><%= project.name %></span>
-        </:row>
-      </Primer.box>
+      <%= if length(@projects) > 0 do %>
+        <Primer.box is_scrollable style="max-height: 400px; margin-top: 18px">
+          <:row :for={project <- @projects}>
+            <span><%= project.name %></span>
+          </:row>
+        </Primer.box>
+      <% else %>
+        <Primer.box>
+          <Primer.blankslate is_spacious>
+            <:heading>
+              You don't have any projects yet
+            </:heading>
+            <p>A single project can contain multiple sources, like web pages, GitHub issues, etc.</p>
+
+            <:action>
+              <Primer.button is_primary phx-click={Primer.open_dialog("project-form")}>
+                Create project
+              </Primer.button>
+            </:action>
+            <:action>
+              <Primer.button is_link href="https://getcanary.dev">Learn more</Primer.button>
+            </:action>
+          </Primer.blankslate>
+        </Primer.box>
+      <% end %>
     </div>
     """
   end

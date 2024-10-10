@@ -108,6 +108,13 @@ defmodule CanaryWeb.Layouts do
                     tab: :projects,
                     icon_inactive: "hero-cog-6-tooth",
                     icon_active: "hero-cog-6-tooth-solid"
+                  },
+                  %{
+                    url: "/settings/billing",
+                    name: "Billing",
+                    tab: :billing,
+                    icon_inactive: "hero-credit-card",
+                    icon_active: "hero-credit-card-solid"
                   }
                 ]
               }

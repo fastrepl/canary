@@ -1,5 +1,5 @@
 defmodule CanaryWeb.SettingsLive.Billing do
-  use CanaryWeb, :live_component
+  use CanaryWeb, :live_view
 
   alias PrimerLive.Component, as: Primer
   alias Canary.Accounts.Billing
@@ -30,18 +30,18 @@ defmodule CanaryWeb.SettingsLive.Billing do
   end
 
   @impl true
-  def update(assigns, socket) do
+  def mount(_params, _session, socket) do
     stripe_customer_portal_url =
       Application.get_env(:canary, :stripe) |> Keyword.fetch!(:customer_portal_url)
 
     stripe_starter_price_id =
       Application.get_env(:canary, :stripe) |> Keyword.fetch!(:starter_price_id)
 
-    subscription = assigns.current_account.billing.stripe_subscription
+    account = socket.assigns.current_account |> Ash.load!([:billing])
+    subscription = account.billing.stripe_subscription
 
     socket =
       socket
-      |> assign(assigns)
       |> assign(:stripe_customer_portal_url, stripe_customer_portal_url)
       |> assign(:stripe_starter_price_id, stripe_starter_price_id)
       |> assign(:subscription_current, subscription_current(subscription))
@@ -91,7 +91,7 @@ defmodule CanaryWeb.SettingsLive.Billing do
 
   defp render_action_button(assigns) do
     ~H"""
-    <Primer.button type="button" phx-click="checkout" phx-target={@myself} is_primary>
+    <Primer.button type="button" phx-click="checkout" is_primary>
       Upgrade
     </Primer.button>
     """
