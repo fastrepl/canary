@@ -28,14 +28,22 @@ if config_env() == :prod do
       For example: ecto://USER:PASS@HOST/DATABASE
       """
 
-  maybe_ipv6 = if System.get_env("ECTO_IPV6") in ~w(true 1), do: [:inet6], else: []
+  maybe_ipv6 =
+    if System.get_env("ECTO_IPV6") in ~w(true 1),
+      do: [:inet6],
+      else: []
+
+  maybe_ssl =
+    if System.get_env("ECTO_SSL") in ~w(true 1),
+      do: [cacerts: :public_key.cacerts_get()],
+      else: false
 
   config :canary, Canary.Repo,
     url: database_url,
     timeout: String.to_integer(System.get_env("DATABASE_TIMEOUT") || "15000"),
     pool_size: String.to_integer(System.get_env("DATABASE_POOL_SIZE") || "10"),
     socket_options: maybe_ipv6,
-    ssl: [cacerts: :public_key.cacerts_get()]
+    ssl: maybe_ssl
 
   # The secret key base is used to sign/encrypt cookies and other secrets.
   # A default value is used in config/dev.exs and config/test.exs but you
@@ -193,8 +201,10 @@ else
 end
 
 if config_env() == :prod do
-  config :opentelemetry_exporter,
-    otlp_protocol: :http_protobuf,
-    otlp_endpoint: System.fetch_env!("OTEL_COLLECTOR_URL"),
-    otlp_headers: [{"Authorization", "Bearer #{System.fetch_env!("OTEL_COLLECTOR_URL_AUTH")}"}]
+  if System.get_env("OTEL_COLLECTOR_URL") and System.get_env("OTEL_COLLECTOR_URL_AUTH") do
+    config :opentelemetry_exporter,
+      otlp_protocol: :http_protobuf,
+      otlp_endpoint: System.fetch_env!("OTEL_COLLECTOR_URL"),
+      otlp_headers: [{"Authorization", "Bearer #{System.fetch_env!("OTEL_COLLECTOR_URL_AUTH")}"}]
+  end
 end
