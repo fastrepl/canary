@@ -72,6 +72,10 @@ defmodule Canary.Accounts.Project do
     end
   end
 
+  aggregates do
+    count :num_sources, :sources
+  end
+
   code_interface do
     define :create, args: [:account_id, :name], action: :create
     define :select, args: [:account_id], action: :select

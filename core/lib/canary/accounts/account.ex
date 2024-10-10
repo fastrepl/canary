@@ -49,6 +49,10 @@ defmodule Canary.Accounts.Account do
     change Canary.Accounts.Changes.InitBilling, on: [:create]
   end
 
+  aggregates do
+    count :num_projects, :projects
+  end
+
   code_interface do
     define :add_member, args: [:user_id], action: :add_member
     define :remove_member, args: [:user_id], action: :remove_member
