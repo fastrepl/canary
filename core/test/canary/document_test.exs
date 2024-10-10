@@ -8,12 +8,13 @@ defmodule Canary.Test.Document do
   describe "webpage" do
     test "create and find" do
       account = account_fixture()
+      project = Canary.Accounts.Project.create!(account.id, "project")
 
       source =
         Canary.Sources.Source
         |> Ash.Changeset.new()
         |> Ash.Changeset.for_action(:create, %{
-          account_id: account.id,
+          project_id: project.id,
           name: "Docs",
           config: %Ash.Union{type: :webpage, value: %Webpage.Config{}}
         })
@@ -47,12 +48,13 @@ defmodule Canary.Test.Document do
 
     test "destroy" do
       account = account_fixture()
+      project = Canary.Accounts.Project.create!(account.id, "project")
 
       source =
         Canary.Sources.Source
         |> Ash.Changeset.new()
         |> Ash.Changeset.for_action(:create, %{
-          account_id: account.id,
+          project_id: project.id,
           name: "Docs",
           config: %Ash.Union{type: :webpage, value: %Webpage.Config{}}
         })
@@ -83,12 +85,13 @@ defmodule Canary.Test.Document do
   describe "github issue" do
     test "create" do
       account = account_fixture()
+      project = Canary.Accounts.Project.create!(account.id, "project")
 
       source =
         Canary.Sources.Source
         |> Ash.Changeset.new()
         |> Ash.Changeset.for_action(:create, %{
-          account_id: account.id,
+          project_id: project.id,
           name: "Docs",
           config: %Ash.Union{type: :webpage, value: %Webpage.Config{}}
         })

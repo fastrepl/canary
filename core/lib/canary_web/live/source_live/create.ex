@@ -20,7 +20,7 @@ defmodule CanaryWeb.SourceLive.Create do
         phx-target={@myself}
         class="flex flex-col gap-4"
       >
-        <input type="hidden" name={f[:account_id].name} value={@current_account.id} />
+        <input type="hidden" name={f[:project_id].name} value={@current_project.id} />
 
         <.inputs_for :let={fc} field={@form[:config]}>
           <div class="flex flex-row gap-2">

@@ -11,28 +11,19 @@ defmodule CanaryWeb.Router do
     plug :put_secure_browser_headers
     plug :load_from_session
     plug CanaryWeb.Plug.LoadAccountFromUser
+    plug CanaryWeb.Plug.LoadProjectFromAccount
   end
 
   pipeline :api do
     plug :accepts, ["json"]
   end
 
-  def is_allowed_origin?(_conn, origin) do
-    %URI{host: host} = URI.parse(origin)
-    host in hosts()
-  end
-
-  defp hosts() do
-    Cachex.fetch!(:cache, :origin, fn _ ->
-      hosts = Canary.Accounts.Key.allowed_hosts!()
-      {:commit, hosts, expire: :timer.seconds(15)}
-    end)
-  end
-
   scope "/" do
     pipe_through :browser
 
-    live_session :auth, layout: {CanaryWeb.Layouts, :root} do
+    live_session :auth,
+      layout: {CanaryWeb.Layouts, :root},
+      on_mount: [{CanaryWeb.LiveUser, :live_no_user}] do
       live "/register", CanaryWeb.AuthLive.Index, :register
       live "/sign-in", CanaryWeb.AuthLive.Index, :sign_in
       live "/reset-request", CanaryWeb.AuthLive.Index, :reset_request
@@ -52,27 +43,36 @@ defmodule CanaryWeb.Router do
 
     get "/checkout", CanaryWeb.CheckoutController, :session
 
-    live_session :demo, layout: {CanaryWeb.Layouts, :root} do
-      live "/demo", CanaryWeb.DemoLive.Index, :without_slug
-      live "/demo/:slug", CanaryWeb.DemoLive.Index, :with_slug
-    end
-
-    ash_authentication_live_session :default,
+    ash_authentication_live_session :app,
       layout: {CanaryWeb.Layouts, :app},
       on_mount: [
-        {CanaryWeb.LiveUserAuth, :live_user_required},
-        CanaryWeb.NavLive
+        {CanaryWeb.LiveUser, :live_user_required},
+        CanaryWeb.LiveAccount,
+        {CanaryWeb.LiveProject, :live_project_required},
+        CanaryWeb.NaveLive.App
       ] do
       live "/", CanaryWeb.HomeLive, :none
       live "/source", CanaryWeb.SourceLive.Index, :index
       live "/source/:id", CanaryWeb.SourceLive.Index, :detail
       live "/insights", CanaryWeb.InsightsLive, :none
+    end
+
+    ash_authentication_live_session :settings,
+      layout: {CanaryWeb.Layouts, :settings},
+      on_mount: [
+        {CanaryWeb.LiveUser, :live_user_required},
+        CanaryWeb.LiveAccount,
+        {CanaryWeb.LiveProject, :live_project_optional},
+        CanaryWeb.NaveLive.Settings
+      ] do
       live "/settings", CanaryWeb.SettingsLive.Index, :none
+      live "/settings/account", CanaryWeb.SettingsLive.Account, :none
+      live "/settings/projects", CanaryWeb.SettingsLive.Projects, :none
     end
 
     ash_authentication_live_session :others,
       layout: {CanaryWeb.Layouts, :root},
-      on_mount: [{CanaryWeb.LiveUserAuth, :live_user_required}] do
+      on_mount: [{CanaryWeb.LiveUser, :live_user_required}] do
       live "/setup/github", CanaryWeb.GithubSetupLive, :none
     end
   end

@@ -1,9 +1,7 @@
 defmodule Canary.Payment do
-  @callback sync_seat(account :: map()) :: {:ok, map()} | {:error, any()}
   @callback sync_ask(account :: map()) :: {:ok, map()} | {:error, any()}
   @callback sync_search(account :: map()) :: {:ok, map()} | {:error, any()}
 
-  def sync_seat(account), do: impl().sync_seat(account)
   def sync_ask(account), do: impl().sync_chats(account)
   def sync_search(account), do: impl().sync_search(account)
 
@@ -12,23 +10,6 @@ end
 
 defmodule Canary.Payment.Stripe do
   @behaviour Canary.Payment
-  @dialyzer {:nowarn_function, sync_seat: 1}
-
-  def sync_seat(%Canary.Accounts.Account{} = account) do
-    account = account |> Ash.load!([:users, :billing])
-    subscription = account.billing.stripe_subscription
-
-    case find_item(subscription, seat_price_id()) do
-      nil ->
-        :error
-
-      item ->
-        subscription["id"]
-        |> Stripe.Subscription.update(%{
-          items: [%{id: item["id"], price: seat_price_id(), quantity: Enum.count(account.users)}]
-        })
-    end
-  end
 
   def sync_ask(%Canary.Accounts.Account{} = account) do
     account = account |> Ash.load!([:billing])
@@ -73,7 +54,6 @@ defmodule Canary.Payment.Stripe do
 
   defp stripe_config(), do: Application.get_env(:canary, :stripe)
 
-  defp seat_price_id, do: stripe_config() |> Keyword.fetch!(:seat_price_id)
   defp ask_price_id, do: stripe_config() |> Keyword.fetch!(:ask_price_id)
   defp search_price_id, do: stripe_config() |> Keyword.fetch!(:search_price_id)
 end
