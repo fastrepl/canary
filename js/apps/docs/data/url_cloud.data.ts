@@ -23,19 +23,19 @@ export default defineLoader({
 });
 
 const forDev = (path) => {
-  const { CANARY_API_BASE, CANARY_API_KEY } = parse(
+  const { CANARY_API_BASE, CANARY_PROJECT_KEY } = parse(
     fs.readFileSync(path, "utf-8"),
   );
 
   return {
     base: CANARY_API_BASE,
-    key: CANARY_API_KEY,
+    key: CANARY_PROJECT_KEY,
   };
 };
 
 const forProd = () => {
   return {
     base: process.env.CANARY_API_BASE,
-    key: process.env.CANARY_API_KEY,
+    key: process.env.CANARY_PROJECT_KEY,
   };
 };

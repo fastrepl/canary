@@ -142,7 +142,7 @@ watch(sourceGroup, () => {
   <Tabs :values="tabs" :selected="tab" @update:selected="tab = $event" />
 
   <canary-root framework="vitepress" :key="question" :query="question" v-show="tab === 'UI'">
-    <canary-provider-cloud :api-base="cloud.base" :api-key="cloud.key" :sources="sourceNames">
+    <canary-provider-cloud :api-base="cloud.base" :project-key="cloud.key" :sources="sourceNames">
       <canary-content>
         <canary-input slot="input"></canary-input>
         <canary-search slot="mode">
@@ -162,7 +162,7 @@ watch(sourceGroup, () => {
 
 ```html-vue{5-11}
 <canary-root framework="vitepress">
-  <canary-provider-cloud api-base="<API_BASE>" api-key="<API_KEY>">
+  <canary-provider-cloud api-base="<API_BASE>" project-key="<API_KEY>">
     <canary-content>
       <canary-input slot="input"></canary-input>
       <canary-search slot="mode">

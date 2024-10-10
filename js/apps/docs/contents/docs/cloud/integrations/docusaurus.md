@@ -21,7 +21,7 @@ After ejecting, you can edit generated files in `src/theme/SearchBar`.
 ```html-vue
 <canary-root framework="docusaurus">
   <canary-provider-pagefind> // [!code --]
-    <canary-provider-cloud api-key="KEY" api-base="https://cloud.getcanary.dev"> // [!code ++]
+    <canary-provider-cloud project-key="KEY" api-base="https://cloud.getcanary.dev"> // [!code ++]
       <!-- Rest of the code -->
     </canary-provider-cloud> // [!code ++]
   </canary-provider-pagefind> // [!code --]

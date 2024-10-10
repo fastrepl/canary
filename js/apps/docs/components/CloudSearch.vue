@@ -42,7 +42,7 @@ const sources = ["canary_webpage", "canary_issue"];
   <div class="w-full max-w-[300px] pl-4 mr-auto" v-if="loaded">
     <canary-root framework="vitepress">
       <canary-provider-cloud
-        :api-key="data.key"
+        :project-key="data.key"
         :api-base="data.base"
         :sources="sources"
       >

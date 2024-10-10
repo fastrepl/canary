@@ -15,7 +15,7 @@ Take a look at our [CloudSearch.vue](https://github.com/fastrepl/canary/blob/mai
 ```html-vue
 <canary-root framework="vitepress">
   <canary-provider-vitepress-minisearch> // [!code --]
-    <canary-provider-cloud api-key="KEY" api-base="https://cloud.getcanary.dev"> // [!code ++]
+    <canary-provider-cloud project-key="KEY" api-base="https://cloud.getcanary.dev"> // [!code ++]
       <!-- Rest of the code -->
     </canary-provider-cloud> // [!code ++]
   </canary-provider-vitepress-minisearch> // [!code --]

@@ -40,7 +40,7 @@ export default function CanarySearchBar() {
   return (
     <canary-root framework="nextra">
       <canary-provider-cloud
-        api-key="KEY"
+        project-key="KEY"
         api-base="https://cloud.getcanary.dev"
       >
         <canary-modal>

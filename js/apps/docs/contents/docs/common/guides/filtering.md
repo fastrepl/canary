@@ -85,7 +85,7 @@ Two providers support this type of filtering.
 
 <canary-root framework="vitepress" query="vitepress" v-if="loaded">
   <canary-provider-cloud
-    :api-key="data.key"
+    :project-key="data.key"
     :api-base="data.base"
     sources="canary_webpage"
   >

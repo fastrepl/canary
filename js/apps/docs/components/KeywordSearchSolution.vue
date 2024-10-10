@@ -43,7 +43,7 @@ const handleSelect = (q: string) => {
       :query="question"
     >
       <canary-provider-cloud
-        :api-key="data.key"
+        :project-key="data.key"
         :api-base="data.base"
         :sources="sources"
       >
