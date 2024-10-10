@@ -203,7 +203,11 @@ else
 end
 
 if config_env() == :prod do
-  if System.get_env("OTEL_COLLECTOR_URL") and System.get_env("OTEL_COLLECTOR_URL_AUTH") do
+  if [
+       "OTEL_COLLECTOR_URL",
+       "OTEL_COLLECTOR_URL_AUTH"
+     ]
+     |> Enum.any?(&System.get_env/1) do
     config :opentelemetry_exporter,
       otlp_protocol: :http_protobuf,
       otlp_endpoint: System.fetch_env!("OTEL_COLLECTOR_URL"),
