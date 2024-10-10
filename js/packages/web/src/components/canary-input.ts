@@ -32,7 +32,7 @@ export class CanaryInput extends LitElement {
 
   @consume({ context: queryContext, subscribe: true })
   @state()
-  private _query: QueryContext = { text: "", tags: [], sources: [] };
+  private _query: QueryContext = { text: "", tags: [] };
 
   @consume({ context: modeContext, subscribe: true })
   @state()

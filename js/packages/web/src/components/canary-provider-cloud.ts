@@ -1,4 +1,4 @@
-import { LitElement, html, type PropertyValues } from "lit";
+import { LitElement, html } from "lit";
 import { property } from "lit/decorators.js";
 
 import { registerCustomElement } from "../decorators";
@@ -9,7 +9,6 @@ import type { AskFunction, SearchFunction } from "../types";
 import { wrapper } from "../styles";
 import { createEvent } from "../store";
 import { cache } from "../decorators/cache";
-import { StringArray } from "../converters";
 import { sseIterator } from "../utils";
 
 const NAME = "canary-provider-cloud";
@@ -17,29 +16,25 @@ const NAME = "canary-provider-cloud";
 @registerCustomElement(NAME)
 export class CanaryProviderCloud extends LitElement {
   @property({ type: String, attribute: "api-base" })
-  apiBase = "";
+  apiBase = "https://cloud.getcanary.dev";
 
+  /**
+   * @deprecated use `project-key` instead
+   */
   @property({ type: String, attribute: "api-key" })
   apiKey = "";
 
-  @property({ converter: StringArray, attribute: "sources" })
-  sources: string[] = [];
+  @property({ type: String, attribute: "project-key" })
+  projectKey = "";
 
   connectedCallback() {
     super.connectedCallback();
 
-    if (!this.apiBase || !this.apiKey) {
-      throw new Error("Endpoint and key are required");
+    if (!this.apiKey && !this.projectKey) {
+      throw new Error("project-key or api-key is required");
     }
 
     this._dispatchOperations();
-    this._dispatchSources();
-  }
-
-  updated(changed: PropertyValues<this>) {
-    if (changed.get("sources")) {
-      this._dispatchSources();
-    }
   }
 
   render() {
@@ -60,21 +55,12 @@ export class CanaryProviderCloud extends LitElement {
     );
   }
 
-  private _dispatchSources() {
-    this.dispatchEvent(
-      createEvent({
-        type: "set_query",
-        data: { sources: this.sources.filter(Boolean) },
-      }),
-    );
-  }
-
   search: SearchFunction = async (query, signal) => {
     const params = {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${this.apiKey}`,
+        Authorization: `Bearer ${this.projectKey || this.apiKey}`,
       },
       body: JSON.stringify({ query }),
       signal,
@@ -94,7 +80,7 @@ export class CanaryProviderCloud extends LitElement {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${this.apiKey}`,
+        Authorization: `Bearer ${this.projectKey || this.apiKey}`,
       },
       body: JSON.stringify({ query }),
       signal,

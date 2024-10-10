@@ -33,7 +33,7 @@ export const createStore = (host: HTMLElement) =>
       }),
       query: new ContextProvider(host, {
         context: queryContext,
-        initialValue: { text: "", tags: [], sources: [] },
+        initialValue: { text: "", tags: [] },
       }),
       executionManager: new ExecutionManager(host, {
         searchDebounceMs: 80,

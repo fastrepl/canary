@@ -12,7 +12,6 @@ import { AskResponse } from "./schema";
 export type QueryContext = {
   text: string;
   tags: string[];
-  sources: string[];
 };
 
 export type ModeContext = {

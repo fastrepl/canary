@@ -31,9 +31,8 @@ defmodule CanaryWeb.HomeLive do
         <pre class="text-lg">try search here: </pre>
         <canary-root>
           <canary-provider-cloud
-            api-key={Enum.at(@current_account.keys, 0).value}
+            project-key={Enum.at(@current_account.keys, 0).value}
             api-base={CanaryWeb.Endpoint.url()}
-            sources={Enum.join(@sources, ",")}
           >
             <canary-modal>
               <canary-trigger-searchbar slot="trigger"></canary-trigger-searchbar>

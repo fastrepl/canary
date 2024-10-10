@@ -74,7 +74,7 @@
 
 ```html
 <canary-root framework="vitepress">
-  <canary-provider-cloud api-key="" api-base="">
+  <canary-provider-cloud project-key="">
     <canary-modal>
       <canary-trigger-searchbar slot="trigger"></canary-trigger-searchbar>
       <canary-content slot="content">

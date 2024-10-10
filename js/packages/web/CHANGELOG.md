@@ -1,5 +1,17 @@
 # @getcanary/web
 
+## 1.0.6
+
+### Patch Changes
+
+- Remove `sources` from `canary-provider-cloud`.
+
+## 1.0.5
+
+### Patch Changes
+
+- Replace `api-key` with `project-key` in `canary-provider-cloud`.
+
 ## 1.0.4
 
 ### Patch Changes
@@ -10,7 +22,7 @@
 
 ### Patch Changes
 
-- Fix initial sources dispatch in canary-provider-cloud.
+- Fix initial sources dispatch in `canary-provider-cloud`.
 
 ## 1.0.2
 
@@ -22,4 +34,4 @@
 
 ### Patch Changes
 
-- Fix bug in canary-provider-cloud that does not dispatch updated sources to the root store.
+- Fix bug in `canary-provider-cloud` that does not dispatch updated sources to the root store.
