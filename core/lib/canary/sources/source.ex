@@ -42,6 +42,11 @@ defmodule Canary.Sources.Source do
   actions do
     defaults [:read, update: [:state, :last_fetched_at, :name, :overview, :config]]
 
+    read :find_with_project_public_key do
+      argument :project_public_key, :string, allow_nil?: false
+      filter expr(project.public_key == ^arg(:project_public_key))
+    end
+
     create :create do
       primary? true
 

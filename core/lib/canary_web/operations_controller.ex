@@ -2,18 +2,17 @@ defmodule CanaryWeb.OperationsController do
   use CanaryWeb, :controller
   require Ash.Query
 
-  plug :find_project when action in [:search, :ask]
+  plug :find_sources when action in [:search, :ask]
 
-  defp find_project(conn, _opts) do
+  defp find_sources(conn, _opts) do
     err_msg = "no client found with the given key"
 
     with {:ok, token} <- get_token_from_header(conn),
-         {:ok, project} <-
-           Canary.Accounts.Project
-           |> Ash.Query.filter(public_key == ^token)
-           |> Ash.Query.build(load: [:sources])
-           |> Ash.read_one() do
-      conn |> assign(:current_project, project)
+         {:ok, sources} <-
+           Canary.Sources.Source
+           |> Ash.Query.for_read(:find_with_project_public_key, %{project_public_key: token})
+           |> Ash.read() do
+      conn |> assign(:sources, sources)
     else
       _ -> conn |> send_resp(401, err_msg) |> halt()
     end
@@ -27,12 +26,7 @@ defmodule CanaryWeb.OperationsController do
   end
 
   def search(conn, %{"query" => %{"text" => query, "tags" => tags}}) do
-    case Canary.Searcher.run(
-           conn.assigns.current_project.sources,
-           query,
-           tags: tags,
-           cache: cache?()
-         ) do
+    case Canary.Searcher.run(conn.assigns.sources, query, tags: tags, cache: cache?()) do
       {:ok, matches} ->
         data = %{
           matches: matches,
@@ -65,7 +59,7 @@ defmodule CanaryWeb.OperationsController do
 
     Task.start_link(fn ->
       Canary.Interactions.Responder.run(
-        conn.assigns.current_project.sources,
+        conn.assigns.sources,
         query,
         fn data -> send(here, data) end,
         tags: tags,
