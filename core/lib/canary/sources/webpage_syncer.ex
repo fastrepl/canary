@@ -29,7 +29,7 @@ defmodule Canary.Sources.Webpage.Syncer do
       inputs
       |> Enum.filter(fn %FetcherResult{} = input ->
         found = docs_existing |> Enum.find(fn existing -> url_eq?(existing, input) end)
-        found && not (hash_eq?(found, input) or tags_eq?(found, input))
+        found && not (hash_eq?(found, input) and tags_eq?(found, input))
       end)
 
     docs_for_update =
