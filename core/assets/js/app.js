@@ -31,6 +31,10 @@ import { parse } from "best-effort-json-parser";
 import * as Sentry from "@sentry/browser";
 import Tracker from "@openreplay/tracker";
 
+import hljs from "highlight.js/lib/core";
+import html from "highlight.js/lib/languages/xml";
+hljs.registerLanguage("html", html);
+
 import { SENTRY_KEY, OPENREPLAY_KEY } from "../config";
 
 if (SENTRY_KEY) {
@@ -66,6 +70,14 @@ let csrfToken = document
 let hooks = {
   ...getHooks(Components),
   Prompt: window.Prompt,
+  Highlight: {
+    mounted() {
+      hljs.highlightElement(this.el);
+    },
+    updated() {
+      hljs.highlightElement(this.el);
+    },
+  },
   BarChart: {
     title() {
       return this.el.dataset.title;
