@@ -55,6 +55,12 @@ export class CanaryProviderCloud extends LitElement {
     );
   }
 
+  private _meta() {
+    return {
+      version: __VERSION__,
+    };
+  }
+
   search: SearchFunction = async (query, signal) => {
     const params = {
       method: "POST",
@@ -62,7 +68,7 @@ export class CanaryProviderCloud extends LitElement {
         "Content-Type": "application/json",
         Authorization: `Bearer ${this.projectKey || this.apiKey}`,
       },
-      body: JSON.stringify({ query }),
+      body: JSON.stringify({ query, meta: this._meta() }),
       signal,
     };
 
@@ -82,7 +88,7 @@ export class CanaryProviderCloud extends LitElement {
         "Content-Type": "application/json",
         Authorization: `Bearer ${this.projectKey || this.apiKey}`,
       },
-      body: JSON.stringify({ query }),
+      body: JSON.stringify({ query, meta: this._meta() }),
       signal,
     });
 

@@ -60,6 +60,9 @@ const components = [
 ].map((name) => `components/${name}`);
 
 export default defineConfig({
+  define: {
+    __VERSION__: JSON.stringify(process.env.npm_package_version),
+  },
   test: {
     environmentMatchGlobs: [["./src/store/*.test.ts", "happy-dom"]],
   },
