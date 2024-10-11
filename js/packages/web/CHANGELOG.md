@@ -1,5 +1,11 @@
 # @getcanary/web
 
+## 1.0.7
+
+### Patch Changes
+
+- Add optional picomatch's options field in TabDefinition.
+
 ## 1.0.6
 
 ### Patch Changes

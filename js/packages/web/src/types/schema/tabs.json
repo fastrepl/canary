@@ -10,6 +10,10 @@
       },
       "pattern": {
         "type": "string"
+      },
+      "options": {
+        "type": "object",
+        "description": "https://github.com/micromatch/picomatch?tab=readme-ov-file#options"
       }
     },
     "required": ["name", "pattern"],

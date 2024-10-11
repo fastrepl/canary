@@ -22,7 +22,7 @@
     "vue": "^3.4.35"
   },
   "dependencies": {
-    "@getcanary/web": "^1.0.6",
+    "@getcanary/web": "^1.0.7",
     "@mux/blurup": "^0.2.3",
     "@mux/mux-player": "^3.0.0",
     "@unocss/reset": "^0.63.3",

@@ -8,4 +8,10 @@
 export type TabDefinitions = {
   name: string;
   pattern: string;
+  /**
+   * https://github.com/micromatch/picomatch?tab=readme-ov-file#options
+   */
+  options?: {
+    [k: string]: unknown;
+  };
 }[];

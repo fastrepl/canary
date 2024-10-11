@@ -37,8 +37,10 @@ export class CanaryFilterTabsGlob extends LitElement {
           filter: {
             args: { tab: this._selected },
             fn: (matches, { tab }: { tab: string }) => {
-              const { pattern } = this.tabs.find(({ name }) => name === tab)!;
-              const matcher = pm(pattern);
+              const { pattern, options } = this.tabs.find(
+                ({ name }) => name === tab,
+              )!;
+              const matcher = pm(pattern, options);
 
               return matches.filter((m) => {
                 let target = "";
