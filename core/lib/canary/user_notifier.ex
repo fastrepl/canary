@@ -103,24 +103,28 @@ defmodule Canary.UserNotifier.NewUserEmailConfirmation do
 
   @impl AshAuthentication.Sender
   def send(%Canary.Accounts.User{} = user, token, opts) do
-    action_type = opts[:changeset] |> Map.get(:action_type)
+    if Application.get_env(:canary, :self_host) do
+      :ok
+    else
+      action_type = opts[:changeset] |> Map.get(:action_type)
 
-    assigns = %{
-      user: user,
-      url: url(~p"/auth/user/confirm_new_user?#{[confirm: token]}"),
-      action_type: action_type
-    }
+      assigns = %{
+        user: user,
+        url: url(~p"/auth/user/confirm_new_user?#{[confirm: token]}"),
+        action_type: action_type
+      }
 
-    {html, text} = render_content(&tpl/1, assigns)
+      {html, text} = render_content(&tpl/1, assigns)
 
-    deliver(%{
-      to: to_string(user.email),
-      subject: "Canary: Email Confirmation",
-      html_body: html,
-      text_body: text
-    })
+      deliver(%{
+        to: to_string(user.email),
+        subject: "Canary: Email Confirmation",
+        html_body: html,
+        text_body: text
+      })
 
-    :ok
+      :ok
+    end
   end
 
   defp tpl(assigns) do

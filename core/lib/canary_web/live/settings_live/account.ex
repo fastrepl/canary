@@ -16,8 +16,16 @@ defmodule CanaryWeb.SettingsLive.Account do
           form_control={%{label: "Email"}}
           is_large
           is_full_width
+          caption={
+            fn ->
+              cond do
+                Application.get_env(:canary, :self_host) -> ""
+                is_nil(@current_user.confirmed_at) -> "Email NOT confirmed"
+                true -> "Email confirmed"
+              end
+            end
+          }
         />
-
         <div class="flex flex-row gap-2 justify-end">
           <Primer.button type="button" phx-click="destroy" is_danger>
             Delete
