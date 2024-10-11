@@ -7,9 +7,8 @@ import { data } from "@data/url_cloud.data";
 const loaded = ref(false);
 
 const tabs = ref([
-  { name: "All", pattern: "**/*" },
-  { name: "Local", pattern: "**/local/**" },
-  { name: "Cloud", pattern: "**/cloud/**" }
+  { name: "Docs", pattern: "getcanary.dev/**" },
+  { name: "Github", pattern: "github.com/**" },
 ]);
 
 const tags = ref(["Local", "Cloud"].join(","));
@@ -51,15 +50,15 @@ All providers support this type of filtering.
 ```
 
 <canary-root framework="vitepress" query="vitepress" v-if="loaded">
-  <canary-provider-vitepress-minisearch :localeIndex="localeIndex">
+  <canary-provider-cloud :api-base="data.base" :project-key="data.key">
     <canary-content>
-        <canary-input slot="input"></canary-input>
-        <canary-search slot="mode">
-          <canary-filter-tabs-glob slot="head" :tabs="JSON.stringify(tabs)"></canary-filter-tabs-glob>
-          <canary-search-results slot="body"></canary-search-results>
-        </canary-search>
+      <canary-input slot="input"></canary-input>
+      <canary-search slot="mode">
+        <canary-filter-tabs-glob slot="head" :tabs="JSON.stringify(tabs)"></canary-filter-tabs-glob>
+        <canary-search-results slot="body"></canary-search-results>
+      </canary-search>
     </canary-content>
-  </canary-provider-vitepress-minisearch>
+  </canary-provider-cloud>
 </canary-root>
 
 ## `canary-filter-tags`
@@ -84,15 +83,11 @@ Two providers support this type of filtering.
 ```
 
 <canary-root framework="vitepress" query="vitepress" v-if="loaded">
-  <canary-provider-cloud
-    :project-key="data.key"
-    :api-base="data.base"
-    sources="canary_webpage"
-  >
+  <canary-provider-cloud :api-base="data.base" :project-key="data.key">
     <canary-content>
+      <canary-filter-tags slot="head" :tags="tags"></canary-filter-tags>
       <canary-input slot="input"></canary-input>
       <canary-search slot="mode">
-        <canary-filter-tags slot="head" :tags="tags"></canary-filter-tags>
         <canary-search-results slot="body"></canary-search-results>
       </canary-search>
     </canary-content>

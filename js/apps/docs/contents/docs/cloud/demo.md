@@ -29,20 +29,20 @@ onMounted(() => {
   });
 });
 
-const sourceGroups = ["canary", "dspy", "hono"] as const;
-const sourceGroup = ref<(typeof sourceGroups)[number]>(sourceGroups[0]);
 
-const sourceNames = computed(() => {
-  if (sourceGroup.value === "canary") {
-    return ["canary_webpage", "canary_issue"];
+const projects = ["canary", "dspy", "hono"] as const;
+const project = ref<(typeof projects)[number]>(projects[0]);
+const projectKey = computed(() => {
+  if (project.value === "canary") {
+    return cloud.key;
   }
 
-  if (sourceGroup.value === "dspy") {
-    return ["dspy_webpage", "dspy_issue", "dspy_discussion"];
+  if (project.value === "dspy") {
+    return "cpab9997bf";
   }
 
-  if (sourceGroup.value === "hono") {
-    return ["hono_webpage", "hono_issue"];
+  if (project.value === "hono") {
+    return cloud.key;
   }
 
   throw new Error();
@@ -51,19 +51,19 @@ const sourceNames = computed(() => {
 const tabs = ["UI", "Code"] as const;
 const tab = ref(tabs[0]);
 
-watch(sourceGroup, () => {
+watch(project, () => {
   tab.value = tabs[0];
 });
 
 const globs = computed(() => {
-  if (sourceGroup.value === "canary") {
+  if (project.value === "canary") {
     return JSON.stringify([
       { name: "Docs", pattern: "**/docs/**/*" },
       { name: "Github", pattern: "github.com/**/*" },
     ]);
   }
 
-  if (sourceGroup.value === "dspy") {
+  if (project.value === "dspy") {
     return JSON.stringify([
       { name: "Docs", pattern: "**/docs/**/*" },
       { name: "API", pattern: "**/api/**" },
@@ -71,7 +71,7 @@ const globs = computed(() => {
     ]);
   }
 
-  if (sourceGroup.value === "hono") {
+  if (project.value === "hono") {
     return JSON.stringify([
       { name: "Docs", pattern: "**/docs/**/!(api)/**/*" },
       { name: "API", pattern: "**/docs/api/**" },
@@ -83,9 +83,9 @@ const globs = computed(() => {
 const question = ref("");
 const questions = ref([]);
 
-watch(sourceGroup, () => {
-  if (sourceGroup.value === "canary") {
-    question.value = "vite";
+watch(project, () => {
+  if (project.value === "canary") {
+    question.value = "canary";
     questions.value = [
       "api-base",
       "vitepress supported?",
@@ -93,7 +93,7 @@ watch(sourceGroup, () => {
     ];
   }
 
-  if (sourceGroup.value === "dspy") {
+  if (project.value === "dspy") {
     question.value = "dspy";
     questions.value = [
       "colbert",
@@ -103,7 +103,7 @@ watch(sourceGroup, () => {
     ];
   }
 
-    if (sourceGroup.value === "hono") {
+    if (project.value === "hono") {
     question.value = "hono";
     questions.value = [
       "middleware",
@@ -128,7 +128,7 @@ watch(sourceGroup, () => {
   <hr class="my-1" />
   <div class="flex flex-row gap-4 items-center">
     <span class="text-sm font-semibold">Sources</span>
-    <Radio :values="sourceGroups" :selected="sourceGroup" @update:selected="sourceGroup = $event" />
+    <Radio :values="projects" :selected="project" @update:selected="project = $event" />
   </div>
   <hr class="my-1" />
   <div class="flex flex-row gap-4 items-center">
@@ -142,7 +142,7 @@ watch(sourceGroup, () => {
   <Tabs :values="tabs" :selected="tab" @update:selected="tab = $event" />
 
   <canary-root framework="vitepress" :key="question" :query="question" v-show="tab === 'UI'">
-    <canary-provider-cloud :api-base="cloud.base" :project-key="cloud.key" :sources="sourceNames">
+    <canary-provider-cloud :api-base="cloud.base" :project-key="projectKey">
       <canary-content>
         <canary-input slot="input"></canary-input>
         <canary-search slot="mode">

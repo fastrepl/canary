@@ -22,6 +22,22 @@ Take a look at our [CloudSearch.vue](https://github.com/fastrepl/canary/blob/mai
 </canary-root>
 ```
 
+::: details If you like the look-and feel of the VitePress's default search bar
+
+1. Import the component
+
+```js
+import VPNavBarSearchButton from "vitepress/dist/client/theme-default/components/VPNavBarSearchButton.vue";
+```
+
+2. Plug it in the "trigger" slot
+
+```html
+<VPNavBarSearchButton slot="trigger" />
+```
+
+:::
+
 ### Step 3: Modify the Layout
 
 ::: code-group

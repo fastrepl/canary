@@ -1,6 +1,3 @@
-canary-trigger-searchbar::part(button) {
-  background-color: var(--vp-code-block-bg);
-}
-canary-trigger-searchbar::part(kbd) {
-  background-color: var(--vp-code-bg);
+.VPNavBar .content .search {
+  display: none !important;
 }

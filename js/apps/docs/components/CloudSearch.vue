@@ -1,15 +1,24 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, onUnmounted, ref } from "vue";
+import VPNavBarSearchButton from "vitepress/dist/client/theme-default/components/VPNavBarSearchButton.vue";
+
 import { data } from "@data/url_cloud.data";
 
+const trigger = ref(null);
 const loaded = ref(false);
+
+const handleKeydown = (e: KeyboardEvent) => {
+  if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
+    e.preventDefault();
+    trigger.value.click();
+  }
+};
 
 onMounted(() => {
   Promise.all([
     import("@getcanary/web/components/canary-root.js"),
     import("@getcanary/web/components/canary-provider-cloud.js"),
     import("@getcanary/web/components/canary-modal.js"),
-    import("@getcanary/web/components/canary-trigger-searchbar.js"),
     import("@getcanary/web/components/canary-content.js"),
     import("@getcanary/web/components/canary-input.js"),
     import("@getcanary/web/components/canary-search.js"),
@@ -24,6 +33,12 @@ onMounted(() => {
   ]).then(() => {
     loaded.value = true;
   });
+
+  document.addEventListener("keydown", handleKeydown);
+});
+
+onUnmounted(() => {
+  document.removeEventListener("keydown", handleKeydown);
 });
 
 const tags = ["Local", "Cloud"].join(",");
@@ -39,15 +54,13 @@ const sources = ["canary_webpage", "canary_issue"];
 </script>
 
 <template>
-  <div class="w-full max-w-[300px] pl-4 mr-auto" v-if="loaded">
+  <div v-if="loaded">
     <canary-root framework="vitepress">
-      <canary-provider-cloud
-        :project-key="data.key"
-        :api-base="data.base"
-        :sources="sources"
-      >
+      <canary-provider-cloud :project-key="data.key" :api-base="data.base">
         <canary-modal>
-          <canary-trigger-searchbar slot="trigger"></canary-trigger-searchbar>
+          <div ref="trigger" slot="trigger">
+            <VPNavBarSearchButton />
+          </div>
           <canary-content slot="content">
             <canary-filter-tags
               slot="head"
@@ -85,5 +98,11 @@ canary-root {
   --canary-content-max-height: 500px;
   --canary-color-primary-c: 0.05;
   --canary-color-primary-h: 90;
+}
+
+@media (min-width: 768px) {
+  .DocSearch-Button {
+    background-color: var(--vp-c-bg-alt) !important;
+  }
 }
 </style>

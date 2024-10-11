@@ -6,7 +6,8 @@
     >
     that your
     <span class="underline text-yellow-500">users love to use.</span>
-    <br />Optimized for techincal docs
-    <span class="underline text-yellow-500">with AI.</span>
+    <br />
+    Open-source, crafted for
+    <span class="underline text-yellow-500">techincal docs.</span>
   </h1>
 </template>

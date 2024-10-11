@@ -2,7 +2,7 @@
 title: Building Plugins in the DOM with Web Components
 date: 2024-10-08
 author: Yujong Lee
-draft: false
+draft: true
 
 next: false
 sidebar: false
@@ -44,9 +44,45 @@ So it should look something like this:
 
 :::
 
-Overtime, this idea evolved and enabled interesting plugin-like API for building a search-bar.
+Overtime, this idea evolved and enabled interesting plugin-like API for building a search-bar. This blog post walks through the implementation, and what other options we considered.
 
-Specifically, we're using [Context Protocol](https://github.com/webcomponents-cg/community-protocols/blob/main/proposals/context.md) and [Lit Components](https://lit.dev/docs/data/context/).
+## The implementation
+
+We used [Context Protocol](https://github.com/webcomponents-cg/community-protocols/blob/main/proposals/context.md) and [Lit Components](https://lit.dev/docs/data/context/).
+
+in `canaey-X-provider`, it dispatch `operations` in the `connectedCallback`.
+
+```js
+connectedCallback() {
+  super.connectedCallback();
+  this.dispatchEvent(
+    createEvent({
+      type: "register_operations",
+      data: { search: this.search, ask: this.ask },
+    }),
+  );
+}
+```
+
+```ts
+export const EVENT_NAME = "canary-broadcast";
+
+export type Event = Parameters<ReturnType<typeof createStore>["send"]>[0];
+
+export const createEvent = (event: Event) => {
+  return new CustomEvent<Event>(EVENT_NAME, {
+    detail: event,
+    composed: true,
+    bubbles: true,
+  });
+};
+
+declare global {
+  interface HTMLElementEventMap {
+    [EVENT_NAME]: CustomEvent<Event>;
+  }
+}
+```
 
 ## Why we need Context
 

@@ -20,11 +20,14 @@ export class CanaryFilterTags extends LitElement {
   tags: string[] = [];
 
   /**
-   * @attr {object} url-sync - sync tags with URL
+   * @attr {object} url-sync - if provided, sync tags with URL with the given pattern
    */
   @property({ type: Object, attribute: "url-sync" })
   syncURL?: TagUrlSyncDefinition;
 
+  /**
+   * @attr {object} local-storage-key - if provided, persist tags in local storage
+   */
   @property({ type: String, attribute: "local-storage-key" })
   localStorageKey?: string;
 

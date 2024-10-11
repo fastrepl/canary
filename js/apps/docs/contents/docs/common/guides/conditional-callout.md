@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { useData } from "vitepress";
+import { data } from "@data/url_cloud.data";
 
 const loaded = ref(false);
 
@@ -30,7 +31,7 @@ const { localeIndex } = useData();
 ```
 
 <canary-root framework="vitepress" query="is there a discord channel?" v-if="loaded">
-  <canary-provider-vitepress-minisearch :localeIndex="localeIndex">
+  <canary-provider-cloud :api-base="data.base" :project-key="data.key">
     <canary-content>
         <canary-input slot="input"></canary-input>
         <canary-search slot="mode">
@@ -38,7 +39,7 @@ const { localeIndex } = useData();
           <canary-search-results slot="body"></canary-search-results>
         </canary-search>
     </canary-content>
-  </canary-provider-vitepress-minisearch>
+  </canary-provider-cloud>
 </canary-root>
 
 <style scoped>

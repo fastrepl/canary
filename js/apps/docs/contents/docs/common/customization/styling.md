@@ -24,21 +24,15 @@ import Styling from "@components/Styling.vue";
 <Styling />
 </div>
 
-::: details Available CSS Variables
+<br />
 
-<!--@include: ./styling.variables.md-->
-
-:::
+Available CSS Variables can be found in [reference](/docs/reference/components).
 
 ## CSS Parts
 
 You can use [`::part CSS pseudo-element`](https://developer.mozilla.org/en-US/docs/Web/CSS/::part) to style Canary's components.
 
-::: details Available Parts
-
-<!--@include: ./styling.parts.md-->
-
-:::
+Available CSS parts can be found in [reference](/docs/reference/components).
 
 ## Light / Dark Mode
 
@@ -50,4 +44,4 @@ You can use [`::part CSS pseudo-element`](https://developer.mozilla.org/en-US/do
 
 Each documentation framework has its own way to add theme information to the dom. By providing `framework` attribute, `canary-root` will handle the theme for you.
 
-Currently we support `docusaurus`, `vitepress`, and `starlight`.
+Currently we support `docusaurus`, `vitepress`, `nextra`, and `starlight`.

@@ -17,6 +17,24 @@ const NAME = "canary-trigger-searchbar";
  * @csspart kbd - kbd
  * @cssprop --canary-trigger-searchbar-max-width - Max width
  * @cssprop --canary-trigger-searchbar-height - Height
+ * @description
+ * This component probably has the most customization needs.
+ *
+ * You can use existing CSS parts, like below:
+ *
+ * ```css
+ * canary-trigger-searchbar::part(button) {
+ *   background-color: var(--vp-code-block-bg);
+ * }
+ * canary-trigger-searchbar::part(kbd) {
+ *   background-color: var(--vp-code-bg);
+ * }
+ *
+ * But in most cases, you'll want to bring your own, and plug it in the "trigger" slot.
+ *
+ * ```html
+ * <YourComponent slot="trigger" />
+ * ```
  */
 @registerCustomElement(NAME)
 export class CanaryTriggerSearchbar extends LitElement {

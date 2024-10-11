@@ -119,6 +119,10 @@ const sidebar = [
           },
         ],
       },
+      {
+        text: "Self-host",
+        link: "/docs/cloud/self-host",
+      },
     ],
   },
   {
@@ -215,12 +219,6 @@ export default defineConfig({
     resolve: {
       alias: [
         {
-          find: /^.*\/VPNavBarSearch\.vue$/,
-          replacement: fileURLToPath(
-            new URL("../components/Empty.vue", import.meta.url),
-          ),
-        },
-        {
           find: "@components",
           replacement: fileURLToPath(new URL("../components", import.meta.url)),
         },
@@ -235,17 +233,17 @@ export default defineConfig({
     },
   },
   themeConfig: {
-    search: { provider: "local" },
+    // search: { provider: "local" },
     // https://vitepress.dev/reference/default-theme-config
     siteTitle: "🐤 Canary",
     nav: [
-      { text: "Blog", link: "/blog" },
+      { text: "💡 Blog", link: "/blog" },
       {
         text: "⭐ GitHub",
         link: "https://github.com/fastrepl/canary",
       },
       {
-        text: "Discord",
+        text: "💬 Discord",
         link: "https://discord.gg/Y8bJkzuQZU",
       },
     ],

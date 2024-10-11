@@ -24,7 +24,7 @@ ul {
 
 li {
   cursor: pointer;
-  padding: 16px 12px;
+  padding: 16px 12px 12px 12px;
   border: 1px solid var(--vp-c-divider);
   border-radius: 8px;
   background-color: var(--vp-c-bg-soft);
