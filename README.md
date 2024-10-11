@@ -55,6 +55,9 @@
   <a href="https://stackblitz.com/edit/canary?file=index.html" target="_blank">
     <img src="https://developer.stackblitz.com/img/open_in_stackblitz_small.svg" alt="Stackblitz">
   </a>
+  <a href="https://getcanary.dev/docs/why.html#tiny-components-that-works-anywhere" target="_blank">
+    <img src="https://img.shields.io/badge/size_comparison-black?labelColor=black" alt="Chart">
+  </a>
   <a href="https://discord.gg/Y8bJkzuQZU" target="_blank">
     <img src="https://img.shields.io/static/v1?label=Join%20our&message=Discord&color=blue&logo=Discord&style=flat" alt="Discord">
   </a>
