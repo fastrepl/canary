@@ -12,6 +12,8 @@ defmodule CanaryWeb.Endpoint do
     same_site: "Lax"
   ]
 
+  plug CanaryWeb.Plug.Health
+
   socket "/live", Phoenix.LiveView.Socket,
     websocket: [connect_info: [session: @session_options]],
     longpoll: [connect_info: [session: @session_options]]
@@ -50,8 +52,6 @@ defmodule CanaryWeb.Endpoint do
     at: "/webhook/stripe",
     handler: CanaryWeb.StripeWebhookHandler,
     secret: {Application, :get_env, [:canary, :stripe_webhook_secret]}
-
-  plug Plug.Telemetry, event_prefix: [:phoenix, :endpoint]
 
   plug Plug.Parsers,
     parsers: [:urlencoded, :multipart, :json],
