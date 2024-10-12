@@ -93,7 +93,7 @@ const config = {
 When you add `@getcanary/docusaurus-theme-search-pagefind` to the `themes` list, it will override the default search component to use Canary's. To customize this search-bar further, you can [eject](https://docusaurus.io/docs/swizzling#ejecting) it and modify the code.
 
 ```bash
-npm run swizzle @getcanary/docusaurus-theme-search-pagefind SearchBar -- --eject
+npm run swizzle docusaurus-theme-search-pagefind SearchBar -- --eject
 ```
 
 ::: code-group
