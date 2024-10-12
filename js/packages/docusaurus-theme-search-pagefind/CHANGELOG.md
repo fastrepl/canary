@@ -1,5 +1,11 @@
 # @getcanary/docusaurus-theme-search-pagefind
 
+## 1.0.2
+
+### Patch Changes
+
+- Add default css for `canary-trigger-searchbar`.
+
 ## 1.0.1
 
 ### Patch Changes

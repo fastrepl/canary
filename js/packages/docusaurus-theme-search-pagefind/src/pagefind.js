@@ -5,9 +5,49 @@ import micromatch from "micromatch";
 import { parse, serialize } from "parse5";
 import cliProgress from "cli-progress";
 
+/**
+ * @typedef PagefindRanking
+ * @property {number} pageLength
+ * @property {number} termFrequency
+ * @property {number} termSimilarity
+ * @property {number} termSaturation
+ *
+ * @typedef PagefindOptions
+ * @property {PagefindRanking} ranking
+ *
+ * @typedef {Object} TagDefinition
+ * @property {string} name
+ * @property {string} pattern
+ * @property {Object} [options] - https://github.com/micromatch/micromatch?tab=readme-ov-file#options
+ *
+ * @typedef {Object} TabDefinitions
+ * @property {string} name
+ * @property {string} pattern
+ * @property {Object} [options] - https://github.com/micromatch/picomatch?tab=readme-ov-file#options
+ *
+ * @typedef {Object} Options
+ * @description Some of these are used in this plugin, and some are passed to `canary-provider-pagefind`.
+ * @property {PagefindRanking} [pagefind]
+ * @property {Array<string>} [includeRoutes]
+ * @property {Array<string>} [excludeRoutes]
+ * @property {Record<string, string>} [styles]
+ * @property {Array<TabDefinitions>} [tabs]
+ * @property {Array<TagDefinition>} [tags]
+ * @property {boolean} [verbose]
+ * @property {number} [maxPages]
+ * @property {number} [maxSubResults]
+ * @property {string} [path]
+ * @property {string} [_base]
+ * @property {string} [_replace]
+ *
+ * @param {Options} options
+ */
 export const buildIndex = async (outDir, docs, options) => {
   const { createIndex, close } = await import("pagefind");
-  const { index } = await createIndex();
+  const { index } = await createIndex({
+    rootSelector: "html",
+    verbose: !!options.verbose,
+  });
 
   const bar = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic);
   bar.start(docs.length, 0);
@@ -43,7 +83,10 @@ const getHTML = (doc, options) => {
   const { tags = [] } = options;
 
   const html = fs.readFileSync(doc.filePath, "utf-8");
-  const dom = parse(html);
+
+  if (tags.length === 0) {
+    return html;
+  }
 
   const matched = tags
     .filter(({ pattern, options }) =>
@@ -54,8 +97,10 @@ const getHTML = (doc, options) => {
     .map(({ name }) => name)
     .join(",");
 
-  // https://pagefind.app/docs/metadata/#specifying-metadata-inline
+  const dom = parse(html);
+
   dom.childNodes[1].attrs.push({
+    // https://pagefind.app/docs/metadata/#specifying-metadata-inline
     name: "data-pagefind-meta",
     value: `tags:${matched}`,
   });

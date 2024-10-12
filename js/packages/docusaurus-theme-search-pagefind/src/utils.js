@@ -57,5 +57,17 @@ export const getFilePaths = (routesPaths, outDir, baseUrl, options) => {
     addedFiles.add(filePath);
   }
 
+  fs.writeFileSync(
+    path.join(outDir, "addedFiles.json"),
+    JSON.stringify(Array.from(addedFiles)),
+  );
+
+  fs.writeFileSync(path.join(outDir, "files.json"), JSON.stringify(files));
+
+  fs.writeFileSync(
+    path.join(outDir, "routesPaths.json"),
+    JSON.stringify(routesPaths),
+  );
+
   return files;
 };

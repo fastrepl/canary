@@ -1,6 +1,6 @@
 {
   "name": "@getcanary/docusaurus-theme-search-pagefind",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": "yujonglee <yujonglee@fastrepl.com>",
   "license": "MIT",
   "main": "dist/index.js",
@@ -8,11 +8,12 @@
     "dist"
   ],
   "scripts": {
-    "build": "rm -rf dist && npm run transform && npm run copy && npm run format",
+    "build": "rm -rf dist && npm run transform && npm run jsdoc && npm run copy && npm run format",
     "copy": "cp -r src/theme dist",
     "transform": "esbuild src/**/*.js --outdir=dist --format=cjs --platform=node --allow-overwrite",
     "format": "prettier --write .",
-    "pub": "npm run build && npm publish --access public"
+    "pub": "npm run build && npm publish --access public",
+    "jsdoc": "npx jsdoc-to-markdown --json src/pagefind.js > dist/jsdoc.json"
   },
   "dependencies": {
     "@getcanary/web": "^1.0.0",
@@ -31,6 +32,7 @@
     "@types/cli-progress": "^3.11.6",
     "@types/micromatch": "^4.0.9",
     "esbuild": "^0.23.0",
+    "json-to-markdown": "^1.0.4",
     "parse5": "^7.1.2",
     "prettier": "^3.3.3"
   }

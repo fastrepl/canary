@@ -1,4 +1,5 @@
 import React from "react";
+import "./style.css";
 
 export default function Canary({ options }) {
   const [loaded, setLoaded] = React.useState(false);
@@ -23,9 +24,9 @@ export default function Canary({ options }) {
       ].filter(Boolean),
     )
       .then(() => setLoaded(true))
-      .catch((e) =>
-        console.error("Maybe you forgot to install '@getcanary/web'?", e),
-      );
+      .catch((e) => {
+        console.error("Maybe you forgot to install '@getcanary/web'?", e);
+      });
   }, []);
 
   if (!loaded) {

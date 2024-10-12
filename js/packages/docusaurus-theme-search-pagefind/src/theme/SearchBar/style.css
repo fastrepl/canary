@@ -1,0 +1,7 @@
+canary-trigger-searchbar::part(button) {
+  background-color: var(--ifm-background-color);
+}
+
+canary-trigger-searchbar::part(kbd) {
+  background-color: var(--ifm-background-color);
+}
