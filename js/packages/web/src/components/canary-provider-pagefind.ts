@@ -103,7 +103,17 @@ export class CanaryProviderPagefind extends LitElement {
     const matches: PagefindResult[] = await Promise.all(
       pages.slice(0, maxPages).map((r: any) => r.data()),
     ).then((results: PagefindResult[]) =>
-      results.filter(({ meta }) => !meta.tag || tags.includes(meta.tag)),
+      results.filter(({ meta }) => {
+        const pageTags = (meta.tags ?? "")
+          .split(",")
+          .map((tag: string) => tag.trim())
+          .filter(Boolean);
+
+        if (pageTags.length === 0) {
+          return true;
+        }
+        return pageTags.some((tag: string) => tags.includes(tag));
+      }),
     );
 
     signal.throwIfAborted();
