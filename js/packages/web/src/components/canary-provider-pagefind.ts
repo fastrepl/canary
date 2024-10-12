@@ -91,7 +91,7 @@ export class CanaryProviderPagefind extends LitElement {
 
   static styles = wrapper;
 
-  beforeSearch: BeforeSearchFunction = async (query) => {
+  beforeSearch: BeforeSearchFunction = async ({ text: query }) => {
     this._pagefind.preload(query);
   };
 
