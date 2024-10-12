@@ -25,7 +25,7 @@ export const getFilePaths = (routesPaths, outDir, baseUrl, options) => {
 
     const filePath = candidatePaths.find(fs.existsSync);
 
-    if (filePath && !fs.existsSync(filePath)) {
+    if (!filePath || !fs.existsSync(filePath)) {
       console.warn(
         `@getcanary/docusaurus-pagefind: could not resolve file for route '${route}', it will be missing in the search index`,
       );
