@@ -181,7 +181,7 @@ export default defineConfig({
           name: "og:description",
           content:
             pageData.frontmatter.layout === "home"
-              ? "Searchbar that your users love to use. Optimized for techincal docs with AI."
+              ? "Searchbar that your users love to use. Optimized for technical docs with AI."
               : pageData.frontmatter.description,
         },
       ],
@@ -201,7 +201,7 @@ export default defineConfig({
           name: "twitter:description",
           content:
             pageData.frontmatter.layout === "home"
-              ? "Searchbar that your users love to use. Optimized for techincal docs with AI."
+              ? "Searchbar that your users love to use. Optimized for technical docs with AI."
               : pageData.frontmatter.description,
         },
       ],

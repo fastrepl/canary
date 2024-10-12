@@ -8,6 +8,6 @@
     <span class="underline text-yellow-500">users love to use.</span>
     <br />
     Open-source, crafted for
-    <span class="underline text-yellow-500">techincal docs.</span>
+    <span class="underline text-yellow-500">technical docs.</span>
   </h1>
 </template>
