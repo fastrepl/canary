@@ -7,6 +7,10 @@
   "files": [
     "dist"
   ],
+  "exports": {
+    ".": "./dist/index.js",
+    "./jsdoc.json": "./dist/jsdoc.json"
+  },
   "scripts": {
     "build": "rm -rf dist && npm run transform && npm run jsdoc && npm run copy && npm run format",
     "copy": "cp -r src/theme dist",
