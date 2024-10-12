@@ -1,5 +1,14 @@
 # @getcanary/web
 
+## 1.0.8
+
+### Patch Changes
+
+- Fix pagefind index preloading.
+- Send package version as metadata in cloud operations.
+- Support opening search result URL in a new tab.
+- Support "tags" metadata in `canary-provider-pagefind`.
+
 ## 1.0.7
 
 ### Patch Changes

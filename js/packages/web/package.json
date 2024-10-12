@@ -1,6 +1,6 @@
 {
   "name": "@getcanary/web",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "license": "MIT",
   "type": "module",
   "main": "dist/components/canary-root.js",
