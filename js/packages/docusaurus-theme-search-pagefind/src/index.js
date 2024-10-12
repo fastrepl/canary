@@ -44,7 +44,7 @@ export default function plugin(context, options) {
     },
     async postBuild({ routesPaths = [], outDir, baseUrl }) {
       const docs = getFilePaths(routesPaths, outDir, baseUrl, options);
-      await buildIndex(outDir, docs);
+      await buildIndex(outDir, docs, options);
     },
     /**
      * @returns {WebpackConfiguration}

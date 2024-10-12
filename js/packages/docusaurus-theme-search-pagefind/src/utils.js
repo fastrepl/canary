@@ -53,7 +53,7 @@ export const getFilePaths = (routesPaths, outDir, baseUrl, options) => {
       continue;
     }
 
-    files.push({ url: route, path: filePath });
+    files.push({ url: route, relativePath, filePath: filePath });
     addedFiles.add(filePath);
   }
 

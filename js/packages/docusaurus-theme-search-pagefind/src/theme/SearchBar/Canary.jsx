@@ -14,6 +14,9 @@ export default function Canary({ options }) {
         import("@getcanary/web/components/canary-content"),
         import("@getcanary/web/components/canary-search"),
         import("@getcanary/web/components/canary-search-results"),
+        options?.tags?.length
+          ? import("@getcanary/web/components/canary-filter-tags")
+          : null,
         options?.tabs?.length
           ? import("@getcanary/web/components/canary-filter-tabs-glob")
           : null,
@@ -35,6 +38,13 @@ export default function Canary({ options }) {
         <canary-modal>
           <canary-trigger-searchbar slot="trigger"></canary-trigger-searchbar>
           <canary-content slot="content">
+            {options?.tags?.length ? (
+              <canary-filter-tags
+                slot="head"
+                tags={options.tags.map(({ name }) => name).join(",")}
+                local-storage-key="canary-filter-tags"
+              ></canary-filter-tags>
+            ) : null}
             <canary-input slot="input"></canary-input>
             <canary-search slot="mode">
               {options?.tabs?.length ? (
