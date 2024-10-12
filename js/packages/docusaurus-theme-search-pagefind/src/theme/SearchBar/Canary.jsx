@@ -45,7 +45,7 @@ export default function Canary({ options }) {
                 local-storage-key="canary-filter-tags"
               ></canary-filter-tags>
             ) : null}
-            <canary-input slot="input"></canary-input>
+            <canary-input slot="input" autofocus></canary-input>
             <canary-search slot="mode">
               {options?.tabs?.length ? (
                 <canary-filter-tabs-glob
