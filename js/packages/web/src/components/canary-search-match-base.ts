@@ -45,7 +45,14 @@ export class CanarySearchMatchBase extends LitElement {
     `;
   }
 
-  private _handleClick() {
+  private _handleClick(e: MouseEvent) {
+    e.stopPropagation();
+
+    if (e.metaKey || e.ctrlKey) {
+      window.open(this.url, "_blank");
+      return;
+    }
+
     this.dispatchEvent(
       new CustomEvent(MODAL_CLOSE_EVENT, { bubbles: true, composed: true }),
     );

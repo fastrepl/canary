@@ -71,6 +71,12 @@ export class CanarySearchMatchGithubIssue extends LitElement {
 
   private _handleClickSub(e: MouseEvent, url: string) {
     e.stopPropagation();
+
+    if (e.metaKey || e.ctrlKey) {
+      window.open(url, "_blank");
+      return;
+    }
+
     this.dispatchEvent(
       new CustomEvent(MODAL_CLOSE_EVENT, { bubbles: true, composed: true }),
     );
