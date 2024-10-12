@@ -30,7 +30,7 @@ onMounted(() => {
 });
 
 
-const projects = ["canary", "dspy", "hono"] as const;
+const projects = ["canary", "dspy", "litellm"] as const;
 const project = ref<(typeof projects)[number]>(projects[0]);
 const projectKey = computed(() => {
   if (project.value === "canary") {
@@ -41,8 +41,8 @@ const projectKey = computed(() => {
     return "cpab9997bf";
   }
 
-  if (project.value === "hono") {
-    return cloud.key;
+  if (project.value === "litellm") {
+    return "cp1a506f13";
   }
 
   throw new Error();
@@ -50,6 +50,7 @@ const projectKey = computed(() => {
 
 const tabs = ["UI", "Code"] as const;
 const tab = ref(tabs[0]);
+const tags = ref(null);
 
 watch(project, () => {
   tab.value = tabs[0];
@@ -65,16 +66,15 @@ const globs = computed(() => {
 
   if (project.value === "dspy") {
     return JSON.stringify([
-      { name: "Docs", pattern: "**/docs/**/*" },
+      { name: "Docs", pattern: "**/docs/**" },
       { name: "API", pattern: "**/api/**" },
       { name: "Github", pattern: "**/github.com/**" },
     ]);
   }
 
-  if (project.value === "hono") {
+  if (project.value === "litellm") {
     return JSON.stringify([
-      { name: "Docs", pattern: "**/docs/**/!(api)/**/*" },
-      { name: "API", pattern: "**/docs/api/**" },
+      { name: "Docs", pattern: "**/docs.litellm.ai/**" },
       { name: "Github", pattern: "**/github.com/**" },
     ]);
   }
@@ -85,31 +85,34 @@ const questions = ref([]);
 
 watch(project, () => {
   if (project.value === "canary") {
-    question.value = "canary";
+    question.value = "vitepress";
     questions.value = [
       "api-base",
       "vitepress supported?",
       "css variable for changing hue?",
     ];
+    tags.value = "Local,Cloud";
   }
 
   if (project.value === "dspy") {
-    question.value = "dspy";
+    question.value = "retrieval";
     questions.value = [
       "colbert",
       "filtering in retrieval?",
       "what is mi..ppro?",
       "built-in datasets list"
     ];
+    tags.value = null;
   }
 
-    if (project.value === "hono") {
-    question.value = "hono";
+    if (project.value === "litellm") {
+    question.value = "openai";
     questions.value = [
-      "middleware",
-      "can i deploy to cloudflare?",
-      "validate Content-Type not supported? not working",
+      "how to limit api cost?",
+      "what models are supported?",
+      "guardrails",
     ];
+    tags.value = "All,Proxy"
   }
 }, { immediate: true });
 </script>
@@ -144,6 +147,7 @@ watch(project, () => {
   <canary-root framework="vitepress" :key="question" :query="question" v-show="tab === 'UI'">
     <canary-provider-cloud :api-base="cloud.base" :project-key="projectKey">
       <canary-content>
+        <canary-filter-tags slot="head" :tags="tags" v-if="tags"></canary-filter-tags>
         <canary-input slot="input"></canary-input>
         <canary-search slot="mode">
           <canary-filter-tabs-glob slot="head" :tabs="globs"></canary-filter-tabs-glob>
@@ -163,7 +167,7 @@ watch(project, () => {
 ```html-vue{5-11}
 <canary-root framework="vitepress">
   <canary-provider-cloud api-base="<API_BASE>" project-key="<API_KEY>">
-    <canary-content>
+    <canary-content>{{ tags ? `\n      <canary-filter-tags slot="head" tags="${tags}"></canary-filter-tags>` : "" }}
       <canary-input slot="input"></canary-input>
       <canary-search slot="mode">
         <canary-filter-tabs-glob slot="head" tabs={JSON.stringify(tabs)}></canary-filter-tabs-glob>

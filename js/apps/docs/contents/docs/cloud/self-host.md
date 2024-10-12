@@ -8,13 +8,13 @@
 
 We have `Railway` template for self-hosting. which consists of `Canary Core`, `PostgreSQL`, and `Typesense`.
 
-
 The only code change needed is to set `api-base` to your self-hosted server.
 
+<!-- prettier-ignore -->
 ```html
 <canary-provider-cloud project-key=""> // [!code --]
-<canary-provider-cloud project-key="" api-base="<SELF_HOSTED_SERVER_URL>"> // [!code ++]
-    <!-- Rest of the code -->
+<canary-provider-cloud project-key="" api-base=<SELF_HOSTED_SERVER_URL>> // [!code ++]
+  <!-- Rest of the code -->
 </canary-provider-cloud>
 ```
 
