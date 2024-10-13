@@ -2,6 +2,7 @@ import { LitElement, css, html, nothing, type PropertyValues } from "lit";
 import { property, state } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 import { ifDefined } from "lit/directives/if-defined.js";
+import { createRef, ref, type Ref } from "lit/directives/ref.js";
 
 import { consume } from "@lit/context";
 import { queryContext, modeContext, executionContext } from "../contexts";
@@ -47,6 +48,8 @@ export class CanaryInput extends LitElement {
 
   private _loadingDebounceTimer: number | null = null;
 
+  private inputRef: Ref<HTMLInputElement> = createRef();
+
   updated(changed: PropertyValues) {
     if (changed.has("_execution")) {
       if (this._loadingDebounceTimer !== null) {
@@ -68,6 +71,16 @@ export class CanaryInput extends LitElement {
     }
   }
 
+  firstUpdated() {
+    // for firefox
+    if (this.autofocus) {
+      const input = this.inputRef.value!;
+      setTimeout(() => {
+        input.focus({ preventScroll: true });
+      }, 1);
+    }
+  }
+
   render() {
     return html`
       <div class="container" part="container">
@@ -75,6 +88,7 @@ export class CanaryInput extends LitElement {
           <div class="i-heroicons-magnifying-glass"></div>
         </slot>
         <input
+          ${ref(this.inputRef)}
           type="text"
           part="input"
           .value=${this._query.text}
