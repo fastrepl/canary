@@ -172,14 +172,28 @@ defmodule Canary.Index do
         filter_by: filter_by,
         sort_by: "_text_match:desc",
         highlight_fields: "content",
-        stopwords: Canary.Index.Stopword.id(),
         prioritize_exact_match: true,
-        prioritize_token_position: false,
+        prioritize_token_position: true,
         prioritize_num_matching_fields: false,
-        max_candidates: 4 * 4
+        max_candidates: 4 * 5,
+        min_len_1typo: 3,
+        min_len_2typo: 6
       }
+      |> add_stopwords(query)
       |> add_embedding_args(opts)
     end)
+  end
+
+  defp add_stopwords(args, query) do
+    if query
+       |> String.split(" ")
+       |> Enum.filter(&(&1 != ""))
+       |> length() < 2 do
+      args
+    else
+      args
+      |> Map.put(:stopwords, Canary.Index.Stopword.id())
+    end
   end
 
   defp add_embedding_args(args, opts) do

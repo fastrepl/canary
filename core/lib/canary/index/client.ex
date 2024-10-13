@@ -29,7 +29,7 @@ defmodule Canary.Index.Client do
         name: name,
         fields: fields,
         enable_nested_fields: true,
-        token_separators: [".", "-", "_"]
+        token_separators: [".", "-", "_", "@"]
       }
     )
     |> wrap()
