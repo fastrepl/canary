@@ -26,13 +26,13 @@ import Styling from "@components/Styling.vue";
 
 <br />
 
-Available CSS Variables can be found in [reference](/docs/reference/components).
+Available CSS Variables can be found in [reference](/docs/reference/web).
 
 ## CSS Parts
 
 You can use [`::part CSS pseudo-element`](https://developer.mozilla.org/en-US/docs/Web/CSS/::part) to style Canary's components.
 
-Available CSS parts can be found in [reference](/docs/reference/components).
+Available CSS parts can be found in [reference](/docs/reference/web).
 
 ## Light / Dark Mode
 

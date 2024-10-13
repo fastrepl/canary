@@ -6,25 +6,34 @@ import { parse, serialize } from "parse5";
 import cliProgress from "cli-progress";
 
 /**
- * @typedef PagefindRanking
+ * @typedef {Object} PagefindRanking
  * @property {number} pageLength
  * @property {number} termFrequency
  * @property {number} termSimilarity
  * @property {number} termSaturation
- *
- * @typedef PagefindOptions
+ */
+
+/**
+ * @typedef {Object} PagefindOptions
+ * @description - https://pagefind.app/docs/ranking/
  * @property {PagefindRanking} ranking
- *
+ */
+
+/**
  * @typedef {Object} TagDefinition
  * @property {string} name
  * @property {string} pattern
- * @property {Object} [options] - https://github.com/micromatch/micromatch?tab=readme-ov-file#options
- *
+ * @property {Object} [options] - https://github.com/micromatch/micromatch#options
+ */
+
+/**
  * @typedef {Object} TabDefinitions
  * @property {string} name
  * @property {string} pattern
- * @property {Object} [options] - https://github.com/micromatch/picomatch?tab=readme-ov-file#options
- *
+ * @property {Object} [options] - https://github.com/micromatch/picomatch#options
+ */
+
+/**
  * @typedef {Object} Options
  * @description Some of these are used in this plugin, and some are passed to `canary-provider-pagefind`.
  * @property {PagefindRanking} [pagefind]
@@ -39,7 +48,11 @@ import cliProgress from "cli-progress";
  * @property {string} [path]
  * @property {string} [_base]
  * @property {string} [_replace]
- *
+ */
+
+/**
+ * @param {string} outDir
+ * @param {Array<Document>} docs
  * @param {Options} options
  */
 export const buildIndex = async (outDir, docs, options) => {
@@ -64,21 +77,6 @@ export const buildIndex = async (outDir, docs, options) => {
   await close();
 };
 
-/**
- * @typedef {Object} Document
- * @property {string} url
- * @property {string} filePath
- * @property {string} relativePath
- *
- * @typedef {Object} TagDefinition
- * @property {string} name
- * @property {string} pattern
- * @property {Object} [options]
- *
- * @param {Document} doc
- * @param {object} options
- * @param {TagDefinition[]} options.tags
- */
 const getHTML = (doc, options) => {
   const { tags = [] } = options;
 

@@ -1,8 +1,11 @@
 <script setup lang="ts">
+    import { data as web } from "@data/version_web.data.js";
     import CEM from "@components/CEM.vue";
 </script>
 
-# Components
+# @getcanary/web
+
+[npm (@{{ web.version }})](https://www.npmjs.com/package/@getcanary/web)
 
 ::: tip
 

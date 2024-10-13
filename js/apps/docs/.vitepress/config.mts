@@ -130,16 +130,12 @@ const sidebar = [
     collapsed: false,
     items: [
       {
-        text: "Packages",
-        link: "/docs/reference/packages",
+        text: "@getcanary/docusa...",
+        link: "/docs/reference/docusaurus",
       },
       {
-        text: "Components",
-        link: "/docs/reference/components",
-      },
-      {
-        text: "Storybook",
-        link: "https://storybook.getcanary.dev",
+        text: "@getcanary/web",
+        link: "/docs/reference/web",
       },
     ],
   },

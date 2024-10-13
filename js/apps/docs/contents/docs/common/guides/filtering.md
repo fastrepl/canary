@@ -38,7 +38,7 @@ Currently we have **two built-in components** for filtering.
 
 ## `canary-filter-tabs-glob`
 
-[reference](/docs/reference/components#canary-filter-tabs-glob)
+[reference](/docs/reference/web#canary-filter-tabs-glob)
 
 All providers support this type of filtering.
 
@@ -63,7 +63,7 @@ All providers support this type of filtering.
 
 ## `canary-filter-tags`
 
-[reference](/docs/reference/components#canary-filter-tags)
+[reference](/docs/reference/web#canary-filter-tags)
 
 Two providers support this type of filtering.
 
