@@ -29,12 +29,8 @@ export class CanarySnippetTitle extends LitElement {
         color: var(--canary-color-gray-20);
         font-size: 1rem;
         font-weight: normal;
-        line-height: 1;
-
-        white-space: nowrap;
-        max-width: 300px;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        line-height: 1.2;
+        text-align: start;
       }
 
       mark {
