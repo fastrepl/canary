@@ -19,9 +19,11 @@ export class CanaryModal extends LitElement {
   private _ref = createRef<HTMLDialogElement>();
 
   render() {
+    console.log("transition in canary-modal.ts: ", this.transition);
+
     return html`
       <slot name="trigger" @click=${this._handleOpen}></slot>
-      <canary-dialog .ref=${this._ref} ?transition=${this.transition}>
+      <canary-dialog .ref=${this._ref} .transition=${this.transition}>
         <slot name="content" @modal-close=${this._handleModalClose}></slot>
       </canary-dialog>
     `;

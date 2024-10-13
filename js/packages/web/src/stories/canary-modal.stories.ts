@@ -41,3 +41,35 @@ export const Default: StoryObj = {
     await userEvent.click(trigger);
   },
 };
+
+export const OpenWithTransition: StoryObj = {
+  args: {},
+  render: () => {
+    return html`
+      <canary-modal
+        transition
+        style="
+          --canary-transition-duration: 0.5s; 
+          --canary-transition-timing: ease;
+        "
+      >
+        <canary-trigger-searchbar
+          data-testid="trigger"
+          slot="trigger"
+        ></canary-trigger-searchbar>
+        <canary-content slot="content">
+          <canary-input slot="input"></canary-input>
+          <canary-search slot="mode">
+            <canary-search-results slot="body"></canary-search-results>
+          </canary-search>
+        </canary-content>
+      </canary-modal>
+    `;
+  },
+  play: async ({ canvasElement }) => {
+    const trigger = shadow.getByShadowTestId(canvasElement, "trigger");
+    await userEvent.click(trigger);
+
+    await new Promise((resolve) => setTimeout(resolve, 500));
+  },
+};
