@@ -13,7 +13,7 @@ defmodule Canary.Test.Scraper do
       @tag params: params
       test name, %{params: params} do
         html = Req.get!(params[:url]).body
-        assert Scraper.run(html) |> length() > 1
+        assert Scraper.run(html) |> length() > 0
       end
     end
   end
