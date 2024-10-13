@@ -14,13 +14,14 @@ export const MODAL_CLOSE_EVENT = "modal-close";
 @registerCustomElement(NAME)
 export class CanaryModal extends LitElement {
   @property({ type: Boolean }) open = false;
+  @property({ type: Boolean }) transition = false;
 
   private _ref = createRef<HTMLDialogElement>();
 
   render() {
     return html`
       <slot name="trigger" @click=${this._handleOpen}></slot>
-      <canary-dialog .ref=${this._ref}>
+      <canary-dialog .ref=${this._ref} ?transition=${this.transition}>
         <slot name="content" @modal-close=${this._handleModalClose}></slot>
       </canary-dialog>
     `;
