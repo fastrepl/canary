@@ -1,5 +1,13 @@
 # @getcanary/web
 
+## 1.0.9
+
+### Patch Changes
+
+- Fix input.focus in Firefox.
+- Show matched item's title in multiple lines.
+- Replace badge with icon for GitHub item status.
+
 ## 1.0.8
 
 ### Patch Changes
