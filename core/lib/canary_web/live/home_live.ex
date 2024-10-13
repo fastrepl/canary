@@ -54,12 +54,15 @@ defmodule CanaryWeb.HomeLive do
     code = """
     <canary-root>
       <canary-provider-cloud project-key="#{project.public_key}" api-base="#{CanaryWeb.Endpoint.url()}">
-        <canary-content>
-          <canary-input slot="input"></canary-input>
-          <canary-search slot="mode">
-            <canary-search-results slot="body"></canary-search-results>
-          </canary-search>
-        </canary-content>
+        <canary-modal>
+          <canary-trigger-searchbar slot="trigger"></canary-trigger-searchbar>
+            <canary-content>
+              <canary-input slot="input"></canary-input>
+              <canary-search slot="mode">
+                <canary-search-results slot="body"></canary-search-results>
+              </canary-search>
+            </canary-content>
+        </canary-modal>
       </canary-provider-cloud>
     </canary-root>
     """
