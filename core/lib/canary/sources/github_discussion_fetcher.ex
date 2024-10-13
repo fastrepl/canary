@@ -67,6 +67,7 @@ defmodule Canary.Sources.GithubDiscussion.Fetcher do
                   avatarUrl
                 }
                 body
+                createdAt
               }
             }
           }

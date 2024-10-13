@@ -29,13 +29,15 @@ defmodule Canary.Index.Collection do
         :github_issue ->
           [
             %{name: "title", type: "string", stem: true},
-            %{name: "content", type: "string", stem: true}
+            %{name: "content", type: "string", stem: true},
+            %{name: "created_at", type: "int64"}
           ]
 
         :github_discussion ->
           [
             %{name: "title", type: "string", stem: true},
-            %{name: "content", type: "string", stem: true}
+            %{name: "content", type: "string", stem: true},
+            %{name: "created_at", type: "int64"}
           ]
       end
 

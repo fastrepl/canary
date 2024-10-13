@@ -61,6 +61,7 @@ defmodule Canary.Sources.GithubIssue.Fetcher do
               nodes {
                 id
                 url
+                createdAt
                 author {
                   login
                   avatarUrl

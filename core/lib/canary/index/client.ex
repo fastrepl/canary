@@ -93,4 +93,21 @@ defmodule Canary.Index.Client do
     )
     |> wrap()
   end
+
+  def update_documents_by_query(collection, filter_by, data) do
+    base()
+    |> Req.patch(
+      url: "/collections/#{collection}/documents?filter_by=#{filter_by}",
+      json: data
+    )
+  end
+
+  def update_collection(collection, fields) do
+    base()
+    |> Req.patch(
+      url: "/collections/#{collection}",
+      json: %{fields: fields}
+    )
+    |> wrap()
+  end
 end

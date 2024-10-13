@@ -37,7 +37,7 @@ defmodule Canary.Index.Document.GithubIssue do
   alias Canary.Index.Document.Shared
 
   @derive Jason.Encoder
-  defstruct Shared.top_level_fields() ++ [:title, :content]
+  defstruct Shared.top_level_fields() ++ [:title, :content, :created_at]
 end
 
 defmodule Canary.Index.Document.GithubIssue.Meta do
@@ -51,7 +51,7 @@ defmodule Canary.Index.Document.GithubDiscussion do
   alias Canary.Index.Document.Shared
 
   @derive Jason.Encoder
-  defstruct Shared.top_level_fields() ++ [:title, :content]
+  defstruct Shared.top_level_fields() ++ [:title, :content, :created_at]
 end
 
 defmodule Canary.Index.Document.GithubDiscussion.Meta do

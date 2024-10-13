@@ -39,6 +39,7 @@ defmodule Canary.Index do
       source_id: chunk.source_id,
       title: chunk.title || "",
       content: chunk.content || "",
+      created_at: DateTime.to_unix(chunk.created_at),
       tags: [],
       is_empty_tags: true,
       meta: meta
@@ -57,6 +58,7 @@ defmodule Canary.Index do
       source_id: chunk.source_id,
       title: chunk.title || "",
       content: chunk.content || "",
+      created_at: DateTime.to_unix(chunk.created_at),
       tags: [],
       is_empty_tags: true,
       meta: meta
@@ -146,32 +148,12 @@ defmodule Canary.Index do
   end
 
   defp build_args(sources, queries, opts) do
-    tags = opts[:tags]
-
     for(source <- sources, query <- queries, do: {source, query})
-    |> Enum.map(fn {%Source{id: source_id, config: %Ash.Union{type: type}}, query} ->
-      filter_by =
-        [
-          "source_id:=[#{source_id}]",
-          if(tags != nil and tags != []) do
-            "(tags:=[#{Enum.join(tags, ",")}] || is_empty_tags:=true)"
-          end
-        ]
-        |> Enum.reject(&is_nil/1)
-        |> Enum.join(" && ")
-
-      query_by = ["title", "content"] |> Enum.join(",")
-      query_by_weights = [3, 1] |> Enum.join(",")
-
+    |> Enum.map(fn {source, query} ->
       %{
-        collection: to_string(type),
         q: query,
         prefix: true,
-        query_by: query_by,
-        query_by_weights: query_by_weights,
-        filter_by: filter_by,
         sort_by: "_text_match:desc",
-        highlight_fields: "content",
         prioritize_exact_match: true,
         prioritize_token_position: true,
         prioritize_num_matching_fields: false,
@@ -179,9 +161,45 @@ defmodule Canary.Index do
         min_len_1typo: 3,
         min_len_2typo: 6
       }
+      |> add_source_specific(source, opts)
       |> add_stopwords(query)
       |> add_embedding_args(opts)
     end)
+  end
+
+  defp add_source_specific(args, %Source{id: id, config: %Ash.Union{type: type}}, opts) do
+    tags = opts[:tags]
+
+    highlight_fields = "content"
+
+    filter_by =
+      [
+        "source_id:=[#{id}]",
+        if(tags != nil and tags != []) do
+          "(tags:=[#{Enum.join(tags, ",")}] || is_empty_tags:=true)"
+        end
+      ]
+      |> Enum.reject(&is_nil/1)
+      |> Enum.join(" && ")
+
+    query_by = ["title", "content"] |> Enum.join(",")
+    query_by_weights = [3, 1] |> Enum.join(",")
+
+    sort_by =
+      case type do
+        :webpage -> "_text_match:desc"
+        :github_issue -> "_text_match(buckets: 2):desc,created_at:desc"
+        :github_discussion -> "_text_match(buckets: 2):desc,created_at:desc"
+        _ -> "_text_match:desc"
+      end
+
+    args
+    |> Map.put(:collection, to_string(type))
+    |> Map.put(:sort_by, sort_by)
+    |> Map.put(:filter_by, filter_by)
+    |> Map.put(:query_by, query_by)
+    |> Map.put(:query_by_weights, query_by_weights)
+    |> Map.put(:highlight_fields, highlight_fields)
   end
 
   defp add_stopwords(args, query) do
