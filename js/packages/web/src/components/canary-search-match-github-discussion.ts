@@ -1,5 +1,6 @@
 import { LitElement, html, css, nothing } from "lit";
 import { property } from "lit/decorators.js";
+import { classMap } from "lit/directives/class-map.js";
 
 import { registerCustomElement } from "../decorators";
 
@@ -31,20 +32,18 @@ export class CanarySearchMatchGithubDiscussion extends LitElement {
           url=${this.match.url}
           exportparts="container:match-item"
         >
-          <span slot="title-icon" class="i-octicon-mark-github-16"></span>
+          <span
+            slot="title-icon"
+            class=${classMap({
+              "i-octicon-discussion-closed-16": this.match.meta.answered,
+              "i-octicon-discussion-duplicate-16":
+                !this.match.meta.answered && this.match.meta.closed,
+              "i-octicon-comment-discussion-16":
+                !this.match.meta.answered && !this.match.meta.closed,
+            })}
+          ></span>
           <canary-snippet-title slot="title" .value=${this.match.title}>
           </canary-snippet-title>
-          <canary-badge slot="title-badge" .name=${"DISCUSSION"}>
-          </canary-badge>
-          <canary-badge
-            slot="title-badge"
-            .name=${this.match.meta.answered
-              ? "ANSWERED"
-              : this.match.meta.closed
-                ? "CLOSED"
-                : "OPEN"}
-          >
-          </canary-badge>
           <canary-snippet-excerpt slot="excerpt" .value=${this.match.excerpt}>
           </canary-snippet-excerpt>
           ${this._render_subs()}

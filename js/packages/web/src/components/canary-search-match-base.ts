@@ -117,6 +117,11 @@ export class CanarySearchMatchBase extends LitElement {
         align-items: center;
         gap: 8px;
       }
+
+      .title ::slotted([slot="title-icon"]) {
+        flex-shrink: 0;
+        opacity: 0.5;
+      }
     `,
   ];
 }
