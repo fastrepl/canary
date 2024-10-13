@@ -1,8 +1,8 @@
 import { LitElement, css, html } from "lit";
 import { property } from "lit/decorators.js";
-
 import { registerCustomElement } from "../decorators";
 import { ref, createRef, Ref } from "lit/directives/ref.js";
+import { classMap } from "lit/directives/class-map.js";
 
 const NAME = "canary-dialog";
 
@@ -15,12 +15,21 @@ const NAME = "canary-dialog";
 @registerCustomElement(NAME)
 export class CanaryDialog extends LitElement {
   @property({ attribute: false })
-  @property({ type: Boolean }) transition = false;
+  @property({ type: Boolean })
+  transition = false;
   ref: Ref<HTMLDialogElement> = createRef();
 
   render() {
+    const canaryDialogClasses = {
+      "with-transition": this.transition,
+    };
+
     return html`
-      <dialog ${ref(this.ref)} class=${this.transition ? 'with-transition' : ''} @click=${this.handleClick}>
+      <dialog
+        ${ref(this.ref)}
+        class=${classMap(canaryDialogClasses)}
+        @click=${this.handleClick}
+      >
         <slot></slot>
       </dialog>
     `;
@@ -54,8 +63,11 @@ export class CanaryDialog extends LitElement {
       }
 
       dialog.with-transition {
-        transition: opacity var(--canary-transition-duration, 0.5s) var(--canary-transition-timing, ease-in-out),
-                    transform var(--canary-transition-duration, 0.5s) var(--canary-transition-timing, ease-in-out);
+        transition:
+          opacity var(--canary-transition-duration, 0.5s)
+            var(--canary-transition-timing, ease-in-out),
+          transform var(--canary-transition-duration, 0.5s)
+            var(--canary-transition-timing, ease-in-out);
       }
 
       dialog.with-transition[open] {
