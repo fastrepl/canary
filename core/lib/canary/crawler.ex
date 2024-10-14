@@ -145,8 +145,28 @@ defmodule Canary.Crawler.Visitor do
   end
 
   defp fetch(url, state, _opts) do
-    with {:ok, response} <- Crawler.req() |> Req.get(url: url, receive_timeout: 7_000) do
-      {:ok, response, state}
+    puppeteer = Application.get_env(:canary, :puppeteer)
+
+    if puppeteer do
+      proxy_url =
+        URI.parse(puppeteer[:base_url])
+        |> Map.put(:path, "/api/render")
+        |> URI.to_string()
+
+      opts = [
+        url: proxy_url,
+        headers: [{"Authorization", "Bearer #{puppeteer[:api_key]}"}],
+        params: [url: url],
+        receive_timeout: 10_000
+      ]
+
+      with {:ok, response} <- Crawler.req() |> Req.get(opts) do
+        {:ok, response, state}
+      end
+    else
+      with {:ok, response} <- Crawler.req() |> Req.get(url: url, receive_timeout: 5_000) do
+        {:ok, response, state}
+      end
     end
   end
 
