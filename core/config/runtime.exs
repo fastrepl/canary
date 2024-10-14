@@ -214,3 +214,15 @@ if config_env() == :prod do
       otlp_headers: [{"Authorization", "Bearer #{System.fetch_env!("OTEL_COLLECTOR_URL_AUTH")}"}]
   end
 end
+
+if System.get_env("SELF_HOST") not in ~w(true 1) do
+  if [
+       "PUPPETEER_BASE_URL",
+       "PUPPETEER_API_KEY"
+     ]
+     |> Enum.any?(&System.get_env/1) do
+    config :canary, :puppeteer,
+      base_url: System.get_env("PUPPETEER_BASE_URL"),
+      api_key: System.get_env("PUPPETEER_API_KEY")
+  end
+end
