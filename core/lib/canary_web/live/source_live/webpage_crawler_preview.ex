@@ -66,7 +66,8 @@ defmodule CanaryWeb.SourceLive.WebpageCrawlerPreview do
       start_urls: config["start_urls"],
       url_include_patterns: config["url_include_patterns"] || [],
       url_exclude_patterns: config["url_exclude_patterns"] || [],
-      tag_definitions: config["tag_definitions"] || []
+      tag_definitions: config["tag_definitions"] || [],
+      js_render: config["js_render"] == "true"
     }
 
     self = self()

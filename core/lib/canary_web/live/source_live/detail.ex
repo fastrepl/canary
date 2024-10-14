@@ -160,6 +160,10 @@ defmodule CanaryWeb.SourceLive.Detail do
                     <Primer.octicon name="plus-16" />
                   </Primer.button>
                 </.form_group>
+
+                <.form_group header="JS Render">
+                  <.input type="checkbox" name={fc[:js_render].name} value={fc[:js_render].value} />
+                </.form_group>
               <% :github_issue -> %>
                 <Primer.text_input
                   form={fc}

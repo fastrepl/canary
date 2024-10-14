@@ -38,7 +38,6 @@ defmodule Canary.Crawler do
     |> Map.put(:query, nil)
     |> Map.put(:fragment, nil)
     |> URI.to_string()
-    |> URI.encode()
     |> String.replace_trailing("/", "")
   end
 
@@ -144,10 +143,11 @@ defmodule Canary.Crawler.Visitor do
     |> Hop.stream()
   end
 
-  defp fetch(url, state, _opts) do
+  defp fetch(url, state, opts) do
+    crawler_config = opts[:crawler_config]
     puppeteer = Application.get_env(:canary, :puppeteer)
 
-    if puppeteer do
+    if not is_nil(puppeteer) and crawler_config.js_render do
       proxy_url =
         URI.parse(puppeteer[:base_url])
         |> Map.put(:path, "/api/render")
@@ -208,7 +208,6 @@ defmodule Canary.Crawler.Visitor do
           |> Map.put(:query, nil)
           |> Map.put(:fragment, nil)
           |> URI.to_string()
-          |> URI.encode()
         end)
         |> Enum.reject(&(URI.parse(&1).host != URI.parse(url).host))
         |> Enum.uniq()
