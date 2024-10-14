@@ -49,8 +49,8 @@ export const OpenWithTransition: StoryObj = {
       <canary-modal
         transition
         style="
-          --canary-transition-duration: 0.5s; 
-          --canary-transition-timing: ease;
+          --canary-transition-duration: 0.8s; 
+          --canary-transition-timing: ease-in-out;
         "
       >
         <canary-trigger-searchbar

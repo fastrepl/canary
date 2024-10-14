@@ -23,7 +23,6 @@ export class CanaryDialog extends LitElement {
     const canaryDialogClasses = {
       "with-transition": this.transition,
     };
-    console.log("transition in canary-dialog.ts: ", this.transition);
 
     return html`
       <dialog
@@ -64,22 +63,25 @@ export class CanaryDialog extends LitElement {
       }
 
       dialog.with-transition {
-        border: 1px solid red;
         transition:
-          opacity var(--canary-transition-duration, 0.3s)
-            var(--canary-transition-timing, ease-in-out),
-          transform var(--canary-transition-duration, 0.3s)
-            var(--canary-transition-timing, ease-in-out);
+          opacity var(--canary-transition-duration, 0.5s)
+            var(--canary-transition-timing, allow-discrete),
+          transform var(--canary-transition-duration, 0.5s)
+            var(--canary-transition-timing, allow-discrete);
       }
 
       dialog.with-transition[open] {
         opacity: 1;
-        transform: translateY(0);
       }
 
       dialog.with-transition:not([open]) {
         opacity: 0;
-        transform: translateY(-20px);
+      }
+
+      @starting-style {
+        dialog.with-transition[open] {
+          opacity: 0;
+        }
       }
     `,
   ];
