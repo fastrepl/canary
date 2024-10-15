@@ -39,7 +39,7 @@ defmodule CanaryWeb.InsightLive do
     socket =
       socket
       |> assign_async(:search_volume, fn ->
-        case Canary.Analytics.pipe("search_volume", %{project_id: project_id}) do
+        case Canary.Analytics.query("search_volume", %{project_id: project_id}) do
           {:ok, data} ->
             labels = Enum.map(data, & &1["date"])
             points = Enum.map(data, & &1["count"])
@@ -47,7 +47,7 @@ defmodule CanaryWeb.InsightLive do
         end
       end)
       |> assign_async(:search_breakdown, fn ->
-        case Canary.Analytics.pipe("search_breakdown", %{project_id: project_id}) do
+        case Canary.Analytics.query("search_breakdown", %{project_id: project_id}) do
           {:ok, data} ->
             labels = Enum.map(data, & &1["group_leader"])
             points = Enum.map(data, & &1["query_count"])

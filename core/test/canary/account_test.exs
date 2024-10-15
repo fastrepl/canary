@@ -3,9 +3,6 @@ defmodule Canary.Test.Account do
   import Canary.AccountsFixtures
   import Canary.UsersFixtures
 
-  import Mox
-  setup :verify_on_exit!
-
   alias Canary.Accounts.Account
 
   test "add and remove member" do

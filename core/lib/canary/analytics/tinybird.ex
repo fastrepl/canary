@@ -1,4 +1,14 @@
 defmodule Canary.Analytics do
+  @callback ingest(source :: String.t(), data :: any()) :: {:ok, any()} | {:error, any()}
+  @callback query(source :: String.t(), args :: any()) :: {:ok, any()} | {:error, any()}
+
+  def ingest(source, data), do: impl().ingest(source, data)
+  def query(source, args), do: impl().query(source, args)
+
+  defp impl(), do: Application.get_env(:canary, :analytics, Canary.Analytics.Tinybird)
+end
+
+defmodule Canary.Analytics.Tinybird do
   defp client() do
     base_url = Application.get_env(:canary, :tinybird) |> Keyword.fetch!(:base_url)
     api_key = Application.get_env(:canary, :tinybird) |> Keyword.fetch!(:api_key)
@@ -64,8 +74,8 @@ defmodule Canary.Analytics do
     end
   end
 
-  def pipe(name, args) do
-    case client() |> Req.post(url: "/v0/pipes/#{name}.json", json: args) do
+  def query(source, args) do
+    case client() |> Req.post(url: "/v0/pipes/#{source}.json", json: args) do
       {:ok, %{status: 200, body: %{"data" => data}}} -> {:ok, data}
       error -> error
     end
