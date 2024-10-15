@@ -82,15 +82,16 @@ let hooks = {
       return JSON.parse(this.el.dataset.points);
     },
     mounted() {
+      /** @type {Chart} */
       const config = {
         type: "bar",
         data: {
           labels: this.labels(),
           datasets: [
             {
-              label: "Query Count",
               data: this.points(),
               backgroundColor: "#f4d47c",
+              barThickness: 24,
             },
           ],
         },
@@ -100,6 +101,11 @@ let hooks = {
           scales: {
             y: {
               beginAtZero: true,
+              ticks: {
+                format: {
+                  maximumFractionDigits: 0,
+                }
+              }
             },
           },
           plugins: {

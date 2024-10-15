@@ -64,7 +64,7 @@ defmodule Canary.Analytics do
     end
   end
 
-  def pipe(name, args) when name in ["search_breakdown"] and is_map(args) do
+  def pipe(name, args) do
     case client() |> Req.post(url: "/v0/pipes/#{name}.json", json: args) do
       {:ok, %{status: 200, body: %{"data" => data}}} -> {:ok, data}
       error -> error
