@@ -65,6 +65,7 @@ export class ExecutionManager {
   }
 
   async search(
+    sessionID: string,
     query: QueryContext,
     operations: OperationContext,
     filters: FiltersContext,
@@ -90,6 +91,7 @@ export class ExecutionManager {
 
       const result = await operations.search(
         query,
+        { session_id: sessionID },
         this._abortController.signal,
       );
 
@@ -113,6 +115,7 @@ export class ExecutionManager {
   }
 
   async ask(
+    sessionID: string,
     query: QueryContext,
     operations: OperationContext,
     _filters: FiltersContext,
@@ -137,6 +140,7 @@ export class ExecutionManager {
 
       await operations.ask(
         query,
+        { session_id: sessionID },
         this._handleDelta.bind(this),
         this._abortController.signal,
       );

@@ -31,14 +31,14 @@ describe("ExecutionManager", () => {
     "debounced $method",
     async ({ method, debounceMs }) => {
       const manager = createManager();
-      const fn = vi.fn().mockImplementation((_input, _signal) => {
+      const fn = vi.fn().mockImplementation((_input, _meta, _signal) => {
         return { matches: [] } as SearchFunctionResult;
       });
 
       expect(manager.ctx.status).toBe(TaskStatus.INITIAL);
 
       // moved to pending, but not executed yet
-      manager[method]({ text: "query", tags: [] }, { [method]: fn }, {});
+      manager[method]("", { text: "query", tags: [] }, { [method]: fn }, {});
       expect(manager.ctx.status).toBe(TaskStatus.PENDING);
       await vi.advanceTimersByTimeAsync(debounceMs - 50);
       expect(manager.ctx.status).toBe(TaskStatus.PENDING);
@@ -50,12 +50,12 @@ describe("ExecutionManager", () => {
       expect(fn).toHaveBeenCalledTimes(1);
 
       // multiple calls are ignored and only the last one is executed
-      manager[method]({ text: "query", tags: [] }, { [method]: fn }, {});
+      manager[method]("", { text: "query", tags: [] }, { [method]: fn }, {});
       expect(manager.ctx.status).toBe(TaskStatus.PENDING);
       await vi.advanceTimersByTimeAsync(debounceMs - 50);
-      manager[method]({ text: "query", tags: [] }, { [method]: fn }, {});
+      manager[method]("", { text: "query", tags: [] }, { [method]: fn }, {});
       await vi.advanceTimersByTimeAsync(debounceMs - 50);
-      manager[method]({ text: "query", tags: [] }, { [method]: fn }, {});
+      manager[method]("", { text: "query", tags: [] }, { [method]: fn }, {});
       await vi.advanceTimersByTimeAsync(debounceMs);
       expect(manager.ctx.status).toBe(TaskStatus.COMPLETE);
       expect(fn).toHaveBeenCalledTimes(1 + 1);
@@ -75,7 +75,7 @@ describe("ExecutionManager", () => {
         method === "search"
           ? vi
               .fn()
-              .mockImplementationOnce((_input, signal) => {
+              .mockImplementationOnce((_query, _meta, signal) => {
                 return new Promise((resolve) => {
                   setTimeout(() => {
                     expect(signal.aborted).toBe(true);
@@ -83,7 +83,7 @@ describe("ExecutionManager", () => {
                   }, LATENCY);
                 });
               })
-              .mockImplementationOnce((_input, signal) => {
+              .mockImplementationOnce((_query, _meta, signal) => {
                 return new Promise((resolve) => {
                   setTimeout(() => {
                     expect(signal.aborted).toBe(false);
@@ -93,7 +93,7 @@ describe("ExecutionManager", () => {
               })
           : vi
               .fn()
-              .mockImplementationOnce((_input, _delta, signal) => {
+              .mockImplementationOnce((_query, _meta, _delta, signal) => {
                 return new Promise((resolve) => {
                   setTimeout(() => {
                     expect(signal.aborted).toBe(true);
@@ -101,7 +101,7 @@ describe("ExecutionManager", () => {
                   }, LATENCY);
                 });
               })
-              .mockImplementationOnce((_input, _delta, signal) => {
+              .mockImplementationOnce((_query, _meta, _delta, signal) => {
                 return new Promise((resolve) => {
                   setTimeout(() => {
                     expect(signal.aborted).toBe(false);
@@ -112,10 +112,10 @@ describe("ExecutionManager", () => {
 
       expect(manager.ctx.status).toBe(TaskStatus.INITIAL);
 
-      manager[method]({ text: "query", tags: [] }, { [method]: fn }, {});
+      manager[method]("", { text: "query", tags: [] }, { [method]: fn }, {});
       expect(manager.ctx.status).toBe(TaskStatus.PENDING);
       await vi.advanceTimersByTimeAsync(debounceMs + 10);
-      manager[method]({ text: "query", tags: [] }, { [method]: fn }, {});
+      manager[method]("", { text: "query", tags: [] }, { [method]: fn }, {});
 
       await vi.advanceTimersByTimeAsync(LATENCY + 1);
 
@@ -129,7 +129,7 @@ describe("ExecutionManager", () => {
   test("pending", async () => {
     const manager = createManager();
     const operations = {
-      search: vi.fn().mockImplementation((_input, _signal) => {
+      search: vi.fn().mockImplementation((_input, _meta, _signal) => {
         return { matches: [] } as SearchFunctionResult;
       }),
       ask: vi.fn(),
@@ -138,7 +138,7 @@ describe("ExecutionManager", () => {
     expect(manager.ctx.status).toBe(TaskStatus.INITIAL);
 
     // immediately transition to pending
-    manager.search({ text: "query", tags: [] }, operations, {});
+    manager.search("", { text: "query", tags: [] }, operations, {});
     expect(manager.ctx.status).toBe(TaskStatus.PENDING);
 
     // finish search, back to complete
@@ -146,15 +146,15 @@ describe("ExecutionManager", () => {
     expect(manager.ctx.status).toBe(TaskStatus.COMPLETE);
 
     // keep staying pending if search frequent enough
-    manager.search({ text: "query", tags: [] }, operations, {});
+    manager.search("", { text: "query", tags: [] }, operations, {});
     expect(manager.ctx.status).toBe(TaskStatus.PENDING);
     await vi.advanceTimersByTimeAsync(SEARCH_DEBOUNCE_MS - 50);
     expect(manager.ctx.status).toBe(TaskStatus.PENDING);
-    manager.search({ text: "query", tags: [] }, operations, {});
+    manager.search("", { text: "query", tags: [] }, operations, {});
     expect(manager.ctx.status).toBe(TaskStatus.PENDING);
     await vi.advanceTimersByTimeAsync(SEARCH_DEBOUNCE_MS - 50);
     expect(manager.ctx.status).toBe(TaskStatus.PENDING);
-    manager.search({ text: "query", tags: [] }, operations, {});
+    manager.search("", { text: "query", tags: [] }, operations, {});
     await vi.advanceTimersByTimeAsync(SEARCH_DEBOUNCE_MS - 50);
     expect(manager.ctx.status).toBe(TaskStatus.PENDING);
 
@@ -163,20 +163,20 @@ describe("ExecutionManager", () => {
     expect(manager.ctx.status).toBe(TaskStatus.COMPLETE);
 
     // debounce timer resets since we do 'ask' after 'search'
-    manager.search({ text: "query", tags: [] }, operations, {});
+    manager.search("", { text: "query", tags: [] }, operations, {});
     await vi.advanceTimersByTimeAsync(SEARCH_DEBOUNCE_MS - 50);
     expect(manager.ctx.status).toBe(TaskStatus.PENDING);
-    manager.ask({ text: "query", tags: [] }, operations, {});
+    manager.ask("", { text: "query", tags: [] }, operations, {});
     await vi.advanceTimersByTimeAsync(ASK_DEBOUNCE_MS - 50);
     expect(manager.ctx.status).toBe(TaskStatus.PENDING);
     await vi.advanceTimersByTimeAsync(ASK_DEBOUNCE_MS - 50);
     expect(manager.ctx.status).toBe(TaskStatus.COMPLETE);
 
-    manager.ask({ text: "query", tags: [] }, operations, {});
+    manager.ask("", { text: "query", tags: [] }, operations, {});
     expect(manager.ctx.status).toBe(TaskStatus.PENDING);
     await vi.advanceTimersByTimeAsync(ASK_DEBOUNCE_MS - 50);
     expect(manager.ctx.status).toBe(TaskStatus.PENDING);
-    manager.ask({ text: "query", tags: [] }, operations, {});
+    manager.ask("", { text: "query", tags: [] }, operations, {});
     expect(manager.ctx.status).toBe(TaskStatus.PENDING);
     await vi.advanceTimersByTimeAsync(ASK_DEBOUNCE_MS + 50);
     expect(manager.ctx.status).toBe(TaskStatus.COMPLETE);

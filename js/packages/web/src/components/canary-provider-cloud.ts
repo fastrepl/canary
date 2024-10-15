@@ -61,14 +61,14 @@ export class CanaryProviderCloud extends LitElement {
     };
   }
 
-  search: SearchFunction = async (query, signal) => {
+  search: SearchFunction = async (query, meta, signal) => {
     const params = {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${this.projectKey || this.apiKey}`,
       },
-      body: JSON.stringify({ query, meta: this._meta() }),
+      body: JSON.stringify({ query, meta: { ...meta, ...this._meta() } }),
       signal,
     };
 
@@ -80,7 +80,7 @@ export class CanaryProviderCloud extends LitElement {
     return res.json();
   };
 
-  ask: AskFunction = async (query, handleDelta, signal) => {
+  ask: AskFunction = async (query, meta, handleDelta, signal) => {
     const url = `${this.apiBase}/api/v1/ask`;
     const req = new Request(url, {
       method: "POST",
@@ -88,7 +88,7 @@ export class CanaryProviderCloud extends LitElement {
         "Content-Type": "application/json",
         Authorization: `Bearer ${this.projectKey || this.apiKey}`,
       },
-      body: JSON.stringify({ query, meta: this._meta() }),
+      body: JSON.stringify({ query, meta: { ...meta, ...this._meta() } }),
       signal,
     });
 

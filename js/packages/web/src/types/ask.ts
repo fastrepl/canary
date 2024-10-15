@@ -1,7 +1,9 @@
 import type { QueryContext, AskResponse } from "./index";
+import type { Meta } from "./meta";
 
 export type AskFunction = (
-  payload: QueryContext,
+  query: QueryContext,
+  meta: Meta,
   handleDelta: (data: AskResponse) => void,
   signal: AbortSignal,
 ) => Promise<null>;

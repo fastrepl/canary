@@ -95,7 +95,7 @@ export class CanaryProviderPagefind extends LitElement {
     this._pagefind.preload(query);
   };
 
-  search: SearchFunction = async ({ text: query, tags }, signal) => {
+  search: SearchFunction = async ({ text: query, tags }, _meta, signal) => {
     const maxPages = this.options.maxPages ?? DEFAULT_MAX_PAGES;
 
     const { results: pages } = await this._pagefind.search(query);

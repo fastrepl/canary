@@ -12,9 +12,20 @@ import { ExecutionManager } from "./managers";
 import { MODE_ASK, MODE_SEARCH } from "../constants";
 import { applyFilters } from "../utils";
 
+const randomID = () => {
+  try {
+    return crypto.randomUUID();
+  } catch (e) {
+    return Array(2)
+      .fill(null)
+      .map(() => Math.random().toString(36).substring(2, 15))
+      .join("-");
+  }
+};
 export const createStore = (host: HTMLElement) =>
   store(
     {
+      session_id: randomID(),
       operation: new ContextProvider(host, {
         context: operationContext,
         initialValue: {},
@@ -99,6 +110,7 @@ export const createStore = (host: HTMLElement) =>
         if (data === MODE_SEARCH) {
           context.executionManager.abort();
           context.executionManager.search(
+            context.session_id,
             context.query.value,
             context.operation.value,
             context.filters.value,
@@ -107,6 +119,7 @@ export const createStore = (host: HTMLElement) =>
         if (data === MODE_ASK) {
           context.executionManager.abort();
           context.executionManager.ask(
+            context.session_id,
             context.query.value,
             context.operation.value,
             context.filters.value,
@@ -115,6 +128,7 @@ export const createStore = (host: HTMLElement) =>
 
         return {
           mode: context.mode,
+          session_id: randomID(),
         };
       },
       set_query: (context, { data }: { data: Partial<QueryContext> }) => {
@@ -123,6 +137,7 @@ export const createStore = (host: HTMLElement) =>
         context.mode.setValue({ ...context.mode.value, current: MODE_SEARCH });
 
         context.executionManager.search(
+          context.session_id,
           nextQuery,
           context.operation.value,
           context.filters.value,
@@ -131,6 +146,8 @@ export const createStore = (host: HTMLElement) =>
         return {
           query: context.query,
           mode: context.mode,
+          session_id:
+            nextQuery.text.length === 0 ? randomID() : context.session_id,
         };
       },
     },

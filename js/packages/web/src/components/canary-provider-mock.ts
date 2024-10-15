@@ -29,7 +29,7 @@ export class CanaryProviderMock extends LitElement {
 
   static styles = wrapper;
 
-  search: SearchFunction = async (_payload, _signal) => {
+  search: SearchFunction = async (_payload, _meta, _signal) => {
     await new Promise((resolve) =>
       setTimeout(resolve, Math.random() * 300 + 200),
     );
@@ -97,7 +97,7 @@ export class CanaryProviderMock extends LitElement {
     return { matches };
   };
 
-  ask: AskFunction = async (_payload, handleDelta, signal) => {
+  ask: AskFunction = async (_query, _meta, handleDelta, signal) => {
     let buffer = "";
     let index = 0;
     const totalLength = mockAskResponse.length;

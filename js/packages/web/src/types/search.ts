@@ -1,4 +1,5 @@
 import type { QueryContext } from "./context";
+import type { Meta } from "./meta";
 
 export type SearchResult = SearchResultBase & {
   sub_results: SearchSubResult[];
@@ -42,7 +43,8 @@ export type SearchFunctionResult = {
 };
 
 export type SearchFunction = (
-  payload: QueryContext,
+  query: QueryContext,
+  meta: Meta,
   signal: AbortSignal,
 ) => Promise<SearchFunctionResult>;
 
