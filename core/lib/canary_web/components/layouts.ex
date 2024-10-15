@@ -54,6 +54,13 @@ defmodule CanaryWeb.Layouts do
                     icon_active: "hero-document-solid"
                   },
                   %{
+                    url: "/insight",
+                    name: "Insight",
+                    tab: :insight,
+                    icon_inactive: "hero-eye",
+                    icon_active: "hero-eye-solid"
+                  },
+                  %{
                     url: "/settings",
                     name: "Settings",
                     tab: :settings,

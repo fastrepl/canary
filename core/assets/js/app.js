@@ -81,9 +81,6 @@ let hooks = {
     points() {
       return JSON.parse(this.el.dataset.points);
     },
-    counts() {
-      return JSON.parse(this.el.dataset.counts);
-    },
     mounted() {
       const config = {
         type: "bar",
@@ -91,29 +88,18 @@ let hooks = {
           labels: this.labels(),
           datasets: [
             {
-              axis: "y",
-              label: "score",
-              barThickness: 24,
+              label: "Query Count",
               data: this.points(),
-              fill: false,
-              borderWidth: 1,
               backgroundColor: "#f4d47c",
             },
           ],
         },
         options: {
-          indexAxis: "y",
           responsive: true,
           maintainAspectRatio: false,
           scales: {
-            x: {
-              reverse: this.points().every((score) => score <= 0),
-            },
             y: {
-              position: "left",
-              afterFit: (scaleInstance) => {
-                scaleInstance.width = 160;
-              },
+              beginAtZero: true,
             },
           },
           plugins: {
@@ -123,15 +109,6 @@ let hooks = {
             title: {
               display: !!this.title(),
               text: this.title(),
-            },
-            tooltip: {
-              callbacks: {
-                label: (context) => {
-                  const score = context.raw.toFixed(2);
-                  const count = this.counts()[context.dataIndex];
-                  return `score: ${score}, count: ${count}`;
-                },
-              },
             },
           },
         },

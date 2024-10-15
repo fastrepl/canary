@@ -12,7 +12,9 @@ defmodule CanaryWeb.OperationsController do
            Canary.Sources.Source
            |> Ash.Query.for_read(:find_with_project_public_key, %{project_public_key: token})
            |> Ash.read() do
-      conn |> assign(:sources, sources)
+      conn
+      |> assign(:sources, sources)
+      |> assign(:project_id, token)
     else
       _ -> conn |> send_resp(401, err_msg) |> halt()
     end
@@ -25,13 +27,23 @@ defmodule CanaryWeb.OperationsController do
     end
   end
 
-  def search(conn, %{"query" => %{"text" => query, "tags" => tags}}) do
+  def search(conn, %{"query" => %{"text" => query, "tags" => tags}} = params) do
     case Canary.Searcher.run(conn.assigns.sources, query, tags: tags, cache: cache?()) do
       {:ok, matches} ->
         data = %{
           matches: matches,
           suggestion: %{questions: Canary.Query.Sugestor.run!(query)}
         }
+
+        GenServer.cast(
+          Canary.Interactions.Processor,
+          {:search,
+           %{
+             query: query,
+             project_id: conn.assigns.project_id,
+             session_id: params["meta"]["session_id"]
+           }}
+        )
 
         conn
         |> put_resp_content_type("application/json")
