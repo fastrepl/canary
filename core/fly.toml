@@ -6,6 +6,7 @@
 app = "canary-prod"
 primary_region = "sjc"
 kill_signal = "SIGTERM"
+kill_timeout = 120
 
 [build]
   dockerfile = "Dockerfile"
