@@ -2,4 +2,4 @@
 "@getcanary/web": patch
 ---
 
-Add transition effects to the canary-modal component
+Add transition option to the `canary-modal` component

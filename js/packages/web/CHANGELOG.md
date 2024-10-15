@@ -1,5 +1,12 @@
 # @getcanary/web
 
+## 1.0.10
+
+### Patch Changes
+
+- Add transition option to the `canary-modal` component
+- Add `session_id` as search and ask metadata.
+
 ## 1.0.9
 
 ### Patch Changes
