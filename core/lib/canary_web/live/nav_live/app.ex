@@ -16,7 +16,7 @@ defmodule CanaryWeb.NaveLive.App do
       case socket.view do
         CanaryWeb.HomeLive -> :home
         CanaryWeb.SourceLive.Index -> :source
-        CanaryWeb.InsightLive -> :insight
+        CanaryWeb.InsightLive.Index -> :insight
         _ -> nil
       end
 

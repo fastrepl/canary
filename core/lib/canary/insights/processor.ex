@@ -1,10 +1,8 @@
-defmodule Canary.Interactions.Processor do
+defmodule Canary.Insights.Processor do
   @moduledoc """
-  Background processor for every interaction.
-
   Usage:
 
-  GenServer.cast(Canary.Interactions.Processor, {:search, %{session_id: "...", project_id: "...", query: "..."}})
+  GenServer.cast(Canary.Insights.Processor, {:search, %{session_id: "...", project_id: "...", query: "..."}})
   """
 
   use GenServer

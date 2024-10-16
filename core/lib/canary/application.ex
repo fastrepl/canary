@@ -27,7 +27,7 @@ defmodule Canary.Application do
 
     children =
       [
-        Canary.Interactions.Processor,
+        Canary.Insights.Processor,
         Canary.Vault,
         {Cachex, name: :cache},
         {Task.Supervisor, name: Canary.TaskSupervisor},

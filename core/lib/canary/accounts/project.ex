@@ -27,6 +27,7 @@ defmodule Canary.Accounts.Project do
   relationships do
     belongs_to :account, Canary.Accounts.Account, allow_nil?: false
     has_many :sources, Canary.Sources.Source
+    has_one :insights_config, Canary.Insights.Config
   end
 
   actions do

@@ -1,10 +1,10 @@
-defmodule Canary.Test.Interaction do
+defmodule Canary.Test.Insights do
   use ExUnit.Case, async: false
 
   import Mox
   setup :verify_on_exit!
 
-  alias Canary.Interactions.Processor
+  alias Canary.Insights.Processor
 
   describe "processor" do
     setup do

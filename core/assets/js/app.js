@@ -81,7 +81,7 @@ let hooks = {
     points() {
       return JSON.parse(this.el.dataset.points);
     },
-    mounted() {
+    render() {
       /** @type {Chart} */
       const config = {
         type: "bar",
@@ -103,6 +103,7 @@ let hooks = {
               beginAtZero: true,
               ticks: {
                 format: {
+                  minimumFractionDigits: 0,
                   maximumFractionDigits: 0,
                 }
               }
@@ -119,8 +120,14 @@ let hooks = {
           },
         },
       };
-
+  
       new Chart(this.el, config);
+    },
+    mounted() {
+      this.render();
+    },
+    updated() {
+      this.render();
     },
   },
   LocalTime: {

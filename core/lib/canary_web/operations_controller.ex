@@ -36,7 +36,7 @@ defmodule CanaryWeb.OperationsController do
         }
 
         GenServer.cast(
-          Canary.Interactions.Processor,
+          Canary.Insights.Processor,
           {:search,
            %{
              query: query,
