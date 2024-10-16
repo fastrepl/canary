@@ -11,6 +11,7 @@ defmodule CanaryWeb.NaveLive.Settings do
       case socket.view do
         CanaryWeb.SettingsLive.Account -> :account
         CanaryWeb.SettingsLive.Projects -> :projects
+        CanaryWeb.SettingsLive.Members -> :members
         CanaryWeb.SettingsLive.Billing -> :billing
         _ -> nil
       end

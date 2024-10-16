@@ -102,16 +102,13 @@ defmodule Canary.UserNotifier.NewUserEmailConfirmation do
   use AshAuthentication.Sender
 
   @impl AshAuthentication.Sender
-  def send(%Canary.Accounts.User{} = user, token, opts) do
+  def send(%Canary.Accounts.User{} = user, token, _opts) do
     if Application.get_env(:canary, :self_host) do
       :ok
     else
-      action_type = opts[:changeset] |> Map.get(:action_type)
-
       assigns = %{
         user: user,
-        url: url(~p"/auth/user/confirm_new_user?#{[confirm: token]}"),
-        action_type: action_type
+        url: url(~p"/auth/user/confirm_new_user?#{[confirm: token]}")
       }
 
       {html, text} = render_content(&tpl/1, assigns)
@@ -136,6 +133,45 @@ defmodule Canary.UserNotifier.NewUserEmailConfirmation do
 
       <p>
         <a href={@url}>Click here</a> to confirm your email address.
+      </p>
+    </.default_layout>
+    """
+  end
+end
+
+defmodule Canary.UserNotifier.MemberInvite do
+  import Phoenix.Component
+  import Canary.UserNotifier, only: [deliver: 1, render_content: 2, default_layout: 1]
+
+  use CanaryWeb, :verified_routes
+
+  def send(email) do
+    assigns = %{
+      email: email,
+      url: url(~p"/sign-in")
+    }
+
+    {html, text} = render_content(&tpl/1, assigns)
+
+    deliver(%{
+      to: to_string(email),
+      subject: "Canary: Member Invite",
+      html_body: html,
+      text_body: text
+    })
+
+    :ok
+  end
+
+  defp tpl(assigns) do
+    ~H"""
+    <.default_layout>
+      <p>
+        Hi <%= @email %>,
+      </p>
+
+      <p>
+        <a href={@url}>Click here</a> to accept the invitation.
       </p>
     </.default_layout>
     """

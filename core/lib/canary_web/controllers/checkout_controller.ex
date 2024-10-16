@@ -2,7 +2,7 @@ defmodule CanaryWeb.CheckoutController do
   use CanaryWeb, :controller
   require Logger
 
-  @trial_period_days 30
+  @trial_period_days 7
 
   def session(%{assigns: %{current_account: current_account}} = conn, _params) do
     url = CanaryWeb.Endpoint.url()

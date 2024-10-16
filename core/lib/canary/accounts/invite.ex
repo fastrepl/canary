@@ -11,7 +11,6 @@ defmodule Canary.Accounts.Invite do
   end
 
   relationships do
-    belongs_to :user, Canary.Accounts.User, allow_nil?: false
     belongs_to :account, Canary.Accounts.Account, allow_nil?: false
   end
 
@@ -20,26 +19,24 @@ defmodule Canary.Accounts.Invite do
 
     read :read do
       primary? true
-      prepare build(load: [:user, :account])
+      prepare build(load: [:account])
     end
 
-    read :verify do
-      argument :email, :string, allow_nil?: false
-
-      get? true
-      filter expr(email == ^arg(:email))
-      filter expr(created_at > ago(30, :minute))
+    read :not_expired do
+      filter expr(created_at > ago(48, :hour))
     end
 
     create :create do
-      argument :user, :map, allow_nil?: false
-      argument :account, :map, allow_nil?: false
+      argument :account_id, :uuid, allow_nil?: false
       argument :email, :string, allow_nil?: false
 
+      change after_action(fn changeset, record, _ctx ->
+               Canary.UserNotifier.MemberInvite.send(record.email)
+               {:ok, record}
+             end)
+
       change set_attribute(:email, arg(:email))
-      change manage_relationship(:user, :user, type: :append)
-      change manage_relationship(:account, :account, type: :append)
-      change load [:user, :account]
+      change manage_relationship(:account_id, :account, type: :append)
     end
   end
 

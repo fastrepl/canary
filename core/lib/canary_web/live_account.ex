@@ -2,6 +2,8 @@ defmodule CanaryWeb.LiveAccount do
   import Phoenix.Component
   use CanaryWeb, :verified_routes
 
+  require Ash.Query
+
   def on_mount(_, _params, _session, socket) do
     if socket.assigns[:current_account] do
       {:cont, socket}
@@ -18,13 +20,34 @@ defmodule CanaryWeb.LiveAccount do
 
     account =
       if length(accounts) == 0 do
-        Canary.Accounts.Account
-        |> Ash.Changeset.for_create(:create, %{user_id: socket.assigns[:current_user].id})
-        |> Ash.create!()
+        handle_empty_accounts(socket)
       else
         Enum.at(accounts, 0)
       end
 
     socket |> assign(:current_account, account)
+  end
+
+  defp handle_empty_accounts(socket) do
+    invite =
+      Canary.Accounts.Invite
+      |> Ash.Query.for_read(:not_expired)
+      |> Ash.Query.filter(email: socket.assigns[:current_user].email)
+      |> Ash.read_one!()
+
+    if not is_nil(invite) do
+      invite = invite |> Ash.load!(:account)
+
+      with invite <- invite |> Ash.load!(:account),
+           :ok <- Ash.destroy(invite),
+           {:ok, _} <-
+             Canary.Accounts.Account.add_member(invite.account, socket.assigns[:current_user].id) do
+        invite.account
+      end
+    else
+      Canary.Accounts.Account
+      |> Ash.Changeset.for_create(:create, %{user_id: socket.assigns[:current_user].id})
+      |> Ash.create!()
+    end
   end
 end

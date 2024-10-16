@@ -133,6 +133,13 @@ defmodule CanaryWeb.Layouts do
                     icon_inactive: "hero-cog-6-tooth",
                     icon_active: "hero-cog-6-tooth-solid"
                   },
+                  %{
+                    url: "/settings/members",
+                    name: "Members",
+                    tab: :members,
+                    icon_inactive: "hero-user-group",
+                    icon_active: "hero-user-group-solid"
+                  },
                   if(Application.get_env(:canary, :self_host)) do
                     nil
                   else

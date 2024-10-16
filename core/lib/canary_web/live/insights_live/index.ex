@@ -53,11 +53,10 @@ defmodule CanaryWeb.InsightLive.Index do
   end
 
   def mount(_params, _session, socket) do
-    # project_id = socket.assigns.current_project.public_key
-    project_id = "cpab9997bf"
+    project_id = socket.assigns.current_project.public_key
 
     current_project = socket.assigns.current_project |> Ash.load!(:insights_config)
-    aliases = current_project.insights_config.aliases
+    aliases = current_project.insights_config[:aliases] || []
 
     socket =
       socket

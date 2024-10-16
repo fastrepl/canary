@@ -68,6 +68,7 @@ defmodule CanaryWeb.Router do
       live "/settings", CanaryWeb.SettingsLive.Index, :none
       live "/settings/account", CanaryWeb.SettingsLive.Account, :none
       live "/settings/projects", CanaryWeb.SettingsLive.Projects, :none
+      live "/settings/members", CanaryWeb.SettingsLive.Members, :none
       live "/settings/billing", CanaryWeb.SettingsLive.Billing, :none
     end
 
