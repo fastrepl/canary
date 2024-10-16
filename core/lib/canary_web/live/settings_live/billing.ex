@@ -9,6 +9,12 @@ defmodule CanaryWeb.SettingsLive.Billing do
     ~H"""
     <div>
       <Primer.subhead>Billing</Primer.subhead>
+      <p>
+        For information about pricing, refer to our <a
+          href="https://getcanary.dev/docs/cloud/platform/pricing"
+          target="_blank"
+        >docs</a>.
+      </p>
 
       <div class="flex flex-col gap-1 text-lg">
         <div>
@@ -42,6 +48,7 @@ defmodule CanaryWeb.SettingsLive.Billing do
 
     socket =
       socket
+      |> assign(:current_account, account)
       |> assign(:stripe_customer_portal_url, stripe_customer_portal_url)
       |> assign(:stripe_starter_price_id, stripe_starter_price_id)
       |> assign(:subscription_current, subscription_current(subscription))

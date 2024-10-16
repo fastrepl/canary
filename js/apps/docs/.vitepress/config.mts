@@ -1,6 +1,7 @@
 import { fileURLToPath, URL } from "node:url";
 import { defineConfig } from "vitepress";
 import unocss from "unocss/vite";
+import footnote from "markdown-it-footnote";
 
 const sidebar = [
   {
@@ -163,6 +164,9 @@ export default defineConfig({
   sitemap: { hostname: "https://getcanary.dev" },
   lastUpdated: true,
   markdown: {
+    config: (md) => {
+      md.use(footnote);
+    },
     image: {
       lazyLoading: true,
     },

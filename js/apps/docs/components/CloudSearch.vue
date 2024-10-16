@@ -30,6 +30,7 @@ onMounted(() => {
     import("@getcanary/web/components/canary-filter-tabs-glob.js"),
     import("@getcanary/web/components/canary-filter-tags.js"),
     import("@getcanary/web/components/canary-search-match-github-issue.js"),
+    import("@getcanary/web/components/canary-footer.js"),
   ]).then(() => {
     loaded.value = true;
   });
@@ -85,6 +86,7 @@ const sources = ["canary_webpage", "canary_issue"];
             <canary-ask slot="mode">
               <canary-ask-results slot="body"></canary-ask-results>
             </canary-ask>
+            <canary-footer slot="footer"></canary-footer>
           </canary-content>
         </canary-modal>
       </canary-provider-cloud>
