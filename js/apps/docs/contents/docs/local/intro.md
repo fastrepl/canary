@@ -2,11 +2,6 @@
 
 If you're working on a small side project or documentation, a local search index like `Pagefind` may suffice. You can run keyword-based searches locally and **still benefit from our composable components.**
 
-| Feature  |            Local            |           Cloud            |
-| -------- | :-------------------------: | :------------------------: |
-| `Search` | `Only Keyword-based Search` | `AI Powered Hybrid Search` |
-| `Ask AI` |             `X`             |            `O`             |
-
 ::: tip
 Wanna try it out? We made a [demo](/docs/local/demo) for you!
 :::

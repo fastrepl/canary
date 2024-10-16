@@ -120,8 +120,22 @@ const sidebar = [
         ],
       },
       {
-        text: "Self-host",
-        link: "/docs/cloud/self-host",
+        text: "Platform",
+        collapsed: true,
+        items: [
+          {
+            text: "Pricing",
+            link: "/docs/cloud/platform/pricing",
+          },
+          {
+            text: "Manual",
+            link: "/docs/cloud/platform/manual",
+          },
+          {
+            text: "Self-host",
+            link: "/docs/cloud/platform/self-host",
+          },
+        ],
       },
     ],
   },
