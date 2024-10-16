@@ -13,6 +13,7 @@ defmodule CanaryWeb.Endpoint do
   ]
 
   plug CanaryWeb.Plug.Health
+  plug CanaryWeb.Plug.Commit
 
   socket "/live", Phoenix.LiveView.Socket,
     websocket: [connect_info: [session: @session_options]],
