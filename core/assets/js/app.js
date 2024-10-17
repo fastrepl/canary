@@ -105,8 +105,8 @@ let hooks = {
                 format: {
                   minimumFractionDigits: 0,
                   maximumFractionDigits: 0,
-                }
-              }
+                },
+              },
             },
           },
           plugins: {
@@ -120,13 +120,17 @@ let hooks = {
           },
         },
       };
-  
+
       new Chart(this.el, config);
     },
     mounted() {
       this.render();
     },
     updated() {
+      if (Chart.getChart(this.el)) {
+        Chart.getChart(this.el).destroy();
+      }
+
       this.render();
     },
   },
