@@ -12,7 +12,7 @@ defmodule Canary.Insights.Config do
   end
 
   relationships do
-    belongs_to :project, Canary.Accounts.Project
+    belongs_to :project, Canary.Accounts.Project, allow_nil?: false
   end
 
   actions do

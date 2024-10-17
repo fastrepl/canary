@@ -21,7 +21,7 @@
       "type": ["array", "map"]
     },
     {
-      "allow_nil?": true,
+      "allow_nil?": false,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
@@ -55,7 +55,7 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "3061E42F402F9141B145F565DB9472869B08CA967A83DAE43DE49A46E277E1C6",
+  "hash": "A25D23AA754304C65B54D52278BC6474E7114B04BA486B6331F6C825D4024C70",
   "identities": [],
   "multitenancy": {
     "attribute": null,
