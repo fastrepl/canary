@@ -23,7 +23,11 @@ defmodule CanaryWeb.StripeWebhookHandler do
 
   @impl true
   def handle_event(%Stripe.Event{type: type, data: data})
-      when type in ["customer.subscription.created", "customer.subscription.updated"] do
+      when type in [
+             "customer.subscription.created",
+             "customer.subscription.updated",
+             "customer.subscription.deleted"
+           ] do
     %{object: %Stripe.Subscription{customer: id} = subscription} = data
 
     with {:ok, %Stripe.Customer{} = customer} <- Stripe.Customer.retrieve(id),
