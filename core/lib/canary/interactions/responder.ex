@@ -59,7 +59,7 @@ defmodule Canary.Interactions.Responder.Default do
     {:ok, completion} =
       Canary.AI.chat(
         %{
-          model: Application.fetch_env!(:canary, :chat_completion_model),
+          model: Application.fetch_env!(:canary, :responder_model),
           messages: messages,
           temperature: 0,
           frequency_penalty: 0.02,

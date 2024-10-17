@@ -21,6 +21,7 @@ defmodule CanaryWeb.InsightLive.Index do
             id="insights-config"
             module={CanaryWeb.InsightLive.Config}
             current_project={@current_project}
+            quries={if @search_breakdown.result, do: @search_breakdown.result.labels, else: []}
           />
         </:body>
       </Primer.dialog>
@@ -56,7 +57,13 @@ defmodule CanaryWeb.InsightLive.Index do
     project_id = socket.assigns.current_project.public_key
 
     current_project = socket.assigns.current_project |> Ash.load!(:insights_config)
-    aliases = current_project.insights_config[:aliases] || []
+
+    aliases =
+      if current_project.insights_config do
+        current_project.insights_config.aliases || []
+      else
+        []
+      end
 
     socket =
       socket

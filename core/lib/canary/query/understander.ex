@@ -35,7 +35,7 @@ defmodule Canary.Query.Understander.LLM do
   @behaviour Canary.Query.Understander
 
   def run(query, keywords) do
-    chat_model = Application.fetch_env!(:canary, :chat_completion_model)
+    chat_model = Application.fetch_env!(:canary, :responder_model)
 
     messages = [
       %{

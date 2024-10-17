@@ -132,8 +132,8 @@ config :canary, :discord_webhook_url, System.get_env("DISCORD_WEBHOOK_URL")
 config :canary, :openai_api_base, System.get_env("OPENAI_API_BASE")
 config :canary, :openai_api_key, System.get_env("OPENAI_API_KEY")
 
-config :canary, :text_embedding_model, System.get_env("TEXT_EMBEDDING_MODEL")
-config :canary, :chat_completion_model, System.get_env("CHAT_COMPLETION_MODEL")
+config :canary, :responder_model, System.get_env("RESPONDER_MODEL")
+config :canary, :general_model, System.get_env("GENERAL_MODEL")
 
 if config_env() != :test do
   if System.get_env("GITHUB_CLIENT_ID") && System.get_env("GITHUB_CLIENT_SECRET") do
