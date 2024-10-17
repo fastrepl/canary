@@ -208,6 +208,7 @@ defmodule Canary.Crawler.Visitor do
           |> Map.put(:query, nil)
           |> Map.put(:fragment, nil)
           |> URI.to_string()
+          |> URI.encode()
         end)
         |> Enum.reject(&(URI.parse(&1).host != URI.parse(url).host))
         |> Enum.uniq()
