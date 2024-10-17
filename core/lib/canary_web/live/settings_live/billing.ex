@@ -37,20 +37,20 @@ defmodule CanaryWeb.SettingsLive.Billing do
 
   @impl true
   def mount(_params, _session, socket) do
-    stripe_customer_portal_url =
-      Application.get_env(:canary, :stripe) |> Keyword.fetch!(:customer_portal_url)
-
-    stripe_starter_price_id =
-      Application.get_env(:canary, :stripe) |> Keyword.fetch!(:starter_price_id)
-
     account = socket.assigns.current_account |> Ash.load!([:billing])
     subscription = account.billing.stripe_subscription
 
     socket =
       socket
       |> assign(:current_account, account)
-      |> assign(:stripe_customer_portal_url, stripe_customer_portal_url)
-      |> assign(:stripe_starter_price_id, stripe_starter_price_id)
+      |> assign(
+        :stripe_customer_portal_url,
+        Application.fetch_env!(:canary, :stripe_customer_portal_url)
+      )
+      |> assign(
+        :stripe_starter_price_id,
+        Application.fetch_env!(:canary, :stripe_starter_price_id)
+      )
       |> assign(:subscription_current, subscription_current(subscription))
       |> assign(:subscription_next, subscription_next(subscription))
       |> assign(:subscription_trial, subscription_trial(subscription))
@@ -109,9 +109,11 @@ defmodule CanaryWeb.SettingsLive.Billing do
   end
 
   defp subscription_current(%{"items" => %{"data" => data}, "trial_end" => trial_end}) do
+    starter_price_id = Application.fetch_env!(:canary, :stripe_starter_price_id)
+
     plan =
       data
-      |> Enum.any?(&(&1["plan"]["id"] == stripe_starter_price_id()))
+      |> Enum.any?(&(&1["plan"]["id"] == starter_price_id))
       |> then(fn starter? -> if(starter?, do: "Starter", else: "Free") end)
 
     if is_nil(trial_end), do: plan, else: "#{plan}(trial)"
@@ -144,8 +146,4 @@ defmodule CanaryWeb.SettingsLive.Billing do
 
   defp format_date(nil), do: "none"
   defp format_date(t), do: DateTime.from_unix!(t) |> Calendar.strftime("%B %d, %Y")
-
-  defp stripe_starter_price_id() do
-    Application.get_env(:canary, :stripe) |> Keyword.fetch!(:starter_price_id)
-  end
 end

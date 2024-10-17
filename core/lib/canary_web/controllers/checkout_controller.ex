@@ -6,7 +6,7 @@ defmodule CanaryWeb.CheckoutController do
 
   def session(%{assigns: %{current_account: current_account}} = conn, _params) do
     url = CanaryWeb.Endpoint.url()
-    price = Application.get_env(:canary, :stripe) |> Keyword.fetch!(:starter_price_id)
+    price = Application.fetch_env!(:canary, :stripe_starter_price_id)
 
     base_params = %{
       ui_mode: :hosted,
