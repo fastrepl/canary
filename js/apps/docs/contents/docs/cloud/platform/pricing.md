@@ -5,7 +5,6 @@
 
 We offer hosted service at [cloud.getcanary.dev](https://cloud.getcanary.dev).
 
-
 > [Contact us](https://cal.com/yujonglee/canary) if there's something else you need.
 
 ## Free (`$0` / month)
