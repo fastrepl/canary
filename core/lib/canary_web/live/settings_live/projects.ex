@@ -36,7 +36,13 @@ defmodule CanaryWeb.SettingsLive.Projects do
                 <div class="flex flex-row items-center gap-2">
                   <span class="text-gray-500">project_key: </span>
                   <div class="flex flex-row items-center gap-2 max-w-[150px]">
-                    <Primer.text_input value={project.public_key} disabled is_small is_full_width>
+                    <Primer.text_input
+                      autocomplete="off"
+                      value={project.public_key}
+                      disabled
+                      is_small
+                      is_full_width
+                    >
                       <:group_button>
                         <Primer.button
                           aria-label="Copy"

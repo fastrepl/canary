@@ -32,6 +32,7 @@ defmodule CanaryWeb.SourceLive.Create do
               phx-change="type-changed"
             />
             <Primer.text_input
+              autocomplete="off"
               form={f}
               field={:name}
               placeholder="e.g. Docs"
@@ -42,6 +43,7 @@ defmodule CanaryWeb.SourceLive.Create do
           <%= case fc.params["_union_type"] do %>
             <% "webpage" -> %>
               <Primer.text_input
+                autocomplete="off"
                 type="url"
                 name={fc[:start_urls].name <> "[]"}
                 value={fc[:start_urls].value}
@@ -50,6 +52,7 @@ defmodule CanaryWeb.SourceLive.Create do
               />
             <% "github_issue" -> %>
               <Primer.text_input
+                autocomplete="off"
                 form={fc}
                 field={:owner}
                 placeholder="e.g. fastrepl"
@@ -57,6 +60,7 @@ defmodule CanaryWeb.SourceLive.Create do
                 is_full_width
               />
               <Primer.text_input
+                autocomplete="off"
                 form={fc}
                 field={:repo}
                 placeholder="e.g. canary"
@@ -65,6 +69,7 @@ defmodule CanaryWeb.SourceLive.Create do
               />
             <% "github_discussion" -> %>
               <Primer.text_input
+                autocomplete="off"
                 form={fc}
                 field={:owner}
                 placeholder="e.g. fastrepl"
@@ -72,6 +77,7 @@ defmodule CanaryWeb.SourceLive.Create do
                 is_full_width
               />
               <Primer.text_input
+                autocomplete="off"
                 form={fc}
                 field={:repo}
                 placeholder="e.g. canary"

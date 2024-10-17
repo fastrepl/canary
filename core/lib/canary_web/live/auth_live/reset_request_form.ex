@@ -34,6 +34,7 @@ defmodule CanaryWeb.AuthLive.ResetRequestForm do
         <% end %>
 
         <Primer.text_input
+          autocomplete="off"
           type="email"
           placeholder="email"
           form={f}

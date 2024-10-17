@@ -15,7 +15,7 @@ We offer hosted service at [cloud.getcanary.dev](https://cloud.getcanary.dev).
 - Index update `twice a week`
 - Blazing fast `Hybrid`(keyword-based + semantic) `search`
 
-## Starter (~~$99~~ `$69` / month)
+## Starter (~~$79~~ `$59` / month)
 
 ::: tip Early bird pricing
 

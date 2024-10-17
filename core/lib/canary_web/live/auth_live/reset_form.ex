@@ -16,6 +16,7 @@ defmodule CanaryWeb.AuthLive.ResetForm do
       >
         <input type="hidden" name={f[:reset_token].name} value={@token} />
         <Primer.text_input
+          autocomplete="off"
           type="password"
           placeholder="password"
           form={f}
@@ -24,6 +25,7 @@ defmodule CanaryWeb.AuthLive.ResetForm do
           is_large
         />
         <Primer.text_input
+          autocomplete="off"
           type="password"
           placeholder="password confirmation"
           form={f}

@@ -37,6 +37,7 @@ defmodule CanaryWeb.InsightLive.Config do
           <div class="p-2 border-2 border-gray-200 rounded-md flex flex-col gap-4">
             <div class="flex flex-row justify-between">
               <Primer.text_input
+                autocomplete="off"
                 form={fc}
                 field={:name}
                 is_full_width
@@ -54,6 +55,7 @@ defmodule CanaryWeb.InsightLive.Config do
               <%= for {member, index} <- Enum.with_index(fc[:members].value || []) do %>
                 <div class="flex flex-row gap-2 items-center">
                   <Primer.text_input
+                    autocomplete="off"
                     name={fc.name <> "[members][#{index}]"}
                     value={member}
                     is_full_width

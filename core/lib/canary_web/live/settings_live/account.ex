@@ -10,6 +10,7 @@ defmodule CanaryWeb.SettingsLive.Account do
 
       <.form :let={f} for={@form} phx-submit="submit" class="flex flex-col gap-4">
         <Primer.text_input
+          autocomplete="off"
           type="email"
           form={f}
           field={:email}

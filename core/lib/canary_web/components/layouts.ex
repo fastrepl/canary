@@ -168,6 +168,9 @@ defmodule CanaryWeb.Layouts do
             </li>
           </ul>
         </li>
+        <li class="mt-auto mb-4 flex flex-row items-center justify-between">
+          <.link navigate={~p"/sign-out"}>Logout</.link>
+        </li>
       </ul>
     </nav>
     """

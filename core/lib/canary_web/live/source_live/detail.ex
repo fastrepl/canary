@@ -35,6 +35,7 @@ defmodule CanaryWeb.SourceLive.Detail do
           class="flex flex-col gap-6 basis-2/5"
         >
           <Primer.text_input
+            autocomplete="off"
             value={
               case @source.config.type do
                 :webpage -> "Webpage"
@@ -49,6 +50,7 @@ defmodule CanaryWeb.SourceLive.Detail do
           />
 
           <Primer.text_input
+            autocomplete="off"
             form={f}
             field={:name}
             is_large
@@ -63,6 +65,7 @@ defmodule CanaryWeb.SourceLive.Detail do
                   <%= for url <- fc[:start_urls].value || [] do %>
                     <div class="flex flex-row w-full items-center gap-2">
                       <Primer.text_input
+                        autocomplete="off"
                         type="url"
                         name={fc[:start_urls].name <> "[]"}
                         value={url}
@@ -85,6 +88,7 @@ defmodule CanaryWeb.SourceLive.Detail do
                 <.form_group header="Include patterns">
                   <%= for url <- fc[:url_include_patterns].value || [] do %>
                     <Primer.text_input
+                      autocomplete="off"
                       type="text"
                       name={fc[:url_include_patterns].name <> "[]"}
                       value={url}
@@ -107,6 +111,7 @@ defmodule CanaryWeb.SourceLive.Detail do
                   <%= for url <- fc[:url_exclude_patterns].value || [] do %>
                     <div class="flex flex-row w-full items-center gap-2">
                       <Primer.text_input
+                        autocomplete="off"
                         type="text"
                         name={fc[:url_exclude_patterns].name <> "[]"}
                         value={url}
@@ -132,6 +137,7 @@ defmodule CanaryWeb.SourceLive.Detail do
                     <%= for tag_def <- fc[:tag_definitions].value || [] do %>
                       <div class="flex flex-col w-full gap-2 pl-2">
                         <Primer.text_input
+                          autocomplete="off"
                           type="text"
                           name={tag_def[:name].name}
                           value={tag_def[:name].value}
@@ -139,6 +145,7 @@ defmodule CanaryWeb.SourceLive.Detail do
                           form_control={%{label: "Name"}}
                         />
                         <Primer.text_input
+                          autocomplete="off"
                           type="text"
                           name={tag_def[:url_include_patterns].name <> "[]"}
                           value={tag_def[:url_include_patterns].value |> Enum.join(",")}
@@ -166,6 +173,7 @@ defmodule CanaryWeb.SourceLive.Detail do
                 </.form_group>
               <% :github_issue -> %>
                 <Primer.text_input
+                  autocomplete="off"
                   form={fc}
                   field={:owner}
                   is_large
@@ -173,6 +181,7 @@ defmodule CanaryWeb.SourceLive.Detail do
                   form_control={%{label: "Owner"}}
                 />
                 <Primer.text_input
+                  autocomplete="off"
                   form={fc}
                   field={:repo}
                   is_large
@@ -181,6 +190,7 @@ defmodule CanaryWeb.SourceLive.Detail do
                 />
               <% :github_discussion -> %>
                 <Primer.text_input
+                  autocomplete="off"
                   form={fc}
                   field={:owner}
                   is_large
@@ -188,6 +198,7 @@ defmodule CanaryWeb.SourceLive.Detail do
                   form_control={%{label: "Owner"}}
                 />
                 <Primer.text_input
+                  autocomplete="off"
                   form={fc}
                   field={:repo}
                   is_large

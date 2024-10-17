@@ -14,11 +14,26 @@ defmodule CanaryWeb.AuthLive.AuthForm do
         action={@action}
         class="flex flex-col justify-center gap-4"
       >
-        <Primer.text_input type="email" placeholder="email" form={f} field={:email} is_large />
-        <Primer.text_input type="password" placeholder="password" form={f} field={:password} is_large />
+        <Primer.text_input
+          autocomplete="off"
+          type="email"
+          placeholder="email"
+          form={f}
+          field={:email}
+          is_large
+        />
+        <Primer.text_input
+          autocomplete="off"
+          type="password"
+          placeholder="password"
+          form={f}
+          field={:password}
+          is_large
+        />
 
         <%= if @register? do %>
           <Primer.text_input
+            autocomplete="off"
             type="password"
             placeholder="password confirmation"
             form={f}

@@ -17,6 +17,7 @@ defmodule CanaryWeb.SettingsLive.CreateProject do
         <input type="hidden" name={f[:account_id].name} value={@current_account.id} />
 
         <Primer.text_input
+          autocomplete="off"
           type="text"
           form={f}
           field={:name}

@@ -9,6 +9,7 @@ defmodule CanaryWeb.SettingsLive.MemberInvite do
       <.form :let={f} for={@form} phx-target={@myself} phx-submit="submit" class="flex flex-col gap-4">
         <input type="hidden" name={f[:account_id].name} value={@current_account.id} />
         <Primer.text_input
+          autocomplete="off"
           form={f}
           field={:email}
           type="email"
