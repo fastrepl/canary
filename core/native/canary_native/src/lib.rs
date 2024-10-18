@@ -16,7 +16,6 @@ rustler::init!(
         html_to_md,
         clone_depth,
         extract_keywords,
-        stopwords,
         glob_match,
     ]
 );
@@ -49,10 +48,7 @@ fn extract_keywords<'a>(content: &'a str, n: usize) -> Vec<String> {
     keywords::extract(content, n).unwrap()
 }
 
-#[rustler::nif]
-fn stopwords() -> Vec<String> {
-    stop_words::get(stop_words::LANGUAGE::English)
-}
+
 
 #[rustler::nif]
 fn glob_match<'a>(pattern: &'a str, path: &'a str) -> bool {

@@ -8,8 +8,6 @@ defmodule Canary.Sources.Source do
   require Ash.Query
   require Ecto.Query
 
-  alias Canary.Sources.Document
-
   attributes do
     uuid_primary_key :id
     create_timestamp :created_at
@@ -58,46 +56,6 @@ defmodule Canary.Sources.Source do
 
     update :update_last_fetched_at do
       change set_attribute(:last_fetched_at, &DateTime.utc_now/0)
-    end
-
-    update :update_overview do
-      require_atomic? false
-
-      change fn changeset, _ ->
-        id = Ash.Changeset.get_data(changeset, :id)
-
-        documents =
-          Document
-          |> Ash.Query.filter(source_id == ^id)
-          |> Ash.read!()
-
-        chunks =
-          documents
-          |> Enum.flat_map(fn %Document{chunks: chunks} ->
-            Enum.map(chunks, fn %Ash.Union{value: value} -> value end)
-          end)
-
-        keywords =
-          documents
-          |> Enum.flat_map(fn %Document{meta: %Ash.Union{type: type}, chunks: chunks} = doc ->
-            case type do
-              :webpage ->
-                Canary.Keywords.extract(doc, max: max(5, floor(500 / length(documents))))
-
-              :github_issue ->
-                Canary.Keywords.extract(doc, max: max(2, floor(500 / length(documents))))
-
-              :github_discussion ->
-                Canary.Keywords.extract(doc, max: max(2, floor(500 / length(documents))))
-            end
-          end)
-          |> Enum.uniq()
-
-        overview = %Canary.Sources.SourceOverview{keywords: keywords}
-
-        changeset
-        |> Ash.Changeset.change_attribute(:overview, overview)
-      end
     end
 
     destroy :destroy do
@@ -180,7 +138,6 @@ defmodule Canary.Sources.Source do
   code_interface do
     define :create, args: [:project_id, :name, :config], action: :create
     define :update_state, args: [:state], action: :update
-    define :update_overview, args: [], action: :update_overview
     define :update_last_fetched_at, args: [], action: :update_last_fetched_at
   end
 

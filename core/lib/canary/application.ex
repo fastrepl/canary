@@ -20,11 +20,6 @@ defmodule Canary.Application do
         time_unit: :millisecond
       )
 
-    :ok = Canary.Index.Collection.ensure(:webpage)
-    :ok = Canary.Index.Collection.ensure(:github_issue)
-    :ok = Canary.Index.Collection.ensure(:github_discussion)
-    :ok = Canary.Index.Stopword.ensure()
-
     children =
       [
         Canary.Insights.Processor,

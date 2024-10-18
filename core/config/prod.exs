@@ -23,8 +23,6 @@ config :canary, Canary.Native,
 
 config :canary, :github_app_url, "https://github.com/apps/getcanary/installations/new"
 
-config :canary, :typesense, collection: "canary_prod"
-
 config :opentelemetry,
   traces_exporter: :otlp,
   span_processor: :batch,
