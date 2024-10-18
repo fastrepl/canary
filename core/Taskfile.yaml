@@ -34,4 +34,4 @@ tasks:
           --url https://api.trieve.ai/api/dataset/${TRIEVE_DATASET} \
           --header "TR-Organization: ${TRIEVE_ORGANIZATION}" \
           --header "Authorization: Bearer ${TRIEVE_API_KEY}" \
-          --header "TR-Dataset: ${TRIEVE_DATASET}"
+          --header "TR-Dataset: ${TRIEVE_DATASET}" || true
