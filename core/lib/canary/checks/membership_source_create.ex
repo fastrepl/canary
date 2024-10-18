@@ -14,7 +14,8 @@ defmodule Canary.Checks.MembershipSourceCreate do
         _opts
       ) do
     with {:ok, %{billing: billing}} <- Ash.load(account, :billing),
-         {:ok, %{num_sources: num_sources}} <- Ash.get(Canary.Accounts.Project, id) do
+         {:ok, %{num_sources: num_sources}} <-
+           Ash.get(Canary.Accounts.Project, id, load: [:num_sources]) do
       %Ash.Union{type: source_type} = Ash.Changeset.get_attribute(changeset, :config)
 
       cond do
