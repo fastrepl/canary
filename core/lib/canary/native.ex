@@ -16,9 +16,6 @@ defmodule Canary.Native do
   @spec extract_keywords(String.t(), non_neg_integer()) :: list(String.t())
   def extract_keywords(_content, _n), do: error()
 
-  @spec stopwords() :: list(String.t())
-  def stopwords(), do: error()
-
   @spec glob_match(String.t(), String.t()) :: boolean()
   def glob_match(_pattern, _text), do: error()
 
