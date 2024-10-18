@@ -59,3 +59,17 @@ export const getFilePaths = (routesPaths, outDir, baseUrl, options) => {
 
   return files;
 };
+
+export const getVersions = (siteDir) => {
+  const versionFilePath = path.join(siteDir, "versions.json");
+  let versions = null;
+
+  if (fs.existsSync(versionFilePath)) {
+    try {
+      const fileContent = fs.readFileSync(versionFilePath, "utf-8");
+      versions = JSON.parse(fileContent);
+    } catch (_) {}
+  }
+
+  return versions;
+};

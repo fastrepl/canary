@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 
-import { getFilePaths } from "./utils";
+import { getFilePaths, getVersions } from "./utils";
 import { buildIndex } from "./pagefind";
 
 /**
@@ -21,7 +21,12 @@ export default function plugin(context, options) {
     async contentLoaded({ actions }) {
       actions.setGlobalData({ options });
     },
-    async postBuild({ routesPaths = [], outDir, baseUrl }) {
+    async postBuild({ siteDir, routesPaths = [], outDir, baseUrl }) {
+      const versions = getVersions(siteDir);
+      if (!versions && !options.tags) {
+        console.warn("'Versions' detected, and 'tags' is not configured.");
+      }
+
       const docs = getFilePaths(routesPaths, outDir, baseUrl, options);
       await buildIndex(outDir, docs, options);
     },
