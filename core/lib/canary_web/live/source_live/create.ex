@@ -101,7 +101,10 @@ defmodule CanaryWeb.SourceLive.Create do
 
     form =
       Canary.Sources.Source
-      |> AshPhoenix.Form.for_create(:create, forms: [auto?: true])
+      |> AshPhoenix.Form.for_create(:create,
+        forms: [auto?: true],
+        actor: socket.assigns.current_account
+      )
       |> then(fn form ->
         if form.forms[:config] do
           form
@@ -129,8 +132,18 @@ defmodule CanaryWeb.SourceLive.Create do
       {:ok, %{id: id}} ->
         {:noreply, socket |> push_navigate(to: ~p"/source/#{id}")}
 
-      {:error, form} ->
-        {:noreply, assign(socket, :form, form)}
+      {:error,
+       %Phoenix.HTML.Form{source: %AshPhoenix.Form{source: %Ash.Changeset{errors: errors}}} = form} ->
+        if Enum.any?(errors, &match?(%Ash.Error.Forbidden.Policy{}, &1)) do
+          socket =
+            socket
+            |> push_navigate(to: ~p"/source")
+            |> put_flash(:error, "Please upgrade your plan.")
+
+          {:noreply, socket}
+        else
+          {:noreply, socket |> assign(:form, form)}
+        end
     end
   end
 

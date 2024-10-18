@@ -22,6 +22,7 @@ defmodule CanaryWeb.SourceLive.List do
             id="source-form"
             module={CanaryWeb.SourceLive.Create}
             current_project={@current_project}
+            current_account={@current_account}
           />
         </:body>
       </Primer.dialog>

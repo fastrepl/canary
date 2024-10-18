@@ -2,6 +2,7 @@ defmodule Canary.Sources.Source do
   use Ash.Resource,
     domain: Canary.Sources,
     data_layer: AshPostgres.DataLayer,
+    authorizers: [Ash.Policy.Authorizer],
     simple_notifiers: [Canary.Notifiers.Discord]
 
   require Ash.Query
@@ -181,6 +182,16 @@ defmodule Canary.Sources.Source do
     define :update_state, args: [:state], action: :update
     define :update_overview, args: [], action: :update_overview
     define :update_last_fetched_at, args: [], action: :update_last_fetched_at
+  end
+
+  policies do
+    policy action_type(:create) do
+      authorize_if Canary.Checks.MembershipSourceCreate
+    end
+
+    policy always() do
+      authorize_if always()
+    end
   end
 
   postgres do
