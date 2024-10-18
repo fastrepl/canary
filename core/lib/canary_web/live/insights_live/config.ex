@@ -177,9 +177,37 @@ defmodule CanaryWeb.InsightLive.Config do
     form =
       socket.assigns.form
       |> AshPhoenix.Form.update_form(path, fn nested_form ->
-        # TODO: not work with update
         params =
-          nested_form.params
+          nested_form
+          |> then(fn form ->
+            params = AshPhoenix.Form.params(nested_form)
+
+            cond do
+              is_nil(form.data) ->
+                params
+
+              map_size(params) == 0 ->
+                %{
+                  "name" => nested_form.data.name,
+                  "members" =>
+                    nested_form.data.members
+                    |> Enum.with_index()
+                    |> Map.new(fn {v, i} -> {"#{i}", v} end)
+                }
+
+              true ->
+                Map.merge(
+                  %{
+                    "name" => nested_form.data.name,
+                    "members" =>
+                      nested_form.data.members
+                      |> Enum.with_index()
+                      |> Map.new(fn {v, i} -> {"#{i}", v} end)
+                  },
+                  params
+                )
+            end
+          end)
           |> Map.update("members", %{}, fn existing ->
             new_key = existing |> map_size() |> to_string()
             existing |> Map.put(new_key, "")
@@ -199,7 +227,36 @@ defmodule CanaryWeb.InsightLive.Config do
       socket.assigns.form
       |> AshPhoenix.Form.update_form(path, fn nested_form ->
         params =
-          nested_form.params
+          nested_form
+          |> then(fn form ->
+            params = AshPhoenix.Form.params(nested_form)
+
+            cond do
+              is_nil(form.data) ->
+                params
+
+              map_size(params) == 0 ->
+                %{
+                  "name" => nested_form.data.name,
+                  "members" =>
+                    nested_form.data.members
+                    |> Enum.with_index()
+                    |> Map.new(fn {v, i} -> {"#{i}", v} end)
+                }
+
+              true ->
+                Map.merge(
+                  %{
+                    "name" => nested_form.data.name,
+                    "members" =>
+                      nested_form.data.members
+                      |> Enum.with_index()
+                      |> Map.new(fn {v, i} -> {"#{i}", v} end)
+                  },
+                  params
+                )
+            end
+          end)
           |> Map.update("members", %{}, fn existing ->
             existing
             |> Enum.sort_by(fn {key, _} -> String.to_integer(key) end)

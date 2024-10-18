@@ -10,11 +10,15 @@ defmodule Canary.Test.Source do
     source =
       Canary.Sources.Source
       |> Ash.Changeset.new()
-      |> Ash.Changeset.for_create(:create, %{
-        project_id: project.id,
-        name: "Docs",
-        config: config
-      })
+      |> Ash.Changeset.for_create(
+        :create,
+        %{
+          project_id: project.id,
+          name: "Docs",
+          config: config
+        },
+        authorize?: false
+      )
       |> Ash.create!()
 
     assert source.project.id == project.id
@@ -29,11 +33,15 @@ defmodule Canary.Test.Source do
     source =
       Canary.Sources.Source
       |> Ash.Changeset.new()
-      |> Ash.Changeset.for_create(:create, %{
-        project_id: project.id,
-        name: "Docs",
-        config: config
-      })
+      |> Ash.Changeset.for_create(
+        :create,
+        %{
+          project_id: project.id,
+          name: "Docs",
+          config: config
+        },
+        authorize?: false
+      )
       |> Ash.create!()
 
     assert source.name == "Docs"

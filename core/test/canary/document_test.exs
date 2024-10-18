@@ -13,25 +13,33 @@ defmodule Canary.Test.Document do
       source =
         Canary.Sources.Source
         |> Ash.Changeset.new()
-        |> Ash.Changeset.for_action(:create, %{
-          project_id: project.id,
-          name: "Docs",
-          config: %Ash.Union{type: :webpage, value: %Webpage.Config{}}
-        })
+        |> Ash.Changeset.for_action(
+          :create,
+          %{
+            project_id: project.id,
+            name: "Docs",
+            config: %Ash.Union{type: :webpage, value: %Webpage.Config{}}
+          },
+          authorize?: false
+        )
         |> Ash.create!()
 
       doc =
         Canary.Sources.Document
-        |> Ash.Changeset.for_create(:create_webpage, %{
-          source_id: source.id,
-          fetcher_result: %Webpage.FetcherResult{
-            url: "https://example.com/",
-            html: "<body><h1>hello</h1></body>",
-            items: [
-              %Canary.Scraper.Item{id: nil, level: 1, title: "hello", content: "<h1>hello</h1>"}
-            ]
-          }
-        })
+        |> Ash.Changeset.for_create(
+          :create_webpage,
+          %{
+            source_id: source.id,
+            fetcher_result: %Webpage.FetcherResult{
+              url: "https://example.com/",
+              html: "<body><h1>hello</h1></body>",
+              items: [
+                %Canary.Scraper.Item{id: nil, level: 1, title: "hello", content: "<h1>hello</h1>"}
+              ]
+            }
+          },
+          authorize?: false
+        )
         |> Ash.create!()
 
       assert doc.meta.type == :webpage
@@ -53,11 +61,15 @@ defmodule Canary.Test.Document do
       source =
         Canary.Sources.Source
         |> Ash.Changeset.new()
-        |> Ash.Changeset.for_action(:create, %{
-          project_id: project.id,
-          name: "Docs",
-          config: %Ash.Union{type: :webpage, value: %Webpage.Config{}}
-        })
+        |> Ash.Changeset.for_action(
+          :create,
+          %{
+            project_id: project.id,
+            name: "Docs",
+            config: %Ash.Union{type: :webpage, value: %Webpage.Config{}}
+          },
+          authorize?: false
+        )
         |> Ash.create!()
 
       Canary.Sources.Document
@@ -90,11 +102,15 @@ defmodule Canary.Test.Document do
       source =
         Canary.Sources.Source
         |> Ash.Changeset.new()
-        |> Ash.Changeset.for_action(:create, %{
-          project_id: project.id,
-          name: "Docs",
-          config: %Ash.Union{type: :webpage, value: %Webpage.Config{}}
-        })
+        |> Ash.Changeset.for_action(
+          :create,
+          %{
+            project_id: project.id,
+            name: "Docs",
+            config: %Ash.Union{type: :webpage, value: %Webpage.Config{}}
+          },
+          authorize?: false
+        )
         |> Ash.create!()
 
       fetcher_results = [
