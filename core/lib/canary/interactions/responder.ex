@@ -7,8 +7,8 @@ defmodule Canary.Interactions.Responder do
               opts :: keyword()
             ) :: {:ok, any()} | {:error, any()}
 
-  def run(sources, query, handle_delta, opts \\ []) do
-    impl().run(sources, query, handle_delta, opts)
+  def run(query, handle_delta, opts \\ []) do
+    impl().run(query, handle_delta, opts)
   end
 
   defp impl, do: Application.get_env(:canary, :responder, Responder.Default)
@@ -19,8 +19,6 @@ defmodule Canary.Interactions.Responder.Default do
 
   require Logger
   require Ash.Query
-
-  alias Canary.Sources.Document
 
   def run(query, handle_delta, opts) do
     {:ok, results} = Canary.Searcher.run(query, opts)
@@ -77,20 +75,12 @@ defmodule Canary.Interactions.Responder.Default do
   end
 
   defp search_results_to_docs(results) do
-    doc_ids =
-      results
-      |> Enum.map(fn result -> result.document_id end)
-      |> Enum.uniq()
-
-    Canary.Sources.Document
-    |> Ash.Query.filter(id in ^doc_ids)
-    |> Ash.read!()
-    |> Enum.sort_by(&Enum.find_index(doc_ids, fn id -> id == &1.id end))
-    |> Enum.map(fn %Document{meta: %Ash.Union{value: meta}, chunks: chunks} ->
+    results
+    |> Enum.map(fn result ->
       %{
-        url: meta.url,
-        title: meta.title,
-        content: chunks |> Enum.map(& &1.value.content) |> Enum.join("\n")
+        url: result.url,
+        title: result.title,
+        content: result.sub_results |> Enum.map(& &1.excerpt) |> Enum.join("\n")
       }
     end)
   end

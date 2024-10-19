@@ -81,17 +81,13 @@ defmodule Canary.Searcher.Default do
       end)
       |> Enum.reject(&is_nil/1)
 
-    if chunks == [] do
-      nil
-    else
-      %{
-        type: group_meta["type"],
-        url: group_meta["url"],
-        title: group_meta["title"],
-        meta: %{},
-        sub_results: chunks
-      }
-    end
+    %{
+      type: group_meta["type"],
+      url: group_meta["url"],
+      title: group_meta["title"],
+      meta: %{},
+      sub_results: chunks
+    }
   end
 
   defp transform_result(%{
