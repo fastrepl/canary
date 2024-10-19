@@ -173,8 +173,6 @@ defmodule Canary.Sources.Document.Create do
          :ok = create_chunks(changesets_and_results, opts) do
       changesets_and_results
       |> Enum.map(fn {_changeset, record} -> {:ok, record} end)
-    else
-      {:error, error} -> {:error, error}
     end
   end
 
