@@ -18,8 +18,9 @@ defmodule Canary.Index.Trieve.Client do
       inputs
       |> Enum.map(fn %{tracking_id: tracking_id, meta: meta} ->
         %{
+          metadata: meta,
           tracking_id: tracking_id,
-          metadata: meta
+          upsert_by_tracking_id: true
         }
       end)
 
