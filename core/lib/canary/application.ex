@@ -22,7 +22,7 @@ defmodule Canary.Application do
 
     children =
       [
-        Canary.Insights.Processor,
+        Canary.Interactions.AnalyticsExporter,
         Canary.Vault,
         {Cachex, name: :cache},
         {Task.Supervisor, name: Canary.TaskSupervisor},

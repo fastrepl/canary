@@ -14,7 +14,7 @@ defmodule CanaryWeb.OperationsController do
            |> Ash.read() do
       conn
       |> assign(:sources, sources)
-      |> assign(:project_id, token)
+      |> assign(:project_public_key, token)
     else
       _ -> conn |> send_resp(401, err_msg) |> halt()
     end
@@ -38,11 +38,11 @@ defmodule CanaryWeb.OperationsController do
         }
 
         GenServer.cast(
-          Canary.Insights.Processor,
+          Canary.Interactions.AnalyticsExporter,
           {:search,
            %{
              query: query,
-             project_id: conn.assigns.project_id,
+             project_public_key: conn.assigns.project_public_key,
              session_id: params["meta"]["session_id"]
            }}
         )
@@ -73,7 +73,7 @@ defmodule CanaryWeb.OperationsController do
     source_ids = Enum.map(conn.assigns.sources, & &1.id)
 
     Task.start_link(fn ->
-      Canary.Interactions.Responder.run(
+      Canary.Responder.run(
         query,
         fn data -> send(here, data) end,
         source_ids: source_ids,

@@ -100,7 +100,7 @@ defmodule CanaryWeb.Dev.ResponderLive do
       |> assign(latency: 0)
       |> assign(started_at: System.monotonic_time())
       |> start_async(:task, fn ->
-        {:ok, %{docs: docs}} = Canary.Interactions.Responder.run(selected, query, &send(self, &1))
+        {:ok, %{docs: docs}} = Canary.Responder.run(selected, query, &send(self, &1))
         docs
       end)
 

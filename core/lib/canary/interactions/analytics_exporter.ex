@@ -1,8 +1,8 @@
-defmodule Canary.Insights.Processor do
+defmodule Canary.Interactions.AnalyticsExporter do
   @moduledoc """
   Usage:
 
-  GenServer.cast(Canary.Insights.Processor, {:search, %{session_id: "...", project_id: "...", query: "..."}})
+  GenServer.cast(Canary.Interactions.AnalyticsExporter, {:search, %{session_id: "...", project_id: "...", query: "..."}})
   """
 
   use GenServer
@@ -10,7 +10,6 @@ defmodule Canary.Insights.Processor do
   @export_interval_ms 10_000
   @export_delay_ms 3_000
 
-  # seconds
   def start_link(opts) do
     GenServer.start_link(__MODULE__, %{}, name: opts[:name] || __MODULE__)
   end
@@ -69,6 +68,9 @@ defmodule Canary.Insights.Processor do
     {:noreply, updated_state}
   end
 
+  def handle_info({:DOWN, _ref, :process, _pid, _reason}, state), do: {:noreply, state}
+  def handle_info({_ref, _ret}, state), do: {:noreply, state}
+
   @impl true
   def terminate(_reason, state) do
     state
@@ -83,7 +85,12 @@ defmodule Canary.Insights.Processor do
   end
 
   defp process([]), do: :ok
-  defp process(items), do: Canary.Analytics.ingest("search", items)
+
+  defp process(items) do
+    Task.Supervisor.async_nolink(Canary.TaskSupervisor, fn ->
+      Canary.Analytics.ingest("search", items)
+    end)
+  end
 
   def deduplicate(items) do
     items

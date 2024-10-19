@@ -1,5 +1,5 @@
-defmodule Canary.Interactions.Responder do
-  alias Canary.Interactions.Responder
+defmodule Canary.Responder do
+  alias Canary.Responder
 
   @callback run(
               query :: String.t(),
@@ -14,8 +14,8 @@ defmodule Canary.Interactions.Responder do
   defp impl, do: Application.get_env(:canary, :responder, Responder.Default)
 end
 
-defmodule Canary.Interactions.Responder.Default do
-  @behaviour Canary.Interactions.Responder
+defmodule Canary.Responder.Default do
+  @behaviour Canary.Responder
 
   require Logger
   require Ash.Query

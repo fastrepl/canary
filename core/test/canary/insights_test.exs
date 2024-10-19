@@ -4,13 +4,13 @@ defmodule Canary.Test.Insights do
   import Mox
   setup :verify_on_exit!
 
-  alias Canary.Insights.Processor
+  alias Canary.Interactions.AnalyticsExporter
 
-  describe "processor" do
+  describe "AnalyticsExporter" do
     setup do
       start_supervised!({
-        Processor,
-        name: Processor.Test
+        AnalyticsExporter,
+        name: AnalyticsExporter.Test
       })
 
       :ok

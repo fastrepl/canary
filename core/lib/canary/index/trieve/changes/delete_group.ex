@@ -24,6 +24,7 @@ defmodule Canary.Index.Trieve.Changes.DeleteGroup do
     |> Enum.map(fn {id, record} ->
       case Trieve.Client.delete_group(id) do
         :ok -> {:ok, record}
+        {:error, %{"message" => "Not Found" <> _}} -> {:ok, record}
         {:error, error} -> {:error, error}
       end
     end)
