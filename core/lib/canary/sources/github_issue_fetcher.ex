@@ -1,4 +1,9 @@
 defmodule Canary.Sources.GithubIssue.FetcherResult do
+  defstruct [:items]
+  @type t :: %__MODULE__{items: list(Canary.Sources.GithubIssue.FetcherResultItem.t())}
+end
+
+defmodule Canary.Sources.GithubIssue.FetcherResultItem do
   defstruct [
     :node_id,
     :title,
@@ -92,7 +97,7 @@ defmodule Canary.Sources.GithubIssue.Fetcher do
   end
 
   defp transform_issue_node(issue) do
-    top = %GithubIssue.FetcherResult{
+    top = %GithubIssue.FetcherResultItem{
       node_id: issue["id"],
       title: issue["title"],
       content: issue["body"],
@@ -107,7 +112,7 @@ defmodule Canary.Sources.GithubIssue.Fetcher do
     comments =
       issue["comments"]["nodes"]
       |> Enum.map(fn comment ->
-        %GithubIssue.FetcherResult{
+        %GithubIssue.FetcherResultItem{
           node_id: comment["id"],
           title: "",
           content: comment["body"],

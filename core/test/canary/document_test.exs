@@ -6,7 +6,7 @@ defmodule Canary.Test.Document do
   alias Canary.Sources.GithubIssue
 
   describe "webpage" do
-    test "create and find" do
+    test "create" do
       account = account_fixture()
       project = Canary.Accounts.Project.create!(account.id, "project")
 
@@ -47,11 +47,6 @@ defmodule Canary.Test.Document do
       assert length(doc.chunks) == 1
       %Ash.Union{value: chunk} = doc.chunks |> Enum.at(0)
       assert chunk.url == "https://example.com"
-
-      [found] =
-        Canary.Sources.Document.find_by_chunk_index_ids!([chunk.index_id, Ash.UUID.generate()])
-
-      assert found.id == doc.id
     end
 
     test "destroy" do

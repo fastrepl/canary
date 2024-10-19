@@ -28,7 +28,7 @@ defmodule Canary.Workers.GithubIssueProcessor do
   defp process(%Source{id: source_id} = source) do
     with {:ok, incomings} <- GithubIssue.Fetcher.run(source),
          :ok <- GithubIssue.Syncer.run(source_id, incomings) do
-      Source.update_overview(source)
+      :ok
     end
   end
 end
