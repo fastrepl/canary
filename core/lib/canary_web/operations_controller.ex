@@ -28,7 +28,9 @@ defmodule CanaryWeb.OperationsController do
   end
 
   def search(conn, %{"query" => %{"text" => query, "tags" => tags}} = params) do
-    case Canary.Searcher.run(conn.assigns.sources, query, tags: tags, cache: cache?()) do
+    source_ids = Enum.map(conn.assigns.sources, & &1.id)
+
+    case Canary.Searcher.run(query, source_ids: source_ids, tags: tags, cache: cache?()) do
       {:ok, matches} ->
         data = %{
           matches: matches,

@@ -4,7 +4,6 @@ defmodule Canary.Index.Trieve.Client do
     dataset = Application.fetch_env!(:canary, :trieve_dataset)
 
     Canary.rest_client(
-      receive_timeout: 2_000,
       base_url: "https://api.trieve.ai/api",
       headers: [
         {"Content-Type", "application/json"},
@@ -62,19 +61,49 @@ defmodule Canary.Index.Trieve.Client do
             tags: tags
           } = chunk
 
+          tag_set =
+            if is_nil(tags) or tags == [] do
+              [
+                format_for_tagset(:source_id, source_id),
+                format_for_tagset(:empty_tags)
+              ]
+            else
+              [
+                format_for_tagset(:source_id, source_id)
+                | Enum.map(tags, &format_for_tagset(:tag, &1))
+              ]
+            end
+
           %{
             tracking_id: tracking_id,
             group_tracking_ids: [group_tracking_id],
             link: url,
             chunk_html: content,
             metadata: meta,
-            tag_set: [
-              format_for_tag(:source_id, source_id)
-              | Enum.map(tags, &format_for_tag(:tag, &1))
-            ],
+            tag_set: tag_set,
             convert_html_to_text: false,
             upsert_by_tracking_id: true
           }
+          |> then(fn data ->
+            if is_struct(chunk[:created_at], DateTime) do
+              data
+              |> Map.merge(%{
+                time_stamp: DateTime.to_iso8601(chunk.created_at)
+              })
+            else
+              data
+            end
+          end)
+          |> then(fn data ->
+            if is_binary(chunk[:title]) do
+              data
+              |> Map.merge(%{
+                fulltext_boost: %{boost_factor: 10, phrase: chunk.title}
+              })
+            else
+              data
+            end
+          end)
         end)
 
       # https://docs.trieve.ai/api-reference/chunk/create-or-upsert-chunk-or-chunks
@@ -108,53 +137,61 @@ defmodule Canary.Index.Trieve.Client do
   def search(query, opts \\ []) do
     tags = opts[:tags]
     source_ids = Keyword.fetch!(opts, :source_ids)
-    search_type = if(question?(query), do: :fulltext, else: :hybrid)
+    search_type = if(question?(query), do: :hybrid, else: :fulltext)
+    receive_timeout = if(question?(query), do: 3_000, else: 1_500)
 
     highlight_options =
       if question?(query) do
         %{
-          highlight_window: 1,
-          highlight_max_length: 4,
+          highlight_window: 8,
+          highlight_max_length: 5,
           highlight_threshold: 0.5,
           highlight_strategy: :v1
         }
       else
         %{
-          highlight_window: 1,
+          highlight_window: 8,
           highlight_max_length: 2,
           highlight_threshold: 0.9,
           highlight_strategy: :exactmatch
         }
       end
 
+    filters = %{
+      must:
+        [
+          %{
+            field: "tag_set",
+            match_any: Enum.map(source_ids, &format_for_tagset(:source_id, &1))
+          },
+          if(not is_nil(tags) and tags != [],
+            do: %{
+              field: "tag_set",
+              match_any: [
+                format_for_tagset(:empty_tags)
+                | Enum.map(tags, &format_for_tagset(:tag, &1))
+              ]
+            },
+            else: nil
+          )
+        ]
+        |> Enum.reject(&is_nil/1)
+    }
+
     # https://docs.trieve.ai/api-reference/chunk-group/search-over-groups
     case base()
          |> Req.post(
+           receive_timeout: receive_timeout,
            url: "/chunk_group/group_oriented_search",
            json: %{
              query: query,
-             filters: %{
-               must:
-                 [
-                   %{
-                     field: "tag_set",
-                     match_any: Enum.map(source_ids, &format_for_tag(:source_id, &1))
-                   },
-                   if(not is_nil(tags) and tags != [],
-                     do: %{
-                       field: "tag_set",
-                       match_any: Enum.map(tags, &format_for_tag(:tag, &1))
-                     },
-                     else: nil
-                   )
-                 ]
-                 |> Enum.reject(&is_nil/1)
-             },
+             filters: filters,
              page: 1,
              page_size: 8,
              group_size: 3,
              search_type: search_type,
              score_threshold: 0.1,
+             recency_bias: 0.5,
              remove_stop_words: true,
              slim_chunks: false,
              typo_options: %{correct_typos: true},
@@ -178,9 +215,10 @@ defmodule Canary.Index.Trieve.Client do
       query
       |> String.split(" ")
       |> Enum.reject(&(&1 == ""))
-      |> Enum.count() > 2
+      |> Enum.count() > 3
   end
 
-  defp format_for_tag(:source_id, value), do: "source_id:#{value}"
-  defp format_for_tag(:tag, value), do: "tag:#{value}"
+  defp format_for_tagset(:empty_tags), do: "__empty_tags__"
+  defp format_for_tagset(:source_id, value), do: "__source_id:#{value}__"
+  defp format_for_tagset(:tag, value), do: "__tag:#{value}__"
 end

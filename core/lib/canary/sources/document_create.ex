@@ -1,6 +1,11 @@
 defmodule Canary.Sources.Document.Create do
   use Ash.Resource.Change
+
   alias Canary.Index.Trieve
+  alias Canary.Sources.Chunk
+  alias Canary.Sources.Webpage
+  alias Canary.Sources.GithubIssue
+  alias Canary.Sources.GithubDiscussion
 
   def init(opts) do
     if [
@@ -19,8 +24,6 @@ defmodule Canary.Sources.Document.Create do
 
   @impl true
   def batch_change(changesets, opts, _context) do
-    IO.inspect(changesets)
-
     changesets
     |> Enum.map(fn changeset ->
       data = Ash.Changeset.get_argument(changeset, opts[:data_argument])
@@ -43,10 +46,10 @@ defmodule Canary.Sources.Document.Create do
     end)
   end
 
-  defp transform_fetcher_result(%Canary.Sources.Webpage.FetcherResult{} = data) do
+  defp transform_fetcher_result(%Webpage.FetcherResult{} = data) do
     local_chunks =
       data.items
-      |> Enum.map(fn _ -> %Canary.Sources.Chunk{index_id: Ash.UUID.generate()} end)
+      |> Enum.map(fn _ -> %Chunk{index_id: Ash.UUID.generate()} end)
 
     remote_chunks =
       data.items
@@ -80,6 +83,87 @@ defmodule Canary.Sources.Document.Create do
       local_doc_meta: local_doc_meta,
       remote_group_meta: remote_group_meta,
       remote_tags: data.tags
+    }
+  end
+
+  defp transform_fetcher_result(%GithubIssue.FetcherResult{} = data) do
+    local_chunks =
+      data.items
+      |> Enum.map(fn _ -> %Chunk{index_id: Ash.UUID.generate()} end)
+
+    remote_chunks =
+      data.items
+      |> Enum.map(fn item ->
+        %{
+          content: item.content,
+          url: data.root.url,
+          title: data.root.title,
+          created_at: item.created_at,
+          meta: %{}
+        }
+      end)
+
+    local_doc_meta = %Ash.Union{
+      type: :github_issue,
+      value: %{
+        node_id: data.root.node_id
+      }
+    }
+
+    remote_group_meta = %{
+      type: :github_issue,
+      title: data.root.title,
+      url: data.root.url,
+      closed: data.root.closed
+    }
+
+    %{
+      local_chunks: local_chunks,
+      remote_chunks: remote_chunks,
+      local_doc_meta: local_doc_meta,
+      remote_group_meta: remote_group_meta,
+      remote_tags: []
+    }
+  end
+
+  defp transform_fetcher_result(%GithubDiscussion.FetcherResult{} = data) do
+    local_chunks =
+      data.items
+      |> Enum.map(fn _ -> %Chunk{index_id: Ash.UUID.generate()} end)
+
+    remote_chunks =
+      data.items
+      |> Enum.map(fn item ->
+        %{
+          url: item.url,
+          content: item.content,
+          title: data.root.title,
+          created_at: item.created_at,
+          meta: %{}
+        }
+      end)
+
+    local_doc_meta = %Ash.Union{
+      type: :github_discussion,
+      value: %{
+        node_id: data.root.node_id
+      }
+    }
+
+    remote_group_meta = %{
+      type: :github_discussion,
+      title: data.root.title,
+      url: data.root.url,
+      closed: data.root.closed,
+      answered: data.root.answered
+    }
+
+    %{
+      local_chunks: local_chunks,
+      remote_chunks: remote_chunks,
+      local_doc_meta: local_doc_meta,
+      remote_group_meta: remote_group_meta,
+      remote_tags: []
     }
   end
 
