@@ -2,7 +2,6 @@ defmodule Canary.Interactions.Responder do
   alias Canary.Interactions.Responder
 
   @callback run(
-              sources :: list(any()),
               query :: String.t(),
               handle_delta :: function(),
               opts :: keyword()
@@ -23,25 +22,13 @@ defmodule Canary.Interactions.Responder.Default do
 
   alias Canary.Sources.Document
 
-  def run(sources, query, handle_delta, opts) do
-    {:ok, results} = Canary.Searcher.run(sources, query, opts)
+  def run(query, handle_delta, opts) do
+    {:ok, results} = Canary.Searcher.run(query, opts)
 
     docs =
       results
       |> search_results_to_docs()
-      |> then(fn docs ->
-        opts = [threshold: 0, renderer: fn doc -> doc.content end]
-
-        case Canary.Reranker.run(query, docs, opts) do
-          {:ok, docs} ->
-            docs
-
-          {:error, error} ->
-            Logger.error(%{message: "reranker failed", error: error})
-            docs
-        end
-        |> Enum.take(5)
-      end)
+      |> Enum.take(5)
 
     messages = [
       %{

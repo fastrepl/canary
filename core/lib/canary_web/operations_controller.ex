@@ -70,12 +70,13 @@ defmodule CanaryWeb.OperationsController do
       |> send_chunked(200)
 
     here = self()
+    source_ids = Enum.map(conn.assigns.sources, & &1.id)
 
     Task.start_link(fn ->
       Canary.Interactions.Responder.run(
-        conn.assigns.sources,
         query,
         fn data -> send(here, data) end,
+        source_ids: source_ids,
         tags: tags,
         cache: cache?()
       )
