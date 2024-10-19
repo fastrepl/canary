@@ -66,10 +66,5 @@ jobs:
         working-directory: core
       - run: mix format --check-formatted
         working-directory: core
-      - run: task trieve:create
-        working-directory: core
       - run: mix test
-        working-directory: core
-      - run: task trieve:delete
-        if: success() || failure()
         working-directory: core
