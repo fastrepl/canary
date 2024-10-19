@@ -144,16 +144,6 @@ if config_env() != :test do
     config :oapi_github, app_name: "getcanary.dev"
   end
 
-  if System.get_env("JINA_API_KEY") do
-    config :canary, :jina_api_key, System.fetch_env!("JINA_API_KEY")
-    config :canary, :reranker, Canary.Reranker.Jina
-  end
-
-  if System.get_env("COHERE_API_KEY") do
-    config :canary, :cohere_api_key, System.fetch_env!("COHERE_API_KEY")
-    config :canary, :reranker, Canary.Reranker.Cohere
-  end
-
   if [
        "STRIPE_SECRET_KEY",
        "STRIPE_PUBLIC_KEY",
@@ -170,6 +160,9 @@ if config_env() != :test do
     config :canary, :stripe_webhook_secret, System.fetch_env!("STRIPE_WEBHOOK_SECRET")
     config :canary, :stripe_starter_price_id, System.fetch_env!("STRIPE_STARTER_PRICE")
   end
+
+  config :canary, :trieve_api_key, System.get_env("TRIEVE_API_KEY")
+  config :canary, :trieve_dataset, System.get_env("TRIEVE_DATASET")
 end
 
 config :canary, :master_user_email, System.get_env("MASTER_USER_EMAIL")
@@ -190,16 +183,6 @@ config :canary, :self_host, System.get_env("SELF_HOST") in ~w(true 1)
 
 config :canary, :fly_api_key, System.get_env("FLY_API_KEY")
 config :canary, :fly_app_name, System.get_env("FLY_APP_NAME")
-
-if config_env() == :prod do
-  config :canary, :typesense,
-    base_url: System.get_env("TYPESENSE_BASE_URL"),
-    api_key: System.get_env("TYPESENSE_API_KEY")
-else
-  config :canary, :typesense,
-    base_url: "http://localhost:8108",
-    api_key: "canary"
-end
 
 if config_env() == :prod do
   if [

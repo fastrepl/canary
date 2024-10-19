@@ -1,28 +1,53 @@
 defmodule Canary.Sources.GithubDiscussion.FetcherResult do
-  defstruct [
+  alias Canary.Sources.GithubDiscussion
+
+  defstruct [:root, :items]
+  @type t :: %__MODULE__{root: GithubDiscussion.Root.t(), items: list(GithubDiscussion.Item.t())}
+end
+
+defmodule Canary.Sources.GithubDiscussion do
+  @fields [
     :node_id,
-    :title,
-    :content,
     :url,
+    :content,
     :created_at,
     :author_name,
-    :author_avatar_url,
-    :comment,
-    :closed,
-    :answered
+    :author_avatar_url
   ]
+
+  def base_fields(), do: @fields
+end
+
+defmodule Canary.Sources.GithubDiscussion.Root do
+  alias Canary.Sources.GithubDiscussion
+
+  defstruct GithubDiscussion.base_fields() ++ [:title, :closed, :answered]
 
   @type t :: %__MODULE__{
           node_id: String.t(),
-          title: String.t(),
-          content: String.t(),
           url: String.t(),
+          content: String.t(),
           created_at: DateTime.t(),
           author_name: String.t(),
           author_avatar_url: String.t(),
-          comment: boolean(),
+          title: String.t(),
           closed: boolean(),
           answered: boolean()
+        }
+end
+
+defmodule Canary.Sources.GithubDiscussion.Item do
+  alias Canary.Sources.GithubDiscussion
+
+  defstruct GithubDiscussion.base_fields()
+
+  @type t :: %__MODULE__{
+          node_id: String.t(),
+          url: String.t(),
+          content: String.t(),
+          created_at: DateTime.t(),
+          author_name: String.t(),
+          author_avatar_url: String.t()
         }
 end
 
@@ -92,34 +117,31 @@ defmodule Canary.Sources.GithubDiscussion.Fetcher do
   end
 
   defp transform_discussion_node(discussion) do
-    top = %GithubDiscussion.FetcherResult{
+    root = %GithubDiscussion.Root{
       node_id: discussion["id"],
-      title: discussion["title"],
-      content: discussion["body"],
       url: discussion["url"],
+      content: discussion["body"],
       created_at: discussion["createdAt"],
       author_name: discussion["author"]["login"],
       author_avatar_url: discussion["author"]["avatarUrl"],
-      comment: false,
+      title: discussion["title"],
       closed: discussion["closed"],
       answered: discussion["isAnswered"]
     }
 
-    comments =
+    items =
       discussion["comments"]["nodes"]
       |> Enum.map(fn comment ->
-        %GithubDiscussion.FetcherResult{
+        %GithubDiscussion.Item{
           node_id: comment["id"],
-          title: "",
-          content: comment["body"],
           url: comment["url"],
+          content: comment["body"],
           created_at: comment["createdAt"],
           author_name: comment["author"]["login"],
-          author_avatar_url: comment["author"]["avatarUrl"],
-          comment: true
+          author_avatar_url: comment["author"]["avatarUrl"]
         }
       end)
 
-    [top | comments]
+    %GithubDiscussion.FetcherResult{root: root, items: items}
   end
 end

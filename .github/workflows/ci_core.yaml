@@ -27,12 +27,11 @@ jobs:
           --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
         ports:
           - 5432:5432
-      typesense:
-        image: typesense/typesense:26.0
     steps:
       - uses: actions/checkout@v3
         with:
           sparse-checkout: core
+      - uses: arduino/setup-task@v2
       - uses: erlef/setup-beam@v1
         with:
           version-file: core/.tool-versions
@@ -67,14 +66,10 @@ jobs:
         working-directory: core
       - run: mix format --check-formatted
         working-directory: core
-      - run: |
-          docker run -d \
-          -p 8108:8108 \
-          --name typesense \
-          -v /tmp/typesense:/data \
-          typesense/typesense:27.0 \
-          --api-key=canary \
-          --data-dir /data \
-          --enable-cors
+      - run: task trieve:create
+        working-directory: core
       - run: mix test
+        working-directory: core
+      - run: task trieve:delete
+        if: success() || failure()
         working-directory: core

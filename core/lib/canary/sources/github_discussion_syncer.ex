@@ -18,12 +18,12 @@ defmodule Canary.Sources.GithubDiscussion.Syncer do
   defp destroy(source_id) do
     Document
     |> Ash.Query.filter(source_id == ^source_id)
-    |> Ash.bulk_destroy(:destroy, %{}, return_errors?: true, batch_size: 50)
+    |> Ash.bulk_destroy(:destroy, %{}, return_errors?: true)
   end
 
   defp create(source_id, incomings) do
     incomings
-    |> Enum.map(&%{source_id: source_id, fetcher_results: &1})
-    |> Ash.bulk_create(Document, :create_github_discussion, return_errors?: true, batch_size: 50)
+    |> Enum.map(&%{source_id: source_id, fetcher_result: &1})
+    |> Ash.bulk_create(Document, :create, return_errors?: true)
   end
 end

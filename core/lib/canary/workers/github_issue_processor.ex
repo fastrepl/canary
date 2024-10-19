@@ -1,7 +1,7 @@
 defmodule Canary.Workers.GithubIssueProcessor do
   use Oban.Worker,
     queue: :github_processor,
-    max_attempts: 2,
+    max_attempts: 1,
     unique: [
       period:
         cond do
@@ -27,8 +27,8 @@ defmodule Canary.Workers.GithubIssueProcessor do
 
   defp process(%Source{id: source_id} = source) do
     with {:ok, incomings} <- GithubIssue.Fetcher.run(source),
-         :ok <- GithubIssue.Syncer.run(source_id, incomings) do
-      Source.update_overview(source)
+         :ok <- GithubIssue.Syncer.run(source_id, Enum.to_list(incomings)) do
+      :ok
     end
   end
 end

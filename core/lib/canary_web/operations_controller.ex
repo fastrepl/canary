@@ -28,7 +28,9 @@ defmodule CanaryWeb.OperationsController do
   end
 
   def search(conn, %{"query" => %{"text" => query, "tags" => tags}} = params) do
-    case Canary.Searcher.run(conn.assigns.sources, query, tags: tags, cache: cache?()) do
+    source_ids = Enum.map(conn.assigns.sources, & &1.id)
+
+    case Canary.Searcher.run(query, source_ids: source_ids, tags: tags, cache: cache?()) do
       {:ok, matches} ->
         data = %{
           matches: matches,
@@ -68,12 +70,13 @@ defmodule CanaryWeb.OperationsController do
       |> send_chunked(200)
 
     here = self()
+    source_ids = Enum.map(conn.assigns.sources, & &1.id)
 
     Task.start_link(fn ->
       Canary.Interactions.Responder.run(
-        conn.assigns.sources,
         query,
         fn data -> send(here, data) end,
+        source_ids: source_ids,
         tags: tags,
         cache: cache?()
       )

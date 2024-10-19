@@ -43,11 +43,11 @@ defmodule Canary.Sources.Webpage.Syncer do
     with %Ash.BulkResult{status: :success} <-
            Document
            |> Ash.Query.filter(id in ^ids_for_destroy)
-           |> Ash.bulk_destroy(:destroy, %{}, return_errors?: true, batch_size: 50),
+           |> Ash.bulk_destroy(:destroy, %{}, return_errors?: true),
          %Ash.BulkResult{status: :success} <-
            (inputs_for_create ++ inputs_for_update)
            |> Enum.map(&%{source_id: source_id, fetcher_result: &1})
-           |> Ash.bulk_create(Document, :create_webpage, return_errors?: true, batch_size: 50) do
+           |> Ash.bulk_create(Document, :create, return_errors?: true) do
       :ok
     else
       %Ash.BulkResult{errors: errors} ->
