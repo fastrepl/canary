@@ -3,6 +3,7 @@ defmodule Canary.Accounts.Project do
     domain: Canary.Accounts,
     data_layer: AshPostgres.DataLayer,
     extensions: [AshArchival.Resource],
+    authorizers: [Ash.Policy.Authorizer],
     simple_notifiers: [Canary.Notifiers.Discord]
 
   require Ash.Query
@@ -80,6 +81,16 @@ defmodule Canary.Accounts.Project do
   code_interface do
     define :create, args: [:account_id, :name], action: :create
     define :select, args: [:account_id], action: :select
+  end
+
+  policies do
+    policy action_type(:create) do
+      authorize_if Canary.Checks.Membership.ProjectCreate
+    end
+
+    policy always() do
+      authorize_if always()
+    end
   end
 
   postgres do

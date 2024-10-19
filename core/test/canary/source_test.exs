@@ -4,7 +4,7 @@ defmodule Canary.Test.Source do
 
   test "create" do
     account = account_fixture()
-    project = Canary.Accounts.Project.create!(account.id, "project")
+    project = Canary.Accounts.Project.create!(account.id, "project", authorize?: false)
     config = %Ash.Union{type: :webpage, value: %Canary.Sources.Webpage.Config{}}
 
     source =
@@ -27,7 +27,7 @@ defmodule Canary.Test.Source do
 
   test "destroy" do
     account = account_fixture()
-    project = Canary.Accounts.Project.create!(account.id, "project")
+    project = Canary.Accounts.Project.create!(account.id, "project", authorize?: false)
     config = %Ash.Union{type: :webpage, value: %Canary.Sources.Webpage.Config{}}
 
     source =

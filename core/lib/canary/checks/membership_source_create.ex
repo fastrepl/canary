@@ -1,4 +1,4 @@
-defmodule Canary.Checks.MembershipSourceCreate do
+defmodule Canary.Checks.Membership.SourceCreate do
   use Ash.Policy.SimpleCheck
 
   def describe(_) do

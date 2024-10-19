@@ -5,8 +5,8 @@ defmodule Canary.Test.Project do
 
   test "soft destroy" do
     account = account_fixture()
-    project_1 = Canary.Accounts.Project.create!(account.id, "project_1")
-    project_2 = Canary.Accounts.Project.create!(account.id, "project_2")
+    project_1 = Canary.Accounts.Project.create!(account.id, "project_1", authorize?: false)
+    project_2 = Canary.Accounts.Project.create!(account.id, "project_2", authorize?: false)
 
     assert Canary.Accounts.Project
            |> Ash.Query.for_read(:read)

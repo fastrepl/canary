@@ -143,7 +143,7 @@ defmodule Canary.Sources.Source do
 
   policies do
     policy action_type(:create) do
-      authorize_if Canary.Checks.MembershipSourceCreate
+      authorize_if Canary.Checks.Membership.SourceCreate
     end
 
     policy always() do

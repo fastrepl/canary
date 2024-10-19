@@ -42,7 +42,10 @@ defmodule CanaryWeb.SettingsLive.CreateProject do
 
     form =
       Canary.Accounts.Project
-      |> AshPhoenix.Form.for_create(:create, forms: [auto?: true])
+      |> AshPhoenix.Form.for_create(:create,
+        forms: [auto?: true],
+        actor: socket.assigns.current_account
+      )
       |> to_form()
 
     {:ok, socket |> assign(:form, form)}
@@ -57,8 +60,21 @@ defmodule CanaryWeb.SettingsLive.CreateProject do
   @impl true
   def handle_event("submit", %{"form" => params}, socket) do
     case AshPhoenix.Form.submit(socket.assigns.form, params: params) do
-      {:ok, _} -> {:noreply, socket |> push_navigate(to: ~p"/settings/projects")}
-      {:error, form} -> {:noreply, assign(socket, :form, form)}
+      {:ok, _} ->
+        {:noreply, socket |> push_navigate(to: ~p"/settings/projects")}
+
+      {:error,
+       %Phoenix.HTML.Form{source: %AshPhoenix.Form{source: %Ash.Changeset{errors: errors}}} = form} ->
+        if Enum.any?(errors, &match?(%Ash.Error.Forbidden.Policy{}, &1)) do
+          socket =
+            socket
+            |> push_navigate(to: ~p"/settings/projects")
+            |> put_flash(:error, "Please upgrade your plan.")
+
+          {:noreply, socket}
+        else
+          {:noreply, socket |> assign(:form, form)}
+        end
     end
   end
 end
