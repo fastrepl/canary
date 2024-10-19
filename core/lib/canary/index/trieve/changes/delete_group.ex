@@ -1,6 +1,5 @@
 defmodule Canary.Index.Trieve.Changes.DeleteGroup do
   use Ash.Resource.Change
-  alias Canary.Index.Trieve
 
   @impl true
   def init(opts) do
@@ -16,17 +15,15 @@ defmodule Canary.Index.Trieve.Changes.DeleteGroup do
 
   @impl true
   def after_batch(changesets_and_results, opts, _context) do
-    changesets_and_results
-    |> Enum.map(fn {_changeset, record} ->
-      id = Map.get(record, opts[:tracking_id_attribute])
-      {id, record}
-    end)
-    |> Enum.map(fn {id, record} ->
-      case Trieve.Client.delete_group(id) do
-        :ok -> {:ok, record}
-        {:error, %{"message" => "Not Found" <> _}} -> {:ok, record}
-        {:error, error} -> {:error, error}
-      end
-    end)
+    records =
+      changesets_and_results
+      |> Enum.map(fn {_changeset, record} -> record end)
+
+    records
+    |> Enum.map(&%{"tracking_id" => Map.get(&1, opts[:tracking_id_attribute])})
+    |> Enum.map(&Canary.Workers.DeleteTrieveGroup.new(&1))
+    |> Oban.insert_all()
+
+    Enum.map(records, &{:ok, &1})
   end
 end

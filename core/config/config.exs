@@ -60,7 +60,8 @@ config :canary, Oban,
     default: 10,
     github_processor: 2,
     webpage_processor: 2,
-    email: 10
+    email: 10,
+    trieve: 50
   ],
   repo: Canary.Repo,
   plugins: [
