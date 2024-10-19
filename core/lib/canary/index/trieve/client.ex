@@ -4,6 +4,7 @@ defmodule Canary.Index.Trieve.Client do
     dataset = Application.fetch_env!(:canary, :trieve_dataset)
 
     Canary.rest_client(
+      receive_timeout: 2_000,
       base_url: "https://api.trieve.ai/api",
       headers: [
         {"Content-Type", "application/json"},
@@ -109,6 +110,23 @@ defmodule Canary.Index.Trieve.Client do
     source_ids = Keyword.fetch!(opts, :source_ids)
     search_type = if(question?(query), do: :fulltext, else: :hybrid)
 
+    highlight_options =
+      if question?(query) do
+        %{
+          highlight_window: 1,
+          highlight_max_length: 4,
+          highlight_threshold: 0.5,
+          highlight_strategy: :v1
+        }
+      else
+        %{
+          highlight_window: 1,
+          highlight_max_length: 2,
+          highlight_threshold: 0.9,
+          highlight_strategy: :exactmatch
+        }
+      end
+
     # https://docs.trieve.ai/api-reference/chunk-group/search-over-groups
     case base()
          |> Req.post(
@@ -133,21 +151,18 @@ defmodule Canary.Index.Trieve.Client do
                  |> Enum.reject(&is_nil/1)
              },
              page: 1,
-             page_size: 20,
+             page_size: 8,
              group_size: 3,
              search_type: search_type,
-             score_threshold: 0,
+             score_threshold: 0.1,
              remove_stop_words: true,
-             typo_options: %{
-               correct_typos: true
-             },
-             highlight_options: %{
-               highlight_results: true,
-               highlight_max_length: 12,
-               highlight_max_num: 1,
-               highlight_window: 6,
-               highlight_threshold: 1.0
-             }
+             slim_chunks: false,
+             typo_options: %{correct_typos: true},
+             highlight_options:
+               Map.merge(
+                 highlight_options,
+                 %{highlight_results: true, highlight_max_num: 1}
+               )
            }
          ) do
       {:ok, %{status: 200, body: %{"results" => results}}} -> {:ok, results}
@@ -157,10 +172,13 @@ defmodule Canary.Index.Trieve.Client do
   end
 
   defp question?(query) do
-    query
-    |> String.split(" ")
-    |> Enum.reject(&(&1 == ""))
-    |> Enum.count() > 2
+    String.ends_with?(query, "?") or
+      query =~
+        ~r/^(who|whom|whose|what|which|when|where|why|how|can|is|does|do|are|could|would|may|give)\b/ or
+      query
+      |> String.split(" ")
+      |> Enum.reject(&(&1 == ""))
+      |> Enum.count() > 2
   end
 
   defp format_for_tag(:source_id, value), do: "source_id:#{value}"

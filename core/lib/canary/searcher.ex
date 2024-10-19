@@ -57,24 +57,37 @@ defmodule Canary.Searcher.Default do
               "highlights" => highlights
             } = chunk
 
-            %{
-              meta: meta,
-              url: url,
-              title: meta["title"],
-              excerpt: Enum.at(highlights, 0, nil)
-            }
+            cond do
+              meta["title"] == group["metadata"]["title"] ->
+                nil
+
+              Enum.at(highlights, 0, nil) == nil ->
+                nil
+
+              true ->
+                %{
+                  meta: meta,
+                  url: url,
+                  title: meta["title"],
+                  excerpt: Enum.at(highlights, 0)
+                }
+            end
           end)
+          |> Enum.reject(&is_nil/1)
 
-        meta = group["metadata"]
-
-        %{
-          type: meta["type"],
-          meta: %{},
-          url: meta["url"],
-          title: meta["title"],
-          sub_results: chunks
-        }
+        if chunks == [] do
+          nil
+        else
+          %{
+            type: group["metadata"]["type"],
+            url: group["metadata"]["url"],
+            title: group["metadata"]["title"],
+            meta: %{},
+            sub_results: chunks
+          }
+        end
       end)
+      |> Enum.reject(&is_nil/1)
 
     {:ok, matches}
   end
