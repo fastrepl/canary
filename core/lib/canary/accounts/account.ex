@@ -6,6 +6,7 @@ defmodule Canary.Accounts.Account do
 
   attributes do
     uuid_primary_key :id
+    attribute :super_user, :boolean, default: false
   end
 
   relationships do
@@ -20,7 +21,7 @@ defmodule Canary.Accounts.Account do
   end
 
   actions do
-    defaults [:read, :destroy]
+    defaults [:read, :destroy, update: [:super_user]]
 
     create :create do
       primary? true

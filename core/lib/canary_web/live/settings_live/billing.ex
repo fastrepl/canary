@@ -43,8 +43,8 @@ defmodule CanaryWeb.SettingsLive.Billing do
 
   @impl true
   def mount(_params, _session, socket) do
-    account = socket.assigns.current_account |> Ash.load!([:billing])
-    subscription = account.billing.stripe_subscription
+    account = socket.assigns.current_account |> Ash.load!(billing: [:membership])
+    membership = account.billing.membership
 
     {:ok, usage} = Canary.Analytics.query(:last_month_usage, %{account_id: account.id})
 
@@ -64,9 +64,9 @@ defmodule CanaryWeb.SettingsLive.Billing do
         :stripe_starter_price_id,
         Application.fetch_env!(:canary, :stripe_starter_price_id)
       )
-      |> assign(:subscription_current, subscription_current(subscription))
-      |> assign(:subscription_next, subscription_next(subscription))
-      |> assign(:subscription_trial, subscription_trial(subscription))
+      |> assign(:subscription_current, compute_subscription_current(membership))
+      |> assign(:subscription_next, compute_subscription_next(membership))
+      |> assign(:subscription_trial, compute_subscription_trial(membership))
       |> assign(:search_usage, search_usage["sum"])
       |> assign(:ask_usage, ask_usage["sum"])
 
@@ -91,7 +91,7 @@ defmodule CanaryWeb.SettingsLive.Billing do
 
   defp render_action_button(
          %{
-           current_account: %{billing: %{stripe_subscription: %{"status" => status}}}
+           current_account: %{billing: %{membership: %{status: status}}}
          } = assigns
        )
        when status in [
@@ -119,46 +119,41 @@ defmodule CanaryWeb.SettingsLive.Billing do
     """
   end
 
-  defp subscription_current(nil) do
-    "Free"
-  end
-
-  defp subscription_current(%{"items" => %{"data" => data}, "trial_end" => trial_end}) do
-    starter_price_id = Application.fetch_env!(:canary, :stripe_starter_price_id)
-
+  defp compute_subscription_current(membership) do
     plan =
-      data
-      |> Enum.any?(&(&1["plan"]["id"] == starter_price_id))
-      |> then(fn starter? -> if(starter?, do: "Starter", else: "Free") end)
+      case membership.tier do
+        :admin -> "Admin"
+        :starter -> "Starter"
+        :free -> "Free"
+      end
 
-    if is_nil(trial_end), do: plan, else: "#{plan}(trial)"
+    if membership.trial do
+      "#{plan}(trial)"
+    else
+      plan
+    end
   end
 
-  defp subscription_next(nil), do: nil
-
-  defp subscription_next(%{
-         "cancel_at_period_end" => true,
-         "current_period_end" => current_period_end
-       }) do
-    "Subscription cancelled, will remain active until #{format_date(current_period_end)}."
+  defp compute_subscription_next(membership) do
+    if membership.current_period_end do
+      if membership.will_renew do
+        "Subscription will be renewed on #{format_date(membership.current_period_end)}."
+      else
+        "Subscription cancelled, will remain active until #{format_date(membership.current_period_end)}."
+      end
+    else
+      nil
+    end
   end
 
-  defp subscription_next(%{
-         "cancel_at_period_end" => false,
-         "current_period_end" => current_period_end
-       }) do
-    "Subscription will be renewed on #{format_date(current_period_end)}."
+  defp compute_subscription_trial(membership) do
+    if membership.trial_end do
+      "Trial ends on #{format_date(membership.trial_end)}."
+    else
+      nil
+    end
   end
-
-  defp subscription_trial(%{
-         "trial_end" => trial_end,
-         "trial_settings" => %{"end_behavior" => %{"missing_payment_method" => _create_invoice}}
-       }) do
-    "Trial ends on #{format_date(trial_end)}."
-  end
-
-  defp subscription_trial(_), do: nil
 
   defp format_date(nil), do: "none"
-  defp format_date(t), do: DateTime.from_unix!(t) |> Calendar.strftime("%B %d, %Y")
+  defp format_date(t), do: Calendar.strftime(t, "%B %d, %Y")
 end

@@ -13,16 +13,16 @@ defmodule Canary.Checks.Membership.SourceCreate do
         },
         _opts
       ) do
-    with {:ok, %{billing: billing}} <- Ash.load(account, :billing),
+    with {:ok, %{billing: billing}} <- Ash.load(account, billing: [:membership]),
          {:ok, %{num_sources: num_sources}} <-
            Ash.get(Canary.Accounts.Project, id, load: [:num_sources]) do
       %Ash.Union{type: source_type} = Ash.Changeset.get_attribute(changeset, :config)
 
       cond do
-        is_nil(billing.stripe_subscription) and source_type == :webpage and num_sources < 1 ->
+        billing.membership.tier == :free and source_type == :webpage and num_sources < 1 ->
           {:ok, true}
 
-        not is_nil(billing.stripe_subscription) and num_sources < 4 ->
+        billing.membership.tier == :starter and num_sources < 4 ->
           {:ok, true}
 
         true ->

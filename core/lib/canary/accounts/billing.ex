@@ -20,6 +20,13 @@ defmodule Canary.Accounts.Billing do
     belongs_to :account, Canary.Accounts.Account
   end
 
+  calculations do
+    calculate :membership, :atom, {
+      Canary.Accounts.MembershipCalculation,
+      stripe_subscription_attribute: :stripe_subscription
+    }
+  end
+
   actions do
     defaults [:read]
 

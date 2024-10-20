@@ -92,6 +92,10 @@ defmodule Canary.Accounts.Project do
   end
 
   policies do
+    bypass actor_attribute_equals(:super_user, true) do
+      authorize_if always()
+    end
+
     policy action_type(:create) do
       authorize_if Canary.Checks.Membership.ProjectCreate
     end
