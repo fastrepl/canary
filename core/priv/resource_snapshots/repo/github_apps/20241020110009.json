@@ -21,7 +21,7 @@
       "type": "bigint"
     },
     {
-      "allow_nil?": true,
+      "allow_nil?": false,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
@@ -55,7 +55,7 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "F46116CD6F8A3AE84C1D92026D9A0657FC8EC83004C746B2C704FAF583FF9A9D",
+  "hash": "F0E9089AFBBB44AD28CBC3BDEC1B43D751DD42CD59F58586C76CC597E16B705A",
   "identities": [],
   "multitenancy": {
     "attribute": null,
