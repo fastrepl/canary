@@ -58,33 +58,37 @@ defmodule Canary.Interactions.UsageExporter do
     Task.Supervisor.async_nolink(Canary.TaskSupervisor, fn ->
       keys = Map.keys(search) ++ Map.keys(ask)
 
-      billings =
-        Canary.Accounts.Billing
-        |> Ash.Query.filter(account.projects.public_key in ^keys)
-        |> Ash.Query.select([:id, :account_id])
-        |> Ash.read!(load: [account: [:projects]])
+      accounts =
+        Canary.Accounts.Account
+        |> Ash.Query.filter(projects.public_key in ^keys)
+        |> Ash.Query.select([:id])
+        |> Ash.read!(load: [:projects])
 
-      search
-      |> Enum.each(fn {key, count} ->
-        billing =
-          billings
-          |> Enum.find(
-            &Enum.any?(&1.account.projects, fn project -> project.public_key == key end)
-          )
+      search_rows =
+        search
+        |> Enum.map(fn {key, count} ->
+          account =
+            accounts
+            |> Enum.find(fn account -> Enum.any?(account.projects, &(&1.public_key == key)) end)
 
-        Canary.Accounts.Billing.increment_search!(billing.id, count)
-      end)
+          project = Enum.find(account.projects, &(&1.public_key == key))
+          %{type: :search, count: count, account_id: account.id, project_id: project.id}
+        end)
 
-      ask
-      |> Enum.each(fn {key, count} ->
-        billing =
-          billings
-          |> Enum.find(
-            &Enum.any?(&1.account.projects, fn project -> project.public_key == key end)
-          )
+      ask_rows =
+        ask
+        |> Enum.map(fn {key, count} ->
+          account =
+            accounts
+            |> Enum.find(fn account -> Enum.any?(account.projects, &(&1.public_key == key)) end)
 
-        Canary.Accounts.Billing.increment_search!(billing.id, count)
-      end)
+          project = Enum.find(account.projects, &(&1.public_key == key))
+          %{type: :ask, count: count, account_id: account.id, project_id: project.id}
+        end)
+
+      (search_rows ++ ask_rows)
+      |> Enum.map(&Map.put(&1, :timestamp, DateTime.utc_now()))
+      |> then(&Canary.Analytics.ingest(:usage, &1))
     end)
   end
 end

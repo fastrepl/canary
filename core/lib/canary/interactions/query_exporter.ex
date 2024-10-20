@@ -1,8 +1,8 @@
-defmodule Canary.Interactions.AnalyticsExporter do
+defmodule Canary.Interactions.QueryExporter do
   @moduledoc """
   Usage:
 
-  GenServer.cast(Canary.Interactions.AnalyticsExporter, {:search, %{session_id: "...", project_public_key: "...", query: "..."}})
+  GenServer.cast(Canary.Interactions.QueryExporter, {:search, %{session_id: "...", project_public_key: "...", query: "..."}})
   """
 
   use GenServer

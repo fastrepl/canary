@@ -46,10 +46,7 @@ defmodule Canary.Analytics.Tinybird do
     end
   end
 
-  defp transform_data(data) when is_list(data) do
-    data
-    |> Enum.map(&transform_data/1)
-  end
+  defp transform_data(data) when is_list(data), do: Enum.map(data, &transform_data/1)
 
   defp transform_data(data) when is_map(data) do
     data
@@ -80,9 +77,4 @@ defmodule Canary.Analytics.Tinybird do
       error -> error
     end
   end
-end
-
-defmodule Canary.Analytics.FeedbackPage do
-  @derive Jason.Encoder
-  defstruct [:host, :path, :score, :account_id, :fingerprint, :timestamp]
 end

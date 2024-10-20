@@ -22,8 +22,6 @@ defmodule Canary.Application do
 
     children =
       [
-        Canary.Interactions.AnalyticsExporter,
-        Canary.Interactions.UsageExporter,
         Canary.Vault,
         {Cachex, name: :cache},
         {Task.Supervisor, name: Canary.TaskSupervisor},
@@ -35,7 +33,7 @@ defmodule Canary.Application do
         {Phoenix.PubSub, name: Canary.PubSub},
         # Start the Finch HTTP client for sending emails
         {Finch, name: Canary.Finch}
-      ] ++ discord() ++ stripe() ++ [CanaryWeb.Endpoint]
+      ] ++ discord() ++ stripe() ++ exporters() ++ [CanaryWeb.Endpoint]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
@@ -59,13 +57,20 @@ defmodule Canary.Application do
     end
   end
 
-  defp stripe do
+  defp stripe() do
     if Application.get_env(:canary, :dev_routes, false) and
          Phoenix.Endpoint.server?(:canary, CanaryWeb.Endpoint) do
       [{Canary.StripeWebhookListener, [forward_to: "http://localhost:4000/webhook/stripe"]}]
     else
       []
     end
+  end
+
+  defp exporters() do
+    [
+      Canary.Interactions.QueryExporter,
+      Canary.Interactions.UsageExporter
+    ]
   end
 
   # https://hexdocs.pm/oban/Oban.Telemetry.html#module-job-events

@@ -16,6 +16,12 @@ defmodule CanaryWeb.SettingsLive.Billing do
         >docs</a>.
       </p>
 
+      <div class="my-2">
+        <pre>Last 30 days:</pre>
+        <pre>Search usage: <%= @search_usage %></pre>
+        <pre>Ask usage: <%= @ask_usage %></pre>
+      </div>
+
       <div class="flex flex-col gap-1 text-lg">
         <div>
           You are on <span class="font-semibold text-xl"><%= @subscription_current %></span> plan.
@@ -40,6 +46,13 @@ defmodule CanaryWeb.SettingsLive.Billing do
     account = socket.assigns.current_account |> Ash.load!([:billing])
     subscription = account.billing.stripe_subscription
 
+    {:ok, usage} = Canary.Analytics.query(:last_month_usage, %{account_id: account.id})
+
+    search_usage =
+      usage |> Enum.find(%{"type" => "search", "sum" => 0}, &(&1["type"] == "search"))
+
+    ask_usage = usage |> Enum.find(%{"type" => "ask", "sum" => 0}, &(&1["type"] == "ask"))
+
     socket =
       socket
       |> assign(:current_account, account)
@@ -54,6 +67,8 @@ defmodule CanaryWeb.SettingsLive.Billing do
       |> assign(:subscription_current, subscription_current(subscription))
       |> assign(:subscription_next, subscription_next(subscription))
       |> assign(:subscription_trial, subscription_trial(subscription))
+      |> assign(:search_usage, search_usage["sum"])
+      |> assign(:ask_usage, ask_usage["sum"])
 
     {:ok, socket}
   end

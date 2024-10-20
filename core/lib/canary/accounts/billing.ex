@@ -49,22 +49,12 @@ defmodule Canary.Accounts.Billing do
       change set_attribute(:stripe_subscription, arg(:stripe_subscription))
     end
 
-    update :increment_ask do
-      argument :amount, :integer, allow_nil?: false
-      change atomic_update(:count_ask, expr(count_ask + ^arg(:amount)))
+    update :set_ask do
+      change set_attribute(:count_ask, 0)
     end
 
-    update :increment_search do
-      argument :amount, :integer, allow_nil?: false
-      change atomic_update(:count_search, expr(count_search + ^arg(:amount)))
-    end
-
-    update :reset_ask do
-      change atomic_update(:count_ask, expr(0))
-    end
-
-    update :reset_search do
-      change atomic_update(:count_search, expr(0))
+    update :set_search do
+      change set_attribute(:count_search, 0)
     end
   end
 
@@ -77,10 +67,8 @@ defmodule Canary.Accounts.Billing do
       args: [:stripe_subscription],
       action: :update_stripe_subscription
 
-    define :increment_ask, args: [:amount], action: :increment_ask
-    define :increment_search, args: [:amount], action: :increment_search
-    define :reset_ask, args: [], action: :reset_ask
-    define :reset_search, args: [], action: :reset_search
+    define :set_ask, args: [], action: :set_ask
+    define :set_search, args: [], action: :set_search
   end
 
   postgres do

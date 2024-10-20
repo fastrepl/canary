@@ -4,13 +4,28 @@ defmodule Canary.Test.Insights do
   import Mox
   setup :verify_on_exit!
 
-  alias Canary.Interactions.AnalyticsExporter
+  alias Canary.Interactions.QueryExporter
+  alias Canary.Interactions.UsageExporter
 
-  describe "AnalyticsExporter" do
+  describe "QueryExporter" do
     setup do
       start_supervised!({
-        AnalyticsExporter,
-        name: AnalyticsExporter.Test
+        QueryExporter,
+        name: QueryExporter.Test
+      })
+
+      :ok
+    end
+
+    test "it works" do
+    end
+  end
+
+  describe "UsageExporter" do
+    setup do
+      start_supervised!({
+        UsageExporter,
+        name: UsageExporter.Test
       })
 
       :ok
