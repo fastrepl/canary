@@ -7,13 +7,13 @@ defmodule Canary.Sources.Document do
     uuid_primary_key :id
     create_timestamp :created_at
 
-    attribute :index_id, :uuid, allow_nil?: true
+    attribute :index_id, :uuid, allow_nil?: false
     attribute :meta, Canary.Type.DocumentMeta, allow_nil?: false
     attribute :chunks, {:array, Canary.Sources.Chunk}, allow_nil?: false
   end
 
   relationships do
-    belongs_to :source, Canary.Sources.Source
+    belongs_to :source, Canary.Sources.Source, allow_nil?: false
   end
 
   actions do
