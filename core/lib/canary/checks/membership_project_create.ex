@@ -19,9 +19,6 @@ defmodule Canary.Checks.Membership.ProjectCreate do
         true ->
           {:ok, false}
       end
-    else
-      {:error, error} -> {:error, error}
-      error -> error
     end
   end
 

@@ -54,8 +54,7 @@ defmodule CanaryWeb.SettingsLive.Members do
 
     invites =
       Canary.Accounts.Invite
-      |> Ash.Query.for_read(:not_expired)
-      |> Ash.Query.filter(account_id: current_account.id)
+      |> Ash.Query.for_read(:not_expired, %{}, actor: current_account)
       |> Ash.read!()
 
     socket =

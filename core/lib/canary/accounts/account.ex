@@ -52,6 +52,7 @@ defmodule Canary.Accounts.Account do
 
   aggregates do
     count :num_projects, :projects
+    count :num_members, :users
   end
 
   code_interface do

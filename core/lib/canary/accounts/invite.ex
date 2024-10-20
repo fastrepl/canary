@@ -1,7 +1,8 @@
 defmodule Canary.Accounts.Invite do
   use Ash.Resource,
     domain: Canary.Accounts,
-    data_layer: AshPostgres.DataLayer
+    data_layer: AshPostgres.DataLayer,
+    authorizers: [Ash.Policy.Authorizer]
 
   attributes do
     uuid_primary_key :id
@@ -15,12 +16,7 @@ defmodule Canary.Accounts.Invite do
   end
 
   actions do
-    defaults [:destroy]
-
-    read :read do
-      primary? true
-      prepare build(load: [:account])
-    end
+    defaults [:read, :destroy]
 
     read :not_expired do
       filter expr(created_at > ago(48, :hour))
@@ -37,6 +33,24 @@ defmodule Canary.Accounts.Invite do
 
       change set_attribute(:email, arg(:email))
       change manage_relationship(:account_id, :account, type: :append)
+    end
+  end
+
+  policies do
+    bypass actor_attribute_equals(:super_user, true) do
+      authorize_if always()
+    end
+
+    policy action_type(:read) do
+      authorize_if Canary.Checks.Filter.InviteAccess
+    end
+
+    policy action_type(:create) do
+      authorize_if Canary.Checks.Membership.TeamInvite
+    end
+
+    policy always() do
+      authorize_if always()
     end
   end
 

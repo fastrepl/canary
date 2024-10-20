@@ -31,8 +31,7 @@ defmodule CanaryWeb.LiveAccount do
   defp handle_empty_accounts(socket) do
     invite =
       Canary.Accounts.Invite
-      |> Ash.Query.for_read(:not_expired)
-      |> Ash.Query.filter(email: socket.assigns[:current_user].email)
+      |> Ash.Query.for_read(:not_expired, %{}, actor: socket.assigns.current_user)
       |> Ash.read_one!()
 
     if not is_nil(invite) do

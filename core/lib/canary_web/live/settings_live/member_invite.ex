@@ -52,7 +52,7 @@ defmodule CanaryWeb.SettingsLive.MemberInvite do
   @impl true
   def handle_event("submit", %{"form" => params}, socket) do
     case Canary.Accounts.Invite
-         |> Ash.Changeset.for_create(:create, params)
+         |> Ash.Changeset.for_create(:create, params, actor: socket.assigns.current_account)
          |> Ash.create() do
       {:ok, _} ->
         {:noreply, socket |> push_navigate(to: ~p"/settings/members")}

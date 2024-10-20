@@ -28,9 +28,6 @@ defmodule Canary.Checks.Membership.SourceCreate do
         true ->
           {:ok, false}
       end
-    else
-      {:error, error} -> {:error, error}
-      error -> error
     end
   end
 
