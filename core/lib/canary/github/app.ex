@@ -11,7 +11,7 @@ defmodule Canary.Github.App do
   end
 
   relationships do
-    belongs_to :account, Canary.Accounts.Account
+    belongs_to :account, Canary.Accounts.Account, allow_nil?: false
     has_many :repos, Canary.Github.Repo
   end
 
