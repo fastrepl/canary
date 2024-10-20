@@ -1,4 +1,9 @@
 defmodule Canary.Change.CascadeDestroy do
+  @moduledoc """
+  `Ash.Resource.CascadeDestroy` only works with `relationships`.
+  This module exists to work with embedded resources.
+  """
+
   use Ash.Resource.Change
 
   @impl true

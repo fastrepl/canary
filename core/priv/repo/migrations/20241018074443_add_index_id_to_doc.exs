@@ -9,7 +9,7 @@ defmodule Canary.Repo.Migrations.AddIndexIdToDoc do
 
   def up do
     alter table(:documents) do
-      add :index_id, :uuid, null: false
+      add :index_id, :uuid, null: true
     end
   end
 

@@ -32,7 +32,7 @@ defmodule Canary.Accounts.Project do
   end
 
   actions do
-    defaults [:read, :destroy]
+    defaults [:read]
 
     read :read_all do
       primary? false
@@ -71,6 +71,14 @@ defmodule Canary.Accounts.Project do
       end
 
       change set_attribute(:selected, true)
+    end
+
+    destroy :destroy do
+      primary? true
+      change {Ash.Resource.Change.CascadeDestroy, relationship: :sources, action: :destroy}
+
+      change {Ash.Resource.Change.CascadeDestroy,
+              relationship: :insights_config, action: :destroy}
     end
   end
 

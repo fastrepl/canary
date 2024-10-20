@@ -8,7 +8,7 @@ defmodule CanaryWeb.SettingsLive.Projects do
     <div>
       <Primer.subhead>
         Projects
-        <:actions>
+        <:actions :if={length(@projects) > 0}>
           <Primer.button is_primary phx-click={Primer.open_dialog("project-form")}>
             New
           </Primer.button>
@@ -136,13 +136,11 @@ defmodule CanaryWeb.SettingsLive.Projects do
   def handle_event("destroy", %{"item" => id}, socket) do
     project = socket.assigns.projects |> Enum.find(&(&1.id == id))
 
-    case Ash.destroy(project) do
-      :ok ->
-        {:noreply, socket |> push_navigate(to: ~p"/settings/projects")}
-
-      error ->
-        IO.inspect(error)
-        {:noreply, socket}
+    case Ash.destroy(project, return_destroyed?: false) do
+      {:error, error} -> IO.inspect(error)
+      _ -> :ok
     end
+
+    {:noreply, socket |> push_navigate(to: ~p"/settings/projects")}
   end
 end

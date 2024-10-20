@@ -21,7 +21,7 @@
       "type": "utc_datetime_usec"
     },
     {
-      "allow_nil?": false,
+      "allow_nil?": true,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
@@ -48,10 +48,7 @@
       "references": null,
       "size": null,
       "source": "chunks",
-      "type": [
-        "array",
-        "map"
-      ]
+      "type": ["array", "map"]
     },
     {
       "allow_nil?": true,
