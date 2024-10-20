@@ -11,36 +11,7 @@
 
 <br />
 
-> Currently, 🐤 provides two things:
-
 <div align="center">
-  <h3>1. Self-hostable core server.</h3>
-  <p></p>
-  <div><em>Auth, fetching / indexing documents, handling queries, etc</em></div>
-  <p></p>
-</div>
-
-<div align="center">
-  <a href="https://railway.app/template/UAbYX1?referralCode=IQ76H8" target="_blank">
-    <img src="https://railway.app/button.svg" alt="railway.app">
-  </a>
-</div>
-
-<br />
-
-<div align="center">
-
-| <img width="800px" src="https://github.com/user-attachments/assets/29f6b777-4a88-4f71-95ef-d4c43ca729a2"></img> | <img width="800px" src="https://github.com/user-attachments/assets/e1dde42f-2643-4982-9014-b003313acc7a"></img> |
-| --------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| <div align="center"><code>Fetcher Status</code></div>                                                           | <div align="center"><code>Crawler Status</code></div>                                                           |
-
-</div>
-
-<br />
-
-<div align="center">
-  <h3>2. Tiny web components for building a search bar.</h3>
-  <p></p>
   <div><em>Glob / tag filters, light / dark mode, multiple panels for Search / Ask AI, and more!</em></div>
   <p></p>
 </div>
