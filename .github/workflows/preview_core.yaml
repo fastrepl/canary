@@ -1,0 +1,36 @@
+# https://github.com/neondatabase/preview-branches-with-fly
+on: [pull_request]
+env:
+  NEON_PROJECT_ID: ${{ vars.NEON_PROJECT_ID }}
+  FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: core
+    concurrency:
+      group: pr-${{ github.event.number }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: branch-name
+        uses: tj-actions/branch-names@v8
+      - id: create-branch
+        uses: neondatabase/create-branch-action@v5
+        with:
+          project_id: ${{ env.NEON_PROJECT_ID }}
+          username: canary_prod_owner
+          database: canary_prod
+          branch_name: preview/${{ steps.branch-name.outputs.current_branch }}
+          api_key: ${{ secrets.NEON_API_KEY }}
+      - run: |
+          echo "DATABASE_URL=${{ steps.create-branch.outputs.db_url_with_pooler }}" >> "$GITHUB_ENV"
+      - id: deploy
+        uses: superfly/fly-pr-review-apps@1.2.1
+        with:
+          secrets: DATABASE_URL=$DATABASE_URL
+      - uses: thollander/actions-comment-pull-request@v2
+        with:
+          message: |-
+            Fly Preview URL :balloon: : ${{ steps.deploy.outputs.url }}
+            Neon branch :elephant: : https://console.neon.tech/app/projects/${{ env.NEON_PROJECT_ID }}/branches/${{ steps.create-branch.outputs.branch_id }}
