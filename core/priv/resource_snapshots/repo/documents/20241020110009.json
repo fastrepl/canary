@@ -21,7 +21,7 @@
       "type": "utc_datetime_usec"
     },
     {
-      "allow_nil?": true,
+      "allow_nil?": false,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
@@ -51,7 +51,7 @@
       "type": ["array", "map"]
     },
     {
-      "allow_nil?": true,
+      "allow_nil?": false,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
@@ -85,7 +85,7 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "574A39D3BDF92D9BCCDD3B528C78D15B1ACDC50645B19F6E619EAF95D7BCA1B0",
+  "hash": "BEF0A88021C81171A3E31B7CD8D5DE915085599E67B8246F7266D9AB5D009403",
   "identities": [],
   "multitenancy": {
     "attribute": null,
