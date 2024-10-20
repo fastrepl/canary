@@ -140,6 +140,7 @@ defmodule Canary.Index.Trieve.Client do
     source_ids = Keyword.fetch!(opts, :source_ids)
     search_type = if(question?(query), do: :hybrid, else: :fulltext)
     receive_timeout = if(question?(query), do: 3_000, else: 1_500)
+    score_threshold = if(question?(query), do: 0.0, else: 0.1)
 
     highlight_options =
       if question?(query) do
@@ -191,7 +192,7 @@ defmodule Canary.Index.Trieve.Client do
              page_size: 8,
              group_size: 3,
              search_type: search_type,
-             score_threshold: 0.1,
+             score_threshold: score_threshold,
              recency_bias: 0.5,
              remove_stop_words: true,
              slim_chunks: false,
