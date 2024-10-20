@@ -17,7 +17,7 @@ defmodule Canary.Accounts.Billing do
   end
 
   relationships do
-    belongs_to :account, Canary.Accounts.Account
+    belongs_to :account, Canary.Accounts.Account, allow_nil?: false
   end
 
   calculations do
