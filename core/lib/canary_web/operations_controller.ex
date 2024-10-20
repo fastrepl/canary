@@ -38,6 +38,11 @@ defmodule CanaryWeb.OperationsController do
         }
 
         GenServer.cast(
+          Canary.Interactions.UsageExporter,
+          {:search, %{project_public_key: conn.assigns.project_public_key}}
+        )
+
+        GenServer.cast(
           Canary.Interactions.AnalyticsExporter,
           {:search,
            %{

@@ -50,11 +50,13 @@ defmodule Canary.Accounts.Billing do
     end
 
     update :increment_ask do
-      change atomic_update(:count_ask, expr(count_ask + 1))
+      argument :amount, :integer, allow_nil?: false
+      change atomic_update(:count_ask, expr(count_ask + ^arg(:amount)))
     end
 
     update :increment_search do
-      change atomic_update(:count_search, expr(count_search + 1))
+      argument :amount, :integer, allow_nil?: false
+      change atomic_update(:count_search, expr(count_search + ^arg(:amount)))
     end
 
     update :reset_ask do
@@ -75,8 +77,8 @@ defmodule Canary.Accounts.Billing do
       args: [:stripe_subscription],
       action: :update_stripe_subscription
 
-    define :increment_ask, args: [], action: :increment_ask
-    define :increment_search, args: [], action: :increment_search
+    define :increment_ask, args: [:amount], action: :increment_ask
+    define :increment_search, args: [:amount], action: :increment_search
     define :reset_ask, args: [], action: :reset_ask
     define :reset_search, args: [], action: :reset_search
   end

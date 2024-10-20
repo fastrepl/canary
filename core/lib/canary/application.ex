@@ -23,6 +23,7 @@ defmodule Canary.Application do
     children =
       [
         Canary.Interactions.AnalyticsExporter,
+        Canary.Interactions.UsageExporter,
         Canary.Vault,
         {Cachex, name: :cache},
         {Task.Supervisor, name: Canary.TaskSupervisor},

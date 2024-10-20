@@ -2,7 +2,7 @@ defmodule Canary.Interactions.AnalyticsExporter do
   @moduledoc """
   Usage:
 
-  GenServer.cast(Canary.Interactions.AnalyticsExporter, {:search, %{session_id: "...", project_id: "...", query: "..."}})
+  GenServer.cast(Canary.Interactions.AnalyticsExporter, {:search, %{session_id: "...", project_public_key: "...", query: "..."}})
   """
 
   use GenServer
@@ -22,7 +22,7 @@ defmodule Canary.Interactions.AnalyticsExporter do
   end
 
   @impl true
-  def handle_cast({:search, %{project_id: _} = payload}, state) do
+  def handle_cast({:search, %{project_public_key: _} = payload}, state) do
     session_id =
       case Map.get(payload, :session_id) do
         nil -> Ash.UUID.generate()
