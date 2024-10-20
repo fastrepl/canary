@@ -2,7 +2,6 @@ defmodule Canary.Accounts.Project do
   use Ash.Resource,
     domain: Canary.Accounts,
     data_layer: AshPostgres.DataLayer,
-    extensions: [AshArchival.Resource],
     authorizers: [Ash.Policy.Authorizer],
     simple_notifiers: [Canary.Notifiers.Discord]
 
@@ -20,11 +19,6 @@ defmodule Canary.Accounts.Project do
     identity :unique_public_key, [:public_key]
   end
 
-  archive do
-    attribute :archived_at
-    exclude_read_actions [:read_all]
-  end
-
   relationships do
     belongs_to :account, Canary.Accounts.Account, allow_nil?: false
     has_many :sources, Canary.Sources.Source
@@ -34,16 +28,12 @@ defmodule Canary.Accounts.Project do
   actions do
     defaults [:read]
 
-    read :read_all do
-      primary? false
-    end
-
     create :create do
       primary? true
       accept [:account_id, :name]
 
       change fn changeset, _ ->
-        key = "cp" <> String.slice(Ash.UUID.generate(), 0..7)
+        key = "cp_" <> String.slice(Ash.UUID.generate(), 0..7)
 
         changeset
         |> Ash.Changeset.force_change_attribute(:public_key, key)

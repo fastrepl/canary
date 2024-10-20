@@ -68,16 +68,6 @@
       "size": null,
       "source": "account_id",
       "type": "uuid"
-    },
-    {
-      "allow_nil?": true,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "archived_at",
-      "type": "utc_datetime_usec"
     }
   ],
   "base_filter": null,
@@ -85,7 +75,7 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "7957B77A672EC2669B596975B759FBA1E04FC107ED445633C5D4263F822F9B50",
+  "hash": "1DE1AB13A125A7921552F2A16F494C5FA8796D0216CE650F2156CEAC1A89DBB1",
   "identities": [
     {
       "all_tenants?": false,

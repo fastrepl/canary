@@ -109,8 +109,7 @@ defmodule Canary.MixProject do
       {:ex2ms, "~> 1.7"},
       {:recon, "~> 2.5", override: true},
       {:recon_ex,
-       github: "tatsuya6502/recon_ex", ref: "0ce4c5da777937a5bb57d3e68b9afcb9877c1c3b"},
-      {:ash_archival, "~> 1.0.4"}
+       github: "tatsuya6502/recon_ex", ref: "0ce4c5da777937a5bb57d3e68b9afcb9877c1c3b"}
     ] ++ deps_eval()
   end
 
