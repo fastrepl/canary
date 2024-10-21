@@ -163,6 +163,7 @@ if config_env() != :test do
 
   config :canary, :trieve_api_key, System.get_env("TRIEVE_API_KEY")
   config :canary, :trieve_dataset, System.get_env("TRIEVE_DATASET")
+  config :canary, :trieve_organization, System.get_env("TRIEVE_ORGANIZATION")
 end
 
 config :canary, :master_user_email, System.get_env("MASTER_USER_EMAIL")
@@ -207,4 +208,8 @@ if System.get_env("SELF_HOST") not in ~w(true 1) do
       base_url: System.get_env("PUPPETEER_BASE_URL"),
       api_key: System.get_env("PUPPETEER_API_KEY")
   end
+end
+
+if System.get_env("PREVIEW") == "1" do
+  config :canary, :env, :preview
 end
