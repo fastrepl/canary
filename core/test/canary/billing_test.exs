@@ -21,11 +21,10 @@ defmodule Canary.Test.Billing do
     updated_1 = Billing.update_stripe_customer!(account.billing, %{id: "cus_123"})
     updated_2 = Billing.update_stripe_customer!(account.billing, %Stripe.Customer{id: "cus_123"})
 
-    [found] =
+    found =
       Billing
       |> Ash.Query.filter(stripe_customer[:id] == "cus_123")
-      |> Ash.Query.limit(1)
-      |> Ash.read!()
+      |> Ash.read_one!()
 
     assert found.id == updated_1.id
     assert found.id == updated_2.id

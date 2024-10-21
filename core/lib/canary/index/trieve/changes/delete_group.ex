@@ -3,7 +3,11 @@ defmodule Canary.Index.Trieve.Changes.DeleteGroup do
 
   @impl true
   def init(opts) do
-    if is_nil(opts[:tracking_id_attribute]) do
+    if [
+         :tracking_id_attribute,
+         :parent_tracking_id_attribute
+       ]
+       |> Enum.any?(&is_nil(opts[&1])) do
       {:error, :invalid_opts}
     else
       {:ok, opts}
@@ -20,7 +24,12 @@ defmodule Canary.Index.Trieve.Changes.DeleteGroup do
       |> Enum.map(fn {_changeset, record} -> record end)
 
     records
-    |> Enum.map(&%{"tracking_id" => Map.get(&1, opts[:tracking_id_attribute])})
+    |> Enum.map(
+      &%{
+        "dataset_tracking_id" => Map.get(&1, opts[:parent_tracking_id_attribute]),
+        "group_tracking_id" => Map.get(&1, opts[:tracking_id_attribute])
+      }
+    )
     |> Enum.map(&Canary.Workers.DeleteTrieveGroup.new(&1))
     |> Oban.insert_all()
 

@@ -1,19 +1,52 @@
-defmodule Canary.Index.Trieve.Client do
-  defp base() do
+defmodule Canary.Index.Trieve do
+  def client(_ \\ nil)
+
+  def client(dataset) when is_binary(dataset) or is_nil(dataset) do
     key = Application.fetch_env!(:canary, :trieve_api_key)
-    dataset = Application.fetch_env!(:canary, :trieve_dataset)
+    org = Application.fetch_env!(:canary, :trieve_organization)
 
     Canary.rest_client(
       base_url: "https://api.trieve.ai/api",
-      headers: [
-        {"Content-Type", "application/json"},
-        {"Authorization", "Bearer #{key}"},
-        {"TR-Dataset", dataset}
-      ]
+      headers:
+        [
+          {"Content-Type", "application/json"},
+          {"Authorization", "Bearer #{key}"},
+          {"TR-Organization", org},
+          if(not is_nil(dataset), do: {"TR-Dataset", dataset}, else: nil)
+        ]
+        |> Enum.reject(&is_nil/1)
     )
   end
 
-  def upsert_groups(inputs) when is_list(inputs) do
+  def client(%Canary.Accounts.Project{index_id: id}), do: client(id)
+
+  def create_dataset(client, tracking_id) do
+    # https://docs.trieve.ai/api-reference/dataset/create-dataset
+    case client
+         |> Req.post(
+           url: "/dataset",
+           json: %{dataset_name: tracking_id, tracking_id: tracking_id}
+         ) do
+      {:ok, %{status: 200, body: _}} -> :ok
+      {:ok, %{status: status, body: error}} when status in 400..499 -> {:error, error}
+      {:error, error} -> {:error, error}
+    end
+  end
+
+  def delete_dataset(client, tracking_id) do
+    # https://docs.trieve.ai/api-reference/dataset/delete-dataset-by-tracking-id
+    case client
+         |> Req.delete(
+           url: "/dataset/tracking_id/#{tracking_id}",
+           headers: [{"TR-Dataset", tracking_id}]
+         ) do
+      {:ok, %{status: 204}} -> :ok
+      {:ok, %{status: status, body: error}} when status in 400..499 -> {:error, error}
+      {:error, error} -> {:error, error}
+    end
+  end
+
+  def upsert_groups(client, inputs) when is_list(inputs) do
     data =
       inputs
       |> Enum.map(fn %{tracking_id: tracking_id, meta: meta} ->
@@ -25,16 +58,16 @@ defmodule Canary.Index.Trieve.Client do
       end)
 
     # https://docs.trieve.ai/api-reference/chunk-group/create-or-upsert-group-or-groups
-    case base() |> Req.post(url: "/chunk_group", json: data) do
+    case client |> Req.post(url: "/chunk_group", json: data) do
       {:ok, %{status: 200, body: _}} -> :ok
       {:ok, %{status: status, body: error}} when status in 400..499 -> {:error, error}
       {:error, error} -> {:error, error}
     end
   end
 
-  def delete_group(group_tracking_id) do
+  def delete_group(client, group_tracking_id) do
     # https://docs.trieve.ai/api-reference/chunk-group/delete-group-by-tracking-id
-    case base()
+    case client
          |> Req.delete(
            url: "/chunk_group/tracking_id/#{group_tracking_id}",
            params: [delete_chunks: true]
@@ -45,7 +78,7 @@ defmodule Canary.Index.Trieve.Client do
     end
   end
 
-  def upsert_chunks(chunks) do
+  def upsert_chunks(client, chunks) do
     chunks
     |> Enum.chunk_every(120)
     |> Enum.reduce_while(:ok, fn batch, _acc ->
@@ -108,7 +141,7 @@ defmodule Canary.Index.Trieve.Client do
         end)
 
       # https://docs.trieve.ai/api-reference/chunk/create-or-upsert-chunk-or-chunks
-      case base() |> Req.post(url: "/chunk", json: data) do
+      case client |> Req.post(url: "/chunk", json: data) do
         {:ok, %{status: 200}} ->
           {:cont, :ok}
 
@@ -121,9 +154,9 @@ defmodule Canary.Index.Trieve.Client do
     end)
   end
 
-  def delete_chunk(chunk_tracking_id) do
+  def delete_chunk(client, chunk_tracking_id) do
     # https://docs.trieve.ai/api-reference/chunk/delete-chunk-by-tracking-id
-    case base() |> Req.post(url: "/chunk/tracking_id/#{chunk_tracking_id}") do
+    case client |> Req.post(url: "/chunk/tracking_id/#{chunk_tracking_id}") do
       {:ok, %{status: 200}} ->
         :ok
 
@@ -135,9 +168,8 @@ defmodule Canary.Index.Trieve.Client do
     end
   end
 
-  def search(query, opts \\ []) do
+  def search(client, query, opts \\ []) do
     tags = opts[:tags]
-    source_ids = Keyword.fetch!(opts, :source_ids)
     search_type = if(question?(query), do: :hybrid, else: :fulltext)
     receive_timeout = if(question?(query), do: 3_000, else: 1_500)
     score_threshold = if(question?(query), do: 0.0, else: 0.1)
@@ -162,10 +194,6 @@ defmodule Canary.Index.Trieve.Client do
     filters = %{
       must:
         [
-          %{
-            field: "tag_set",
-            match_any: Enum.map(source_ids, &format_for_tagset(:source_id, &1))
-          },
           if(not is_nil(tags) and tags != [],
             do: %{
               field: "tag_set",
@@ -181,7 +209,7 @@ defmodule Canary.Index.Trieve.Client do
     }
 
     # https://docs.trieve.ai/api-reference/chunk-group/search-over-groups
-    case base()
+    case client
          |> Req.post(
            receive_timeout: receive_timeout,
            url: "/chunk_group/group_oriented_search",

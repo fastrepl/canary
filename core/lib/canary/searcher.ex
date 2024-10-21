@@ -1,35 +1,35 @@
 defmodule Canary.Searcher do
-  @callback run(String.t(), keyword()) :: {:ok, list(map())} | {:error, any()}
+  @callback run(any(), String.t(), keyword()) :: {:ok, list(map())} | {:error, any()}
 
-  def run(query, opts \\ []) do
+  def run(project, query, opts \\ []) do
     {cache, opts} = Keyword.pop(opts, :cache, false)
 
     if cache do
-      with {:error, _} <- get_cache(query, opts),
-           {:ok, result} <- impl().run(query, opts) do
-        set_cache(query, opts, result)
+      with {:error, _} <- get_cache(project, query, opts),
+           {:ok, result} <- impl().run(project, query, opts) do
+        set_cache(project, query, opts, result)
         {:ok, result}
       end
     else
-      impl().run(query, opts)
+      impl().run(project, query, opts)
     end
   end
 
-  defp set_cache(query, opts, result) do
-    Cachex.put(:cache, key(query, opts), result, ttl: :timer.minutes(3))
+  defp set_cache(project, query, opts, result) do
+    Cachex.put(:cache, key(project, query, opts), result, ttl: :timer.minutes(3))
   end
 
-  defp get_cache(query, opts) do
-    case Cachex.get(:cache, key(query, opts)) do
+  defp get_cache(project, query, opts) do
+    case Cachex.get(:cache, key(project, query, opts)) do
       {:ok, nil} -> {:error, :not_found}
       {:ok, hit} -> {:ok, hit}
     end
   end
 
-  defp key(query, opts) do
-    query
+  defp key(project, query, opts) do
+    project.id
+    |> Kernel.<>(":" <> query)
     |> Kernel.<>(":" <> Jason.encode!(opts[:tags]))
-    |> Kernel.<>(":" <> Jason.encode!(opts[:source_ids]))
   end
 
   defp impl(), do: Application.get_env(:canary, :searcher, Canary.Searcher.Default)
@@ -39,9 +39,11 @@ defmodule Canary.Searcher.Default do
   @behaviour Canary.Searcher
 
   require Ash.Query
+  alias Canary.Index.Trieve
+  alias Canary.Accounts.Project
 
-  def run(query, opts) do
-    with {:ok, groups} <- Canary.Index.Trieve.Client.search(query, opts) do
+  def run(%Project{} = project, query, opts) do
+    with {:ok, groups} <- Trieve.client(project) |> Trieve.search(query, opts) do
       matches =
         groups
         |> Enum.map(&transform_result/1)

@@ -10,10 +10,11 @@ defmodule Canary.Sources.Document.Create do
   def init(opts) do
     if [
          :data_argument,
+         :source_id_argument,
          :meta_attribute,
          :chunks_attribute,
          :tracking_id_attribute,
-         :source_id_attribute
+         :parent_tracking_id_attribute
        ]
        |> Enum.any?(fn key -> is_nil(opts[key]) end) do
       {:error, :invalid_opts}
@@ -24,6 +25,8 @@ defmodule Canary.Sources.Document.Create do
 
   @impl true
   def batch_change(changesets, opts, _context) do
+    {:ok, %{index_id: parent_index_id}} = changesets |> Enum.at(0) |> find_project(opts)
+
     changesets
     |> Enum.map(fn changeset ->
       data = Ash.Changeset.get_argument(changeset, opts[:data_argument])
@@ -37,6 +40,10 @@ defmodule Canary.Sources.Document.Create do
       } = transform_fetcher_result(data)
 
       changeset
+      |> Ash.Changeset.force_change_attribute(
+        opts[:parent_tracking_id_attribute],
+        parent_index_id
+      )
       |> Ash.Changeset.force_change_attribute(opts[:tracking_id_attribute], Ash.UUID.generate())
       |> Ash.Changeset.change_attribute(opts[:meta_attribute], local_doc_meta)
       |> Ash.Changeset.change_attribute(opts[:chunks_attribute], local_chunks)
@@ -176,39 +183,66 @@ defmodule Canary.Sources.Document.Create do
     end
   end
 
+  defp find_project(%Ash.Changeset{} = changeset, opts) do
+    source_id = changeset |> Ash.Changeset.get_argument(opts[:source_id_argument])
+
+    Canary.Accounts.Project
+    |> Ash.Query.filter(sources.id == ^source_id)
+    |> Ash.read_one()
+  end
+
   defp create_groups(changesets_and_results, opts) do
-    changesets_and_results
-    |> Enum.map(fn {changeset, doc_record} ->
-      %{
-        tracking_id: Map.get(doc_record, opts[:tracking_id_attribute]),
-        meta: changeset.context.remote_group_meta
-      }
-    end)
-    |> Trieve.Client.upsert_groups()
+    dataset_tracking_id =
+      changesets_and_results
+      |> Enum.at(0)
+      |> elem(0)
+      |> Ash.Changeset.get_attribute(opts[:parent_tracking_id_attribute])
+
+    input =
+      changesets_and_results
+      |> Enum.map(fn {changeset, doc_record} ->
+        %{
+          tracking_id: Map.get(doc_record, opts[:tracking_id_attribute]),
+          meta: changeset.context.remote_group_meta
+        }
+      end)
+
+    Trieve.client(dataset_tracking_id)
+    |> Trieve.upsert_groups(input)
   end
 
   defp create_chunks(changesets_and_results, opts) do
-    changesets_and_results
-    |> Enum.flat_map(fn {changeset, doc_record} ->
-      group_tracking_id = Map.get(doc_record, opts[:tracking_id_attribute])
+    dataset_tracking_id =
+      changesets_and_results
+      |> Enum.at(0)
+      |> elem(0)
+      |> Ash.Changeset.get_attribute(opts[:parent_tracking_id_attribute])
 
-      local_chunks = Map.get(doc_record, opts[:chunks_attribute])
-      remote_chunks = changeset.context.remote_chunks
+    input =
+      changesets_and_results
+      |> Enum.flat_map(fn {changeset, doc_record} ->
+        source_id = Ash.Changeset.get_argument(changeset, opts[:source_id_argument])
+        group_tracking_id = Map.get(doc_record, opts[:tracking_id_attribute])
 
-      remote_chunks
-      |> Enum.with_index()
-      |> Enum.map(fn {chunk, index} ->
-        %{
-          tracking_id: Enum.at(local_chunks, index).index_id,
-          group_tracking_id: group_tracking_id,
-          content: chunk.content,
-          url: chunk.url,
-          meta: chunk.meta,
-          source_id: Map.get(doc_record, opts[:source_id_attribute]),
-          tags: changeset.context.remote_tags
-        }
+        local_chunks = Map.get(doc_record, opts[:chunks_attribute])
+        remote_chunks = changeset.context.remote_chunks
+
+        remote_chunks
+        |> Enum.with_index()
+        |> Enum.map(fn {chunk, index} ->
+          %{
+            tracking_id: Enum.at(local_chunks, index).index_id,
+            group_tracking_id: group_tracking_id,
+            content: chunk.content,
+            url: chunk.url,
+            meta: chunk.meta,
+            source_id: source_id,
+            tags: changeset.context.remote_tags
+          }
+        end)
       end)
-    end)
-    |> Trieve.Client.upsert_chunks()
+
+    Trieve.client(dataset_tracking_id)
+    |> Trieve.upsert_chunks(input)
   end
 end

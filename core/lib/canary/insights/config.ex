@@ -22,5 +22,9 @@ defmodule Canary.Insights.Config do
   postgres do
     table "insights_configs"
     repo Canary.Repo
+
+    references do
+      reference :project, deferrable: :initially
+    end
   end
 end

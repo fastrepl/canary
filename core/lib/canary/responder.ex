@@ -1,14 +1,10 @@
 defmodule Canary.Responder do
+  @callback run(any(), String.t(), function(), keyword()) :: {:ok, any()} | {:error, any()}
+
   alias Canary.Responder
 
-  @callback run(
-              query :: String.t(),
-              handle_delta :: function(),
-              opts :: keyword()
-            ) :: {:ok, any()} | {:error, any()}
-
-  def run(query, handle_delta, opts \\ []) do
-    impl().run(query, handle_delta, opts)
+  def run(project, query, handle_delta, opts \\ []) do
+    impl().run(project, query, handle_delta, opts)
   end
 
   defp impl, do: Application.get_env(:canary, :responder, Responder.Default)
@@ -20,8 +16,8 @@ defmodule Canary.Responder.Default do
   require Logger
   require Ash.Query
 
-  def run(query, handle_delta, opts) do
-    {:ok, results} = Canary.Searcher.run(query, opts)
+  def run(project, query, handle_delta, opts) do
+    {:ok, results} = Canary.Searcher.run(project, query, opts)
 
     docs =
       results

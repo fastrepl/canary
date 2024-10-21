@@ -8,6 +8,8 @@ defmodule Canary.Sources.Document do
     create_timestamp :created_at
 
     attribute :index_id, :uuid, allow_nil?: false
+    attribute :parent_index_id, :string, allow_nil?: true
+
     attribute :meta, Canary.Type.DocumentMeta, allow_nil?: false
     attribute :chunks, {:array, Canary.Sources.Chunk}, allow_nil?: false
   end
@@ -29,17 +31,23 @@ defmodule Canary.Sources.Document do
 
       change {
         Canary.Sources.Document.Create,
+        source_id_argument: :source_id,
         data_argument: :fetcher_result,
         meta_attribute: :meta,
         chunks_attribute: :chunks,
-        source_id_attribute: :source_id,
-        tracking_id_attribute: :index_id
+        tracking_id_attribute: :index_id,
+        parent_tracking_id_attribute: :parent_index_id
       }
     end
 
     destroy :destroy do
       primary? true
-      change {Canary.Index.Trieve.Changes.DeleteGroup, tracking_id_attribute: :index_id}
+      require_atomic? false
+
+      change {
+        Canary.Index.Trieve.Changes.DeleteGroup,
+        tracking_id_attribute: :index_id, parent_tracking_id_attribute: :parent_index_id
+      }
     end
   end
 

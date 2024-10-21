@@ -6,11 +6,6 @@ defmodule Canary.Sources.Chunk do
   end
 
   actions do
-    defaults [:read, create: [:index_id]]
-
-    destroy :destroy do
-      primary? true
-      change {Canary.Index.Trieve.Changes.DeleteChunk, tracking_id_attribute: :index_id}
-    end
+    defaults [:read, :destroy, create: [:index_id]]
   end
 end
