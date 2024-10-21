@@ -27,17 +27,7 @@
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "last_fetched_at",
-      "type": "utc_datetime"
-    },
-    {
-      "allow_nil?": false,
-      "default": "\"idle\"",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "state",
+      "source": "parent_index_id",
       "type": "text"
     },
     {
@@ -47,17 +37,17 @@
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "name",
-      "type": "text"
+      "source": "index_id",
+      "type": "uuid"
     },
     {
-      "allow_nil?": true,
+      "allow_nil?": false,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "overview",
+      "source": "meta",
       "type": "map"
     },
     {
@@ -67,8 +57,8 @@
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "config",
-      "type": "map"
+      "source": "chunks",
+      "type": ["array", "map"]
     },
     {
       "allow_nil?": false,
@@ -76,7 +66,7 @@
       "generated?": false,
       "primary_key?": false,
       "references": {
-        "deferrable": false,
+        "deferrable": "initially",
         "destination_attribute": "id",
         "destination_attribute_default": null,
         "destination_attribute_generated": null,
@@ -88,15 +78,15 @@
           "global": null,
           "strategy": null
         },
-        "name": "sources_project_id_fkey",
+        "name": "documents_source_id_fkey",
         "on_delete": null,
         "on_update": null,
         "primary_key?": true,
         "schema": "public",
-        "table": "projects"
+        "table": "sources"
       },
       "size": null,
-      "source": "project_id",
+      "source": "source_id",
       "type": "uuid"
     }
   ],
@@ -105,27 +95,8 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "48ED170ECAE4FA6472A2859D36CB711D75CC459AADC766E448A2EFBC8377B368",
-  "identities": [
-    {
-      "all_tenants?": false,
-      "base_filter": null,
-      "index_name": "sources_unique_name_index",
-      "keys": [
-        {
-          "type": "atom",
-          "value": "name"
-        },
-        {
-          "type": "atom",
-          "value": "project_id"
-        }
-      ],
-      "name": "unique_name",
-      "nils_distinct?": true,
-      "where": null
-    }
-  ],
+  "hash": "9ACFE59ACF5E791B59185A692C6DA21FF4DCE48FD1B14A331D43289108742EBE",
+  "identities": [],
   "multitenancy": {
     "attribute": null,
     "global": null,
@@ -133,5 +104,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "sources"
+  "table": "documents"
 }

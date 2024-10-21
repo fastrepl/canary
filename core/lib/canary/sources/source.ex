@@ -158,5 +158,9 @@ defmodule Canary.Sources.Source do
   postgres do
     table "sources"
     repo Canary.Repo
+
+    references do
+      reference :project, deferrable: :initially
+    end
   end
 end

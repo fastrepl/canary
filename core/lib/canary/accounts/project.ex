@@ -13,6 +13,7 @@ defmodule Canary.Accounts.Project do
     attribute :name, :string, allow_nil?: false
     attribute :selected, :boolean, allow_nil?: false, default: false
     attribute :public_key, :string, allow_nil?: false
+    attribute :index_id, :string, allow_nil?: true
   end
 
   identities do
@@ -38,6 +39,8 @@ defmodule Canary.Accounts.Project do
         changeset
         |> Ash.Changeset.force_change_attribute(:public_key, key)
       end
+
+      change {Canary.Index.Trieve.Changes.CreateDataset, tracking_id_attribute: :index_id}
     end
 
     update :update do
@@ -65,10 +68,14 @@ defmodule Canary.Accounts.Project do
 
     destroy :destroy do
       primary? true
+      require_atomic? false
+
       change {Ash.Resource.Change.CascadeDestroy, relationship: :sources, action: :destroy}
 
       change {Ash.Resource.Change.CascadeDestroy,
               relationship: :insights_config, action: :destroy}
+
+      change {Canary.Index.Trieve.Changes.DeleteDataset, tracking_id_attribute: :index_id}
     end
   end
 

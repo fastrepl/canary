@@ -2,18 +2,18 @@ defmodule CanaryWeb.OperationsController do
   use CanaryWeb, :controller
   require Ash.Query
 
-  plug :find_sources when action in [:search, :ask]
+  plug :find_project when action in [:search, :ask]
 
-  defp find_sources(conn, _opts) do
+  defp find_project(conn, _opts) do
     err_msg = "no client found with the given key"
 
     with {:ok, token} <- get_token_from_header(conn),
-         {:ok, sources} <-
-           Canary.Sources.Source
-           |> Ash.Query.for_read(:find_with_project_public_key, %{project_public_key: token})
-           |> Ash.read() do
+         {:ok, project} <-
+           Canary.Accounts.Project
+           |> Ash.Query.filter(public_key == ^token)
+           |> Ash.read_one() do
       conn
-      |> assign(:sources, sources)
+      |> assign(:project, project)
       |> assign(:project_public_key, token)
     else
       _ -> conn |> send_resp(401, err_msg) |> halt()
@@ -28,9 +28,7 @@ defmodule CanaryWeb.OperationsController do
   end
 
   def search(conn, %{"query" => %{"text" => query, "tags" => tags}} = params) do
-    source_ids = Enum.map(conn.assigns.sources, & &1.id)
-
-    case Canary.Searcher.run(query, source_ids: source_ids, tags: tags, cache: cache?()) do
+    case Canary.Searcher.run(conn.assigns.project, query, tags: tags, cache: cache?()) do
       {:ok, matches} ->
         data = %{
           matches: matches,
@@ -75,13 +73,12 @@ defmodule CanaryWeb.OperationsController do
       |> send_chunked(200)
 
     here = self()
-    source_ids = Enum.map(conn.assigns.sources, & &1.id)
 
     Task.start_link(fn ->
       Canary.Responder.run(
+        conn.assigns.project,
         query,
         fn data -> send(here, data) end,
-        source_ids: source_ids,
         tags: tags,
         cache: cache?()
       )

@@ -11,34 +11,14 @@
       "type": "uuid"
     },
     {
-      "allow_nil?": false,
-      "default": "nil",
+      "allow_nil?": true,
+      "default": "[]",
       "generated?": false,
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "name",
-      "type": "text"
-    },
-    {
-      "allow_nil?": false,
-      "default": "false",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "selected",
-      "type": "boolean"
-    },
-    {
-      "allow_nil?": false,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "public_key",
-      "type": "text"
+      "source": "aliases",
+      "type": ["array", "map"]
     },
     {
       "allow_nil?": false,
@@ -46,7 +26,7 @@
       "generated?": false,
       "primary_key?": false,
       "references": {
-        "deferrable": false,
+        "deferrable": "initially",
         "destination_attribute": "id",
         "destination_attribute_default": null,
         "destination_attribute_generated": null,
@@ -58,15 +38,15 @@
           "global": null,
           "strategy": null
         },
-        "name": "projects_account_id_fkey",
+        "name": "insights_configs_project_id_fkey",
         "on_delete": null,
         "on_update": null,
         "primary_key?": true,
         "schema": "public",
-        "table": "accounts"
+        "table": "projects"
       },
       "size": null,
-      "source": "account_id",
+      "source": "project_id",
       "type": "uuid"
     }
   ],
@@ -75,23 +55,8 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "1DE1AB13A125A7921552F2A16F494C5FA8796D0216CE650F2156CEAC1A89DBB1",
-  "identities": [
-    {
-      "all_tenants?": false,
-      "base_filter": null,
-      "index_name": "projects_unique_public_key_index",
-      "keys": [
-        {
-          "type": "atom",
-          "value": "public_key"
-        }
-      ],
-      "name": "unique_public_key",
-      "nils_distinct?": true,
-      "where": null
-    }
-  ],
+  "hash": "6D698808A2EE41DFDB0D5A2CE7AF8764451A308203964DD8BA7B28BE5E849A8E",
+  "identities": [],
   "multitenancy": {
     "attribute": null,
     "global": null,
@@ -99,5 +64,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "projects"
+  "table": "insights_configs"
 }
