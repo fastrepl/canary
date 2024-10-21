@@ -28,7 +28,7 @@ jobs:
         uses: superfly/fly-pr-review-apps@1.2.1
         with:
           path: core
-          secrets: DATABASE_URL=$DATABASE_URL
+          secrets: DATABASE_URL=$DATABASE_URL SECRET_KEY_BASE={{ secrets.SECRET_KEY_BASE }}
       - uses: thollander/actions-comment-pull-request@v2
         with:
           message: |-
