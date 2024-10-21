@@ -1,4 +1,4 @@
-defmodule CanaryWeb.SettingsLive.Billing do
+defmodule CanaryWeb.BillingLive.Index do
   use CanaryWeb, :live_view
 
   alias PrimerLive.Component, as: Primer
@@ -37,6 +37,45 @@ defmodule CanaryWeb.SettingsLive.Billing do
       <div class="flex flex-row gap-2 mt-4 justify-end">
         <%= render_action_button(assigns) %>
       </div>
+
+      <.plans />
+    </div>
+    """
+  end
+
+  def plans(assigns) do
+    ~H"""
+    <div class="overflow-x-auto">
+      <table class="min-w-full bg-white border border-gray-300">
+        <thead>
+          <tr class="bg-gray-100">
+            <th
+              :for={value <- ["Name", "Price", "Source", "Search", "Ask AI", "Analytics"]}
+              class="py-2 px-4 border-b text-left"
+            >
+              <%= value %>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td
+              :for={value <- ["Feee", "$0 / mo", "<= 1, Webpage only", "100,000", "Coming soon", "X"]}
+              class="py-2 px-4 border-b"
+            >
+              <%= value %>
+            </td>
+          </tr>
+          <tr>
+            <td
+              :for={value <- ["Starter", "$59 / mo", "<= 3", "Unlimited", "Coming soon", "O"]}
+              class="py-2 px-4 border-b"
+            >
+              <%= value %>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
     """
   end

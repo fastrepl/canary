@@ -1,4 +1,4 @@
-defmodule CanaryWeb.SettingsLive.CreateProject do
+defmodule CanaryWeb.ProjectsLive.Create do
   use CanaryWeb, :live_component
   alias PrimerLive.Component, as: Primer
 
@@ -61,14 +61,14 @@ defmodule CanaryWeb.SettingsLive.CreateProject do
   def handle_event("submit", %{"form" => params}, socket) do
     case AshPhoenix.Form.submit(socket.assigns.form, params: params) do
       {:ok, _} ->
-        {:noreply, socket |> push_navigate(to: ~p"/settings/projects")}
+        {:noreply, socket |> push_navigate(to: ~p"/projects")}
 
       {:error,
        %Phoenix.HTML.Form{source: %AshPhoenix.Form{source: %Ash.Changeset{errors: errors}}} = form} ->
         if Enum.any?(errors, &match?(%Ash.Error.Forbidden.Policy{}, &1)) do
           socket =
             socket
-            |> push_navigate(to: ~p"/settings/projects")
+            |> push_navigate(to: ~p"/projects")
             |> put_flash(:error, "Please upgrade your plan.")
 
           {:noreply, socket}

@@ -20,7 +20,7 @@ defmodule CanaryWeb.LiveProject do
 
       cond do
         account.projects == [] ->
-          {:halt, Phoenix.LiveView.redirect(socket, to: ~p"/settings/projects")}
+          {:halt, Phoenix.LiveView.redirect(socket, to: ~p"/projects")}
 
         is_nil(project) ->
           project = account.projects |> Enum.at(0)

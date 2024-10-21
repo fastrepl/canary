@@ -1,4 +1,4 @@
-defmodule CanaryWeb.SettingsLive.Projects do
+defmodule CanaryWeb.ProjectsLive.Index do
   use CanaryWeb, :live_view
   alias PrimerLive.Component, as: Primer
 
@@ -20,7 +20,7 @@ defmodule CanaryWeb.SettingsLive.Projects do
         <:body>
           <.live_component
             id="project-form"
-            module={CanaryWeb.SettingsLive.CreateProject}
+            module={CanaryWeb.ProjectsLive.Create}
             current_account={@current_account}
           />
         </:body>
@@ -141,6 +141,6 @@ defmodule CanaryWeb.SettingsLive.Projects do
       _ -> :ok
     end
 
-    {:noreply, socket |> push_navigate(to: ~p"/settings/projects")}
+    {:noreply, socket |> push_navigate(to: ~p"/projects")}
   end
 end

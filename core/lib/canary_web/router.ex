@@ -49,27 +49,18 @@ defmodule CanaryWeb.Router do
         {CanaryWeb.LiveUser, :live_user_required},
         CanaryWeb.LiveAccount,
         {CanaryWeb.LiveProject, :live_project_required},
-        CanaryWeb.NaveLive.App
+        CanaryWeb.LiveOnboarding,
+        CanaryWeb.LiveNav
       ] do
-      live "/", CanaryWeb.HomeLive, :none
+      live "/onboarding", CanaryWeb.OnboardingLive.Index, :none
+      live "/", CanaryWeb.OverviewLive.Index, :none
       live "/source", CanaryWeb.SourceLive.Index, :index
       live "/source/:id", CanaryWeb.SourceLive.Index, :detail
       live "/insight", CanaryWeb.InsightLive.Index, :none
-    end
-
-    ash_authentication_live_session :settings,
-      layout: {CanaryWeb.Layouts, :settings},
-      on_mount: [
-        {CanaryWeb.LiveUser, :live_user_required},
-        CanaryWeb.LiveAccount,
-        {CanaryWeb.LiveProject, :live_project_optional},
-        CanaryWeb.NaveLive.Settings
-      ] do
+      live "/projects", CanaryWeb.ProjectsLive.Index, :none
+      live "/members", CanaryWeb.MembersLive.Index, :none
+      live "/billing", CanaryWeb.BillingLive.Index, :none
       live "/settings", CanaryWeb.SettingsLive.Index, :none
-      live "/settings/account", CanaryWeb.SettingsLive.Account, :none
-      live "/settings/projects", CanaryWeb.SettingsLive.Projects, :none
-      live "/settings/members", CanaryWeb.SettingsLive.Members, :none
-      live "/settings/billing", CanaryWeb.SettingsLive.Billing, :none
     end
 
     ash_authentication_live_session :others,

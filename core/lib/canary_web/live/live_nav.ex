@@ -1,12 +1,17 @@
-defmodule CanaryWeb.NaveLive.App do
+defmodule CanaryWeb.LiveNav do
   import Phoenix.LiveView
   use Phoenix.Component
 
   def on_mount(_, _params, _session, socket) do
+    current_account = socket.assigns.current_account
+    projects = current_account.projects
+
     socket =
       socket
       |> attach_hook(:app_active_tab, :handle_params, &set_active_tab/3)
       |> attach_hook(:app_project_change, :handle_event, &handle_event/3)
+      |> assign(:current_accounts, [current_account])
+      |> assign(:current_projects, projects)
 
     {:cont, socket}
   end
@@ -14,9 +19,14 @@ defmodule CanaryWeb.NaveLive.App do
   defp set_active_tab(_params, _url, socket) do
     active_tab =
       case socket.view do
-        CanaryWeb.HomeLive -> :home
-        CanaryWeb.SourceLive.Index -> :source
-        CanaryWeb.InsightLive.Index -> :insight
+        CanaryWeb.OverviewLive.Index -> "Overview"
+        CanaryWeb.SourceLive.Index -> "Sources"
+        CanaryWeb.InsightLive.Index -> "Insights"
+        CanaryWeb.OnboardingLive.Index -> "Onboarding"
+        CanaryWeb.ProjectsLive.Index -> "Projects"
+        CanaryWeb.MembersLive.Index -> "Members"
+        CanaryWeb.BillingLive.Index -> "Billing"
+        CanaryWeb.SettingsLive.Index -> "Settings"
         _ -> nil
       end
 

@@ -1,18 +1,61 @@
-<aside class="fixed inset-y-0 z-50 flex w-60 flex-col">
-  <div class="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6">
-    <div class="flex h-16 shrink-0 items-center">
-      <span class="text-2xl">🐤</span>
+<nav class="bg-white border-b border-gray-300 shadow-sm h-16 flex flex-row items-center px-4 justify-between">
+  <div class="flex flex-row items-center gap-8">
+    <span class="text-md">🐤 Canary</span>
+    <div class="flex flex-row items-center gap-2">
+      <form phx-change="organization-change">
+        <.input type="select" name="current-organization" options={[]} value={nil} />
+      </form>
+      <span class="text-gray-500">/</span>
+      <form phx-change="project-change">
+        <.input
+          type="select"
+          name="current-project"
+          options={@current_projects |> Enum.map(&{&1.name, &1.name})}
+          value={@current_project.name}
+        />
+      </form>
     </div>
-    <CanaryWeb.Layouts.app_side_menu
-      active_tab={@app_active_tab}
-      current_account={@current_account}
-      current_project={@current_project}
-    />
   </div>
-</aside>
+  <div class="flex flex-row items-center gap-8">
+    <div class="flex flex-row items-center gap-4">
+      <.link href="https://github.com/fastrepl/canary" target="_blank">GitHub</.link>
+      <.link href="https://getcanary.dev/discord" target="_blank">Discord</.link>
+      <.link href="https://getcanary.dev" target="_blank">Docs</.link>
+    </div>
+    <.link navigate={~p"/sign-out"}>Logout</.link>
+  </div>
+</nav>
 
-<main class="py-8 lg:pl-72">
-  <div class="px-4 sm:px-6 lg:px-8">
+<main class="bg-white px-12 py-4">
+  <div class="w-full mb-4 text-md flex flex-row items-center gap-4 border-b border-gray-200">
+    <%= for {name, path} <- [
+        {"Overview", "/"},
+        {"Sources", "/source"},
+        {"Insights", "/insight"},
+        {nil, nil},
+        if(@onboarding?, do: {"Onboarding", "/onboarding"}),
+        {"Projects", "/projects"},
+        {"Members", "/members"},
+        {"Billing", "/billing"},
+        {"Settings", "/settings"},
+      ] do %>
+      <%= if is_nil(name) do %>
+        <span class="mx-auto"></span>
+      <% else %>
+        <.link
+          navigate={"#{path}"}
+          class={[
+            "border-b-2 -mb-[1px]",
+            if(@app_active_tab == name, do: "border-gray-900 font-semibold")
+          ]}
+        >
+          <%= name %>
+        </.link>
+      <% end %>
+    <% end %>
+  </div>
+
+  <div>
     <.flash_group flash={@flash} />
     <%= @inner_content %>
   </div>

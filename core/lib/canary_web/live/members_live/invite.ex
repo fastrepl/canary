@@ -1,4 +1,4 @@
-defmodule CanaryWeb.SettingsLive.MemberInvite do
+defmodule CanaryWeb.MembersLive.Invite do
   use CanaryWeb, :live_component
   alias PrimerLive.Component, as: Primer
 
@@ -55,7 +55,7 @@ defmodule CanaryWeb.SettingsLive.MemberInvite do
          |> Ash.Changeset.for_create(:create, params, actor: socket.assigns.current_account)
          |> Ash.create() do
       {:ok, _} ->
-        {:noreply, socket |> push_navigate(to: ~p"/settings/members")}
+        {:noreply, socket |> push_navigate(to: ~p"/members")}
 
       error ->
         IO.inspect(error)
