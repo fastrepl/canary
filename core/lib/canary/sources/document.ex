@@ -8,7 +8,7 @@ defmodule Canary.Sources.Document do
     create_timestamp :created_at
 
     attribute :index_id, :uuid, allow_nil?: false
-    attribute :parent_index_id, :string, allow_nil?: true
+    attribute :parent_index_id, :string, allow_nil?: false
 
     attribute :meta, Canary.Type.DocumentMeta, allow_nil?: false
     attribute :chunks, {:array, Canary.Sources.Chunk}, allow_nil?: false

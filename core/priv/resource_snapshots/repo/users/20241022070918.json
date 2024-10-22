@@ -7,48 +7,8 @@
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "refresh_token",
-      "type": "text"
-    },
-    {
-      "allow_nil?": true,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "access_token_expires_at",
+      "source": "confirmed_at",
       "type": "utc_datetime_usec"
-    },
-    {
-      "allow_nil?": true,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "access_token",
-      "type": "text"
-    },
-    {
-      "allow_nil?": false,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "uid",
-      "type": "text"
-    },
-    {
-      "allow_nil?": false,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "strategy",
-      "type": "text"
     },
     {
       "allow_nil?": false,
@@ -59,6 +19,26 @@
       "size": null,
       "source": "id",
       "type": "uuid"
+    },
+    {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "email",
+      "type": "citext"
+    },
+    {
+      "allow_nil?": true,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "hashed_password",
+      "type": "text"
     },
     {
       "allow_nil?": true,
@@ -78,15 +58,15 @@
           "global": null,
           "strategy": null
         },
-        "name": "user_identities_user_id_fkey",
+        "name": "users_account_id_fkey",
         "on_delete": null,
         "on_update": null,
         "primary_key?": true,
         "schema": "public",
-        "table": "users"
+        "table": "accounts"
       },
       "size": null,
-      "source": "user_id",
+      "source": "account_id",
       "type": "uuid"
     }
   ],
@@ -95,27 +75,19 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "D9B0487E940CD9F608DDAEEE8E82C995A7C559BE0107E8C614A10237105A7A39",
+  "hash": "428FD7F2C04DAC9F8B551D03473D11A80349F7052A0C0C31AB1178EEBA6970B8",
   "identities": [
     {
       "all_tenants?": false,
       "base_filter": null,
-      "index_name": "user_identities_unique_on_strategy_and_uid_and_user_id_index",
+      "index_name": "users_unique_email_index",
       "keys": [
         {
           "type": "atom",
-          "value": "strategy"
-        },
-        {
-          "type": "atom",
-          "value": "uid"
-        },
-        {
-          "type": "atom",
-          "value": "user_id"
+          "value": "email"
         }
       ],
-      "name": "unique_on_strategy_and_uid_and_user_id",
+      "name": "unique_email",
       "nils_distinct?": true,
       "where": null
     }
@@ -127,5 +99,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "user_identities"
+  "table": "users"
 }

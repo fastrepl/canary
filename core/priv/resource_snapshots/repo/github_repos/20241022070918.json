@@ -17,37 +17,7 @@
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "name",
-      "type": "text"
-    },
-    {
-      "allow_nil?": false,
-      "default": "false",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "selected",
-      "type": "boolean"
-    },
-    {
-      "allow_nil?": false,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "public_key",
-      "type": "text"
-    },
-    {
-      "allow_nil?": true,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "index_id",
+      "source": "full_name",
       "type": "text"
     },
     {
@@ -68,15 +38,15 @@
           "global": null,
           "strategy": null
         },
-        "name": "projects_account_id_fkey",
-        "on_delete": null,
+        "name": "github_repos_app_id_fkey",
+        "on_delete": "delete",
         "on_update": null,
         "primary_key?": true,
         "schema": "public",
-        "table": "accounts"
+        "table": "github_apps"
       },
       "size": null,
-      "source": "account_id",
+      "source": "app_id",
       "type": "uuid"
     }
   ],
@@ -85,19 +55,23 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "216BE4A3DCA322540D525E98549FA459F042040B3548E98B5FF08EDEE21A8A14",
+  "hash": "885115CC891EA442FBE3B323FE3555360230DB8E24A4D92DA4EE302C34160592",
   "identities": [
     {
       "all_tenants?": false,
       "base_filter": null,
-      "index_name": "projects_unique_public_key_index",
+      "index_name": "github_repos_unique_repo_index",
       "keys": [
         {
           "type": "atom",
-          "value": "public_key"
+          "value": "app_id"
+        },
+        {
+          "type": "atom",
+          "value": "full_name"
         }
       ],
-      "name": "unique_public_key",
+      "name": "unique_repo",
       "nils_distinct?": true,
       "where": null
     }
@@ -109,5 +83,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "projects"
+  "table": "github_repos"
 }

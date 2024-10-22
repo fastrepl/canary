@@ -9,7 +9,7 @@ defmodule Canary.Accounts.Account do
   attributes do
     uuid_primary_key :id
     attribute :super_user, :boolean, default: false
-    attribute :name, :string, allow_nil?: true
+    attribute :name, :string, allow_nil?: false
     attribute :selected, :boolean, allow_nil?: false, default: false
   end
 

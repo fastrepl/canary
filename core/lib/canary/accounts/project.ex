@@ -13,7 +13,7 @@ defmodule Canary.Accounts.Project do
     attribute :name, :string, allow_nil?: false
     attribute :selected, :boolean, allow_nil?: false, default: false
     attribute :public_key, :string, allow_nil?: false
-    attribute :index_id, :string, allow_nil?: true
+    attribute :index_id, :string, allow_nil?: false
   end
 
   identities do

@@ -101,14 +101,26 @@ defmodule Canary.Repo.Migrations.InitResources do
              )
     end
 
-    create unique_index(:sources, [:name, :project_id], name: "sources_unique_name_index")
-
     alter table(:projects) do
       add :name, :text, null: false
       add :selected, :boolean, null: false, default: false
       add :public_key, :text, null: false
+      add :index_id, :text, null: false
       add :account_id, :uuid, null: false
-      add :archived_at, :utc_datetime_usec
+    end
+
+    create table(:insights_configs, primary_key: false) do
+      add :id, :uuid, null: false, default: fragment("gen_random_uuid()"), primary_key: true
+      add :aliases, {:array, :map}, default: []
+
+      add :project_id,
+          references(:projects,
+            column: :id,
+            name: "insights_configs_project_id_fkey",
+            type: :uuid,
+            prefix: "public"
+          ),
+          null: false
     end
 
     create table(:github_repos, primary_key: false) do
@@ -138,7 +150,7 @@ defmodule Canary.Repo.Migrations.InitResources do
 
     alter table(:github_apps) do
       add :installation_id, :bigint, null: false
-      add :account_id, :uuid
+      add :account_id, :uuid, null: false
     end
 
     create table(:documents, primary_key: false) do
@@ -148,6 +160,8 @@ defmodule Canary.Repo.Migrations.InitResources do
         null: false,
         default: fragment("(now() AT TIME ZONE 'utc')")
 
+      add :index_id, :uuid, null: false
+      add :parent_index_id, :text, null: false
       add :meta, :map, null: false
       add :chunks, {:array, :map}, null: false
 
@@ -157,7 +171,8 @@ defmodule Canary.Repo.Migrations.InitResources do
             name: "documents_source_id_fkey",
             type: :uuid,
             prefix: "public"
-          )
+          ),
+          null: false
     end
 
     create table(:billings, primary_key: false) do
@@ -166,7 +181,7 @@ defmodule Canary.Repo.Migrations.InitResources do
       add :stripe_subscription, :map
       add :count_ask, :bigint, null: false, default: 0
       add :count_search, :bigint, null: false, default: 0
-      add :account_id, :uuid
+      add :account_id, :uuid, null: false
     end
 
     create table(:accounts, primary_key: false) do
@@ -219,6 +234,12 @@ defmodule Canary.Repo.Migrations.InitResources do
              )
     end
 
+    alter table(:accounts) do
+      add :super_user, :boolean, default: false
+      add :name, :text, null: false
+      add :selected, :boolean, null: false, default: false
+    end
+
     create table(:account_users, primary_key: false) do
       add :user_id,
           references(:users,
@@ -250,15 +271,6 @@ defmodule Canary.Repo.Migrations.InitResources do
 
       add :email, :text, null: false
 
-      add :user_id,
-          references(:users,
-            column: :id,
-            name: "account_invites_user_id_fkey",
-            type: :uuid,
-            prefix: "public"
-          ),
-          null: false
-
       add :account_id,
           references(:accounts,
             column: :id,
@@ -274,12 +286,22 @@ defmodule Canary.Repo.Migrations.InitResources do
     )
 
     execute(
+      "ALTER TABLE insights_configs alter CONSTRAINT insights_configs_project_id_fkey DEFERRABLE INITIALLY DEFERRED"
+    )
+
+    execute(
       "ALTER TABLE source_events alter CONSTRAINT source_events_source_id_fkey DEFERRABLE INITIALLY DEFERRED"
     )
+
+    execute(
+      "ALTER TABLE sources alter CONSTRAINT sources_project_id_fkey DEFERRABLE INITIALLY DEFERRED"
+    )
+
+    create unique_index(:sources, [:name, :project_id], name: "sources_unique_name_index")
   end
 
   def down do
-    drop constraint(:account_invites, "account_invites_user_id_fkey")
+    drop_if_exists unique_index(:sources, [:name, :project_id], name: "sources_unique_name_index")
 
     drop constraint(:account_invites, "account_invites_account_id_fkey")
 
@@ -290,6 +312,12 @@ defmodule Canary.Repo.Migrations.InitResources do
     drop constraint(:account_users, "account_users_account_id_fkey")
 
     drop table(:account_users)
+
+    alter table(:accounts) do
+      remove :selected
+      remove :name
+      remove :super_user
+    end
 
     drop constraint(:billings, "billings_account_id_fkey")
 
@@ -348,15 +376,17 @@ defmodule Canary.Repo.Migrations.InitResources do
 
     drop table(:github_repos)
 
+    drop constraint(:insights_configs, "insights_configs_project_id_fkey")
+
+    drop table(:insights_configs)
+
     alter table(:projects) do
-      remove :archived_at
       remove :account_id
+      remove :index_id
       remove :public_key
       remove :selected
       remove :name
     end
-
-    drop_if_exists unique_index(:sources, [:name, :project_id], name: "sources_unique_name_index")
 
     drop constraint(:sources, "sources_project_id_fkey")
 
@@ -385,7 +415,15 @@ defmodule Canary.Repo.Migrations.InitResources do
     drop table(:users)
 
     execute(
+      "ALTER TABLE sources alter CONSTRAINT sources_project_id_fkey DEFERRABLE INITIALLY DEFERRED"
+    )
+
+    execute(
       "ALTER TABLE source_events alter CONSTRAINT source_events_source_id_fkey DEFERRABLE INITIALLY DEFERRED"
+    )
+
+    execute(
+      "ALTER TABLE insights_configs alter CONSTRAINT insights_configs_project_id_fkey DEFERRABLE INITIALLY DEFERRED"
     )
 
     execute(

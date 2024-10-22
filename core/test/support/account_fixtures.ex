@@ -9,7 +9,7 @@ defmodule Canary.AccountsFixtures do
       |> Ash.create!()
 
     Canary.Accounts.Account
-    |> Ash.Changeset.for_create(:create, %{user_id: user.id})
+    |> Ash.Changeset.for_create(:create, %{name: "test", user_id: user.id})
     |> Ash.create!()
   end
 

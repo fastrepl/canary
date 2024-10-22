@@ -21,7 +21,7 @@
       "type": "boolean"
     },
     {
-      "allow_nil?": true,
+      "allow_nil?": false,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
@@ -46,7 +46,7 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "8BCBD3B7FB12098A1D317182F1E59BC90A87E00E27908ADA851DD1DA67FC8EBD",
+  "hash": "4472E1D1ACCFE1175AF70319EDB2EDC0C2543E630131D37CE178F5B0275EE11E",
   "identities": [],
   "multitenancy": {
     "attribute": null,

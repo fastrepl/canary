@@ -11,14 +11,14 @@
       "type": "uuid"
     },
     {
-      "allow_nil?": true,
-      "default": "[]",
+      "allow_nil?": false,
+      "default": "nil",
       "generated?": false,
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "aliases",
-      "type": ["array", "map"]
+      "source": "installation_id",
+      "type": "bigint"
     },
     {
       "allow_nil?": false,
@@ -26,7 +26,7 @@
       "generated?": false,
       "primary_key?": false,
       "references": {
-        "deferrable": "initially",
+        "deferrable": false,
         "destination_attribute": "id",
         "destination_attribute_default": null,
         "destination_attribute_generated": null,
@@ -38,15 +38,15 @@
           "global": null,
           "strategy": null
         },
-        "name": "insights_configs_project_id_fkey",
-        "on_delete": null,
+        "name": "github_apps_account_id_fkey",
+        "on_delete": "delete",
         "on_update": null,
         "primary_key?": true,
         "schema": "public",
-        "table": "projects"
+        "table": "accounts"
       },
       "size": null,
-      "source": "project_id",
+      "source": "account_id",
       "type": "uuid"
     }
   ],
@@ -55,7 +55,7 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "6D698808A2EE41DFDB0D5A2CE7AF8764451A308203964DD8BA7B28BE5E849A8E",
+  "hash": "C2F2C8EA134EF23589FE7DA0676AB0F6DFD32B3B065DED12567F2EDA430FFA93",
   "identities": [],
   "multitenancy": {
     "attribute": null,
@@ -64,5 +64,5 @@
   },
   "repo": "Elixir.Canary.Repo",
   "schema": null,
-  "table": "insights_configs"
+  "table": "github_apps"
 }

@@ -11,9 +11,6 @@ kill_timeout = 120
 [build]
   dockerfile = "Dockerfile"
 
-[deploy]
-  strategy = "bluegreen"
-  
 [env]
   PHX_HOST = "cloud.getcanary.dev"
   PORT = "8080"
