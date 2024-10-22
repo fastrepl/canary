@@ -23,16 +23,15 @@ defmodule Canary.Accounts.Invite do
     end
 
     create :create do
+      accept [:email]
       argument :account_id, :uuid, allow_nil?: false
-      argument :email, :string, allow_nil?: false
+
+      change manage_relationship(:account_id, :account, type: :append)
 
       change after_action(fn changeset, record, _ctx ->
                Canary.UserNotifier.MemberInvite.send(record.email)
                {:ok, record}
              end)
-
-      change set_attribute(:email, arg(:email))
-      change manage_relationship(:account_id, :account, type: :append)
     end
   end
 

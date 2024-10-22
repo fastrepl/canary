@@ -5,9 +5,18 @@ defmodule CanaryWeb.OverviewLive.Volume do
   def render(assigns) do
     ~H"""
     <div>
-      <div class={["w-full h-60", if(@search_volume.loading, do: "animate-pulse bg-gray-100")]}>
+      <div class={[
+        "w-full h-60 bg-gray-100 flex items-center justify-center",
+        if(@search_volume.loading, do: "animate-pulse")
+      ]}>
+        <p
+          :if={!@search_volume.loading && @search_volume.result.labels == []}
+          class="text-gray-700 text-md"
+        >
+          Not enough data to show.
+        </p>
         <canvas
-          :if={!@search_volume.loading}
+          :if={!@search_volume.loading && @search_volume.result.labels != []}
           id="search-volume"
           phx-hook="BarChart"
           data-title="Search Volume"

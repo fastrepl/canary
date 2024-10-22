@@ -15,7 +15,7 @@ defmodule Canary.Checks.Filter.InviteAccess do
         },
         _opts
       ) do
-    expr(account_id <= ^actor(:id))
+    expr(account_id == ^actor(:id))
   end
 
   def filter(

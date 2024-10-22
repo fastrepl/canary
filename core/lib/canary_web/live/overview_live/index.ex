@@ -5,17 +5,11 @@ defmodule CanaryWeb.OverviewLive.Index do
   def render(assigns) do
     ~H"""
     <div>
-      <h2>Overview</h2>
+      <h2 class="mb-2">Overview</h2>
 
       <.live_component
         id="overview-volume"
         module={CanaryWeb.OverviewLive.Volume}
-        current_project={@current_project}
-      />
-
-      <.live_component
-        id="overview-events"
-        module={CanaryWeb.OverviewLive.Events}
         current_project={@current_project}
       />
     </div>
