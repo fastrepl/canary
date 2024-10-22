@@ -1,12 +1,12 @@
-defmodule CanaryWeb.SettingsLive.Account do
+defmodule CanaryWeb.SettingsLive.Project do
   use CanaryWeb, :live_component
   alias PrimerLive.Component, as: Primer
 
   @impl true
-  def render(%{owner?: true} = assigns) do
+  def render(assigns) do
     ~H"""
     <div>
-      <h2>Organization</h2>
+      <h2>Project</h2>
       <.form
         for={@form}
         phx-target={@myself}
@@ -14,7 +14,6 @@ defmodule CanaryWeb.SettingsLive.Account do
         phx-submit="save"
         class="flex flex-col gap-8"
       >
-        <input type="hidden" name={@form[:user_id].name} value={@current_user.id} />
         <.input field={@form[:name]} label="Name" />
 
         <div class="flex flex-row gap-2 justify-end">
@@ -30,36 +29,19 @@ defmodule CanaryWeb.SettingsLive.Account do
     """
   end
 
-  def render(%{owner?: false} = assigns) do
-    ~H"""
-    <div>
-      <h2>Organization</h2>
-      <div>Only owner can update the info.</div>
-    </div>
-    """
-  end
-
   @impl true
   def update(assigns, socket) do
-    current_account = assigns.current_account |> Ash.load!(:owner)
-    owner? = current_account.owner.id == assigns.current_user.id
+    form =
+      assigns.current_project
+      |> AshPhoenix.Form.for_update(:update, forms: [auto?: true])
+      |> to_form()
 
     socket =
       socket
       |> assign(assigns)
-      |> assign_form()
-      |> assign(:owner?, owner?)
+      |> assign(:form, form)
 
     {:ok, socket}
-  end
-
-  defp assign_form(socket) do
-    form =
-      socket.assigns.current_account
-      |> AshPhoenix.Form.for_update(:update)
-      |> to_form()
-
-    socket |> assign(:form, form)
   end
 
   @impl true

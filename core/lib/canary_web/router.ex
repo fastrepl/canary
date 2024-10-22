@@ -50,6 +50,7 @@ defmodule CanaryWeb.Router do
         CanaryWeb.LiveInvite,
         {CanaryWeb.LiveAccount, :live_account_optional},
         {CanaryWeb.LiveProject, :live_project_optional},
+        CanaryWeb.LiveOnboarding,
         CanaryWeb.LiveNav
       ] do
       live "/onboarding", CanaryWeb.OnboardingLive.Index, :none
@@ -62,6 +63,7 @@ defmodule CanaryWeb.Router do
         CanaryWeb.LiveInvite,
         {CanaryWeb.LiveAccount, :live_account_required},
         {CanaryWeb.LiveProject, :live_project_required},
+        CanaryWeb.LiveOnboarding,
         CanaryWeb.LiveNav
       ] do
       live "/", CanaryWeb.OverviewLive.Index, :none

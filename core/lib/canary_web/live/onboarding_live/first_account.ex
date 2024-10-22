@@ -5,9 +5,15 @@ defmodule CanaryWeb.OnboardingLive.FirstAccount do
   def render(assigns) do
     ~H"""
     <div class="border border-gray-200 py-4 px-6 rounded-md">
-      <h2>Let's create your first organization!</h2>
+      <h2 class="mb-4">Let's create your first organization!</h2>
 
-      <.form for={@form} phx-target={@myself} phx-change="validate" phx-submit="save">
+      <.form
+        for={@form}
+        phx-target={@myself}
+        phx-change="validate"
+        phx-submit="save"
+        class="flex flex-col gap-2"
+      >
         <input type="hidden" name={@form[:user_id].name} value={@current_user.id} />
         <.input field={@form[:name]} label="Name" />
         <.button type="submit">Save</.button>
@@ -39,8 +45,16 @@ defmodule CanaryWeb.OnboardingLive.FirstAccount do
 
   def handle_event("save", %{"form" => params}, socket) do
     case AshPhoenix.Form.submit(socket.assigns.form, params: params) do
-      {:ok, _} -> {:noreply, socket |> push_navigate(to: ~p"/")}
-      {:error, form} -> {:noreply, socket |> assign(:form, form)}
+      {:ok, _} ->
+        socket =
+          socket
+          |> LiveToast.put_toast(:success, "Your organization has been created!")
+          |> push_navigate(to: ~p"/")
+
+        {:noreply, socket}
+
+      {:error, form} ->
+        {:noreply, socket |> assign(:form, form)}
     end
   end
 end

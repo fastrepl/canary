@@ -14,7 +14,7 @@ defmodule CanaryWeb.AuthController do
 
   def failure(conn, _activity, _reason) do
     conn
-    |> put_flash(:error, "Incorrect email or password")
+    |> LiveToast.put_toast(:error, "Incorrect email or password")
     |> redirect(to: ~p"/sign-in")
   end
 

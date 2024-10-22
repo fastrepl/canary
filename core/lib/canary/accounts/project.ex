@@ -27,7 +27,7 @@ defmodule Canary.Accounts.Project do
   end
 
   actions do
-    defaults [:read]
+    defaults [:read, update: [:name, :selected, :public_key]]
 
     create :create do
       primary? true
@@ -41,11 +41,6 @@ defmodule Canary.Accounts.Project do
       end
 
       change {Canary.Index.Trieve.Changes.CreateDataset, tracking_id_attribute: :index_id}
-    end
-
-    update :update do
-      primary? true
-      accept [:name, :selected, :public_key]
     end
 
     update :select do

@@ -13,14 +13,24 @@ defmodule CanaryWeb.BillingLive.Stats do
           <%= if is_nil(metric) do %>
             <div class="px-4 py-5 sm:p-6">
               <dt class="text-base font-semibold">Current Plan</dt>
-              <dd class="text-6xl mt-2">
-                <%= case @current_account.billing.membership.tier do %>
-                  <% :free -> %>
-                    Free
-                  <% :starter -> %>
-                    Starter
-                  <% :admin -> %>
-                    Admin
+              <dd class="flex flex-col gap-2">
+                <span class="text-6xl mt-2">
+                  <%= case @current_account.billing.membership.tier do %>
+                    <% :free -> %>
+                      Free
+                    <% :starter -> %>
+                      Starter
+                    <% :admin -> %>
+                      Admin
+                  <% end %>
+                </span>
+                <%= if @current_account.billing.membership.trial_end do %>
+                  <span class="-mb-7">
+                    Trial ends on <%= Calendar.strftime(
+                      @current_account.billing.membership.trial_end,
+                      "%B %d, %Y"
+                    ) %>
+                  </span>
                 <% end %>
               </dd>
             </div>
@@ -68,11 +78,31 @@ defmodule CanaryWeb.BillingLive.Stats do
 
     metrics = [
       nil,
-      %{title: "Total Projects", current: length(current_account.projects), total: 10},
-      %{title: "Total Users", current: length(current_account.users), total: 20},
-      %{title: "Total Sources", current: num_sources, total: 100},
-      %{title: "Searches in the last 30 days", current: search_usage, total: 1000},
-      %{title: "'Ask AI' in the last 30 days", current: ask_usage, total: 0}
+      %{
+        title: "Total Projects",
+        current: length(current_account.projects),
+        total: Canary.Membership.max_projects(current_account)
+      },
+      %{
+        title: "Total Users",
+        current: length(current_account.users),
+        total: Canary.Membership.max_members(current_account)
+      },
+      %{
+        title: "Total Sources",
+        current: num_sources,
+        total: Canary.Membership.max_sources(current_account)
+      },
+      %{
+        title: "Searches in the last 30 days",
+        current: search_usage,
+        total: Canary.Membership.max_searches(current_account)
+      },
+      %{
+        title: "'Ask AI' in the last 30 days",
+        current: ask_usage,
+        total: Canary.Membership.max_asks(current_account)
+      }
     ]
 
     socket =

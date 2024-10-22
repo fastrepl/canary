@@ -3,11 +3,11 @@
     <.link class="text-md text-black" navigate={~p"/"}>🐤 Canary</.link>
     <%= if not is_nil(@current_account) and not is_nil(@current_project) do %>
       <div class="flex flex-row items-center gap-2">
-        <form phx-change="organization-change">
+        <form phx-change="account-change">
           <.input
             type="select"
-            name="current-organization"
-            options={@current_accounts |> Enum.map(&{&1.name, &1.name})}
+            name="current-account"
+            options={Enum.map(@current_accounts, &{&1.name, &1.name})}
             value={@current_account && @current_account.name}
           />
         </form>
@@ -16,20 +16,26 @@
           <.input
             type="select"
             name="current-project"
-            options={@current_projects |> Enum.map(&{&1.name, &1.name})}
+            options={Enum.map(@current_projects, &{&1.name, &1.name})}
             value={@current_project && @current_project.name}
           />
         </form>
       </div>
     <% end %>
   </div>
-  <div class="flex flex-row items-center gap-8">
+  <div class="flex flex-row items-center gap-6">
     <div class="flex flex-row items-center gap-4">
-      <.link href="https://github.com/fastrepl/canary" target="_blank">GitHub</.link>
-      <.link href="https://getcanary.dev/discord" target="_blank">Discord</.link>
-      <.link href="https://getcanary.dev" target="_blank">Docs</.link>
+      <.link href="https://github.com/fastrepl/canary" target="_blank" class="text-gray-700">
+        GitHub
+      </.link>
+      <.link href="https://getcanary.dev/discord" target="_blank" class="text-gray-700">
+        Discord
+      </.link>
+      <.link href="https://getcanary.dev" target="_blank" class="text-gray-700">
+        Docs
+      </.link>
     </div>
-    <.link navigate={~p"/sign-out"}>Logout</.link>
+    <.link navigate={~p"/sign-out"} class="text-black">Logout</.link>
   </div>
 </nav>
 
@@ -40,7 +46,7 @@
         {"Sources", "/source"},
         {"Insights", "/insight"},
         {nil, nil},
-        {"Onboarding", "/onboarding"},
+        if(@onboarding?, do: {"Onboarding", "/onboarding"}),
         {"Projects", "/projects"},
         {"Members", "/members"},
         {"Billing", "/billing"},
@@ -52,8 +58,8 @@
         <.link
           navigate={"#{path}"}
           class={[
-            "border-b-2 -mb-[1px]",
-            if(@app_active_tab == name, do: "border-gray-900 font-semibold")
+            "text-gray-600 hover:no-underline hover:text-yellow-500 border-b-2 -mb-[1px]",
+            if(@app_active_tab == name, do: "border-yellow-400 font-semibold text-black ")
           ]}
         >
           <%= name %>
@@ -63,7 +69,11 @@
   </div>
 
   <div>
-    <.flash_group flash={@flash} />
+    <LiveToast.toast_group
+      flash={@flash}
+      connected={assigns[:socket] != nil}
+      corner={:bottom_right}
+    />
     <%= @inner_content %>
   </div>
 </main>

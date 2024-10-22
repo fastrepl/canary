@@ -138,7 +138,7 @@ defmodule CanaryWeb.SourceLive.Create do
           socket =
             socket
             |> push_navigate(to: ~p"/source")
-            |> put_flash(:error, "Please upgrade your plan.")
+            |> LiveToast.put_toast(:error, "Please upgrade your plan.")
 
           {:noreply, socket}
         else

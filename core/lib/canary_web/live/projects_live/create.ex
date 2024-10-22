@@ -69,7 +69,7 @@ defmodule CanaryWeb.ProjectsLive.Create do
           socket =
             socket
             |> push_navigate(to: ~p"/projects")
-            |> put_flash(:error, "Please upgrade your plan.")
+            |> LiveToast.put_toast(:error, "Please upgrade your plan.")
 
           {:noreply, socket}
         else

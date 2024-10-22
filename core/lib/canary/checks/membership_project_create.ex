@@ -13,11 +13,8 @@ defmodule Canary.Checks.Membership.ProjectCreate do
     with {:ok, %{billing: _billing, num_projects: num_projects}} <-
            Ash.load(account, [:num_projects, billing: [:membership]]) do
       cond do
-        num_projects < 1 ->
-          {:ok, true}
-
-        true ->
-          {:ok, false}
+        num_projects < Canary.Membership.max_projects(account) -> {:ok, true}
+        true -> {:ok, false}
       end
     end
   end

@@ -15,7 +15,7 @@ defmodule CanaryWeb.BillingLive.Plans do
                   value <- [
                     "Name",
                     "Price",
-                    "Members",
+                    "Users",
                     "Source",
                     "Search",
                     "Ask AI",
@@ -34,7 +34,7 @@ defmodule CanaryWeb.BillingLive.Plans do
               <td
                 :for={
                   value <- [
-                    "Feee",
+                    "Free",
                     "$0 / mo",
                     "<= 1",
                     "<= 1, Webpage only",
@@ -46,7 +46,7 @@ defmodule CanaryWeb.BillingLive.Plans do
                 }
                 class="py-2 px-4 border-b"
               >
-                <%= if is_nil(value) do %>
+                <%= if value == :action do %>
                   <%= render_action_button(Map.merge(assigns, %{plan: :free})) %>
                 <% else %>
                   <%= value %>
@@ -64,12 +64,12 @@ defmodule CanaryWeb.BillingLive.Plans do
                     "Unlimited",
                     "Coming soon",
                     "O",
-                    nil
+                    :action
                   ]
                 }
                 class="py-2 px-4 border-b"
               >
-                <%= if is_nil(value) do %>
+                <%= if value == :action do %>
                   <%= render_action_button(Map.merge(assigns, %{plan: :starter})) %>
                 <% else %>
                   <%= value %>
@@ -118,7 +118,7 @@ defmodule CanaryWeb.BillingLive.Plans do
            {:ok, _} <- Canary.Accounts.Billing.update_stripe_customer(billing, customer) do
         {:noreply, socket |> redirect(to: ~p"/checkout")}
       else
-        {:error, error} -> {:noreply, socket |> put_flash(:error, error)}
+        {:error, error} -> {:noreply, socket |> LiveToast.put_toast(:error, error)}
       end
     else
       {:noreply, socket |> redirect(to: ~p"/checkout")}
@@ -149,7 +149,7 @@ defmodule CanaryWeb.BillingLive.Plans do
 
   defp render_action_button(assigns) do
     ~H"""
-    <Primer.button type="button" phx-click="checkout" is_primary>
+    <Primer.button type="button" phx-target={@myself} phx-click="checkout" is_primary>
       Upgrade
     </Primer.button>
     """

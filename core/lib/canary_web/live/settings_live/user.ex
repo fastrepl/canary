@@ -28,7 +28,7 @@ defmodule CanaryWeb.SettingsLive.User do
           }
         />
         <div class="flex flex-row gap-2 justify-end">
-          <Primer.button type="button" phx-click="destroy" is_danger>
+          <Primer.button type="button" phx-target={@myself} phx-click="destroy" is_danger>
             Delete
           </Primer.button>
           <Primer.button type="submit" is_primary>
@@ -73,17 +73,11 @@ defmodule CanaryWeb.SettingsLive.User do
     {:noreply, socket}
   end
 
-  @impl true
   def handle_event("destroy", _, socket) do
-    case Ash.destroy(socket.assigns.current_account) do
-      :ok ->
-        {:noreply, socket |> redirect(to: ~p"/")}
+    socket =
+      socket
+      |> LiveToast.put_toast(:info, "Please contact us if you want to delete your project.")
 
-      {:error, _} ->
-        {:noreply,
-         socket
-         |> put_flash(:error, "Failed to delete account")
-         |> push_navigate(to: ~p"/settings")}
-    end
+    {:noreply, socket}
   end
 end

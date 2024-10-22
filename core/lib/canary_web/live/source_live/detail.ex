@@ -391,10 +391,19 @@ defmodule CanaryWeb.SourceLive.Detail do
   def handle_event("destroy", _, socket) do
     case Ash.destroy(socket.assigns.source) do
       :ok ->
-        {:noreply, socket |> redirect(to: ~p"/source")}
+        socket =
+          socket
+          |> LiveToast.put_toast(:info, "Source has been deleted!")
+          |> push_patch(to: ~p"/source")
+
+        {:noreply, socket}
 
       error ->
-        IO.inspect(error)
+        socket =
+          socket
+          |> LiveToast.put_toast(:error, error)
+          |> push_patch(to: ~p"/source")
+
         {:noreply, socket}
     end
   end

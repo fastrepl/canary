@@ -33,6 +33,14 @@ defmodule CanaryWeb.LiveNav do
     {:cont, socket |> assign(app_active_tab: active_tab)}
   end
 
+  def handle_event("account-change", %{"current-account" => account_name}, socket) do
+    account = socket.assigns.current_accounts |> Enum.find(&(&1.name == account_name))
+    user_id = socket.assigns.current_user.id
+
+    {:ok, _} = Canary.Accounts.Account.select(account, user_id)
+    {:halt, socket |> push_navigate(to: "/")}
+  end
+
   def handle_event("project-change", %{"current-project" => project_name}, socket) do
     project = socket.assigns.current_account.projects |> Enum.find(&(&1.name == project_name))
     account_id = socket.assigns.current_account.id
