@@ -28,6 +28,7 @@ defmodule CanaryWeb.LiveAccount do
       |> Ash.load!(:accounts)
       |> Map.get(:accounts)
 
-    socket |> assign(:current_account, Enum.at(accounts, 0, nil))
+    current_account = Enum.find(accounts, & &1.selected) || Enum.at(accounts, 0, nil)
+    socket |> assign(:current_account, current_account)
   end
 end
