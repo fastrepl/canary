@@ -1,6 +1,5 @@
 defmodule CanaryWeb.InsightLive.Index do
   use CanaryWeb, :live_view
-  alias PrimerLive.Component, as: Primer
 
   def render(%{can_use_insights?: false} = assigns) do
     ~H"""
@@ -16,26 +15,22 @@ defmodule CanaryWeb.InsightLive.Index do
   def render(assigns) do
     ~H"""
     <div class="flex flex-col gap-4">
-      <Primer.subhead>
-        Insights
-        <:actions>
-          <Primer.button is_primary phx-click={Primer.open_dialog("insights-config-dialog")}>
+      <div class="flex flex-row justify-between items-center mb-4">
+        <h2>Insights</h2>
+        <div>
+          <.button is_primary phx-click={show_modal("insights-config-dialog")}>
             Config
-          </Primer.button>
-        </:actions>
-      </Primer.subhead>
-
-      <Primer.dialog id="insights-config-dialog" is_backdrop>
-        <:header_title>Config</:header_title>
-        <:body>
-          <.live_component
-            id="insights-config"
-            module={CanaryWeb.InsightLive.Config}
-            current_project={@current_project}
-            quries={if @search_breakdown.result, do: @search_breakdown.result.labels, else: []}
-          />
-        </:body>
-      </Primer.dialog>
+          </.button>
+          <.modal id="insights-config-dialog">
+            <.live_component
+              id="insights-config"
+              module={CanaryWeb.InsightLive.Config}
+              current_project={@current_project}
+              quries={if @search_breakdown.result, do: @search_breakdown.result.labels, else: []}
+            />
+          </.modal>
+        </div>
+      </div>
 
       <div class={["w-full h-60", if(@search_volume.loading, do: "animate-pulse bg-gray-100")]}>
         <canvas

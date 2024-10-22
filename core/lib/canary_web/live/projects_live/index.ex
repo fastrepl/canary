@@ -6,25 +6,22 @@ defmodule CanaryWeb.ProjectsLive.Index do
   def render(assigns) do
     ~H"""
     <div>
-      <Primer.subhead>
-        Projects
-        <:actions :if={length(@projects) > 0}>
-          <Primer.button is_primary phx-click={Primer.open_dialog("project-form")}>
-            New
-          </Primer.button>
-        </:actions>
-      </Primer.subhead>
+      <div class="flex flex-row justify-between items-center mb-4">
+        <h2>Projects</h2>
 
-      <Primer.dialog id="project-form" is_backdrop>
-        <:header_title>Create a new project</:header_title>
-        <:body>
-          <.live_component
-            id="project-form"
-            module={CanaryWeb.ProjectsLive.Create}
-            current_account={@current_account}
-          />
-        </:body>
-      </Primer.dialog>
+        <div>
+          <.button is_primary phx-click={show_modal("project-form")}>
+            New
+          </.button>
+          <.modal id="project-form">
+            <.live_component
+              id="project-form"
+              module={CanaryWeb.ProjectsLive.Create}
+              current_account={@current_account}
+            />
+          </.modal>
+        </div>
+      </div>
 
       <%= if length(@projects) > 0 do %>
         <Primer.box is_scrollable style="max-height: 400px; margin-top: 18px">
@@ -58,15 +55,9 @@ defmodule CanaryWeb.ProjectsLive.Index do
                   </div>
                 </div>
 
-                <Primer.button
-                  type="button"
-                  phx-click="destroy"
-                  phx-value-item={project.id}
-                  is_danger
-                  is_small
-                >
+                <.button type="button" phx-click="destroy" phx-value-item={project.id} is_danger>
                   Delete
-                </Primer.button>
+                </.button>
               </div>
             </div>
           </:row>

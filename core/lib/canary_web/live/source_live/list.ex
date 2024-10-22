@@ -6,26 +6,21 @@ defmodule CanaryWeb.SourceLive.List do
   def render(assigns) do
     ~H"""
     <div>
-      <Primer.subhead>
-        Source
-        <:actions :if={length(@sources) > 0}>
-          <Primer.button is_primary phx-click={Primer.open_dialog("source-form")}>
-            New
-          </Primer.button>
-        </:actions>
-      </Primer.subhead>
+      <div class="flex flex-row justify-between items-center mb-4">
+        <h2>Source</h2>
+        <.button is_primary phx-click={show_modal("source-form")}>
+          New
+        </.button>
+      </div>
 
-      <Primer.dialog id="source-form" is_backdrop>
-        <:header_title>Create a new source</:header_title>
-        <:body>
-          <.live_component
-            id="source-form"
-            module={CanaryWeb.SourceLive.Create}
-            current_project={@current_project}
-            current_account={@current_account}
-          />
-        </:body>
-      </Primer.dialog>
+      <.modal id="source-form">
+        <.live_component
+          id="source-form"
+          module={CanaryWeb.SourceLive.Create}
+          current_project={@current_project}
+          current_account={@current_account}
+        />
+      </.modal>
 
       <%= if length(@sources) > 0 do %>
         <Primer.box is_spacious>

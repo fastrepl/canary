@@ -1,6 +1,5 @@
 defmodule CanaryWeb.SourceLive.Create do
   use CanaryWeb, :live_component
-  alias PrimerLive.Component, as: Primer
 
   @config_types [
     {"Webpage", "webpage"},
@@ -23,70 +22,39 @@ defmodule CanaryWeb.SourceLive.Create do
         <input type="hidden" name={f[:project_id].name} value={@current_project.id} />
 
         <.inputs_for :let={fc} field={@form[:config]}>
-          <div class="flex flex-row gap-2">
-            <Primer.select
-              form={fc}
-              field={:_union_type}
-              options={@config_types}
-              form_control={%{label: "Type"}}
-              phx-change="type-changed"
-            />
-            <Primer.text_input
-              autocomplete="off"
-              form={f}
-              field={:name}
-              placeholder="e.g. Docs"
-              form_control={%{label: "Name"}}
-            />
-          </div>
+          <.input
+            type="select"
+            field={fc[:_union_type]}
+            options={@config_types}
+            label="Type"
+            phx-change="type-changed"
+          />
+          <.input
+            type="text"
+            field={f[:name]}
+            placeholder="e.g. Docs"
+            label="Name"
+            autocomplete="off"
+          />
 
           <%= case fc.params["_union_type"] do %>
             <% "webpage" -> %>
-              <Primer.text_input
-                autocomplete="off"
+              <.input
                 type="url"
+                autocomplete="off"
                 name={fc[:start_urls].name <> "[]"}
                 value={fc[:start_urls].value}
-                form_control={%{label: "URL"}}
-                is_full_width
+                label="URL"
               />
             <% "github_issue" -> %>
-              <Primer.text_input
-                autocomplete="off"
-                form={fc}
-                field={:owner}
-                placeholder="e.g. fastrepl"
-                form_control={%{label: "Owner"}}
-                is_full_width
-              />
-              <Primer.text_input
-                autocomplete="off"
-                form={fc}
-                field={:repo}
-                placeholder="e.g. canary"
-                form_control={%{label: "Repo"}}
-                is_full_width
-              />
+              <.input autocomplete="off" field={fc[:owner]} placeholder="e.g. fastrepl" label="Owner" />
+              <.input autocomplete="off" field={fc[:repo]} placeholder="e.g. canary" label="Repo" />
             <% "github_discussion" -> %>
-              <Primer.text_input
-                autocomplete="off"
-                form={fc}
-                field={:owner}
-                placeholder="e.g. fastrepl"
-                form_control={%{label: "Owner"}}
-                is_full_width
-              />
-              <Primer.text_input
-                autocomplete="off"
-                form={fc}
-                field={:repo}
-                placeholder="e.g. canary"
-                form_control={%{label: "Repo"}}
-                is_full_width
-              />
+              <.input autocomplete="off" field={fc[:owner]} placeholder="e.g. fastrepl" label="Owner" />
+              <.input autocomplete="off" field={fc[:repo]} placeholder="e.g. canary" label="Repo" />
           <% end %>
         </.inputs_for>
-        <Primer.button is_submit>Save</Primer.button>
+        <.button type="submit" is_primary>Save</.button>
       </.form>
     </div>
     """

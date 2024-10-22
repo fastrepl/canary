@@ -1,6 +1,5 @@
 defmodule CanaryWeb.SettingsLive.Project do
   use CanaryWeb, :live_component
-  alias PrimerLive.Component, as: Primer
 
   @impl true
   def render(assigns) do
@@ -17,12 +16,12 @@ defmodule CanaryWeb.SettingsLive.Project do
         <.input field={@form[:name]} label="Name" />
 
         <div class="flex flex-row gap-2 justify-end">
-          <Primer.button type="button" phx-target={@myself} phx-click="destroy" is_danger>
+          <.button type="button" phx-target={@myself} phx-click="destroy" is_danger>
             Delete
-          </Primer.button>
-          <Primer.button type="submit" is_primary>
+          </.button>
+          <.button type="submit" is_primary>
             Update
-          </Primer.button>
+          </.button>
         </div>
       </.form>
     </div>

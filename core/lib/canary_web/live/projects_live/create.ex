@@ -1,6 +1,5 @@
 defmodule CanaryWeb.ProjectsLive.Create do
   use CanaryWeb, :live_component
-  alias PrimerLive.Component, as: Primer
 
   @impl true
   def render(assigns) do
@@ -15,22 +14,11 @@ defmodule CanaryWeb.ProjectsLive.Create do
         class="flex flex-col gap-4"
       >
         <input type="hidden" name={f[:account_id].name} value={@current_account.id} />
+        <.input type="text" autocomplete="off" field={f[:name]} label="Name" />
 
-        <Primer.text_input
-          autocomplete="off"
-          type="text"
-          form={f}
-          field={:name}
-          form_control={%{label: "Name"}}
-          is_large
-          is_full_width
-        />
-
-        <div class="flex flex-row gap-2 justify-end">
-          <Primer.button type="submit" is_primary>
-            Create
-          </Primer.button>
-        </div>
+        <.button type="submit" is_primary>
+          Create
+        </.button>
       </.form>
     </div>
     """

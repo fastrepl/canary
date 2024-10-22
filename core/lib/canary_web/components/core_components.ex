@@ -224,6 +224,9 @@ defmodule CanaryWeb.CoreComponents do
   attr :class, :string, default: nil
   attr :rest, :global, include: ~w(disabled form name value)
 
+  attr :is_primary, :boolean, default: false
+  attr :is_danger, :boolean, default: false
+
   slot :inner_block, required: true
 
   def button(assigns) do
@@ -231,8 +234,8 @@ defmodule CanaryWeb.CoreComponents do
     <button
       type={@type}
       class={[
-        "phx-submit-loading:opacity-75 rounded-lg bg-zinc-900 hover:bg-zinc-700 py-2 px-3",
-        "text-sm font-semibold leading-6 text-white active:text-white/80",
+        "phx-submit-loading:opacity-75 rounded-lg py-1 px-3 text-sm font-semibold leading-6",
+        button_color(%{is_primary: @is_primary, is_danger: @is_danger}),
         @class
       ]}
       {@rest}
@@ -241,6 +244,15 @@ defmodule CanaryWeb.CoreComponents do
     </button>
     """
   end
+
+  defp button_color(%{is_primary: true}),
+    do: "bg-yellow-900 hover:bg-yellow-700 text-white active:text-white/80"
+
+  defp button_color(%{is_primary: false, is_danger: true}),
+    do: "bg-white border border-amber-600 text-amber-600 hover:bg-amber-100 active:text-amber-500"
+
+  defp button_color(%{is_primary: false, is_danger: false}),
+    do: "bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 active:text-gray-500"
 
   @doc """
   Renders an input with label and error messages.
@@ -330,7 +342,7 @@ defmodule CanaryWeb.CoreComponents do
 
   def input(%{type: "select"} = assigns) do
     ~H"""
-    <div>
+    <div class="flex flex-col gap-1">
       <.label for={@id}><%= @label %></.label>
       <select
         id={@id}
@@ -369,7 +381,7 @@ defmodule CanaryWeb.CoreComponents do
   # All other inputs text, datetime-local, url, password, etc. are handled here...
   def input(assigns) do
     ~H"""
-    <div>
+    <div class="flex flex-col gap-1">
       <.label for={@id}><%= @label %></.label>
       <input
         type={@type}
@@ -377,7 +389,7 @@ defmodule CanaryWeb.CoreComponents do
         id={@id}
         value={Phoenix.HTML.Form.normalize_value(@type, @value)}
         class={[
-          "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6",
+          "block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6",
           @errors == [] && "border-zinc-300 focus:border-zinc-400",
           @errors != [] && "border-rose-400 focus:border-rose-400"
         ]}

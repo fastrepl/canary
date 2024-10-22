@@ -7,7 +7,7 @@ defmodule CanaryWeb.MembersLive.Index do
     <div>
       <div class="flex flex-row items-center justify-between mb-2">
         <h2>Members</h2>
-        <.button phx-click={show_modal("invite-member-modal")}>Invite</.button>
+        <.button phx-click={show_modal("invite-member-modal")} is_primary>Invite</.button>
       </div>
 
       <.modal id="invite-member-modal" on_cancel={JS.navigate(~p"/members")}>
