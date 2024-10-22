@@ -23,6 +23,7 @@ defmodule Canary.Accounts.Billing do
   calculations do
     calculate :membership, :atom, {
       Canary.Accounts.MembershipCalculation,
+      account_relation_load: {:account, [:super_user]},
       stripe_subscription_attribute: :stripe_subscription
     }
   end

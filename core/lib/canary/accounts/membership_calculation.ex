@@ -4,6 +4,7 @@ defmodule Canary.Accounts.MembershipCalculation do
   @impl true
   def init(opts) do
     if [
+         :account_relation_load,
          :stripe_subscription_attribute
        ]
        |> Enum.any?(&is_nil(opts[&1])) do
@@ -16,6 +17,7 @@ defmodule Canary.Accounts.MembershipCalculation do
   @impl true
   def load(_query, opts, _context) do
     [
+      opts[:account_relation_load],
       opts[:stripe_subscription_attribute]
     ]
   end
@@ -27,7 +29,7 @@ defmodule Canary.Accounts.MembershipCalculation do
       sub = record |> Map.get(opts[:stripe_subscription_attribute])
 
       %{
-        tier: tier(sub),
+        tier: if(record.account.super_user, do: :admin, else: tier(sub)),
         trial: trial?(sub),
         trial_end: trial_end(sub),
         will_renew: will_renew?(sub),
@@ -52,7 +54,6 @@ defmodule Canary.Accounts.MembershipCalculation do
           nil -> :free
           %{"plan" => %{"active" => false}} -> :free
           %{"plan" => %{"active" => true}} -> :starter
-          _ -> :free
         end
     end
   end
