@@ -22,7 +22,7 @@ defmodule CanaryWeb.LiveProject do
 
       cond do
         account.projects == [] ->
-          {:halt, Phoenix.LiveView.redirect(socket, to: ~p"/projects")}
+          {:halt, Phoenix.LiveView.redirect(socket, to: ~p"/onboarding")}
 
         is_nil(project) ->
           project = account.projects |> Enum.at(0)
@@ -36,11 +36,17 @@ defmodule CanaryWeb.LiveProject do
   end
 
   defp select_from_existing_projects(socket) do
-    account = socket.assigns[:current_account] |> Ash.load!(:projects)
+    if socket.assigns[:current_account] do
+      account = socket.assigns[:current_account] |> Ash.load!(:projects)
 
-    socket
-    |> assign(:current_account, account)
-    |> assign(:current_projects, account.projects)
-    |> assign(:current_project, Enum.at(account.projects, 0, nil))
+      socket
+      |> assign(:current_account, account)
+      |> assign(:current_projects, account.projects)
+      |> assign(:current_project, Enum.at(account.projects, 0, nil))
+    else
+      socket
+      |> assign(:current_projects, [])
+      |> assign(:current_project, nil)
+    end
   end
 end

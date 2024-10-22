@@ -4,8 +4,12 @@ defmodule CanaryWeb.OnboardingLive.FirstSource do
   @impl true
   def render(assigns) do
     ~H"""
-    <div>
-      <h2>First Source</h2>
+    <div class="border border-gray-200 py-4 px-6 rounded-md">
+      <h2 class="mb-2">You haven't created any sources yet.</h2>
+
+      <div>
+        Head over to <.link navigate={~p"/source"}>sources</.link> tab to create your first source.
+      </div>
     </div>
     """
   end

@@ -1,4 +1,4 @@
-defmodule CanaryWeb.BillingLive.Usage do
+defmodule CanaryWeb.BillingLive.Stats do
   use CanaryWeb, :live_component
 
   @impl true
@@ -13,7 +13,16 @@ defmodule CanaryWeb.BillingLive.Usage do
           <%= if is_nil(metric) do %>
             <div class="px-4 py-5 sm:p-6">
               <dt class="text-base font-semibold">Current Plan</dt>
-              <dd class="text-6xl mt-2">Free</dd>
+              <dd class="text-6xl mt-2">
+                <%= case @current_account.billing.membership.tier do %>
+                  <% :free -> %>
+                    Free
+                  <% :starter -> %>
+                    Starter
+                  <% :admin -> %>
+                    Admin
+                <% end %>
+              </dd>
             </div>
           <% else %>
             <div class="px-4 py-5 sm:p-6">

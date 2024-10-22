@@ -20,7 +20,7 @@ defmodule CanaryWeb.OnboardingLive.Index do
       <.live_component
         id="onboarding-first-account"
         module={CanaryWeb.OnboardingLive.FirstAccount}
-        current_project={@current_project}
+        current_user={@current_user}
       />
     </div>
     """
@@ -32,6 +32,18 @@ defmodule CanaryWeb.OnboardingLive.Index do
       <.live_component
         id="onboarding-first-project"
         module={CanaryWeb.OnboardingLive.FirstProject}
+        current_account={@current_account}
+      />
+    </div>
+    """
+  end
+
+  def render(%{num_sources: 0} = assigns) do
+    ~H"""
+    <div>
+      <.live_component
+        id="onboarding-first-source"
+        module={CanaryWeb.OnboardingLive.FirstSource}
         current_project={@current_project}
       />
     </div>
@@ -41,11 +53,6 @@ defmodule CanaryWeb.OnboardingLive.Index do
   def render(assigns) do
     ~H"""
     <div>
-      <.live_component
-        id="onboarding-first-source"
-        module={CanaryWeb.OnboardingLive.FirstSource}
-        current_project={@current_project}
-      />
       <.live_component
         id="onboarding-first-search"
         module={CanaryWeb.OnboardingLive.FirstSearch}
@@ -57,6 +64,19 @@ defmodule CanaryWeb.OnboardingLive.Index do
 
   @impl true
   def mount(params, _session, socket) do
-    {:ok, socket |> assign(:invite?, params["invite"] == "true")}
+    num_sources =
+      if is_nil(socket.assigns[:current_project]) do
+        0
+      else
+        project = socket.assigns[:current_project]
+        project |> Ash.load!(:num_sources) |> Map.get(:num_sources)
+      end
+
+    socket =
+      socket
+      |> assign(:invite?, params["invite"] == "true")
+      |> assign(:num_sources, num_sources)
+
+    {:ok, socket}
   end
 end

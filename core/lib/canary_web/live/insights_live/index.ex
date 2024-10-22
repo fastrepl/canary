@@ -2,6 +2,17 @@ defmodule CanaryWeb.InsightLive.Index do
   use CanaryWeb, :live_view
   alias PrimerLive.Component, as: Primer
 
+  def render(%{can_use_insights?: false} = assigns) do
+    ~H"""
+    <div class="w-full h-[calc(100vh-200px)] bg-gray-100 rounded-sm flex flex-col items-center justify-center">
+      <p class="text-lg">You don't have access to <span class="text-underline">Insights</span>.</p>
+      <p>
+        Learn more about our plans <.link navigate={~p"/billing"}>here</.link>.
+      </p>
+    </div>
+    """
+  end
+
   def render(assigns) do
     ~H"""
     <div class="flex flex-col gap-4">
@@ -54,8 +65,9 @@ defmodule CanaryWeb.InsightLive.Index do
   end
 
   def mount(_params, _session, socket) do
-    project_id = socket.assigns.current_project.public_key
+    can_use_insights? = Canary.Membership.can_use_insights?(socket.assigns.current_account)
 
+    project_id = socket.assigns.current_project.public_key
     current_project = socket.assigns.current_project |> Ash.load!(:insights_config)
 
     aliases =
@@ -67,6 +79,7 @@ defmodule CanaryWeb.InsightLive.Index do
 
     socket =
       socket
+      |> assign(can_use_insights?: can_use_insights?)
       |> assign(current_project: current_project)
       |> assign_async(:search_volume, fn ->
         case Canary.Analytics.query("search_volume", %{project_id: project_id}) do

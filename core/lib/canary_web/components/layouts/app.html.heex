@@ -1,20 +1,27 @@
 <nav class="bg-white border-b border-gray-300 shadow-sm h-16 flex flex-row items-center px-4 justify-between">
   <div class="flex flex-row items-center gap-8">
     <.link class="text-md text-black" navigate={~p"/"}>🐤 Canary</.link>
-    <div class="flex flex-row items-center gap-2">
-      <form phx-change="organization-change">
-        <.input type="select" name="current-organization" options={[]} value={nil} />
-      </form>
-      <span class="text-gray-500">/</span>
-      <form phx-change="project-change">
-        <.input
-          type="select"
-          name="current-project"
-          options={@current_projects |> Enum.map(&{&1.name, &1.name})}
-          value={@current_project.name}
-        />
-      </form>
-    </div>
+    <%= if not is_nil(@current_account) and not is_nil(@current_project) do %>
+      <div class="flex flex-row items-center gap-2">
+        <form phx-change="organization-change">
+          <.input
+            type="select"
+            name="current-organization"
+            options={@current_accounts |> Enum.map(&{&1.name, &1.name})}
+            value={@current_account && @current_account.name}
+          />
+        </form>
+        <span class="text-gray-500">/</span>
+        <form phx-change="project-change">
+          <.input
+            type="select"
+            name="current-project"
+            options={@current_projects |> Enum.map(&{&1.name, &1.name})}
+            value={@current_project && @current_project.name}
+          />
+        </form>
+      </div>
+    <% end %>
   </div>
   <div class="flex flex-row items-center gap-8">
     <div class="flex flex-row items-center gap-4">

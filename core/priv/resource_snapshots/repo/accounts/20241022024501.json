@@ -19,6 +19,26 @@
       "size": null,
       "source": "super_user",
       "type": "boolean"
+    },
+    {
+      "allow_nil?": true,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "name",
+      "type": "text"
+    },
+    {
+      "allow_nil?": false,
+      "default": "false",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "selected",
+      "type": "boolean"
     }
   ],
   "base_filter": null,
@@ -26,7 +46,7 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "3EFD1D77DBB8044E6F6DFF711C61E7935AF4C26030CEDFCC66DA1C76EC985CB1",
+  "hash": "8BCBD3B7FB12098A1D317182F1E59BC90A87E00E27908ADA851DD1DA67FC8EBD",
   "identities": [],
   "multitenancy": {
     "attribute": null,

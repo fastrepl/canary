@@ -12,8 +12,8 @@ defmodule CanaryWeb.BillingLive.Index do
       </p>
 
       <.live_component
-        id="billing-usage"
-        module={CanaryWeb.BillingLive.Usage}
+        id="billing-stats"
+        module={CanaryWeb.BillingLive.Stats}
         current_account={@current_account}
       />
 
