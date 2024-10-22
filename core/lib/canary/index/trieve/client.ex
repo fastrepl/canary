@@ -228,7 +228,12 @@ defmodule Canary.Index.Trieve do
              highlight_options:
                Map.merge(
                  highlight_options,
-                 %{highlight_results: true, highlight_max_num: 1}
+                 %{
+                   highlight_results: true,
+                   highlight_max_num: 1,
+                   pre_tag: "<mark>",
+                   post_tag: "</mark>"
+                 }
                )
            }
          ) do
