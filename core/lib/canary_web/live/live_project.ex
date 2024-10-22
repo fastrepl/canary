@@ -6,11 +6,13 @@ defmodule CanaryWeb.LiveProject do
     if not is_nil(socket.assigns[:current_project]) do
       {:cont, socket}
     else
-      {:cont, socket |> assign(:current_project, nil)}
+      {:cont, select_from_existing_projects(socket)}
     end
   end
 
   def on_mount(:live_project_required, _params, _session, socket) do
+    socket = select_from_existing_projects(socket)
+
     if not is_nil(socket.assigns[:current_project]) do
       {:cont, socket}
     else
@@ -31,5 +33,14 @@ defmodule CanaryWeb.LiveProject do
           {:cont, socket |> assign(:current_project, project)}
       end
     end
+  end
+
+  defp select_from_existing_projects(socket) do
+    account = socket.assigns[:current_account] |> Ash.load!(:projects)
+
+    socket
+    |> assign(:current_account, account)
+    |> assign(:current_projects, account.projects)
+    |> assign(:current_project, Enum.at(account.projects, 0, nil))
   end
 end

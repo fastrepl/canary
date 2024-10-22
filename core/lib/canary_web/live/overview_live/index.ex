@@ -10,7 +10,13 @@ defmodule CanaryWeb.OverviewLive.Index do
       <.live_component
         id="overview-volume"
         module={CanaryWeb.OverviewLive.Volume}
-        current_account={@current_account}
+        current_project={@current_project}
+      />
+
+      <.live_component
+        id="overview-events"
+        module={CanaryWeb.OverviewLive.Events}
+        current_project={@current_project}
       />
     </div>
     """

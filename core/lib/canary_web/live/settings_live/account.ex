@@ -15,7 +15,7 @@ defmodule CanaryWeb.SettingsLive.Account do
     ~H"""
     <div>
       <h2>Account</h2>
-      You are not owner.
+      <div>Only owner can update account info.</div>
     </div>
     """
   end

@@ -1,6 +1,6 @@
 <nav class="bg-white border-b border-gray-300 shadow-sm h-16 flex flex-row items-center px-4 justify-between">
   <div class="flex flex-row items-center gap-8">
-    <span class="text-md">🐤 Canary</span>
+    <.link class="text-md text-black" navigate={~p"/"}>🐤 Canary</.link>
     <div class="flex flex-row items-center gap-2">
       <form phx-change="organization-change">
         <.input type="select" name="current-organization" options={[]} value={nil} />
@@ -33,7 +33,7 @@
         {"Sources", "/source"},
         {"Insights", "/insight"},
         {nil, nil},
-        if(@onboarding?, do: {"Onboarding", "/onboarding"}),
+        {"Onboarding", "/onboarding"},
         {"Projects", "/projects"},
         {"Members", "/members"},
         {"Billing", "/billing"},

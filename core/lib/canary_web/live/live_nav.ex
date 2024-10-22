@@ -4,7 +4,7 @@ defmodule CanaryWeb.LiveNav do
 
   def on_mount(_, _params, _session, socket) do
     current_account = socket.assigns.current_account
-    projects = current_account.projects
+    projects = if is_nil(current_account), do: [], else: current_account.projects
 
     socket =
       socket

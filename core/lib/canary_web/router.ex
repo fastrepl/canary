@@ -43,16 +43,27 @@ defmodule CanaryWeb.Router do
 
     get "/checkout", CanaryWeb.CheckoutController, :session
 
+    ash_authentication_live_session :onboarding,
+      layout: {CanaryWeb.Layouts, :app},
+      on_mount: [
+        {CanaryWeb.LiveUser, :live_user_required},
+        CanaryWeb.LiveInvite,
+        {CanaryWeb.LiveAccount, :live_account_optional},
+        {CanaryWeb.LiveProject, :live_project_optional},
+        CanaryWeb.LiveNav
+      ] do
+      live "/onboarding", CanaryWeb.OnboardingLive.Index, :none
+    end
+
     ash_authentication_live_session :app,
       layout: {CanaryWeb.Layouts, :app},
       on_mount: [
         {CanaryWeb.LiveUser, :live_user_required},
-        CanaryWeb.LiveAccount,
+        CanaryWeb.LiveInvite,
+        {CanaryWeb.LiveAccount, :live_account_required},
         {CanaryWeb.LiveProject, :live_project_required},
-        CanaryWeb.LiveOnboarding,
         CanaryWeb.LiveNav
       ] do
-      live "/onboarding", CanaryWeb.OnboardingLive.Index, :none
       live "/", CanaryWeb.OverviewLive.Index, :none
       live "/source", CanaryWeb.SourceLive.Index, :index
       live "/source/:id", CanaryWeb.SourceLive.Index, :detail

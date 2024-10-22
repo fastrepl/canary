@@ -5,17 +5,17 @@ defmodule CanaryWeb.MembersLive.Index do
   def render(assigns) do
     ~H"""
     <div>
-      <h2>Members</h2>
-
-      <.button phx-click={show_modal("invite-member-modal")}>Invite a new member</.button>
-
-      <.modal id="invite-member-modal" on_cancel={JS.navigate(~p"/members")}>
-        <.live_component
-          id="invite-form"
-          module={CanaryWeb.MembersLive.Invite}
-          current_account={@current_account}
-        />
-      </.modal>
+      <div class="flex flex-row items-center justify-between mb-2">
+        <h2>Members</h2>
+        <.button phx-click={show_modal("invite-member-modal")}>Invite</.button>
+        <.modal id="invite-member-modal" on_cancel={JS.navigate(~p"/members")}>
+          <.live_component
+            id="invite-form"
+            module={CanaryWeb.MembersLive.Invite}
+            current_account={@current_account}
+          />
+        </.modal>
+      </div>
 
       <div class="overflow-x-auto">
         <table class="min-w-full bg-white border border-gray-300">
