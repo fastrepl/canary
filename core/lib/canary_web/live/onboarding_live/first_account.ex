@@ -5,7 +5,10 @@ defmodule CanaryWeb.OnboardingLive.FirstAccount do
   def render(assigns) do
     ~H"""
     <div class="border border-gray-200 py-4 px-6 rounded-md">
-      <h2 class="mb-4">Let's create your first organization!</h2>
+      <div class="mb-3">
+        <h2>Let's create your first organization!</h2>
+        <p>You can create multiple projects within one organization.</p>
+      </div>
 
       <.form
         for={@form}
@@ -48,7 +51,7 @@ defmodule CanaryWeb.OnboardingLive.FirstAccount do
       {:ok, _} ->
         socket =
           socket
-          |> LiveToast.put_toast(:success, "Your organization has been created!")
+          |> put_flash(:info, "Your organization has been created!")
           |> push_navigate(to: ~p"/")
 
         {:noreply, socket}

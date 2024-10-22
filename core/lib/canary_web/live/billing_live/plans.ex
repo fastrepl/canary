@@ -118,7 +118,13 @@ defmodule CanaryWeb.BillingLive.Plans do
            {:ok, _} <- Canary.Accounts.Billing.update_stripe_customer(billing, customer) do
         {:noreply, socket |> redirect(to: ~p"/checkout")}
       else
-        {:error, error} -> {:noreply, socket |> LiveToast.put_toast(:error, error)}
+        {:error, error} ->
+          socket =
+            socket
+            |> put_flash(:error, error)
+            |> push_navigate(to: "/billing")
+
+          {:noreply, socket}
       end
     else
       {:noreply, socket |> redirect(to: ~p"/checkout")}

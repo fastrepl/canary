@@ -393,16 +393,16 @@ defmodule CanaryWeb.SourceLive.Detail do
       :ok ->
         socket =
           socket
-          |> LiveToast.put_toast(:info, "Source has been deleted!")
-          |> push_patch(to: ~p"/source")
+          |> put_flash(:info, "Source has been deleted!")
+          |> push_navigate(to: ~p"/source")
 
         {:noreply, socket}
 
       error ->
         socket =
           socket
-          |> LiveToast.put_toast(:error, error)
-          |> push_patch(to: ~p"/source")
+          |> put_flash(:error, error)
+          |> push_navigate(to: ~p"/source")
 
         {:noreply, socket}
     end

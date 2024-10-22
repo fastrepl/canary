@@ -78,7 +78,8 @@ defmodule CanaryWeb.SettingsLive.Account do
   def handle_event("destroy", _, socket) do
     socket =
       socket
-      |> LiveToast.put_toast(:info, "Please contact us if you want to delete your project.")
+      |> put_flash(:error, "Please contact us if you want to delete your project.")
+      |> push_navigate(to: ~p"/settings")
 
     {:noreply, socket}
   end

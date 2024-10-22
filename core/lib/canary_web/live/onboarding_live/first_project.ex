@@ -51,7 +51,7 @@ defmodule CanaryWeb.OnboardingLive.FirstProject do
       {:ok, _} ->
         socket =
           socket
-          |> LiveToast.put_toast(:success, "Your project has been created!")
+          |> put_flash(:info, "Your project has been created!")
           |> push_navigate(to: ~p"/")
 
         {:noreply, socket}

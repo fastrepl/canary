@@ -68,8 +68,8 @@ defmodule CanaryWeb.ProjectsLive.Create do
         if Enum.any?(errors, &match?(%Ash.Error.Forbidden.Policy{}, &1)) do
           socket =
             socket
+            |> put_flash(:error, "Please upgrade your plan.")
             |> push_navigate(to: ~p"/projects")
-            |> LiveToast.put_toast(:error, "Please upgrade your plan.")
 
           {:noreply, socket}
         else
