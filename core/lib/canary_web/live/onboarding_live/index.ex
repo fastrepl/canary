@@ -53,12 +53,8 @@ defmodule CanaryWeb.OnboardingLive.Index do
 
   def render(assigns) do
     ~H"""
-    <div>
-      <.live_component
-        id="onboarding-first-search"
-        module={CanaryWeb.OnboardingLive.FirstSearch}
-        current_project={@current_project}
-      />
+    <div class="w-full h-[calc(100vh-200px)] bg-gray-100 rounded-sm flex flex-col items-center justify-center">
+      <p class="text-lg">You're all set!</p>
     </div>
     """
   end

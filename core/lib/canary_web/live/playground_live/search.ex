@@ -1,11 +1,11 @@
-defmodule CanaryWeb.OnboardingLive.FirstSearch do
+defmodule CanaryWeb.PlaygroundLive.Search do
   use CanaryWeb, :live_component
 
   @impl true
   def render(assigns) do
     ~H"""
     <div class="border border-gray-200 py-4 px-6 rounded-md">
-      <h2>Canary hasn't handled any searches yet.</h2>
+      <h2>Search bar for your documentation</h2>
 
       <div class="flex flex-col gap-0 mt-4">
         <p>Code example ↓</p>

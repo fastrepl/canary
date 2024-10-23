@@ -69,6 +69,7 @@ defmodule CanaryWeb.Router do
       live "/source", CanaryWeb.SourceLive.Index, :index
       live "/source/:id", CanaryWeb.SourceLive.Index, :detail
       live "/insight", CanaryWeb.InsightLive.Index, :none
+      live "/playground", CanaryWeb.PlaygroundLive.Index, :none
       live "/projects", CanaryWeb.ProjectsLive.Index, :none
       live "/members", CanaryWeb.MembersLive.Index, :none
       live "/billing", CanaryWeb.BillingLive.Index, :none

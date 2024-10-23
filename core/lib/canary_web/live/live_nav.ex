@@ -34,6 +34,7 @@ defmodule CanaryWeb.LiveNav do
         CanaryWeb.MembersLive.Index -> "Members"
         CanaryWeb.BillingLive.Index -> "Billing"
         CanaryWeb.SettingsLive.Index -> "Settings"
+        CanaryWeb.PlaygroundLive.Index -> "Playground"
         _ -> nil
       end
 
