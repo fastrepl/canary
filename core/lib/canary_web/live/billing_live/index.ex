@@ -1,15 +1,15 @@
 defmodule CanaryWeb.BillingLive.Index do
   use CanaryWeb, :live_view
-  alias PrimerLive.Component, as: Primer
-
   @impl true
   def render(assigns) do
     ~H"""
     <div>
-      <Primer.subhead>Billing</Primer.subhead>
-      <p class="-mt-2 mb-4">
-        All information displayed here is for the current organization only.
-      </p>
+      <div class="border-b mb-4">
+        <h2>Billing</h2>
+        <p>
+          All information displayed here is for the current organization only.
+        </p>
+      </div>
 
       <.live_component
         id="billing-stats"

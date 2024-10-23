@@ -9,29 +9,30 @@ defmodule Canary.Interactions.UsageExporter do
   require Ash.Query
   require Logger
 
-  @export_interval_ms 15_000
-  @initial_state %{search: %{}, ask: %{}}
+  @initial_data %{search: %{}, ask: %{}}
+  @default_opts %{export_interval_ms: 15_000}
 
   def start_link(opts) do
-    GenServer.start_link(__MODULE__, nil, name: opts[:name] || __MODULE__)
+    GenServer.start_link(__MODULE__, opts[:opts] || %{}, name: opts[:name] || __MODULE__)
   end
 
   @impl true
-  def init(_args) do
+  def init(opts) do
     Process.flag(:trap_exit, true)
-    schedule_batch()
-    {:ok, @initial_state}
+
+    state = %{data: @initial_data, opts: Map.merge(@default_opts, opts)}
+    schedule_batch(state)
+
+    {:ok, state}
   end
 
   @impl true
   def handle_cast({:search, %{project_id: key}}, state) do
-    state = state |> update_in([:search, Access.key(key, 0)], &(&1 + 1))
-    {:noreply, state}
+    {:noreply, update_in(state, [:data, :search, Access.key(key, 0)], &(&1 + 1))}
   end
 
   def handle_cast({:ask, %{project_id: key}}, state) do
-    state = state |> update_in([:ask, Access.key(key, 0)], &(&1 + 1))
-    {:noreply, state}
+    {:noreply, update_in(state, [:data, :ask, Access.key(key, 0)], &(&1 + 1))}
   end
 
   def handle_cast({:search, _}, state), do: {:noreply, state}
@@ -40,8 +41,8 @@ defmodule Canary.Interactions.UsageExporter do
   @impl true
   def handle_info(:handle_batch, state) do
     process(state)
-    schedule_batch()
-    {:noreply, @initial_state}
+    schedule_batch(state)
+    {:noreply, Map.merge(state, %{data: @initial_data})}
   end
 
   def handle_info({:DOWN, _ref, :process, _pid, _reason}, state), do: {:noreply, state}
@@ -58,9 +59,11 @@ defmodule Canary.Interactions.UsageExporter do
     :ok
   end
 
-  defp schedule_batch, do: Process.send_after(self(), :handle_batch, @export_interval_ms)
+  defp schedule_batch(%{opts: %{export_interval_ms: t}}) do
+    Process.send_after(self(), :handle_batch, t)
+  end
 
-  defp process(%{search: search, ask: ask}) do
+  defp process(%{data: %{search: search, ask: ask}}) do
     Task.Supervisor.async_nolink(Canary.TaskSupervisor, fn ->
       ids = Map.keys(search) ++ Map.keys(ask)
 
@@ -70,29 +73,19 @@ defmodule Canary.Interactions.UsageExporter do
         |> Ash.Query.select([:id])
         |> Ash.read!(load: [:projects])
 
-      search_rows =
-        search
-        |> Enum.map(fn {project_id, count} ->
-          account =
-            accounts
-            |> Enum.find(fn account -> Enum.any?(account.projects, &(&1.id == project_id)) end)
+      rows =
+        Enum.map(search, fn pair -> {:search, pair} end) ++
+          Enum.map(ask, fn pair -> {:ask, pair} end)
 
-          project = Enum.find(account.projects, &(&1.id == project_id))
-          %{type: :search, count: count, account_id: account.id, project_id: project.id}
-        end)
+      rows
+      |> Enum.map(fn {type, {project_id, count}} ->
+        account =
+          Enum.find(accounts, fn account ->
+            Enum.any?(account.projects, &(&1.id == project_id))
+          end)
 
-      ask_rows =
-        ask
-        |> Enum.map(fn {project_id, count} ->
-          account =
-            accounts
-            |> Enum.find(fn account -> Enum.any?(account.projects, &(&1.id == project_id)) end)
-
-          project = Enum.find(account.projects, &(&1.id == project_id))
-          %{type: :ask, count: count, account_id: account.id, project_id: project.id}
-        end)
-
-      (search_rows ++ ask_rows)
+        %{type: type, count: count, account_id: account.id, project_id: project_id}
+      end)
       |> Enum.map(&Map.put(&1, :timestamp, DateTime.utc_now()))
       |> then(&Canary.Analytics.ingest(:usage, &1))
     end)

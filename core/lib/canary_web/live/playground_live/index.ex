@@ -5,6 +5,11 @@ defmodule CanaryWeb.PlaygroundLive.Index do
   def render(assigns) do
     ~H"""
     <div>
+      <div class="mb-4">
+        <h2>Playground</h2>
+        <p>Copy-pastable examples, powered by your existing sources.</p>
+      </div>
+
       <.live_component
         id="playground-search"
         module={CanaryWeb.PlaygroundLive.Search}

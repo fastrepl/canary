@@ -3,11 +3,19 @@ defmodule CanaryWeb.InsightLive.Index do
 
   def render(%{can_use_insights?: false} = assigns) do
     ~H"""
-    <div class="w-full h-[calc(100vh-200px)] bg-gray-100 rounded-sm flex flex-col items-center justify-center">
-      <p class="text-lg">You don't have access to <span class="text-underline">Insights</span>.</p>
-      <p>
-        Learn more about our plans <.link navigate={~p"/billing"}>here</.link>.
-      </p>
+    <div>
+      <div class="flex flex-row justify-between items-center mb-2">
+        <h2>Insights</h2>
+      </div>
+
+      <div class="w-full h-[calc(100vh-300px)] bg-gray-100 rounded-sm flex flex-col items-center justify-center">
+        <p class="text-lg">
+          You don't have access to <span class="text-underline">Insights</span>.
+        </p>
+        <p>
+          Learn more about our plans <.link navigate={~p"/billing"}>here</.link>.
+        </p>
+      </div>
     </div>
     """
   end

@@ -1,5 +1,5 @@
-defmodule Canary.Test.Insights do
-  use ExUnit.Case, async: false
+defmodule Canary.Test.Interactions do
+  use Canary.DataCase, async: false
 
   import Mox
   setup :verify_on_exit!
@@ -25,7 +25,7 @@ defmodule Canary.Test.Insights do
     setup do
       start_supervised!({
         UsageExporter,
-        name: UsageExporter.Test
+        name: UsageExporter.Test, opts: %{export_interval_ms: 100}
       })
 
       :ok
