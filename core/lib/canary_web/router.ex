@@ -74,6 +74,7 @@ defmodule CanaryWeb.Router do
       live "/members", CanaryWeb.MembersLive.Index, :none
       live "/billing", CanaryWeb.BillingLive.Index, :none
       live "/settings", CanaryWeb.SettingsLive.Index, :none
+      live "/experiment", CanaryWeb.ExperimentLive.Index, :none
     end
 
     ash_authentication_live_session :others,
