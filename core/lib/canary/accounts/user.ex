@@ -10,10 +10,21 @@ defmodule Canary.Accounts.User do
 
     attribute :email, :ci_string, allow_nil?: false, public?: true
     attribute :hashed_password, :string, allow_nil?: true, sensitive?: true
+
+    attribute :selected_account_id, :uuid, allow_nil?: true
+    attribute :selected_project_id, :uuid, allow_nil?: true
+  end
+
+  relationships do
+    belongs_to :account, Canary.Accounts.Account, allow_nil?: true
+
+    many_to_many :accounts, Canary.Accounts.Account do
+      through Canary.Accounts.AccountUser
+    end
   end
 
   actions do
-    defaults [:read, :destroy]
+    defaults [:read, :destroy, update: [:email, :selected_account_id, :selected_project_id]]
 
     if Application.compile_env(:canary, :env) != :prod do
       create :mock, accept: [:email, :hashed_password]
@@ -33,20 +44,6 @@ defmodule Canary.Accounts.User do
         user_info = Ash.Changeset.get_argument(changeset, :user_info)
         Ash.Changeset.change_attributes(changeset, Map.take(user_info, ["email"]))
       end
-    end
-
-    update :update do
-      primary? true
-      require_atomic? false
-      accept [:email]
-    end
-  end
-
-  relationships do
-    belongs_to :account, Canary.Accounts.Account, allow_nil?: true
-
-    many_to_many :accounts, Canary.Accounts.Account do
-      through Canary.Accounts.AccountUser
     end
   end
 

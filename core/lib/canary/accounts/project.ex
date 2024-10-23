@@ -11,7 +11,6 @@ defmodule Canary.Accounts.Project do
     uuid_primary_key :id
 
     attribute :name, :string, allow_nil?: false
-    attribute :selected, :boolean, allow_nil?: false, default: false
     attribute :public_key, :string, allow_nil?: false
     attribute :index_id, :string, allow_nil?: false
   end
@@ -27,7 +26,7 @@ defmodule Canary.Accounts.Project do
   end
 
   actions do
-    defaults [:read, update: [:name, :selected, :public_key]]
+    defaults [:read, update: [:name, :public_key]]
 
     create :create do
       primary? true
@@ -41,24 +40,6 @@ defmodule Canary.Accounts.Project do
       end
 
       change {Canary.Index.Trieve.Changes.CreateDataset, tracking_id_attribute: :index_id}
-    end
-
-    update :select do
-      argument :account_id, :uuid, allow_nil?: false
-      require_atomic? false
-
-      change fn changeset, _ ->
-        account_id = Ash.Changeset.get_argument(changeset, :account_id)
-
-        case __MODULE__
-             |> Ash.Query.filter(account_id == ^account_id)
-             |> Ash.bulk_update(:update, %{selected: false}, return_errors?: true) do
-          %Ash.BulkResult{status: :success} -> changeset
-          %Ash.BulkResult{errors: errors} -> changeset |> Ash.Changeset.add_error(errors)
-        end
-      end
-
-      change set_attribute(:selected, true)
     end
 
     destroy :destroy do
@@ -80,7 +61,6 @@ defmodule Canary.Accounts.Project do
 
   code_interface do
     define :create, args: [:account_id, :name], action: :create
-    define :select, args: [:account_id], action: :select
   end
 
   policies do

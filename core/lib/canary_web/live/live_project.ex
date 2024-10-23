@@ -3,17 +3,15 @@ defmodule CanaryWeb.LiveProject do
   use CanaryWeb, :verified_routes
 
   def on_mount(:live_project_optional, _params, _session, socket) do
-    if not is_nil(socket.assigns[:current_project]) do
-      {:cont, socket}
-    else
-      {:cont, select_from_existing_projects(socket)}
-    end
+    socket = socket.assigns[:current_project] || select_from_existing_projects(socket)
+
+    {:cont, socket}
   end
 
   def on_mount(:live_project_required, _params, _session, socket) do
-    socket = select_from_existing_projects(socket)
+    socket = socket.assigns[:current_project] || select_from_existing_projects(socket)
 
-    if not is_nil(socket.assigns[:current_project]) do
+    if socket.assigns[:current_project] do
       {:cont, socket}
     else
       {:halt, Phoenix.LiveView.redirect(socket, to: ~p"/onboarding")}
@@ -22,13 +20,16 @@ defmodule CanaryWeb.LiveProject do
 
   defp select_from_existing_projects(socket) do
     if socket.assigns[:current_account] do
-      account = socket.assigns[:current_account] |> Ash.load!(:projects)
-      projects = account.projects
-      current_project = Enum.find(projects, & &1.selected) || Enum.at(projects, 0)
+      current_user = socket.assigns[:current_user]
+      current_account = socket.assigns[:current_account] |> Ash.load!(:projects)
+
+      current_project =
+        Enum.find(current_account.projects, &(&1.id == current_user.selected_project_id)) ||
+          Enum.at(current_account.projects, 0)
 
       socket
-      |> assign(:current_account, account)
-      |> assign(:current_projects, projects)
+      |> assign(:current_account, current_account)
+      |> assign(:current_projects, current_account.projects)
       |> assign(:current_project, current_project)
     else
       socket

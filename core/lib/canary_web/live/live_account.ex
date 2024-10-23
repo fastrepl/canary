@@ -5,15 +5,13 @@ defmodule CanaryWeb.LiveAccount do
   require Ash.Query
 
   def on_mount(:live_account_optional, _params, _session, socket) do
-    if socket.assigns[:current_account] do
-      {:cont, socket}
-    else
-      {:cont, select_from_existing_accounts(socket)}
-    end
+    socket = socket.assigns[:current_account] || select_from_existing_accounts(socket)
+
+    {:cont, socket}
   end
 
   def on_mount(:live_account_required, _params, _session, socket) do
-    socket = select_from_existing_accounts(socket)
+    socket = socket.assigns[:current_account] || select_from_existing_accounts(socket)
 
     if socket.assigns[:current_account] do
       {:cont, socket}
@@ -23,12 +21,13 @@ defmodule CanaryWeb.LiveAccount do
   end
 
   defp select_from_existing_accounts(socket) do
-    accounts =
-      socket.assigns[:current_user]
-      |> Ash.load!(:accounts)
-      |> Map.get(:accounts)
+    current_user = socket.assigns[:current_user]
+    accounts = current_user |> Ash.load!(:accounts) |> Map.get(:accounts)
 
-    current_account = Enum.find(accounts, & &1.selected) || Enum.at(accounts, 0, nil)
+    current_account =
+      Enum.find(accounts, &(&1.id == current_user.selected_account_id)) ||
+        Enum.at(accounts, 0, nil)
+
     socket |> assign(:current_account, current_account)
   end
 end

@@ -7,8 +7,8 @@
           <.input
             type="select"
             name="current-account"
-            options={Enum.map(@current_accounts, &{&1.name, &1.name})}
-            value={@current_account && @current_account.name}
+            options={Enum.map(@current_accounts, &{&1.name, &1.id})}
+            value={@current_account && @current_account.id}
           />
         </form>
         <span class="text-gray-500">/</span>
@@ -16,8 +16,8 @@
           <.input
             type="select"
             name="current-project"
-            options={Enum.map(@current_projects, &{&1.name, &1.name})}
-            value={@current_project && @current_project.name}
+            options={Enum.map(@current_projects, &{&1.name, &1.id})}
+            value={@current_project && @current_project.id}
           />
         </form>
       </div>

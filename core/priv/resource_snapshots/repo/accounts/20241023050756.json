@@ -29,16 +29,6 @@
       "size": null,
       "source": "name",
       "type": "text"
-    },
-    {
-      "allow_nil?": false,
-      "default": "false",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "selected",
-      "type": "boolean"
     }
   ],
   "base_filter": null,
@@ -46,7 +36,7 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "4472E1D1ACCFE1175AF70319EDB2EDC0C2543E630131D37CE178F5B0275EE11E",
+  "hash": "E87F84D17C54D95AF9F11C38CEAD3305A4B3188CA6976CAC2BC2616383DA2B10",
   "identities": [],
   "multitenancy": {
     "attribute": null,

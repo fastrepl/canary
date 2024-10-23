@@ -45,6 +45,26 @@
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "selected_account_id",
+      "type": "uuid"
+    },
+    {
+      "allow_nil?": true,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "selected_project_id",
+      "type": "uuid"
+    },
+    {
+      "allow_nil?": true,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
       "references": {
         "deferrable": false,
         "destination_attribute": "id",
@@ -75,7 +95,7 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "428FD7F2C04DAC9F8B551D03473D11A80349F7052A0C0C31AB1178EEBA6970B8",
+  "hash": "1F3A4F9CC587CF3A26A4099BDE3536EAA8743167436D8984B3FC0812A9267061",
   "identities": [
     {
       "all_tenants?": false,
