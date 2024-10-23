@@ -103,8 +103,16 @@ let hooks = {
           responsive: true,
           maintainAspectRatio: false,
           scales: {
+            x: {
+              grid: {
+                drawOnChartArea: false,
+              }, 
+            },
             y: {
               beginAtZero: true,
+              grid: {
+                drawOnChartArea: false,
+              },
               ticks: {
                 format: {
                   minimumFractionDigits: 0,

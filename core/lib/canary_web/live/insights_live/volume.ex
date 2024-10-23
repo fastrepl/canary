@@ -2,20 +2,34 @@ defmodule CanaryWeb.InsightsLive.Volume do
   use CanaryWeb, :live_component
 
   @impl true
+  def render(%{search_volume: %{loading: false, result: %{labels: []}}} = assigns) do
+    ~H"""
+    <div class={[
+      "w-full flex items-center justify-center",
+      "h-60 bg-gray-50 p-4 rounded-lg border"
+    ]}>
+      <p class="text-gray-700 text-md">
+        Not enough data to show.
+      </p>
+    </div>
+    """
+  end
+
   def render(assigns) do
     ~H"""
-    <div>
-      <div class={["w-full h-60", if(@search_volume.loading, do: "animate-pulse bg-gray-100")]}>
-        <canvas
-          :if={!@search_volume.loading}
-          id="search-volume"
-          phx-hook="BarChart"
-          data-title="Search Volume"
-          data-labels={Jason.encode!(@search_volume.result.labels)}
-          data-points={Jason.encode!(@search_volume.result.points)}
-        >
-        </canvas>
-      </div>
+    <div class={[
+      "w-full h-60 bg-gray-50 p-4 rounded-lg border",
+      if(@search_volume.loading, do: "animate-pulse bg-gray-100")
+    ]}>
+      <canvas
+        :if={!@search_volume.loading}
+        id="insights-volume"
+        phx-hook="BarChart"
+        data-title="Search Volume"
+        data-labels={Jason.encode!(@search_volume.result.labels)}
+        data-points={Jason.encode!(@search_volume.result.points)}
+      >
+      </canvas>
     </div>
     """
   end

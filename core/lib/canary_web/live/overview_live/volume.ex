@@ -2,29 +2,35 @@ defmodule CanaryWeb.OverviewLive.Volume do
   use CanaryWeb, :live_component
 
   @impl true
+  def render(%{search_volume: %{loading: false, result: %{labels: []}}} = assigns) do
+    ~H"""
+    <div class={[
+      "w-full flex items-center justify-center",
+      "h-60 bg-gray-50 p-4 rounded-lg border"
+    ]}>
+      <p class="text-gray-700 text-md">
+        Not enough data to show.
+      </p>
+    </div>
+    """
+  end
+
   def render(assigns) do
     ~H"""
-    <div>
-      <div class={[
-        "w-full h-60 bg-gray-100 flex items-center justify-center",
-        if(@search_volume.loading, do: "animate-pulse")
-      ]}>
-        <p
-          :if={!@search_volume.loading && @search_volume.result.labels == []}
-          class="text-gray-700 text-md"
-        >
-          Not enough data to show.
-        </p>
-        <canvas
-          :if={!@search_volume.loading && @search_volume.result.labels != []}
-          id="search-volume"
-          phx-hook="BarChart"
-          data-title="Search Volume"
-          data-labels={Jason.encode!(@search_volume.result.labels)}
-          data-points={Jason.encode!(@search_volume.result.points)}
-        >
-        </canvas>
-      </div>
+    <div class={[
+      "w-full flex items-center justify-center",
+      "h-60 bg-gray-50 p-4 rounded-lg",
+      if(@search_volume.loading, do: "animate-pulse bg-gray-100", else: "border")
+    ]}>
+      <canvas
+        :if={!@search_volume.loading}
+        id="overview-volume"
+        phx-hook="BarChart"
+        data-title="Search Volume"
+        data-labels={Jason.encode!(@search_volume.result.labels)}
+        data-points={Jason.encode!(@search_volume.result.points)}
+      >
+      </canvas>
     </div>
     """
   end
