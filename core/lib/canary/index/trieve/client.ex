@@ -132,7 +132,8 @@ defmodule Canary.Index.Trieve do
             if is_binary(chunk[:title]) do
               data
               |> Map.merge(%{
-                fulltext_boost: %{boost_factor: 10, phrase: chunk.title}
+                fulltext_boost: %{boost_factor: 5, phrase: chunk.title},
+                semantic_boost: %{boost_factor: 5, phrase: chunk.title}
               })
             else
               data
@@ -172,7 +173,7 @@ defmodule Canary.Index.Trieve do
     tags = opts[:tags]
     search_type = if(question?(query), do: :hybrid, else: :fulltext)
     receive_timeout = if(question?(query), do: 3_000, else: 1_500)
-    score_threshold = if(question?(query), do: 0.0, else: 0.1)
+    score_threshold = if(question?(query), do: 0.0, else: 0.05)
 
     highlight_options =
       if question?(query) do
@@ -224,7 +225,17 @@ defmodule Canary.Index.Trieve do
              recency_bias: 0.5,
              remove_stop_words: true,
              slim_chunks: false,
-             typo_options: %{correct_typos: true},
+             typo_options: %{
+               correct_typos: true,
+               one_typo_word_range: %{
+                 min: 3,
+                 max: 9
+               },
+               two_typo_word_range: %{
+                 min: 4,
+                 max: 12
+               }
+             },
              highlight_options:
                Map.merge(
                  highlight_options,
