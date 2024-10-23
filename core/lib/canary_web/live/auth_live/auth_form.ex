@@ -51,7 +51,7 @@ defmodule CanaryWeb.AuthLive.AuthForm do
           </.link>
         </div>
 
-        <Primer.button type="submit" is_primary>Login</Primer.button>
+        <.button type="submit" is_primary>Login</.button>
 
         <%= if Application.get_env(:canary, :github)[:enabled?] do %>
           <Primer.button type="button" phx-click="github" phx-target={@myself}>

@@ -570,15 +570,13 @@ defmodule CanaryWeb.CoreComponents do
 
   def back(assigns) do
     ~H"""
-    <div class="mt-16">
-      <.link
-        navigate={@navigate}
-        class="text-sm font-semibold leading-6 text-zinc-900 hover:text-zinc-700"
-      >
-        <.icon name="hero-arrow-left-solid" class="h-3 w-3" />
-        <%= render_slot(@inner_block) %>
-      </.link>
-    </div>
+    <.link
+      navigate={@navigate}
+      class="text-sm font-semibold leading-6 text-zinc-900 hover:text-zinc-700"
+    >
+      <.icon name="hero-arrow-left-solid" class="h-3 w-3" />
+      <%= render_slot(@inner_block) %>
+    </.link>
     """
   end
 

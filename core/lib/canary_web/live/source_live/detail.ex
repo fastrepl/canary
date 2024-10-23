@@ -9,11 +9,7 @@ defmodule CanaryWeb.SourceLive.Detail do
     ~H"""
     <div>
       <div class="flex flex-row justify-between items-center mb-4">
-        <Primer.breadcrumb>
-          <:item navigate={~p"/source"}>Source</:item>
-          <:item>Detail</:item>
-        </Primer.breadcrumb>
-
+        <.back navigate={~p"/source"}>Back to list</.back>
         <div class="flex flex-row gap-2">
           <.button type="button" phx-click="destroy" phx-target={@myself} is_danger>
             Delete

@@ -5,7 +5,6 @@ defmodule CanaryWeb.SettingsLive.Project do
   def render(assigns) do
     ~H"""
     <div>
-      <h2>Project</h2>
       <.form
         for={@form}
         phx-target={@myself}

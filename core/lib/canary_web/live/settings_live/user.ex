@@ -5,8 +5,6 @@ defmodule CanaryWeb.SettingsLive.User do
   def render(assigns) do
     ~H"""
     <div>
-      <h2>User</h2>
-
       <.form :let={f} for={@form} phx-submit="submit" class="flex flex-col gap-4">
         <.input type="email" autocomplete="off" field={f[:email]} label="Email" />
         <div class="flex flex-row gap-2 justify-end">

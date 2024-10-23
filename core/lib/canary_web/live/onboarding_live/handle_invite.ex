@@ -71,7 +71,7 @@ defmodule CanaryWeb.OnboardingLive.HandleInvite do
 
         {:noreply, socket}
 
-      %Ash.BulkResult{errors: errors} ->
+      %Ash.BulkResult{errors: _errors} ->
         socket =
           socket
           |> put_flash(:error, "Failed to discard all invites")

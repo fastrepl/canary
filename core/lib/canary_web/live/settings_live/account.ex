@@ -2,10 +2,9 @@ defmodule CanaryWeb.SettingsLive.Account do
   use CanaryWeb, :live_component
 
   @impl true
-  def render(%{owner?: true} = assigns) do
+  def render(assigns) do
     ~H"""
     <div>
-      <h2>Organization</h2>
       <.form
         for={@form}
         phx-target={@myself}
@@ -29,25 +28,12 @@ defmodule CanaryWeb.SettingsLive.Account do
     """
   end
 
-  def render(%{owner?: false} = assigns) do
-    ~H"""
-    <div>
-      <h2>Organization</h2>
-      <div>Only owner can update the info.</div>
-    </div>
-    """
-  end
-
   @impl true
   def update(assigns, socket) do
-    current_account = assigns.current_account |> Ash.load!(:owner)
-    owner? = current_account.owner.id == assigns.current_user.id
-
     socket =
       socket
       |> assign(assigns)
       |> assign_form()
-      |> assign(:owner?, owner?)
 
     {:ok, socket}
   end
