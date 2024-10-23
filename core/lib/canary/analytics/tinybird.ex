@@ -62,8 +62,8 @@ defmodule Canary.Analytics.Tinybird do
       %{status: 202, body: %{"quarantined_rows" => rows}} when rows > 0 ->
         {:error, :quarantined}
 
-      %{status: 202, body: body} ->
-        {:ok, body}
+      %{status: 202} ->
+        :ok
 
       error ->
         IO.inspect(error)

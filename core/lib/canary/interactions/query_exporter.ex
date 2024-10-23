@@ -2,10 +2,11 @@ defmodule Canary.Interactions.QueryExporter do
   @moduledoc """
   Usage:
 
-  GenServer.cast(Canary.Interactions.QueryExporter, {:search, %{session_id: "...", project_public_key: "...", query: "..."}})
+  GenServer.cast(Canary.Interactions.QueryExporter, {:search, %{session_id: "...", project_id: "...", query: "..."}})
   """
 
   use GenServer
+  require Logger
 
   @export_interval_ms 10_000
   @export_delay_ms 3_000
@@ -22,7 +23,7 @@ defmodule Canary.Interactions.QueryExporter do
   end
 
   @impl true
-  def handle_cast({:search, %{project_public_key: _} = payload}, state) do
+  def handle_cast({:search, %{project_id: _} = payload}, state) do
     session_id =
       case Map.get(payload, :session_id) do
         nil -> Ash.UUID.generate()
@@ -69,7 +70,12 @@ defmodule Canary.Interactions.QueryExporter do
   end
 
   def handle_info({:DOWN, _ref, :process, _pid, _reason}, state), do: {:noreply, state}
-  def handle_info({_ref, _ret}, state), do: {:noreply, state}
+  def handle_info({_ref, :ok}, state), do: {:noreply, state}
+
+  def handle_info({_ref, {:error, error}}, state) do
+    Logger.error("failed to export query: #{error}")
+    {:noreply, state}
+  end
 
   @impl true
   def terminate(_reason, state) do

@@ -12,9 +12,7 @@ defmodule CanaryWeb.OperationsController do
            Canary.Accounts.Project
            |> Ash.Query.filter(public_key == ^token)
            |> Ash.read_one() do
-      conn
-      |> assign(:project, project)
-      |> assign(:project_public_key, token)
+      conn |> assign(:project, project)
     else
       _ -> conn |> send_resp(401, err_msg) |> halt()
     end
@@ -35,20 +33,22 @@ defmodule CanaryWeb.OperationsController do
           suggestion: %{questions: Canary.Query.Sugestor.run!(query)}
         }
 
-        GenServer.cast(
-          Canary.Interactions.UsageExporter,
-          {:search, %{project_public_key: conn.assigns.project_public_key}}
-        )
+        :ok =
+          GenServer.cast(
+            Canary.Interactions.UsageExporter,
+            {:search, %{project_id: conn.assigns.project.id}}
+          )
 
-        GenServer.cast(
-          Canary.Interactions.AnalyticsExporter,
-          {:search,
-           %{
-             query: query,
-             project_public_key: conn.assigns.project_public_key,
-             session_id: params["meta"]["session_id"]
-           }}
-        )
+        :ok =
+          GenServer.cast(
+            Canary.Interactions.QueryExporter,
+            {:search,
+             %{
+               query: query,
+               project_id: conn.assigns.project.id,
+               session_id: params["meta"]["session_id"]
+             }}
+          )
 
         conn
         |> put_resp_content_type("application/json")
