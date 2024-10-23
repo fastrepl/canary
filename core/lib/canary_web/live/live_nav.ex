@@ -1,16 +1,23 @@
 defmodule CanaryWeb.LiveNav do
   import Phoenix.LiveView
   use Phoenix.Component
+  use CanaryWeb, :verified_routes
 
   def on_mount(_, _params, _session, socket) do
+    accounts =
+      socket.assigns.current_user
+      |> Ash.load!(accounts: [:name])
+      |> Map.get(:accounts)
+
     current_account = socket.assigns.current_account
+
     projects = if is_nil(current_account), do: [], else: current_account.projects
 
     socket =
       socket
       |> attach_hook(:app_active_tab, :handle_params, &set_active_tab/3)
       |> attach_hook(:app_project_change, :handle_event, &handle_event/3)
-      |> assign(:current_accounts, [current_account])
+      |> assign(:current_accounts, accounts)
       |> assign(:current_projects, projects)
 
     {:cont, socket}
@@ -38,7 +45,7 @@ defmodule CanaryWeb.LiveNav do
     user_id = socket.assigns.current_user.id
 
     {:ok, _} = Canary.Accounts.Account.select(account, user_id)
-    {:halt, socket |> push_navigate(to: "/")}
+    {:halt, socket |> push_navigate(to: ~p"/")}
   end
 
   def handle_event("project-change", %{"current-project" => project_name}, socket) do
@@ -46,7 +53,7 @@ defmodule CanaryWeb.LiveNav do
     account_id = socket.assigns.current_account.id
 
     {:ok, _} = Canary.Accounts.Project.select(project, account_id)
-    {:halt, socket |> push_navigate(to: "/")}
+    {:halt, socket |> push_navigate(to: ~p"/")}
   end
 
   def handle_event(_, _, socket), do: {:cont, socket}

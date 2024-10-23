@@ -1,6 +1,5 @@
 defmodule CanaryWeb.BillingLive.Plans do
   use CanaryWeb, :live_component
-  alias PrimerLive.Component, as: Primer
 
   @impl true
   def render(assigns) do
@@ -147,17 +146,17 @@ defmodule CanaryWeb.BillingLive.Plans do
               "paused"
             ] do
     ~H"""
-    <Primer.button href={@stripe_customer_portal_url}>
+    <.button phx-click={JS.navigate(@stripe_customer_portal_url)}>
       Manage
-    </Primer.button>
+    </.button>
     """
   end
 
   defp render_action_button(assigns) do
     ~H"""
-    <Primer.button type="button" phx-target={@myself} phx-click="checkout" is_primary>
+    <.button type="button" phx-target={@myself} phx-click="checkout" is_primary>
       Upgrade
-    </Primer.button>
+    </.button>
     """
   end
 

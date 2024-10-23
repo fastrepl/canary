@@ -44,6 +44,10 @@ defmodule Canary.Accounts.Invite do
       authorize_if Canary.Checks.Filter.InviteAccess
     end
 
+    policy action_type(:destroy) do
+      authorize_if Canary.Checks.Filter.InviteAccess
+    end
+
     policy action_type(:create) do
       authorize_if Canary.Checks.Membership.TeamInvite
     end

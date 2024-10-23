@@ -42,8 +42,12 @@ defmodule CanaryWeb.BillingLive.Stats do
                   <div>
                     <%= metric.current %><span class="ml-2 text-sm font-medium text-neutral-600">of <%= metric.total %></span>
                   </div>
-                  <div class="h-2.5 rounded-full bg-gray-200 dark:bg-gray-700" style="width: 200px;">
-                    <div class="h-2.5 rounded-full transition-all duration-300 ease-in-out"></div>
+                  <div class="h-2.5 rounded-full bg-gray-200" style="width: 200px;">
+                    <div
+                      class="h-2.5 rounded-full bg-gray-400"
+                      style={"width: #{200 * percent(metric.current, metric.total)}%"}
+                    >
+                    </div>
                   </div>
                 </div>
               </dd>
@@ -112,5 +116,13 @@ defmodule CanaryWeb.BillingLive.Stats do
       |> assign(:metrics, metrics)
 
     {:ok, socket}
+  end
+
+  defp percent(current, total) do
+    if total == 0 do
+      0
+    else
+      Float.round(current / total * 100, 2)
+    end
   end
 end

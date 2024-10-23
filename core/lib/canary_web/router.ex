@@ -47,7 +47,6 @@ defmodule CanaryWeb.Router do
       layout: {CanaryWeb.Layouts, :app},
       on_mount: [
         {CanaryWeb.LiveUser, :live_user_required},
-        CanaryWeb.LiveInvite,
         {CanaryWeb.LiveAccount, :live_account_optional},
         {CanaryWeb.LiveProject, :live_project_optional},
         CanaryWeb.LiveOnboarding,

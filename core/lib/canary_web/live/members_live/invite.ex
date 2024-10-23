@@ -8,7 +8,7 @@ defmodule CanaryWeb.MembersLive.Invite do
       <.form :let={f} for={@form} phx-target={@myself} phx-submit="save" class="flex flex-col gap-4">
         <input type="hidden" name={f[:account_id].name} value={@current_account.id} />
         <.input type="email" field={f[:email]} autocomplete="off" label="Email" />
-        <.button type="submit">Send</.button>
+        <.button type="submit" is_primary>Send</.button>
       </.form>
     </div>
     """

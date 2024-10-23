@@ -26,6 +26,6 @@ defmodule Canary.Checks.Filter.InviteAccess do
         },
         _opts
       ) do
-    expr(email <= ^actor(:email))
+    expr(email == ^actor(:email))
   end
 end

@@ -15,12 +15,12 @@ defmodule CanaryWeb.SourceLive.Detail do
         </Primer.breadcrumb>
 
         <div class="flex flex-row gap-2">
-          <Primer.button type="button" phx-click="destroy" phx-target={@myself} is_danger>
+          <.button type="button" phx-click="destroy" phx-target={@myself} is_danger>
             Delete
-          </Primer.button>
-          <Primer.button type="submit" form="form" phx-target={@myself} is_primary>
+          </.button>
+          <.button type="submit" form="form" phx-target={@myself} is_primary>
             Save
-          </Primer.button>
+          </.button>
         </div>
       </div>
 

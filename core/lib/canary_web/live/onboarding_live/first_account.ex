@@ -19,7 +19,7 @@ defmodule CanaryWeb.OnboardingLive.FirstAccount do
       >
         <input type="hidden" name={@form[:user_id].name} value={@current_user.id} />
         <.input field={@form[:name]} label="Name" />
-        <.button type="submit">Save</.button>
+        <.button type="submit" is_primary>Save</.button>
       </.form>
     </div>
     """

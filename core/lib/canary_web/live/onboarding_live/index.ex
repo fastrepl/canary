@@ -9,6 +9,7 @@ defmodule CanaryWeb.OnboardingLive.Index do
         id="onboarding-handle-invite"
         module={CanaryWeb.OnboardingLive.HandleInvite}
         current_user={@current_user}
+        view_pid={self()}
       />
     </div>
     """
@@ -78,5 +79,10 @@ defmodule CanaryWeb.OnboardingLive.Index do
       |> assign(:num_sources, num_sources)
 
     {:ok, socket}
+  end
+
+  @impl true
+  def handle_info(:no_invites, socket) do
+    {:noreply, socket |> push_navigate(to: ~p"/")}
   end
 end
