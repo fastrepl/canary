@@ -110,7 +110,8 @@ defmodule Canary.MixProject do
       {:recon, "~> 2.5", override: true},
       {:recon_ex,
        github: "tatsuya6502/recon_ex", ref: "0ce4c5da777937a5bb57d3e68b9afcb9877c1c3b"},
-      {:live_toast, "~> 0.6.4"}
+      {:live_toast, "~> 0.6.4"},
+      {:flow, "~> 1.0"}
     ] ++ deps_eval()
   end
 

@@ -122,11 +122,12 @@ defmodule Canary.Crawler.Visitor do
     stream =
       config.start_urls
       |> Enum.map(&crawl(&1, config))
-      |> Stream.concat()
-      |> Stream.map(fn {url, %Req.Response{} = respense, _state} ->
-        {Crawler.normalize_url(url), respense.body}
+      |> Flow.from_enumerables(max_demand: 1, stages: length(config.start_urls))
+      |> Flow.map(fn {url, %Req.Response{} = response, _state} ->
+        {Crawler.normalize_url(url), response.body}
       end)
-      |> Stream.filter(fn {url, _body} -> Canary.Crawler.include?(url, config) end)
+      |> Flow.filter(fn {url, _body} -> Canary.Crawler.include?(url, config) end)
+      |> Flow.stream(link: true)
       |> Stream.uniq_by(fn {url, _body} -> url end)
 
     {:ok, stream}
