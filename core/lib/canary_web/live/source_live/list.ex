@@ -7,7 +7,6 @@ defmodule CanaryWeb.SourceLive.List do
     <div>
       <div class="flex flex-row justify-between items-center mb-4">
         <h2>Source</h2>
-
         <div>
           <%= if @sources != [] do %>
             <.button is_primary phx-click={show_modal("source-form")}>
@@ -35,26 +34,28 @@ defmodule CanaryWeb.SourceLive.List do
           </.button>
         </div>
       <% else %>
-        <div
-          :for={source <- @sources}
-          class="border rounded-md px-4 py-4  hover:bg-gray-100"
-          phx-click={JS.navigate(~p"/source/#{source.id}")}
-        >
-          <div class="flex flex-row items-center justify-between">
-            <div class="flex flex-row gap-2 items-center">
-              <span class="text-gray-600"><%= source.name %></span>
-              <span class="px-1 py-0.5 rounded-md bg-yellow-100"><%= source.config.type %></span>
-            </div>
+        <div class="flex flex-col gap-4">
+          <div
+            :for={source <- @sources}
+            class="border rounded-md px-4 py-4 hover:bg-gray-100"
+            phx-click={JS.navigate(~p"/source/#{source.id}")}
+          >
+            <div class="flex flex-row items-center justify-between">
+              <div class="flex flex-row gap-2 items-center">
+                <span class="text-gray-600"><%= source.name %></span>
+                <span class="px-1 py-0.5 rounded-md bg-yellow-100"><%= source.config.type %></span>
+              </div>
 
-            <div class="flex flex-row gap-2 items-center">
-              <span
-                id={"event-#{source.id}"}
-                phx-hook="TimeAgo"
-                class="invisible text-gray-700 font-light text-xs"
-              >
-                Updated <%= source.lastest_event_at %>
-              </span>
-              <span class="text-gray-500 h-4 w-4 hero-chevron-right-solid"></span>
+              <div class="flex flex-row gap-2 items-center">
+                <span
+                  id={"event-#{source.id}"}
+                  phx-hook="TimeAgo"
+                  class="invisible text-gray-700 font-light text-xs"
+                >
+                  Updated <%= source.lastest_event_at %>
+                </span>
+                <span class="text-gray-500 h-4 w-4 hero-chevron-right-solid"></span>
+              </div>
             </div>
           </div>
         </div>

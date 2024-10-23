@@ -164,8 +164,8 @@ defmodule CanaryWeb.SourceLive.Detail do
                   </Primer.button>
                 </.form_group>
 
-                <.form_group header="JS Render">
-                  <.input type="checkbox" name={fc[:js_render].name} value={fc[:js_render].value} />
+                <.form_group header="JS Render (experimental)">
+                  <.input type="checkbox" field={fc[:js_render]} />
                 </.form_group>
               <% :github_issue -> %>
                 <Primer.text_input

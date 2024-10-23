@@ -2,7 +2,7 @@ defmodule CanaryWeb.InsightsLive.Volume do
   use CanaryWeb, :live_component
 
   @impl true
-  def render(%{search_volume: %{loading: false, result: %{labels: []}}} = assigns) do
+  def render(%{search_volume: %{result: %{labels: []}}} = assigns) do
     ~H"""
     <div class={[
       "w-full flex items-center justify-center",
