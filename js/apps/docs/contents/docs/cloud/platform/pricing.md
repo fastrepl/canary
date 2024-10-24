@@ -14,15 +14,7 @@ We offer hosted service at [cloud.getcanary.dev](https://cloud.getcanary.dev).
 - Index update `twice a week`
 - Blazing fast `Hybrid`(keyword-based + semantic) `search`
 
-## Starter (~~$79~~ `$59` / month)
-
-::: tip Early bird pricing
-
-The system is stable. Popular projects like [DSPy](https://dspy-docs.vercel.app/) are using it as main searchbar.
-
-There are some rough edges in the dashboard, and we're working on it.
-
-:::
+## Starter (`$59` / month)
 
 - Up to `1` project, `3` users, and `3` sources
 - `Any source` we support. (currently `Webpage`, `GitHub issue`, and `GitHub discussion` with some limitations[^1])

@@ -245,6 +245,14 @@ export default defineConfig({
     ssr: {
       noExternal: ["@nolebase/vitepress-plugin-highlight-targeted-heading"],
     },
+    server: {
+      proxy: {
+        "/discord": {
+          target: "https://discord.gg/Y8bJkzuQZU",
+          changeOrigin: true,
+        },
+      },
+    },
   },
   themeConfig: {
     // search: { provider: "local" },
@@ -258,7 +266,11 @@ export default defineConfig({
       },
       {
         text: "💬 Discord",
-        link: "https://discord.gg/Y8bJkzuQZU",
+        link: "https://getcanary.dev/discord",
+      },
+      {
+        text: "🐤 Cloud",
+        link: "https://cloud.getcanary.dev",
       },
     ],
     sidebar: {

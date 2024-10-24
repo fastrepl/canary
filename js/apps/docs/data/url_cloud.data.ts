@@ -23,14 +23,22 @@ export default defineLoader({
 });
 
 const forDev = (path) => {
-  const { CANARY_API_BASE, CANARY_PROJECT_KEY } = parse(
-    fs.readFileSync(path, "utf-8"),
-  );
+  try {
+    const { CANARY_API_BASE, CANARY_PROJECT_KEY } = parse(
+      fs.readFileSync(path, "utf-8"),
+    );
+    return {
+      base: CANARY_API_BASE,
+      key: CANARY_PROJECT_KEY,
+    };
+  } catch (e) {
+    console.error("Failed to load .env file", e);
 
-  return {
-    base: CANARY_API_BASE,
-    key: CANARY_PROJECT_KEY,
-  };
+    return {
+      base: "",
+      key: "",
+    };
+  }
 };
 
 const forProd = () => {
