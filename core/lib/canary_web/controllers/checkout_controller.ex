@@ -17,13 +17,14 @@ defmodule CanaryWeb.CheckoutController do
       metadata: %{"account_id" => current_account.id},
       subscription_data: %{
         trial_period_days: @trial_period_days
-      }
+      },
+      allow_promotion_codes: true
     }
 
     params =
       case Ash.load!(current_account, :billing).billing.stripe_customer do
         nil -> base_params
-        customer -> base_params |> Map.put(:customer, customer["id"])
+        customer -> Map.put(base_params, :customer, customer["id"])
       end
 
     case Stripe.Checkout.Session.create(params) do
