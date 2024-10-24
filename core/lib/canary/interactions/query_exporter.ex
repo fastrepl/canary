@@ -41,9 +41,9 @@ defmodule Canary.Interactions.QueryExporter do
 
   @impl true
   def handle_info(:handle_batch, %{opts: %{export_delay_ms: _export_delay_ms}} = state) do
-    process(state)
-    schedule_batch(state)
-    {:noreply, state}
+    next_state = process(state)
+    schedule_batch(next_state)
+    {:noreply, next_state}
   end
 
   def handle_info({:DOWN, _ref, :process, _pid, _reason}, state), do: {:noreply, state}
@@ -64,13 +64,15 @@ defmodule Canary.Interactions.QueryExporter do
     Process.send_after(self(), :handle_batch, t)
   end
 
-  defp process(%{data: %{search: search}}) when map_size(search) == 0, do: :ok
+  defp process(%{data: %{search: search}} = state) when map_size(search) == 0, do: state
 
-  defp process(%{data: %{search: search}} = state) do
+  defp process(%{data: %{search: search}, opts: %{export_delay_ms: export_delay_ms}} = state) do
+    now = DateTime.utc_now()
+
     {keep, send} =
       search
       |> Enum.reduce({%{}, []}, fn {session_id, items}, {keep_acc, send_acc} ->
-        {items_to_keep, items_to_send} = dedupe(items)
+        {items_to_keep, items_to_send} = dedupe(items, now, export_delay_ms)
         {Map.put(keep_acc, session_id, items_to_keep), send_acc ++ items_to_send}
       end)
 
@@ -78,10 +80,42 @@ defmodule Canary.Interactions.QueryExporter do
       Canary.Analytics.ingest(:search, send)
     end)
 
-    {:noreply, state |> put_in([:data, :search], keep)}
+    put_in(state, [:data, :search], keep)
   end
 
-  defp dedupe(items) do
-    {[], items}
+  defp dedupe(items, now, export_delay_ms) do
+    items = Enum.sort_by(items, & &1.timestamp, DateTime)
+    dedupe_items(items, now, export_delay_ms, [], [])
+  end
+
+  defp dedupe_items([], _now, _export_delay_ms, items_to_keep, items_to_send) do
+    {items_to_keep, items_to_send}
+  end
+
+  defp dedupe_items([item], now, export_delay_ms, items_to_keep, items_to_send) do
+    time_since_item = DateTime.diff(now, item.timestamp, :millisecond)
+
+    if time_since_item >= export_delay_ms do
+      dedupe_items([], now, export_delay_ms, items_to_keep, [item | items_to_send])
+    else
+      dedupe_items([], now, export_delay_ms, [item | items_to_keep], items_to_send)
+    end
+  end
+
+  defp dedupe_items([item1, item2 | rest], now, export_delay_ms, items_to_keep, items_to_send) do
+    time_diff = DateTime.diff(item2.timestamp, item1.timestamp, :millisecond)
+    is_prefix = String.starts_with?(item2.query, item1.query)
+    time_since_item1 = DateTime.diff(now, item1.timestamp, :millisecond)
+
+    cond do
+      is_prefix and time_diff <= export_delay_ms ->
+        dedupe_items([item2 | rest], now, export_delay_ms, items_to_keep, items_to_send)
+
+      time_since_item1 >= export_delay_ms ->
+        dedupe_items([item2 | rest], now, export_delay_ms, items_to_keep, [item1 | items_to_send])
+
+      true ->
+        dedupe_items([item2 | rest], now, export_delay_ms, [item1 | items_to_keep], items_to_send)
+    end
   end
 end

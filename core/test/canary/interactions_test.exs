@@ -18,17 +18,11 @@ defmodule Canary.Test.Interactions do
 
     test "it works", %{export_interval_ms: export_interval_ms} do
       Canary.Index.Trieve.Mock
-      |> expect(:client, 1, fn _project ->
-        :ok
-      end)
-      |> expect(:create_dataset, 1, fn _client, _data ->
-        :ok
-      end)
+      |> expect(:client, 1, fn _project -> :ok end)
+      |> expect(:create_dataset, 1, fn _client, _data -> :ok end)
 
       Canary.Analytics.Mock
-      |> expect(:ingest, 1, fn :usage, _items ->
-        :ok
-      end)
+      |> expect(:ingest, 1, fn :usage, _items -> :ok end)
 
       account_1 = account_fixture()
       project_1 = Canary.Accounts.Project.create!(account_1.id, "project_1", authorize?: false)
@@ -44,31 +38,48 @@ defmodule Canary.Test.Interactions do
 
   describe "QueryExporter" do
     setup do
-      opts = %{export_interval_ms: 500, export_delay_ms: 100}
+      # Increased export_delay_ms
+      opts = %{export_interval_ms: 500, export_delay_ms: 200}
       start_supervised!({QueryExporter, name: QueryExporter.Test, opts: opts})
       opts
     end
 
     test "it works", %{export_interval_ms: export_interval_ms} do
       Canary.Index.Trieve.Mock
-      |> expect(:client, 1, fn _project ->
-        :ok
-      end)
-      |> expect(:create_dataset, 1, fn _client, _data ->
-        :ok
-      end)
+      |> expect(:client, 1, fn _project -> :ok end)
+      |> expect(:create_dataset, 1, fn _client, _data -> :ok end)
 
       Canary.Analytics.Mock
-      |> expect(:ingest, 1, fn :search, _items ->
-        :ok
+      |> expect(:ingest, 1, fn :search, items ->
+        assert length(items) == 1
       end)
 
       account_1 = account_fixture()
       project_1 = Canary.Accounts.Project.create!(account_1.id, "project_1", authorize?: false)
 
+      session_id = Ash.UUID.generate()
+
       :ok =
         QueryExporter.Test
-        |> GenServer.cast({:search, %{project_id: project_1.id, query: "query"}})
+        |> GenServer.cast(
+          {:search, %{session_id: session_id, project_id: project_1.id, query: "que"}}
+        )
+
+      Process.sleep(50)
+
+      :ok =
+        QueryExporter.Test
+        |> GenServer.cast(
+          {:search, %{session_id: session_id, project_id: project_1.id, query: "quer"}}
+        )
+
+      Process.sleep(50)
+
+      :ok =
+        QueryExporter.Test
+        |> GenServer.cast(
+          {:search, %{session_id: session_id, project_id: project_1.id, query: "query"}}
+        )
 
       Process.sleep(export_interval_ms + 100)
       :ok = GenServer.stop(QueryExporter.Test)
