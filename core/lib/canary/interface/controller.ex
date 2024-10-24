@@ -1,4 +1,4 @@
-defmodule CanaryWeb.OperationsController do
+defmodule CanaryWeb.Interface.Controller do
   use CanaryWeb, :controller
   require Ash.Query
 
@@ -26,7 +26,7 @@ defmodule CanaryWeb.OperationsController do
   end
 
   def search(conn, %{"query" => %{"text" => query, "tags" => tags}} = params) do
-    case Canary.Searcher.run(conn.assigns.project, query, tags: tags, cache: cache?()) do
+    case Canary.Interface.Search.run(conn.assigns.project, query, tags: tags, cache: cache?()) do
       {:ok, matches} ->
         data = %{
           matches: matches,
@@ -75,7 +75,7 @@ defmodule CanaryWeb.OperationsController do
     here = self()
 
     Task.start_link(fn ->
-      Canary.Responder.run(
+      Canary.Interface.Ask.run(
         conn.assigns.project,
         query,
         fn data -> send(here, data) end,

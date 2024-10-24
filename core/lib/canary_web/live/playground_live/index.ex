@@ -10,11 +10,19 @@ defmodule CanaryWeb.PlaygroundLive.Index do
         <p>Copy-pastable examples, powered by your existing sources.</p>
       </div>
 
-      <.live_component
-        id="playground-search"
-        module={CanaryWeb.PlaygroundLive.Search}
-        current_project={@current_project}
-      />
+      <div class="flex flex-col gap-4">
+        <.live_component
+          id="playground-search"
+          module={CanaryWeb.PlaygroundLive.Search}
+          current_project={@current_project}
+        />
+
+        <.live_component
+          id="playground-ask"
+          module={CanaryWeb.PlaygroundLive.Ask}
+          current_project={@current_project}
+        />
+      </div>
     </div>
     """
   end

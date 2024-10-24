@@ -87,8 +87,8 @@ defmodule CanaryWeb.Router do
   scope "/api/v1" do
     pipe_through :api
 
-    post "/search", CanaryWeb.OperationsController, :search
-    post "/ask", CanaryWeb.OperationsController, :ask
+    post "/ask", CanaryWeb.Interface.Controller, :ask
+    post "/search", CanaryWeb.Interface.Controller, :search
   end
 
   if Application.compile_env(:canary, :dev_routes) do
@@ -96,13 +96,6 @@ defmodule CanaryWeb.Router do
       pipe_through :browser
 
       forward "/mailbox", Plug.Swoosh.MailboxPreview
-
-      live_session :dev, layout: {CanaryWeb.Layouts, :dev} do
-        live "/reader", CanaryWeb.Dev.ReaderLive, :none
-        live "/searcher", CanaryWeb.Dev.SearcherLive, :none
-        live "/understander", CanaryWeb.Dev.UnderstanderLive, :none
-        live "/responder", CanaryWeb.Dev.ResponderLive, :none
-      end
     end
   end
 end

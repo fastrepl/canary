@@ -1,4 +1,4 @@
-defmodule Canary.Searcher do
+defmodule Canary.Interface.Search do
   @callback run(any(), String.t(), keyword()) :: {:ok, list(map())} | {:error, any()}
 
   def run(project, query, opts \\ []) do
@@ -32,11 +32,12 @@ defmodule Canary.Searcher do
     |> Kernel.<>(":" <> Jason.encode!(opts[:tags]))
   end
 
-  defp impl(), do: Application.get_env(:canary, :searcher, Canary.Searcher.Default)
+  defp impl(),
+    do: Application.get_env(:canary, :interface_search, Canary.Interface.Search.Default)
 end
 
-defmodule Canary.Searcher.Default do
-  @behaviour Canary.Searcher
+defmodule Canary.Interface.Search.Default do
+  @behaviour Canary.Interface.Search
 
   require Ash.Query
   alias Canary.Index.Trieve

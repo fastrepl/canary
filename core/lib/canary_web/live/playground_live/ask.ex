@@ -1,11 +1,11 @@
-defmodule CanaryWeb.PlaygroundLive.Search do
+defmodule CanaryWeb.PlaygroundLive.Ask do
   use CanaryWeb, :live_component
 
   @impl true
   def render(assigns) do
     ~H"""
     <div class="border border-gray-200 py-4 px-6 rounded-md">
-      <h2>Search</h2>
+      <h2>Search + Ask</h2>
 
       <div class="flex flex-col gap-0 mt-4">
         <p>Code example ↓</p>
@@ -26,6 +26,9 @@ defmodule CanaryWeb.PlaygroundLive.Search do
                 <canary-search slot="mode">
                   <canary-search-results slot="body"></canary-search-results>
                 </canary-search>
+                <canary-ask slot="mode">
+                  <canary-ask-results slot="body"></canary-ask-results>
+                </canary-ask>
               </canary-content>
             </canary-modal>
           </canary-provider-cloud>
@@ -49,6 +52,9 @@ defmodule CanaryWeb.PlaygroundLive.Search do
               <canary-search slot="mode">
                 <canary-search-results slot="body"></canary-search-results>
               </canary-search>
+              <canary-ask slot="mode">
+                <canary-ask-results slot="body"></canary-ask-results>
+              </canary-ask>
             </canary-content>
         </canary-modal>
       </canary-provider-cloud>
