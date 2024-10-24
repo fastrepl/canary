@@ -72,6 +72,7 @@ defmodule Canary.MixProject do
       {:nostrum, "~> 0.8.0", runtime: false},
       {:gun, "~> 2.0"},
       {:ash, "~> 3.4"},
+      {:ash_phoenix, "== 2.1.4"},
       {:ash_authentication, "~> 4.0"},
       {:ash_authentication_phoenix, "~> 2.1"},
       {:ash_postgres, "~> 2.3"},
