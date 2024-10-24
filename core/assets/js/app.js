@@ -22,7 +22,7 @@ import { Socket } from "phoenix";
 import { LiveSocket } from "phoenix_live_view";
 import topbar from "../vendor/topbar";
 
-import { createLiveToastHook } from "../../deps/live_toast"
+import { createLiveToastHook } from "../../deps/live_toast";
 
 import { getHooks } from "live_svelte";
 import * as Components from "../svelte/**/*.svelte";
@@ -31,13 +31,12 @@ import { format } from "timeago.js";
 import ClipboardJS from "clipboard";
 import Chart from "chart.js/auto";
 import { parse } from "best-effort-json-parser";
+
+import { codeToHtml } from "shiki";
+import { transformerNotationHighlight } from "@shikijs/transformers";
+
 import * as Sentry from "@sentry/browser";
 import Tracker from "@openreplay/tracker";
-
-import hljs from "highlight.js/lib/core";
-import html from "highlight.js/lib/languages/xml";
-hljs.registerLanguage("html", html);
-
 import { SENTRY_KEY, OPENREPLAY_KEY } from "../config";
 
 if (SENTRY_KEY) {
@@ -71,10 +70,19 @@ let hooks = {
   Prompt: window.Prompt,
   Highlight: {
     mounted() {
-      hljs.highlightElement(this.el);
+      this.run();
     },
     updated() {
-      hljs.highlightElement(this.el);
+      this.run();
+    },
+    run() {
+      codeToHtml(this.el.textContent, {
+        lang: "html",
+        theme: "rose-pine-dawn",
+        transformers: [transformerNotationHighlight()],
+      }).then((html) => {
+        this.el.innerHTML = html;
+      });
     },
   },
   BarChart: {
@@ -108,7 +116,7 @@ let hooks = {
             x: {
               grid: {
                 drawOnChartArea: false,
-              }, 
+              },
             },
             y: {
               beginAtZero: true,
@@ -156,7 +164,7 @@ let hooks = {
       this.fn();
     },
     fn() {
-      let dt = new Date(this.el.textContent);
+      const dt = new Date(this.el.textContent);
       this.el.textContent = dt.toLocaleString();
       this.el.classList.remove("invisible");
     },

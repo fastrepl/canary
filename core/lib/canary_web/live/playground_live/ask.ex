@@ -9,7 +9,7 @@ defmodule CanaryWeb.PlaygroundLive.Ask do
 
       <div class="flex flex-col gap-0 mt-4">
         <p>Code example ↓</p>
-        <pre id={@id} phx-hook="Highlight" class="lang-html"><code><%= @code %></code></pre>
+        <code id={@id} phx-hook="Highlight"><%= @code %></code>
       </div>
 
       <div class="flex flex-col gap-0 mt-4">
@@ -52,9 +52,9 @@ defmodule CanaryWeb.PlaygroundLive.Ask do
               <canary-search slot="mode">
                 <canary-search-results slot="body"></canary-search-results>
               </canary-search>
-              <canary-ask slot="mode">
-                <canary-ask-results slot="body"></canary-ask-results>
-              </canary-ask>
+              <canary-ask slot="mode"> // [!code highlight]
+                <canary-ask-results slot="body"></canary-ask-results> // [!code highlight]
+              </canary-ask> // [!code highlight]
             </canary-content>
         </canary-modal>
       </canary-provider-cloud>

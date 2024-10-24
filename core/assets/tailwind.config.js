@@ -11,7 +11,7 @@ module.exports = {
     "../lib/canary_web.ex",
     "../lib/canary_web/**/*.*ex",
     "./svelte/**/*.svelte",
-    '../deps/live_toast/lib/**/*.*ex',
+    "../deps/live_toast/lib/**/*.*ex",
   ],
   theme: {
     extend: {

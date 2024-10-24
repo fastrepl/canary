@@ -72,3 +72,15 @@ body {
     --canary-color-gray-95: oklch(var(--l-95) var(--canary-color-gray-ch));
     --canary-color-gray-100: oklch(var(--l-100) var(--canary-color-gray-ch));
 }
+
+code pre {
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+
+span.line.highlighted {
+  border-radius: 2px;
+  background-color: rgba(142, 150, 170, 0.14);
+  width: 100%;
+  display: inline-block;
+}

@@ -9,7 +9,7 @@ defmodule CanaryWeb.PlaygroundLive.Search do
 
       <div class="flex flex-col gap-0 mt-4">
         <p>Code example ↓</p>
-        <pre id={@id} phx-hook="Highlight" class="lang-html"><code><%= @code %></code></pre>
+        <code id={@id} phx-hook="Highlight"><%= @code %></code>
       </div>
 
       <div class="flex flex-col gap-0 mt-4">
@@ -46,9 +46,9 @@ defmodule CanaryWeb.PlaygroundLive.Search do
           <canary-trigger-searchbar slot="trigger"></canary-trigger-searchbar>
             <canary-content>
               <canary-input slot="input"></canary-input>
-              <canary-search slot="mode">
-                <canary-search-results slot="body"></canary-search-results>
-              </canary-search>
+              <canary-search slot="mode"> // [!code highlight]
+                <canary-search-results slot="body"></canary-search-results> // [!code highlight]
+              </canary-search> // [!code highlight]
             </canary-content>
         </canary-modal>
       </canary-provider-cloud>
