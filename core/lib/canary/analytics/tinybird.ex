@@ -1,6 +1,8 @@
 defmodule Canary.Analytics do
-  @callback ingest(source :: String.t(), data :: any()) :: {:ok, any()} | {:error, any()}
-  @callback query(source :: String.t(), args :: any()) :: {:ok, any()} | {:error, any()}
+  @callback ingest(source :: atom(), data :: any()) :: {:ok, any()} | {:error, any()}
+  @callback query(source :: atom(), args :: any()) :: {:ok, any()} | {:error, any()}
+
+  def ingest(_, []), do: :ok
 
   def ingest(source, data), do: impl().ingest(source, data)
   def query(source, args), do: impl().query(source, args)
@@ -18,8 +20,6 @@ defmodule Canary.Analytics.Tinybird do
       headers: [{"Authorization", "Bearer #{api_key}"}]
     )
   end
-
-  def ingest(_, []), do: :ok
 
   def ingest(source, data) when is_list(data) do
     data =

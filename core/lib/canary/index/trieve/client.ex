@@ -1,7 +1,34 @@
 defmodule Canary.Index.Trieve do
-  def client(_ \\ nil)
+  @callback client(any()) :: any()
+  @callback create_dataset(any(), any()) :: any()
+  @callback delete_dataset(any(), any()) :: any()
+  @callback upsert_groups(any(), any()) :: any()
+  @callback delete_group(any(), any()) :: any()
+  @callback upsert_chunks(any(), any()) :: any()
+  @callback delete_chunk(any(), any()) :: any()
+  @callback search(any(), any(), keyword()) :: any()
+  @callback get_chunks(any(), any()) :: any()
 
-  def client(dataset) when is_binary(dataset) or is_nil(dataset) do
+  def client(_ \\ nil)
+  def client(%Canary.Accounts.Project{index_id: id}), do: client(id)
+  def client(dataset), do: impl().client(dataset)
+
+  def create_dataset(client, tracking_id), do: impl().create_dataset(client, tracking_id)
+  def delete_dataset(client, tracking_id), do: impl().delete_dataset(client, tracking_id)
+  def upsert_groups(client, inputs), do: impl().upsert_groups(client, inputs)
+  def delete_group(client, group_tracking_id), do: impl().delete_group(client, group_tracking_id)
+  def upsert_chunks(client, chunks), do: impl().upsert_chunks(client, chunks)
+  def delete_chunk(client, chunk_tracking_id), do: impl().delete_chunk(client, chunk_tracking_id)
+  def search(client, query, opts \\ []), do: impl().search(client, query, opts)
+  def get_chunks(client, group_tracking_id), do: impl().get_chunks(client, group_tracking_id)
+
+  defp impl(), do: Application.get_env(:canary, :trieve, Canary.Index.Trieve.Actual)
+end
+
+defmodule Canary.Index.Trieve.Actual do
+  @behaviour Canary.Index.Trieve
+
+  def client(dataset) do
     key = Application.fetch_env!(:canary, :trieve_api_key)
     org = Application.fetch_env!(:canary, :trieve_organization)
 
@@ -17,8 +44,6 @@ defmodule Canary.Index.Trieve do
         |> Enum.reject(&is_nil/1)
     )
   end
-
-  def client(%Canary.Accounts.Project{index_id: id}), do: client(id)
 
   def create_dataset(client, tracking_id) do
     # https://docs.trieve.ai/api-reference/dataset/create-dataset
