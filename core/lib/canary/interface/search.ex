@@ -47,10 +47,20 @@ defmodule Canary.Interface.Search.Default do
     with {:ok, groups} <- Trieve.client(project) |> Trieve.search(query, opts) do
       matches =
         groups
-        |> Enum.map(&transform_result/1)
+        |> Enum.map(&transform_result_safe/1)
         |> Enum.reject(&is_nil/1)
 
       {:ok, matches}
+    end
+  end
+
+  defp transform_result_safe(group) do
+    try do
+      transform_result(group)
+    rescue
+      exception ->
+        Sentry.Context.set_extra_context(group)
+        Sentry.capture_exception(exception, stacktrace: __STACKTRACE__)
     end
   end
 
