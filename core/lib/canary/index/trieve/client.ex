@@ -41,7 +41,8 @@ defmodule Canary.Index.Trieve.Actual do
           {"TR-Organization", org},
           if(not is_nil(dataset), do: {"TR-Dataset", dataset}, else: nil)
         ]
-        |> Enum.reject(&is_nil/1)
+        |> Enum.reject(&is_nil/1),
+      receive_timeout: 2 * 15_000
     )
   end
 
@@ -273,9 +274,18 @@ defmodule Canary.Index.Trieve.Actual do
                )
            }
          ) do
-      {:ok, %{status: 200, body: %{"results" => results}}} -> {:ok, results}
-      {:ok, %{status: status, body: error}} when status in 400..499 -> {:error, error}
-      {:error, error} -> {:error, error}
+      {:ok, %{status: 200, body: %{"results" => results}}} ->
+        {:ok, results}
+
+      {:ok, %{status: status, body: error}} when status in 400..499 ->
+        if error["message"] =~ "Should have at least one value for match" do
+          {:ok, []}
+        else
+          {:error, error}
+        end
+
+      {:error, error} ->
+        {:error, error}
     end
   end
 

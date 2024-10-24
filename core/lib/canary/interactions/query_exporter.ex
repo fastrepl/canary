@@ -29,9 +29,9 @@ defmodule Canary.Interactions.QueryExporter do
   def handle_cast({:search, payload}, state) do
     session_id =
       case Map.get(payload, :session_id) do
-        nil -> Ash.UUID.generate()
         "" -> Ash.UUID.generate()
-        id -> id
+        id when is_binary(id) -> id
+        _ -> Ash.UUID.generate()
       end
 
     item = payload |> Map.put(:timestamp, DateTime.utc_now())

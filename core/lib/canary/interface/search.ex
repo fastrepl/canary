@@ -59,8 +59,10 @@ defmodule Canary.Interface.Search.Default do
       transform_result(group)
     rescue
       exception ->
-        Sentry.Context.set_extra_context(group)
+        Sentry.Context.set_extra_context(%{search_result_group: group})
         Sentry.capture_exception(exception, stacktrace: __STACKTRACE__)
+
+        nil
     end
   end
 
