@@ -58,10 +58,20 @@ defmodule Canary.Membership do
     account = ensure_membership(account)
 
     case account.billing.membership.tier do
-      :free -> 0
-      :starter -> 0
-      :admin -> 0
+      :free -> 100
+      :starter -> 1000
+      :admin -> 1000 * 1000
       _ -> 0
+    end
+  end
+
+  def refetch_interval_hours(%Canary.Accounts.Account{} = account) do
+    account = ensure_membership(account)
+
+    case account.billing.membership.tier do
+      :free -> 24 * 3
+      :starter -> 24 * 1
+      _ -> 24 * 7
     end
   end
 

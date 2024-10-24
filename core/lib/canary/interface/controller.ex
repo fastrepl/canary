@@ -84,6 +84,12 @@ defmodule CanaryWeb.Interface.Controller do
       )
     end)
 
+    :ok =
+      GenServer.cast(
+        Canary.Interactions.UsageExporter,
+        {:ask, %{project_id: conn.assigns.project.id}}
+      )
+
     receive_and_send(conn)
   end
 

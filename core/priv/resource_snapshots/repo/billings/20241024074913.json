@@ -51,6 +51,26 @@
       "type": "bigint"
     },
     {
+      "allow_nil?": true,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "membership_override_tier",
+      "type": "text"
+    },
+    {
+      "allow_nil?": true,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "membership_override_ends_at",
+      "type": "utc_datetime"
+    },
+    {
       "allow_nil?": false,
       "default": "nil",
       "generated?": false,
@@ -85,7 +105,7 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "E40D4F66E6C414D8E35B9A3BC470BB7BC6EE366D1AA55F9189DD8A66AF76AED8",
+  "hash": "222CF7F97CE6D11357A6BDA6823F16F4B85D11377153593C1D0108CDC0EC147A",
   "identities": [],
   "multitenancy": {
     "attribute": null,

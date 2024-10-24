@@ -7,7 +7,11 @@ defmodule CanaryWeb.PlaygroundLive.Index do
     <div>
       <div class="mb-4">
         <h2>Playground</h2>
-        <p>Copy-pastable examples, powered by your existing sources.</p>
+        <div>
+          <div>
+            For more information, please refer to our <a href="https://getcanary.dev/docs">documentation</a>.
+          </div>
+        </div>
       </div>
 
       <div class="flex flex-col gap-4">

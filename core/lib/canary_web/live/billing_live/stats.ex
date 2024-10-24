@@ -24,6 +24,14 @@ defmodule CanaryWeb.BillingLive.Stats do
                       Admin
                   <% end %>
                 </span>
+                <%= if @current_account.billing.membership.grant_end do %>
+                  <span class="-mb-7">
+                    Trial ends on <%= Calendar.strftime(
+                      @current_account.billing.membership.grant_end,
+                      "%B %d, %Y"
+                    ) %>
+                  </span>
+                <% end %>
                 <%= if @current_account.billing.membership.trial_end do %>
                   <span class="-mb-7">
                     Trial ends on <%= Calendar.strftime(

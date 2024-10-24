@@ -16,6 +16,7 @@ defmodule CanaryWeb.BillingLive.Plans do
                     "Price",
                     "Users",
                     "Source",
+                    "Reindex",
                     "Search",
                     "Ask AI",
                     "Analytics",
@@ -37,8 +38,11 @@ defmodule CanaryWeb.BillingLive.Plans do
                     "$0 / mo",
                     "<= 1",
                     "<= 1, Webpage only",
-                    "100,000",
-                    "Coming soon",
+                    "Every 72 hours",
+                    (1000 * 1000)
+                    |> Integer.to_string()
+                    |> String.pad_leading(3, "0"),
+                    "100",
                     "X",
                     nil
                   ]
@@ -60,8 +64,11 @@ defmodule CanaryWeb.BillingLive.Plans do
                     "$59 / mo",
                     "<= 3",
                     "<= 3, All types",
-                    "Unlimited",
-                    "Coming soon",
+                    "Every 24 hours",
+                    (5000 * 1000)
+                    |> Integer.to_string()
+                    |> String.pad_leading(3, "0"),
+                    1000,
                     "O",
                     :action
                   ]

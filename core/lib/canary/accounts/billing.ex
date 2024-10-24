@@ -14,6 +14,9 @@ defmodule Canary.Accounts.Billing do
 
     attribute :count_ask, :integer, allow_nil?: false, default: 0
     attribute :count_search, :integer, allow_nil?: false, default: 0
+
+    attribute :membership_override_tier, Canary.Accounts.Membership, allow_nil?: true
+    attribute :membership_override_ends_at, :utc_datetime, allow_nil?: true
   end
 
   relationships do
@@ -21,11 +24,7 @@ defmodule Canary.Accounts.Billing do
   end
 
   calculations do
-    calculate :membership, :atom, {
-      Canary.Accounts.MembershipCalculation,
-      account_relation_load: {:account, [:super_user]},
-      stripe_subscription_attribute: :stripe_subscription
-    }
+    calculate :membership, Canary.Accounts.Membership, Canary.Accounts.MembershipCalculation
   end
 
   actions do
@@ -57,12 +56,20 @@ defmodule Canary.Accounts.Billing do
       change set_attribute(:stripe_subscription, arg(:stripe_subscription))
     end
 
-    update :set_ask do
-      change set_attribute(:count_ask, 0)
-    end
+    update :grant_starter_for do
+      require_atomic? false
 
-    update :set_search do
-      change set_attribute(:count_search, 0)
+      argument :days, :integer, allow_nil?: false
+      change set_attribute(:membership_override_tier, :starter)
+
+      change fn changeset, _ ->
+        days = Ash.Changeset.get_argument(changeset, :days)
+        ends_at = DateTime.utc_now() |> DateTime.add(days, :day)
+
+        changeset
+        |> Ash.Changeset.change_attribute(:membership_override_tier, :starter)
+        |> Ash.Changeset.change_attribute(:membership_override_ends_at, ends_at)
+      end
     end
   end
 
@@ -74,9 +81,6 @@ defmodule Canary.Accounts.Billing do
     define :update_stripe_subscription,
       args: [:stripe_subscription],
       action: :update_stripe_subscription
-
-    define :set_ask, args: [], action: :set_ask
-    define :set_search, args: [], action: :set_search
   end
 
   postgres do

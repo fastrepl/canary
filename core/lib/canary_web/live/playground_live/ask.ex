@@ -5,7 +5,7 @@ defmodule CanaryWeb.PlaygroundLive.Ask do
   def render(assigns) do
     ~H"""
     <div class="border border-gray-200 py-4 px-6 rounded-md">
-      <h2>Search + Ask</h2>
+      <h2>Search + Ask AI</h2>
 
       <div class="flex flex-col gap-0 mt-4">
         <p>Code example ↓</p>
