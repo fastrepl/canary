@@ -19,10 +19,18 @@ defmodule CanaryWeb.OverviewLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
+    socket =
+      socket
+      |> assign_timezone()
+
+    {:ok, socket}
+  end
+
+  defp assign_timezone(socket) do
     if timezone = get_connect_params(socket)["timezone"] do
-      {:ok, assign(socket, timezone: timezone)}
+      assign(socket, timezone: timezone)
     else
-      {:ok, assign(socket, timezone: "UTC")}
+      assign(socket, timezone: "UTC")
     end
   end
 end

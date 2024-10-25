@@ -1,4 +1,4 @@
-defmodule CanaryWeb.PlaygroundLive.Index do
+defmodule CanaryWeb.ExampleLive.Index do
   use CanaryWeb, :live_view
 
   @impl true
@@ -6,7 +6,7 @@ defmodule CanaryWeb.PlaygroundLive.Index do
     ~H"""
     <div>
       <div class="mb-4">
-        <h2>Playground</h2>
+        <h2>Examples</h2>
         <div>
           <div>
             For more information, please refer to our <a href="https://getcanary.dev/docs">documentation</a>.
@@ -16,14 +16,14 @@ defmodule CanaryWeb.PlaygroundLive.Index do
 
       <div class="flex flex-col gap-4">
         <.live_component
-          id="playground-search"
-          module={CanaryWeb.PlaygroundLive.Search}
+          id="example-search"
+          module={CanaryWeb.ExampleLive.Search}
           current_project={@current_project}
         />
 
         <.live_component
-          id="playground-ask"
-          module={CanaryWeb.PlaygroundLive.Ask}
+          id="example-ask"
+          module={CanaryWeb.ExampleLive.Ask}
           current_project={@current_project}
         />
       </div>

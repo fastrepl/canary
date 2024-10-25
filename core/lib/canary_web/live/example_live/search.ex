@@ -1,4 +1,4 @@
-defmodule CanaryWeb.PlaygroundLive.Search do
+defmodule CanaryWeb.ExampleLive.Search do
   use CanaryWeb, :live_component
 
   @impl true

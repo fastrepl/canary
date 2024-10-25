@@ -5,8 +5,8 @@ defmodule CanaryWeb.SourceLive.List do
   def render(%{sources: []} = assigns) do
     ~H"""
     <div>
-      <div class="flex flex-row justify-between items-center mb-2">
-        <h2>Source</h2>
+      <div class="flex flex-row justify-between items-center mb-4">
+        <%= render_header(assigns) %>
         <.modal id="source-form">
           <.live_component
             id="source-form"
@@ -16,6 +16,7 @@ defmodule CanaryWeb.SourceLive.List do
           />
         </.modal>
       </div>
+
       <div class="w-full h-[calc(100vh-300px)] bg-gray-100 rounded-sm flex flex-col items-center justify-center">
         <p class="text-lg">
           You don't have any <span class="text-underline">sources</span> yet.
@@ -31,8 +32,8 @@ defmodule CanaryWeb.SourceLive.List do
   def render(assigns) do
     ~H"""
     <div>
-      <div class="flex flex-row justify-between items-center mb-2">
-        <h2>Source</h2>
+      <div class="flex flex-row justify-between items-center mb-4">
+        <%= render_header(assigns) %>
         <div>
           <.button is_primary phx-click={show_modal("source-form")}>
             New
@@ -71,6 +72,19 @@ defmodule CanaryWeb.SourceLive.List do
               <span class="text-gray-500 h-4 w-4 hero-chevron-right-solid"></span>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+    """
+  end
+
+  defp render_header(assigns) do
+    ~H"""
+    <div>
+      <h2>Sources</h2>
+      <div>
+        <div>
+          For more information, please refer to our <a href="https://getcanary.dev/docs">documentation</a>.
         </div>
       </div>
     </div>

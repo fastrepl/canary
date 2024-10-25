@@ -1,4 +1,4 @@
-defmodule CanaryWeb.PlaygroundLive.Ask do
+defmodule CanaryWeb.ExampleLive.Ask do
   use CanaryWeb, :live_component
 
   @impl true
