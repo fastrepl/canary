@@ -22,12 +22,26 @@ defmodule CanaryWeb.SourceLive.Detail do
 
       <div class="flex flex-col md:flex-row gap-12">
         <div class="basis-2/5">
-          <.live_component
-            id="source-form"
-            module={CanaryWeb.SourceLive.WebpageForm}
-            source={@source}
-            form={@form}
-          />
+          <%= case @source.config.type do %>
+            <% :webpage -> %>
+              <.live_component
+                id="source-form"
+                module={CanaryWeb.SourceLive.WebpageForm}
+                source={@source}
+              />
+            <% :github_issue -> %>
+              <.live_component
+                id="source-form"
+                module={CanaryWeb.SourceLive.GithubForm}
+                source={@source}
+              />
+            <% :github_discussion -> %>
+              <.live_component
+                id="source-form"
+                module={CanaryWeb.SourceLive.GithubForm}
+                source={@source}
+              />
+          <% end %>
         </div>
 
         <div class="hidden md:inline-block min-h-[1em] w-0.5 self-stretch bg-gray-200"></div>
@@ -121,25 +135,19 @@ defmodule CanaryWeb.SourceLive.Detail do
     socket = assign(socket, assigns)
     source = socket.assigns.source
 
-    form =
-      source
-      |> AshPhoenix.Form.for_update(:update, forms: [auto?: true])
-      |> to_form()
-
     socket =
       socket
-      |> assign(form: form)
+      |> assign_new(:current_config, fn ->
+        %Ash.Union{value: config} = source.config
+
+        Map.from_struct(config)
+        |> Map.new(fn {k, v} -> {to_string(k), v} end)
+      end)
       |> assign(source: source)
       |> assign(
         tabs: if(source.config.type == :webpage, do: ["Status", "Preview"], else: ["Status"])
       )
       |> assign(:tab, "Status")
-      |> assign_new(:current_config, fn ->
-        %Ash.Union{value: config} = form.data.config
-
-        Map.from_struct(config)
-        |> Map.new(fn {k, v} -> {to_string(k), v} end)
-      end)
       |> assign(action_msg: if(source.state == :running, do: "Cancel", else: "Fetch"))
       |> assign(action_name: if(source.state == :running, do: "cancel", else: "fetch"))
       |> assign(crawler_preview_id: @crawler_preview_id)
@@ -157,44 +165,6 @@ defmodule CanaryWeb.SourceLive.Detail do
     {:noreply, socket |> assign(:tab, tab)}
   end
 
-  @impl true
-  def handle_event("validate", %{"form" => params}, socket) do
-    params =
-      if get_in(params, ["config", "tag_definitions"]) do
-        params
-        |> update_in(
-          ["config", "tag_definitions"],
-          &TagDefinitionForm.transform(&1)
-        )
-      else
-        params
-      end
-
-    form = AshPhoenix.Form.validate(socket.assigns.form, params)
-
-    socket =
-      socket
-      |> assign(form: form)
-      |> assign(current_config: form.params["config"])
-
-    {:noreply, socket}
-  end
-
-  @impl true
-  def handle_event("submit", %{"form" => params}, socket) do
-    params = drop_empty(params)
-
-    case AshPhoenix.Form.submit(socket.assigns.form, params: params) do
-      {:ok, _} ->
-        {:noreply, socket |> push_navigate(to: ~p"/source/#{socket.assigns.source.id}")}
-
-      {:error, form} = e ->
-        IO.inspect(e)
-        {:noreply, assign(socket, :form, form)}
-    end
-  end
-
-  @impl true
   def handle_event("destroy", _, socket) do
     case Ash.destroy(socket.assigns.source) do
       :ok ->
@@ -215,7 +185,6 @@ defmodule CanaryWeb.SourceLive.Detail do
     end
   end
 
-  @impl true
   def handle_event("fetch", _, socket) do
     result =
       socket.assigns.source
@@ -232,7 +201,6 @@ defmodule CanaryWeb.SourceLive.Detail do
     end
   end
 
-  @impl true
   def handle_event("cancel", _, socket) do
     result =
       socket.assigns.source
@@ -247,68 +215,5 @@ defmodule CanaryWeb.SourceLive.Detail do
         IO.inspect(error)
         {:noreply, socket}
     end
-  end
-
-  defp drop_empty(params) do
-    [
-      "start_urls",
-      "url_include_patterns",
-      "url_exclude_patterns"
-    ]
-    |> Enum.reduce(params, fn key, acc ->
-      if not is_list(acc["config"][key]) do
-        acc
-      else
-        update_in(acc, ["config", key], fn list ->
-          list
-          |> Enum.map(&String.trim/1)
-          |> Enum.reject(&(&1 == ""))
-        end)
-      end
-    end)
-  end
-end
-
-defmodule TagDefinitionForm do
-  @default_tag_definition_item %{}
-
-  def transform(value), do: transform(value, nil)
-
-  defp transform("", nil), do: @default_tag_definition_item
-  defp transform("", key) when key in ["url_include_patterns"], do: []
-  defp transform("", _key), do: ""
-
-  defp transform(list, key_context) when is_list(list) do
-    list
-    |> Enum.map(&transform(&1, key_context))
-    |> handle_context(key_context)
-  end
-
-  defp transform(map, key_context) when is_map(map) do
-    if integerish_keys?(map) do
-      map
-      |> Enum.sort_by(fn {k, _v} -> String.to_integer(k) end)
-      |> Enum.map(fn {_k, v} -> transform(v, key_context) end)
-      |> handle_context(key_context)
-    else
-      Enum.into(map, %{}, fn {k, v} ->
-        {k, transform(v, k)}
-      end)
-    end
-  end
-
-  defp transform(value, _key), do: value
-
-  defp handle_context(values, key_context) do
-    case key_context do
-      "url_include_patterns" -> List.flatten(values)
-      "url_exclude_patterns" -> List.flatten(values)
-      _ -> values
-    end
-  end
-
-  defp integerish_keys?(map) do
-    Map.keys(map)
-    |> Enum.all?(&(&1 =~ ~r/^\d+$/))
   end
 end

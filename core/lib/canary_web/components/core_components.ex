@@ -391,7 +391,8 @@ defmodule CanaryWeb.CoreComponents do
         class={[
           "block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6",
           @errors == [] && "border-zinc-300 focus:border-zinc-400",
-          @errors != [] && "border-rose-400 focus:border-rose-400"
+          @errors != [] && "border-rose-400 focus:border-rose-400",
+          @rest[:disabled] && "bg-zinc-100 cursor-not-allowed"
         ]}
         {@rest}
       />
