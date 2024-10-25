@@ -7,13 +7,8 @@ defmodule CanaryWeb.ExampleLive.Ask do
     <div class="border border-gray-200 py-4 px-6 rounded-md">
       <h2>Search + Ask AI</h2>
 
-      <div class="flex flex-col gap-0 mt-4">
-        <p>Code example ↓</p>
-        <code id={@id} phx-hook="Highlight"><%= @code %></code>
-      </div>
-
-      <div class="flex flex-col gap-0 mt-4">
-        <p class="text-md">Above code will render a search bar like this ↓</p>
+      <div class="flex flex-col gap-0 mt-2">
+        <p class="text-md">Click below to try it ↓</p>
         <canary-root>
           <canary-provider-cloud
             project-key={@current_project.public_key}
@@ -33,6 +28,11 @@ defmodule CanaryWeb.ExampleLive.Ask do
             </canary-modal>
           </canary-provider-cloud>
         </canary-root>
+      </div>
+
+      <div class="flex flex-col gap-0 mt-4">
+        <p>Actual code to render above ↓</p>
+        <code id={@id} phx-hook="Highlight"><%= @code %></code>
       </div>
     </div>
     """
