@@ -693,4 +693,20 @@ defmodule CanaryWeb.CoreComponents do
     <time phx-hook="LocalTime" id={@id} class="invisible"><%= @date %></time>
     """
   end
+
+  attr :class, :string, default: nil
+  slot :inner_block, required: true
+
+  def tooltip(assigns) do
+    ~H"""
+    <div id={random_id("tt")} class={["tooltip", @class]} role="tooltip" phx-hook="TooltipHook">
+      <%= render_slot(@inner_block) %>
+      <div class="arrow" id="arrow"></div>
+    </div>
+    """
+  end
+
+  defp random_id(prefix) do
+    prefix <> "_" <> (:crypto.strong_rand_bytes(8) |> Base.url_encode64(padding: false))
+  end
 end

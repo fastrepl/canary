@@ -59,6 +59,7 @@ import "@getcanary/web/components/canary-search-match-github-issue.js";
 import "@getcanary/web/components/canary-search-match-github-discussion.js";
 import "@getcanary/web/components/canary-ask.js";
 import "@getcanary/web/components/canary-ask-results.js";
+import "@getcanary/web/components/canary-tooltip.js";
 
 const csrfToken = document
   .querySelector("meta[name='csrf-token']")

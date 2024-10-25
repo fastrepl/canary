@@ -193,10 +193,22 @@ defmodule CanaryWeb.SourceLive.Detail do
 
     case result do
       {:ok, _} ->
+        socket =
+          socket
+          |> put_flash(
+            :info,
+            "Fetching started. It may take a while. You can close this tab, and come back later."
+          )
+          |> push_navigate(to: ~p"/source/#{socket.assigns.source.id}")
+
         {:noreply, socket}
 
       {:error, error} ->
-        IO.inspect(error)
+        socket =
+          socket
+          |> put_flash(:error, error)
+          |> push_navigate(to: ~p"/source/#{socket.assigns.source.id}")
+
         {:noreply, socket}
     end
   end
@@ -209,10 +221,19 @@ defmodule CanaryWeb.SourceLive.Detail do
 
     case result do
       {:ok, _} ->
+        socket =
+          socket
+          |> put_flash(:info, "Fetching has been canceled.")
+          |> push_navigate(to: ~p"/source/#{socket.assigns.source.id}")
+
         {:noreply, socket}
 
       {:error, error} ->
-        IO.inspect(error)
+        socket =
+          socket
+          |> put_flash(:error, error)
+          |> push_navigate(to: ~p"/source/#{socket.assigns.source.id}")
+
         {:noreply, socket}
     end
   end

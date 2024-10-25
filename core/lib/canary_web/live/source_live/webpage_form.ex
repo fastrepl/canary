@@ -19,7 +19,7 @@ defmodule CanaryWeb.SourceLive.WebpageForm do
         <.input field={f[:name]} label="Name" />
 
         <.inputs_for :let={fc} field={@form[:config]}>
-          <.form_group header="URLs">
+          <.form_group header="URLs" tooltip="Crawler will start from these URLs.">
             <%= for url <- fc[:start_urls].value || [] do %>
               <.input type="url" autocomplete="off" name={fc[:start_urls].name <> "[]"} value={url} />
             <% end %>
@@ -35,7 +35,10 @@ defmodule CanaryWeb.SourceLive.WebpageForm do
             </Primer.button>
           </.form_group>
 
-          <.form_group header="Include patterns">
+          <.form_group
+            header="Include patterns"
+            tooltip="Glob patterns. / e.g. https://example.com/docs/**"
+          >
             <%= for url <- fc[:url_include_patterns].value || [] do %>
               <.input autocomplete="off" name={fc[:url_include_patterns].name <> "[]"} value={url} />
             <% end %>
@@ -51,7 +54,10 @@ defmodule CanaryWeb.SourceLive.WebpageForm do
             </Primer.button>
           </.form_group>
 
-          <.form_group header="Exclude patterns">
+          <.form_group
+            header="Exclude patterns"
+            tooltip="Glob patterns. / e.g. https://example.com/blog/**"
+          >
             <%= for url <- fc[:url_exclude_patterns].value || [] do %>
               <.input autocomplete="off" name={fc[:url_exclude_patterns].name <> "[]"} value={url} />
             <% end %>
@@ -68,7 +74,7 @@ defmodule CanaryWeb.SourceLive.WebpageForm do
             </Primer.button>
           </.form_group>
 
-          <.form_group header="Tags">
+          <.form_group header="Tags" tooltip="e.g. name='v1' / patterns=['https://example.com/v1/**']">
             <div class="flex flex-col gap-6">
               <.inputs_for :let={fct} field={fc[:tag_definitions]}>
                 <div class="flex flex-col gap-2">
@@ -121,9 +127,11 @@ defmodule CanaryWeb.SourceLive.WebpageForm do
             </Primer.button>
           </.form_group>
 
-          <.form_group header="JS Render (experimental)">
-            <.input type="checkbox" field={fc[:js_render]} />
-          </.form_group>
+          <div class="invisible">
+            <.form_group header="JS Render (experimental)">
+              <.input type="checkbox" field={fc[:js_render]} />
+            </.form_group>
+          </div>
         </.inputs_for>
       </.form>
     </div>
@@ -131,14 +139,31 @@ defmodule CanaryWeb.SourceLive.WebpageForm do
   end
 
   attr :header, :string, required: true
+  attr :tooltip, :string, required: false
+
   slot :inner_block, required: true
-  slot :action
+  slot :action, required: false
 
   def form_group(assigns) do
     ~H"""
     <div class="flex flex-col gap-2">
       <div class="form-group-header flex items-center justify-between">
-        <span class="FormControl-label"><%= @header %></span>
+        <%= if assigns[:tooltip] do %>
+          <canary-tooltip text={@tooltip}>
+            <div class="flex flex-row items-center gap-2">
+              <span class="FormControl-label"><%= @header %></span>
+              <span class={[
+                "border rounded-full px-1 text-xs",
+                "border-gray-300 text-gray-400"
+              ]}>
+                ?
+              </span>
+            </div>
+          </canary-tooltip>
+        <% else %>
+          <span class="FormControl-label"><%= @header %></span>
+        <% end %>
+
         <%= render_slot(@action) %>
       </div>
       <%= render_slot(@inner_block) %>
