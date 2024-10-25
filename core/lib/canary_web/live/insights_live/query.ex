@@ -43,11 +43,17 @@ defmodule CanaryWeb.InsightsLive.Query do
         []
       end
 
+    args = %{
+      days: 7,
+      project_id: assigns.current_project.id,
+      timezone: assigns.timezone
+    }
+
     socket =
       socket
       |> assign(assigns)
       |> assign_async(:search_breakdown, fn ->
-        case Canary.Analytics.query("search_breakdown", %{project_id: assigns.current_project.id}) do
+        case Canary.Analytics.query(:search_breakdown, args) do
           {:ok, data} ->
             map =
               data

@@ -44,12 +44,14 @@ defmodule CanaryWeb.InsightLive.Index do
       <.live_component
         id="insights-volume"
         module={CanaryWeb.InsightsLive.Volume}
+        timezone={@timezone}
         current_project={@current_project}
       />
 
       <.live_component
         id="insights-volume"
         module={CanaryWeb.InsightsLive.Query}
+        timezone={@timezone}
         current_project={@current_project}
       />
     </div>
@@ -65,6 +67,10 @@ defmodule CanaryWeb.InsightLive.Index do
       |> assign(can_use_insights?: can_use_insights?)
       |> assign(current_project: current_project)
 
-    {:ok, socket}
+    if timezone = get_connect_params(socket)["timezone"] do
+      {:ok, assign(socket, timezone: timezone)}
+    else
+      {:ok, assign(socket, timezone: "UTC")}
+    end
   end
 end

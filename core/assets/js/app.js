@@ -60,11 +60,11 @@ import "@getcanary/web/components/canary-search-match-github-discussion.js";
 import "@getcanary/web/components/canary-ask.js";
 import "@getcanary/web/components/canary-ask-results.js";
 
-let csrfToken = document
+const csrfToken = document
   .querySelector("meta[name='csrf-token']")
   .getAttribute("content");
 
-let hooks = {
+const hooks = {
   ...getHooks(Components),
   LiveToast: createLiveToastHook(),
   Prompt: window.Prompt,
@@ -202,9 +202,13 @@ let hooks = {
     },
   },
 };
-let liveSocket = new LiveSocket("/live", Socket, {
-  params: { _csrf_token: csrfToken },
+
+const liveSocket = new LiveSocket("/live", Socket, {
   hooks,
+  params: {
+    _csrf_token: csrfToken,
+    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+  },
 });
 
 // Show progress bar on live navigation and form submits

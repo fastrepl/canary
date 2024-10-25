@@ -37,13 +37,17 @@ defmodule CanaryWeb.OverviewLive.Volume do
 
   @impl true
   def update(assigns, socket) do
-    project_id = assigns.current_project.id
+    args = %{
+      days: 7,
+      project_id: assigns.current_project.id,
+      timezone: assigns.timezone
+    }
 
     socket =
       socket
       |> assign(assigns)
       |> assign_async(:search_volume, fn ->
-        case Canary.Analytics.query("search_volume", %{project_id: project_id}) do
+        case Canary.Analytics.query(:search_volume, args) do
           {:ok, data} ->
             result = %{
               labels: Enum.map(data, & &1["date"]),

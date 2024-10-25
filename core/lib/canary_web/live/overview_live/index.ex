@@ -11,6 +11,7 @@ defmodule CanaryWeb.OverviewLive.Index do
         id="overview-volume"
         module={CanaryWeb.OverviewLive.Volume}
         current_project={@current_project}
+        timezone={@timezone}
       />
     </div>
     """
@@ -18,6 +19,10 @@ defmodule CanaryWeb.OverviewLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, socket}
+    if timezone = get_connect_params(socket)["timezone"] do
+      {:ok, assign(socket, timezone: timezone)}
+    else
+      {:ok, assign(socket, timezone: "UTC")}
+    end
   end
 end

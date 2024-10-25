@@ -51,7 +51,7 @@ defmodule CanaryWeb.SourceLive.List do
       <div class="flex flex-col gap-4">
         <div
           :for={source <- @sources}
-          class="border rounded-md px-4 py-4 hover:bg-gray-100"
+          class="border rounded-md px-4 py-4 hover:bg-gray-100 cursor-pointer"
           phx-click={JS.navigate(~p"/source/#{source.id}")}
         >
           <div class="flex flex-row items-center justify-between">
