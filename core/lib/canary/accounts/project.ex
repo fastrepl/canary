@@ -13,6 +13,7 @@ defmodule Canary.Accounts.Project do
     attribute :name, :string, allow_nil?: false
     attribute :public_key, :string, allow_nil?: false
     attribute :index_id, :string, allow_nil?: false
+    attribute :public, :boolean, default: false
   end
 
   identities do
@@ -26,7 +27,7 @@ defmodule Canary.Accounts.Project do
   end
 
   actions do
-    defaults [:read, update: [:name, :public_key]]
+    defaults [:read, update: [:name, :public_key, :public]]
 
     create :create do
       primary? true
@@ -40,6 +41,14 @@ defmodule Canary.Accounts.Project do
       end
 
       change {Canary.Index.Trieve.Changes.CreateDataset, tracking_id_attribute: :index_id}
+    end
+
+    update :transfer do
+      require_atomic? false
+      argument :account_id, :uuid, allow_nil?: false
+
+      change set_attribute(:public, false)
+      change manage_relationship(:account_id, :account, type: :append_and_remove)
     end
 
     destroy :destroy do

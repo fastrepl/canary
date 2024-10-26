@@ -69,9 +69,7 @@ defmodule CanaryWeb.BillingLive.Stats do
 
   @impl true
   def update(assigns, socket) do
-    current_account =
-      assigns.current_account
-      |> Ash.load!([:users, :projects])
+    current_account = assigns.current_account |> Ash.load!([:users, :projects])
 
     num_sources =
       current_account.projects
@@ -127,5 +125,5 @@ defmodule CanaryWeb.BillingLive.Stats do
   end
 
   defp ratio(_, 0), do: 0
-  defp ratio(current, total), do: Float.round(current / total, 2)
+  defp ratio(current, total), do: min(1, Float.round(current / total, 2))
 end

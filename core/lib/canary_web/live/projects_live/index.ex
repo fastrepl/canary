@@ -3,6 +3,32 @@ defmodule CanaryWeb.ProjectsLive.Index do
   alias PrimerLive.Component, as: Primer
 
   @impl true
+  def render(%{current_account: %{projects: projects}} = assigns) when projects == [] do
+    ~H"""
+    <div>
+      <div class="mb-4">
+        <h2>Projects</h2>
+        <.modal id="project-form">
+          <.live_component
+            id="project-form"
+            module={CanaryWeb.ProjectsLive.Create}
+            current_account={@current_account}
+          />
+        </.modal>
+      </div>
+
+      <div class="w-full h-[calc(100vh-300px)] bg-gray-100 rounded-sm flex flex-col items-center justify-center">
+        <p class="text-lg">
+          You don't have any <span class="text-underline">projects</span> yet.
+        </p>
+        <.button is_primary phx-click={show_modal("project-form")}>
+          Create your first project!
+        </.button>
+      </div>
+    </div>
+    """
+  end
+
   def render(assigns) do
     ~H"""
     <div>
@@ -23,79 +49,56 @@ defmodule CanaryWeb.ProjectsLive.Index do
         </div>
       </div>
 
-      <%= if length(@projects) > 0 do %>
-        <Primer.box is_scrollable style="max-height: 400px; margin-top: 18px">
-          <:row :for={project <- @projects}>
-            <div class="flex flex-row items-center justify-between">
-              <span><%= project.name %></span>
+      <Primer.box is_scrollable style="max-height: 400px; margin-top: 18px">
+        <:row :for={project <- @current_account.projects}>
+          <div class="flex flex-row items-center justify-between">
+            <span><%= project.name %></span>
 
-              <div class="flex flex-row items-center gap-12">
-                <div class="flex flex-row items-center gap-2">
-                  <span class="text-gray-500">project_key: </span>
-                  <div class="flex flex-row items-center gap-2 max-w-[150px]">
-                    <Primer.text_input
-                      autocomplete="off"
-                      value={project.public_key}
-                      disabled
-                      is_small
-                      is_full_width
-                    >
-                      <:group_button>
-                        <Primer.button
-                          aria-label="Copy"
-                          id={"project-key-#{project.public_key}"}
-                          phx-hook="Clipboard"
-                          data-clipboard-text={project.public_key}
-                          is_small
-                        >
-                          <Primer.octicon name="paste-16" />
-                        </Primer.button>
-                      </:group_button>
-                    </Primer.text_input>
-                  </div>
+            <div class="flex flex-row items-center gap-12">
+              <div class="flex flex-row items-center gap-2">
+                <span class="text-gray-500">project_key: </span>
+                <div class="flex flex-row items-center gap-2 max-w-[150px]">
+                  <Primer.text_input
+                    autocomplete="off"
+                    value={project.public_key}
+                    disabled
+                    is_small
+                    is_full_width
+                  >
+                    <:group_button>
+                      <Primer.button
+                        aria-label="Copy"
+                        id={"project-key-#{project.public_key}"}
+                        phx-hook="Clipboard"
+                        data-clipboard-text={project.public_key}
+                        is_small
+                      >
+                        <Primer.octicon name="paste-16" />
+                      </Primer.button>
+                    </:group_button>
+                  </Primer.text_input>
                 </div>
-
-                <.button type="button" phx-click="destroy" phx-value-item={project.id} is_danger>
-                  Delete
-                </.button>
               </div>
-            </div>
-          </:row>
-        </Primer.box>
-      <% else %>
-        <Primer.box>
-          <Primer.blankslate is_spacious>
-            <:heading>
-              You don't have any projects yet
-            </:heading>
-            <p>A single project can contain multiple sources, like web pages, GitHub issues, etc.</p>
 
-            <:action>
-              <Primer.button is_primary phx-click={Primer.open_dialog("project-form")}>
-                Create project
-              </Primer.button>
-            </:action>
-            <:action>
-              <Primer.button is_link href="https://getcanary.dev">Learn more</Primer.button>
-            </:action>
-          </Primer.blankslate>
-        </Primer.box>
-      <% end %>
+              <.button type="button" phx-click="destroy" phx-value-item={project.id} is_danger>
+                Delete
+              </.button>
+            </div>
+          </div>
+        </:row>
+      </Primer.box>
     </div>
     """
   end
 
   @impl true
   def mount(_params, _session, socket) do
-    projects =
-      socket.assigns.current_account
-      |> Ash.load!(projects: [:sources])
-      |> Map.get(:projects)
+    account = socket.assigns.current_account |> Ash.load!([:projects])
 
     socket =
       socket
       |> assign_form_for_create()
-      |> assign(projects: projects)
+      |> assign(current_account: account)
 
     {:ok, socket}
   end
@@ -112,12 +115,17 @@ defmodule CanaryWeb.ProjectsLive.Index do
   @impl true
   def handle_event("submit", %{"form" => params}, socket) do
     case AshPhoenix.Form.submit(socket.assigns.form, params: params) do
-      {:ok, record} ->
-        {:noreply, socket |> assign(:current_project, record)}
+      {:ok, _record} ->
+        {:noreply, socket}
 
-      {:error, updated_form} = e ->
-        IO.inspect(e)
-        {:noreply, assign(socket, :form, updated_form)}
+      {:error, form} ->
+        socket =
+          socket
+          |> assign(:form, form)
+          |> put_flash(:error, "Failed to create project")
+          |> push_navigate(to: ~p"/projects")
+
+        {:noreply, socket}
     end
 
     {:noreply, socket}
@@ -125,7 +133,7 @@ defmodule CanaryWeb.ProjectsLive.Index do
 
   @impl true
   def handle_event("destroy", %{"item" => id}, socket) do
-    project = socket.assigns.projects |> Enum.find(&(&1.id == id))
+    project = socket.assigns.current_account.projects |> Enum.find(&(&1.id == id))
 
     case Ash.destroy(project, return_destroyed?: false) do
       {:error, error} -> IO.inspect(error)

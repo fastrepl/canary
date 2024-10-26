@@ -43,6 +43,10 @@ defmodule CanaryWeb.Router do
 
     get "/checkout", CanaryWeb.CheckoutController, :session
 
+    live_session :public, layout: {CanaryWeb.Layouts, :root} do
+      live "/demo/:id", CanaryWeb.PublicLive.Demo, :none
+    end
+
     ash_authentication_live_session :onboarding,
       layout: {CanaryWeb.Layouts, :app},
       on_mount: [
