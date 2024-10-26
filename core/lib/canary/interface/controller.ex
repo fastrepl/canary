@@ -26,38 +26,48 @@ defmodule CanaryWeb.Interface.Controller do
   end
 
   def search(conn, %{"query" => %{"text" => query, "tags" => tags}} = params) do
-    case Canary.Interface.Search.run(conn.assigns.project, query, tags: tags, cache: cache?()) do
-      {:ok, matches} ->
-        data = %{
-          matches: matches,
-          suggestion: %{questions: Canary.Query.Sugestor.run!(query)}
+    try do
+      matches =
+        Canary.Interface.Search.run!(conn.assigns.project, query, tags: tags, cache: cache?())
+
+      data = %{
+        matches: matches,
+        suggestion: %{questions: Canary.Query.Sugestor.run!(query)}
+      }
+
+      :ok =
+        GenServer.cast(
+          Canary.Interactions.UsageExporter,
+          {:search, %{project_id: conn.assigns.project.id}}
+        )
+
+      :ok =
+        GenServer.cast(
+          Canary.Interactions.QueryExporter,
+          {:search,
+           %{
+             query: query,
+             project_id: conn.assigns.project.id,
+             session_id: params["meta"]["session_id"]
+           }}
+        )
+
+      conn
+      |> put_resp_content_type("application/json")
+      |> send_resp(200, Jason.encode!(data))
+      |> halt()
+    rescue
+      error ->
+        Sentry.capture_exception(error, stacktrace: __STACKTRACE__)
+
+        empty = %{
+          matches: [],
+          suggestion: %{questions: []}
         }
-
-        :ok =
-          GenServer.cast(
-            Canary.Interactions.UsageExporter,
-            {:search, %{project_id: conn.assigns.project.id}}
-          )
-
-        :ok =
-          GenServer.cast(
-            Canary.Interactions.QueryExporter,
-            {:search,
-             %{
-               query: query,
-               project_id: conn.assigns.project.id,
-               session_id: params["meta"]["session_id"]
-             }}
-          )
 
         conn
         |> put_resp_content_type("application/json")
-        |> send_resp(200, Jason.encode!(data))
-        |> halt()
-
-      {:error, _} ->
-        conn
-        |> send_resp(500, Jason.encode!(%{}))
+        |> send_resp(200, Jason.encode!(empty))
         |> halt()
     end
   end

@@ -1,6 +1,11 @@
 defmodule Canary.Interface.Search do
   @callback run(any(), String.t(), keyword()) :: {:ok, list(map())} | {:error, any()}
 
+  def run!(project, query, opts \\ []) do
+    {:ok, result} = run(project, query, opts)
+    result
+  end
+
   def run(_, _, opts \\ [])
   def run(nil, _, _), do: {:ok, []}
   def run(_, "", _), do: {:ok, []}
