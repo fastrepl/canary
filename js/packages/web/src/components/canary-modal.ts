@@ -4,6 +4,7 @@ import { property } from "lit/decorators.js";
 import { registerCustomElement } from "../decorators";
 import { createRef } from "lit/directives/ref.js";
 
+import { createEvent } from "../store";
 import { wrapper } from "../styles";
 import "./canary-dialog";
 
@@ -33,6 +34,7 @@ export class CanaryModal extends LitElement {
 
   private _handleModalClose() {
     this._ref.value?.close();
+    this.dispatchEvent(createEvent({ type: "set_query", data: { text: "" } }));
   }
 
   static styles = [

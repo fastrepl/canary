@@ -4,6 +4,8 @@ import { registerCustomElement } from "../decorators";
 import { ref, createRef, Ref } from "lit/directives/ref.js";
 import { classMap } from "lit/directives/class-map.js";
 
+import { createEvent } from "../store";
+
 const NAME = "canary-dialog";
 
 /**
@@ -39,6 +41,9 @@ export class CanaryDialog extends LitElement {
     const dialog = this.ref.value;
     if (dialog?.open && (e.target as any)["nodeName"] === "DIALOG") {
       dialog.close();
+      this.dispatchEvent(
+        createEvent({ type: "set_query", data: { text: "" } }),
+      );
     }
   }
 
