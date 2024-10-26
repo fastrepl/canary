@@ -1,5 +1,6 @@
 import { LitElement, css, html } from "lit";
 import { property } from "lit/decorators.js";
+import { ifDefined } from "lit/directives/if-defined.js";
 
 import { registerCustomElement } from "../decorators";
 import { createRef } from "lit/directives/ref.js";
@@ -22,7 +23,7 @@ export class CanaryModal extends LitElement {
   render() {
     return html`
       <slot name="trigger" @click=${this._handleOpen}></slot>
-      <canary-dialog .ref=${this._ref} .transition=${this.transition}>
+      <canary-dialog .ref=${this._ref} transition=${ifDefined(this.transition)}>
         <slot name="content" @modal-close=${this._handleModalClose}></slot>
       </canary-dialog>
     `;

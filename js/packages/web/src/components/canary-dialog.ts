@@ -16,9 +16,9 @@ const NAME = "canary-dialog";
  */
 @registerCustomElement(NAME)
 export class CanaryDialog extends LitElement {
-  @property({ attribute: false })
   @property({ type: Boolean })
   transition = false;
+
   ref: Ref<HTMLDialogElement> = createRef();
 
   render() {
@@ -69,10 +69,10 @@ export class CanaryDialog extends LitElement {
 
       dialog.with-transition {
         transition:
-          opacity var(--canary-transition-duration, 0.5s)
-            var(--canary-transition-timing, allow-discrete),
-          transform var(--canary-transition-duration, 0.5s)
-            var(--canary-transition-timing, allow-discrete);
+          opacity var(--canary-transition-duration, 0.1s)
+            var(--canary-transition-timing, linear),
+          transform var(--canary-transition-duration, 0.1s)
+            var(--canary-transition-timing, linear);
       }
 
       dialog.with-transition[open] {

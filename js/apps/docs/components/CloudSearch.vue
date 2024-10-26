@@ -58,7 +58,7 @@ const sources = ["canary_webpage", "canary_issue"];
   <div v-if="loaded">
     <canary-root framework="vitepress">
       <canary-provider-cloud :project-key="data.key" :api-base="data.base">
-        <canary-modal>
+        <canary-modal transition>
           <div ref="trigger" slot="trigger">
             <VPNavBarSearchButton />
           </div>
