@@ -44,7 +44,7 @@ defmodule CanaryWeb.InsightsLive.Query do
       end
 
     args = %{
-      days: 7,
+      days: assigns[:days] || 7,
       project_id: assigns.current_project.id,
       timezone: assigns.timezone
     }

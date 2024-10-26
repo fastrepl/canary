@@ -26,7 +26,7 @@ defmodule CanaryWeb.OverviewLive.Volume do
         :if={!@search_volume.loading}
         id="overview-volume"
         phx-hook="BarChart"
-        data-title="Search Volume"
+        data-title="Search Volume (Last 7 days)"
         data-labels={Jason.encode!(@search_volume.result.labels)}
         data-points={Jason.encode!(@search_volume.result.points)}
       >

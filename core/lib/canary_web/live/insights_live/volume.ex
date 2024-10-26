@@ -37,7 +37,7 @@ defmodule CanaryWeb.InsightsLive.Volume do
   @impl true
   def update(assigns, socket) do
     args = %{
-      days: 7,
+      days: assigns[:days] || 7,
       project_id: assigns.current_project.id,
       timezone: assigns.timezone
     }
