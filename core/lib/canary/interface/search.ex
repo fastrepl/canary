@@ -1,7 +1,11 @@
 defmodule Canary.Interface.Search do
   @callback run(any(), String.t(), keyword()) :: {:ok, list(map())} | {:error, any()}
 
-  def run(project, query, opts \\ []) do
+  def run(_, _, opts \\ [])
+  def run(nil, _, _), do: {:ok, []}
+  def run(_, "", _), do: {:ok, []}
+
+  def run(project, query, opts) do
     {cache, opts} = Keyword.pop(opts, :cache, false)
 
     if cache do

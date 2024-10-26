@@ -71,7 +71,7 @@ defmodule Canary.Membership do
     case account.billing.membership.tier do
       :free -> 24 * 3
       :starter -> 24 * 1
-      _ -> 24 * 7
+      _ -> 24 * 30 * 12 * 10
     end
   end
 
