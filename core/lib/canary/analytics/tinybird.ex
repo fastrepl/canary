@@ -66,7 +66,6 @@ defmodule Canary.Analytics.Tinybird do
         :ok
 
       error ->
-        IO.inspect(error)
         error
     end
   end

@@ -34,7 +34,7 @@ defmodule Canary.Accounts.Project do
       accept [:account_id, :name]
 
       change fn changeset, _ ->
-        key = "cp_" <> String.slice(Ash.UUID.generate(), 0..7)
+        key = "cp_" <> String.slice(Ecto.UUID.generate(), 0..7)
 
         changeset
         |> Ash.Changeset.force_change_attribute(:public_key, key)

@@ -77,17 +77,19 @@ defmodule Canary.Interactions.UsageExporter do
         Enum.map(search, fn pair -> {:search, pair} end) ++
           Enum.map(ask, fn pair -> {:ask, pair} end)
 
-      rows
-      |> Enum.map(fn {type, {project_id, count}} ->
-        account =
-          Enum.find(accounts, fn account ->
-            Enum.any?(account.projects, &(&1.id == project_id))
-          end)
+      rows =
+        rows
+        |> Enum.map(fn {type, {project_id, count}} ->
+          account =
+            Enum.find(accounts, fn account ->
+              Enum.any?(account.projects, &(&1.id == project_id))
+            end)
 
-        %{type: type, count: count, account_id: account.id, project_id: project_id}
-      end)
-      |> Enum.map(&Map.put(&1, :timestamp, DateTime.utc_now()))
-      |> then(&Canary.Analytics.ingest(:usage, &1))
+          %{type: type, count: count, account_id: account.id, project_id: project_id}
+        end)
+        |> Enum.map(&Map.put(&1, :timestamp, DateTime.utc_now()))
+
+      :ok = Canary.Analytics.ingest(:usage, rows)
     end)
   end
 end

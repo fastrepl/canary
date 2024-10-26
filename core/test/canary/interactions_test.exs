@@ -57,7 +57,7 @@ defmodule Canary.Test.Interactions do
       account_1 = account_fixture()
       project_1 = Canary.Accounts.Project.create!(account_1.id, "project_1", authorize?: false)
 
-      session_id = Ash.UUID.generate()
+      session_id = Ecto.UUID.generate()
 
       :ok =
         QueryExporter.Test

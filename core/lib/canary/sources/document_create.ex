@@ -44,7 +44,7 @@ defmodule Canary.Sources.Document.Create do
         opts[:parent_tracking_id_attribute],
         parent_index_id
       )
-      |> Ash.Changeset.force_change_attribute(opts[:tracking_id_attribute], Ash.UUID.generate())
+      |> Ash.Changeset.force_change_attribute(opts[:tracking_id_attribute], Ecto.UUID.generate())
       |> Ash.Changeset.change_attribute(opts[:meta_attribute], local_doc_meta)
       |> Ash.Changeset.change_attribute(opts[:chunks_attribute], local_chunks)
       |> Ash.Changeset.put_context(:remote_group_meta, remote_group_meta)
@@ -56,7 +56,7 @@ defmodule Canary.Sources.Document.Create do
   defp transform_fetcher_result(%Webpage.FetcherResult{} = data) do
     local_chunks =
       data.items
-      |> Enum.map(fn _ -> %Chunk{index_id: Ash.UUID.generate()} end)
+      |> Enum.map(fn _ -> %Chunk{index_id: Ecto.UUID.generate()} end)
 
     remote_chunks =
       data.items
@@ -96,7 +96,7 @@ defmodule Canary.Sources.Document.Create do
   defp transform_fetcher_result(%GithubIssue.FetcherResult{} = data) do
     local_chunks =
       data.items
-      |> Enum.map(fn _ -> %Chunk{index_id: Ash.UUID.generate()} end)
+      |> Enum.map(fn _ -> %Chunk{index_id: Ecto.UUID.generate()} end)
 
     remote_chunks =
       data.items
@@ -136,7 +136,7 @@ defmodule Canary.Sources.Document.Create do
   defp transform_fetcher_result(%GithubDiscussion.FetcherResult{} = data) do
     local_chunks =
       data.items
-      |> Enum.map(fn _ -> %Chunk{index_id: Ash.UUID.generate()} end)
+      |> Enum.map(fn _ -> %Chunk{index_id: Ecto.UUID.generate()} end)
 
     remote_chunks =
       data.items

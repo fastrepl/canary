@@ -28,10 +28,11 @@ defmodule Canary.Interactions.QueryExporter do
   @impl true
   def handle_cast({:search, payload}, state) do
     session_id =
-      case Map.get(payload, :session_id) do
-        "" -> Ash.UUID.generate()
-        id when is_binary(id) -> id
-        _ -> Ash.UUID.generate()
+      case payload
+           |> Map.get(:session_id)
+           |> Ecto.UUID.cast() do
+        {:ok, uuid} -> uuid
+        :error -> Ecto.UUID.generate()
       end
 
     item = payload |> Map.put(:timestamp, DateTime.utc_now())
@@ -77,7 +78,7 @@ defmodule Canary.Interactions.QueryExporter do
       end)
 
     Task.Supervisor.async_nolink(Canary.TaskSupervisor, fn ->
-      Canary.Analytics.ingest(:search, send)
+      :ok = Canary.Analytics.ingest(:search, send)
     end)
 
     put_in(state, [:data, :search], keep)

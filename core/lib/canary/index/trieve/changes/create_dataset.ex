@@ -15,7 +15,7 @@ defmodule Canary.Index.Trieve.Changes.CreateDataset do
   @impl true
   def change(changeset, opts, _context) do
     env = Application.fetch_env!(:canary, :env)
-    tracking_id = "#{env}_#{Ash.UUID.generate()}"
+    tracking_id = "#{env}_#{Ecto.UUID.generate()}"
 
     changeset
     |> Ash.Changeset.force_change_attribute(opts[:tracking_id_attribute], tracking_id)
