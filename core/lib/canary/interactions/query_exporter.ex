@@ -73,7 +73,11 @@ defmodule Canary.Interactions.QueryExporter do
     {keep, send} =
       search
       |> Enum.reduce({%{}, []}, fn {session_id, items}, {keep_acc, send_acc} ->
-        {items_to_keep, items_to_send} = dedupe(items, now, export_delay_ms)
+        {items_to_keep, items_to_send} =
+          items
+          |> Enum.map(&Map.put(&1, :session_id, session_id))
+          |> dedupe(now, export_delay_ms)
+
         {Map.put(keep_acc, session_id, items_to_keep), send_acc ++ items_to_send}
       end)
 
