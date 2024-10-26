@@ -100,13 +100,22 @@ defmodule CanaryWeb.Interface.Controller do
     here = self()
 
     Task.start_link(fn ->
-      Canary.Interface.Ask.run(
-        conn.assigns.project,
-        query,
-        fn data -> send(here, data) end,
-        tags: tags,
-        cache: cache?()
-      )
+      try do
+        {:ok, completion} =
+          Canary.Interface.Ask.run(
+            conn.assigns.project,
+            query,
+            &send(here, {:delta, &1}),
+            tags: tags,
+            cache: cache?()
+          )
+
+        send(here, {:done, completion})
+      catch
+        exception ->
+          Sentry.capture_exception(exception, stacktrace: __STACKTRACE__)
+          send(here, {:error, exception})
+      end
     end)
 
     :ok =
@@ -119,28 +128,21 @@ defmodule CanaryWeb.Interface.Controller do
   end
 
   defp receive_and_send(conn) do
-    Stream.repeatedly(fn -> receive_event() end)
-    |> Enum.reduce_while(conn, fn
-      {:delta, data}, conn when is_binary(data) ->
-        chunk(conn, sse_encode(data))
-        {:cont, conn}
-
-      {:done, _data}, conn ->
-        {:halt, conn}
-
-      {:error, _}, conn ->
-        {:halt, conn}
-
-      _, conn ->
-        {:cont, conn}
-    end)
-  end
-
-  defp receive_event() do
     receive do
-      event -> event
+      {:delta, data} when is_binary(data) ->
+        case chunk(conn, sse_encode(data)) do
+          {:ok, conn} -> receive_and_send(conn)
+          _ -> conn
+        end
+
+      {:done, _data} ->
+        conn
+
+      {:error, _} ->
+        conn
     after
-      60_000 -> {:error, :timeout}
+      5_000 ->
+        conn
     end
   end
 

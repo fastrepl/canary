@@ -83,7 +83,7 @@ defmodule Canary.Interface.Ask.Default do
               :ok
 
             %{"choices" => [%{"delta" => %{"content" => content}}]} ->
-              safe(handle_delta, {:delta, content})
+              safe(handle_delta, content)
               Agent.update(pid, &(&1 <> content))
 
             _ ->
@@ -93,8 +93,6 @@ defmodule Canary.Interface.Ask.Default do
       )
 
     completion = if completion == "", do: Agent.get(pid, & &1), else: completion
-    safe(handle_delta, {:done, completion})
-
     {:ok, %{response: completion}}
   end
 
