@@ -24,22 +24,21 @@ defmodule CanaryWeb.BillingLive.Stats do
                       Admin
                   <% end %>
                 </span>
-                <%= if @current_account.billing.membership.grant_end do %>
-                  <span class="-mb-7">
-                    Trial ends on <%= Calendar.strftime(
-                      @current_account.billing.membership.grant_end,
-                      "%B %d, %Y"
-                    ) %>
-                  </span>
-                <% end %>
-                <%= if @current_account.billing.membership.trial_end do %>
-                  <span class="-mb-7">
-                    Trial ends on <%= Calendar.strftime(
-                      @current_account.billing.membership.trial_end,
-                      "%B %d, %Y"
-                    ) %>
-                  </span>
-                <% end %>
+                <span :if={@current_account.billing.membership.grant_end} class="-mb-7">
+                  Trial ends on <%= Calendar.strftime(
+                    @current_account.billing.membership.grant_end,
+                    "%B %d, %Y"
+                  ) %>
+                </span>
+                <span :if={@current_account.billing.membership.trial_end} class="-mb-7">
+                  Trial ends on <%= Calendar.strftime(
+                    @current_account.billing.membership.trial_end,
+                    "%B %d, %Y"
+                  ) %>
+                </span>
+                <span :if={@plan_exceeded} class="-mb-7 text-red-600">
+                  You have exceeded your limit. Please upgrade your plan.
+                </span>
               </dd>
             </div>
           <% else %>
@@ -48,7 +47,18 @@ defmodule CanaryWeb.BillingLive.Stats do
               <dd class="mt-1 flex items-baseline justify-between md:block lg:flex">
                 <div class="flex flex-col items-baseline gap-3 text-2xl font-semibold">
                   <div>
-                    <%= metric.current %><span class="ml-2 text-sm font-medium text-neutral-600">of <%= metric.total %></span>
+                    <span class={[
+                      "text-gray-800",
+                      metric.current > metric.total && "text-red-600"
+                    ]}>
+                      <%= metric.current %>
+                    </span>
+                    <span class={[
+                      "ml-1 text-sm text-gray-500",
+                      metric.current > metric.total && "text-red-600"
+                    ]}>
+                      of <%= metric.total %>
+                    </span>
                   </div>
                   <div class="h-2.5 rounded-full bg-gray-200" style="width: 300px;">
                     <div
@@ -115,11 +125,17 @@ defmodule CanaryWeb.BillingLive.Stats do
       }
     ]
 
+    plan_exceeded =
+      metrics
+      |> Enum.reject(&is_nil/1)
+      |> Enum.any?(&(&1.current > &1.total))
+
     socket =
       socket
       |> assign(assigns)
       |> assign(:current_account, current_account)
       |> assign(:metrics, metrics)
+      |> assign(:plan_exceeded, plan_exceeded)
 
     {:ok, socket}
   end
