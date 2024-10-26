@@ -150,11 +150,12 @@ const hooks = {
       this.render();
     },
     updated() {
-      if (Chart.getChart(this.el)) {
-        Chart.getChart(this.el).destroy();
+      const existing = Chart.getChart(this.el);
+      if (existing) {
+        existing.update();
+      } else {
+        this.render();
       }
-
-      this.render();
     },
   },
   LocalTime: {
