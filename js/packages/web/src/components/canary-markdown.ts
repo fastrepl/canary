@@ -9,7 +9,6 @@ import { themeContext } from "../contexts";
 import { ThemeContext } from "../types";
 import { global, codeBlockScrollbar } from "../styles";
 
-import { highlightElement } from "prismjs";
 import { marked, type Tokens } from "marked";
 
 marked.use({
@@ -47,7 +46,7 @@ export class CanaryMarkdown extends LitElement {
 
     return html`
       <link rel="stylesheet" href=${stylePath} />
-      ${this.languages.map((lang) =>
+      ${["core", ...this.languages].map((lang) =>
         this._script(
           `https://unpkg.com/prismjs@1.29.0/components/prism-${lang}.min.js`,
         ),
@@ -90,7 +89,9 @@ export class CanaryMarkdown extends LitElement {
 
   private _highlight(el: HTMLElement) {
     el.querySelectorAll("pre code").forEach((el) => {
-      highlightElement(el, false);
+      if (window.Prism) {
+        window.Prism.highlightElement(el, false);
+      }
     });
   }
 

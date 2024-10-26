@@ -1,6 +1,6 @@
 {
   "name": "@getcanary/web",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "license": "MIT",
   "type": "module",
   "main": "dist/components/canary-root.js",
@@ -39,8 +39,7 @@
     "best-effort-json-parser": "^1.1.2",
     "lit": "^3.1.4",
     "marked": "^14.0.0",
-    "picomatch": "^4.0.2",
-    "prismjs": "^1.29.0"
+    "picomatch": "^4.0.2"
   },
   "devDependencies": {
     "@argos-ci/cli": "^2.4.3",

@@ -1,5 +1,12 @@
 # @getcanary/web
 
+## 1.0.11
+
+### Patch Changes
+
+- Reset input when modal closed.
+- Load prismjs from cdn instead of bundling it.
+
 ## 1.0.10
 
 ### Patch Changes
