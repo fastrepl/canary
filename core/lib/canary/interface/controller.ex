@@ -25,7 +25,7 @@ defmodule CanaryWeb.Interface.Controller do
          {:ok, project} <-
            Canary.Accounts.Project
            |> Ash.Query.filter(public_key == ^token)
-           |> Ash.read_one() do
+           |> Ash.read_one(not_found_error?: true) do
       conn |> assign(:project, project)
     else
       _ -> conn |> send_resp(401, err_msg) |> halt()
