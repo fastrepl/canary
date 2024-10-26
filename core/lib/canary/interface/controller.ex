@@ -42,7 +42,8 @@ defmodule CanaryWeb.Interface.Controller do
   def search(conn, %{"query" => %{"text" => query, "tags" => tags}} = params) do
     try do
       matches =
-        Canary.Interface.Search.run!(conn.assigns.project, query, tags: tags, cache: cache?())
+        conn.assigns.project
+        |> Canary.Interface.Search.run!(query, tags: tags, cache: cache?())
 
       data = %{
         matches: matches,

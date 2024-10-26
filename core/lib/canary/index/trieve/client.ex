@@ -196,26 +196,42 @@ defmodule Canary.Index.Trieve.Actual do
   end
 
   def search(client, query, opts \\ []) do
-    tags = opts[:tags]
-    search_type = if(question?(query), do: :hybrid, else: :fulltext)
-    receive_timeout = if(question?(query), do: 3_000, else: 1_500)
-    score_threshold = if(question?(query), do: 0.0, else: 0.05)
+    rag? = Keyword.get(opts, :rag, false)
+    tags = Keyword.get(opts, :tags, nil)
+
+    search_type = if(rag? or question?(query), do: :hybrid, else: :fulltext)
+    receive_timeout = if(rag? or question?(query), do: 3_000, else: 1_500)
+    remove_stop_words = not (rag? or question?(query))
+    page_size = if(rag?, do: 10, else: 24)
+    group_size = if(rag?, do: 5, else: 3)
+
+    score_threshold =
+      cond do
+        rag? -> 0.0
+        question?(query) -> 0.0
+        true -> 0.05
+      end
 
     highlight_options =
-      if question?(query) do
-        %{
-          highlight_window: 8,
-          highlight_max_length: 5,
-          highlight_threshold: 0.5,
-          highlight_strategy: :v1
-        }
-      else
-        %{
-          highlight_window: 8,
-          highlight_max_length: 2,
-          highlight_threshold: 0.9,
-          highlight_strategy: :exactmatch
-        }
+      cond do
+        rag? ->
+          %{highlight_results: false}
+
+        question?(query) ->
+          %{
+            highlight_window: 8,
+            highlight_max_length: 5,
+            highlight_threshold: 0.5,
+            highlight_strategy: :v1
+          }
+
+        true ->
+          %{
+            highlight_window: 8,
+            highlight_max_length: 2,
+            highlight_threshold: 0.9,
+            highlight_strategy: :exactmatch
+          }
       end
 
     filters = %{
@@ -244,32 +260,31 @@ defmodule Canary.Index.Trieve.Actual do
              query: query,
              filters: filters,
              page: 1,
-             page_size: 24,
-             group_size: 3,
+             page_size: page_size,
+             group_size: group_size,
              search_type: search_type,
              score_threshold: score_threshold,
-             remove_stop_words: true,
-             slim_chunks: false,
+             remove_stop_words: remove_stop_words,
              typo_options: %{
                correct_typos: true,
                one_typo_word_range: %{
                  min: 3,
-                 max: 9
+                 max: 3 * 3
                },
                two_typo_word_range: %{
                  min: 4,
-                 max: 12
+                 max: 4 * 3
                }
              },
              highlight_options:
                Map.merge(
-                 highlight_options,
                  %{
                    highlight_results: true,
                    highlight_max_num: 1,
                    pre_tag: "<mark>",
                    post_tag: "</mark>"
-                 }
+                 },
+                 highlight_options
                )
            }
          ) do

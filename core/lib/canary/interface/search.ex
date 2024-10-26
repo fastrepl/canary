@@ -7,7 +7,6 @@ defmodule Canary.Interface.Search do
   end
 
   def run(_, _, opts \\ [])
-  def run(nil, _, _), do: {:ok, []}
   def run(_, "", _), do: {:ok, []}
 
   def run(project, query, opts) do

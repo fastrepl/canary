@@ -15,6 +15,7 @@ defmodule Canary.Interface.Ask.Default do
 
   def run(project, query, handle_delta, opts) do
     client = Trieve.client(project)
+    opts = opts |> Keyword.put(:rag, true)
 
     {:ok, groups} = client |> Trieve.search(query, opts)
 
