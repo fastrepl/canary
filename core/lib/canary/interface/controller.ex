@@ -2,7 +2,21 @@ defmodule CanaryWeb.Interface.Controller do
   use CanaryWeb, :controller
   require Ash.Query
 
+  plug :rate_limit when action in [:search, :ask]
   plug :find_project when action in [:search, :ask]
+
+  defp rate_limit(conn, _opts) do
+    with {:ok, token} <- get_token_from_header(conn),
+         {:allow, _count} <- Hammer.check_rate(token, 60_000, 6000) do
+      conn
+    else
+      _ ->
+        conn
+        |> put_resp_content_type("application/json")
+        |> send_resp(429, Jason.encode!(%{message: "rate limit exceeded"}))
+        |> halt()
+    end
+  end
 
   defp find_project(conn, _opts) do
     err_msg = "no client found with the given key"
