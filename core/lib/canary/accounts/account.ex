@@ -24,7 +24,12 @@ defmodule Canary.Accounts.Account do
   end
 
   actions do
-    defaults [:read, :destroy, update: [:name, :super_user]]
+    defaults [:destroy, update: [:name, :super_user]]
+
+    read :read do
+      primary? true
+      prepare build(load: [:owner_email_confirmed])
+    end
 
     create :create do
       primary? true
@@ -57,6 +62,10 @@ defmodule Canary.Accounts.Account do
   aggregates do
     count :num_projects, :projects
     count :num_members, :users
+  end
+
+  calculations do
+    calculate :owner_email_confirmed, :boolean, expr(not is_nil(owner.confirmed_at))
   end
 
   code_interface do

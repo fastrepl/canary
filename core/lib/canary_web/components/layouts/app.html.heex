@@ -1,81 +1,89 @@
-<nav class="bg-white border-b border-gray-300 shadow-sm h-16 flex flex-row items-center px-4 justify-between">
-  <div class="flex flex-row items-center gap-8">
-    <.link class="text-md text-black" navigate={~p"/"}>🐤 Canary</.link>
-    <%= if not is_nil(@current_account) and not is_nil(@current_project) do %>
-      <div class="flex flex-row items-center gap-2">
-        <form phx-change="account-change">
-          <.input
-            type="select"
-            name="current-account"
-            options={Enum.map(@current_accounts, &{&1.name, &1.id})}
-            value={@current_account && @current_account.id}
-          />
-        </form>
-        <span class="text-gray-500">/</span>
-        <form phx-change="project-change">
-          <.input
-            type="select"
-            name="current-project"
-            options={Enum.map(@current_projects, &{&1.name, &1.id})}
-            value={@current_project && @current_project.id}
-          />
-        </form>
-      </div>
-    <% end %>
-  </div>
-  <div class="flex flex-row items-center gap-6">
-    <div class="flex flex-row items-center gap-4">
-      <.link href="https://github.com/fastrepl/canary" target="_blank" class="text-gray-700">
-        GitHub
-      </.link>
-      <.link href="https://getcanary.dev/discord" target="_blank" class="text-gray-700">
-        Discord
-      </.link>
-      <.link href="https://getcanary.dev" target="_blank" class="text-gray-700">
-        Docs
-      </.link>
-    </div>
-    <.link navigate={~p"/sign-out"} class="text-black">Logout</.link>
-  </div>
-</nav>
-
-<main class="bg-white px-12 py-4">
-  <div class="w-full mb-4 text-md flex flex-row items-center gap-4 border-b border-gray-200">
-    <%= for {name, path} <- [
-        {"Overview", "/"},
-        {"Sources", "/source"},
-        {"Insights", "/insight"},
-        {"Examples", "/example"},
-        if(Application.get_env(:canary, :env) == :dev, do: {"Experiment", "/experiment"}),
-        {nil, nil},
-        if(@onboarding?, do: {"Onboarding", "/onboarding"}),
-        {"Projects", "/projects"},
-        {"Members", "/members"},
-        {"Billing", "/billing"},
-        {"Settings", "/settings"},
-      ] do %>
-      <%= if is_nil(name) do %>
-        <span class="mx-auto"></span>
-      <% else %>
-        <.link
-          navigate={"#{path}"}
-          class={[
-            "text-gray-600 hover:no-underline hover:text-yellow-500 border-b-2 -mb-[1px]",
-            if(@app_active_tab == name, do: "border-yellow-400 font-semibold text-black ")
-          ]}
-        >
-          <%= name %>
-        </.link>
+<div class="flex flex-col h-screen">
+  <nav class="bg-white border-b border-gray-300 shadow-sm h-16 flex flex-row items-center px-4 justify-between">
+    <div class="flex flex-row items-center gap-8">
+      <.link class="text-md text-black" navigate={~p"/"}>🐤 Canary</.link>
+      <%= if not is_nil(@current_account) and not is_nil(@current_project) do %>
+        <div class="flex flex-row items-center gap-2">
+          <form phx-change="account-change">
+            <.input
+              type="select"
+              name="current-account"
+              options={Enum.map(@current_accounts, &{&1.name, &1.id})}
+              value={@current_account && @current_account.id}
+            />
+          </form>
+          <span class="text-gray-500">/</span>
+          <form phx-change="project-change">
+            <.input
+              type="select"
+              name="current-project"
+              options={Enum.map(@current_projects, &{&1.name, &1.id})}
+              value={@current_project && @current_project.id}
+            />
+          </form>
+        </div>
       <% end %>
-    <% end %>
-  </div>
+    </div>
+    <div class="flex flex-row items-center gap-6">
+      <div class="flex flex-row items-center gap-4">
+        <.link href="https://github.com/fastrepl/canary" target="_blank" class="text-gray-700">
+          GitHub
+        </.link>
+        <.link href="https://getcanary.dev/discord" target="_blank" class="text-gray-700">
+          Discord
+        </.link>
+        <.link href="https://getcanary.dev" target="_blank" class="text-gray-700">
+          Docs
+        </.link>
+      </div>
+      <.link navigate={~p"/sign-out"} class="text-black">Logout</.link>
+    </div>
+  </nav>
 
-  <div>
+  <main class="flex-grow bg-white px-12 py-4">
+    <div class="w-full mb-4 text-md flex flex-row items-center gap-4 border-b border-gray-200">
+      <%= for {name, path} <- [
+            {"Overview", "/"},
+            {"Sources", "/source"},
+            {"Insights", "/insight"},
+            {"Examples", "/example"},
+            if(Application.get_env(:canary, :env) == :dev, do: {"Experiment", "/experiment"}),
+            {nil, nil},
+            if(@onboarding?, do: {"Onboarding", "/onboarding"}),
+            {"Projects", "/projects"},
+            {"Members", "/members"},
+            {"Billing", "/billing"},
+            {"Settings", "/settings"},
+          ] do %>
+        <%= if is_nil(name) do %>
+          <span class="mx-auto"></span>
+        <% else %>
+          <.link
+            navigate={"#{path}"}
+            class={[
+              "text-gray-600 hover:no-underline hover:text-yellow-500 border-b-2 -mb-[1px]",
+              if(@app_active_tab == name, do: "border-yellow-400 font-semibold text-black ")
+            ]}
+          >
+            <%= name %>
+          </.link>
+        <% end %>
+      <% end %>
+    </div>
+
     <LiveToast.toast_group
       flash={@flash}
       connected={assigns[:socket] != nil}
       corner={:bottom_right}
     />
+
     <%= @inner_content %>
-  </div>
-</main>
+  </main>
+
+  <footer
+    :if={not @current_account.owner_email_confirmed}
+    class="bg-red-50 text-xs text-center py-2 font-semibold"
+  >
+    The owner of this account has not confirmed their email address.
+  </footer>
+</div>

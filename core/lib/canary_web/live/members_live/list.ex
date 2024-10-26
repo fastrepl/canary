@@ -22,7 +22,9 @@ defmodule CanaryWeb.MembersLive.List do
             <td class="py-2 px-4 border-b">
               <%= if user.email == @current_account.owner.email, do: "Owner", else: "Member" %>
             </td>
-            <td class="py-2 px-4 border-b">Active</td>
+            <td class="py-2 px-4 border-b">
+              <%= if user.confirmed_at, do: "Confirmed", else: "Unconfirmed" %>
+            </td>
             <td class="py-2 px-4 border-b">None</td>
           </tr>
           <tr :for={invite <- @invites}>
