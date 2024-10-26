@@ -14,7 +14,44 @@ defmodule Canary.Interface.Ask.Default do
   alias Canary.Index.Trieve
 
   def run(project, query, handle_delta, opts) do
-    {:ok, results} = Trieve.client(project) |> Trieve.search(query, opts)
+    client = Trieve.client(project)
+
+    {:ok, groups} = client |> Trieve.search(query, opts)
+
+    results =
+      groups
+      |> Enum.take(5)
+      |> Enum.map(fn %{"chunks" => chunks, "group" => %{"tracking_id" => group_id}} ->
+        Task.async(fn ->
+          matched_chunk_ids = chunks |> Enum.map(& &1["chunk"]["id"])
+
+          case Trieve.get_chunks(client, group_id) do
+            {:ok, %{"chunks" => full_chunks}} ->
+              indices =
+                full_chunks
+                |> Enum.map(& &1["id"])
+                |> Enum.with_index()
+                |> Enum.filter(fn {id, _index} -> Enum.member?(matched_chunk_ids, id) end)
+                |> Enum.map(fn {_id, index} -> index end)
+
+              full_chunks
+              |> Enum.with_index()
+              |> Enum.filter(fn {_chunk, index} -> Enum.any?(indices, &(abs(&1 - index) <= 2)) end)
+              |> Enum.map(fn {chunk, _index} ->
+                %{
+                  "url" => chunk["link"],
+                  "content" => chunk["chunk_html"],
+                  "metadata" => chunk["metadata"]
+                }
+              end)
+
+            _ ->
+              nil
+          end
+        end)
+      end)
+      |> Task.await_many(3_000)
+      |> Enum.reject(&is_nil/1)
 
     {:ok, pid} = Agent.start_link(fn -> "" end)
 
