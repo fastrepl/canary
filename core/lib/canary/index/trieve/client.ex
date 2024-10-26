@@ -244,11 +244,10 @@ defmodule Canary.Index.Trieve.Actual do
              query: query,
              filters: filters,
              page: 1,
-             page_size: 8,
+             page_size: 24,
              group_size: 3,
              search_type: search_type,
              score_threshold: score_threshold,
-             recency_bias: 0.5,
              remove_stop_words: true,
              slim_chunks: false,
              typo_options: %{
