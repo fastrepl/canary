@@ -93,6 +93,7 @@ defmodule CanaryWeb.Router do
 
     post "/ask", CanaryWeb.Interface.Controller, :ask
     post "/search", CanaryWeb.Interface.Controller, :search
+    post "/event", CanaryWeb.Interface.Controller, :event
   end
 
   if Application.compile_env(:canary, :dev_routes) do

@@ -2,8 +2,15 @@ defmodule CanaryWeb.Interface.Controller do
   use CanaryWeb, :controller
   require Ash.Query
 
-  plug :rate_limit when action in [:search, :ask]
+  @canary_id_header "x-canary-operation-id"
+
+  plug :set_operation_id when action in [:search, :ask]
   plug :find_project when action in [:search, :ask]
+  plug :rate_limit when action in [:search, :ask]
+
+  defp set_operation_id(conn, _opts) do
+    conn |> put_resp_header(@canary_id_header, Ecto.UUID.generate())
+  end
 
   defp rate_limit(conn, _opts) do
     with {:ok, token} <- get_token_from_header(conn),
@@ -33,10 +40,23 @@ defmodule CanaryWeb.Interface.Controller do
   end
 
   defp get_token_from_header(conn) do
-    case Plug.Conn.get_req_header(conn, "authorization") do
+    case get_req_header(conn, "authorization") do
       ["Bearer " <> token] -> {:ok, token}
       _ -> :error
     end
+  end
+
+  def event(conn, %{"type" => "navigate", "payload" => %{"id" => id, "url" => url}}) do
+    :ok =
+      GenServer.cast(
+        Canary.Interactions.QueryExporter,
+        {:navigate, %{id: id, url: url}}
+      )
+
+    conn
+    |> put_resp_content_type("application/json")
+    |> send_resp(200, Jason.encode!(%{}))
+    |> halt()
   end
 
   def search(conn, %{"query" => %{"text" => query, "tags" => tags}} = params) do
@@ -63,6 +83,7 @@ defmodule CanaryWeb.Interface.Controller do
            %{
              query: query,
              project_id: conn.assigns.project.id,
+             id: get_resp_header(conn, @canary_id_header),
              session_id: params["meta"]["session_id"]
            }}
         )

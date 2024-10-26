@@ -40,6 +40,10 @@ defmodule Canary.Interactions.QueryExporter do
     {:noreply, state |> update_in([:data, :search, Access.key(session_id, [])], &[item | &1])}
   end
 
+  def handle_cast({:navigate, _payload}, state) do
+    {:noreply, state}
+  end
+
   @impl true
   def handle_info(:handle_batch, %{opts: %{export_delay_ms: _export_delay_ms}} = state) do
     next_state = process(state)
