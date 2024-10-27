@@ -211,10 +211,9 @@ defmodule Canary.Index.Trieve.Actual do
     group_size = if(rag?, do: 5, else: 3)
 
     score_threshold =
-      cond do
-        rag? -> 0.0
-        question?(query) -> 0.0
-        true -> 0.01
+      case search_type do
+        :fulltext -> 2
+        _ -> 0.5
       end
 
     highlight_options =
@@ -234,7 +233,6 @@ defmodule Canary.Index.Trieve.Actual do
           %{
             highlight_window: 12,
             highlight_max_length: 2,
-            highlight_threshold: 0.9,
             highlight_strategy: :exactmatch
           }
       end
