@@ -95,16 +95,18 @@ defmodule Canary.Sources.Document.Create do
 
   defp transform_fetcher_result(%GithubIssue.FetcherResult{} = data) do
     local_chunks =
-      data.items
+      [data.root | data.items]
       |> Enum.map(fn _ -> %Chunk{index_id: Ecto.UUID.generate()} end)
 
     remote_chunks =
-      data.items
-      |> Enum.map(fn item ->
+      [data.root | data.items]
+      |> Enum.with_index(0)
+      |> Enum.map(fn {item, index} ->
         %{
           content: item.content,
           url: data.root.url,
-          title: data.root.title <> "\n" <> data.root.content,
+          title:
+            if(index == 0, do: item.title, else: data.root.title <> "\n" <> data.root.content),
           created_at: item.created_at,
           weight: clamp(1, 5, item.num_reactions),
           meta: %{}
@@ -136,16 +138,18 @@ defmodule Canary.Sources.Document.Create do
 
   defp transform_fetcher_result(%GithubDiscussion.FetcherResult{} = data) do
     local_chunks =
-      data.items
+      [data.root | data.items]
       |> Enum.map(fn _ -> %Chunk{index_id: Ecto.UUID.generate()} end)
 
     remote_chunks =
-      data.items
-      |> Enum.map(fn item ->
+      [data.root | data.items]
+      |> Enum.with_index(0)
+      |> Enum.map(fn {item, index} ->
         %{
           url: item.url,
           content: item.content,
-          title: data.root.title <> "\n" <> data.root.content,
+          title:
+            if(index == 0, do: item.title, else: data.root.title <> "\n" <> data.root.content),
           created_at: item.created_at,
           weight: clamp(1, 5, item.num_reactions),
           meta: %{}
@@ -177,6 +181,8 @@ defmodule Canary.Sources.Document.Create do
   end
 
   @impl true
+  def after_batch([], _opts, _context), do: []
+
   def after_batch(changesets_and_results, opts, _context) do
     with :ok = create_groups(changesets_and_results, opts),
          :ok = create_chunks(changesets_and_results, opts) do
