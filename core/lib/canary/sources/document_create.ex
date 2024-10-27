@@ -103,8 +103,8 @@ defmodule Canary.Sources.Document.Create do
       |> Enum.with_index(0)
       |> Enum.map(fn {item, index} ->
         %{
+          url: item.url,
           content: item.content,
-          url: data.root.url,
           title:
             if(index == 0, do: item.title, else: data.root.title <> "\n" <> data.root.content),
           created_at: item.created_at,
