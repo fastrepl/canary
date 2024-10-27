@@ -81,7 +81,7 @@
   </main>
 
   <footer
-    :if={not @current_account.owner_email_confirmed}
+    :if={not is_nil(@current_account) and not @current_account.owner_email_confirmed}
     class="bg-red-50 text-xs text-center py-2 font-semibold"
   >
     The owner of this account has not confirmed their email address.
