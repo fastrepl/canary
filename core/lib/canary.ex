@@ -1,6 +1,6 @@
 defmodule Canary do
   def rest_client(opts \\ []) do
-    Req.new(opts)
+    Req.new(Keyword.merge(opts, retry: :transient))
     |> attach_otel()
   end
 
