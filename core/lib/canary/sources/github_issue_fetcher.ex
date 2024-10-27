@@ -12,7 +12,8 @@ defmodule Canary.Sources.GithubIssue do
     :content,
     :created_at,
     :author_name,
-    :author_avatar_url
+    :author_avatar_url,
+    :num_reactions
   ]
 
   def base_fields(), do: @fields
@@ -74,11 +75,6 @@ defmodule Canary.Sources.GithubIssue.Fetcher do
               login
               avatarUrl
             }
-            labels(first: 10) {
-              nodes {
-                name
-              }
-            }
             title
             body
             closed
@@ -93,7 +89,13 @@ defmodule Canary.Sources.GithubIssue.Fetcher do
                   avatarUrl
                 }
                 body
+                reactions {
+                  totalCount
+                }
               }
+            }
+            reactions {
+              totalCount
             }
           }
         }
@@ -126,7 +128,8 @@ defmodule Canary.Sources.GithubIssue.Fetcher do
       author_name: issue["author"]["login"],
       author_avatar_url: issue["author"]["avatarUrl"],
       title: issue["title"],
-      closed: issue["closed"]
+      closed: issue["closed"],
+      num_reactions: issue["reactions"]["totalCount"]
     }
 
     items =
@@ -138,7 +141,8 @@ defmodule Canary.Sources.GithubIssue.Fetcher do
           content: comment["body"],
           created_at: comment["createdAt"],
           author_name: comment["author"]["login"],
-          author_avatar_url: comment["author"]["avatarUrl"]
+          author_avatar_url: comment["author"]["avatarUrl"],
+          num_reactions: comment["reactions"]["totalCount"]
         }
       end)
 

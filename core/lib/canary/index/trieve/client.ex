@@ -147,9 +147,7 @@ defmodule Canary.Index.Trieve.Actual do
           |> then(fn data ->
             if is_struct(chunk[:created_at], DateTime) do
               data
-              |> Map.merge(%{
-                time_stamp: DateTime.to_iso8601(chunk.created_at)
-              })
+              |> Map.put(:time_stamp, DateTime.to_iso8601(chunk.created_at))
             else
               data
             end
@@ -161,6 +159,13 @@ defmodule Canary.Index.Trieve.Actual do
                 fulltext_boost: %{boost_factor: 5, phrase: chunk.title},
                 semantic_boost: %{boost_factor: 5, phrase: chunk.title}
               })
+            else
+              data
+            end
+          end)
+          |> then(fn data ->
+            if chunk[:weight] do
+              data |> Map.put(:weight, chunk[:weight])
             else
               data
             end

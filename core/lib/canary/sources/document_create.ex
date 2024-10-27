@@ -104,8 +104,9 @@ defmodule Canary.Sources.Document.Create do
         %{
           content: item.content,
           url: data.root.url,
-          title: data.root.title,
+          title: data.root.title <> "\n" <> data.root.content,
           created_at: item.created_at,
+          weight: clamp(1, 5, item.num_reactions),
           meta: %{}
         }
       end)
@@ -144,8 +145,9 @@ defmodule Canary.Sources.Document.Create do
         %{
           url: item.url,
           content: item.content,
-          title: data.root.title,
+          title: data.root.title <> "\n" <> data.root.content,
           created_at: item.created_at,
+          weight: clamp(1, 5, item.num_reactions),
           meta: %{}
         }
       end)
@@ -237,6 +239,7 @@ defmodule Canary.Sources.Document.Create do
             url: chunk.url,
             meta: chunk.meta,
             source_id: source_id,
+            weight: chunk[:weight],
             tags: changeset.context.remote_tags
           }
         end)
@@ -245,4 +248,8 @@ defmodule Canary.Sources.Document.Create do
     Trieve.client(dataset_tracking_id)
     |> Trieve.upsert_chunks(input)
   end
+
+  def clamp(min, _max, n) when n < min, do: min
+  def clamp(_min, max, n) when n > max, do: max
+  def clamp(_min, _max, n), do: n
 end

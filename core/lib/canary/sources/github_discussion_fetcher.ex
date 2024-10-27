@@ -12,7 +12,8 @@ defmodule Canary.Sources.GithubDiscussion do
     :content,
     :created_at,
     :author_name,
-    :author_avatar_url
+    :author_avatar_url,
+    :num_reactions
   ]
 
   def base_fields(), do: @fields
@@ -93,7 +94,13 @@ defmodule Canary.Sources.GithubDiscussion.Fetcher do
                 }
                 body
                 createdAt
+                reactions {
+                  totalCount
+                }
               }
+            }
+            reactions {
+              totalCount
             }
           }
         }
@@ -126,7 +133,8 @@ defmodule Canary.Sources.GithubDiscussion.Fetcher do
       author_avatar_url: discussion["author"]["avatarUrl"],
       title: discussion["title"],
       closed: discussion["closed"],
-      answered: discussion["isAnswered"]
+      answered: discussion["isAnswered"],
+      num_reactions: discussion["reactions"]["totalCount"]
     }
 
     items =
@@ -138,7 +146,8 @@ defmodule Canary.Sources.GithubDiscussion.Fetcher do
           content: comment["body"],
           created_at: comment["createdAt"],
           author_name: comment["author"]["login"],
-          author_avatar_url: comment["author"]["avatarUrl"]
+          author_avatar_url: comment["author"]["avatarUrl"],
+          num_reactions: comment["reactions"]["totalCount"]
         }
       end)
 
