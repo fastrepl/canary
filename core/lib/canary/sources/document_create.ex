@@ -60,11 +60,13 @@ defmodule Canary.Sources.Document.Create do
 
     remote_chunks =
       data.items
-      |> Enum.map(fn item ->
+      |> Enum.with_index(0)
+      |> Enum.map(fn {item, index} ->
         %{
           content: item.content,
           url: URI.parse(data.url) |> Map.put(:fragment, item.id) |> to_string(),
           meta: %{
+            index: index,
             title: item.title
           }
         }
@@ -109,7 +111,7 @@ defmodule Canary.Sources.Document.Create do
             if(index == 0, do: item.title, else: data.root.title <> "\n" <> data.root.content),
           created_at: item.created_at,
           weight: clamp(1, 5, item.num_reactions),
-          meta: %{}
+          meta: %{index: index}
         }
       end)
 
@@ -152,7 +154,7 @@ defmodule Canary.Sources.Document.Create do
             if(index == 0, do: item.title, else: data.root.title <> "\n" <> data.root.content),
           created_at: item.created_at,
           weight: clamp(1, 5, item.num_reactions),
-          meta: %{}
+          meta: %{index: index}
         }
       end)
 

@@ -308,9 +308,11 @@ defmodule Canary.Index.Trieve.Actual do
     end
   end
 
-  def get_chunks(client, group_tracking_id) do
+  def get_chunks(client, group_tracking_id, opts \\ []) do
+    page = max(Keyword.get(opts, :page, 1), 1)
+
     # https://docs.trieve.ai/api-reference/chunk-group/get-chunks-in-group-by-tracking-id
-    case client |> Req.get(url: "/chunk_group/tracking_id/#{group_tracking_id}/1") do
+    case client |> Req.get(url: "/chunk_group/tracking_id/#{group_tracking_id}/#{page}") do
       {:ok, %{status: 200, body: result}} -> {:ok, result}
       {:ok, %{status: status, body: error}} when status in 400..499 -> {:error, error}
       {:error, error} -> {:error, error}
