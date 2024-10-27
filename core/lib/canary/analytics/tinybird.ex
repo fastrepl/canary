@@ -21,6 +21,25 @@ defmodule Canary.Analytics.Tinybird do
     )
   end
 
+  def sources(), do: [:usage, :search]
+
+  def delete_by_project_id(source, project_id) do
+    case client()
+         |> Req.post(
+           url: "/v0/datasources/#{source}/delete",
+           form: %{"delete_condition" => "project_id == '#{project_id}'"}
+         ) do
+      {:ok, %{body: %{"job_url" => url}}} ->
+        {:ok, url}
+
+      {:error, error} ->
+        {:error, error}
+
+      error ->
+        {:error, error}
+    end
+  end
+
   def ingest(source, data) when is_list(data) do
     data =
       data

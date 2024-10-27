@@ -61,7 +61,8 @@ config :canary, Oban,
     github_processor: 2,
     webpage_processor: 2,
     email: 10,
-    trieve: 50
+    trieve: 50,
+    tinybird: 1
   ],
   repo: Canary.Repo,
   plugins: [
