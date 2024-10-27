@@ -23,20 +23,19 @@ defmodule CanaryWeb.InsightLive.Index do
     <div class="flex flex-col gap-4">
       <div class="flex flex-row justify-between items-center mb-2">
         <h2>Insights</h2>
-        <div>
-          <%!-- <.button is_primary phx-click={show_modal("insights-config-dialog")}>
+        <%!-- <div>
+          <.button is_primary phx-click={show_modal("insights-config-dialog")}>
             Config
-          </.button> --%>
+          </.button>
 
-          <%!-- <.modal id="insights-config-dialog">
+          <.modal id="insights-config-dialog">
             <.live_component
               id="insights-config"
               module={CanaryWeb.InsightLive.Config}
               current_project={@current_project}
-              quries={if @search_breakdown.result, do: @search_breakdown.result.labels, else: []}
             />
-          </.modal> --%>
-        </div>
+          </.modal>
+        </div> --%>
       </div>
 
       <div class="flex flex-col gap-4">

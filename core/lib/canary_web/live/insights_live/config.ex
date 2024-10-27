@@ -9,18 +9,6 @@ defmodule CanaryWeb.InsightLive.Config do
       <div class="text-md font-semibold">Aliases</div>
       <div class="mb-4">
         <div>Set this if you want to combine duplicated queries.</div>
-        <div>
-          Click
-          <span
-            class="hero-sparkles w-5 h-5 cursor-pointer"
-            phx-click="generate"
-            phx-target={@myself}
-            phx-value-item={@form.name}
-          >
-          </span>
-          to generate from scratch.
-        </div>
-        <div :if={@generating?}>Generating... (may takes ~10 seconds)</div>
       </div>
 
       <.form
@@ -44,7 +32,7 @@ defmodule CanaryWeb.InsightLive.Config do
                 form_control={%{label: "Name"}}
               />
               <Primer.octicon
-                class="ml-auto"
+                class="ml-auto cursor-pointer"
                 name="x-16"
                 phx-target={@myself}
                 phx-click="remove_alias"
@@ -114,7 +102,6 @@ defmodule CanaryWeb.InsightLive.Config do
       socket
       |> assign(assigns)
       |> assign_form()
-      |> assign(:generating?, false)
 
     {:ok, socket}
   end
@@ -268,90 +255,5 @@ defmodule CanaryWeb.InsightLive.Config do
       end)
 
     {:noreply, assign(socket, form: form)}
-  end
-
-  def handle_event("generate", %{"item" => path}, socket) do
-    quries = socket.assigns.quries |> Enum.slice(0, 20)
-
-    socket =
-      socket
-      |> assign(:generating?, true)
-      |> start_async(:generate, fn ->
-        {:ok, completion} =
-          Canary.AI.chat(%{
-            model: Application.fetch_env!(:canary, :general_model),
-            messages: [
-              %{
-                role: "user",
-                content: """
-                #{quries}
-                ---
-
-                Above are quries user typed in the search bar.
-                Some of them are just partial queries performed while typing, and some of them are full queries but similar.
-                Write down aliases if they can be combined. Take extra care on partial queries.
-
-                For example, if we have "examp", "example" and "exam" in the quries list, we can combine them into:
-                name: "example",
-                members: ["example", "examp", "exam"]
-
-                Each item in "members" must be picked from the above queries, without any extra text.
-                """
-              }
-            ],
-            temperature: 0,
-            max_tokens: 2000,
-            response_format: %{
-              type: "json_schema",
-              json_schema: %{
-                name: "Aliases",
-                strict: true,
-                schema: %{
-                  type: "object",
-                  properties: %{
-                    aliases: %{
-                      type: "array",
-                      items: %{
-                        type: "object",
-                        properties: %{
-                          name: %{type: "string"},
-                          members: %{
-                            type: "array",
-                            items: %{type: "string"}
-                          }
-                        },
-                        required: ["name", "members"],
-                        additionalProperties: false
-                      }
-                    }
-                  },
-                  required: ["aliases"],
-                  additionalProperties: false
-                }
-              }
-            }
-          })
-
-        {path, Jason.decode!(completion)}
-      end)
-
-    {:noreply, socket}
-  end
-
-  @impl true
-  def handle_async(:generate, {:ok, {path, data}}, socket) do
-    form =
-      socket.assigns.form
-      |> AshPhoenix.Form.update_form(path, fn nested_form ->
-        params = Map.merge(nested_form.params, data)
-        AshPhoenix.Form.validate(nested_form, params)
-      end)
-
-    socket =
-      socket
-      |> assign(:generating?, false)
-      |> assign(:form, form)
-
-    {:noreply, socket}
   end
 end

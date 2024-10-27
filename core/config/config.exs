@@ -70,7 +70,9 @@ config :canary, Oban,
     {Oban.Plugins.Lifeline, rescue_after: :timer.minutes(5)},
     {Oban.Plugins.Cron,
      crontab: [
-       {"0 0 * * *", Canary.Workers.SourceProcessor}
+       {"0 0 * * *", Canary.Workers.SourceProcessor},
+       {"0 0 */2 * *", Canary.Workers.Pruner},
+       {"0 0 * * *", Canary.Workers.QueryAliases}
      ]}
   ]
 
