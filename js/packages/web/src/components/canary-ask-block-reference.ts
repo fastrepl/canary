@@ -65,6 +65,7 @@ export class CanaryAskBlockReference extends LitElement {
         border-radius: 0.5rem;
         background-color: var(--canary-color-gray-100);
         color: var(--canary-color-gray-10);
+        text-wrap: pretty;
       }
 
       .container:hover {

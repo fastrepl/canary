@@ -47,8 +47,8 @@ export const createStore = (host: HTMLElement) =>
         initialValue: { text: "", tags: [] },
       }),
       executionManager: new ExecutionManager(host, {
-        searchDebounceMs: 80,
-        askDebounceMs: 300,
+        searchDebounceMs: 50,
+        askDebounceMs: 0,
       }),
     },
     {
