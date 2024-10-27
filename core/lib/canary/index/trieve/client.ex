@@ -214,7 +214,7 @@ defmodule Canary.Index.Trieve.Actual do
       cond do
         rag? -> 0.0
         question?(query) -> 0.0
-        true -> 0.05
+        true -> 0.01
       end
 
     highlight_options =
@@ -224,15 +224,15 @@ defmodule Canary.Index.Trieve.Actual do
 
         question?(query) ->
           %{
-            highlight_window: 8,
-            highlight_max_length: 5,
-            highlight_threshold: 0.5,
+            highlight_window: 12,
+            highlight_max_length: 6,
+            highlight_threshold: 0.8,
             highlight_strategy: :v1
           }
 
         true ->
           %{
-            highlight_window: 8,
+            highlight_window: 12,
             highlight_max_length: 2,
             highlight_threshold: 0.9,
             highlight_strategy: :exactmatch
