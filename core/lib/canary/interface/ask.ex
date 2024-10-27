@@ -56,7 +56,7 @@ defmodule Canary.Interface.Ask.Default do
 
     {:ok, pid} = Agent.start_link(fn -> "" end)
 
-    {:ok, completion} =
+    resp =
       Canary.AI.chat(
         %{
           model: Application.fetch_env!(:canary, :responder_model),
@@ -85,15 +85,14 @@ defmodule Canary.Interface.Ask.Default do
             %{"choices" => [%{"delta" => %{"content" => content}}]} ->
               safe(handle_delta, content)
               Agent.update(pid, &(&1 <> content))
-
-            _ ->
-              :ok
           end
         end
       )
 
-    completion = if completion == "", do: Agent.get(pid, & &1), else: completion
-    {:ok, %{response: completion}}
+    with {:ok, completion} <- resp do
+      completion = if completion == "", do: Agent.get(pid, & &1), else: completion
+      {:ok, %{response: completion}}
+    end
   end
 
   defp safe(func, arg) do

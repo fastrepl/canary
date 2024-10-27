@@ -132,10 +132,10 @@ defmodule CanaryWeb.Interface.Controller do
           )
 
         send(here, {:done, completion})
-      catch
+      rescue
         exception ->
-          Sentry.capture_exception(exception, stacktrace: __STACKTRACE__)
           send(here, {:error, exception})
+          Sentry.capture_exception(exception, stacktrace: __STACKTRACE__)
       end
     end)
 
