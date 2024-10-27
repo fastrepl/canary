@@ -118,6 +118,18 @@ const hooks = {
               grid: {
                 drawOnChartArea: false,
               },
+              ticks: {
+                callback(value, index, ticks) {
+                  const ticksToShow = Math.min(ticks.length, 20);
+
+                  if (index < ticksToShow) {
+                    return this.getLabelForValue(value);
+                  }
+
+                  return "";
+                },
+                autoSkip: false,
+              },
             },
             y: {
               beginAtZero: true,
@@ -133,6 +145,9 @@ const hooks = {
             },
           },
           plugins: {
+            tooltip: {
+              enabled: true,
+            },
             legend: {
               display: false,
             },
