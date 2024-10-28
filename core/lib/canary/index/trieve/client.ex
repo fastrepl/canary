@@ -209,12 +209,12 @@ defmodule Canary.Index.Trieve.Actual do
     search_type = if(rag? or question?(query), do: :hybrid, else: :fulltext)
     receive_timeout = if(rag? or question?(query), do: 3_000, else: 1_500)
     remove_stop_words = not (rag? or question?(query))
-    page_size = if(rag?, do: 10, else: 24)
+    page_size = if(rag?, do: 8, else: 32)
     group_size = if(rag?, do: 5, else: 3)
 
     score_threshold =
       case search_type do
-        :fulltext -> 2
+        :fulltext -> 1
         _ -> 0.5
       end
 

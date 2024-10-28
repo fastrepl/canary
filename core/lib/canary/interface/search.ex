@@ -90,6 +90,9 @@ defmodule Canary.Interface.Search.Default do
           meta["title"] == group_meta["title"] ->
             nil
 
+          Enum.at(highlights, 0, nil) == nil ->
+            nil
+
           true ->
             %{
               meta: meta,
