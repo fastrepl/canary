@@ -59,7 +59,15 @@ defmodule Canary.Interface.Ask.Default do
             },
             %{
               role: "user",
-              content: Jason.encode!(%{query: query, docs: results})
+              content: """
+              <retrieved_documents>
+              #{Jason.encode!(results)}
+              </retrieved_documents>
+
+              <user_question>
+              #{query}
+              </user_question>
+              """
             }
           ],
           temperature: 0,
