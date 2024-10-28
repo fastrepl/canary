@@ -52,6 +52,15 @@ defmodule CanaryWeb.PublicLive.Demo do
           current_project={@current_project}
         />
       </div>
+
+      <div class="flex flex-col gap-2">
+        <.button class="w-full h-10" is_primary phx-click={JS.navigate(~p"/")}>
+          Get started
+        </.button>
+        <.button class="w-full h-10" phx-click={JS.navigate("https://github.com/fastrepl/canary")}>
+          ⭐ Our GitHub repo
+        </.button>
+      </div>
     </div>
     """
   end

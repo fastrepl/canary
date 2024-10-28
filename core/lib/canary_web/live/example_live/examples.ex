@@ -140,7 +140,7 @@ defmodule CanaryWeb.ExampleLive.Examples do
               name: "Search with Ask AI",
               description: "Type longer question, and press tab to run 'Ask AI'.",
               code: """
-              <canary-root query="#{assigns.current_project.name}">
+              <canary-root query="why use #{assigns.current_project.name}?">
                 <canary-provider-cloud project-key="#{assigns.current_project.public_key}" api-base="#{CanaryWeb.Endpoint.url()}">
                   <canary-modal transition>
                     <canary-trigger-searchbar slot="trigger"></canary-trigger-searchbar>
@@ -166,7 +166,7 @@ defmodule CanaryWeb.ExampleLive.Examples do
               name: "Search with Ask AI",
               description: "Type longer question, and press tab to run 'Ask AI'.",
               code: """
-              <canary-root query="#{assigns.current_project.name}">
+              <canary-root query="why use #{assigns.current_project.name}?">
                 <canary-provider-cloud project-key="#{assigns.current_project.public_key}" api-base="#{CanaryWeb.Endpoint.url()}">
                   <canary-modal transition>
                     <canary-trigger-searchbar slot="trigger"></canary-trigger-searchbar>
@@ -191,7 +191,7 @@ defmodule CanaryWeb.ExampleLive.Examples do
               name: "Search with Ask AI",
               description: "Type longer question, and press tab to run 'Ask AI'.",
               code: """
-              <canary-root>
+              <canary-root query="why use #{assigns.current_project.name}?">
                 <canary-provider-cloud project-key="#{assigns.current_project.public_key}" api-base="#{CanaryWeb.Endpoint.url()}">
                   <canary-modal transition>
                     <canary-trigger-searchbar slot="trigger"></canary-trigger-searchbar>
