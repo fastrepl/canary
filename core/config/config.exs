@@ -95,6 +95,7 @@ config :mime, :extensions, %{"json" => "application/vnd.api+json"}
 config :canary, :github_app_url, "https://github.com/apps/getcanary-dev/installations/new"
 
 config :ash, :missed_notifications, :ignore
+config :ash, :policies, log_policy_breakdowns: :error
 
 config :floki, :html_parser, Floki.HTMLParser.Html5ever
 

@@ -5,9 +5,14 @@ defmodule CanaryWeb.MembersLive.Index do
   def render(assigns) do
     ~H"""
     <div>
-      <div class="flex flex-row items-center justify-between mb-2">
-        <h2>Members</h2>
-        <.button phx-click={show_modal("invite-member-modal")} is_primary>Invite</.button>
+      <div class="flex flex-col mb-2">
+        <div class="flex flex-row items-center justify-between">
+          <h2>Members</h2>
+          <.button phx-click={show_modal("invite-member-modal")} is_primary>Invite</.button>
+        </div>
+        <p>
+          Members can access all projects, and can invite other members.
+        </p>
       </div>
 
       <.modal id="invite-member-modal" on_cancel={JS.navigate(~p"/members")}>

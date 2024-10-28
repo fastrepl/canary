@@ -5,6 +5,9 @@ defmodule CanaryWeb.BillingLive.Plans do
   def render(assigns) do
     ~H"""
     <div>
+      <div class="mb-2">
+        For more information, please refer to our <a href="https://getcanary.dev/docs/cloud/platform/pricing">pricing page</a>.
+      </div>
       <div class="overflow-x-auto">
         <table class="min-w-full bg-white border border-gray-300">
           <thead>
@@ -14,8 +17,9 @@ defmodule CanaryWeb.BillingLive.Plans do
                   value <- [
                     "Name",
                     "Price",
+                    "Projects",
                     "Users",
-                    "Source",
+                    "Sources",
                     "Reindex",
                     "Search",
                     "Ask AI",
@@ -36,13 +40,14 @@ defmodule CanaryWeb.BillingLive.Plans do
                   value <- [
                     "Free",
                     "$0 / mo",
-                    "<= 1",
-                    "<= 1, Webpage only",
-                    "Every 72 hours",
-                    (1000 * 1000)
-                    |> Integer.to_string()
-                    |> String.pad_leading(3, "0"),
-                    "100",
+                    "<= #{Canary.Membership.max_projects(:free)}",
+                    "<= #{Canary.Membership.max_members(:free)}",
+                    "<= #{Canary.Membership.max_sources(:free)}",
+                    "Every #{Canary.Membership.refetch_interval_hours(:free)} hours",
+                    Canary.Membership.max_searches(:free)
+                    |> Number.Delimit.number_to_delimited(precision: 0),
+                    Canary.Membership.max_asks(:free)
+                    |> Number.Delimit.number_to_delimited(precision: 0),
                     "X",
                     nil
                   ]
@@ -61,14 +66,15 @@ defmodule CanaryWeb.BillingLive.Plans do
                 :for={
                   value <- [
                     "Starter",
-                    "$59 / mo",
-                    "<= 3",
-                    "<= 3, All types",
-                    "Every 24 hours",
-                    (5000 * 1000)
-                    |> Integer.to_string()
-                    |> String.pad_leading(3, "0"),
-                    1000,
+                    "$79 / mo",
+                    "<= #{Canary.Membership.max_projects(:starter)}",
+                    "<= #{Canary.Membership.max_members(:starter)}",
+                    "<= #{Canary.Membership.max_sources(:starter)}",
+                    "Every #{Canary.Membership.refetch_interval_hours(:starter)} hours",
+                    Canary.Membership.max_searches(:starter)
+                    |> Number.Delimit.number_to_delimited(precision: 0),
+                    Canary.Membership.max_asks(:starter)
+                    |> Number.Delimit.number_to_delimited(precision: 0),
                     "O",
                     :action
                   ]

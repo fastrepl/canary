@@ -9,20 +9,15 @@ defmodule Canary.Checks.Membership.SourceCreate do
         %Canary.Accounts.Account{} = account,
         %Ash.Policy.Authorizer{
           resource: Canary.Sources.Source,
-          changeset: %Ash.Changeset{relationships: %{project: [{[%{id: id}], _}]}} = changeset
+          changeset: %Ash.Changeset{relationships: %{project: [{[%{id: id}], _}]}}
         },
         _opts
       ) do
     with {:ok, %{billing: billing}} <- Ash.load(account, billing: [:membership]),
          {:ok, %{num_sources: num_sources}} <-
            Ash.get(Canary.Accounts.Project, id, load: [:num_sources]) do
-      %Ash.Union{type: source_type} = Ash.Changeset.get_attribute(changeset, :config)
-
       cond do
-        billing.membership.tier == :free and source_type == :webpage and num_sources < 1 ->
-          {:ok, true}
-
-        billing.membership.tier == :starter and num_sources < 4 ->
+        num_sources < Canary.Membership.max_sources(billing.membership.tier) ->
           {:ok, true}
 
         true ->

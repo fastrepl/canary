@@ -24,18 +24,16 @@ defmodule Canary.Checks.Membership.TeamInvite do
         account != account_id ->
           {:ok, false}
 
-        billing.membership.tier == :free ->
-          {:ok, false}
-
-        billing.membership.tier == :starter and num_invites + num_members < 4 ->
+        num_invites + num_members <= Canary.Membership.max_members(billing.membership.tier) ->
           {:ok, true}
 
         true ->
           {:ok, false}
       end
+    else
+      _ ->
+        {:ok, false}
     end
-
-    {:ok, true}
   end
 
   def match?(_, _, _), do: false

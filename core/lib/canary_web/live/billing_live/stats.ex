@@ -9,70 +9,79 @@ defmodule CanaryWeb.BillingLive.Stats do
         "col-span-4 grid grid-cols-1 divide-y divide-gray-200 overflow-hidden rounded-lg border bg-white shadow",
         "md:grid-cols-2 md:divide-x md:divide-y-0"
       ]}>
+        <.render_plan plan_exceeded={@plan_exceeded} current_account={@current_account} />
         <%= for metric <- @metrics do %>
-          <%= if is_nil(metric) do %>
-            <div class="px-4 py-5 sm:p-6">
-              <dt class="text-base font-semibold">Current Plan</dt>
-              <dd class="flex flex-col gap-2">
-                <span class="text-6xl mt-2">
-                  <%= case @current_account.billing.membership.tier do %>
-                    <% :free -> %>
-                      Free
-                    <% :starter -> %>
-                      Starter
-                    <% :admin -> %>
-                      Admin
-                  <% end %>
-                </span>
-                <span :if={@current_account.billing.membership.grant_end} class="-mb-7">
-                  Trial ends on <%= Calendar.strftime(
-                    @current_account.billing.membership.grant_end,
-                    "%B %d, %Y"
-                  ) %>
-                </span>
-                <span :if={@current_account.billing.membership.trial_end} class="-mb-7">
-                  Trial ends on <%= Calendar.strftime(
-                    @current_account.billing.membership.trial_end,
-                    "%B %d, %Y"
-                  ) %>
-                </span>
-                <span :if={@plan_exceeded} class="-mb-7 text-red-600">
-                  You have exceeded your limit. Please upgrade your plan.
-                </span>
-              </dd>
-            </div>
-          <% else %>
-            <div class="px-4 py-5 sm:p-6">
-              <dt class="text-base font-normal"><%= metric.title %></dt>
-              <dd class="mt-1 flex items-baseline justify-between md:block lg:flex">
-                <div class="flex flex-col items-baseline gap-3 text-2xl font-semibold">
-                  <div>
-                    <span class={[
-                      "text-gray-800",
-                      metric.current > metric.total && "text-red-600"
-                    ]}>
-                      <%= metric.current %>
-                    </span>
-                    <span class={[
-                      "ml-1 text-sm text-gray-500",
-                      metric.current > metric.total && "text-red-600"
-                    ]}>
-                      of <%= metric.total %>
-                    </span>
-                  </div>
-                  <div class="h-2.5 rounded-full bg-gray-200" style="width: 300px;">
-                    <div
-                      class="h-2.5 rounded-full bg-gray-500"
-                      style={"width: #{300 * ratio(metric.current, metric.total)}px"}
-                    >
-                    </div>
-                  </div>
-                </div>
-              </dd>
-            </div>
-          <% end %>
+          <.render_metric metric={metric} current_account={@current_account} />
         <% end %>
       </dl>
+    </div>
+    """
+  end
+
+  defp render_plan(assigns) do
+    ~H"""
+    <div class="px-4 py-5 sm:p-6">
+      <dt class="text-base font-semibold">Current Plan</dt>
+      <dd class="flex flex-col gap-2">
+        <span class="text-6xl mt-2">
+          <%= case @current_account.billing.membership.tier do %>
+            <% :free -> %>
+              Free
+            <% :starter -> %>
+              Starter
+            <% :admin -> %>
+              Admin
+          <% end %>
+        </span>
+        <span :if={@current_account.billing.membership.grant_end} class="-mb-7">
+          Trial ends on <%= Calendar.strftime(
+            @current_account.billing.membership.grant_end,
+            "%B %d, %Y"
+          ) %>
+        </span>
+        <span :if={@current_account.billing.membership.trial_end} class="-mb-7">
+          Trial ends on <%= Calendar.strftime(
+            @current_account.billing.membership.trial_end,
+            "%B %d, %Y"
+          ) %>
+        </span>
+        <span :if={@plan_exceeded} class="-mb-7 text-red-600">
+          You have exceeded your limit. Please upgrade your plan.
+        </span>
+      </dd>
+    </div>
+    """
+  end
+
+  defp render_metric(assigns) do
+    ~H"""
+    <div class="px-4 py-5 sm:p-6">
+      <dt class="text-base font-normal"><%= @metric.title %></dt>
+      <dd class="mt-1 flex items-baseline justify-between md:block lg:flex">
+        <div class="flex flex-col items-baseline gap-3 text-2xl font-semibold">
+          <div>
+            <span class={[
+              "text-gray-800",
+              @metric.current > @metric.total && "text-red-600"
+            ]}>
+              <%= Number.Delimit.number_to_delimited(@metric.current, precision: 0) %>
+            </span>
+            <span class={[
+              "ml-1 text-sm text-gray-500",
+              @metric.current > @metric.total && "text-red-600"
+            ]}>
+              of <%= Number.Delimit.number_to_delimited(@metric.total, precision: 0) %>
+            </span>
+          </div>
+          <div class="h-2.5 rounded-full bg-gray-200" style="width: 300px;">
+            <div
+              class="h-2.5 rounded-full bg-gray-500"
+              style={"width: #{300 * ratio(@metric.current, @metric.total)}px"}
+            >
+            </div>
+          </div>
+        </div>
+      </dd>
     </div>
     """
   end
@@ -97,7 +106,6 @@ defmodule CanaryWeb.BillingLive.Stats do
       usage |> Enum.find(%{"type" => "ask", "sum" => 0}, &(&1["type"] == "ask"))
 
     metrics = [
-      nil,
       %{
         title: "Total Projects",
         current: length(current_account.projects),

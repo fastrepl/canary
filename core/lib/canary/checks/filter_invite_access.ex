@@ -7,25 +7,13 @@ defmodule Canary.Checks.Filter.InviteAccess do
   end
 
   @impl true
-  def filter(
-        _,
-        %Ash.Policy.Authorizer{
-          resource: Canary.Accounts.Invite,
-          actor: %Canary.Accounts.Account{id: _}
-        },
-        _opts
-      ) do
+  def filter(%Canary.Accounts.Account{id: _}, %Ash.Policy.Authorizer{} = _authorizer, _opts) do
     expr(account_id == ^actor(:id))
   end
 
-  def filter(
-        _,
-        %Ash.Policy.Authorizer{
-          resource: Canary.Accounts.Invite,
-          actor: %Canary.Accounts.User{email: _}
-        },
-        _opts
-      ) do
+  def filter(%Canary.Accounts.User{email: _}, %Ash.Policy.Authorizer{} = _authorizer, _opts) do
     expr(email == ^actor(:email))
   end
+
+  def filter(_actor, _authorizer, _opts), do: false
 end
