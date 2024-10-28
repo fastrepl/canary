@@ -21,9 +21,9 @@ defmodule Canary.Workers.JobReporter do
         _opts
       )
       when event in [:start, :stop, :exception] and worker in @processors do
-    source = Ash.get!(Source, args["source_id"])
-
     try do
+      source = Ash.get!(Source, args["source_id"])
+
       case event do
         :start ->
           Source.update_state(source, :running)
