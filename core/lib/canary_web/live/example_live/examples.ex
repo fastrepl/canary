@@ -138,6 +138,7 @@ defmodule CanaryWeb.ExampleLive.Examples do
           has_webpage and has_github and tags != "" ->
             %{
               name: "Search with Ask AI",
+              paid: true,
               description: "Type longer question, and press tab to run 'Ask AI'.",
               code: """
               <canary-root query="why use #{assigns.current_project.name}?">
@@ -164,6 +165,7 @@ defmodule CanaryWeb.ExampleLive.Examples do
           has_webpage and has_github and tags == "" ->
             %{
               name: "Search with Ask AI",
+              paid: true,
               description: "Type longer question, and press tab to run 'Ask AI'.",
               code: """
               <canary-root query="why use #{assigns.current_project.name}?">
@@ -189,6 +191,7 @@ defmodule CanaryWeb.ExampleLive.Examples do
           true ->
             %{
               name: "Search with Ask AI",
+              paid: true,
               description: "Type longer question, and press tab to run 'Ask AI'.",
               code: """
               <canary-root query="why use #{assigns.current_project.name}?">

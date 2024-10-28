@@ -10,6 +10,17 @@ defmodule Canary.Membership do
     end
   end
 
+  def can_use_ask?(%Canary.Accounts.Account{} = account) do
+    account = ensure_membership(account)
+
+    case account.billing.membership.tier do
+      :free -> false
+      :starter -> true
+      :admin -> true
+      _ -> false
+    end
+  end
+
   def max_sources(%Canary.Accounts.Account{} = account) do
     account = ensure_membership(account)
 

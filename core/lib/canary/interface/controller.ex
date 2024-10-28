@@ -4,9 +4,10 @@ defmodule CanaryWeb.Interface.Controller do
 
   @canary_id_header "x-canary-operation-id"
 
+  plug :rate_limit when action in [:search, :ask]
   plug :set_operation_id when action in [:search, :ask]
   plug :find_project when action in [:search, :ask]
-  plug :rate_limit when action in [:search, :ask]
+  plug :prevent_free_plan when action in [:ask]
 
   defp set_operation_id(conn, _opts) do
     conn |> put_resp_header(@canary_id_header, Ecto.UUID.generate())
@@ -26,16 +27,56 @@ defmodule CanaryWeb.Interface.Controller do
   end
 
   defp find_project(conn, _opts) do
-    err_msg = "no client found with the given key"
+    action = Phoenix.Controller.action_name(conn)
+
+    err_msg = "no project found with the given key"
 
     with {:ok, token} <- get_token_from_header(conn),
          {:ok, project} <-
            Canary.Accounts.Project
            |> Ash.Query.filter(public_key == ^token)
+           |> wrap_project_query(action)
            |> Ash.read_one(not_found_error?: true) do
       conn |> assign(:project, project)
     else
       _ -> conn |> send_resp(401, err_msg) |> halt()
+    end
+  end
+
+  defp prevent_free_plan(conn, _opts) do
+    err_msg = "can not access this with free plan"
+
+    cond do
+      Application.get_env(:canary, :env) != :prod ->
+        conn
+
+      conn.host == "cloud.getcanary.dev" ->
+        conn
+
+      not Canary.Membership.can_use_ask?(conn.assigns.project.account) ->
+        conn |> send_resp(403, err_msg) |> halt()
+
+      true ->
+        conn |> send_resp(403, err_msg) |> halt()
+    end
+  end
+
+  defp wrap_project_query(query, action) do
+    if action == :search do
+      query
+    else
+      billing_query =
+        Canary.Accounts.Billing
+        |> Ash.Query.select([:id])
+        |> Ash.Query.load(:membership)
+
+      account_query =
+        Canary.Accounts.Account
+        |> Ash.Query.select([:id])
+        |> Ash.Query.load(billing: billing_query)
+
+      query
+      |> Ash.Query.load(account: account_query)
     end
   end
 
