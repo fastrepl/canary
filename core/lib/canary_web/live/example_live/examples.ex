@@ -112,29 +112,55 @@ defmodule CanaryWeb.ExampleLive.Examples do
           },
           else: nil
         ),
-        if(tags !== "",
-          do: %{
-            name: "Search with tags",
-            description: "Can split results based on selected tags.",
-            code: """
-            <canary-root query="#{assigns.current_project.name}">
-              <canary-provider-cloud project-key="#{assigns.current_project.public_key}" api-base="#{CanaryWeb.Endpoint.url()}">
-                <canary-modal transition>
-                  <canary-trigger-searchbar slot="trigger"></canary-trigger-searchbar>
-                    <canary-content slot="content">
-                      <canary-filter-tags slot="head" tags="#{tags}"></canary-filter-tags> // [!code ++]
-                      <canary-input slot="input" autofocus></canary-input>
-                      <canary-search slot="mode">
-                        <canary-search-results slot="body"></canary-search-results>
-                      </canary-search>
-                    </canary-content>
-                </canary-modal>
-              </canary-provider-cloud>
-            </canary-root>
-            """
-          },
-          else: nil
-        ),
+        cond do
+          tags !== "" and not has_github ->
+            %{
+              name: "Search with tags",
+              description: "Can split results based on selected tags.",
+              code: """
+              <canary-root query="#{assigns.current_project.name}">
+                <canary-provider-cloud project-key="#{assigns.current_project.public_key}" api-base="#{CanaryWeb.Endpoint.url()}">
+                  <canary-modal transition>
+                    <canary-trigger-searchbar slot="trigger"></canary-trigger-searchbar>
+                      <canary-content slot="content">
+                        <canary-filter-tags slot="head" tags="#{tags}"></canary-filter-tags> // [!code ++]
+                        <canary-input slot="input" autofocus></canary-input>
+                        <canary-search slot="mode">
+                          <canary-search-results slot="body"></canary-search-results>
+                        </canary-search>
+                      </canary-content>
+                  </canary-modal>
+                </canary-provider-cloud>
+              </canary-root>
+              """
+            }
+
+          tags !== "" and has_github ->
+            %{
+              name: "Search with tags",
+              description: "Can split results based on selected tags.",
+              code: """
+              <canary-root query="#{assigns.current_project.name}">
+                <canary-provider-cloud project-key="#{assigns.current_project.public_key}" api-base="#{CanaryWeb.Endpoint.url()}">
+                  <canary-modal transition>
+                    <canary-trigger-searchbar slot="trigger"></canary-trigger-searchbar>
+                      <canary-content slot="content">
+                        <canary-filter-tags slot="head" tags="#{tags}"></canary-filter-tags> // [!code ++]
+                        <canary-input slot="input" autofocus></canary-input>
+                        <canary-search slot="mode">
+                          <canary-filter-tabs-glob slot="head" tabs='#{Jason.encode!(tabs)}'></canary-filter-tabs-glob> // [!code ++]
+                          <canary-search-results slot="body"></canary-search-results>
+                        </canary-search>
+                      </canary-content>
+                  </canary-modal>
+                </canary-provider-cloud>
+              </canary-root>
+              """
+            }
+
+          true ->
+            nil
+        end,
         cond do
           has_webpage and has_github and tags != "" ->
             %{
