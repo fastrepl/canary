@@ -54,6 +54,9 @@ defmodule Canary.Workers.JobReporter do
     rescue
       e ->
         Logger.info(Exception.format(:error, e, __STACKTRACE__))
+    catch
+      e ->
+        Logger.info(Exception.format(:error, e, __STACKTRACE__))
     end
   end
 

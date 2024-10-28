@@ -49,7 +49,7 @@ defmodule CanaryWeb.ProjectsLive.Index do
         </div>
       </div>
 
-      <Primer.box is_scrollable style="max-height: 400px; margin-top: 18px">
+      <Primer.box is_scrollable style="max-height: 600px; margin-top: 18px">
         <:row :for={project <- @current_account.projects}>
           <div class="flex flex-row items-center justify-between">
             <span><%= project.name %></span>

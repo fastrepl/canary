@@ -227,7 +227,7 @@ defmodule Canary.Index.Trieve.Actual do
           %{
             highlight_window: 12,
             highlight_max_length: 6,
-            highlight_threshold: 0.8,
+            highlight_threshold: 0.4,
             highlight_strategy: :v1
           }
 

@@ -91,7 +91,8 @@ defmodule CanaryWeb.ExampleLive.Examples do
         if(has_webpage and has_github,
           do: %{
             name: "Search with tabs",
-            description: "Can create any number of tabs using glob patterns.",
+            description:
+              "Can create any number of tabs using glob patterns. e.g. Docs / Blog / GitHub / API / etc.",
             code: """
             <canary-root query="#{assigns.current_project.name}">
               <canary-provider-cloud project-key="#{assigns.current_project.public_key}" api-base="#{CanaryWeb.Endpoint.url()}">
