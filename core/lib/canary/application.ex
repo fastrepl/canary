@@ -89,7 +89,11 @@ defmodule Canary.Application do
 
   defp add_sentry_logger() do
     :logger.add_handler(:sentry_handler, Sentry.LoggerHandler, %{
-      config: %{metadata: [:file, :line]}
+      config: %{
+        capture_log_messages: true,
+        level: :error,
+        metadata: :all
+      }
     })
   end
 end
