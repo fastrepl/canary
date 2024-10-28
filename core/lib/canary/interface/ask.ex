@@ -24,21 +24,13 @@ defmodule Canary.Interface.Ask.Default do
       |> Enum.take(5)
       |> Enum.map(fn %{"chunks" => chunks, "group" => %{"tracking_id" => group_id}} ->
         Task.async(fn ->
-          matched_chunk_ids = chunks |> Enum.map(& &1["chunk"]["id"])
+          chunk_indices =
+            chunks |> Enum.map(&get_in(&1, ["chunk", "metadata", Access.key("index", 0)]))
 
-          case Trieve.get_chunks(client, group_id) do
+          case Trieve.get_chunks(client, group_id, chunk_indices: chunk_indices) do
             {:ok, %{"chunks" => full_chunks}} ->
-              indices =
-                full_chunks
-                |> Enum.map(& &1["id"])
-                |> Enum.with_index()
-                |> Enum.filter(fn {id, _index} -> Enum.member?(matched_chunk_ids, id) end)
-                |> Enum.map(fn {_id, index} -> index end)
-
               full_chunks
-              |> Enum.with_index()
-              |> Enum.filter(fn {_chunk, index} -> Enum.any?(indices, &(abs(&1 - index) <= 2)) end)
-              |> Enum.map(fn {chunk, _index} ->
+              |> Enum.map(fn chunk ->
                 %{
                   "url" => chunk["link"],
                   "content" => chunk["chunk_html"],

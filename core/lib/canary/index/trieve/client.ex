@@ -7,7 +7,7 @@ defmodule Canary.Index.Trieve do
   @callback upsert_chunks(any(), any()) :: any()
   @callback delete_chunk(any(), any()) :: any()
   @callback search(any(), any(), keyword()) :: any()
-  @callback get_chunks(any(), any()) :: any()
+  @callback get_chunks(any(), any(), keyword()) :: any()
 
   def client(_ \\ nil)
   def client(%Canary.Accounts.Project{index_id: id}), do: client(id)
@@ -20,7 +20,9 @@ defmodule Canary.Index.Trieve do
   def upsert_chunks(client, chunks), do: impl().upsert_chunks(client, chunks)
   def delete_chunk(client, chunk_tracking_id), do: impl().delete_chunk(client, chunk_tracking_id)
   def search(client, query, opts \\ []), do: impl().search(client, query, opts)
-  def get_chunks(client, group_tracking_id), do: impl().get_chunks(client, group_tracking_id)
+
+  def get_chunks(client, group_tracking_id, opts \\ []),
+    do: impl().get_chunks(client, group_tracking_id, opts)
 
   defp impl(), do: Application.get_env(:canary, :trieve, Canary.Index.Trieve.Actual)
 end
@@ -307,13 +309,40 @@ defmodule Canary.Index.Trieve.Actual do
   end
 
   def get_chunks(client, group_tracking_id, opts \\ []) do
-    page = max(Keyword.get(opts, :page, 1), 1)
+    page_size = 10
+    chunk_indices = Keyword.get(opts, :chunk_indices, [0])
 
-    # https://docs.trieve.ai/api-reference/chunk-group/get-chunks-in-group-by-tracking-id
-    case client |> Req.get(url: "/chunk_group/tracking_id/#{group_tracking_id}/#{page}") do
-      {:ok, %{status: 200, body: result}} -> {:ok, result}
-      {:ok, %{status: status, body: error}} when status in 400..499 -> {:error, error}
-      {:error, error} -> {:error, error}
+    pages =
+      chunk_indices
+      |> Enum.map(&(div(&1, page_size) + 1))
+      |> Enum.uniq()
+      |> Enum.sort()
+
+    result =
+      pages
+      |> Enum.map(fn page ->
+        Task.async(fn ->
+          # https://docs.trieve.ai/api-reference/chunk-group/get-chunks-in-group-by-tracking-id
+          case client |> Req.get(url: "/chunk_group/tracking_id/#{group_tracking_id}/#{page}") do
+            {:ok, %{status: 200, body: result}} -> {:ok, result}
+            {:ok, %{status: status, body: error}} when status in 400..499 -> {:error, error}
+            {:error, error} -> {:error, error}
+          end
+        end)
+      end)
+      |> Task.await_many(3_000)
+
+    if Enum.all?(result, &match?({:error, _}, &1)) do
+      {:error, result}
+    else
+      chunks =
+        result
+        |> Enum.flat_map(fn
+          {:ok, %{"chunks" => chunks}} -> chunks
+          _ -> []
+        end)
+
+      {:ok, %{"chunks" => chunks}}
     end
   end
 
