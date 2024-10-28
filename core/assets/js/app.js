@@ -33,7 +33,10 @@ import Chart from "chart.js/auto";
 import { parse } from "best-effort-json-parser";
 
 import { codeToHtml } from "shiki";
-import { transformerNotationHighlight } from "@shikijs/transformers";
+import {
+  transformerNotationHighlight,
+  transformerNotationDiff,
+} from "@shikijs/transformers";
 
 import * as Sentry from "@sentry/browser";
 import Tracker from "@openreplay/tracker";
@@ -60,6 +63,9 @@ import "@getcanary/web/components/canary-search-match-github-discussion.js";
 import "@getcanary/web/components/canary-ask.js";
 import "@getcanary/web/components/canary-ask-results.js";
 import "@getcanary/web/components/canary-tooltip.js";
+import "@getcanary/web/components/canary-footer.js";
+import "@getcanary/web/components/canary-filter-tabs-glob.js";
+import "@getcanary/web/components/canary-filter-tags.js";
 
 const csrfToken = document
   .querySelector("meta[name='csrf-token']")
@@ -80,7 +86,10 @@ const hooks = {
       codeToHtml(this.el.textContent, {
         lang: "html",
         theme: "rose-pine-dawn",
-        transformers: [transformerNotationHighlight()],
+        transformers: [
+          transformerNotationHighlight(),
+          transformerNotationDiff(),
+        ],
       }).then((html) => {
         this.el.innerHTML = html;
       });

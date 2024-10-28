@@ -5,14 +5,7 @@ defmodule CanaryWeb.ExampleLive.Index do
   def render(%{num_sources: 0} = assigns) do
     ~H"""
     <div>
-      <div class="mb-4">
-        <h2>Examples</h2>
-        <div>
-          <div>
-            For more information, please refer to our <a href="https://getcanary.dev/docs">documentation</a>.
-          </div>
-        </div>
-      </div>
+      <%= render_header(assigns) %>
 
       <div class="w-full h-[calc(100vh-300px)] bg-gray-100 rounded-sm flex flex-col items-center justify-center">
         <p class="text-lg">
@@ -26,30 +19,45 @@ defmodule CanaryWeb.ExampleLive.Index do
     """
   end
 
+  def render(%{num_total_documents: 0} = assigns) do
+    ~H"""
+    <div>
+      <%= render_header(assigns) %>
+
+      <div class="w-full h-[calc(100vh-300px)] bg-gray-100 rounded-sm flex flex-col items-center justify-center">
+        <p class="text-lg">
+          You have some sources, but they don't have any documents yet.
+        </p>
+        <p>
+          Head over to <.link navigate={~p"/source"}>sources</.link>
+          tab and fetch documents from your sources.
+        </p>
+      </div>
+    </div>
+    """
+  end
+
   def render(assigns) do
     ~H"""
     <div>
-      <div class="mb-4">
-        <h2>Examples</h2>
+      <%= render_header(assigns) %>
+      <.live_component
+        id="examples"
+        module={CanaryWeb.ExampleLive.Examples}
+        current_project={@current_project}
+      />
+    </div>
+    """
+  end
+
+  defp render_header(assigns) do
+    ~H"""
+    <div class="mb-4">
+      <h2>Examples</h2>
+      <div>
         <div>
-          <div>
-            For more information, please refer to our <a href="https://getcanary.dev/docs">documentation</a>.
-          </div>
+          For more information, please refer to our <a href="https://getcanary.dev">documentation</a>.
         </div>
-      </div>
-
-      <div class="flex flex-col gap-4">
-        <.live_component
-          id="example-search"
-          module={CanaryWeb.ExampleLive.Search}
-          current_project={@current_project}
-        />
-
-        <.live_component
-          id="example-ask"
-          module={CanaryWeb.ExampleLive.Ask}
-          current_project={@current_project}
-        />
       </div>
     </div>
     """
@@ -57,11 +65,20 @@ defmodule CanaryWeb.ExampleLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
-    num_sources =
+    current_project =
       socket.assigns.current_project
-      |> Ash.load!(:num_sources)
-      |> Map.get(:num_sources)
+      |> Ash.load!([:num_sources, sources: [:num_documents]])
 
-    {:ok, assign(socket, num_sources: num_sources)}
+    num_total_documents =
+      current_project.sources
+      |> Enum.reduce(0, fn source, acc -> acc + source.num_documents end)
+
+    socket =
+      socket
+      |> assign(:current_project, current_project)
+      |> assign(:num_sources, current_project.num_sources)
+      |> assign(:num_total_documents, num_total_documents)
+
+    {:ok, socket}
   end
 end

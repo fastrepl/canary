@@ -31,7 +31,24 @@ defmodule Canary.Accounts.Project do
 
     create :create do
       primary? true
-      accept [:account_id, :name]
+
+      accept [:name]
+      argument :account_id, :uuid, allow_nil?: false
+
+      change manage_relationship(:account_id, :account, type: :append)
+
+      change fn changeset, _ ->
+        account_id = Ash.Changeset.get_argument(changeset, :account_id)
+
+        with {:ok, %{billing: %{membership: %{tier: tier}}}} <-
+               Canary.Accounts.Account
+               |> Ash.get(account_id, load: [billing: [:membership]]) do
+          changeset
+          |> Ash.Changeset.force_change_attribute(:public, tier == :admin)
+        else
+          _ -> changeset
+        end
+      end
 
       change fn changeset, _ ->
         key = "cp_" <> String.slice(Ecto.UUID.generate(), 0..7)

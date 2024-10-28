@@ -1,9 +1,9 @@
 <div class="flex flex-col h-screen">
-  <nav class="bg-white border-b border-gray-300 shadow-sm h-16 flex flex-row items-center px-4 justify-between">
+  <nav class="bg-white border-b border-gray-300 shadow-sm h-12 flex flex-row items-center px-4 justify-between">
     <div class="flex flex-row items-center gap-8">
       <.link class="text-md text-black" navigate={~p"/"}>🐤 Canary</.link>
       <%= if not is_nil(@current_account) and not is_nil(@current_project) do %>
-        <div class="flex flex-row items-center gap-2">
+        <div class="flex flex-row items-center gap-2 py-2">
           <form phx-change="account-change">
             <.input
               type="select"
@@ -81,7 +81,7 @@
   </main>
 
   <footer
-    :if={not is_nil(@current_account) and not @current_account.owner_email_confirmed}
+    :if={not is_nil(@current_account) and is_nil(@current_account.owner_email_confirmed)}
     class="bg-red-50 text-xs text-center py-2 font-semibold"
   >
     The owner of this account has not confirmed their email address.

@@ -22,7 +22,7 @@ defmodule CanaryWeb.LiveAccount do
 
   defp select_from_existing_accounts(socket) do
     current_user = socket.assigns[:current_user]
-    accounts = current_user |> Ash.load!(:accounts) |> Map.get(:accounts)
+    accounts = current_user |> Ash.load!(accounts: [:owner_email_confirmed]) |> Map.get(:accounts)
 
     current_account =
       Enum.find(accounts, &(&1.id == current_user.selected_account_id)) ||

@@ -84,3 +84,15 @@ span.line.highlighted {
   width: 100%;
   display: inline-block;
 }
+
+span.line {
+  text-wrap: pretty;
+}
+
+span.line.diff.add {
+  background-color: rgba(16, 185, 129, 0.14);
+}
+
+span.line.diff.remove {
+  background-color: rgba(244, 63, 94, 0.14);
+}
