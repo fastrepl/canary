@@ -17,7 +17,7 @@ defmodule CanaryWeb.ExampleLive.Example do
 
       <div class="flex flex-col gap-0 mt-4 text-wrap">
         <p>Actual code to render above ↓</p>
-        <code id={@id} phx-hook="Highlight"><%= @example.code %></code>
+        <code id={@id} phx-hook="Highlight" class="invisible"><%= @example.code %></code>
       </div>
     </div>
     """

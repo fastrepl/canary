@@ -92,6 +92,7 @@ const hooks = {
         ],
       }).then((html) => {
         this.el.innerHTML = html;
+        this.el.classList.remove("invisible");
       });
     },
   },
