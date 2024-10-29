@@ -8,15 +8,14 @@ defmodule Canary.Workers.ProjectManager do
     else
       {:ok, projects} = Ash.read(Canary.Accounts.Project)
 
-      pruner_jobs =
-        projects
-        |> Enum.map(&Canary.Workers.TinybirdPruner.new(%{account_id: &1.id}))
-
-      alias_jobs =
-        projects
-        |> Enum.map(&Canary.Workers.QueryAliases.new(%{project_id: &1.id}))
-
-      Oban.insert_all(pruner_jobs ++ alias_jobs)
+      projects
+      |> Enum.flat_map(fn %{id: id} ->
+        [
+          Canary.Workers.TinybirdPruner.new(%{project_id: id}),
+          Canary.Workers.QueryAliases.new(%{project_id: id})
+        ]
+      end)
+      |> Oban.insert_all()
 
       :ok
     end
