@@ -31,6 +31,9 @@ export class CanaryInput extends LitElement {
   @property({ type: Boolean })
   autofocus = false;
 
+  @property({ type: String })
+  placeholder = "Search for anything...";
+
   @consume({ context: queryContext, subscribe: true })
   @state()
   private _query: QueryContext = { text: "", tags: [] };
@@ -94,7 +97,7 @@ export class CanaryInput extends LitElement {
           .value=${this._query.text}
           autocomplete="off"
           spellcheck="false"
-          placeholder="Search for anything..."
+          placeholder=${this.placeholder}
           @input=${this._handleInput}
           @keydown=${this._handleKeyDown}
           onfocus="this.setSelectionRange(this.value.length,this.value.length);"
