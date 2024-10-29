@@ -1,6 +1,8 @@
 # Docusaurus
 
-## Installation
+## Setup
+
+### Installation
 
 ::: tip
 If you were using `@getcanary/docusaurus-theme-search-pagefind` before, please remove it.
@@ -10,22 +12,70 @@ If you were using `@getcanary/docusaurus-theme-search-pagefind` before, please r
 npm install @getcanary/web
 ```
 
-## Configuration
+### Ejecting
 
 ```bash
-npm run swizzle @docusaurus/theme-classic SearchBar -- --eject
+# if you are using classic theme
+npm run swizzle @docusaurus/theme-classic SearchBar -- --eject --javascript
 ```
+
+::: code-group
+
+```js [src/theme/SearchBar.js]
+export { default } from "@docusaurus/Noop";
+```
+
+:::
+
+## Configuration
 
 After ejecting, you can edit generated files in `src/theme/SearchBar`.
 
-```html-vue
-<canary-root framework="docusaurus">
-  <canary-provider-pagefind> // [!code --]
-    <canary-provider-cloud project-key="KEY" api-base="https://cloud.getcanary.dev"> // [!code ++]
-      <!-- Rest of the code -->
-    </canary-provider-cloud> // [!code ++]
-  </canary-provider-pagefind> // [!code --]
-</canary-root>
-```
+```js
+import React from "react";
 
-Take a look at our implementation of `docusaurus-theme-search-pagefind` [here](https://github.com/fastrepl/canary/blob/main/js/packages/docusaurus-theme-search-pagefind/src/theme/SearchBar/Canary.jsx).
+export default function SearchBarWrapper(props) {
+  const [loaded, setLoaded] = React.useState(false);
+
+  React.useEffect(() => {
+    Promise.all([
+      import("@getcanary/web/components/canary-root"),
+      import("@getcanary/web/components/canary-provider-cloud"),
+      import("@getcanary/web/components/canary-modal"),
+      import("@getcanary/web/components/canary-trigger-searchbar"),
+      import("@getcanary/web/components/canary-input"),
+      import("@getcanary/web/components/canary-content"),
+      import("@getcanary/web/components/canary-search"),
+      import("@getcanary/web/components/canary-search-results"),
+      // If you want to give us a shout-out, please add this.
+      import("@getcanary/web/components/canary-footer.js"),
+      // Needed if you have GitHub source.
+      import("@getcanary/web/components/canary-search-match-github-issue"),
+      import("@getcanary/web/components/canary-search-match-github-discussion"),
+    ])
+      .then(() => setLoaded(true))
+      .catch(console.error);
+  }, []);
+
+  if (!loaded) {
+    return null;
+  }
+
+  return (
+    <canary-root framework="docusaurus">
+      <canary-provider-cloud project-key="YOUR_KEY">
+        <canary-modal transition>
+          <canary-trigger-searchbar slot="trigger"></canary-trigger-searchbar>
+          <canary-content slot="content">
+            <canary-input slot="input" autofocus></canary-input>
+            <canary-search slot="mode">
+              <canary-search-results slot="body"></canary-search-results>
+            </canary-search>
+            <canary-footer slot="footer"></canary-footer>
+          </canary-content>
+        </canary-modal>
+      </canary-provider-cloud>
+    </canary-root>
+  );
+}
+```

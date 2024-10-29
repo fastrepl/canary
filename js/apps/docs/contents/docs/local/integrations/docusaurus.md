@@ -88,8 +88,6 @@ const config = {
 
 ### Advanced
 
-[source](https://github.com/fastrepl/canary/blob/main/js/packages/docusaurus-theme-search-pagefind/src/index.js)
-
 When you add `@getcanary/docusaurus-theme-search-pagefind` to the `themes` list, it will override the default search component to use Canary's. To customize this search-bar further, you can [eject](https://docusaurus.io/docs/swizzling#ejecting) it and modify the code.
 
 ```bash
@@ -98,7 +96,8 @@ npm run swizzle docusaurus-theme-search-pagefind SearchBar -- --eject
 
 ::: code-group
 
-```js{4} [src/theme/SearchBar.js]
+```js [src/theme/SearchBar.js]
+// https://github.com/fastrepl/canary/blob/main/js/packages/docusaurus-theme-search-pagefind/src/theme/SearchBar/Canary.jsx
 export default function SearchBar() {
   ...
   return (
@@ -110,7 +109,5 @@ export default function SearchBar() {
 ```
 
 :::
-
-> Specifying `framework="docusaurus"` is required to detect light/dark mode changes.
 
 Note that since `Canary`'s **main focus is to provide composable primitives**, ejected components will be very simple and easy to customize.
