@@ -21,7 +21,7 @@ defmodule Canary.Interface.Ask.Default do
 
     results =
       groups
-      |> Enum.take(6)
+      |> Enum.take(8)
       |> Enum.map(fn %{"chunks" => chunks, "group" => %{"tracking_id" => group_id}} ->
         Task.async(fn ->
           chunk_indices =

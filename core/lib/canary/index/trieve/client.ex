@@ -44,7 +44,7 @@ defmodule Canary.Index.Trieve.Actual do
           if(not is_nil(dataset), do: {"TR-Dataset", dataset}, else: nil)
         ]
         |> Enum.reject(&is_nil/1),
-      receive_timeout: 2 * 15_000
+      receive_timeout: 4_000
     )
   end
 
@@ -207,16 +207,11 @@ defmodule Canary.Index.Trieve.Actual do
     tags = Keyword.get(opts, :tags, nil)
     source_ids = Keyword.get(opts, :source_ids, nil)
 
-    search_type = if(rag? or question?(query), do: :hybrid, else: :fulltext)
+    search_type = if(rag? or question?(query), do: :fulltext, else: :fulltext)
     remove_stop_words = not (rag? or question?(query))
     group_size = if(rag?, do: 5, else: 3)
-    page_size = 8
-
-    score_threshold =
-      case search_type do
-        :fulltext -> 1
-        _ -> 0.3
-      end
+    page_size = if(rag?, do: 12, else: 8)
+    score_threshold = 0.3
 
     highlight_options =
       cond do
@@ -281,7 +276,7 @@ defmodule Canary.Index.Trieve.Actual do
           })
         end)
       end)
-      |> Task.await_many(2_500)
+      |> Task.await_many(5_000)
 
     if Enum.all?(result, &match?({:error, _}, &1)) do
       {:error, result}
@@ -329,7 +324,6 @@ defmodule Canary.Index.Trieve.Actual do
     # https://docs.trieve.ai/api-reference/chunk-group/search-over-groups
     case client
          |> Req.post(
-           receive_timeout: 2_000,
            url: "/chunk_group/group_oriented_search",
            json: data
          ) do
@@ -370,7 +364,7 @@ defmodule Canary.Index.Trieve.Actual do
           end
         end)
       end)
-      |> Task.await_many(3_000)
+      |> Task.await_many(5_000)
 
     if Enum.all?(result, &match?({:error, _}, &1)) do
       {:error, result}
