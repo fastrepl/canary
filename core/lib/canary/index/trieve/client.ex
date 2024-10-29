@@ -236,7 +236,7 @@ defmodule Canary.Index.Trieve.Actual do
 
     filters =
       if is_nil(source_ids) do
-        %{must: [filter_for_tags(tags)] |> Enum.reject(&is_nil/1)}
+        [%{must: [filter_for_tags(tags)] |> Enum.reject(&is_nil/1)}]
       else
         source_ids
         |> Enum.map(fn id ->
