@@ -1,4 +1,6 @@
 defmodule Canary.Sources.GithubFetcher do
+  require Logger
+
   defp client() do
     Canary.graphql_client(
       url: "https://api.github.com/graphql",
@@ -35,11 +37,12 @@ defmodule Canary.Sources.GithubFetcher do
             end
 
           {:try_after_s, seconds} ->
+            Logger.warning("failed to fetch from github, retrying in #{seconds} seconds")
             Process.sleep(seconds * 1000)
             {[], cursor}
 
           {:error, errors} ->
-            IO.inspect(errors)
+            Logger.error("failed to fetch from github: #{inspect(errors)}")
             {[], :stop}
         end
     end)

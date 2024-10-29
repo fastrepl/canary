@@ -62,21 +62,26 @@ defmodule CanaryWeb.Interface.Controller do
   end
 
   defp wrap_project_query(query, action) do
+    source_query =
+      Canary.Sources.Source
+      |> Ash.Query.select([:id])
+
+    billing_query =
+      Canary.Accounts.Billing
+      |> Ash.Query.select([:id])
+      |> Ash.Query.load(:membership)
+
+    account_query =
+      Canary.Accounts.Account
+      |> Ash.Query.select([:id])
+      |> Ash.Query.load(billing: billing_query)
+
     if action == :search do
       query
+      |> Ash.Query.load(sources: source_query)
     else
-      billing_query =
-        Canary.Accounts.Billing
-        |> Ash.Query.select([:id])
-        |> Ash.Query.load(:membership)
-
-      account_query =
-        Canary.Accounts.Account
-        |> Ash.Query.select([:id])
-        |> Ash.Query.load(billing: billing_query)
-
       query
-      |> Ash.Query.load(account: account_query)
+      |> Ash.Query.load(sources: source_query, account: account_query)
     end
   end
 
@@ -103,8 +108,13 @@ defmodule CanaryWeb.Interface.Controller do
   def search(conn, %{"query" => %{"text" => query, "tags" => tags}} = params) do
     try do
       matches =
-        conn.assigns.project
-        |> Canary.Interface.Search.run!(query, tags: tags, cache: cache?())
+        Canary.Interface.Search.run!(
+          conn.assigns.project,
+          query,
+          tags: tags,
+          cache: cache?(),
+          source_ids: Enum.map(conn.assigns.project.sources, & &1.id)
+        )
 
       data = %{
         matches: matches,
@@ -169,7 +179,8 @@ defmodule CanaryWeb.Interface.Controller do
             query,
             &send(here, {:delta, &1}),
             tags: tags,
-            cache: cache?()
+            cache: cache?(),
+            source_ids: Enum.map(conn.assigns.project.sources, & &1.id)
           )
 
         send(here, {:done, completion})

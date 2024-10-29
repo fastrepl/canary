@@ -24,7 +24,7 @@ defmodule Canary.Interface.Search do
   end
 
   defp set_cache(project, query, opts, result) do
-    Cachex.put(:cache, key(project, query, opts), result, ttl: :timer.minutes(3))
+    Cachex.put(:cache, key(project, query, opts), result, ttl: :timer.minutes(1))
   end
 
   defp get_cache(project, query, opts) do
@@ -38,6 +38,7 @@ defmodule Canary.Interface.Search do
     project.id
     |> Kernel.<>(":" <> query)
     |> Kernel.<>(":" <> Jason.encode!(opts[:tags]))
+    |> Kernel.<>(":" <> Jason.encode!(opts[:source_ids]))
   end
 
   defp impl(),

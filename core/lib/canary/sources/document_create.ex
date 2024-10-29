@@ -247,6 +247,7 @@ defmodule Canary.Sources.Document.Create do
             url: chunk.url,
             meta: chunk.meta,
             source_id: source_id,
+            title: chunk[:title],
             weight: chunk[:weight],
             tags: changeset.context.remote_tags
           }

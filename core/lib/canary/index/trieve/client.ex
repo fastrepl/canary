@@ -205,17 +205,17 @@ defmodule Canary.Index.Trieve.Actual do
   def search(client, query, opts \\ []) do
     rag? = Keyword.get(opts, :rag, false)
     tags = Keyword.get(opts, :tags, nil)
+    source_ids = Keyword.get(opts, :source_ids, nil)
 
     search_type = if(rag? or question?(query), do: :hybrid, else: :fulltext)
-    receive_timeout = if(rag? or question?(query), do: 3_000, else: 1_500)
     remove_stop_words = not (rag? or question?(query))
-    page_size = if(rag?, do: 8, else: 32)
     group_size = if(rag?, do: 5, else: 3)
+    page_size = 8
 
     score_threshold =
       case search_type do
         :fulltext -> 1
-        _ -> 0.5
+        _ -> 0.3
       end
 
     highlight_options =
@@ -239,59 +239,99 @@ defmodule Canary.Index.Trieve.Actual do
           }
       end
 
-    filters = %{
-      must:
-        [
-          if(not is_nil(tags) and tags != [],
-            do: %{
-              field: "tag_set",
-              match_any: [
-                format_for_tagset(:empty_tags)
-                | Enum.map(tags, &format_for_tagset(:tag, &1))
-              ]
-            },
-            else: nil
-          )
-        ]
-        |> Enum.reject(&is_nil/1)
-    }
+    filters =
+      if is_nil(source_ids) do
+        %{must: [filter_for_tags(tags)] |> Enum.reject(&is_nil/1)}
+      else
+        source_ids
+        |> Enum.map(fn id ->
+          %{must: [filter_for_tags(tags), filter_for_source_id(id)] |> Enum.reject(&is_nil/1)}
+        end)
+      end
 
+    result =
+      filters
+      |> Enum.map(fn f ->
+        Task.async(fn ->
+          client
+          |> run_search(%{
+            filters: f,
+            query: query,
+            page: 1,
+            page_size: page_size,
+            group_size: group_size,
+            search_type: search_type,
+            score_threshold: score_threshold,
+            remove_stop_words: remove_stop_words,
+            typo_options: %{
+              correct_typos: true,
+              one_typo_word_range: %{min: 3, max: 3 * 3},
+              two_typo_word_range: %{min: 4, max: 4 * 3}
+            },
+            highlight_options:
+              Map.merge(
+                %{
+                  highlight_results: true,
+                  highlight_max_num: 1,
+                  pre_tag: "<mark>",
+                  post_tag: "</mark>"
+                },
+                highlight_options
+              )
+          })
+        end)
+      end)
+      |> Task.await_many(2_500)
+
+    if Enum.all?(result, &match?({:error, _}, &1)) do
+      {:error, result}
+    else
+      merged =
+        result
+        |> Enum.flat_map(fn
+          {:ok, v} -> v
+          _ -> []
+        end)
+        |> Enum.sort_by(
+          fn %{"chunks" => chunks} ->
+            chunks
+            |> Enum.max_by(& &1["score"])
+            |> Map.get("score")
+          end,
+          :desc
+        )
+
+      {:ok, merged}
+    end
+  end
+
+  defp filter_for_source_id(id) do
+    %{
+      field: "tag_set",
+      match_any: [format_for_tagset(:source_id, id)]
+    }
+  end
+
+  defp filter_for_tags(nil), do: nil
+  defp filter_for_tags([]), do: nil
+
+  defp filter_for_tags(tags) do
+    %{
+      field: "tag_set",
+      match_any: [
+        format_for_tagset(:empty_tags)
+        | Enum.map(tags, &format_for_tagset(:tag, &1))
+      ]
+    }
+  end
+
+  defp run_search(client, data) do
     # https://docs.trieve.ai/api-reference/chunk-group/search-over-groups
     case client
          |> Req.post(
-           receive_timeout: receive_timeout,
+           receive_timeout: 2_000,
            url: "/chunk_group/group_oriented_search",
-           json: %{
-             query: query,
-             filters: filters,
-             page: 1,
-             page_size: page_size,
-             group_size: group_size,
-             search_type: search_type,
-             score_threshold: score_threshold,
-             remove_stop_words: remove_stop_words,
-             typo_options: %{
-               correct_typos: true,
-               one_typo_word_range: %{
-                 min: 3,
-                 max: 3 * 3
-               },
-               two_typo_word_range: %{
-                 min: 4,
-                 max: 4 * 3
-               }
-             },
-             highlight_options:
-               Map.merge(
-                 %{
-                   highlight_results: true,
-                   highlight_max_num: 1,
-                   pre_tag: "<mark>",
-                   post_tag: "</mark>"
-                 },
-                 highlight_options
-               )
-           }
+           json: data
          ) do
       {:ok, %{status: 200, body: %{"results" => results}}} ->
         {:ok, results}
