@@ -12,19 +12,23 @@ defmodule Canary.Interface.Search do
   def run(project, query, opts) do
     {cache, opts} = Keyword.pop(opts, :cache, false)
 
-    if cache do
-      with {:error, _} <- get_cache(project, query, opts),
-           {:ok, result} <- impl().run(project, query, opts) do
-        set_cache(project, query, opts, result)
-        {:ok, result}
-      end
-    else
+    if not cache do
       impl().run(project, query, opts)
+    else
+      case get_cache(project, query, opts) do
+        {:ok, result} ->
+          {:ok, result}
+
+        _ ->
+          {:ok, result} = impl().run(project, query, opts)
+          set_cache(project, query, opts, result)
+          {:ok, result}
+      end
     end
   end
 
   defp set_cache(project, query, opts, result) do
-    Cachex.put(:cache, key(project, query, opts), result, ttl: :timer.minutes(1))
+    Cachex.put(:cache, key(project, query, opts), result, ttl: :timer.seconds(30))
   end
 
   defp get_cache(project, query, opts) do

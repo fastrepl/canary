@@ -110,7 +110,7 @@ defmodule Canary.Sources.Document.Create do
           title:
             if(index == 0, do: item.title, else: data.root.title <> "\n" <> data.root.content),
           created_at: item.created_at,
-          weight: clamp(1, 5, item.num_reactions),
+          weight: 1 + clamp(0, 3, item.num_reactions / 2) / 10,
           meta: %{index: index}
         }
       end)
@@ -153,7 +153,7 @@ defmodule Canary.Sources.Document.Create do
           title:
             if(index == 0, do: item.title, else: data.root.title <> "\n" <> data.root.content),
           created_at: item.created_at,
-          weight: clamp(1, 5, item.num_reactions),
+          weight: 1 + clamp(0, 3, item.num_reactions / 2) / 10,
           meta: %{index: index}
         }
       end)
