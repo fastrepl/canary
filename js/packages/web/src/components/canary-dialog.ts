@@ -12,6 +12,8 @@ const NAME = "canary-dialog";
  * @cssprop --canary-color-backdrop-overlay - Backdrop overlay color
  * @cssprop --canary-transition-duration - Duration of modal transition
  * @cssprop --canary-transition-timing - Timing function of modal transition
+ * @cssprop --canary-backdrop-blur - Blur of backdrop
+ * @csspart dialog - Dialog
  * @slot - Default slot
  */
 @registerCustomElement(NAME)
@@ -31,6 +33,7 @@ export class CanaryDialog extends LitElement {
         ${ref(this.ref)}
         class=${classMap(canaryDialogClasses)}
         @click=${this.handleClick}
+        part="dialog"
       >
         <slot></slot>
       </dialog>
@@ -51,10 +54,9 @@ export class CanaryDialog extends LitElement {
     css`
       dialog::backdrop {
         background-color: var(--canary-color-backdrop-overlay);
-        -webkit-backdrop-filter: blur(0.25rem);
-        backdrop-filter: blur(0.25rem);
+        -webkit-backdrop-filter: blur(var(--canary-backdrop-blur, 0.25rem));
+        backdrop-filter: blur(var(--canary-backdrop-blur, 0.25rem));
       }
-
       dialog {
         margin: 0 auto;
         top: 60px;

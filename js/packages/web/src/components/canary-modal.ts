@@ -13,6 +13,9 @@ const NAME = "canary-modal";
 
 export const MODAL_CLOSE_EVENT = "modal-close";
 
+/**
+ * @csspart dialog - Dialog
+ */
 @registerCustomElement(NAME)
 export class CanaryModal extends LitElement {
   @property({ type: Boolean }) open = false;
@@ -23,7 +26,11 @@ export class CanaryModal extends LitElement {
   render() {
     return html`
       <slot name="trigger" @click=${this._handleOpen}></slot>
-      <canary-dialog .ref=${this._ref} transition=${ifDefined(this.transition)}>
+      <canary-dialog
+        .ref=${this._ref}
+        transition=${ifDefined(this.transition)}
+        exportparts="dialog"
+      >
         <slot name="content" @modal-close=${this._handleModalClose}></slot>
       </canary-dialog>
     `;

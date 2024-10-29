@@ -1,5 +1,11 @@
 # @getcanary/web
 
+## 1.0.12
+
+### Patch Changes
+
+- Add backdrop blur css variable and css part for dialog.
+
 ## 1.0.11
 
 ### Patch Changes
