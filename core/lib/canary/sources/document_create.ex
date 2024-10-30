@@ -63,7 +63,7 @@ defmodule Canary.Sources.Document.Create do
       |> Enum.with_index(0)
       |> Enum.map(fn {item, index} ->
         %{
-          content: item.content,
+          content: item.title <> "\n" <> item.content,
           url: URI.parse(data.url) |> Map.put(:fragment, item.id) |> to_string(),
           meta: %{
             index: index,
@@ -100,15 +100,16 @@ defmodule Canary.Sources.Document.Create do
       [data.root | data.items]
       |> Enum.map(fn _ -> %Chunk{index_id: Ecto.UUID.generate()} end)
 
+    title = data.root.title
+
     remote_chunks =
       [data.root | data.items]
       |> Enum.with_index(0)
       |> Enum.map(fn {item, index} ->
         %{
           url: item.url,
-          content: item.content,
-          title:
-            if(index == 0, do: item.title, else: data.root.title <> "\n" <> data.root.content),
+          content: if(index == 0, do: item.content, else: title <> "\n" <> item.content),
+          title: title,
           created_at: item.created_at,
           weight: 1 + clamp(0, 3, floor(item.num_reactions / 3)) / 10,
           meta: %{index: index}
@@ -143,15 +144,16 @@ defmodule Canary.Sources.Document.Create do
       [data.root | data.items]
       |> Enum.map(fn _ -> %Chunk{index_id: Ecto.UUID.generate()} end)
 
+    title = data.root.title
+
     remote_chunks =
       [data.root | data.items]
       |> Enum.with_index(0)
       |> Enum.map(fn {item, index} ->
         %{
           url: item.url,
-          content: item.content,
-          title:
-            if(index == 0, do: item.title, else: data.root.title <> "\n" <> data.root.content),
+          content: if(index == 0, do: item.content, else: title <> " / " <> item.content),
+          title: title,
           created_at: item.created_at,
           weight: 1 + clamp(0, 3, floor(item.num_reactions / 3)) / 10,
           meta: %{index: index}

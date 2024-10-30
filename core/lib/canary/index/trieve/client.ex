@@ -53,7 +53,13 @@ defmodule Canary.Index.Trieve.Actual do
     case client
          |> Req.post(
            url: "/dataset",
-           json: %{dataset_name: tracking_id, tracking_id: tracking_id}
+           json: %{
+             dataset_name: tracking_id,
+             tracking_id: tracking_id,
+             server_configuration: %{
+               LOCKED: Application.get_env(:canary, :env) == :prod
+             }
+           }
          ) do
       {:ok, %{status: 200, body: _}} -> :ok
       {:ok, %{status: status, body: error}} when status in 400..499 -> {:error, error}
@@ -158,8 +164,8 @@ defmodule Canary.Index.Trieve.Actual do
             if is_binary(chunk[:title]) do
               data
               |> Map.merge(%{
-                fulltext_boost: %{boost_factor: 5, phrase: chunk.title},
-                semantic_boost: %{boost_factor: 5, phrase: chunk.title}
+                fulltext_boost: %{boost_factor: 3, phrase: chunk.title},
+                semantic_boost: %{boost_factor: 0.3, phrase: chunk.title}
               })
             else
               data
@@ -207,7 +213,7 @@ defmodule Canary.Index.Trieve.Actual do
     tags = Keyword.get(opts, :tags, nil)
     source_ids = Keyword.get(opts, :source_ids, nil)
 
-    search_type = if(rag? or question?(query), do: :fulltext, else: :fulltext)
+    search_type = :fulltext
     remove_stop_words = not (rag? or question?(query))
     group_size = if(rag?, do: 5, else: 3)
     page_size = if(rag?, do: 12, else: 8)
