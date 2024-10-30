@@ -3,6 +3,8 @@ import { defineConfig } from "vitepress";
 import unocss from "unocss/vite";
 import footnote from "markdown-it-footnote";
 
+const DISCORD_URL = "https://discord.gg/Y8bJkzuQZU";
+
 const sidebar = [
   {
     text: "Start Here",
@@ -248,7 +250,7 @@ export default defineConfig({
     server: {
       proxy: {
         "/discord": {
-          target: "https://discord.gg/Y8bJkzuQZU",
+          target: DISCORD_URL,
           changeOrigin: true,
         },
       },
@@ -266,7 +268,7 @@ export default defineConfig({
       },
       {
         text: "💬 Discord",
-        link: "https://getcanary.dev/discord",
+        link: DISCORD_URL,
       },
       {
         text: "🐤 Cloud",
