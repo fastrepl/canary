@@ -89,8 +89,8 @@ defmodule Canary.Analytics.Tinybird do
     end
   end
 
-  def query(source, args) do
-    case client() |> Req.post(url: "/v0/pipes/#{source}.json", json: args) do
+  def query(pipe, args \\ %{}) do
+    case client() |> Req.post(url: "/v0/pipes/#{pipe}.json", json: args) do
       {:ok, %{status: 200, body: %{"data" => data}}} -> {:ok, data}
       error -> error
     end

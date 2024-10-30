@@ -6,18 +6,23 @@ defmodule Canary.Workers.ProjectManager do
     if Application.get_env(:canary, :env) != :prod do
       :ok
     else
-      {:ok, projects} = Ash.read(Canary.Accounts.Project)
+      with {:ok, rows} <- Canary.Analytics.Tinybird.query(:all_project_ids),
+           {:ok, projects} = Ash.read(Canary.Accounts.Project) do
+        all_project_ids = rows |> Enum.map(& &1["project_id"])
+        valid_project_ids = projects |> Enum.map(& &1.id)
 
-      projects
-      |> Enum.flat_map(fn %{id: id} ->
-        [
-          Canary.Workers.TinybirdPruner.new(%{project_id: id}),
-          Canary.Workers.QueryAliases.new(%{project_id: id})
-        ]
-      end)
-      |> Oban.insert_all()
+        pruning_jobs =
+          (all_project_ids -- valid_project_ids)
+          |> Enum.map(&Canary.Workers.TinybirdPruner.new(%{project_id: &1}))
 
-      :ok
+        alias_jobs =
+          valid_project_ids
+          |> Enum.map(&Canary.Workers.QueryAliases.new(%{project_id: &1}))
+
+        Oban.insert_all(pruning_jobs ++ alias_jobs)
+
+        :ok
+      end
     end
   end
 end
