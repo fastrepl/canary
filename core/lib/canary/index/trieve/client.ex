@@ -62,7 +62,7 @@ defmodule Canary.Index.Trieve.Actual do
            }
          ) do
       {:ok, %{status: 200, body: _}} -> :ok
-      {:ok, %{status: status, body: error}} when status in 400..499 -> {:error, error}
+      {:ok, %{status: status, body: error}} when status in 400..599 -> {:error, error}
       {:error, error} -> {:error, error}
     end
   end
@@ -75,7 +75,7 @@ defmodule Canary.Index.Trieve.Actual do
            headers: [{"TR-Dataset", tracking_id}]
          ) do
       {:ok, %{status: 204}} -> :ok
-      {:ok, %{status: status, body: error}} when status in 400..499 -> {:error, error}
+      {:ok, %{status: status, body: error}} when status in 400..599 -> {:error, error}
       {:error, error} -> {:error, error}
     end
   end
@@ -94,7 +94,7 @@ defmodule Canary.Index.Trieve.Actual do
     # https://docs.trieve.ai/api-reference/chunk-group/create-or-upsert-group-or-groups
     case client |> Req.post(url: "/chunk_group", json: data) do
       {:ok, %{status: 200, body: _}} -> :ok
-      {:ok, %{status: status, body: error}} when status in 400..499 -> {:error, error}
+      {:ok, %{status: status, body: error}} when status in 400..599 -> {:error, error}
       {:error, error} -> {:error, error}
     end
   end
@@ -107,7 +107,7 @@ defmodule Canary.Index.Trieve.Actual do
            params: [delete_chunks: true]
          ) do
       {:ok, %{status: 204}} -> :ok
-      {:ok, %{status: status, body: error}} when status in 400..499 -> {:error, error}
+      {:ok, %{status: status, body: error}} when status in 400..599 -> {:error, error}
       {:error, error} -> {:error, error}
     end
   end
@@ -185,7 +185,7 @@ defmodule Canary.Index.Trieve.Actual do
         {:ok, %{status: 200}} ->
           {:cont, :ok}
 
-        {:ok, %{status: status, body: error}} when status in 400..499 ->
+        {:ok, %{status: status, body: error}} when status in 400..599 ->
           {:halt, {:error, error}}
 
         {:error, error} ->
@@ -200,7 +200,7 @@ defmodule Canary.Index.Trieve.Actual do
       {:ok, %{status: 200}} ->
         :ok
 
-      {:ok, %{status: status, body: error}} when status in 400..499 ->
+      {:ok, %{status: status, body: error}} when status in 400..599 ->
         {:error, error}
 
       {:error, error} ->
@@ -336,7 +336,7 @@ defmodule Canary.Index.Trieve.Actual do
       {:ok, %{status: 200, body: %{"results" => results}}} ->
         {:ok, results}
 
-      {:ok, %{status: status, body: error}} when status in 400..499 ->
+      {:ok, %{status: status, body: error}} when status in 400..599 ->
         if error["message"] =~ "Should have at least one value for match" do
           {:ok, []}
         else
@@ -365,7 +365,7 @@ defmodule Canary.Index.Trieve.Actual do
           # https://docs.trieve.ai/api-reference/chunk-group/get-chunks-in-group-by-tracking-id
           case client |> Req.get(url: "/chunk_group/tracking_id/#{group_tracking_id}/#{page}") do
             {:ok, %{status: 200, body: result}} -> {:ok, result}
-            {:ok, %{status: status, body: error}} when status in 400..499 -> {:error, error}
+            {:ok, %{status: status, body: error}} when status in 400..599 -> {:error, error}
             {:error, error} -> {:error, error}
           end
         end)

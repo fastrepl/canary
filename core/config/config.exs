@@ -58,10 +58,10 @@ config :canary, Oban,
   engine: Oban.Engines.Basic,
   queues: [
     default: 10,
-    github_processor: 2,
+    github_processor: 1,
     webpage_processor: 2,
     email: 10,
-    trieve: 50,
+    trieve: 5,
     tinybird: 1
   ],
   repo: Canary.Repo,
