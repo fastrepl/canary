@@ -21,7 +21,11 @@ defmodule Canary.Interface.Search do
 
         _ ->
           {:ok, result} = impl().run(project, query, opts)
-          set_cache(project, query, opts, result)
+
+          if result != [] do
+            set_cache(project, query, opts, result)
+          end
+
           {:ok, result}
       end
     end
