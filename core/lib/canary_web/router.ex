@@ -81,6 +81,13 @@ defmodule CanaryWeb.Router do
       live "/experiment", CanaryWeb.ExperimentLive.Index, :none
     end
 
+    ash_authentication_live_session :stacks,
+      layout: {CanaryWeb.Layouts, :stacks},
+      on_mount: [] do
+      live "/stacks/nextforge", CanaryWeb.StacksLive.Index, :selector
+      live "/stacks/nextforge/:id", CanaryWeb.StacksLive.Session, :none
+    end
+
     ash_authentication_live_session :others,
       layout: {CanaryWeb.Layouts, :root},
       on_mount: [{CanaryWeb.LiveUser, :live_user_required}] do

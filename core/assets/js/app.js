@@ -75,6 +75,18 @@ const hooks = {
   ...getHooks(Components),
   LiveToast: createLiveToastHook(),
   Prompt: window.Prompt,
+  EnterToSubmit: {
+    mounted() {
+      this.el.addEventListener("keydown", (e) => {
+        if (e.key == "Enter") {
+          e.preventDefault();
+          this.el.form.dispatchEvent(
+            new Event("submit", { bubbles: true, cancelable: true }),
+          );
+        }
+      });
+    },
+  },
   Highlight: {
     mounted() {
       this.run();
