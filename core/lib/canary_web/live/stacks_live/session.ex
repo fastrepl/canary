@@ -10,9 +10,14 @@ defmodule CanaryWeb.StacksLive.Session do
       <h1 class="text-xl font-semibold mb-4">next-forge</h1>
 
       <div class="flex-grow overflow-y-auto flex flex-col gap-2">
-        <div :for={message <- @messages} class="flex flex-row gap-2 items-center">
+        <div
+          :for={{message, index} <- Enum.with_index(@messages)}
+          class="flex flex-row gap-2 items-center"
+        >
           <span class="text-gray-500"><%= message.role %></span>
-          <span class="text-gray-900"><%= message.content %></span>
+          <div class="prose" id={"messsage-#{index}"} phx-hook="HighlightAll">
+            <%= raw(Earmark.as_html!(message.content)) %>
+          </div>
         </div>
       </div>
 
@@ -123,17 +128,13 @@ defmodule CanaryWeb.StacksLive.Session do
           end
         end)
       end)
-      |> Task.await_many(3_000)
+      |> Task.await_many(5_000)
       |> Enum.reject(&is_nil/1)
 
     Canary.AI.chat(
       %{
-        model: Application.fetch_env!(:canary, :responder_model),
+        model: "gpt-4o-mini",
         messages: [
-          %{
-            role: "system",
-            content: Canary.Prompt.format("responder_system", %{})
-          },
           %{
             role: "user",
             content: """

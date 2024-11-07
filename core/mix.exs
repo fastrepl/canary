@@ -113,7 +113,8 @@ defmodule Canary.MixProject do
        github: "tatsuya6502/recon_ex", ref: "0ce4c5da777937a5bb57d3e68b9afcb9877c1c3b"},
       {:live_toast, "~> 0.6.4"},
       {:flow, "~> 1.0"},
-      {:number, "~> 1.0.1"}
+      {:number, "~> 1.0.1"},
+      {:earmark, "~> 1.4"}
     ] ++ deps_eval()
   end
 

@@ -6,6 +6,7 @@
   },
   "devDependencies": {
     "@shikijs/transformers": "^1.22.0",
+    "@tailwindcss/typography": "^0.5.15",
     "@types/node": "^20.14.9",
     "daisyui": "^4.12.10",
     "esbuild": "^0.16.17",

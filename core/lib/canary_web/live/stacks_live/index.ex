@@ -4,9 +4,7 @@ defmodule CanaryWeb.StacksLive.Index do
   @impl true
   def render(%{live_action: :selector} = assigns) do
     ~H"""
-    <div>
-      <.live_component id="stacks-selector" module={CanaryWeb.StacksLive.Selector} />
-    </div>
+    <.live_component id="stacks-selector" module={CanaryWeb.StacksLive.Selector} />
     """
   end
 

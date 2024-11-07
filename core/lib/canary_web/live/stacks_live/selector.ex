@@ -58,9 +58,9 @@ defmodule CanaryWeb.StacksLive.Selector do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="flex flex-col items-center justify-center">
+    <div class="flex flex-col items-center justify-center h-screen">
       <div class="flex flex-col items-center my-4">
-        <h1 class="text-3xl font-bold">
+        <h1 class="text-4xl font-bold">
           Ask about
           <.link href="https://github.com/haydenbleasel/next-forge" class="underline">
             Next-Forge

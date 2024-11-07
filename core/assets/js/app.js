@@ -87,6 +87,25 @@ const hooks = {
       });
     },
   },
+  HighlightAll: {
+    mounted() {
+      this.run();
+    },
+    updated() {
+      this.run();
+    },
+    run() {
+      const elements = this.el.querySelectorAll("code");
+      for (const element of elements) {
+        codeToHtml(element.textContent, {
+          lang: "javascript",
+          theme: "rose-pine-dawn",
+        }).then((html) => {
+          element.innerHTML = html;
+        });
+      }
+    },
+  },
   Highlight: {
     mounted() {
       this.run();
